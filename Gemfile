@@ -15,6 +15,7 @@ gem 'recipient_interceptor'
 gem 'simple_form'
 gem 'strong_parameters'
 gem 'unicorn'
+gem 'paperclip'
 
 group :assets do
   gem 'coffee-rails'
@@ -32,6 +33,7 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'rspec-rails'
   gem 'sham_rack'
+  gem 'pry'
 end
 
 group :test do
@@ -42,6 +44,8 @@ group :test do
   gem 'shoulda-matchers'
   gem 'simplecov', require: false
   gem 'timecop'
+  gem 'guard-spork'
+  gem 'rb-inotify', require: false
 end
 
 group :staging, :production do
