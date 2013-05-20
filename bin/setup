@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+
+# Set up Rails app. Run this script immediately after cloning the codebase.
+# https://github.com/thoughtbot/guides/tree/master/protocol
+
+bundle install --binstubs=bin/stubs
+bundle exec rake db:setup
+
+if [ ! -f .env ]; then
+  cp .sample.env .env
+fi
