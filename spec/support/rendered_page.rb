@@ -1,6 +1,6 @@
 module RenderedPage
   def page
-    @page ||= Capybara.string(rendered)
+    @page ||= Capybara::Node::Simple.new(rendered)
   end
 
   def within(selector)

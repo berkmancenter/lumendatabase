@@ -1,9 +1,7 @@
 Chill::Application.routes.draw do
-  namespace :api do
-    resources :submissions, only: [:create]
-  end
-
   resources :notices, only: [:show]
+
+  resources :submissions, only: [:new, :create]
 
   root to: 'home#index'
 end

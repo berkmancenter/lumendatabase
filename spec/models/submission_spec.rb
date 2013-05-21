@@ -8,17 +8,17 @@ describe Submission do
 
       uploaded_file = Rack::Test::UploadedFile.new(fh.path, "text/pdf")
 
-      Submission.create!(title: 'A title', file: uploaded_file)
+      Submission.new(title: 'A title', file: uploaded_file).save
     end
 
     expect(FileUpload.last.read).to eq 'Some content'
   end
 
   it 'does not attempt to create a FileUpload when parameters absent' do
-    FileUpload.should_not_receive(:create!)
-    Notice.stub(:create!)
+    FileUpload.any_instance.should_not_receive(:save)
+    Notice.any_instance.stub(:save).and_return(true)
 
-    Submission.create!(title: "A Title")
+    Submission.new(title: "A Title").save
   end
 
   def with_tempfile(&block)

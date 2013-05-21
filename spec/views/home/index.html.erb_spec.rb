@@ -1,6 +1,15 @@
 require 'spec_helper'
 
 describe 'home/index.html.erb' do
+
+  it 'shows a link to create a new submission' do
+    assign(:notices, [])
+
+    render
+
+    expect(page).to contain_link(new_submission_path)
+  end
+
   it 'shows metadata and a link to each of its notices' do
     notices = build_stubbed_list(:notice, 3, date_sent: 1.hour.ago)
     assign(:notices, notices)

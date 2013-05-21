@@ -3,6 +3,10 @@ FactoryGirl.define do
   factory :notice do
     title "A title"
 
+    trait :with_body do
+      body "A body"
+    end
+
     factory :notice_with_notice_file do
       ignore do
         content "Content"
