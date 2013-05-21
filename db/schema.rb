@@ -30,12 +30,15 @@ ActiveRecord::Schema.define(:version => 20130521140741) do
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
 
   create_table "file_uploads", :force => true do |t|
+    t.integer  "notice_id"
     t.string   "kind"
     t.string   "file_file_name"
     t.string   "file_content_type"
     t.integer  "file_file_size"
     t.datetime "file_updated_at"
   end
+
+  add_index "file_uploads", ["notice_id"], :name => "index_file_uploads_on_notice_id"
 
   create_table "notices", :force => true do |t|
     t.string   "title"

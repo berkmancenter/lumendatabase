@@ -11,12 +11,7 @@ describe Submission do
       Submission.create!(title: 'A title', file: uploaded_file)
     end
 
-    with_tempfile do |fh|
-      file = FileUpload.last
-      file.file.copy_to_local_file(:original, fh.path)
-
-      expect(fh.read).to eq 'Some content'
-    end
+    expect(FileUpload.last.read).to eq 'Some content'
   end
 
   it 'does not attempt to create a FileUpload when parameters absent' do

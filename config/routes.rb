@@ -1,5 +1,7 @@
 Chill::Application.routes.draw do
   namespace :api do
-    resource :submissions, only: [:create]
+    resources :submissions, only: [:create]
   end
+
+  resources :notices, only: [:show]
 end
