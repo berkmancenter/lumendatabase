@@ -4,4 +4,6 @@ Chill::Application.routes.draw do
   end
 
   resources :notices, only: [:show]
+
+  root to: 'home#index'
 end
