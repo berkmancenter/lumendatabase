@@ -17,6 +17,7 @@ gem 'simple_form'
 gem 'strong_parameters'
 gem 'unicorn'
 gem 'paperclip'
+gem 'active_model_serializers', '~> 0.8.0'
 
 group :assets do
   gem 'coffee-rails'
