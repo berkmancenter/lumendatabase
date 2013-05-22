@@ -1,9 +1,15 @@
-You look great in Suspenders
-============================
+Chilling Effects
+================
 
-Use the following guides for getting things done, programming well, and
-programming in style.
+Description here.
 
-* [Protocol](http://github.com/thoughtbot/guides/blob/master/protocol)
-* [Best Practices](http://github.com/thoughtbot/guides/blob/master/best-practices)
-* [Style](http://github.com/thoughtbot/guides/blob/master/style)
+License
+=======
+
+Chilling Effects is licensed under the MIT License, the same terms as Rails
+itself. See LICENSE.txt for more information
+
+Copyright
+=========
+
+Copyright (c) 2013 President and Fellows of Harvard College
