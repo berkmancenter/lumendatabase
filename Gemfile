@@ -4,6 +4,7 @@ ruby '2.0.0'
 
 gem 'airbrake'
 gem 'bourbon'
+gem 'neat'
 gem 'delayed_job_active_record', '>= 4.0.0.beta2'
 gem 'flutie'
 gem 'high_voltage'

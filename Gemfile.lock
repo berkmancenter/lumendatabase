@@ -126,6 +126,9 @@ GEM
     mocha (0.13.3)
       metaclass (~> 0.0.1)
     multi_json (1.7.3)
+    neat (1.3.0)
+      bourbon (>= 2.1)
+      sass (>= 3.2)
     newrelic_rpm (3.6.2.96)
     nokogiri (1.5.9)
     paperclip (3.4.2)
@@ -249,6 +252,7 @@ DEPENDENCIES
   high_voltage
   jquery-rails
   launchy
+  neat
   newrelic_rpm
   paperclip
   pg
