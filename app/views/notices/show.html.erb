@@ -11,3 +11,7 @@
 <section id="tags">
   <%= @notice.tag_list %>
 </section>
+
+<section id="categories">
+  <%= render 'shared/category_list', categories: @notice.categories %>
+</section>

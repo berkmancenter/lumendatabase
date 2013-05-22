@@ -20,8 +20,8 @@ describe NoticesController do
   end
 
   context "#show as JSON" do
-    it "finds and serializes the notice" do
-      notice = create(:notice_with_notice_file, content: "Some content")
+    it "serializes the notice metadata" do
+      notice = create(:notice)
 
       get :show, id: notice.id, format: :json
 
@@ -30,7 +30,25 @@ describe NoticesController do
       expect(json).to have_key(:title).with_value(notice.title)
       expect(json).to have_key(:body).with_value(notice.body)
       expect(json).to have_key(:date_sent).with_value(notice.date_sent)
+    end
+
+    it "serializes the file content" do
+      notice = create(:notice_with_notice_file, content: "Some content")
+
+      get :show, id: notice.id, format: :json
+
+      json = JSON.parse(response.body)["notice"]
       expect(json).to have_key(:notice_file_content).with_value("Some content")
+    end
+
+    it "includes the notice category names" do
+      notice = create(:notice, :with_categories)
+
+      get :show, id: notice.id, format: :json
+
+      json = JSON.parse(response.body)["notice"]
+      expect(json).to have_key(:categories)
+      expect(json["categories"]).to match_array notice.categories.map(&:name)
     end
   end
 end

@@ -37,6 +37,8 @@ GEM
       activesupport
       builder
       json
+    ancestry (2.0.0)
+      activerecord (>= 3.0.0)
     arel (3.0.2)
     better_errors (0.8.0)
       coderay (>= 1.0.0)
@@ -243,6 +245,7 @@ DEPENDENCIES
   active_model_serializers (~> 0.8.0)
   acts-as-taggable-on
   airbrake
+  ancestry
   better_errors
   binding_of_caller
   bourbon

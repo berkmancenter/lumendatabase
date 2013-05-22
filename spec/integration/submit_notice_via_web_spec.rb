@@ -53,6 +53,26 @@ feature "notice submission" do
     end
   end
 
+  scenario "submitting a notice with categories" do
+    create(:category, name: "Category 1")
+    create(:category, name: "Category 2")
+    create(:category, name: "Category 3")
+
+    visit "/submissions/new"
+
+    fill_in "Title", with: "A title"
+    select "Category 1", from: "Categories"
+    select "Category 3", from: "Categories"
+    click_on "Enter"
+
+    visit notice_path(Notice.last)
+
+    within('#categories') do
+      expect(page).to have_content "Category 1"
+      expect(page).to have_content "Category 3"
+    end
+  end
+
   scenario "a form articulates its required fields correctly" do
     visit "/submissions/new"
 

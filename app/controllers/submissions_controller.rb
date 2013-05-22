@@ -22,7 +22,7 @@ class SubmissionsController < ApplicationController
 
   def submission_params
     params.require(:submission).permit(
-      :title, :body, :date_sent, :file, :tag_list
+      :title, :body, :date_sent, :file, :tag_list, category_ids: []
     )
   end
 

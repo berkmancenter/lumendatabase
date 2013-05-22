@@ -1,7 +1,36 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rake db:seed (or created alongside the db with db:setup).
-#
-# Examples:
-#
-#   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
-#   Mayor.create(name: 'Emanuel', city: cities.first)
+category_names = [
+  'Anticircumvention (DMCA)',
+  'Bookmarks',
+  'Chilling Effects',
+  'Copyright',
+  'Copyright and Fair Use',
+  'Court Orders',
+  'Defamation',
+  'Derivative Works',
+  'DMCA Notices',
+  'DMCA Safe Harbor',
+  'DMCA Subpoenas',
+  'Documenting Your Domain Defense',
+  'Domain Names and Trademarks',
+  'E-Commerce Patents',
+  'Fan Fiction',
+  'International',
+  'John Doe Anonymity',
+  'Linking',
+  'No Action',
+  'Patent',
+  'Piracy or Copyright Infringement',
+  'Protest, Parody and Criticism Sites',
+  'References',
+  'Responses',
+  'Reverse Engineering',
+  'Right of Publicity',
+  'Trade Secret',
+  'Trademark',
+  'UDRP',
+  'Uncategorized'
+]
+
+category_names.each do |category_name|
+  Category.create!(name: category_name)
+end

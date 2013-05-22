@@ -2,7 +2,14 @@
   <%= form.input :title %>
   <%= form.input :body %>
   <%= form.input :date_sent %>
-  <%= form.input :file, as: :file, label: 'Notice File' %>
   <%= form.input :tag_list %>
+  <%=
+    form.input :category_ids,
+      as: :select,
+      label: "Categories",
+      collection: @submission.available_categories,
+      input_html: { multiple: true }
+  %>
+  <%= form.input :file, as: :file, label: 'Notice File' %>
   <%= form.submit "Enter" %>
 <% end %>

@@ -1,5 +1,9 @@
 FactoryGirl.define do
 
+  factory :category do
+    name "Category name"
+  end
+
   factory :notice do
     title "A title"
 
@@ -10,6 +14,12 @@ FactoryGirl.define do
     trait :with_tags do
       before(:create) do |notice|
         notice.tag_list = 'a_tag, another_tag'
+      end
+    end
+
+    trait :with_categories do
+      before(:create) do |notice|
+        notice.categories = build_list(:category, 3)
       end
     end
 

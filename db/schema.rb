@@ -13,6 +13,22 @@
 
 ActiveRecord::Schema.define(:version => 20130522212547) do
 
+  create_table "categories", :force => true do |t|
+    t.string "name"
+    t.string "description"
+    t.string "ancestry"
+  end
+
+  add_index "categories", ["ancestry"], :name => "index_categories_on_ancestry"
+
+  create_table "categories_notices", :force => true do |t|
+    t.integer "category_id"
+    t.integer "notice_id"
+  end
+
+  add_index "categories_notices", ["category_id"], :name => "index_categories_notices_on_category_id"
+  add_index "categories_notices", ["notice_id"], :name => "index_categories_notices_on_notice_id"
+
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
     t.integer  "attempts",   :default => 0

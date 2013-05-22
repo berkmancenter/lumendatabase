@@ -19,6 +19,7 @@ gem 'unicorn'
 gem 'paperclip'
 gem 'active_model_serializers', '~> 0.8.0'
 gem 'acts-as-taggable-on'
+gem 'ancestry'
 
 group :assets do
   gem 'coffee-rails'

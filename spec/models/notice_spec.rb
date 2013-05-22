@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe Notice do
   it { should validate_presence_of :title }
+  it { should have_many :file_uploads }
+  it { should have_and_belong_to_many :categories }
 
   context "#notice_file_content" do
     it "returns the contents of its uploaded notice file when present" do
