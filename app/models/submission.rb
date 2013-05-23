@@ -13,10 +13,12 @@ class Submission
     @date_sent = params[:date_sent]
     @file = params[:file]
 
-    @notice = Notice.new(params.slice(:title, :body, :date_sent))
+    notice = Notice.new(params.slice(:title, :body, :date_sent))
+
+    models << notice
 
     if @file.present?
-      @file_upload = FileUpload.new(file: @file, kind: :notice)
+      models << FileUpload.new(file: @file, kind: :notice, notice: notice)
     end
   end
 
@@ -28,21 +30,16 @@ class Submission
 
   private
 
-  attr_reader :notice, :file_upload
-
   def all_models_valid?
-    notice.valid? && (file_upload.nil? || file_upload.valid?)
+    models.all?(&:valid?)
   end
 
   def save_all_models
-    if notice.save
-      if file_upload
-        file_upload.notice = notice
-        file_upload.save
-      else
-        true
-      end
-    end
+    models.all?(&:save)
+  end
+
+  def models
+    @models ||= []
   end
 
 end
