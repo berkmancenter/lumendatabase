@@ -1,9 +1,41 @@
-<h1>Chilling Effect</h1>
+<nav class="home-nav">
+  <ol>
+    <li>
+      <%= link_to("Report C&D Notice", new_submission_path) %>
+    </li>
+    <li>
+      <a href="">Weather Reports</a>
+    </li>
+    <li>
+      <a href="">About</a>
+    </li>
+    <li>
+      <a href="">Topics</a>
+    </li>
+</nav>
 
-<h3>Recent Notices</h3>
+<section class="home-search-form">
+  <h1><%= image_tag("logo.svg") %> <span>Chilling Effects</span></h1>
+  <form>
+    <div class="input">
+      <input type="text">
+    </div>
+    <div class="submit">
+      <input type="submit" value="Search">
+    </div>
+  </form>
+</section>
 
-<ul id="recent-notices">
-  <%= render @notices %>
-</ul>
+<div class="site-news">
+  <section class="news-snippets">
+    <h2>Weather Reports</h2>
+  </section >
+  <section class="recent-notices">
+    <h2>Recently Linked Cease & Desists</h2>
 
-<%= link_to("Submit new notice", new_submission_path) %>
+    <div id="recent-notices">
+      <%= render @notices %>
+    </div>
+  </section>
+</div>
+

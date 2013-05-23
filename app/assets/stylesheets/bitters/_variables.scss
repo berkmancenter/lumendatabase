@@ -8,6 +8,8 @@
 // Colors
 ///////////////////////////////////////////////////////////////////////////////
 
+$home-width: 750px;
+
 $blue: #477DCA;
 $dark-gray: #333;
 $light-gray: #DDD;
@@ -17,13 +19,22 @@ $light-green: #E6EFC2;
 
 //  Font Colors
 $base-font-color: $dark-gray;
+$base-font-color-2: #777A83;
+
+$base-font-size-small-2: 14px;
+$base-font-size-small-1: 15px;
+$base-font-size: 16px;
 
 //  Text Link Colors
 $base-link-color: $blue;
 $hover-link-color: darken($blue, 15%);
 
+$nav-link-color: #656C7E;
+$nav-hover-link-color: darken($nav-link-color, 15%);
+
 // Border color
 $base-border-color: $light-gray;
+$base-border-color-1: #E1E1E1;
 
 // Flash Colors
 $error-color: $light-red;
