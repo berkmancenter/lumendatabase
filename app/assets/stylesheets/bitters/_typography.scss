@@ -4,6 +4,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
+@include font-face (fontello, 'fontello/fontello', normal, $asset-pipeline: true);
+
 // Font Stack
 $sans-serif: 'Open Sans', $helvetica;
 $serif: $georgia;

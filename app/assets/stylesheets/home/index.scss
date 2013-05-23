@@ -41,7 +41,7 @@ section.home-search-form {
   margin: 25vh 0;
 
   h1 {
-    margin-top: 0;
+    margin: 0 0 32px 0;
     text-align: center;
 
     span {
@@ -53,33 +53,41 @@ section.home-search-form {
   form {
     @include clearfix;
     font-size: 0;
+    margin: 0 auto;
+    position: relative;
     text-align: center;
-
-    > div {
-      display: inline-block;
-      vertical-align: top;
-    }
+    width: $home-search-input-w;
   }
 
   div.input {
     input {
-      @include border-right-radius(0);
-      border-right: 0;
       height: 52px;
-      width: 450px;
+      padding-right: $home-search-button-w + 15px;
+      width: $home-search-input-w;
     }
   }
 
   div.submit {
-    input {
-      width: 80px;
-      @include linear-gradient(#4383ED, #2C68CD);
+    position: absolute;
+    float: right;
+    top: 0;
+    right: 0;
+
+    button {
+      @include icon(icon-search);
       border: 1px solid #2D61BA;
+      @include border-right-radius(3px);
       color: white;
-      font-size: 12px;
+      font-family: 'fontello';
+      font-size: 63px;
       height: 52px;
+      @include linear-gradient(#4383ED, #2C68CD);
       text-shadow: 0 -1px 0 hsla(0, 0%, 0%, 0.4);
-      @include border-left-radius(1px);
+      width: $home-search-button-w;
+
+      &:before {
+        margin-right: -0.1em;
+      }
     }
   }
 }

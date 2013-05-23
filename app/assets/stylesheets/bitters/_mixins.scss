@@ -1,0 +1,20 @@
+@mixin icon($icon, $position:before) {
+  &:#{$position} {
+    @extend %#{$icon};
+    display: inline-block;
+    font-family: 'fontello';
+    font-style: normal;
+    font-weight: normal;
+    speak: none;
+    text-align: center;
+    text-decoration: inherit;
+    -webkit-font-smoothing: antialiased;
+    width: 1em;
+
+    @if($position == before) {
+      margin-right: 0.5em;
+    } @else {
+      margin-left: 0.5em;
+    }
+  }
+}

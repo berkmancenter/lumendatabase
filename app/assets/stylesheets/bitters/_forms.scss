@@ -90,8 +90,8 @@ select {
   margin-bottom: $base-line-height * 1.5;
 }
 
-button,
-input[type="submit"] {
+button:not(.reset),
+input[type="submit"]:not(.reset) {
   @include button(simple, #fafafa);
 
   // Button Overrides
