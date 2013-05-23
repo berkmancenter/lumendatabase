@@ -39,6 +39,20 @@ feature "notice submission" do
     expect(page).to have_content "Some content"
   end
 
+  scenario "submitting a notice with tags" do
+    visit "/submissions/new"
+
+    fill_in "Title", with: "A title"
+    fill_in "Tag list", with: "tag_1, tag_2"
+    click_on "Enter"
+
+    visit notice_path(Notice.last)
+
+    within('#tags') do
+      expect(page).to have_content "tag_1"
+    end
+  end
+
   scenario "a form articulates its required fields correctly" do
     visit "/submissions/new"
 

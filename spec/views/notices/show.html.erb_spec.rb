@@ -19,4 +19,15 @@ describe 'notices/show.html.erb' do
 
     expect(rendered).to include("File content")
   end
+
+  it "displays a notice with tags" do
+    notice = create(:notice, :with_tags)
+    assign(:notice, notice)
+
+    render
+
+    within('#tags') do
+      expect(page).to have_content("a_tag")
+    end
+  end
 end

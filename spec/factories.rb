@@ -7,6 +7,12 @@ FactoryGirl.define do
       body "A body"
     end
 
+    trait :with_tags do
+      before(:create) do |notice|
+        notice.tag_list = 'a_tag, another_tag'
+      end
+    end
+
     factory :notice_with_notice_file do
       ignore do
         content "Content"

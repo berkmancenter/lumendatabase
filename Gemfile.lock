@@ -30,6 +30,8 @@ GEM
     activesupport (3.2.13)
       i18n (= 0.6.1)
       multi_json (~> 1.0)
+    acts-as-taggable-on (2.4.1)
+      rails (>= 3, < 5)
     addressable (2.3.4)
     airbrake (3.1.12)
       activesupport
@@ -239,6 +241,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers (~> 0.8.0)
+  acts-as-taggable-on
   airbrake
   better_errors
   binding_of_caller

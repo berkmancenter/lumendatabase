@@ -1,6 +1,7 @@
 class Notice < ActiveRecord::Base
 
   has_many :file_uploads
+  acts_as_taggable
 
   validates_presence_of :title
 

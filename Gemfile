@@ -18,6 +18,7 @@ gem 'strong_parameters'
 gem 'unicorn'
 gem 'paperclip'
 gem 'active_model_serializers', '~> 0.8.0'
+gem 'acts-as-taggable-on'
 
 group :assets do
   gem 'coffee-rails'

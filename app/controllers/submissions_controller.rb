@@ -21,7 +21,9 @@ class SubmissionsController < ApplicationController
   private
 
   def submission_params
-    params.require(:submission).permit(:title, :body, :date_sent, :file)
+    params.require(:submission).permit(
+      :title, :body, :date_sent, :file, :tag_list
+    )
   end
 
   def render_bad_request(errors)

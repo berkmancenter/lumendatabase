@@ -3,7 +3,7 @@ require 'psuedo_model'
 class Submission
   include PsuedoModel
 
-  attr_reader :title, :body, :date_sent, :file
+  attr_reader :title, :body, :date_sent, :file, :tag_list
 
   validates_presence_of :title
 
@@ -12,9 +12,9 @@ class Submission
     @body  = params[:body]
     @date_sent = params[:date_sent]
     @file = params[:file]
+    @tag_list = params[:tag_list]
 
-    notice = Notice.new(params.slice(:title, :body, :date_sent))
-
+    notice = Notice.new(params.slice(:title, :body, :date_sent, :tag_list))
     models << notice
 
     if @file.present?

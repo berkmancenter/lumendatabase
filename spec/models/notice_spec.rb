@@ -34,4 +34,26 @@ describe Notice do
       expect(Notice.recent).to eq [first_notice, second_notice, third_notice]
     end
   end
+
+  context "tagging" do
+    it "accepts a comma-delimited string and turns it into an array of tags" do
+      notice = create(:notice, tag_list: 'foo, bar, baz, blee')
+
+      expect(notice.tag_list).to eq ['foo','bar','baz','blee']
+    end
+
+    it 'has lowercases tags automatically' do
+      notice = create(:notice, tag_list: 'FOO')
+
+      expect(notice.tag_list).to eq ['foo']
+    end
+
+    it 'cleans up unused tags after deletion' do
+      notice = create(:notice, tag_list: 'foo')
+      notice.tag_list.remove('foo')
+      notice.save
+
+      expect(ActsAsTaggableOn::Tag.find_by_name('foo')).not_to be
+    end
+  end
 end
