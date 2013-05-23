@@ -73,6 +73,22 @@ feature "notice submission" do
     end
   end
 
+  scenario "submitting a notice with entities", js: true do
+    visit "/submissions/new"
+    fill_in "Title", with: "A title"
+    fill_in "Recipient Name", with: "Recipient the first"
+    fill_in "Submitter Name", with: "Submitter the first"
+    fill_in "Date sent", with: Time.now
+
+    click_on "Submit"
+
+    click_on 'A title'
+    within('#entities') do
+      expect(page).to have_content "Recipient the first"
+      expect(page).to have_content "Submitter the first"
+    end
+  end
+
   scenario "a form articulates its required fields correctly" do
     visit "/submissions/new"
 

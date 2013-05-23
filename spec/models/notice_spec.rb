@@ -3,6 +3,8 @@ require 'spec_helper'
 describe Notice do
   it { should validate_presence_of :title }
   it { should have_many :file_uploads }
+  it { should have_many :entity_notice_roles }
+  it { should have_many(:entities).through(:entity_notice_roles)  }
   it { should have_and_belong_to_many :categories }
 
   context "#notice_file_content" do
@@ -44,7 +46,7 @@ describe Notice do
       expect(notice.tag_list).to eq ['foo','bar','baz','blee']
     end
 
-    it 'has lowercases tags automatically' do
+    it 'has lowercased tags automatically' do
       notice = create(:notice, tag_list: 'FOO')
 
       expect(notice.tag_list).to eq ['foo']
@@ -56,6 +58,16 @@ describe Notice do
       notice.save
 
       expect(ActsAsTaggableOn::Tag.find_by_name('foo')).not_to be
+    end
+  end
+
+  context "notice roles" do
+    it "cleans up notice roles after a notice is destroyed" do
+      entity = create(:entity_with_notice_roles)
+      notice = entity.notices.first
+
+      EntityNoticeRole.any_instance.should_receive(:destroy)
+      notice.destroy
     end
   end
 end

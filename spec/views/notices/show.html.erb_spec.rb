@@ -30,4 +30,17 @@ describe 'notices/show.html.erb' do
       expect(page).to have_content("a_tag")
     end
   end
+
+  it "displays a notice with entities" do
+    notice = create(:notice_with_entities)
+    assign(:notice, notice)
+
+    render
+
+    within('#entities') do
+      notice.entities.each do |entity|
+        expect(page).to have_content(entity.name)
+      end
+    end
+  end
 end

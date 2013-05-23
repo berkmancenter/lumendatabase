@@ -57,6 +57,32 @@ ActiveRecord::Schema.define(:version => 20130523204557) do
 
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
 
+  create_table "entities", :force => true do |t|
+    t.string "name",                                     :null => false
+    t.string "kind",           :default => "individual", :null => false
+    t.string "address_line_1"
+    t.string "address_line_2"
+    t.string "state"
+    t.string "country_code"
+    t.string "phone"
+    t.string "email"
+    t.string "url"
+    t.string "ancestry"
+  end
+
+  add_index "entities", ["ancestry"], :name => "index_entities_on_ancestry"
+
+  create_table "entity_notice_roles", :force => true do |t|
+    t.integer  "entity_id"
+    t.integer  "notice_id"
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "entity_notice_roles", ["entity_id"], :name => "index_entity_notice_roles_on_entity_id"
+  add_index "entity_notice_roles", ["notice_id"], :name => "index_entity_notice_roles_on_notice_id"
+
   create_table "file_uploads", :force => true do |t|
     t.integer  "notice_id"
     t.string   "kind"
