@@ -1,24 +1,9 @@
-<nav class="home-nav">
-  <ol>
-    <li>
-      <%= link_to("Report C&D Notice", new_submission_path) %>
-    </li>
-    <li>
-      <a href="">Weather Reports</a>
-    </li>
-    <li>
-      <a href="">About</a>
-    </li>
-    <li>
-      <a href="">Topics</a>
-    </li>
-</nav>
-
+<%= render 'shared/navigation' -%>
 <section class="home-search-form">
   <h1><%= image_tag("logo.svg") %></h1>
   <form>
     <div class="input">
-      <input type="text">
+      <input type="search" placeholder="Search C&D notices…">
     </div>
     <div class="submit">
       <button class="reset" type="submit" title="search"></button>
@@ -31,7 +16,7 @@
     <h2>Weather Reports</h2>
   </section >
   <section class="recent-notices">
-    <h2>Recently Linked Cease & Desists</h2>
+    <h2>Recent Cease & Desists</h2>
 
     <div id="recent-notices">
       <%= render @notices %>

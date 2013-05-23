@@ -11,10 +11,13 @@
  *= require_self
  */
 
+@import 'normalize';
 @import 'bourbon';
 @import 'neat';
 @import 'bitters/base';
 
 @import 'shared/fontello';
+
+@import 'layouts/application';
 
 @import 'home/index';

@@ -9,7 +9,10 @@
 </head>
 <body class="<%= body_class %>">
   <%= render 'flashes' -%>
-  <%= yield %>
+  <%= render 'shared/header' -%>
+  <section class="main app">
+    <%= yield %>
+  </section>
   <%= render 'javascript' %>
 </body>
 </html>

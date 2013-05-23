@@ -1,17 +1,20 @@
-<h1><%= @notice.title %></h1>
+<article class="notice-show">
+  <h1><%= @notice.title %></h1>
 
-<section>
-  <%= @notice.body %>
-</section>
+  <section>
+    <%= @notice.body %>
+  </section>
 
-<section>
-  <%= @notice.notice_file_content %>
-</section>
+  <section>
+    <%= @notice.notice_file_content %>
+  </section>
 
-<section id="tags">
-  <%= @notice.tag_list %>
-</section>
+  <section id="tags">
+    <%= @notice.tag_list %>
+  </section>
 
-<section id="categories">
-  <%= render 'shared/category_list', categories: @notice.categories %>
-</section>
+  <section id="categories">
+    <%= render 'shared/category_list', categories: @notice.categories %>
+  </section>
+
+</article>

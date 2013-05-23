@@ -10,7 +10,7 @@ $form-border-color-focus: $blue; //blue default
 $form-border-radius: 3px;
 $form-box-shadow-focus: darken($form-border-color-focus, 5%);
 $form-font-size: $base-font-size;
-$form-font-family: $lucida-grande;
+$form-font-family: $sans-serif;
 $form-width: em(300);
 
 fieldset {
@@ -29,8 +29,11 @@ select {
 }
 
 label {
+  color: $base-font-color-3;
   font-weight: bold;
   margin-bottom: $base-line-height * .25;
+  text-transform: uppercase;
+  font-size: $base-font-size-small-2;
 
   &.required::after {
     content: "*";
@@ -99,4 +102,11 @@ input[type="submit"]:not(.reset) {
   box-shadow: 0 1px 1px hsla(0, 0%, 0%, 0.06);
   font-size: $form-font-size;
   padding: 0.7em 1.9em;
+}
+
+input {
+  @include placeholder {
+    color: #AEB6C2;
+    font-weight: 300;
+  }
 }

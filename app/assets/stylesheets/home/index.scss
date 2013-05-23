@@ -3,33 +3,33 @@ body.home-index {
   @include outer-container;
   max-width: $home-width;
   margin-top: 0;
-}
 
-nav.home-nav {
-  ol {
-    background: white;
-    border-radius: 0 0 3px 3px;
-    @include clearfix;
-    list-style: none;
-    margin-top: 0;
-    padding: 0;
-    border: 1px solid $base-border-color;
-    border-top: 0;
-    width: 100%;
+  nav.main-nav {
+    ol {
+      background: white;
+      border-radius: 0 0 3px 3px;
+      @include clearfix;
+      list-style: none;
+      margin-top: 0;
+      padding: 0;
+      border: 1px solid $base-border-color;
+      border-top: 0;
+      width: 100%;
 
-    li {
-      width: 25%;
-      float: left;
-      padding: 10px 20px;
-      font-size: $base-font-size-small-1;
-      text-align: center;
+      li {
+        width: 25%;
+        float: left;
+        padding: 10px 20px;
+        font-size: $base-font-size - 1px;
+        text-align: center;
 
-      a {
-        color: $nav-link-color;
-        text-decoration: none;
+        a {
+          color: $nav-link-color;
+          text-decoration: none;
 
-        &:hover {
-          color: $nav-hover-link-color;
+          &:hover {
+            color: $nav-hover-link-color;
+          }
         }
       }
     }
@@ -39,6 +39,7 @@ nav.home-nav {
 section.home-search-form {
   margin: 175px 0 150px 0;
   margin: 25vh 0;
+  @extend %search-form;
 
   h1 {
     margin: 0 0 32px 0;
@@ -51,44 +52,7 @@ section.home-search-form {
   }
 
   form {
-    @include clearfix;
-    font-size: 0;
     margin: 0 auto;
-    position: relative;
-    text-align: center;
-    width: $home-search-input-w;
-  }
-
-  div.input {
-    input {
-      height: 52px;
-      padding-right: $home-search-button-w + 15px;
-      width: $home-search-input-w;
-    }
-  }
-
-  div.submit {
-    position: absolute;
-    float: right;
-    top: 0;
-    right: 0;
-
-    button {
-      @include icon(icon-search);
-      border: 1px solid #2D61BA;
-      @include border-right-radius(3px);
-      color: white;
-      font-family: 'fontello';
-      font-size: 63px;
-      height: 52px;
-      @include linear-gradient(#4383ED, #2C68CD);
-      text-shadow: 0 -1px 0 hsla(0, 0%, 0%, 0.4);
-      width: $home-search-button-w;
-
-      &:before {
-        margin-right: -0.1em;
-      }
-    }
   }
 }
 
@@ -102,9 +66,24 @@ section.main.home {
       padding: 20px;
     }
 
+    article {
+      font-size: $base-font-size-small-1;
+      margin-bottom: 0.5em;
+
+      a {
+        font-weight: 600;
+      }
+
+      time {
+        display: block;
+        font-size: $base-font-size-small-2;
+        color: $base-font-color-2;
+      }
+    }
+
     h2 {
       margin: 0 0 1em;
-      font-size: $base-font-size-small-2;
+      font-size: $base-font-size-small-1 - 1px;
       text-transform: uppercase;
       color: $base-font-color-2;
     }
