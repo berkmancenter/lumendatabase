@@ -1,7 +1,9 @@
+# create three that we hold onto and reuse
+dmca      = Category.create!(name: 'Anticircumvention (DMCA)')
+bookmarks = Category.create!(name: 'Bookmarks')
+chilling  = Category.create!(name: 'Chilling Effects')
+
 category_names = [
-  'Anticircumvention (DMCA)',
-  'Bookmarks',
-  'Chilling Effects',
   'Copyright',
   'Copyright and Fair Use',
   'Court Orders',
@@ -34,3 +36,14 @@ category_names = [
 category_names.each do |category_name|
   Category.create!(name: category_name)
 end
+
+CategoryManager.create!(
+  name: "Harvard Law",
+  categories: [dmca, bookmarks, chilling]
+)
+
+Submission.new(
+  title: "Lion King on YouTube",
+  date_sent: Time.now,
+  category_ids: [dmca, bookmarks, chilling].map(&:id)
+).save

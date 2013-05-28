@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130522212547) do
+ActiveRecord::Schema.define(:version => 20130523204557) do
 
   create_table "categories", :force => true do |t|
     t.string "name"
@@ -21,6 +21,14 @@ ActiveRecord::Schema.define(:version => 20130522212547) do
 
   add_index "categories", ["ancestry"], :name => "index_categories_on_ancestry"
 
+  create_table "categories_category_managers", :force => true do |t|
+    t.integer "category_id"
+    t.integer "category_manager_id"
+  end
+
+  add_index "categories_category_managers", ["category_id"], :name => "index_categories_category_managers_on_category_id"
+  add_index "categories_category_managers", ["category_manager_id"], :name => "index_categories_category_managers_on_category_manager_id"
+
   create_table "categories_notices", :force => true do |t|
     t.integer "category_id"
     t.integer "notice_id"
@@ -28,6 +36,10 @@ ActiveRecord::Schema.define(:version => 20130522212547) do
 
   add_index "categories_notices", ["category_id"], :name => "index_categories_notices_on_category_id"
   add_index "categories_notices", ["notice_id"], :name => "index_categories_notices_on_notice_id"
+
+  create_table "category_managers", :force => true do |t|
+    t.string "name"
+  end
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
