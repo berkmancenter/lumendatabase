@@ -1,5 +1,7 @@
 FactoryGirl.define do
 
+  sequence(:email) { |n| "user_#{n}@example.com" }
+
   factory :category do
     name "Category name"
   end
@@ -52,6 +54,12 @@ FactoryGirl.define do
         Rack::Test::UploadedFile.new(fh.path, "text/plain")
       end
     end
+  end
+
+  factory :user do
+    email
+    password "secretsauce"
+    password_confirmation "secretsauce"
   end
 
 end
