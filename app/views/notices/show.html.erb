@@ -1,7 +1,25 @@
 <article class="notice-show">
+  <header>
   <h1><%= @notice.title %></h1>
+  <span class="date-recieved wip">Date Recieved: <time datetime="">May 17, 2013</time></span>
+</header>
 
-  <section>
+  <div class="sender-reciever wip">
+    <section class="reciever">
+      <h6>Recipient</h6>
+      <span>[Private]</span>
+      <span>Google, Inc. [Blogger]</span>
+      <span>Mountain View, CA, 94043, USA</span>
+    </section>
+    <section class="sender">
+      <h6>Sender</h6>
+      <span>Jan Krohn</span>
+      <span>Sent by: [Private]</span>
+      <span>[Private]</span>
+      <span>KH</span>
+    </section>
+  </div>
+  <section class="body">
     <%= @notice.body %>
   </section>
 

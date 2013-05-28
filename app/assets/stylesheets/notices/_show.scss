@@ -1,0 +1,85 @@
+body.notices {
+  background: #FAFAFA;
+}
+
+article.notice-show {
+  header {
+    margin-bottom: 2em;
+
+    h1 {
+      color: $base-title-color;
+      font-size: em(26, 15);
+      font-weight: bold;
+      line-height: 1em;
+      margin-bottom: 0.15em;
+    }
+
+    .date-recieved {
+      font-weight: bold;
+      font-size: $base-font-size-small-1 - 1px;
+      color: $base-font-color-3;
+    }
+  }
+
+  div.sender-reciever {
+    @include clearfix;
+    margin-bottom: 40px;
+
+    section.sender,
+    section.reciever {
+      background: #fff;
+      border: 1px solid $base-border-color-2;
+      border-left: 0;
+      border-radius: 3px;
+      float: left;
+      min-height: 150px;
+      width: 30%;
+      min-width: 200px;
+      padding: 25px 35px;
+    }
+
+    section.reciever {
+      box-shadow: -4px 0 0 #18A753;
+      margin-right: 15%;
+
+    }
+
+    section.sender {
+      box-shadow: -4px 0 0 #DE5024;
+      position: relative;
+
+      &:before {
+        background-image: image_url("arrow.svg");
+        background-repeat: no-repeat;
+        background-size: 26.5%;
+        content: "";
+        height: 48px;
+        left: -38%;
+        position: absolute;
+        top: 50px;
+        width: 100%;
+        z-index: -1;
+      }
+    }
+
+    h6 {
+      font-size: $base-font-size-small-1;
+      font-weight: bold;
+    }
+
+    span {
+      display: block;
+      font-size: $base-font-size-small-1;
+    }
+  }
+
+  section.body {
+    background: white;
+    border: 1px solid $base-border-color-2;
+    border-radius: 2px;
+    box-shadow: 0 0 0 10px hsla(0, 0%, 0%, 0.05);
+    clear: left;
+    font-size: $base-font-size-small-1;
+    padding: 40px;
+  }
+}

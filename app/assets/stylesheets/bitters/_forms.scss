@@ -29,11 +29,11 @@ select {
 }
 
 label {
-  color: $base-font-color-3;
+  color: $base-title-color;
   font-weight: bold;
   margin-bottom: $base-line-height * .25;
   text-transform: uppercase;
-  font-size: $base-font-size-small-2;
+  font-size: $base-font-size-small-1;
 
   &.required::after {
     content: "*";

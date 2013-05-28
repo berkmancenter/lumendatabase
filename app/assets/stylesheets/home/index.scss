@@ -20,7 +20,6 @@ body.home-index {
         width: 25%;
         float: left;
         padding: 10px 20px;
-        font-size: $base-font-size - 1px;
         text-align: center;
 
         a {
@@ -53,6 +52,10 @@ section.home-search-form {
 
   form {
     margin: 0 auto;
+
+    input {
+      font-size: $base-font-size + 1px;
+    }
   }
 }
 
@@ -67,7 +70,7 @@ section.main.home {
     }
 
     article {
-      font-size: $base-font-size-small-1;
+      font-size: $base-font-size - 1px;
       margin-bottom: 0.5em;
 
       a {
@@ -76,14 +79,14 @@ section.main.home {
 
       time {
         display: block;
-        font-size: $base-font-size-small-2;
+        font-size: $base-font-size-small-1;
         color: $base-font-color-2;
       }
     }
 
     h2 {
       margin: 0 0 1em;
-      font-size: $base-font-size-small-1 - 1px;
+      font-size: $base-font-size-small-1;
       text-transform: uppercase;
       color: $base-font-color-2;
     }
