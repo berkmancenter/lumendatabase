@@ -20,6 +20,8 @@ gem 'paperclip'
 gem 'active_model_serializers', '~> 0.8.0'
 gem 'acts-as-taggable-on'
 gem 'ancestry'
+gem 'devise'
+gem 'rails_admin', '~>0.4.8'
 
 group :assets do
   gem 'coffee-rails'
