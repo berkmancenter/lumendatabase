@@ -17,5 +17,7 @@
   <% end %>
 
   <%= form.input :file, as: :file, label: 'Notice File' %>
-  <%= form.submit "Submit" %>
+  <div class="buttons-wrapper">
+    <%= form.submit "Submit", :class => "submit" %>
+  </div>
 <% end %>

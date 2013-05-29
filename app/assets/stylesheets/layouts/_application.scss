@@ -1,3 +1,7 @@
+body {
+  background: #FAFAFA;
+}
+
 section.main.app {
   @include outer-container;
   padding-top: 40px;

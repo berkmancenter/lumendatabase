@@ -22,3 +22,12 @@
 
 @import 'home/index';
 @import 'notices/show';
+@import 'submissions/new';
+
+.wip {
+  outline: 1px solid yellow;
+
+  &.disabled {
+    outline: none;
+  }
+}

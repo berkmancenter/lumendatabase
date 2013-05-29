@@ -20,6 +20,8 @@
     </section>
   </div>
   <section class="body">
+    <h2 class="notice-title wip">Re: Infringement Notification via Blogger Complaint</h2>
+    <p class="source wip">Sent via: Online Form</p>
     <%= @notice.body %>
   </section>
 
@@ -27,13 +29,17 @@
     <%= @notice.notice_file_content %>
   </section>
 
-  <section id="tags">
-    <%= @notice.tag_list %>
-  </section>
+  <div class="foot">
+    <section id="tags">
+      <h6>Tags</h6>
+      <%= @notice.tag_list %>
+    </section>
 
-  <section id="categories">
-    <%= render 'shared/category_list', categories: @notice.categories %>
-  </section>
+    <section id="categories">
+      <h6>Categories</h6>
+      <%= render 'shared/category_list', categories: @notice.categories %>
+    </section>
+  </div>
 
   <section id="entities">
     <%= render @notice.entity_notice_roles %>

@@ -1,0 +1,39 @@
+form.new_submission {
+  $label-width: 150px;
+  $label-margin: 20px;
+
+  width: 600px;
+  margin: 0 auto;
+
+  div {
+    @include clearfix;
+  }
+
+  label {
+    float: left;
+    text-align: right;
+    width: 150px;
+    margin-right: 20px;
+  }
+
+  div.input label {
+    margin-top: 12px;
+  }
+
+  div.input.file label {
+    margin-top: 0;
+  }
+
+  select, input {
+    float: left;
+  }
+
+  select {
+    padding: 10px 10px 5px 10px;
+  }
+
+  div.buttons-wrapper {
+    margin-top: 20px;
+    padding-left: $label-width + $label-margin;
+  }
+}

@@ -80,6 +80,48 @@ article.notice-show {
     box-shadow: 0 0 0 10px hsla(0, 0%, 0%, 0.05);
     clear: left;
     font-size: $base-font-size-small-1;
+    margin-bottom: 20px;
     padding: 40px;
+
+    h2 {
+      font-size: 17px;
+      margin: 0;
+      line-height: 1.5em;
+      font-weight: 700;
+    }
+
+    p.source {
+      color: #999;
+      font-weight: 600;
+      font-size: $base-font-size-small-1;
+      margin-bottom: 25px;
+    }
+  }
+
+  div.foot {
+    padding: 20px 40px;
+    // background: white;
+    // box-shadow: 0 1px 2px 0 hsla(0, 0%, 0%, 0.22);
+    border-radius: 3px;
+    @include clearfix;
+
+    section {
+      font-size: $base-font-size-small-1;
+      width: 50%;
+      float: left;
+      min-height: 20px;
+
+      &:first-child {
+        padding-right: 10px;
+      }
+
+      &:last-child {
+        padding-left: 10px;
+      }
+    }
+
+    h6 {
+      @extend %title-caps;
+    }
   }
 }
