@@ -9,5 +9,8 @@ class CreateRailsAdminHistoriesTable < ActiveRecord::Migration
       t.integer :year, limit: 5
       t.timestamps
     end
+    %w[item table month year].each do |column|
+      add_index :rails_admin_histories, column
+    end
   end
 end

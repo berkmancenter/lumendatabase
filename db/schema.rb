@@ -113,7 +113,10 @@ ActiveRecord::Schema.define(:version => 20130528150904) do
     t.datetime "updated_at",              :null => false
   end
 
-  add_index "rails_admin_histories", ["item", "table", "month", "year"], :name => "index_rails_admin_histories"
+  add_index "rails_admin_histories", ["item"], :name => "index_rails_admin_histories_on_item"
+  add_index "rails_admin_histories", ["month"], :name => "index_rails_admin_histories_on_month"
+  add_index "rails_admin_histories", ["table"], :name => "index_rails_admin_histories_on_table"
+  add_index "rails_admin_histories", ["year"], :name => "index_rails_admin_histories_on_year"
 
   create_table "taggings", :force => true do |t|
     t.integer  "tag_id"
