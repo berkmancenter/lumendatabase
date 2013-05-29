@@ -35,5 +35,5 @@ Chill::Application.configure do
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
 
-  config.action_mailer.default_url_option = { host: 'www.example.com' }
+  config.action_mailer.default_url_options = { host: 'www.example.com' }
 end
