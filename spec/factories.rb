@@ -37,6 +37,12 @@ FactoryGirl.define do
         )
       end
     end
+
+    factory :notice_with_entities do
+      after(:create) do |notice|
+        create(:entity_notice_role, notice: notice, entity: create(:entity))
+      end
+    end
   end
 
   factory :file_upload do
@@ -50,6 +56,34 @@ FactoryGirl.define do
         fh.flush
 
         Rack::Test::UploadedFile.new(fh.path, "text/plain")
+      end
+    end
+  end
+
+  factory :entity_notice_role do
+    notice { build(:notice) }
+    entity { build(:entity) }
+    name { 'principal' }
+  end
+
+  factory :entity do
+    name "A name"
+    kind "individual"
+
+    factory :entity_with_children do
+      after(:create) do |parent_entity|
+        create(:entity, parent: parent_entity)
+        create(:entity, parent: parent_entity)
+      end
+    end
+
+    factory :entity_with_notice_roles do
+      after(:create) do |entity|
+        notice = create(:notice)
+        create(
+          :entity_notice_role,
+          entity: entity, notice: notice, name: 'principal'
+        )
       end
     end
   end

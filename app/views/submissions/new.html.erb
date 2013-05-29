@@ -10,6 +10,12 @@
       collection: @submission.available_categories,
       input_html: { multiple: true }
   %>
+
+  <%= form.fields_for(:entities) do |entity_form| %>
+    <%= raw entity_form_input(entity_form, 'Recipient') %>
+    <%= raw entity_form_input(entity_form, 'Submitter') %>
+  <% end %>
+
   <%= form.input :file, as: :file, label: 'Notice File' %>
   <%= form.submit "Submit" %>
 <% end %>

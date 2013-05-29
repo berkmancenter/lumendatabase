@@ -14,6 +14,7 @@ class Submission
     @file = params[:file]
     @tag_list = params[:tag_list]
     @category_ids = params[:category_ids]
+    @entities = params[:entities]
 
     notice_params = params.slice(:title, :body, :date_sent, :tag_list)
 
@@ -26,6 +27,10 @@ class Submission
 
     if @file.present?
       models << FileUpload.new(file: @file, kind: :notice, notice: notice)
+    end
+
+    if @entities.present?
+      associate_new_entities_with_notice @entities, notice
     end
   end
 
@@ -40,6 +45,21 @@ class Submission
   end
 
   private
+
+  def associate_new_entities_with_notice(entities, notice)
+    entities.each do |entity_hash|
+      entity_role = entity_hash.delete(:role)
+      entity = Entity.new(entity_hash)
+      entity_notice_role = EntityNoticeRole.new(
+        entity: entity, notice: notice, name: entity_role
+      )
+
+      if entity.valid? && entity_notice_role.valid?
+        models << entity
+        models << entity_notice_role
+      end
+    end
+  end
 
   def all_models_valid?
     models.all?(&:valid?)

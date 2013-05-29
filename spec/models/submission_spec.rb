@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Submission do
-  it "allows a file to uploaded" do
+  it 'allows a file to be uploaded' do
     with_tempfile do |fh|
       fh.write 'Some content'
       fh.flush
@@ -46,6 +46,32 @@ describe Submission do
     submission.save
 
     expect(Notice.last.categories).to be_empty
+  end
+
+  it 'does not attempt to create entities when none are submitted' do
+    Entity.any_instance.should_not_receive(:save)
+    EntityNoticeRole.any_instance.should_not_receive(:save)
+    Notice.any_instance.stub(:save).and_return(true)
+
+    Submission.new(title: "A Title").save
+  end
+
+  it 'creates entities when they are submitted' do
+    Entity.any_instance.should_receive(:save)
+    Notice.any_instance.stub(:save).and_return(true)
+
+    Submission.new(title: "A Title", entities: [{
+      name: 'I am a person', kind: 'individual', role: 'principal'
+    }]).save
+  end
+
+  it 'creates entity_notice_roles when they are submitted' do
+    EntityNoticeRole.any_instance.should_receive(:save)
+    Notice.any_instance.stub(:save).and_return(true)
+
+    Submission.new(title: "A Title", entities: [{
+      name: 'I am a person', kind: 'individual', role: 'principal'
+    }]).save
   end
 
   def with_tempfile(&block)
