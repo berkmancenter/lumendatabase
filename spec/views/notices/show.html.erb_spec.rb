@@ -43,4 +43,26 @@ describe 'notices/show.html.erb' do
       end
     end
   end
+
+  it "displays a notice with relevant questions" do
+    notice = create(:notice, :with_questions, questions: [
+      q1 = create(:relevant_question, question: "Q 1", answer: "A 1"),
+      q2 = create(:relevant_question, question: "Q 2", answer: "A 2")
+    ])
+    assign(:notice, notice)
+
+    render
+
+    within('#relevant-questions') do
+      within("#relevant_question_#{q1.id}") do
+        expect(page).to have_content("Q 1")
+        expect(page).to have_content("A 1")
+      end
+
+      within("#relevant_question_#{q2.id}") do
+        expect(page).to have_content("Q 2")
+        expect(page).to have_content("A 2")
+      end
+    end
+  end
 end

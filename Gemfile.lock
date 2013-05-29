@@ -222,6 +222,7 @@ GEM
       json (~> 1.4)
     recipient_interceptor (0.1.1)
       mail
+    redcarpet (2.3.0)
     remotipart (1.0.5)
     rspec-core (2.13.1)
     rspec-expectations (2.13.0)
@@ -315,6 +316,7 @@ DEPENDENCIES
   rails_admin (~> 0.4.8)
   rb-inotify
   recipient_interceptor
+  redcarpet (~> 2.3.0)
   rspec-rails
   sass-rails
   sham_rack
