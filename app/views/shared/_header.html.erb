@@ -1,6 +1,10 @@
 <header class="app">
   <div class="container">
-    <h1><%= image_tag("logo.svg") %></h1>
+    <h1>
+      <%= link_to root_path, :id => "root" do %>
+        <%= image_tag("logo.svg") %>
+      <% end %>
+    </h1>
     <form>
       <div class="input">
         <input type="search" placeholder="Search C&D notices…">
