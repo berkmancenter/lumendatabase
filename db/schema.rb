@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130530154325) do
+ActiveRecord::Schema.define(:version => 20130530180507) do
 
   create_table "categories", :force => true do |t|
     t.string "name"
@@ -125,6 +125,14 @@ ActiveRecord::Schema.define(:version => 20130530154325) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  create_table "notices_relevant_questions", :force => true do |t|
+    t.integer "notice_id"
+    t.integer "relevant_question_id"
+  end
+
+  add_index "notices_relevant_questions", ["notice_id"], :name => "index_notices_relevant_questions_on_notice_id"
+  add_index "notices_relevant_questions", ["relevant_question_id"], :name => "index_notices_relevant_questions_on_relevant_question_id"
 
   create_table "notices_works", :id => false, :force => true do |t|
     t.integer  "notice_id"

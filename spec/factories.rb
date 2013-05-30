@@ -4,16 +4,6 @@ FactoryGirl.define do
 
   factory :category do
     name "Category name"
-
-    trait :with_questions do
-      ignore do
-        questions { build_list(:relevant_question, 3) }
-      end
-
-      before(:create) do |category, evaluator|
-        category.relevant_questions = evaluator.questions
-      end
-    end
   end
 
   factory :notice do
@@ -32,17 +22,6 @@ FactoryGirl.define do
     trait :with_categories do
       before(:create) do |notice|
         notice.categories = build_list(:category, 3)
-      end
-    end
-
-    trait :with_questions do
-      ignore do
-        questions { build_list(:relevant_question, 3) }
-      end
-
-      before(:create) do |notice, evaluator|
-        notice.categories <<
-          create(:category, :with_questions, questions: evaluator.questions)
       end
     end
 

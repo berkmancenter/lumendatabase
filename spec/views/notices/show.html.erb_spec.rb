@@ -44,22 +44,23 @@ describe 'notices/show.html.erb' do
     end
   end
 
-  it "displays a notice with relevant questions" do
-    notice = create(:notice, :with_questions, questions: [
-      q1 = create(:relevant_question, question: "Q 1", answer: "A 1"),
-      q2 = create(:relevant_question, question: "Q 2", answer: "A 2")
-    ])
-    assign(:notice, notice)
+  it "displays a notice with all relevant questions" do
+    category_question = create(:relevant_question, question: "Q 1", answer: "A 1")
+    notice_question = create(:relevant_question, question: "Q 2", answer: "A 2")
+    assign(:notice, create(:notice,
+      categories: [create(:category, relevant_questions: [category_question])],
+      relevant_questions: [notice_question]
+    ))
 
     render
 
     within('#relevant-questions') do
-      within("#relevant_question_#{q1.id}") do
+      within("#relevant_question_#{category_question.id}") do
         expect(page).to have_content("Q 1")
         expect(page).to have_content("A 1")
       end
 
-      within("#relevant_question_#{q2.id}") do
+      within("#relevant_question_#{notice_question.id}") do
         expect(page).to have_content("Q 2")
         expect(page).to have_content("A 2")
       end

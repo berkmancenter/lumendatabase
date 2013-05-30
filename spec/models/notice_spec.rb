@@ -8,6 +8,7 @@ describe Notice do
   it { should have_many(:infringing_urls).through(:works) }
   it { should have_many(:entities).through(:entity_notice_roles)  }
   it { should have_and_belong_to_many :categories }
+  it { should have_and_belong_to_many :relevant_questions }
 
   context "#notice_file_content" do
     it "returns the contents of its uploaded notice file when present" do
@@ -73,15 +74,43 @@ describe Notice do
     end
   end
 
-  context "#relevant_questions" do
-    it "returns the relevant questions from its categories" do
-      categories = create_list(:category, 3, :with_questions)
-      category_questions = categories.map(&:relevant_questions).flatten
-      notice = create(:notice, categories: categories)
+  context "#all_relevant_questions" do
+    it "returns questions related to it and its categories" do
+      category1_questions = [create(:relevant_question, question: "Q1")]
+      category2_questions = [
+        create(:relevant_question, question: "Q2"),
+        create(:relevant_question, question: "Q3")
+      ]
+      notice_questions = [create(:relevant_question, question: "Q4")]
+      notice = create(
+        :notice,
+        categories: [
+          create(:category, relevant_questions: category1_questions),
+          create(:category, relevant_questions: category2_questions)
+        ],
+        relevant_questions: notice_questions
+      )
 
-      notice_questions = notice.relevant_questions
+      questions = notice.all_relevant_questions.map(&:question)
 
-      expect(notice_questions).to match_array(category_questions)
+      expect(questions).to match_array %w( Q1 Q2 Q3 Q4 )
+    end
+
+    it "does not duplicate questions" do
+      shared_question = create(:relevant_question, question: "Q1")
+      category_questions = [
+        shared_question,
+        create(:relevant_question, question: "Q2")
+      ]
+      notice = create(
+        :notice,
+        categories: [create(:category, relevant_questions: category_questions)],
+        relevant_questions: [shared_question]
+      )
+
+      questions = notice.all_relevant_questions.map(&:question)
+
+      expect(questions).to match_array %w( Q1 Q2 )
     end
   end
 end
