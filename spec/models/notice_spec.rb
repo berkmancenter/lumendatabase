@@ -4,6 +4,8 @@ describe Notice do
   it { should validate_presence_of :title }
   it { should have_many :file_uploads }
   it { should have_many :entity_notice_roles }
+  it { should have_and_belong_to_many :works }
+  it { should have_many(:infringing_urls).through(:works) }
   it { should have_many(:entities).through(:entity_notice_roles)  }
   it { should have_and_belong_to_many :categories }
 

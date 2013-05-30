@@ -4,7 +4,10 @@ class Notice < ActiveRecord::Base
   has_many :entity_notice_roles, dependent: :destroy
   has_many :entities, through: :entity_notice_roles
   has_many :file_uploads
+  has_many :infringing_urls, through: :works
   has_many :relevant_questions, through: :categories
+
+  has_and_belongs_to_many :works
 
   acts_as_taggable
 
