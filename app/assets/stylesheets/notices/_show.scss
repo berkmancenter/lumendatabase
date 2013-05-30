@@ -1,51 +1,68 @@
+$notice-padding: 35px;
+
 body.notices {
   background: #FAFAFA;
 }
 
 article.notice-show {
-  header {
-    margin-bottom: 2em;
-
-    h1 {
-      color: $base-title-color;
-      font-size: em(26, 15);
-      font-weight: bold;
-      line-height: 1em;
-      margin-bottom: 0.15em;
-    }
-
-    .date-recieved {
-      font-weight: bold;
-      font-size: $base-font-size-small-1 - 1px;
-      color: $base-font-color-3;
-    }
+  h1 {
+    color: $base-title-color;
+    font-size: em(26, 15);
+    font-weight: bold;
+    line-height: 1em;
+    margin-bottom: 0.15em;
   }
 
-  div.sender-reciever {
+  .date-recieved {
+    font-weight: bold;
+    font-size: $base-font-size-small-1 - 1px;
+    color: $base-font-color-3;
+  }
+}
+article.notice-show {
+  section.body {
+    position: relative;
+    z-index: 1;
+    background: white;
+    border-radius: 3px;
+    box-shadow: 0 2px 4px 0 hsla(0, 0%, 0%, 0.25);
+    clear: left;
+    font-size: $base-font-size-small-1;
+    margin-top: 2em;
+    overflow: hidden;
+  }
+}
+
+// Header
+//************************************************************************//
+article.notice-show {
+  header {
     @include clearfix;
-    margin-bottom: 40px;
+    border-bottom: 1px solid $base-border-color-1;
 
     section.sender,
     section.reciever {
       background: #fff;
-      border: 1px solid $base-border-color-2;
-      border-left: 0;
-      border-radius: 3px;
       float: left;
+      @include linear-gradient(to top, #fafafa, #fff);
       min-height: 150px;
-      width: 30%;
-      min-width: 200px;
-      padding: 25px 35px;
+      @include pad(25px default 25px $notice-padding);
+      width: 50%;
+
+      @include media($mobile) {
+        @include fill-parent;
+        float: none;
+        min-height: 0;
+        @include pad(15px 20px);
+      }
     }
 
     section.reciever {
-      box-shadow: -4px 0 0 #18A753;
-      margin-right: 15%;
-
+      box-shadow: inset 0 4px 0 #18A753;
     }
 
     section.sender {
-      box-shadow: -4px 0 0 #DE5024;
+      box-shadow: inset 0 4px 0 #DE5024;
       position: relative;
 
       &:before {
@@ -54,11 +71,11 @@ article.notice-show {
         background-size: 26.5%;
         content: "";
         height: 48px;
-        left: -38%;
+        left: -20%;
         position: absolute;
         top: 50px;
-        width: 100%;
-        z-index: -1;
+        width: 62%;
+        z-index: 1;
       }
     }
 
@@ -72,16 +89,14 @@ article.notice-show {
       font-size: $base-font-size-small-1;
     }
   }
+}
 
-  section.body {
-    background: white;
-    border: 1px solid $base-border-color-2;
-    border-radius: 2px;
-    box-shadow: 0 0 0 10px hsla(0, 0%, 0%, 0.05);
-    clear: left;
-    font-size: $base-font-size-small-1;
-    margin-bottom: 20px;
-    padding: 40px;
+
+// Document Body
+//************************************************************************//
+article.notice-show {
+  div.main {
+    padding: $notice-padding;
 
     h2 {
       font-size: 17px;
@@ -97,31 +112,59 @@ article.notice-show {
       margin-bottom: 25px;
     }
   }
+}
 
-  div.foot {
-    padding: 20px 40px;
-    // background: white;
-    // box-shadow: 0 1px 2px 0 hsla(0, 0%, 0%, 0.22);
-    border-radius: 3px;
+// Footer
+//************************************************************************//
+article.notice-show {
+  footer {
     @include clearfix;
+    margin: 0 15px 40px;
+    position: relative;
+    top: -1px;
+    z-index: 0;
+    background: hsla(0, 0%, 0%, 0.05);
+    box-shadow: 0 0 0 1px hsla(0, 0%, 0%, 0.1);
+    border-radius: 0 0 3px 3px;
 
     section {
-      font-size: $base-font-size-small-1;
-      width: 50%;
       float: left;
+      font-size: $base-font-size-small-1;
       min-height: 20px;
-
-      &:first-child {
-        padding-right: 10px;
-      }
+      @include span-columns(6);
+      @include pad(15px default);
 
       &:last-child {
-        padding-left: 10px;
+        // @include pad(0 0 0 20px);
       }
     }
 
     h6 {
       @extend %title-caps;
     }
+  }
+}
+
+// FAQ Section
+//************************************************************************//
+section#relevant-questions {
+  padding: 0 $notice-padding;
+  margin: 40px 0 0;
+
+  div.question {
+    font-weight: 700;
+    margin-bottom: 1em;
+    font-size: $base-font-size - 1;
+  }
+
+  div.answer {
+    border-left: 3px solid hsl(0, 0%, 80%);
+    display: none;
+    margin-left: 6px;
+    padding-left: 22px;
+  }
+
+  p, li {
+    font-size: $base-font-size-small-1;
   }
 }

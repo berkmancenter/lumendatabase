@@ -1,4 +1,4 @@
-<%= div_for(relevant_question) do %>
+<%= content_tag_for(:article, relevant_question) do %>
   <div class="question"><%= relevant_question.question %></div>
   <div class="answer">
     <%=raw relevant_question.answer_html %>

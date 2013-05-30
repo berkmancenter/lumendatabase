@@ -6,6 +6,7 @@ header.app {
 
   .container {
     @include outer-container;
+    padding: $gutter;
   }
 
   h1 {
@@ -14,6 +15,7 @@ header.app {
 
     img {
       height: 42px;
+      display: block;
     }
   }
 
