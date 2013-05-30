@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130528150904) do
+ActiveRecord::Schema.define(:version => 20130529200527) do
 
   create_table "categories", :force => true do |t|
     t.string "name"
@@ -36,6 +36,14 @@ ActiveRecord::Schema.define(:version => 20130528150904) do
 
   add_index "categories_notices", ["category_id"], :name => "index_categories_notices_on_category_id"
   add_index "categories_notices", ["notice_id"], :name => "index_categories_notices_on_notice_id"
+
+  create_table "categories_relevant_questions", :force => true do |t|
+    t.integer "category_id"
+    t.integer "relevant_question_id"
+  end
+
+  add_index "categories_relevant_questions", ["category_id"], :name => "index_categories_relevant_questions_on_category_id"
+  add_index "categories_relevant_questions", ["relevant_question_id"], :name => "index_categories_relevant_questions_on_relevant_question_id"
 
   create_table "category_managers", :force => true do |t|
     t.string "name"
@@ -117,6 +125,11 @@ ActiveRecord::Schema.define(:version => 20130528150904) do
   add_index "rails_admin_histories", ["month"], :name => "index_rails_admin_histories_on_month"
   add_index "rails_admin_histories", ["table"], :name => "index_rails_admin_histories_on_table"
   add_index "rails_admin_histories", ["year"], :name => "index_rails_admin_histories_on_year"
+
+  create_table "relevant_questions", :force => true do |t|
+    t.text "question"
+    t.text "answer"
+  end
 
   create_table "taggings", :force => true do |t|
     t.integer  "tag_id"

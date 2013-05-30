@@ -70,4 +70,16 @@ describe Notice do
       notice.destroy
     end
   end
+
+  context "#relevant_questions" do
+    it "returns the relevant questions from its categories" do
+      categories = create_list(:category, 3, :with_questions)
+      category_questions = categories.map(&:relevant_questions).flatten
+      notice = create(:notice, categories: categories)
+
+      notice_questions = notice.relevant_questions
+
+      expect(notice_questions).to match_array(category_questions)
+    end
+  end
 end

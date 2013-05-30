@@ -1,9 +1,10 @@
 class Notice < ActiveRecord::Base
 
   has_and_belongs_to_many :categories
-  has_many :file_uploads
   has_many :entity_notice_roles, dependent: :destroy
   has_many :entities, through: :entity_notice_roles
+  has_many :file_uploads
+  has_many :relevant_questions, through: :categories
 
   acts_as_taggable
 

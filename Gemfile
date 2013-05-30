@@ -22,6 +22,7 @@ gem 'acts-as-taggable-on'
 gem 'ancestry'
 gem 'devise'
 gem 'rails_admin', '~>0.4.8'
+gem 'redcarpet', '~>2.3.0'
 
 group :assets do
   gem 'coffee-rails'
