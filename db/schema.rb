@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130529200527) do
+ActiveRecord::Schema.define(:version => 20130530154325) do
 
   create_table "categories", :force => true do |t|
     t.string "name"
@@ -102,6 +102,22 @@ ActiveRecord::Schema.define(:version => 20130529200527) do
 
   add_index "file_uploads", ["notice_id"], :name => "index_file_uploads_on_notice_id"
 
+  create_table "infringing_urls", :force => true do |t|
+    t.string   "url",        :limit => 1024, :null => false
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
+  end
+
+  create_table "infringing_urls_works", :id => false, :force => true do |t|
+    t.integer  "infringing_url_id", :null => false
+    t.integer  "work_id",           :null => false
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
+  add_index "infringing_urls_works", ["infringing_url_id"], :name => "index_infringing_urls_works_on_infringing_url_id"
+  add_index "infringing_urls_works", ["work_id"], :name => "index_infringing_urls_works_on_work_id"
+
   create_table "notices", :force => true do |t|
     t.string   "title"
     t.text     "body"
@@ -109,6 +125,16 @@ ActiveRecord::Schema.define(:version => 20130529200527) do
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end
+
+  create_table "notices_works", :id => false, :force => true do |t|
+    t.integer  "notice_id"
+    t.integer  "work_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "notices_works", ["notice_id"], :name => "index_notices_works_on_notice_id"
+  add_index "notices_works", ["work_id"], :name => "index_notices_works_on_work_id"
 
   create_table "rails_admin_histories", :force => true do |t|
     t.text     "message"
@@ -161,5 +187,12 @@ ActiveRecord::Schema.define(:version => 20130529200527) do
   add_index "users", ["authentication_token"], :name => "index_users_on_authentication_token", :unique => true
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
+
+  create_table "works", :force => true do |t|
+    t.string   "url",         :limit => 1024, :null => false
+    t.text     "description"
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
+  end
 
 end
