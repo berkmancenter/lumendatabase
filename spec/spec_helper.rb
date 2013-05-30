@@ -13,9 +13,15 @@ Spork.prefork do
   require 'rspec/autorun'
   require 'capybara/rspec'
   DatabaseCleaner.strategy = :truncation
+
+  # https://github.com/sporkrb/spork/issues/188
+  ActiveRecord::Base.remove_connection
 end
 
 Spork.each_run do
+  # https://github.com/sporkrb/spork/issues/188
+  ActiveRecord::Base.establish_connection
+
   Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
   RSpec.configure do |config|
