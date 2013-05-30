@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Submission do
-  it 'allows a file to be uploaded' do
+  it "allows a file to be uploaded" do
     with_tempfile do |fh|
       fh.write 'Some content'
       fh.flush
@@ -48,7 +48,7 @@ describe Submission do
     expect(Notice.last.categories).to be_empty
   end
 
-  it 'does not attempt to create entities when none are submitted' do
+  it "does not attempt to create entities when none are submitted" do
     Entity.any_instance.should_not_receive(:save)
     EntityNoticeRole.any_instance.should_not_receive(:save)
     Notice.any_instance.stub(:save).and_return(true)
@@ -56,7 +56,7 @@ describe Submission do
     Submission.new(title: "A Title").save
   end
 
-  it 'creates entities when they are submitted' do
+  it "creates entities when they are submitted" do
     Entity.any_instance.should_receive(:save)
     Notice.any_instance.stub(:save).and_return(true)
 
@@ -65,7 +65,7 @@ describe Submission do
     }]).save
   end
 
-  it 'creates entity_notice_roles when they are submitted' do
+  it "creates entity_notice_roles when they are submitted" do
     EntityNoticeRole.any_instance.should_receive(:save)
     Notice.any_instance.stub(:save).and_return(true)
 
@@ -73,6 +73,26 @@ describe Submission do
       name: 'I am a person', kind: 'individual', role: 'principal'
     }]).save
   end
+
+  context "submission source" do
+    it "has its own source attribute" do
+      submission = Submission.new
+      submission.source = :foo
+
+      expect(submission.source).to eq :foo
+    end
+
+    it "assigns the Notice's source from its own" do
+      submission = Submission.new(title: "A title")
+      submission.source = Notice::SOURCES.first
+
+      submission.save
+
+      expect(Notice.last.source).to eq Notice::SOURCES.first
+    end
+  end
+
+  private
 
   def with_tempfile(&block)
     Tempfile.open('tempfile', &block)

@@ -8,13 +8,8 @@ class SubmissionsController < ApplicationController
     @submission = Submission.new(submission_params)
 
     respond_to do |format|
-      if @submission.save
-        format.json { head :created }
-        format.html { redirect_to :root, notice: "Notice added!" }
-      else
-        format.json { render_bad_request(@submission.errors) }
-        format.html { render :new }
-      end
+      format.json { respond_for_api }
+      format.html { respond_for_web }
     end
   end
 
@@ -25,6 +20,26 @@ class SubmissionsController < ApplicationController
       :title, :body, :date_received, :file, :tag_list, category_ids: [],
       entities: valid_entity_fields
     )
+  end
+
+  def respond_for_api
+    @submission.source = :api
+
+    if @submission.save
+      head :created
+    else
+      render_bad_request(@submission.errors)
+    end
+  end
+
+  def respond_for_web
+    @submission.source = :web
+
+    if @submission.save
+      redirect_to :root, notice: "Notice added!"
+    else
+      render :new
+    end
   end
 
   def render_bad_request(errors)

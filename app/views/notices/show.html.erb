@@ -14,12 +14,11 @@
 
     <div class="main">
       <h2 class="notice-title wip">Re: Infringement Notification via Blogger Complaint</h2>
-      <p class="source wip">Sent via: Online Form</p>
+      <%= notice_source(@notice) %>
 
       <ul id="works">
         <%= render @notice.works %>
       </ul>
-
     </div>
   </section>
 
