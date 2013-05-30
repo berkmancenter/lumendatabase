@@ -48,13 +48,15 @@ class Submission
 
   def associate_new_entities_with_notice(entities, notice)
     entities.each do |entity_hash|
-      entity_role = entity_hash.delete(:role)
-      entity = Entity.new(entity_hash)
-      entity_notice_role = EntityNoticeRole.new(
-        entity: entity, notice: notice, name: entity_role
-      )
+      name = entity_hash[:name]
+      role = entity_hash[:role]
 
-      if entity.valid? && entity_notice_role.valid?
+      if name.present?
+        entity = Entity.new(name: name)
+        entity_notice_role = EntityNoticeRole.new(
+          entity: entity, notice: notice, name: role
+        )
+
         models << entity
         models << entity_notice_role
       end
