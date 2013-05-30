@@ -32,14 +32,23 @@ describe 'notices/show.html.erb' do
   end
 
   it "displays a notice with entities" do
-    notice = create(:notice_with_entities)
+    notice = create(
+      :notice,
+      :with_entities, roles_for_entities: ['submitter', 'recipient']
+    )
+
     assign(:notice, notice)
 
     render
 
     within('#entities') do |node|
       notice.entities.each do |entity|
-        expect(node).to have_content(entity.name)
+        expect(page).to have_content(entity.name)
+        expect(page).to have_content(entity.address_line_1)
+        expect(page).to have_content(entity.address_line_2)
+        expect(page).to have_content(entity.city)
+        expect(page).to have_content(entity.state)
+        expect(page).to have_content(entity.country_code)
       end
     end
   end
@@ -81,4 +90,5 @@ describe 'notices/show.html.erb' do
       end
     end
   end
+
 end
