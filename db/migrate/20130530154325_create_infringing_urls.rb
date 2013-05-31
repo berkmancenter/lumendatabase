@@ -8,7 +8,6 @@ class CreateInfringingUrls < ActiveRecord::Migration
     create_table(:infringing_urls_works, id: false) do |t|
       t.belongs_to :infringing_url, null: false
       t.belongs_to :work, null: false
-      t.timestamps
     end
 
     add_index :infringing_urls_works, :infringing_url_id

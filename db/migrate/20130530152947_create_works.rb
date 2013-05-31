@@ -9,7 +9,6 @@ class CreateWorks < ActiveRecord::Migration
     create_table(:notices_works, id: false) do |t|
       t.belongs_to :notice
       t.belongs_to :work
-      t.timestamps
     end
 
     add_index :notices_works, :notice_id

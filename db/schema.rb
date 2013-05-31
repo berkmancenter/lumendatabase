@@ -109,10 +109,8 @@ ActiveRecord::Schema.define(:version => 20130531170647) do
   end
 
   create_table "infringing_urls_works", :id => false, :force => true do |t|
-    t.integer  "infringing_url_id", :null => false
-    t.integer  "work_id",           :null => false
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.integer "infringing_url_id", :null => false
+    t.integer "work_id",           :null => false
   end
 
   add_index "infringing_urls_works", ["infringing_url_id"], :name => "index_infringing_urls_works_on_infringing_url_id"
@@ -135,10 +133,8 @@ ActiveRecord::Schema.define(:version => 20130531170647) do
   add_index "notices_relevant_questions", ["relevant_question_id"], :name => "index_notices_relevant_questions_on_relevant_question_id"
 
   create_table "notices_works", :id => false, :force => true do |t|
-    t.integer  "notice_id"
-    t.integer  "work_id"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.integer "notice_id"
+    t.integer "work_id"
   end
 
   add_index "notices_works", ["notice_id"], :name => "index_notices_works_on_notice_id"
