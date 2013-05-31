@@ -1,8 +1,32 @@
-
 %title-caps {
   font-size: $base-font-size-small-1;
   text-transform: uppercase;
   color: $base-font-color-2;
+}
+
+// FAQ - Accordion
+//************************************************************************//
+%faq-accordion {
+  margin: 40px 0 0;
+
+  .question {
+    font-weight: 700;
+    margin-bottom: 1em;
+    font-size: $base-font-size - 1;
+  }
+
+  .answer {
+    border-left: 3px solid hsl(0, 0%, 80%);
+    display: none;
+    font-size: $base-font-size-small-1;
+    margin-bottom: 10px;
+    margin-left: 6px;
+    padding-left: 22px;
+  }
+
+  p, li {
+    font-size: $base-font-size-small-1;
+  }
 }
 
 //************************************************************************//

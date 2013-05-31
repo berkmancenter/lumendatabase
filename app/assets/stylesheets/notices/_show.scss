@@ -1,5 +1,3 @@
-$notice-padding: 35px;
-
 body.notices {
   background: #FAFAFA;
 }
@@ -46,7 +44,7 @@ article.notice-show {
       float: left;
       @include linear-gradient(to top, #fafafa, #fff);
       min-height: 150px;
-      @include pad(25px default 25px $notice-padding);
+      @include pad(25px default 25px $base-padding);
       width: 50%;
 
       @include media($mobile) {
@@ -96,7 +94,7 @@ article.notice-show {
 //************************************************************************//
 article.notice-show {
   div.main {
-    padding: $notice-padding;
+    padding: $base-padding;
 
     h2 {
       font-size: 17px;
@@ -148,23 +146,6 @@ article.notice-show {
 // FAQ Section
 //************************************************************************//
 section#relevant-questions {
-  padding: 0 $notice-padding;
-  margin: 40px 0 0;
-
-  div.question {
-    font-weight: 700;
-    margin-bottom: 1em;
-    font-size: $base-font-size - 1;
-  }
-
-  div.answer {
-    border-left: 3px solid hsl(0, 0%, 80%);
-    display: none;
-    margin-left: 6px;
-    padding-left: 22px;
-  }
-
-  p, li {
-    font-size: $base-font-size-small-1;
-  }
+  @extend %faq-accordion;
+  padding: 0 $base-padding;
 }

@@ -5,5 +5,4 @@ body {
 section.main.app {
   @include outer-container;
   padding: 40px $gutter;
-  padding-top: 40px;
 }

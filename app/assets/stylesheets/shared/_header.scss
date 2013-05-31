@@ -1,12 +1,11 @@
 header.app {
   @extend %search-form;
-  background: $header-background;
   @include clearfix;
-  padding-top: 22px;
+  @include linear-gradient(hsl(43, 41%, 98%),hsl(43, 7%, 92%));
 
   .container {
     @include outer-container;
-    padding: $gutter;
+    padding: 30px $gutter;
   }
 
   h1 {
@@ -38,19 +37,21 @@ header.app {
   }
 }
 
+//************************************************************************//
+// Navigation
+//************************************************************************//
 header.app {
   nav {
-    margin-top: 18px;
-    clear: left;
-    @include linear-gradient(#fff, #F3F3F3);
-    border-top: 1px solid $base-border-color;
     border-bottom: 1px solid $base-border-color;
+    border-top: 1px solid $base-border-color;
+    clear: left;
+    background: #fff;
 
     ol {
       @include clearfix;
-      @include outer-container;
       margin: 0 auto;
-      padding: 0;
+      @include outer-container;
+      padding: 0 $gutter;
 
       li {
         margin-right: 15px;
@@ -60,8 +61,9 @@ header.app {
         a {
           color: $base-font-color;
           display: block;
-          font-size: $base-font-size;
-          padding: 10px 20px;
+          font-size: $base-font-size-small-1;
+          font-weight: 600;
+          padding: 14px 30px 14px 5px;
           text-decoration: none;
         }
       }
