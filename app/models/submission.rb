@@ -3,20 +3,20 @@ require 'psuedo_model'
 class Submission
   include PsuedoModel
 
-  attr_reader :title, :body, :date_sent, :file, :tag_list, :category_ids
+  attr_reader :title, :body, :date_received, :file, :tag_list, :category_ids
 
   validates_presence_of :title
 
   def initialize(params = {})
     @title = params[:title]
     @body = params[:body]
-    @date_sent = params[:date_sent]
+    @date_received = params[:date_received]
     @file = params[:file]
     @tag_list = params[:tag_list]
     @category_ids = params[:category_ids]
     @entities = params[:entities]
 
-    notice_params = params.slice(:title, :body, :date_sent, :tag_list)
+    notice_params = params.slice(:title, :body, :date_received, :tag_list)
 
     if @category_ids.present?
       notice_params[:categories] = Category.where(id: @category_ids)

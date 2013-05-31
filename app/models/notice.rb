@@ -16,7 +16,7 @@ class Notice < ActiveRecord::Base
   validates_presence_of :title
 
   def self.recent
-    where('date_sent > ?', 1.week.ago).order('date_sent DESC')
+    where('date_received > ?', 1.week.ago).order('date_received DESC')
   end
 
   def notice_file_content

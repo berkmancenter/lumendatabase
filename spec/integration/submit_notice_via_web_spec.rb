@@ -6,7 +6,7 @@ feature "notice submission" do
 
     fill_in "Title", with: "A title"
     fill_in "Body", with: "A body"
-    fill_in "Date sent", with: Time.now
+    fill_in "Date received", with: Time.now
 
     click_on "Submit"
 
@@ -21,7 +21,7 @@ feature "notice submission" do
     visit "/submissions/new"
 
     fill_in "Title", with: "A title"
-    fill_in "Date sent", with: Time.now
+    fill_in "Date received", with: Time.now
 
     Tempfile.open("notice_file") do |fh|
       fh.write "Some content"
@@ -78,7 +78,7 @@ feature "notice submission" do
     fill_in "Title", with: "A title"
     fill_in "Recipient Name", with: "Recipient the first"
     fill_in "Submitter Name", with: "Submitter the first"
-    fill_in "Date sent", with: Time.now
+    fill_in "Date received", with: Time.now
 
     click_on "Submit"
 
@@ -94,7 +94,7 @@ feature "notice submission" do
 
     within('form#new_submission') do
       expect(page).to have_css('input#submission_title.required')
-      expect(page).to have_css('input#submission_date_sent:not(.required)')
+      expect(page).to have_css('input#submission_date_received:not(.required)')
     end
   end
 

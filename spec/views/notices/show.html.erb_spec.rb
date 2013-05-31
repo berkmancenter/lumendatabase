@@ -9,6 +9,7 @@ describe 'notices/show.html.erb' do
 
     expect(rendered).to include notice.title
     expect(rendered).to include notice.body
+    expect(rendered).to include notice.date_received.to_s
   end
 
   it "displays the notices file" do

@@ -11,7 +11,7 @@ describe 'home/index.html.erb' do
   end
 
   it 'shows metadata and a link to each of its notices' do
-    notices = build_stubbed_list(:notice, 3, date_sent: 1.hour.ago)
+    notices = build_stubbed_list(:notice, 3, date_received: 1.hour.ago)
     assign(:notices, notices)
 
     render
@@ -19,7 +19,7 @@ describe 'home/index.html.erb' do
     notices.each do |notice|
       within("#notice_#{notice.id}") do |node|
         expect(node.text).to include notice.title
-        expect(node.text).to include notice.date_sent.to_s
+        expect(node.text).to include notice.date_received.to_s
         expect(node).to contain_link notice_path(notice)
       end
     end

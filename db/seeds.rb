@@ -103,6 +103,6 @@ CategoryManager.create!(
 ################################################################################
 Submission.new(
   title: "Lion King on YouTube",
-  date_sent: Time.now,
+  date_received: Time.now,
   category_ids: [dmca, bookmarks, chilling].map(&:id)
 ).save

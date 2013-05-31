@@ -26,17 +26,17 @@ describe Notice do
 
   context "#recent" do
     it "returns notices sent in the past week" do
-      recent_notice = create(:notice, date_sent: 1.week.ago + 1.hour)
-      old_notice = create(:notice, date_sent: 1.week.ago - 1.hour)
+      recent_notice = create(:notice, date_received: 1.week.ago + 1.hour)
+      old_notice = create(:notice, date_received: 1.week.ago - 1.hour)
 
       expect(Notice.recent).to include(recent_notice)
       expect(Notice.recent).not_to include(old_notice)
     end
 
     it "returns notices in descending date sent order" do
-      third_notice = create(:notice, date_sent: 16.hours.ago)
-      first_notice = create(:notice, date_sent: 1.hour.ago)
-      second_notice = create(:notice, date_sent: 10.hours.ago)
+      third_notice = create(:notice, date_received: 16.hours.ago)
+      first_notice = create(:notice, date_received: 1.hour.ago)
+      second_notice = create(:notice, date_received: 10.hours.ago)
 
       expect(Notice.recent).to eq [first_notice, second_notice, third_notice]
     end

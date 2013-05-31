@@ -29,7 +29,7 @@ describe NoticesController do
       expect(json).to have_key(:id).with_value(notice.id)
       expect(json).to have_key(:title).with_value(notice.title)
       expect(json).to have_key(:body).with_value(notice.body)
-      expect(json).to have_key(:date_sent).with_value(notice.date_sent)
+      expect(json).to have_key(:date_received).with_value(notice.date_received)
     end
 
     it "serializes the file content" do
