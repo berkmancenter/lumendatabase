@@ -1,3 +1,3 @@
 <%= content_tag_for(:article, notice) do %>
-  <%= link_to(notice.title, notice_path(notice)) %> <time datetime="<%= notice.date_sent %>"><%= notice.date_sent %></time>
+  <%= link_to(notice.title, notice_path(notice)) %> <time datetime="<%= notice.date_received %>"><%= notice.date_received %></time>
 <% end %>

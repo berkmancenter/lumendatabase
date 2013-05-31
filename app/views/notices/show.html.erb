@@ -1,6 +1,6 @@
 <article class="notice-show">
   <h1><%= @notice.title %></h1>
-  <span class="date-recieved wip">Date Received: <time datetime="">May 17, 2013</time></span>
+  <span class="date-recieved">Date Received: <time datetime="<%= @notice.date_received %>"><%= @notice.date_received %></time></span>
 
   <section class="body">
     <header class="wip">
