@@ -99,6 +99,22 @@ CategoryManager.create!(
 )
 
 ################################################################################
+# Works
+################################################################################
+urls = []
+urls << InfringingUrl.create!(url: "http://example.com/bad_url_1")
+urls << InfringingUrl.create!(url: "http://example.com/bad_url_2")
+urls << InfringingUrl.create!(url: "http://example.com/bad_url_3")
+urls << InfringingUrl.create!(url: "http://example.com/bad_url_4")
+urls << InfringingUrl.create!(url: "http://example.com/bad_url_5")
+
+work = Work.create!(
+  url: "http://disney.com/lion_king.mp4",
+  description: "Lion King Video",
+  infringing_urls: urls
+)
+
+################################################################################
 # Submissions
 ################################################################################
 Submission.new(
@@ -106,3 +122,8 @@ Submission.new(
   date_received: Time.now,
   category_ids: [dmca, bookmarks, chilling].map(&:id)
 ).save
+
+# TODO: add works/urls via submission interface
+notice = Notice.last
+notice.works << work
+notice.save!

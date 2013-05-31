@@ -1,0 +1,12 @@
+<%= content_tag_for(:li, work) do %>
+  <h6>Copyright claim: #<%= work_counter %></h6>
+  <p>Description: <%= work.description %></p>
+  <p>URL: <%= work.url %></p>
+  <ol>
+    <% work.infringing_urls.each do |url| %>
+      <%= content_tag_for(:li, url) do %>
+        <%= url.url %>
+      <% end %>
+    <% end %>
+  </ol>
+<% end %>
