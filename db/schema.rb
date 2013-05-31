@@ -124,6 +124,7 @@ ActiveRecord::Schema.define(:version => 20130531181449) do
     t.datetime "date_received"
     t.datetime "created_at",    :null => false
     t.datetime "updated_at",    :null => false
+    t.string   "source"
   end
 
   create_table "notices_relevant_questions", :force => true do |t|

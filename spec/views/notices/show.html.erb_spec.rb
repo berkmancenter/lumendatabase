@@ -91,4 +91,34 @@ describe 'notices/show.html.erb' do
     end
   end
 
+  it "shows the notice source correctly for web" do
+    assign(:notice, create(:notice, source: 'web'))
+
+    render
+
+    expect(page).to have_source_element_containing('Online Form')
+  end
+
+  it "shows the notice source correctly for api" do
+    assign(:notice, create(:notice, source: 'api'))
+
+    render
+
+    expect(page).to have_source_element_containing('API Submission')
+  end
+
+  it "shows the notice source correctly for unknown" do
+    assign(:notice, create(:notice, source: nil))
+
+    render
+
+    expect(page).to have_source_element_containing('Unknown')
+  end
+
+  private
+
+  def have_source_element_containing(text)
+    have_css(".body .source:contains('#{text}')")
+  end
+
 end

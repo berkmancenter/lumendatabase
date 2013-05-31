@@ -33,10 +33,11 @@ describe AssociatesEntities do
       end
     end
 
-    it 'appends to Submission#models' do
+    it 'appends the correct models to Submission#models' do
       with_valid_associater do |associater, notice, submission|
         associater.associate_entity_models
-        expect(submission.models.count).to eq 3
+        expect(submission.models.detect { |m| m.is_a?(Entity) }).to be
+        expect(submission.models.detect { |m| m.is_a?(EntityNoticeRole) }).to be
       end
     end
   end
