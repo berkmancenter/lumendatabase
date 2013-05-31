@@ -22,7 +22,7 @@ describe Notice do
 
       expect(notice.notice_file_content).to eq ''
     end
-  end
+    end
 
   context "#recent" do
     it "returns notices sent in the past week" do
@@ -64,13 +64,39 @@ describe Notice do
     end
   end
 
-  context "notice roles" do
-    it "cleans up notice roles after a notice is destroyed" do
+  context "entity notice roles" do
+    it "clean up notice roles after a notice is destroyed" do
       entity = create(:entity_with_notice_roles)
       notice = entity.notices.first
 
       EntityNoticeRole.any_instance.should_receive(:destroy)
       notice.destroy
+    end
+
+    context 'with entities' do
+      it "has submitters" do
+        notice = create(
+          :notice, :with_entities, roles_for_entities: ['submitter']
+        )
+        expect(notice.submitter).to be_instance_of(Entity)
+        expect(notice.submitter).to eq entity_for_role_from_notice(notice, 'submitter')
+      end
+
+      it "has recipients" do
+        notice = create(
+          :notice, :with_entities, roles_for_entities: ['recipient']
+        )
+        expect(notice.recipient).to be_instance_of(Entity)
+        expect(notice.recipient).to eq entity_for_role_from_notice(notice, 'recipient')
+      end
+    end
+
+    context "without notice roles" do
+      it "returns nil for recipient and submitter" do
+        notice = create(:notice)
+        expect(notice.recipient).to be_nil
+        expect(notice.submitter).to be_nil
+      end
     end
   end
 
@@ -112,5 +138,9 @@ describe Notice do
 
       expect(questions).to match_array %w( Q1 Q2 )
     end
+  end
+
+  def entity_for_role_from_notice(notice, role)
+    notice.entity_notice_roles.where(name: role).first.entity
   end
 end

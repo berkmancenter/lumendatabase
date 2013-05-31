@@ -22,7 +22,8 @@ class SubmissionsController < ApplicationController
 
   def submission_params
     params.require(:submission).permit(
-      :title, :body, :date_received, :file, :tag_list, category_ids: [], entities: [:name, :role]
+      :title, :body, :date_received, :file, :tag_list, category_ids: [],
+      entities: valid_entity_fields
     )
   end
 
@@ -30,6 +31,11 @@ class SubmissionsController < ApplicationController
     error_message = errors.full_messages.join(', ')
 
     render text: error_message, status: :bad_request
+  end
+
+  def valid_entity_fields
+    [:name, :role, :address_line_1, :address_line_2, :city, :state, :zip,
+      :country_code, :phone, :email, :url]
   end
 
 end

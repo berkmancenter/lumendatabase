@@ -27,9 +27,26 @@ class Notice < ActiveRecord::Base
     relevant_questions | category_relevant_questions
   end
 
+  def submitter
+    entities_that_have_submitted.first
+  end
+
+  def recipient
+    entities_that_have_received.first
+  end
+
   private
 
   def first_notice
     file_uploads.notices.first || NullFileUpload.new
   end
+
+  def entities_that_have_submitted
+    entity_notice_roles.submitters.map(&:entity)
+  end
+
+  def entities_that_have_received
+    entity_notice_roles.recipients.map(&:entity)
+  end
+
 end

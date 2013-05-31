@@ -9,4 +9,25 @@ describe EntityNoticeRole do
   it{ should have_db_index :entity_id }
   it{ should have_db_index :notice_id }
   it{ should ensure_inclusion_of(:name).in_array(EntityNoticeRole::ROLES) }
+
+  EntityNoticeRole::ROLES.each do |role|
+    context "getting #{role} instances" do
+      it 'returns the correct role' do
+        instance_with_role = create(:entity_notice_role, name: role)
+        create(:entity_notice_role, name: a_different_role_than(role))
+
+        expect(described_class.all.count).to eq 2
+        expect(described_class.send(role.pluralize.to_sym)).to eq [instance_with_role]
+      end
+    end
+  end
+
+  private
+
+  def a_different_role_than(role)
+    roles = EntityNoticeRole::ROLES.dup
+    roles.delete(role)
+    roles.first
+  end
+
 end

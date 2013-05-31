@@ -29,9 +29,7 @@ class Submission
       models << FileUpload.new(file: @file, kind: :notice, notice: notice)
     end
 
-    if @entities.present?
-      associate_new_entities_with_notice @entities, notice
-    end
+    AssociatesEntities.new(@entities, notice, self).associate_entity_models
   end
 
   def save
@@ -44,24 +42,11 @@ class Submission
     Category.all
   end
 
-  private
-
-  def associate_new_entities_with_notice(entities, notice)
-    entities.each do |entity_hash|
-      name = entity_hash[:name]
-      role = entity_hash[:role]
-
-      if name.present?
-        entity = Entity.new(name: name)
-        entity_notice_role = EntityNoticeRole.new(
-          entity: entity, notice: notice, name: role
-        )
-
-        models << entity
-        models << entity_notice_role
-      end
-    end
+  def models
+    @models ||= []
   end
+
+  private
 
   def all_models_valid?
     models.all?(&:valid?)
@@ -69,10 +54,6 @@ class Submission
 
   def save_all_models
     models.all?(&:save)
-  end
-
-  def models
-    @models ||= []
   end
 
 end

@@ -9,6 +9,9 @@ FactoryGirl.define do
   end
 
   factory :notice do
+    ignore do
+      roles_for_entities { ['principal'] }
+    end
     title "A title"
 
     trait :with_body do
@@ -48,9 +51,14 @@ FactoryGirl.define do
       end
     end
 
-    factory :notice_with_entities do
-      after(:create) do |notice|
-        create(:entity_notice_role, notice: notice, entity: create(:entity))
+    trait :with_entities do
+      after(:create) do |notice, instance|
+        instance.roles_for_entities.each do |role|
+          create(
+            :entity_notice_role, notice: notice, entity: create(:entity, name: "#{role} name"),
+            name: role
+          )
+        end
       end
     end
   end
@@ -73,12 +81,21 @@ FactoryGirl.define do
   factory :entity_notice_role do
     notice { build(:notice) }
     entity { build(:entity) }
-    name { 'principal' }
+    name 'principal'
   end
 
   factory :entity do
     name "A name"
     kind "individual"
+    address_line_1 "Address 1"
+    address_line_2 "Address 2"
+    city "City"
+    state "State"
+    zip "01222"
+    country_code "US"
+    phone "555-555-1212"
+    email "foo@example.com"
+    url "http://www.example.com"
 
     factory :entity_with_children do
       after(:create) do |parent_entity|

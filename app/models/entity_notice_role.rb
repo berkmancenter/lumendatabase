@@ -4,6 +4,15 @@ class EntityNoticeRole < ActiveRecord::Base
 
   ROLES = %w[principal agent recipient submitter target]
 
+  class << self
+    ROLES.each do |role|
+      define_method(role.pluralize.to_sym) do
+        where(name: role)
+      end
+    end
+  end
+
   validates_presence_of :entity, :notice, :name
   validates_inclusion_of :name, in: ROLES
+
 end

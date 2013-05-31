@@ -3,20 +3,13 @@
   <span class="date-recieved">Date Received: <time datetime="<%= @notice.date_received %>"><%= @notice.date_received %></time></span>
 
   <section class="body">
-    <header class="wip">
-      <section class="reciever">
-        <h6>Recipient</h6>
-        <span>[Private]</span>
-        <span>Google, Inc. [Blogger]</span>
-        <span>Mountain View, CA, 94043, USA</span>
-      </section>
-      <section class="sender">
-        <h6>Sender</h6>
-        <span>Jan Krohn</span>
-        <span>Sent by: [Private]</span>
-        <span>[Private]</span>
-        <span>KH</span>
-      </section>
+    <header id="entities" class="wip">
+      <% if @notice.recipient %>
+        <%= render @notice.recipient, css_class: 'reciever' %>
+      <% end %>
+      <% if @notice.submitter %>
+        <%= render @notice.submitter,  css_class: 'sender' %>
+      <% end %>
     </header>
 
     <div class="main">
@@ -45,10 +38,6 @@
       <%= render 'shared/category_list', categories: @notice.categories %>
     </section>
   </footer>
-
-  <section id="entities">
-    <%= render @notice.entity_notice_roles %>
-  </section>
 
   <section id="relevant-questions">
     <%= render @notice.all_relevant_questions %>

@@ -77,6 +77,12 @@ feature "notice submission" do
     visit "/submissions/new"
     fill_in "Title", with: "A title"
     fill_in "Recipient Name", with: "Recipient the first"
+    fill_in "Recipient Address Line 1", with: "Recipient Line 1"
+    fill_in "Recipient Address Line 2", with: "Recipient Line 2"
+    fill_in "Recipient City", with: "Recipient City"
+    fill_in "Recipient State", with: "Recipient State"
+    select "United States", from: "Recipient Country Code"
+
     fill_in "Submitter Name", with: "Submitter the first"
     fill_in "Date received", with: Time.now
 
@@ -85,6 +91,12 @@ feature "notice submission" do
     click_on 'A title'
     within('#entities') do
       expect(page).to have_content "Recipient the first"
+      expect(page).to have_content "Recipient Line 1"
+      expect(page).to have_content "Recipient Line 2"
+      expect(page).to have_content "Recipient City"
+      expect(page).to have_content "Recipient State"
+      expect(page).to have_content "United States"
+
       expect(page).to have_content "Submitter the first"
     end
   end
