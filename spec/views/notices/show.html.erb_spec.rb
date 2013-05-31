@@ -2,13 +2,12 @@ require 'spec_helper'
 
 describe 'notices/show.html.erb' do
   it "displays a metadata from a notice" do
-    notice = build(:notice, :with_body)
+    notice = build(:notice)
     assign(:notice, notice)
 
     render
 
     expect(rendered).to include notice.title
-    expect(rendered).to include notice.body
     expect(rendered).to include notice.date_received.to_s
   end
 
@@ -27,8 +26,8 @@ describe 'notices/show.html.erb' do
 
     render
 
-    within('#tags') do
-      expect(page).to have_content("a_tag")
+    within('#tags') do |node|
+      expect(node).to have_content("a_tag")
     end
   end
 
@@ -38,9 +37,9 @@ describe 'notices/show.html.erb' do
 
     render
 
-    within('#entities') do
+    within('#entities') do |node|
       notice.entities.each do |entity|
-        expect(page).to have_content(entity.name)
+        expect(node).to have_content(entity.name)
       end
     end
   end
@@ -55,15 +54,30 @@ describe 'notices/show.html.erb' do
 
     render
 
-    within('#relevant-questions') do
-      within("#relevant_question_#{category_question.id}") do
-        expect(page).to have_content("Q 1")
-        expect(page).to have_content("A 1")
+    [category_question, notice_question].each do |question|
+      within("#relevant_question_#{question.id}") do |node|
+        expect(node).to have_content(question.question)
+        expect(node).to have_content(question.answer)
       end
+    end
+  end
 
-      within("#relevant_question_#{notice_question.id}") do
-        expect(page).to have_content("Q 2")
-        expect(page).to have_content("A 2")
+  it "displays a notice's works and infringing urls" do
+    notice = create(:notice, :with_infringing_urls)
+    assign(:notice, notice)
+
+    render
+
+    notice.works.each do |work|
+      within("#work_#{work.id}") do |node|
+        expect(node).to have_content(work.description)
+        expect(node).to have_content(work.url)
+
+        work.infringing_urls.each do |url|
+          within("#infringing_url_#{url.id}") do |inner_node|
+            expect(inner_node).to have_content(url.url)
+          end
+        end
       end
     end
   end

@@ -2,6 +2,8 @@ FactoryGirl.define do
 
   sequence(:email) { |n| "user_#{n}@example.com" }
 
+  sequence(:url) { |n| "http://example.com/url_#{n}" }
+
   factory :category do
     name "Category name"
   end
@@ -22,6 +24,12 @@ FactoryGirl.define do
     trait :with_categories do
       before(:create) do |notice|
         notice.categories = build_list(:category, 3)
+      end
+    end
+
+    trait :with_infringing_urls do # through works
+      before(:create) do |notice|
+        notice.works = build_list(:work, 3, :with_infringing_urls)
       end
     end
 
@@ -99,6 +107,21 @@ FactoryGirl.define do
   factory :relevant_question do
     question "What is the meaning of life?"
     answer "42"
+  end
+
+  factory :work do
+    url
+    description "Something copyrighted"
+
+    trait :with_infringing_urls do
+      before(:create) do |work|
+        work.infringing_urls = build_list(:infringing_url, 3)
+      end
+    end
+  end
+
+  factory :infringing_url do
+    url
   end
 
 end
