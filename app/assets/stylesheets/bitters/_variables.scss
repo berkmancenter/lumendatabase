@@ -37,6 +37,9 @@ $base-font-size: 15px;
 $base-link-color: $blue;
 $hover-link-color: darken($blue, 15%);
 
+$base-link-color-1: #1C7ED6;
+$hover-link-color-1: darken($base-link-color-1, 15%);
+
 $nav-link-color: #656C7E;
 $nav-hover-link-color: darken($nav-link-color, 15%);
 
