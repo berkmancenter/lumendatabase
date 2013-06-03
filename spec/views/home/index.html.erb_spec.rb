@@ -19,7 +19,7 @@ describe 'home/index.html.erb' do
     notices.each do |notice|
       within("#notice_#{notice.id}") do |node|
         expect(node.text).to include notice.title
-        expect(node.text).to include notice.date_received.to_s
+        expect(node.text).to include notice.date_received.to_s(:simple)
         expect(node).to contain_link notice_path(notice)
       end
     end
