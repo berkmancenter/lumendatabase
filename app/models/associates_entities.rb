@@ -6,7 +6,7 @@ class AssociatesEntities
     @submission = submission
   end
 
-  def associate_entity_models
+  def associate
     if entities_to_associate?
       @entity_params.map do|entity_param|
         entity = Entity.new(valid_entity_params(entity_param))

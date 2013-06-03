@@ -1,5 +1,6 @@
 <%= content_tag_for(:li, work) do %>
   <h6>Copyright claim: #<%= work_counter %></h6>
+  <p>Kind of Work: <%= work.kind %></p>
   <p>Description: <%= work.description %></p>
   <p>URL: <%= work.url %></p>
   <ol>

@@ -10,7 +10,7 @@ describe AssociatesEntities do
       Entity.should_not_receive(:new)
       EntityNoticeRole.should_not_receive(:new)
 
-      associater.associate_entity_models
+      associater.associate
     end
 
     it 'initializes an Entity with the correct metadata' do
@@ -18,7 +18,7 @@ describe AssociatesEntities do
         example_entity.slice(*entity_specific_params)
       )
       with_valid_associater do |associater, notice, submission|
-        associater.associate_entity_models
+        associater.associate
       end
     end
 
@@ -29,13 +29,13 @@ describe AssociatesEntities do
         EntityNoticeRole.should_receive(:new).with(
           notice: notice, name: example_entity[:role], entity: entity_instance
         )
-        associater.associate_entity_models
+        associater.associate
       end
     end
 
     it 'appends the correct models to Submission#models' do
       with_valid_associater do |associater, notice, submission|
-        associater.associate_entity_models
+        associater.associate
         expect(submission.models.detect { |m| m.is_a?(Entity) }).to be
         expect(submission.models.detect { |m| m.is_a?(EntityNoticeRole) }).to be
       end
