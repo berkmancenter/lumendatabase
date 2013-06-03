@@ -3,9 +3,8 @@ require 'psuedo_model'
 class Submission
   include PsuedoModel
 
-  attr_reader :title, :body, :date_received, :file, :tag_list, :category_ids
-
-  attr_accessor :source
+  attr_reader :title, :body, :date_received, :source, :file, :tag_list,
+    :category_ids
 
   validates_presence_of :title
 
@@ -13,6 +12,7 @@ class Submission
     @title = params[:title]
     @body = params[:body]
     @date_received = params[:date_received]
+    @source = params[:source]
     @file = params[:file]
     @tag_list = params[:tag_list]
     @category_ids = params[:category_ids]
@@ -53,7 +53,7 @@ class Submission
       body: body,
       date_received: date_received,
       tag_list: tag_list,
-      source: source && source.to_s
+      source: source
     }
 
     if category_ids.present?

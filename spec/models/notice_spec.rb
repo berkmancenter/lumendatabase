@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe Notice do
   it { should validate_presence_of :title }
-  it { should ensure_inclusion_of(:source).in_array(Notice::SOURCES) }
   it { should have_many :file_uploads }
   it { should have_many :entity_notice_roles }
   it { should have_and_belong_to_many :works }
@@ -10,10 +9,6 @@ describe Notice do
   it { should have_many(:entities).through(:entity_notice_roles)  }
   it { should have_and_belong_to_many :categories }
   it { should have_and_belong_to_many :relevant_questions }
-
-  it "has at least web and api sources available" do
-    expect(Notice::SOURCES).to include('web', 'api')
-  end
 
   context "#notice_file_content" do
     it "returns the contents of its uploaded notice file when present" do
