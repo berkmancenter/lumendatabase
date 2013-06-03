@@ -3,7 +3,7 @@
 ################################################################################
 questions = []
 questions << RelevantQuestion.new(
-  question: "Question: What is the Anti-Cybersquatting Consumer Protection Act (ACPA)?",
+  question: "What is the Anti-Cybersquatting Consumer Protection Act (ACPA)?",
   answer: %{
 The ACPA (codified as [15 USC 1125(d)][1125] is aimed at people who register a
 domain name with the intention of taking financial advantage of another's
@@ -55,7 +55,33 @@ or not, so long as the mark:
 ################################################################################
 # Categories, Category Managers
 ################################################################################
-dmca      = Category.create!(name: 'Anticircumvention (DMCA)', relevant_questions: questions)
+dmca = Category.create!(
+  name: 'Anticircumvention (DMCA)',
+  description: %{
+In the online world, the potentially infringing activities of
+individuals are stored and transmitted through the networks of third
+parties. Web site hosting services, Internet service providers, and
+search engines that link to materials on the Web are just some of the
+service providers that transmit materials created by others.  Section
+512 of the Digital Millennium Copyright Act (DMCA) protects online
+service providers (OSPs) from liability for information posted or
+transmitted by subscribers if they quickly remove or disable access to
+material identified in a copyright holder's complaint.
+
+While the safe harbor provisions provide a way for individuals to
+object to the removal of their materials once taken down, they do not
+require service providers to notify those individuals before their
+allegedly infringing materials are removed. If the material on your
+site does not infringe the intellectual property rights of a copyright
+owner and it has been improperly removed from the Web, you can file a
+counter-notice with the service provider, who must transmit it to the
+person who made the complaint. If the copyright owner does not notify
+the service provider within 14 business days that it has filed a claim
+against you in court, your materials can be restored to the Internet.
+  },
+  relevant_questions: questions
+)
+
 bookmarks = Category.create!(name: 'Bookmarks')
 chilling  = Category.create!(name: 'Chilling Effects')
 

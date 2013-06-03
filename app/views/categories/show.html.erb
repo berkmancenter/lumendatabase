@@ -1,0 +1,16 @@
+<section class="category-description>">
+  <h1><%= @category.name %></h1>
+  <article>
+    <p><%=raw @category.description_html %></p>
+  </article>
+</section>
+
+<section class="category-faqs" id="category-faqs">
+  <h2>Frequently Asked Questions</h2>
+  <% @category.relevant_questions.each do |question| %>
+    <article>
+      <div class="question"><%= question.question %></div>
+      <div class="answer"><%=raw question.answer_html %></div>
+    </article>
+  <% end %>
+</section>

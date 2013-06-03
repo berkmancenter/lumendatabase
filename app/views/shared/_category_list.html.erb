@@ -1,1 +1,5 @@
-<%= categories.map(&:name).join(', ') %>
+<% *init, last = categories %>
+<% init.each do |category| %>
+  <%= link_to(category.name, category_path(category)) %>, 
+<% end %>
+<%= link_to(last.name, category_path(last)) if last %>
