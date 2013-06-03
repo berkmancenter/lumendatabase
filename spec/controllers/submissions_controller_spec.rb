@@ -17,6 +17,16 @@ describe SubmissionsController do
       expect(response).to be_successful
     end
 
+    it "returns a json response with ID and URL for the created notice" do
+      post_valid_submission do |submission|
+        submission.stub(:notice_id).and_return(42)
+      end
+
+      json = JSON.parse(response.body)
+      expect(json['notice_id']).to eq 42
+      expect(json['notice_url']).to eq notice_url(42)
+    end
+
     it "returns a useful status code when a required parameter is missing" do
       post_invalid_submission
 
@@ -87,7 +97,7 @@ describe SubmissionsController do
   end
 
   def submission_double
-    double("Submission", save: true)
+    double("Submission", save: true, notice_id: 1)
   end
 
 end

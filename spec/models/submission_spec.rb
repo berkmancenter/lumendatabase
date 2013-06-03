@@ -90,6 +90,14 @@ describe Submission do
     expect(Notice.last.subject).to eq "Some subject"
   end
 
+  it "sets its notice_id correctly after save" do
+    submission = Submission.new(title: "A title")
+
+    submission.save
+
+    expect(submission.notice_id).to eq Notice.last.id
+  end
+
   context "works" do
     it "creates works with metadata" do
       submission = Submission.new(
