@@ -120,7 +120,27 @@ work = Work.create!(
 Submission.new(
   title: "Lion King on YouTube",
   date_received: Time.now,
-  category_ids: [dmca, bookmarks, chilling].map(&:id)
+  category_ids: [dmca, bookmarks, chilling].map(&:id),
+  tag_list: 'movies, disney, youtube',
+  entities: [
+    { name: 'Google',
+      kind: 'organization',
+      role: 'recipient',
+      address_line_1: '1600 Amphitheatre Parkway',
+      city: 'Mountain View',
+      state: 'CA',
+      zip: '94043',
+      country_code: 'US' },
+
+    { name: 'Joe Lawyer',
+      kind: 'individual',
+      role: 'submitter',
+      address_line_1: '1234 Anystreet St.',
+      city: 'Anytown',
+      state: 'CA',
+      zip: '94044',
+      country_code: 'US' }
+  ]
 ).save
 
 # TODO: add works/urls via submission interface
