@@ -7,4 +7,8 @@ class Category < ActiveRecord::Base
 
   validates_presence_of :name
 
+  def description_html
+    Markdown.render(description.to_s)
+  end
+
 end
