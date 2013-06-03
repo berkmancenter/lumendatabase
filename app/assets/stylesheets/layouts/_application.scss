@@ -3,6 +3,6 @@ body {
 }
 
 section.main.app {
-  @include outer-container;
-  padding: 40px $gutter;
+  @include container;
+  padding: 40px $gutter 40px 210px;
 }

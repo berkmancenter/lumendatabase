@@ -1,9 +1,7 @@
 form.new_submission {
-  $label-width: 150px;
+  $label-width: 200px;
   $label-margin: 20px;
-
   width: 600px;
-  margin: 0 auto;
 
   div {
     @include clearfix;
@@ -12,7 +10,7 @@ form.new_submission {
   label {
     float: left;
     text-align: right;
-    width: 150px;
+    width: $label-width;
     margin-right: 20px;
   }
 

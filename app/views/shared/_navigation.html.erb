@@ -1,16 +1,19 @@
 <nav class="main-nav">
   <ol>
-    <li>
+    <li class="search">
+      <%= link_to("Search", root_path) %>
+    </li>
+    <li class="new-notice">
       <%= link_to("Report C&D Notice", new_submission_path) %>
     </li>
-    <li>
+    <li class="blog">
       <a href="">Weather Reports</a>
     </li>
-    <li>
-      <a href="">About</a>
+    <li class="categories">
+      <a href="">Categories</a>
     </li>
-    <li>
-      <a href="">Topics</a>
+    <li class="about">
+      <a href="">About</a>
     </li>
 </nav>
 

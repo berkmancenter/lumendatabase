@@ -1,19 +1,20 @@
 header.app {
   @extend %search-form;
   @include clearfix;
-  @include linear-gradient(hsl(43, 41%, 98%),hsl(43, 7%, 92%));
+  @include linear-gradient(hsl(43, 41%, 98%), hsl(43, 7%, 92%));
 
   .container {
-    @include outer-container;
-    padding: 30px $gutter;
+    @include container;
+    padding: 20px;
   }
 
   h1 {
-    margin: 0 80px 0 0;
+    margin: 0 30px 0 0;
     float: left;
 
     img {
-      height: 42px;
+      margin-top: 5px;
+      height: 30px;
       display: block;
     }
   }
@@ -48,10 +49,9 @@ header.app {
     background: #fff;
 
     ol {
-      @include clearfix;
-      margin: 0 auto;
-      @include outer-container;
-      padding: 0 $gutter;
+      @include container;
+      margin: 0;
+      padding: 0 0 0 $left-margin;
 
       li {
         margin-right: 15px;
@@ -63,9 +63,14 @@ header.app {
           display: block;
           font-size: $base-font-size-small-1;
           font-weight: 600;
-          padding: 14px 30px 14px 5px;
+          padding: 6px 6px 6px 6px;
           text-decoration: none;
         }
+      }
+
+      li.about {
+        float: right;
+        margin-right: $base-padding;
       }
     }
   }

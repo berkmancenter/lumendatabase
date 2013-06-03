@@ -5,18 +5,20 @@ body.notices {
 article.notice-show {
   h1 {
     color: $base-title-color;
-    font-size: em(26, 15);
+    font-size: em(24, 15);
     font-weight: bold;
     line-height: 1em;
     margin-bottom: 0.15em;
+    margin-top: 0;
   }
 
-  .date-recieved {
+  .date-received {
     font-weight: bold;
     font-size: $base-font-size-small-1 - 1px;
     color: $base-font-color-3;
   }
 }
+
 article.notice-show {
   section.body {
     position: relative;
@@ -35,16 +37,15 @@ article.notice-show {
 //************************************************************************//
 article.notice-show {
   header {
-    @include clearfix;
+    @extend %gray-gradient;
     border-bottom: 1px solid $base-border-color-1;
+    @include clearfix;
 
     section.sender,
-    section.reciever {
-      background: #fff;
+    section.receiver {
       float: left;
-      @include linear-gradient(to top, #fafafa, #fff);
       min-height: 150px;
-      @include pad(25px default 25px $base-padding);
+      @include pad(15px default 25px $base-padding);
       width: 50%;
 
       @include media($mobile) {
@@ -55,7 +56,7 @@ article.notice-show {
       }
     }
 
-    section.reciever {
+    section.receiver {
       box-shadow: inset 0 4px 0 #18A753;
     }
 
@@ -69,7 +70,7 @@ article.notice-show {
         background-size: 26.5%;
         content: "";
         height: 48px;
-        left: -20%;
+        left: 82%;
         position: absolute;
         top: 50px;
         width: 62%;
@@ -77,6 +78,13 @@ article.notice-show {
       }
     }
 
+    h5 {
+      text-transform: uppercase;
+      color: darken($light-gray, 5%);
+      font-weight: bold;
+      margin-bottom: 5px;
+      font-size: $base-font-size-small-1 - 1;
+    }
     h6 {
       font-size: $base-font-size-small-1;
       font-weight: bold;

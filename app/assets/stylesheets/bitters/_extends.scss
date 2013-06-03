@@ -4,6 +4,10 @@
   color: $base-font-color-2;
 }
 
+%gray-gradient {
+  @include linear-gradient(to top, #fafafa, #fff);
+}
+
 // FAQ - Accordion
 //************************************************************************//
 %faq-accordion {

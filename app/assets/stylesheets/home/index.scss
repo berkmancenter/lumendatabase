@@ -6,20 +6,20 @@ body.home-index {
   nav.main-nav {
     ol {
       background: white;
+      border: 1px solid $base-border-color;
       border-radius: 0 0 3px 3px;
+      border-top: 0;
       @include clearfix;
       list-style: none;
       margin-top: 0;
       padding: 0;
-      border: 1px solid $base-border-color;
-      border-top: 0;
       width: 100%;
 
       li {
-        width: 25%;
         float: left;
         padding: 10px 20px;
         text-align: center;
+        width: 25%;
 
         a {
           color: $nav-link-color;
@@ -29,6 +29,10 @@ body.home-index {
             color: $nav-hover-link-color;
           }
         }
+      }
+
+      li.search {
+        display: none;
       }
     }
   }

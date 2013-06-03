@@ -1,14 +1,14 @@
 <article class="notice-show">
   <h1><%= @notice.title %></h1>
-  <span class="date-recieved">Date Received: <time datetime="<%= @notice.date_received %>"><%= @notice.date_received %></time></span>
+  <span class="date-received">Date Received: <time datetime="<%= @notice.date_received %>"><%= @notice.date_received %></time></span>
 
   <section class="body">
     <header id="entities" class="wip">
-      <% if @notice.recipient %>
-        <%= render @notice.recipient, css_class: 'reciever' %>
-      <% end %>
       <% if @notice.submitter %>
         <%= render @notice.submitter,  css_class: 'sender' %>
+      <% end %>
+      <% if @notice.recipient %>
+        <%= render @notice.recipient, css_class: 'receiver' %>
       <% end %>
     </header>
 
