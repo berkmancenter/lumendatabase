@@ -32,12 +32,6 @@ describe SubmissionsController do
 
       expect(response.body).to include "Title can't be blank"
     end
-
-    it "sets the submission source to :api" do
-      post_valid_submission do |submission|
-        submission.should_receive(:source=).with(:api)
-      end
-    end
   end
 
   context "#create from HTML" do
@@ -51,12 +45,6 @@ describe SubmissionsController do
       post_invalid_submission(format: :html)
 
       expect(response).to render_template(:new)
-    end
-
-    it "sets the submission source to :web" do
-      post_valid_submission(format: :html) do |submission|
-        submission.should_receive(:source=).with(:web)
-      end
     end
   end
 
@@ -89,7 +77,7 @@ describe SubmissionsController do
   end
 
   def submission_double
-    double("Submission", save: true, :source= => nil)
+    double("Submission", save: true)
   end
 
 end

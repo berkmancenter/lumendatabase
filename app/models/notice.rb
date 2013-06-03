@@ -1,7 +1,5 @@
 class Notice < ActiveRecord::Base
 
-  SOURCES = %w( web api )
-
   has_and_belongs_to_many :categories
   has_many :category_relevant_questions,
     through: :categories, source: :relevant_questions
@@ -16,7 +14,6 @@ class Notice < ActiveRecord::Base
   acts_as_taggable
 
   validates_presence_of :title
-  validates_inclusion_of :source, in: SOURCES, allow_nil: true
 
   def self.recent
     where('date_received > ?', 1.week.ago).order('date_received DESC')

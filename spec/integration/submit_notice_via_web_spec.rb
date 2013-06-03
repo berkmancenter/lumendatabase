@@ -1,14 +1,8 @@
 require 'spec_helper'
 
 feature "notice submission" do
-  scenario "submitting a notice without a file" do
-    visit "/submissions/new"
-
-    fill_in "Title", with: "A title"
-    fill_in "Body", with: "A body"
-    fill_in "Date received", with: Time.now
-
-    click_on "Submit"
+  scenario "submitting a notice file" do
+    submit_recent_notice("A title")
 
     expect(page).to have_css('#flash_notice')
 
@@ -18,35 +12,21 @@ feature "notice submission" do
   end
 
   scenario "submitting a notice with an attached file" do
-    visit "/submissions/new"
-
-    fill_in "Title", with: "A title"
-    fill_in "Date received", with: Time.now
-
-    Tempfile.open("notice_file") do |fh|
-      fh.write "Some content"
-      fh.flush
-
-      attach_file "Notice File", fh.path
+    submit_recent_notice do
+      attach_notice_file("Some content")
     end
 
-    click_on "Submit"
-
-    within("#recent-notices") do
-      click_on "A title"
-    end
+    open_recent_notice
 
     expect(page).to have_content "Some content"
   end
 
   scenario "submitting a notice with tags" do
-    visit "/submissions/new"
+    submit_recent_notice do
+      fill_in "Tag list", with: "tag_1, tag_2"
+    end
 
-    fill_in "Title", with: "A title"
-    fill_in "Tag list", with: "tag_1, tag_2"
-    click_on "Submit"
-
-    visit notice_path(Notice.last)
+    open_recent_notice
 
     within('#tags') do
       expect(page).to have_content "tag_1"
@@ -58,14 +38,12 @@ feature "notice submission" do
     create(:category, name: "Category 2")
     create(:category, name: "Category 3")
 
-    visit "/submissions/new"
+    submit_recent_notice do
+      select "Category 1", from: "Categories"
+      select "Category 3", from: "Categories"
+    end
 
-    fill_in "Title", with: "A title"
-    select "Category 1", from: "Categories"
-    select "Category 3", from: "Categories"
-    click_on "Submit"
-
-    visit notice_path(Notice.last)
+    open_recent_notice
 
     within('#categories') do
       expect(page).to have_content "Category 1"
@@ -74,21 +52,19 @@ feature "notice submission" do
   end
 
   scenario "submitting a notice with entities", js: true do
-    visit "/submissions/new"
-    fill_in "Title", with: "A title"
-    fill_in "Recipient Name", with: "Recipient the first"
-    fill_in "Recipient Address Line 1", with: "Recipient Line 1"
-    fill_in "Recipient Address Line 2", with: "Recipient Line 2"
-    fill_in "Recipient City", with: "Recipient City"
-    fill_in "Recipient State", with: "Recipient State"
-    select "United States", from: "Recipient Country Code"
+    submit_recent_notice do
+      fill_in "Recipient Name", with: "Recipient the first"
+      fill_in "Recipient Address Line 1", with: "Recipient Line 1"
+      fill_in "Recipient Address Line 2", with: "Recipient Line 2"
+      fill_in "Recipient City", with: "Recipient City"
+      fill_in "Recipient State", with: "Recipient State"
+      select "United States", from: "Recipient Country Code"
 
-    fill_in "Submitter Name", with: "Submitter the first"
-    fill_in "Date received", with: Time.now
+      fill_in "Submitter Name", with: "Submitter the first"
+    end
 
-    click_on "Submit"
+    open_recent_notice
 
-    click_on 'A title'
     within('#entities') do
       expect(page).to have_content "Recipient the first"
       expect(page).to have_content "Recipient Line 1"
@@ -99,6 +75,16 @@ feature "notice submission" do
 
       expect(page).to have_content "Submitter the first"
     end
+  end
+
+  scenario "submitting a notice with a source" do
+    submit_recent_notice do
+      fill_in "Sent via", with: "Arbitrary source"
+    end
+
+    open_recent_notice
+
+    expect(page).to have_content "Sent via: Arbitrary source"
   end
 
   scenario "a form articulates its required fields correctly" do
@@ -117,6 +103,32 @@ feature "notice submission" do
 
     within('form .submission_title') do
       expect(page).to have_css('.error')
+    end
+  end
+
+  private
+
+  def submit_recent_notice(title = "A title")
+    visit "/submissions/new"
+
+    fill_in "Title", with: title
+    fill_in "Date received", with: Time.now
+
+    yield if block_given?
+
+    click_on "Submit"
+  end
+
+  def open_recent_notice(title = "A title")
+    within('#recent-notices') { click_on title }
+  end
+
+  def attach_notice_file(content)
+    Tempfile.open('notice_file') do |fh|
+      fh.write content
+      fh.flush
+
+      attach_file "Notice File", fh.path
     end
   end
 

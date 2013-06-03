@@ -14,7 +14,7 @@
 
     <div class="main">
       <h2 class="notice-title wip">Re: Infringement Notification via Blogger Complaint</h2>
-      <%= notice_source(@notice) %>
+      <p class="source">Sent via: <%= @notice.source || 'Unknown' %></p>
 
       <ul id="works">
         <%= render @notice.works %>

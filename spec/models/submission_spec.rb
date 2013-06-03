@@ -74,22 +74,12 @@ describe Submission do
     }]).save
   end
 
-  context "submission source" do
-    it "has its own source attribute" do
-      submission = Submission.new
-      submission.source = :foo
+  it "assigns the Notice's source from params" do
+    submission = Submission.new(title: "A title", source: "Arbitrary source")
 
-      expect(submission.source).to eq :foo
-    end
+    submission.save
 
-    it "assigns the Notice's source from its own" do
-      submission = Submission.new(title: "A title")
-      submission.source = Notice::SOURCES.first
-
-      submission.save
-
-      expect(Notice.last.source).to eq Notice::SOURCES.first
-    end
+    expect(Notice.last.source).to eq "Arbitrary source"
   end
 
   private

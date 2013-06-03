@@ -17,14 +17,12 @@ class SubmissionsController < ApplicationController
 
   def submission_params
     params.require(:submission).permit(
-      :title, :body, :date_received, :file, :tag_list, category_ids: [],
-      entities: valid_entity_fields
+      :title, :body, :date_received, :source, :file, :tag_list,
+      category_ids: [], entities: valid_entity_fields
     )
   end
 
   def respond_for_api
-    @submission.source = :api
-
     if @submission.save
       head :created
     else
@@ -33,8 +31,6 @@ class SubmissionsController < ApplicationController
   end
 
   def respond_for_web
-    @submission.source = :web
-
     if @submission.save
       redirect_to :root, notice: "Notice added!"
     else
