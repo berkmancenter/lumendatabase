@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 feature "notice submission" do
-  scenario "submitting a notice file" do
+  scenario "submitting a notice" do
     submit_recent_notice("A title")
 
     expect(page).to have_css('#flash_notice')
@@ -18,7 +18,7 @@ feature "notice submission" do
 
     open_recent_notice
 
-    expect(page).to have_content "Some content"
+    pending "We don't use the attached file yet"
   end
 
   scenario "submitting a notice with tags" do
