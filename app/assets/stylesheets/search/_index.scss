@@ -136,3 +136,27 @@ ol.results-list {
     }
   }
 }
+
+.results-pagination {
+  margin-left: $base-padding;
+  margin-bottom: 40px;
+
+  span, em, a {
+    border: 1px solid $base-border-color;
+    font-size: $base-font-size - 1;
+    padding: 0.2em 0.5em
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  em {
+    font-style: normal;
+    font-weight: 700;
+  }
+
+  span.gap {
+    border: 0;
+  }
+}
