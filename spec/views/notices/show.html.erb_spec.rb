@@ -33,8 +33,8 @@ describe 'notices/show.html.erb' do
 
     render
 
-    within('#tags') do |node|
-      expect(node).to have_content("a_tag")
+    within('#tags') do
+      expect(page).to have_content("a_tag")
     end
   end
 
@@ -48,7 +48,7 @@ describe 'notices/show.html.erb' do
 
     render
 
-    within('#entities') do |node|
+    within('#entities') do
       notice.entities.each do |entity|
         expect(page).to have_content(entity.name)
         expect(page).to have_content(entity.address_line_1)
@@ -71,9 +71,9 @@ describe 'notices/show.html.erb' do
     render
 
     [category_question, notice_question].each do |question|
-      within("#relevant_question_#{question.id}") do |node|
-        expect(node).to have_content(question.question)
-        expect(node).to have_content(question.answer)
+      within("#relevant_question_#{question.id}") do
+        expect(page).to have_content(question.question)
+        expect(page).to have_content(question.answer)
       end
     end
   end
@@ -85,13 +85,13 @@ describe 'notices/show.html.erb' do
     render
 
     notice.works.each do |work|
-      within("#work_#{work.id}") do |node|
-        expect(node).to have_content(work.description)
-        expect(node).to have_content(work.url)
+      within("#work_#{work.id}") do
+        expect(page).to have_content(work.description)
+        expect(page).to have_content(work.url)
 
         work.infringing_urls.each do |url|
-          within("#infringing_url_#{url.id}") do |inner_node|
-            expect(inner_node).to have_content(url.url)
+          within("#infringing_url_#{url.id}") do
+            expect(page).to have_content(url.url)
           end
         end
       end

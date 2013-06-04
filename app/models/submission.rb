@@ -4,7 +4,7 @@ class Submission
   include PsuedoModel
 
   attr_reader :title, :subject, :body, :date_received, :source, :file,
-    :tag_list, :category_ids, :works
+    :tag_list, :category_ids, :works, :notice_id
 
   validates_presence_of :title
 
@@ -34,8 +34,8 @@ class Submission
 
     AssociatesWorks.new(works, notice, self).associate
 
-    if valid? && all_models_valid?
-      save_all_models
+    if valid? && all_models_valid? && save_all_models
+      @notice_id = notice.id
     end
   end
 

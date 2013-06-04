@@ -17,10 +17,10 @@ describe 'home/index.html.erb' do
     render
 
     notices.each do |notice|
-      within("#notice_#{notice.id}") do |node|
-        expect(node.text).to include notice.title
-        expect(node.text).to include notice.date_received.to_s(:simple)
-        expect(node).to contain_link notice_path(notice)
+      within("#notice_#{notice.id}") do
+        expect(page).to have_content notice.title
+        expect(page).to have_content notice.date_received.to_s(:simple)
+        expect(page).to contain_link notice_path(notice)
       end
     end
   end

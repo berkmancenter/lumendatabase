@@ -37,7 +37,7 @@ class SubmissionsController < ApplicationController
 
   def respond_for_api
     if @submission.save
-      head :created
+      render_created_submission(@submission)
     else
       render_bad_request(@submission.errors)
     end
@@ -49,6 +49,13 @@ class SubmissionsController < ApplicationController
     else
       render :new
     end
+  end
+
+  def render_created_submission(submission)
+    render json: {
+      notice_id: submission.notice_id,
+      notice_url: notice_url(submission.notice_id)
+    }, status: :created
   end
 
   def render_bad_request(errors)
