@@ -23,12 +23,14 @@ header.app {
   form {
     margin: 0;
     float: left;
+    width: 530px;
 
     div.input input {
       height: 42px;
       padding-top: 6px;
       padding-bottom: 6px;
       margin-bottom: 0;
+      width: 100%;
     }
 
     div.submit button {
