@@ -32,6 +32,11 @@ describe SubmissionsController do
 
       expect(response.body).to include "Title can't be blank"
     end
+
+    it "does not normalize parameters" do
+      NormalizesParameters.should_not_receive(:normalize)
+      post_valid_submission
+    end
   end
 
   context "#create from HTML" do
@@ -46,7 +51,14 @@ describe SubmissionsController do
 
       expect(response).to render_template(:new)
     end
+
+    it "normalizes HTML form parameters" do
+      NormalizesParameters.should_receive(:normalize)
+      post_valid_submission(format: :html)
+    end
   end
+
+
 
   private
 

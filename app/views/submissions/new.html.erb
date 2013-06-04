@@ -17,7 +17,12 @@
     <%= raw entity_form_input(entity_form, 'Submitter') %>
   <% end %>
 
+  <%= form.fields_for(:works) do |works_form| %>
+    <%= render partial: 'works_form', locals: { form: works_form } %>
+  <% end %>
+
   <%= form.input :file, as: :file, label: 'Notice File' %>
+
   <div class="buttons-wrapper">
     <%= form.submit "Submit", :class => "submit" %>
   </div>

@@ -77,6 +77,30 @@ feature "notice submission" do
     end
   end
 
+  scenario "submitting a notice with works" do
+    submit_recent_notice do
+      fill_in 'Work URL', with: 'http://www.example.com/original_work.pdf'
+      fill_in 'Kind of Work', with: 'movie'
+      fill_in 'Work Description', with: 'A series of videos and still images'
+      fill_in 'Infringing URLs', with: "http://example.com/infringing_url1
+http://example.com/infringing_url2"
+    end
+
+    open_recent_notice
+
+    within('#works') do
+      expect(page).to have_content 'http://www.example.com/original_work.pdf'
+      expect(page).to have_content 'movie'
+      expect(page).to have_content 'A series of videos and still images'
+      expect(page).to have_css(
+        %{.infringing_url:contains("http://example.com/infringing_url1")}
+      )
+      expect(page).to have_css(
+        %{.infringing_url:contains("http://example.com/infringing_url2")}
+      )
+    end
+  end
+
   scenario "submitting a notice with a source" do
     submit_recent_notice do
       fill_in "Sent via", with: "Arbitrary source"

@@ -82,6 +82,37 @@ describe Submission do
     expect(Notice.last.source).to eq "Arbitrary source"
   end
 
+  context "works" do
+    it "creates works with metadata" do
+      submission = Submission.new(
+        title: "A title",
+        works: [
+          { url: 'http://www.example.com/original_work.pdf',
+            description: 'Video and images produced by Foocorp',
+            infringing_urls: [
+              'http://www.example.com/infringing_url1',
+              'http://www.example.com/infringing_url2',
+              'http://www.example.com/infringing_url3',
+              'http://www.example.com/infringing_url4'
+            ]
+          }
+        ]
+      )
+      submission.save
+
+      notice = Notice.last
+      work = notice.works.first
+      expect(notice.works.count).to eq 1
+      expect(work.url).to eq 'http://www.example.com/original_work.pdf'
+      expect(work.infringing_urls.map(&:url)).to eq [
+          'http://www.example.com/infringing_url1',
+          'http://www.example.com/infringing_url2',
+          'http://www.example.com/infringing_url3',
+          'http://www.example.com/infringing_url4'
+      ]
+    end
+  end
+
   private
 
   def with_tempfile(&block)

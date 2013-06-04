@@ -4,7 +4,7 @@ class Submission
   include PsuedoModel
 
   attr_reader :title, :body, :date_received, :source, :file, :tag_list,
-    :category_ids
+    :category_ids, :works
 
   validates_presence_of :title
 
@@ -17,6 +17,7 @@ class Submission
     @tag_list = params[:tag_list]
     @category_ids = params[:category_ids]
     @entities = params[:entities]
+    @works = params[:works]
   end
 
   def save
@@ -28,7 +29,9 @@ class Submission
       models << file_upload
     end
 
-    AssociatesEntities.new(entities, notice, self).associate_entity_models
+    AssociatesEntities.new(entities, notice, self).associate
+
+    AssociatesWorks.new(works, notice, self).associate
 
     if valid? && all_models_valid?
       save_all_models
