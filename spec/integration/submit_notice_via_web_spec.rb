@@ -111,6 +111,16 @@ http://example.com/infringing_url2"
     expect(page).to have_content "Sent via: Arbitrary source"
   end
 
+  scenario "submitting a notice with a subject" do
+    submit_recent_notice do
+      fill_in "Subject", with: "Some subject"
+    end
+
+    open_recent_notice
+
+    expect(page).to have_content "Re: Some subject"
+  end
+
   scenario "a form articulates its required fields correctly" do
     visit "/submissions/new"
 

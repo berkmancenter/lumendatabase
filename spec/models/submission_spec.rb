@@ -82,6 +82,14 @@ describe Submission do
     expect(Notice.last.source).to eq "Arbitrary source"
   end
 
+  it "assigns the Notice's subject from params" do
+    submission = Submission.new(title: "A title", subject: "Some subject")
+
+    submission.save
+
+    expect(Notice.last.subject).to eq "Some subject"
+  end
+
   context "works" do
     it "creates works with metadata" do
       submission = Submission.new(
