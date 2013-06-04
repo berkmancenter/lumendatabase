@@ -1,4 +1,5 @@
 class Notice < ActiveRecord::Base
+  RECENT_LIMIT = 7
 
   has_and_belongs_to_many :categories
   has_many :category_relevant_questions,
@@ -14,7 +15,7 @@ class Notice < ActiveRecord::Base
   acts_as_taggable
 
   def self.recent
-    where('date_received > ?', 1.week.ago).order('date_received DESC')
+    order('created_at DESC').limit(RECENT_LIMIT)
   end
 
   def all_relevant_questions
