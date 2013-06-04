@@ -1,7 +1,11 @@
 require 'spec_helper'
 
 describe Notice do
-  it { should validate_presence_of :title }
+  context 'schema_validations' do
+    it { should validate_presence_of :title }
+    it { should ensure_length_of(:title).is_at_most(255) }
+  end
+
   it { should have_many :file_uploads }
   it { should have_many :entity_notice_roles }
   it { should have_and_belong_to_many :works }

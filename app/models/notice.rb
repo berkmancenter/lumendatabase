@@ -13,8 +13,6 @@ class Notice < ActiveRecord::Base
 
   acts_as_taggable
 
-  validates_presence_of :title
-
   def self.recent
     where('date_received > ?', 1.week.ago).order('date_received DESC')
   end

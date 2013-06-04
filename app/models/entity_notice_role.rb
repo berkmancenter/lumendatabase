@@ -12,7 +12,6 @@ class EntityNoticeRole < ActiveRecord::Base
     end
   end
 
-  validates_presence_of :entity, :notice, :name
   validates_inclusion_of :name, in: ROLES
 
 end
