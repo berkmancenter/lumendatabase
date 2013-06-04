@@ -54,6 +54,7 @@ feature "notice submission" do
   scenario "submitting a notice with entities", js: true do
     submit_recent_notice do
       fill_in "Recipient Name", with: "Recipient the first"
+      select "organization", from: "Recipient Kind"
       fill_in "Recipient Address Line 1", with: "Recipient Line 1"
       fill_in "Recipient Address Line 2", with: "Recipient Line 2"
       fill_in "Recipient City", with: "Recipient City"
@@ -67,6 +68,7 @@ feature "notice submission" do
 
     within('#entities') do
       expect(page).to have_content "Recipient the first"
+      expect(page).to have_content "organization"
       expect(page).to have_content "Recipient Line 1"
       expect(page).to have_content "Recipient Line 2"
       expect(page).to have_content "Recipient City"
