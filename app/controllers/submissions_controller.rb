@@ -27,7 +27,7 @@ class SubmissionsController < ApplicationController
   end
 
   def entity_params
-    [:name, :role, :address_line_1, :address_line_2, :city, :state,
+    [:name, :kind, :role, :address_line_1, :address_line_2, :city, :state,
      :zip, :country_code, :phone, :email, :url]
   end
 
