@@ -130,6 +130,7 @@ CategoryManager.create!(
 Submission.new(
   title: "Lion King on YouTube",
   date_received: Time.now,
+  source: "Online Form",
   category_ids: [dmca, bookmarks, chilling].map(&:id),
   tag_list: 'movies, disney, youtube',
   works: [ {
