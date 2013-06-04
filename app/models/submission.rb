@@ -3,13 +3,14 @@ require 'psuedo_model'
 class Submission
   include PsuedoModel
 
-  attr_reader :title, :body, :date_received, :source, :file, :tag_list,
-    :category_ids, :works
+  attr_reader :title, :subject, :body, :date_received, :source, :file,
+    :tag_list, :category_ids, :works
 
   validates_presence_of :title
 
   def initialize(params = {})
     @title = params[:title]
+    @subject = params[:subject]
     @body = params[:body]
     @date_received = params[:date_received]
     @source = params[:source]
@@ -53,6 +54,7 @@ class Submission
   def initialize_notice
     notice_params = {
       title: title,
+      subject: subject,
       body: body,
       date_received: date_received,
       tag_list: tag_list,

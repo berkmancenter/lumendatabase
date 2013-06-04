@@ -18,11 +18,21 @@ class SubmissionsController < ApplicationController
   def submission_params
     transform_html_parameters
 
-    params.require(:submission).permit(
-      :title, :body, :date_received, :source, :file, :tag_list,
-      category_ids: [], entities: valid_entity_fields,
-      works: [:url, :description, :kind, infringing_urls: []]
-    )
+    params.require(:submission).permit(*notice_params)
+  end
+
+  def notice_params
+    [:title, :subject, :body, :date_received, :source, :file, :tag_list,
+     category_ids: [], entities: entity_params, works: work_params]
+  end
+
+  def entity_params
+    [:name, :role, :address_line_1, :address_line_2, :city, :state,
+     :zip, :country_code, :phone, :email, :url]
+  end
+
+  def work_params
+    [:url, :description, :kind, infringing_urls: []]
   end
 
   def respond_for_api
@@ -45,11 +55,6 @@ class SubmissionsController < ApplicationController
     error_message = errors.full_messages.join(', ')
 
     render text: error_message, status: :bad_request
-  end
-
-  def valid_entity_fields
-    [:name, :role, :address_line_1, :address_line_2, :city, :state, :zip,
-      :country_code, :phone, :email, :url]
   end
 
   def transform_html_parameters

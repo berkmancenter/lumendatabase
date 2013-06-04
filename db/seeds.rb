@@ -129,6 +129,7 @@ CategoryManager.create!(
 ################################################################################
 Submission.new(
   title: "Lion King on YouTube",
+  subject: "Infringement Notification via Blogger Complaint",
   date_received: Time.now,
   source: "Online Form",
   category_ids: [dmca, bookmarks, chilling].map(&:id),

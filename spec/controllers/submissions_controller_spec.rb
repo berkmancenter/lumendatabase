@@ -58,8 +58,6 @@ describe SubmissionsController do
     end
   end
 
-
-
   private
 
   def post_valid_submission(options = {})

@@ -99,7 +99,7 @@ describe 'notices/show.html.erb' do
   end
 
   it "displays the notice source" do
-    assign(:notice, create(:notice, source: "Arbitrary source"))
+    assign(:notice, build(:notice, source: "Arbitrary source"))
 
     render
 
@@ -108,11 +108,19 @@ describe 'notices/show.html.erb' do
 
 
   it "displays correctly for a notice of unknown source" do
-    assign(:notice, create(:notice, source: nil))
+    assign(:notice, build(:notice, source: nil))
 
     render
 
     expect(page).to have_content("Sent via: Unknown")
+  end
+
+  it "displays the notice's subject" do
+    assign(:notice, build(:notice, subject: "Some subject"))
+
+    render
+
+    expect(page).to have_content("Re: Some subject")
   end
 
 end
