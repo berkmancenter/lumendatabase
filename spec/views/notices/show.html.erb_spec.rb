@@ -18,15 +18,6 @@ describe 'notices/show.html.erb' do
     expect(rendered).to include "June 05, 2013"
   end
 
-  it "displays the notices file" do
-    notice = create(:notice_with_notice_file, content: "File content")
-    assign(:notice, notice)
-
-    render
-
-    expect(rendered).to include("File content")
-  end
-
   it "displays a notice with tags" do
     notice = create(:notice, :with_tags)
     assign(:notice, notice)

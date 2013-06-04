@@ -14,20 +14,6 @@ describe Notice do
   it { should have_and_belong_to_many :categories }
   it { should have_and_belong_to_many :relevant_questions }
 
-  context "#notice_file_content" do
-    it "returns the contents of its uploaded notice file when present" do
-      notice = create(:notice_with_notice_file, content: "Some content")
-
-      expect(notice.notice_file_content).to eq "Some content"
-    end
-
-    it "returns an empty string when there is no uploaded file" do
-      notice = build(:notice)
-
-      expect(notice.notice_file_content).to eq ''
-    end
-    end
-
   context "#recent" do
     it "returns notices sent in the past week" do
       recent_notice = create(:notice, date_received: 1.week.ago + 1.hour)

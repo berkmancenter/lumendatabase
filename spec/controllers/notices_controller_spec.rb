@@ -32,15 +32,6 @@ describe NoticesController do
       expect(json).to have_key(:date_received).with_value(notice.date_received)
     end
 
-    it "serializes the file content" do
-      notice = create(:notice_with_notice_file, content: "Some content")
-
-      get :show, id: notice.id, format: :json
-
-      json = JSON.parse(response.body)["notice"]
-      expect(json).to have_key(:notice_file_content).with_value("Some content")
-    end
-
     it "includes the notice category names" do
       notice = create(:notice, :with_categories)
 

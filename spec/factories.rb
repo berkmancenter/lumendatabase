@@ -36,21 +36,6 @@ FactoryGirl.define do
       end
     end
 
-    factory :notice_with_notice_file do
-      ignore do
-        content "Content"
-      end
-
-      after(:create) do |notice, evaluator|
-        create(
-          :file_upload,
-          kind: :notice,
-          notice: notice,
-          content: evaluator.content
-        )
-      end
-    end
-
     trait :with_entities do
       after(:create) do |notice, instance|
         instance.roles_for_entities.each do |role|

@@ -17,10 +17,6 @@ class Notice < ActiveRecord::Base
     where('date_received > ?', 1.week.ago).order('date_received DESC')
   end
 
-  def notice_file_content
-    first_notice.read
-  end
-
   def all_relevant_questions
     relevant_questions | category_relevant_questions
   end
@@ -34,10 +30,6 @@ class Notice < ActiveRecord::Base
   end
 
   private
-
-  def first_notice
-    file_uploads.notices.first || NullFileUpload.new
-  end
 
   def entities_that_have_submitted
     entity_notice_roles.submitters.map(&:entity)
