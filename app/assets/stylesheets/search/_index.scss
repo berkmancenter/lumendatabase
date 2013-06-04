@@ -17,39 +17,51 @@ section.search-results {
 }
 
 ol.results-list {
-  $color: $base-font-color-2;
   margin-top: 2em;
   padding: 0 $base-padding;
 
   li {
     list-style-type: none;
     margin-bottom: 23px;
+
+    &:hover {
+      div.metadata div.category {
+        @include transition;
+        opacity: 1;
+      }
+    }
   }
 
   h3 {
-    font-size: $base-font-size + 1;
+    font-size: $base-font-size-1;
     line-height: 1.2em;
     margin: 0;
 
     a {
-      color: $base-link-color-1;
+      color: saturate(darken($base-link-color-1, 5%), 100%);
+      text-decoration: none;
 
       &:hover {
-        color: $hover-link-color-1;
+        color: darken($base-link-color-1, 5%);
+        text-decoration: underline;
+      }
+
+      &:visited {
+        color: #609;
       }
     }
   }
 
   div.metadata {
+    color: lighten($base-font-color, 7%);
+
     div {
-      display: inline-block;
       font-size: $base-font-size-small-1;
       font-weight: 600;
       margin-right: 20px;
       line-height: 1.4em;
 
       a {
-        color: $base-font-color;
         text-decoration: none;
 
         &:hover {
@@ -59,7 +71,13 @@ ol.results-list {
       }
     }
 
+    div.date-received {
+        display: inline-block;
+    }
+
     div.sender-receiver {
+      display: inline-block;
+
       a {
         display: inline-block;
         font-style: italic;
@@ -67,16 +85,47 @@ ol.results-list {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+
+        &.sender {
+          color: #915959;
+        }
+
+        &.receiver {
+          color: #65A16A;
+        }
+      }
+    }
+
+    ol.excerpt {
+      font-size: $base-font-size-small-1;
+      font-weight: normal;
+      margin: 0;
+      padding: 0;
+
+      li {
+        list-style: none;
+        margin: 0;
+      }
+
+      b {
+        font-weight: 600;
+        color: $base-font-color-2;
+      }
+
+      em {
+        color: $base-font-color;
+        font-weight: 600;
+        font-style: normal;
       }
     }
 
     div.category {
-      color: $color;
-      display: block;
+      opacity: 0;
+      color: $base-font-color-2;
       font-weight: 400;
 
       a {
-        color: $color;
+        color: $base-font-color-2;
       }
     }
 
