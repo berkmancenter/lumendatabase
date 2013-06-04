@@ -1,8 +1,12 @@
 require "spec_helper"
 
 describe Entity do
-  it { should validate_presence_of :name }
-  it { should validate_presence_of :kind }
+  context 'schema_validations' do
+    it { should validate_presence_of :name }
+    it { should validate_presence_of :kind }
+    it { should ensure_length_of(:address_line_1).is_at_most(255) }
+  end
+
   it { should have_many :entity_notice_roles }
   it { should have_many(:notices).through(:entity_notice_roles)  }
   it { should ensure_inclusion_of(:kind).in_array(Entity::KINDS) }

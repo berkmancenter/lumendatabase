@@ -5,6 +5,5 @@ class Entity < ActiveRecord::Base
 
   KINDS = %w[organization individual]
 
-  validates_presence_of :name, :kind
   validates_inclusion_of :kind, in: KINDS
 end

@@ -24,6 +24,7 @@ gem 'devise'
 gem 'rails_admin', '~>0.4.8'
 gem 'redcarpet', '~>2.3.0'
 gem 'country_select'
+gem 'schema_validations'
 
 group :assets do
   gem 'coffee-rails'
