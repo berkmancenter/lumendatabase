@@ -14,19 +14,17 @@ describe Notice do
   it { should have_and_belong_to_many :categories }
   it { should have_and_belong_to_many :relevant_questions }
 
-  context "#recent" do
-    it "returns notices sent in the past week" do
-      recent_notice = create(:notice, date_received: 1.week.ago + 1.hour)
-      old_notice = create(:notice, date_received: 1.week.ago - 1.hour)
+  context ".recent" do
+    it "returns a limited number of notices" do
+      create_list(:notice, Notice::RECENT_LIMIT + 1)
 
-      expect(Notice.recent).to include(recent_notice)
-      expect(Notice.recent).not_to include(old_notice)
+      expect(Notice.recent.size).to eq Notice::RECENT_LIMIT
     end
 
-    it "returns notices in descending date sent order" do
-      third_notice = create(:notice, date_received: 16.hours.ago)
-      first_notice = create(:notice, date_received: 1.hour.ago)
-      second_notice = create(:notice, date_received: 10.hours.ago)
+    it "returns notices in descending created_at sent order" do
+      third_notice = Timecop.travel(16.hours.ago) { create(:notice) }
+      first_notice = Timecop.travel(1.hour.ago) { create(:notice) }
+      second_notice = Timecop.travel(10.hours.ago) { create(:notice) }
 
       expect(Notice.recent).to eq [first_notice, second_notice, third_notice]
     end
