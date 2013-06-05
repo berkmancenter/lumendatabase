@@ -92,7 +92,6 @@ feature "notice submission" do
   scenario "submitting a notice with works" do
     submit_recent_notice do
       fill_in 'Work URL', with: 'http://www.example.com/original_work.pdf'
-      fill_in 'Kind of Work', with: 'movie'
       fill_in 'Work Description', with: 'A series of videos and still images'
       fill_in 'Infringing URL', with: "http://example.com/infringing_url1"
     end

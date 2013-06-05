@@ -36,4 +36,21 @@ describe Work do
   context '#url' do
     it_behaves_like 'an object with a url'
   end
+
+  context '#kind' do
+    it "auto classifies before saving if kind is not set" do
+      DeterminesWorkKind.any_instance.should_receive(:kind).and_return('foo')
+      work = build(:work, url: 'http://www.example.com/foo.mp3')
+
+      work.save
+      expect(work.kind).to eq 'foo'
+    end
+
+    it "does not auto classify if kind is set" do
+      DeterminesWorkKind.any_instance.should_not_receive(:kind)
+      work = build(:work, url: 'http://www.example.com/foo.mp3', kind: 'foo')
+
+      work.save
+    end
+  end
 end
