@@ -7,6 +7,12 @@ describe 'shared/_navigation.html.erb' do
     expect(page).to contain_link(new_notice_path)
   end
 
+  it 'shows a link to read the blog' do
+    render
+
+    expect(page).to contain_link(blog_entries_path)
+  end
+
   it 'has links to all categories' do
     categories = create_list(:category, 3)
 

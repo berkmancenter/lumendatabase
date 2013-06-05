@@ -1,0 +1,8 @@
+<%= content_tag_for(:article, blog_entry) do %>
+  <h2><%= link_to(blog_entry.title, blog_entry_path(blog_entry)) %></h2>
+  <p><%= publishing_info(blog_entry) %></p>
+
+  <section class="abstract">
+    <p>Abstract: <%= blog_entry.abstract %></p>
+  </section>
+<% end %>

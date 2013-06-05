@@ -11,7 +11,18 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130604155451) do
+ActiveRecord::Schema.define(:version => 20130605210537) do
+
+  create_table "blog_entries", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "author",       :null => false
+    t.string   "title",        :null => false
+    t.text     "abstract"
+    t.text     "content"
+    t.datetime "published_at"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
 
   create_table "categories", :force => true do |t|
     t.string "name",        :null => false
