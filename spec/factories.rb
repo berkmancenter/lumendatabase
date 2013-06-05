@@ -9,10 +9,19 @@ FactoryGirl.define do
   end
 
   factory :notice do
-    ignore do
-      roles_for_entities { ['principal'] }
-    end
     title "A title"
+    works { build_list(:work, 1) }
+
+    ignore do
+      role_names ['principal']
+    end
+
+    after :build do |notice, evaluator|
+      evaluator.role_names.each do |role_name|
+        notice.entity_notice_roles <<
+          build(:entity_notice_role, notice: notice, name: role_name)
+      end
+    end
 
     trait :with_body do
       body "A body"
@@ -35,17 +44,6 @@ FactoryGirl.define do
         notice.works = build_list(:work, 3, :with_infringing_urls)
       end
     end
-
-    trait :with_entities do
-      after(:create) do |notice, instance|
-        instance.roles_for_entities.each do |role|
-          create(
-            :entity_notice_role, notice: notice, entity: create(:entity, name: "#{role} name"),
-            name: role
-          )
-        end
-      end
-    end
   end
 
   factory :file_upload do
@@ -64,8 +62,8 @@ FactoryGirl.define do
   end
 
   factory :entity_notice_role do
-    notice { build(:notice) }
-    entity { build(:entity) }
+    notice
+    entity
     name 'principal'
   end
 
@@ -82,20 +80,10 @@ FactoryGirl.define do
     email "foo@example.com"
     url "http://www.example.com"
 
-    factory :entity_with_children do
+    trait :with_children do
       after(:create) do |parent_entity|
         create(:entity, parent: parent_entity)
         create(:entity, parent: parent_entity)
-      end
-    end
-
-    factory :entity_with_notice_roles do
-      after(:create) do |entity|
-        notice = create(:notice)
-        create(
-          :entity_notice_role,
-          entity: entity, notice: notice, name: 'principal'
-        )
       end
     end
   end

@@ -1,13 +1,16 @@
 require 'spec_helper'
 
 describe Notice do
+  it { should validate_presence_of :works }
+  it { should validate_presence_of :entity_notice_roles }
+
   context 'schema_validations' do
     it { should validate_presence_of :title }
     it { should ensure_length_of(:title).is_at_most(255) }
   end
 
   it { should have_many :file_uploads }
-  it { should have_many :entity_notice_roles }
+  it { should have_many(:entity_notice_roles).dependent(:destroy) }
   it { should have_and_belong_to_many :works }
   it { should have_many(:infringing_urls).through(:works) }
   it { should have_many(:entities).through(:entity_notice_roles)  }
@@ -53,29 +56,23 @@ describe Notice do
   end
 
   context "entity notice roles" do
-    it "clean up notice roles after a notice is destroyed" do
-      entity = create(:entity_with_notice_roles)
-      notice = entity.notices.first
-
-      EntityNoticeRole.any_instance.should_receive(:destroy)
-      notice.destroy
-    end
-
     context 'with entities' do
-      it "has submitters" do
-        notice = create(
-          :notice, :with_entities, roles_for_entities: ['submitter']
-        )
-        expect(notice.submitter).to be_instance_of(Entity)
-        expect(notice.submitter).to eq entity_for_role_from_notice(notice, 'submitter')
-      end
+      %w( submitter recipient ).each do |role_name|
+        context "##{role_name}" do
+          it "returns entity of type #{role_name}" do
+            entity = create(:entity)
+            notice = create(:notice)
 
-      it "has recipients" do
-        notice = create(
-          :notice, :with_entities, roles_for_entities: ['recipient']
-        )
-        expect(notice.recipient).to be_instance_of(Entity)
-        expect(notice.recipient).to eq entity_for_role_from_notice(notice, 'recipient')
+            create(
+              :entity_notice_role,
+              entity: entity,
+              notice: notice,
+              name: role_name
+            )
+            expect(notice.send(role_name)).to eq entity
+          end
+
+        end
       end
     end
 
@@ -126,9 +123,5 @@ describe Notice do
 
       expect(questions).to match_array %w( Q1 Q2 )
     end
-  end
-
-  def entity_for_role_from_notice(notice, role)
-    notice.entity_notice_roles.where(name: role).first.entity
   end
 end

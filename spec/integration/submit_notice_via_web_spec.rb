@@ -51,7 +51,7 @@ feature "notice submission" do
     end
   end
 
-  scenario "submitting a notice with entities", js: true do
+  scenario "submitting a notice with entities" do
     submit_recent_notice do
       fill_in "Recipient Name", with: "Recipient the first"
       select "organization", from: "Recipient Kind"
@@ -84,8 +84,7 @@ feature "notice submission" do
       fill_in 'Work URL', with: 'http://www.example.com/original_work.pdf'
       fill_in 'Kind of Work', with: 'movie'
       fill_in 'Work Description', with: 'A series of videos and still images'
-      fill_in 'Infringing URLs', with: "http://example.com/infringing_url1
-http://example.com/infringing_url2"
+      fill_in 'Infringing URL', with: "http://example.com/infringing_url1"
     end
 
     open_recent_notice
@@ -96,9 +95,6 @@ http://example.com/infringing_url2"
       expect(page).to have_content 'A series of videos and still images'
       expect(page).to have_css(
         %{.infringing_url:contains("http://example.com/infringing_url1")}
-      )
-      expect(page).to have_css(
-        %{.infringing_url:contains("http://example.com/infringing_url2")}
       )
     end
   end
@@ -124,20 +120,20 @@ http://example.com/infringing_url2"
   end
 
   scenario "a form articulates its required fields correctly" do
-    visit "/submissions/new"
+    visit "/notices/new"
 
-    within('form#new_submission') do
-      expect(page).to have_css('input#submission_title.required')
-      expect(page).to have_css('input#submission_date_received:not(.required)')
+    within('form#new_notice') do
+      expect(page).to have_css('input#notice_title.required')
+      expect(page).to have_css('input#notice_date_received:not(.required)')
     end
   end
 
   scenario "submitting a notice without required fields present" do
-    visit "/submissions/new"
+    visit "/notices/new"
 
     click_on "Submit"
 
-    within('form .submission_title') do
+    within('form .notice_title') do
       expect(page).to have_css('.error')
     end
   end
@@ -145,10 +141,18 @@ http://example.com/infringing_url2"
   private
 
   def submit_recent_notice(title = "A title")
-    visit "/submissions/new"
+    visit "/notices/new"
 
     fill_in "Title", with: title
     fill_in "Date received", with: Time.now
+
+    fill_in "Recipient Name", with: "Recipient the first"
+    fill_in "Submitter Name", with: "Submitter the first"
+
+    fill_in 'Work URL', with: 'http://www.example.com/original_work.pdf'
+    fill_in 'Kind of Work', with: 'movie'
+    fill_in 'Work Description', with: 'A series of videos and still images'
+    fill_in 'Infringing URL', with: "http://example.com/infringing_url1"
 
     yield if block_given?
 

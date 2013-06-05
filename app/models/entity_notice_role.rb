@@ -4,6 +4,8 @@ class EntityNoticeRole < ActiveRecord::Base
 
   ROLES = %w[principal agent recipient submitter target]
 
+  accepts_nested_attributes_for :entity
+
   class << self
     ROLES.each do |role|
       define_method(role.pluralize.to_sym) do

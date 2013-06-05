@@ -1,26 +1,27 @@
 require 'spec_helper'
 
 describe EntityNoticeRole do
-  it{ should belong_to :entity }
-  it{ should belong_to :notice }
+  it { should belong_to :entity }
+  it { should belong_to :notice }
+
   context 'schema_validations' do
-    it{ should validate_presence_of :name }
-    it{ should validate_presence_of :entity }
-    it{ should validate_presence_of :notice }
-    it{ should ensure_length_of(:name).is_at_most(255) }
+    it { should validate_presence_of :name }
+    it { should validate_presence_of :entity }
+    it { should validate_presence_of :notice }
+    it { should ensure_length_of(:name).is_at_most(255) }
   end
-  it{ should have_db_index :entity_id }
-  it{ should have_db_index :notice_id }
-  it{ should ensure_inclusion_of(:name).in_array(EntityNoticeRole::ROLES) }
+
+  it { should have_db_index :entity_id }
+  it { should have_db_index :notice_id }
+  it { should ensure_inclusion_of(:name).in_array(EntityNoticeRole::ROLES) }
 
   EntityNoticeRole::ROLES.each do |role|
     context "getting #{role} instances" do
       it 'returns the correct role' do
-        instance_with_role = create(:entity_notice_role, name: role)
-        create(:entity_notice_role, name: a_different_role_than(role))
+        create(:notice, role_names: [role, a_different_role_than(role)])
 
         expect(described_class.all.count).to eq 2
-        expect(described_class.send(role.pluralize.to_sym)).to eq [instance_with_role]
+        expect(described_class.send(role.pluralize.to_sym).count).to eq 1
       end
     end
   end

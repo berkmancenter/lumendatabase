@@ -125,43 +125,48 @@ CategoryManager.create!(
 )
 
 ################################################################################
-# Submissions
+# Notices
 ################################################################################
-Submission.new(
+Notice.create!(
   title: "Lion King on YouTube",
   subject: "Infringement Notification via Blogger Complaint",
   date_received: Time.now,
   source: "Online Form",
   category_ids: [dmca, bookmarks, chilling].map(&:id),
   tag_list: 'movies, disney, youtube',
-  works: [ {
+  works_attributes: [ {
     url: "http://disney.com/lion_king.mp4",
     description: "Lion King Video",
-    infringing_urls: [
-      'http://example.com/bad_url_1',
-      'http://example.com/bad_url_2',
-      'http://example.com/bad_url_3',
-      'http://example.com/bad_url_4',
-      'http://example.com/bad_url_5',
+    kind: 'movie',
+    infringing_urls_attributes: [
+      { url: 'http://example.com/bad_url_1'} ,
+      { url: 'http://example.com/bad_url_2'} ,
+      { url: 'http://example.com/bad_url_3'} ,
+      { url: 'http://example.com/bad_url_4'} ,
+      { url: 'http://example.com/bad_url_5'}
     ],
   }],
-  entities: [
-    { name: 'Google',
+  entity_notice_roles_attributes: [ {
+    name: 'recipient',
+    entity_attributes: {
       kind: 'organization',
-      role: 'recipient',
+      name: 'Google',
       address_line_1: '1600 Amphitheatre Parkway',
       city: 'Mountain View',
       state: 'CA',
       zip: '94043',
-      country_code: 'US' },
-
-    { name: 'Joe Lawyer',
+      country_code: 'US'
+    }
+  }, {
+    name: 'submitter',
+    entity_attributes: {
+      name: 'Joe Lawyer',
       kind: 'individual',
-      role: 'submitter',
       address_line_1: '1234 Anystreet St.',
       city: 'Anytown',
       state: 'CA',
       zip: '94044',
-      country_code: 'US' }
-  ]
-).save
+      country_code: 'US'
+    }
+  }]
+)

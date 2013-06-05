@@ -30,10 +30,7 @@ describe 'notices/show.html.erb' do
   end
 
   it "displays a notice with entities" do
-    notice = create(
-      :notice,
-      :with_entities, roles_for_entities: ['submitter', 'recipient']
-    )
+    notice = create(:notice, role_names: ['submitter', 'recipient'])
 
     assign(:notice, notice)
 

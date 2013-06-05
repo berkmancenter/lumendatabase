@@ -4,7 +4,7 @@ class Notice < ActiveRecord::Base
   has_and_belongs_to_many :categories
   has_many :category_relevant_questions,
     through: :categories, source: :relevant_questions
-  has_many :entity_notice_roles, dependent: :destroy
+  has_many :entity_notice_roles, dependent: :destroy, inverse_of: :notice
   has_many :entities, through: :entity_notice_roles
   has_many :file_uploads
   has_many :infringing_urls, through: :works
@@ -12,7 +12,16 @@ class Notice < ActiveRecord::Base
 
   has_and_belongs_to_many :works
 
+  validates_presence_of :works, :entity_notice_roles
+
   acts_as_taggable
+
+  accepts_nested_attributes_for :file_uploads,
+    reject_if: ->(attributes) { attributes['file'].blank? }
+
+  accepts_nested_attributes_for :entity_notice_roles
+
+  accepts_nested_attributes_for :works
 
   def self.recent
     order('created_at DESC').limit(RECENT_LIMIT)
@@ -28,6 +37,10 @@ class Notice < ActiveRecord::Base
 
   def recipient
     entities_that_have_received.first
+  end
+
+  def available_categories
+    Category.all
   end
 
   private

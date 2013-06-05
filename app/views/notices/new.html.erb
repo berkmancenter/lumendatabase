@@ -1,0 +1,51 @@
+<%= simple_form_for(@notice) do |form| %>
+  <%= form.input :title %>
+  <%= form.input :subject %>
+  <%= form.input :body %>
+  <%= form.input :date_received, as: :string %>
+  <%= form.input :source, label: "Sent via" %>
+  <%= form.input :tag_list %>
+  <%=
+    form.input :category_ids,
+      label: "Categories",
+      prompt: nil,
+      collection: @notice.available_categories,
+      input_html: { multiple: true }
+  %>
+
+  <%= form.simple_fields_for(:entity_notice_roles) do |roles_form| %>
+    <% role = roles_form.object.name.titleize %>
+    <%= roles_form.input :name, as: :hidden %>
+    <%= roles_form.simple_fields_for(:entity) do |entity_form| %>
+      <%= entity_form.input :name, label: "#{role} Name" %>
+      <%= entity_form.input :kind,
+        label: "#{role} Kind", prompt: nil, collection: Entity::KINDS %>
+      <%= entity_form.input :address_line_1, label: "#{role} Address Line 1" %>
+      <%= entity_form.input :address_line_2, label: "#{role} Address Line 2" %>
+      <%= entity_form.input :city, label: "#{role} City" %>
+      <%= entity_form.input :state, label: "#{role} State" %>
+      <%= entity_form.input :zip, label: "#{role} Zip" %>
+      <%= entity_form.input :country_code, label: "#{role} Country Code" %>
+      <%= entity_form.input :phone, label: "#{role} Phone" %>
+      <%= entity_form.input :email, label: "#{role} Email" %>
+      <%= entity_form.input :url, label: "#{role} URL" %>
+    <% end %>
+  <% end %>
+
+  <%= form.simple_fields_for(:works) do |works_form| %>
+    <%= works_form.input :url, label: "Work URL" %>
+    <%= works_form.input :kind, label: "Kind of Work" %>
+    <%= works_form.input :description, label: "Work Description" %>
+    <%= works_form.simple_fields_for(:infringing_urls) do |urls_form| %>
+      <%= urls_form.input :url, label: "Infringing URL" %>
+    <% end %>
+  <% end %>
+
+  <%= form.simple_fields_for(:file_uploads) do |file_uploads_form| %>
+    <%= file_uploads_form.input :file, label: 'Notice File' %>
+  <% end %>
+
+  <div class="buttons-wrapper">
+    <%= form.submit "Submit", :class => "submit" %>
+  </div>
+<% end %>

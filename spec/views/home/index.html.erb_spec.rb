@@ -2,12 +2,12 @@ require 'spec_helper'
 
 describe 'home/index.html.erb' do
 
-  it 'shows a link to create a new submission' do
+  it 'shows a link to create a new notice' do
     assign(:notices, [])
 
     render
 
-    expect(page).to contain_link(new_submission_path)
+    expect(page).to contain_link(new_notice_path)
   end
 
   it 'shows metadata and a link to each of its notices' do
