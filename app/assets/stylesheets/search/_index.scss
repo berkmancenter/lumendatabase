@@ -156,6 +156,10 @@ ol.results-list {
     font-weight: 700;
   }
 
+  span.disabled.previous_page {
+    display: none;
+  }
+
   span.gap {
     border: 0;
   }
