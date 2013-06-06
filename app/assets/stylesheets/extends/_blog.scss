@@ -1,0 +1,15 @@
+%blog-metadata {
+  font-size: $base-font-size-small-1;
+  color: $base-font-color-3;
+  margin-bottom: 0.6em;
+  font-family: $serif;
+
+  a {
+    color: $base-font-color-3;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

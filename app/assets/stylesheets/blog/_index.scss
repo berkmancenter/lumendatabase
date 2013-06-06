@@ -1,3 +1,50 @@
+section.posts {
+  @include span-columns(8);
+}
+
+article.post-item {
+  border-radius: 3px;
+  background: #fff;
+  @include pad(30px);
+  margin-bottom: 30px;
+  box-shadow: 0 -0px 0 $shadow-2, inset 0 1px 0 #eaeaea, $base-shadow;
+  @include transition;
+
+  &:hover {
+    box-shadow: 0 -3px 0 $shadow-2, inset 0 0px 0 #eaeaea, $base-shadow;
+  }
+
+  h3 {
+    font-weight: 800;
+    line-height: 1.2;
+    margin-top: 0;
+
+    a, a:hover, a:active {
+      color: $base-font-color;
+      text-decoration: none;
+    }
+  }
+
+  div.metadata {
+    @extend %blog-metadata;
+  }
+
+  a.snippet {
+    font-family: $serif;
+    text-decoration: none;
+    color: $base-font-color;
+
+    &:hover, &:active, &:focus {
+      color: $base-font-color;
+    }
+
+    p {
+      font-size: $base-font-size + 1;
+      line-height: 1.5;
+    }
+  }
+}
+
 aside.sidebar {
   min-height: 300px;
   @include span-columns(4);
@@ -27,66 +74,6 @@ aside.sidebar {
       &:hover {
         text-decoration: underline;
       }
-    }
-  }
-
-}
-
-section.posts {
-  @include span-columns(8);
-}
-
-article.post-item {
-  border-radius: 3px;
-  background: #fff;
-  @include pad(30px);
-  margin-bottom: 30px;
-  box-shadow: 0 -0px 0 $shadow-2, inset 0 1px 0 #eaeaea, $base-shadow;
-  @include transition;
-
-  &:hover {
-    box-shadow: 0 -3px 0 $shadow-2, inset 0 0px 0 #eaeaea, $base-shadow;
-  }
-
-  h3 {
-    font-weight: 800;
-    line-height: 1.2;
-    margin-top: 0;
-
-    a, a:hover, a:active {
-      color: $base-font-color;
-      text-decoration: none;
-    }
-  }
-
-  div.metadata {
-    font-size: $base-font-size-small-1;
-    color: $base-font-color-3;
-    margin-bottom: 0.6em;
-    font-family: $serif;
-
-    a {
-      color: $base-font-color-3;
-      text-decoration: none;
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-  }
-
-  a.snippet {
-    font-family: $serif;
-    text-decoration: none;
-    color: $base-font-color;
-
-    &:hover, &:active, &:focus {
-      color: $base-font-color;
-    }
-
-    p {
-      font-size: $base-font-size + 1;
-      line-height: 1.5;
     }
   }
 }

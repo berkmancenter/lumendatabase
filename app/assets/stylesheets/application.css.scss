@@ -16,6 +16,7 @@
 @import 'neat';
 @import 'bitters/base';
 @import 'components/base';
+@import 'extends/blog';
 
 @import 'shared/fontello';
 @import 'shared/header';
@@ -28,6 +29,7 @@
 @import 'categories/show';
 @import 'search/index';
 @import 'blog/index';
+@import 'blog/show';
 
 .wip {
   outline: 1px solid yellow;
