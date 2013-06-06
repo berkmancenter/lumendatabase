@@ -5,6 +5,7 @@ describe Entity do
     it { should validate_presence_of :name }
     it { should validate_presence_of :kind }
     it { should ensure_length_of(:address_line_1).is_at_most(255) }
+    it { should validate_uniqueness_of(:name) }
   end
 
   it { should have_many(:entity_notice_roles).dependent(:destroy) }

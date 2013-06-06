@@ -85,6 +85,7 @@ ActiveRecord::Schema.define(:version => 20130605210537) do
     t.string "city"
     t.string "zip"
     t.index ["ancestry"], :name => "index_entities_on_ancestry", :order => {"ancestry" => :asc}
+    t.index ["name"], :name => "index_entities_on_name", :unique => true, :order => {"name" => :asc}
   end
 
   create_table "entity_notice_roles", :force => true do |t|
@@ -111,6 +112,7 @@ ActiveRecord::Schema.define(:version => 20130605210537) do
     t.string   "url",        :limit => 1024, :null => false
     t.datetime "created_at",                 :null => false
     t.datetime "updated_at",                 :null => false
+    t.index ["url"], :name => "index_infringing_urls_on_url", :unique => true, :order => {"url" => :asc}
   end
 
   create_table "infringing_urls_works", :id => false, :force => true do |t|

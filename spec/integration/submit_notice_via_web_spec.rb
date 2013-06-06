@@ -79,6 +79,16 @@ feature "notice submission" do
     end
   end
 
+  scenario "submmiting notices with duplicate items" do
+    submit_recent_notice
+    submit_recent_notice
+
+    expect(Notice.count).to eq 2
+    expect(Entity.count).to eq 2
+    expect(Work.count).to eq 2
+    expect(InfringingUrl.count).to eq 1
+  end
+
   scenario "submitting a notice with works" do
     submit_recent_notice do
       fill_in 'Work URL', with: 'http://www.example.com/original_work.pdf'
