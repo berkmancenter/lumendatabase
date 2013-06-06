@@ -13,8 +13,8 @@
       <a href="#" data-dropdown="#dropdown-categories">Categories</a>
       <div id="dropdown-categories" class="dropdown dropdown-relative">
         <ol class="dropdown-menu">
-          <% 10.times do %>
-            <li><a href="#">Copyright and Fair Use</a></li>
+          <% available_categories.each do |category| %>
+            <%= link_to(category.name, category_path(category)) %>
           <% end %>
         </ol>
       </div>

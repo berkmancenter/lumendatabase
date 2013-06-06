@@ -39,10 +39,6 @@ class Notice < ActiveRecord::Base
     entities_that_have_received.first
   end
 
-  def available_categories
-    Category.all
-  end
-
   private
 
   def entities_that_have_submitted
