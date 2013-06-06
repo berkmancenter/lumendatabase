@@ -7,13 +7,13 @@ describe 'shared/_navigation.html.erb' do
     expect(page).to contain_link(new_notice_path)
   end
 
-  def contain_link(path, title = nil)
-    selector = %{a[href="#{path}"]}
+  it 'has links to all categories' do
+    categories = create_list(:category, 3)
 
-    if title
-      selector << ":contains('#{title}')"
+    render
+
+    categories.each do |category|
+      expect(page).to contain_link(category_path(category))
     end
-
-    have_css(selector)
   end
 end
