@@ -1,0 +1,6 @@
+<div class="metadata">
+  <span class="author"><%= blog_entry.author %></span> 
+  <% if published_at = blog_entry.published_at %>
+    on <%= time_tag(published_at, published_at.to_s(:simple)) %>
+  <% end %>
+</div>

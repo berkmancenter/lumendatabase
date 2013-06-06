@@ -18,14 +18,6 @@ describe 'blog_entries/show.html.erb' do
     expect(page).to have_content(blog_entry.published_at.to_s(:simple))
   end
 
-  it "shows the entry's abstract" do
-    blog_entry = assign_blog_entry(:with_abstract)
-
-    render
-
-    expect(page).to have_content("Abstract: #{blog_entry.abstract}")
-  end
-
   it "shows the entry's html content" do
     blog_entry = assign_blog_entry(:with_content)
 

@@ -97,7 +97,7 @@ As the DMLP points out:
 > the notice requirements of the DMCA do not require a copyright owner
 > to merely claim use without permission; they require a copyright owner
 > to state that the use "is not authorized by the copyright owner, its
-> agent, or the law." [emphasis added] (17 U.S.C.  § 512(c)(3)(A)(v).)
+> agent, or the law." \[emphasis added] (17 U.S.C.  § 512(c)(3)(A)(v).)
 > Similarly, Section 512(f) allows recovery against anyone who knowingly
 > misrepresents "that material or activity is infringing," and as the
 > Copyright Act and courts repeatedly note, "a fair use is not an
