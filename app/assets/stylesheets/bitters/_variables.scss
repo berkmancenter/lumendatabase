@@ -51,11 +51,17 @@ $base-border-color: $light-gray;
 $base-border-color-1: #E1E1E1;
 $base-border-color-2: #D1D3D8;
 
+$base-shadow: 0 2px 4px hsla(0, 0%, 0%, 0.25);
+
 // Navigation
 $nav-hover: #1C7ED6;
 $nav-hover-border: darken($nav-hover, 20%);
 
 $nav-bg: #3B4758;
+
+// Box-shadow borders
+$shadow-1: #8793B1; // blueish gray
+$shadow-2: #1dbea2; // Blue - Blog
 
 // Flash Colors
 $error-color: $light-red;
