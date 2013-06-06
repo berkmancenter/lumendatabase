@@ -1,8 +1,17 @@
+//************************************************************************//
+// Header
+//************************************************************************//
 header.app {
   @extend %search-form;
   @include clearfix;
   @include linear-gradient(hsl(43, 41%, 98%), hsl(43, 7%, 92%));
+  border-bottom: 1px solid $base-border-color;
+}
 
+//************************************************************************//
+// Form
+//************************************************************************//
+header.app {
   .container {
     @include container;
     padding: 20px;
@@ -44,36 +53,28 @@ header.app {
 // Navigation
 //************************************************************************//
 header.app {
-  nav {
-    border-bottom: 1px solid $base-border-color;
-    border-top: 1px solid $base-border-color;
-    clear: left;
-    background: #fff;
+  ol.nav-list {
+    @include container;
+    margin: 0;
+    padding: 0 0 0 $left-margin;
 
-    ol {
-      @include container;
-      margin: 0;
-      padding: 0 0 0 $left-margin;
+    li.nav-item a {
+      font-size: $base-font-size-small-1;
+      padding: 6px 15px;
+    }
 
-      li {
-        margin-right: 15px;
-        list-style: none;
-        float: left;
+    li.about {
+      float: right;
+      margin-right: $base-padding;
+    }
+  }
 
-        a {
-          color: $base-font-color;
-          display: block;
-          font-size: $base-font-size-small-1;
-          font-weight: 600;
-          padding: 6px 6px 6px 6px;
-          text-decoration: none;
-        }
-      }
+  #dropdown-categories {
+    @include ui-dropdown(left, $width: 200px);
+    margin-top: 4px;
 
-      li.about {
-        float: right;
-        margin-right: $base-padding;
-      }
+    li a {
+      @extend %nav-anchor;
     }
   }
 }

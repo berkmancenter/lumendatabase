@@ -1,18 +1,25 @@
 <nav class="main-nav">
-  <ol>
-    <li class="search">
+  <ol class="nav-list">
+    <li class="nav-item search">
       <%= link_to("Search", root_path) %>
     </li>
-    <li class="new-notice">
+    <li class="nav-item new-notice">
       <%= link_to("Report C&D Notice", new_notice_path) %>
     </li>
-    <li class="blog">
+    <li class="nav-item blog">
       <a href="">Weather Reports</a>
     </li>
-    <li class="categories">
-      <a href="">Categories</a>
+    <li class="nav-item categories">
+      <a href="#" data-dropdown="#dropdown-categories">Categories</a>
+      <div id="dropdown-categories" class="dropdown dropdown-relative">
+        <ol class="dropdown-menu">
+          <% 10.times do %>
+            <li><a href="#">Copyright and Fair Use</a></li>
+          <% end %>
+        </ol>
+      </div>
     </li>
-    <li class="about">
+    <li class="nav-item about">
       <a href="">About</a>
     </li>
 </nav>

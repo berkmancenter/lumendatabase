@@ -1,0 +1,212 @@
+//  Nub
+///////////////////////////////////////////////////////////////////////////////
+
+@mixin ui-nub($size: 8px, $position: top-right,  $bg-color: #fff, $border-color: rgb(100,100,100)) {
+
+  &:before,
+  &:after {
+    display: block;
+    pointer-events: none;
+    position: absolute;
+    width: 0;
+    height: 0;
+    content: '';
+  }
+
+  &:before {
+    border: ($size + 1) solid transparent;
+  }
+
+  &:after {
+    border: $size solid transparent;
+  }
+
+  @if ($position == top-left) or ($position == top-right) or ($position == top-center) {
+    &:before {
+      border-bottom-color: $border-color;
+      top: -(($size * 2) + 2);
+      bottom: auto;
+      left: auto;
+      right: auto;
+    }
+    &:after {
+      border-bottom-color: $bg-color;
+      top: -(($size * 2) - 0);
+      bottom: auto;
+      left: auto;
+      right: auto;
+    }
+
+    @if $position == top-right {
+      &:before {
+        right: ($size * 2);
+        margin-right: -($size + 1);
+      }
+      &:after {
+        right: ($size * 2);
+        margin-right: -$size;
+      }
+    }
+    @else if $position == top-left {
+      &:before {
+        left: ($size * 2);
+        margin-left: -($size + 1);
+      }
+      &:after {
+        left: ($size * 2);
+        margin-left: -$size;
+      }
+    }
+    @else if $position == top-center {
+      &:before {
+        left: 50%;
+        margin-left: -($size + 1);
+      }
+      &:after {
+        left: 50%;
+        margin-left: -$size;
+      }
+    }
+  }
+  @else if ($position == bottom-left) or ($position == bottom-right) or ($position == bottom-center) {
+    &:before {
+      border-top-color: $border-color;
+      top: auto;
+      bottom: -(($size * 2) + 2);
+      left: auto;
+      right: auto;
+    }
+    &:after {
+      border-top-color: $bg-color;
+      top: auto;
+      bottom: -(($size * 2) - 0);
+      left: auto;
+      right: auto;
+    }
+
+    @if $position == bottom-right {
+      &:before {
+        right: ($size * 2);
+        margin-right: -($size + 1);
+      }
+      &:after {
+        right: ($size * 2);
+        margin-right: -$size;
+      }
+    }
+    @else if $position == bottom-left {
+      &:before {
+        left: ($size * 2);
+        margin-left: -($size + 1);
+      }
+      &:after {
+        left: ($size * 2);
+        margin-left: -$size;
+      }
+    }
+    @else if $position == bottom-center {
+      &:before {
+        left: 50%;
+        margin-left: -($size + 1);
+      }
+      &:after {
+        left: 50%;
+        margin-left: -$size;
+      }
+    }
+  }
+  @else if ($position == left-top) or ($position == left-bottom) or ($position == left-center) {
+    &:before {
+      border-right-color: $border-color;
+      top: auto;
+      bottom: auto;
+      left: -(($size * 2) + 2);
+      right: auto;
+    }
+    &:after {
+      border-right-color: $bg-color;
+      top: auto;
+      bottom: auto;
+      left: -(($size * 2) - 0);
+      right: auto;
+    }
+
+    @if $position == left-top {
+      &:before {
+        top: ($size * 2);
+        margin-top: -($size + 1);
+      }
+      &:after {
+        top: ($size * 2);
+        margin-top: -$size;
+      }
+    }
+    @else if $position == left-bottom {
+      &:before {
+        bottom: ($size * 2);
+        margin-bottom: -($size + 1);
+      }
+      &:after {
+        bottom: ($size * 2);
+        margin-bottom: -$size;
+      }
+    }
+    @else if $position == left-center {
+      &:before {
+        top: 50%;
+        margin-top: -($size + 1);
+      }
+      &:after {
+        top: 50%;
+        margin-top: -$size;
+      }
+    }
+  }
+  @else if ($position == right-top) or ($position == right-bottom) or ($position == right-center) {
+    &:before {
+      border-left-color: $border-color;
+      top: auto;
+      bottom: auto;
+      left: auto;
+      right: -(($size * 2) + 2);
+    }
+    &:after {
+      border-left-color: $bg-color;
+      top: auto;
+      bottom: auto;
+      left: auto;
+      right: -(($size * 2) - 0);
+    }
+
+    @if $position == right-top {
+      &:before {
+        top: ($size * 2);
+        margin-top: -($size + 1);
+      }
+      &:after {
+        top: ($size * 2);
+        margin-top: -$size;
+      }
+    }
+    @else if $position == right-bottom {
+      &:before {
+        bottom: ($size * 2);
+        margin-bottom: -($size + 1);
+      }
+      &:after {
+        bottom: ($size * 2);
+        margin-bottom: -$size;
+      }
+    }
+    @else if $position == right-center {
+      &:before {
+        top: 50%;
+        margin-top: -($size + 1);
+      }
+      &:after {
+        top: 50%;
+        margin-top: -$size;
+      }
+    }
+  }
+}

@@ -1,0 +1,55 @@
+@mixin ui-dropdown($align: center, $width: 180px, $nub-size: 10px, $nub-bg-color: #fff, $nub-border-color: rgb(140,140,140),  $style: null) {
+  display: none;
+  position: absolute;
+  width: $width;
+  z-index: 20;
+
+  @if $style == null {
+    background-color: #fff;
+    border-radius: 4px;
+    @include box-shadow(0 1px 6px 0 rgba(0,0,0, 0.3));
+    border: 1px solid rgb(150,150,150);
+    margin: 0px;
+    padding: 1px;
+    text-align: left;
+
+    ul, ol {
+      margin: 0px;
+      overflow: scroll;
+      padding: 0px;
+    }
+
+    li {
+      list-style: none;
+      float: none;
+      width: auto;
+    }
+
+    a {
+      display: block;
+      margin: 2px 0px;
+      padding: 6px 15px;
+      text-decoration: none;
+
+      &:hover {
+        background: rgb(248,248,248);
+      }
+    }
+  }
+
+  @else {
+    @extend %#{$style};
+  }
+
+  // position the dropdown absolute to its container
+  @if $align == center {
+    left: 50%;
+    margin-left: -($width/2);
+  }
+  @else {
+    #{$align}: 0%;
+  }
+
+  // add a nub to the top
+  @include ui-nub($nub-size, top-#{$align}, $nub-bg-color, $nub-border-color);
+}

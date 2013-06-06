@@ -44,12 +44,18 @@ $base-link-color-1: #1C7ED6;
 $hover-link-color-1: darken($base-link-color-1, 15%);
 
 $nav-link-color: #656C7E;
-$nav-hover-link-color: darken($nav-link-color, 15%);
+$nav-hover-link-color: darken($nav-link-color, 20%);
 
 // Border color
 $base-border-color: $light-gray;
 $base-border-color-1: #E1E1E1;
 $base-border-color-2: #D1D3D8;
+
+// Navigation
+$nav-hover: #1C7ED6;
+$nav-hover-border: darken($nav-hover, 20%);
+
+$nav-bg: #3B4758;
 
 // Flash Colors
 $error-color: $light-red;
