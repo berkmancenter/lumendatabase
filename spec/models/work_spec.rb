@@ -8,6 +8,31 @@ describe Work do
     it { should ensure_length_of(:kind).is_at_most(255) }
   end
 
+  context '#infringing_urls' do
+    it "does not create duplicate infringing_urls" do
+      existing_infringing_url = create(
+        :infringing_url, url: 'http://www.example.com/infringe'
+      )
+      duplicate_infringing_url = build(
+        :infringing_url, url: 'http://www.example.com/infringe'
+      )
+      new_infringing_url = build(
+        :infringing_url, url: 'http://example.com/new'
+      )
+
+      work = build(
+        :work,
+        infringing_urls: [duplicate_infringing_url, new_infringing_url]
+      )
+      work.save
+
+      work.reload
+
+      expect(work.infringing_urls).to include existing_infringing_url
+      expect(InfringingUrl.count).to eq 2
+    end
+  end
+
   context '#url' do
     it_behaves_like 'an object with a url'
   end

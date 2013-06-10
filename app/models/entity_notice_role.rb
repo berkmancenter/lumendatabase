@@ -6,6 +6,14 @@ class EntityNoticeRole < ActiveRecord::Base
 
   accepts_nested_attributes_for :entity
 
+  def validate_associated_records_for_entity
+    if self.entity && existing_entity = Entity.where(
+      name: self.entity.name
+    ).first
+      self.entity = existing_entity
+    end
+  end
+
   class << self
     ROLES.each do |role|
       define_method(role.pluralize.to_sym) do

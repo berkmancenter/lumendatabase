@@ -68,7 +68,7 @@ FactoryGirl.define do
   end
 
   factory :entity do
-    name "A name"
+    sequence(:name) { |n| "Entity name #{n}" }
     kind "individual"
     address_line_1 "Address 1"
     address_line_2 "Address 2"

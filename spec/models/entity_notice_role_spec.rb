@@ -26,7 +26,37 @@ describe EntityNoticeRole do
     end
   end
 
+  context '#entities' do
+    it "does not create duplicate entities" do
+      existing_entity = create(
+        :entity, entity_attributes
+      )
+      duplicate_entity = build(
+        :entity, entity_attributes
+      )
+
+      entity_notice_role = build(
+        :entity_notice_role, entity: duplicate_entity, notice: build(:notice)
+      )
+      entity_notice_role.save
+
+      entity_notice_role.reload
+
+      expect(entity_notice_role.entity).to eq existing_entity
+    end
+  end
+
   private
+
+  def entity_attributes
+    {
+      name: 'Foo bar corp',
+      address_line_1: '123 foo lane',
+      city: 'Fooville',
+      state: 'MA',
+      zip: '01922'
+    }
+  end
 
   def a_different_role_than(role)
     roles = EntityNoticeRole::ROLES.dup
