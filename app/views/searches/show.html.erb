@@ -1,0 +1,9 @@
+<section class="search-results">
+  <header>
+    <div class="result-stats">About <%= @results.total_entries %> results</div>
+  </header>
+  <ol class="results-list">
+    <%= render partial: 'result', collection: @results %>
+  </ol>
+  <%= will_paginate @results %>
+</section>

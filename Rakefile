@@ -7,12 +7,16 @@ require File.expand_path('../config/application', __FILE__)
 Chill::Application.load_tasks
 
 if defined?(RSpec)
-  desc 'Run factory specs.'
-  RSpec::Core::RakeTask.new(:factory_specs) do |t|
-    t.pattern = './spec/models/factories_spec.rb'
+  task(:spec).clear
+
+  desc "Run specs excluding elasticsearch"
+  RSpec::Core::RakeTask.new(:spec) do |t|
+    t.rspec_opts = '--tag "~search"'
   end
 
-  task spec: :factory_specs
+  desc "Run all specs"
+  RSpec::Core::RakeTask.new(:all)
 end
+
 task(:default).clear
-task :default => [:spec]
+task default: :all

@@ -26,6 +26,7 @@ gem 'redcarpet', '~>2.3.0'
 gem 'country_select'
 gem 'schema_validations'
 gem 'will_paginate', '~>3.0'
+gem 'tire', '~> 0.6.0'
 
 group :assets do
   gem 'coffee-rails'
@@ -56,6 +57,7 @@ group :test do
   gem 'timecop'
   gem 'guard-spork'
   gem 'rb-inotify', require: false
+  gem 'fakeweb'
 end
 
 group :staging, :production do

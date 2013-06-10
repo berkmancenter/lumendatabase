@@ -9,5 +9,7 @@ Chill::Application.routes.draw do
 
   resources :blog_entries, only: [:index, :show]
 
+  resource :search, only: [:show]
+
   root to: 'home#index'
 end
