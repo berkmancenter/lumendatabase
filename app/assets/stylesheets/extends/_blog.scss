@@ -1,3 +1,10 @@
+%blog-entry {
+  background: #fff;
+  border-radius: 3px;
+  box-shadow: 0 -0px 0 $shadow-2, inset 0 1px 0 #eaeaea, $base-shadow;
+  margin-bottom: 30px;
+}
+
 %blog-metadata {
   font-size: $base-font-size-small-1;
   color: $base-font-color-3;

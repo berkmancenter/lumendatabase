@@ -1,9 +1,6 @@
-article.post {
-  background: #fff;
-  border-radius: 3px;
-  box-shadow: 0 -0px 0 $shadow-2, inset 0 1px 0 #eaeaea, $base-shadow;
-  margin-bottom: 30px;
-  @include pad(30px);
+body.blog_entries-show article.blog_entry {
+  @extend %blog-entry;
+  @include pad(40px);
   @include span-columns(10);
 
   h3 {
@@ -19,18 +16,22 @@ article.post {
   p, blockquote {
     font-family: $serif;
     font-size: $base-font-size-2;
-    line-height: 1.5;
+    line-height: 1.6;
     margin: 2em 0;
   }
 
   blockquote {
     $border-size: 6px;
-    $margin-left: 31px;
+    $margin-left: 41px;
     border-left: $border-size solid $shadow-2;
     color: $base-font-color;
     font-style: italic;
-    line-height: 1.6em;
+    line-height: 1.7em;
     margin-left: -$margin-left;
     padding-left: $margin-left - $border-size;
+
+    * {
+      line-height: 1.7em;
+    }
   }
 }
