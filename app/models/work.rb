@@ -12,4 +12,10 @@ class Work < ActiveRecord::Base
     end
   end
 
+  before_save do
+    if self.kind.blank?
+      determiner = DeterminesWorkKind.new(url, infringing_urls.map(&:url))
+      self.kind = determiner.kind
+    end
+  end
 end
