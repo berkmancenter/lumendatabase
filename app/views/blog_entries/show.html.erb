@@ -1,12 +1,5 @@
-<article class="blog-entry">
-  <h1><%= @blog_entry.title %></h1>
-  <p><%= publishing_info(@blog_entry) %></p>
-
-  <section id="abstract">
-    <p>Abstract: <%= @blog_entry.abstract %></p>
-  </section>
-
-  <section id="content">
-    <%= raw @blog_entry.content_html %>
-  </section>
+<article class="post">
+  <h3 class="title"><%= @blog_entry.title %></h1>
+  <%= render 'metadata', blog_entry: @blog_entry %>
+  <%= raw @blog_entry.content_html %>
 </article>

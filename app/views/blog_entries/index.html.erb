@@ -1,4 +1,23 @@
-<h1>Chilling Effects Weather Reports</h1>
-<section id="blog-entries">
+<section class="posts">
   <%= render @blog_entries %>
 </section>
+
+<aside class="sidebar">
+  <h4>What we're reading</h4>
+  <ol>
+    <% 2.times do %>
+      <li>
+        <a href="#">Obsessed With Google, Copyright Holders Ignore The Actual Pirated Content</a>
+      </li>
+      <li>
+        <a href="#">How to Fight Revenge Porn</a>
+      </li>
+      <li>
+        <a href="#">One Of These Things Is not Like The Other...</a>
+      </li>
+      <li>
+        <a href="#">It's DMCA Notices All The Way Down</a>
+      </li>
+    <% end %>
+  </ol>
+</aside>
