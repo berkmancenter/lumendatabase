@@ -114,7 +114,7 @@ ol.results-list {
 
       em {
         color: $base-font-color;
-        font-weight: 600;
+        font-weight: 700;
         font-style: normal;
       }
     }
@@ -137,30 +137,3 @@ ol.results-list {
   }
 }
 
-.results-pagination {
-  margin-left: $base-padding;
-  margin-bottom: 40px;
-
-  span, em, a {
-    border: 1px solid $base-border-color;
-    font-size: $base-font-size - 1;
-    padding: 0.2em 0.5em
-  }
-
-  a {
-    text-decoration: none;
-  }
-
-  em {
-    font-style: normal;
-    font-weight: 700;
-  }
-
-  span.disabled.previous_page {
-    display: none;
-  }
-
-  span.gap {
-    border: 0;
-  }
-}
