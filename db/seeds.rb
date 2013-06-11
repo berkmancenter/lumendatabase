@@ -1,3 +1,5 @@
+Tire.index('notices').delete
+
 ################################################################################
 # Blog Entries
 ################################################################################
@@ -111,9 +113,11 @@ Keep an eye on this case!
 
 ################################################################################
 # Relevant Questions
+#
+# TODO: More FAQs with markdown Q/As
+#
 ################################################################################
-questions = []
-questions << RelevantQuestion.new(
+RelevantQuestion.create!(
   question: "What is the Anti-Cybersquatting Consumer Protection Act (ACPA)?",
   answer: %{
 The ACPA (codified as [15 USC 1125(d)][1125] is aimed at people who register a
@@ -150,7 +154,7 @@ defenses.
   }
 )
 
-questions << RelevantQuestion.new(
+RelevantQuestion.create!(
   question: "Who can use the ACPA?",
   answer: %{
 The owner of any trademark protected under US federal law, whether registered
@@ -164,11 +168,17 @@ or not, so long as the mark:
 )
 
 ################################################################################
-# Categories, Category Managers
+# Categories
+#
+# TODO: Markdown descriptions for the other categories
+#
 ################################################################################
-dmca = Category.create!(
-  name: 'Anticircumvention (DMCA)',
-  description: %{
+Category.create!(name: 'Chilling Effects')
+Category.create!(name: 'Copyright').tap do |p|
+  Category.create!(
+    parent: p,
+    name: 'Anticircumvention (DMCA)',
+    description: %{
 In the online world, the potentially infringing activities of
 individuals are stored and transmitted through the networks of third
 parties. Web site hosting services, Internet service providers, and
@@ -189,77 +199,101 @@ counter-notice with the service provider, who must transmit it to the
 person who made the complaint. If the copyright owner does not notify
 the service provider within 14 business days that it has filed a claim
 against you in court, your materials can be restored to the Internet.
-  },
-  relevant_questions: questions
-)
+    },
+    relevant_questions: RelevantQuestion.all
+  )
+  Category.create!(parent: p, name: 'Copyright and Fair Use')
+  Category.create!(parent: p, name: 'Derivative Works')
 
-bookmarks = Category.create!(name: 'Bookmarks')
-chilling  = Category.create!(name: 'Chilling Effects')
+  Category.create!(parent: p, name: 'DMCA Safe Harbor').tap do |pp|
+    Category.create!(parent: pp, name: 'DMCA Notices')
+  end
 
-category_names = [
-  'Copyright',
-  'Copyright and Fair Use',
-  'Court Orders',
-  'Defamation',
-  'Derivative Works',
-  'DMCA Notices',
-  'DMCA Safe Harbor',
-  'DMCA Subpoenas',
-  'Documenting Your Domain Defense',
-  'Domain Names and Trademarks',
-  'E-Commerce Patents',
-  'Fan Fiction',
-  'International',
-  'John Doe Anonymity',
-  'Linking',
-  'No Action',
-  'Patent',
-  'Piracy or Copyright Infringement',
-  'Protest, Parody and Criticism Sites',
-  'References',
-  'Responses',
-  'Reverse Engineering',
-  'Right of Publicity',
-  'Trade Secret',
-  'Trademark',
-  'UDRP',
-  'Uncategorized'
-]
-
-category_names.each do |category_name|
-  Category.create!(name: category_name)
+  Category.create!(parent: p, name: 'DMCA Subpoenas')
+  Category.create!(parent: p, name: 'Piracy or Copyright Infringement')
+  Category.create!(parent: p, name: 'Reverse Engineering')
 end
 
-CategoryManager.create!(
-  name: "Harvard Law",
-  categories: [dmca, bookmarks, chilling]
-)
+Category.create!(name: 'Defamation')
+Category.create!(name: 'Fan Fiction')
+
+Category.create!(name: 'International').tap do |p|
+  Category.create!(parent: p, name: 'Court Orders')
+end
+
+Category.create!(name: 'John Doe Anonymity')
+Category.create!(name: 'Linking')
+Category.create!(name: 'No Action')
+
+Category.create!(name: 'Patent').tap do |p|
+  Category.create!(parent: p, name: 'E-Commerce Patents')
+end
+
+Category.create!(name: 'Responses')
+Category.create!(name: 'Right of Publicity')
+Category.create!(name: 'Trade Secret')
+
+Category.create!(name: 'Trademark').tap do |p|
+  Category.create!(parent: p, name: 'Domain Names and Trademarks').tap do |pp|
+    Category.create!(parent: pp, name: 'ACPA')
+    Category.create!(parent: pp, name: 'Documenting Your Domain Defense')
+    Category.create!(parent: pp, name: 'UDRP')
+  end
+
+  Category.create!(parent: p, name: 'Protest, Parody and Criticism Sites')
+end
+
+Category.create!(name: 'Uncategorized')
 
 ################################################################################
 # Notices
 ################################################################################
-Notice.create!(
-  title: "Lion King on YouTube",
-  subject: "Infringement Notification via Blogger Complaint",
-  date_received: Time.now,
-  source: "Online Form",
-  category_ids: [dmca, bookmarks, chilling].map(&:id),
-  tag_list: 'movies, disney, youtube',
-  works_attributes: [ {
-    url: "http://disney.com/lion_king.mp4",
-    description: "Lion King Video",
-    kind: 'movie',
-    infringing_urls_attributes: [
-      { url: 'http://example.com/bad_url_1'} ,
-      { url: 'http://example.com/bad_url_2'} ,
-      { url: 'http://example.com/bad_url_3'} ,
-      { url: 'http://example.com/bad_url_4'} ,
-      { url: 'http://example.com/bad_url_5'}
-    ],
-  }],
-  entity_notice_roles_attributes: [ {
-    name: 'recipient',
-    entity_attributes: {
+class FakeNotice
+  attr_reader :title, :source, :subject, :date_received
+
+  def initialize
+    @title = [
+      'Lion King', 'Batman', 'Revenge of the Nerds', 'Harry Potter',
+      'Star Wars', 'That Movie', 'Some Book', 'This Thing', 'I Give Up'
+    ].sample
+
+    @source = ["Online form", "Email", "Phone"].sample
+    @subject = "Websearch Infringment Notification via #{@source}"
+    @date_received = (1..10).to_a.sample.days.ago
+  end
+
+  def categories
+    lim = (3..5).to_a.sample
+
+    Category.order('random()').limit(lim)
+  end
+
+  def tags
+    ["movie", "disney", "youtube"]
+  end
+
+  def kind
+    %w( movie book video ).sample
+  end
+
+  def work_url
+    "http://works.com/#{title.downcase.gsub(/\s+/, '_')}.ext"
+  end
+
+  def work_description
+    "#{title} #{kind}".titleize
+  end
+
+  def urls
+    n = (5..100).to_a.sample
+
+    n.times.map do |i|
+      { url: "http://example.com/bad/url_#{i}" }
+    end
+  end
+
+  def recipient
+    [{
       kind: 'organization',
       name: 'Google',
       address_line_1: '1600 Amphitheatre Parkway',
@@ -267,10 +301,20 @@ Notice.create!(
       state: 'CA',
       zip: '94043',
       country_code: 'US'
-    }
-  }, {
-    name: 'submitter',
-    entity_attributes: {
+    },
+    {
+      kind: 'organization',
+      name: 'Twitter, Inc.',
+      address_line_1: '1355 Market St, Suite 900',
+      city: 'San Francisco',
+      state: 'CA',
+      zip: '94103',
+      country_code: 'US'
+    }].sample
+  end
+
+  def submitter
+    [{
       name: 'Joe Lawyer',
       kind: 'individual',
       address_line_1: '1234 Anystreet St.',
@@ -278,6 +322,65 @@ Notice.create!(
       state: 'CA',
       zip: '94044',
       country_code: 'US'
-    }
-  }]
-)
+    },
+    {
+      name: 'Bill Somebody',
+      kind: 'individual',
+      address_line_1: '123 Any St.',
+      city: 'Town',
+      state: 'CA',
+      zip: '94044',
+      country_code: 'US'
+    },
+    {
+      name: 'Steve Simpson',
+      kind: 'individual',
+      address_line_1: '23 My St.',
+      city: 'Scranton',
+      state: 'CA',
+      zip: '94044',
+      country_code: 'US'
+    },
+    {
+      name: 'Mike Itten',
+      kind: 'individual',
+      address_line_1: '12 Main St.',
+      city: 'Springfield',
+      state: 'CA',
+      zip: '94044',
+      country_code: 'US'
+    }].sample
+  end
+end
+
+count = ENV['NOTICE_COUNT'] || 500
+
+print "\n--> Generating #{count} Fake Notices"
+
+count.times do
+  fake = FakeNotice.new
+
+  Notice.create!(
+    title: fake.title,
+    subject: fake.subject,
+    date_received: fake.date_received,
+    source: fake.source,
+    category_ids: fake.categories.map(&:id),
+    tag_list: fake.tags,
+    works_attributes: [ {
+      url: fake.work_url,
+      description: fake.work_description,
+      kind: fake.kind,
+      infringing_urls_attributes: fake.urls
+    }],
+    entity_notice_roles_attributes: [ {
+      name: 'recipient', entity_attributes: fake.recipient
+    }, {
+      name: 'submitter', entity_attributes: fake.submitter
+    }]
+  )
+
+  print '.'
+end
+
+puts
