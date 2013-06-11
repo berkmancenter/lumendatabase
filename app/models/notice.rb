@@ -37,7 +37,7 @@ class Notice < ActiveRecord::Base
     {
       id: id,
       title: title,
-      categories: categories.as_json(only: [:id, :name]),
+      categories: categories,
       tags: tag_list,
       submitter_name: submitter_name,
       recipient_name: recipient_name,
