@@ -7,6 +7,10 @@ Chill::Application.routes.draw do
 
   resources :categories, only: [:show]
 
+  scope format: true, constraints: { format: :json } do
+    resources :categories, only: [:index]
+  end
+
   resources :blog_entries, only: [:index, :show]
 
   resource :search, only: [:show]
