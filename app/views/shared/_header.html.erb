@@ -6,13 +6,6 @@
         <%= image_tag("logo.svg") %>
       <% end %>
     </h1>
-    <form>
-      <div class="input">
-        <input type="search" placeholder="Search C&D notices…">
-      </div>
-      <div class="submit">
-        <button class="reset" type="submit" title="search"></button>
-      </div>
-    </form>
+    <%= render 'shared/search' %>
   </div>
 </header>
