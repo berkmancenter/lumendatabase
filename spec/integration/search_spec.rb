@@ -5,7 +5,7 @@ feature "Search", search: true do
     FakeWeb.clean_registry
     FakeWeb.allow_net_connect = true
 
-    Tire.index('notices').delete
+    Tire.index(Notice.index_name).delete
   end
 
   scenario "for full-text on a single model" do
