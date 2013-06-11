@@ -53,9 +53,9 @@ body.home-index {
   }
 
   #dropdown-categories {
-    @include ui-dropdown(center, $width: 100%);
+    @include ui-dropdown(center, $width: 300px);
     margin-top: 5px;
-    margin-left: 0;
+    margin-left: 0 !important;
 
     li a {
       @extend %nav-anchor;
