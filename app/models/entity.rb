@@ -6,4 +6,6 @@ class Entity < ActiveRecord::Base
   KINDS = %w[organization individual]
 
   validates_inclusion_of :kind, in: KINDS
+
+  after_update { notices.each(&:touch) }
 end

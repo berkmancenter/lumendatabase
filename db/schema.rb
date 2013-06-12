@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130611203318) do
+ActiveRecord::Schema.define(:version => 20130613142221) do
 
   create_table "blog_entries", :force => true do |t|
     t.integer  "user_id"
@@ -38,18 +38,18 @@ ActiveRecord::Schema.define(:version => 20130611203318) do
     t.index ["category_manager_id"], :name => "index_categories_category_managers_on_category_manager_id", :order => {"category_manager_id" => :asc}
   end
 
-  create_table "categories_notices", :force => true do |t|
-    t.integer "category_id"
-    t.integer "notice_id"
-    t.index ["category_id"], :name => "index_categories_notices_on_category_id", :order => {"category_id" => :asc}
-    t.index ["notice_id"], :name => "index_categories_notices_on_notice_id", :order => {"notice_id" => :asc}
-  end
-
   create_table "categories_relevant_questions", :force => true do |t|
     t.integer "category_id"
     t.integer "relevant_question_id"
     t.index ["category_id"], :name => "index_categories_relevant_questions_on_category_id", :order => {"category_id" => :asc}
     t.index ["relevant_question_id"], :name => "index_categories_relevant_questions_on_relevant_question_id", :order => {"relevant_question_id" => :asc}
+  end
+
+  create_table "categorizations", :force => true do |t|
+    t.integer "category_id"
+    t.integer "notice_id"
+    t.index ["category_id"], :name => "index_categorizations_on_category_id", :order => {"category_id" => :asc}
+    t.index ["notice_id"], :name => "index_categorizations_on_notice_id", :order => {"notice_id" => :asc}
   end
 
   create_table "category_managers", :force => true do |t|

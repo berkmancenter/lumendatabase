@@ -7,7 +7,8 @@ class Notice < ActiveRecord::Base
   HIGHLIGHTS = [ :title, :tags, :'categories.name', :submitter_name,
                  :recipient_name, :'infringing_urls.url' ]
 
-  has_and_belongs_to_many :categories
+  has_many :categorizations, dependent: :destroy
+  has_many :categories, through: :categorizations
   has_many :category_relevant_questions,
     through: :categories, source: :relevant_questions
   has_many :entity_notice_roles, dependent: :destroy, inverse_of: :notice
@@ -28,6 +29,8 @@ class Notice < ActiveRecord::Base
   accepts_nested_attributes_for :entity_notice_roles
 
   accepts_nested_attributes_for :works
+
+  after_touch { tire.update_index }
 
   def self.recent
     order('created_at DESC').limit(RECENT_LIMIT)

@@ -18,8 +18,8 @@ FactoryGirl.define do
 
     after :build do |notice, evaluator|
       evaluator.role_names.each do |role_name|
-        notice.entity_notice_roles <<
-          build(:entity_notice_role, notice: notice, name: role_name)
+        role = notice.entity_notice_roles.build(name: role_name)
+        role.entity = build(:entity)
       end
     end
 
