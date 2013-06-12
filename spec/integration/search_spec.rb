@@ -59,6 +59,20 @@ feature "Search", search: true do
         expect(page.html).to have_excerpt('example.com')
       end
     end
+
+    scenario "for works" do
+      work = create(:work, description: "An arbitrary description")
+      notice = create(:notice, works: [work])
+
+      expect_search_to_find("arbitrary", notice) do
+        expect(page).to have_content(work.description)
+        expect(page.html).to have_excerpt("arbitrary", "An", "description")
+      end
+
+      expect_search_to_find(work.url, notice) do
+        expect(page.html).to have_excerpt('example.com')
+      end
+    end
   end
 
   context "changes to assocated models" do
