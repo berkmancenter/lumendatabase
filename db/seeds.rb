@@ -1,4 +1,4 @@
-Tire.index('notices').delete
+Tire.index(Notice.index_name).delete
 
 Dir[Rails.root.join('db/seeds/**/*.rb')].each { |s| load(s) }
 

@@ -1,0 +1,4 @@
+web: bundle exec unicorn -p $PORT -c ./config/unicorn.rb
+
+# elasticsearch initialization during development
+elasticsearch_dev: ./bin/elasticsearch_harness.sh

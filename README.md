@@ -8,17 +8,28 @@ Development
 
 Requirements:
 
-* ruby 2.0, a modern postgres
+* ruby 2.0
+* modern postgres
+* A jre (openjdk works fine)
 
 Setup:
 
+The order of these commands is important, as we need a running elasticsearch
+before adding seed data. foreman starts up a web server on port 5000 by
+default, available at http://localhost:5000/
+
     bundle install
-    rake db:create db:migrate db:seed db:test:prepare
+    rake db:create
+    # foreman will install elasticsearch under tmp/ the first time you start
+    foreman start -f Procfile.dev
+    # Run this next command after foreman has started elasticsearch
+    rake db:migrate db:seed db:test:prepare
 
-If you need to reset your database and seed data, then add "db:drop" to the
-front of the command above, thusly:
+If you need to reset your database and seed data, then run:
 
-    rake db:drop db:create db:migrate db:seed db:test:prepare
+    rake db:drop db:create
+
+before proceeding with the rest of the commmands.
 
 License
 =======
