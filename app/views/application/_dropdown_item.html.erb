@@ -1,0 +1,13 @@
+<% has_children = category.children.any? %>
+<li class="<%= "dropdown-submenu" if has_children %>">
+  <%= link_to(category.name, category_path(category)) %>
+
+  <% if has_children %>
+    <ol class="dropdown-menu">
+      <li class="title">Subcategories</li>
+      <% category.children.each do |child| %>
+        <%= render "dropdown_item", category: child %>
+      <% end %>
+    </ol>
+  <% end %>
+</li>
