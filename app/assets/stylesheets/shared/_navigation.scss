@@ -13,7 +13,8 @@ nav.main-nav {
 
     > a {
       @extend %nav-anchor;
-      color: hsla(0, 0%, 100%, 0.75);
+      color: $nav-color;
+      font-size: $base-font-size-small-1;
       font-weight: bold;
       text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
 
@@ -81,30 +82,63 @@ li.dropdown {
 
   li a {
     @extend %nav-anchor;
-    font-weight: 700;
-    padding: 8px 15px;
+    line-height: 1.2;
+    padding: 10px 15px;
   }
 }
 
 // Submenu
 //************************************************************************//
-.dropdown-submenu {
+li.dropdown-submenu {
   position: relative;
+  @include clearfix;
+
+  > a {
+    padding-right: 30px;
+    &:after {
+      @include triangle(12px, hsla(0, 0%, 100%, 0.6), right);
+      position: absolute;
+      content: "";
+      top: 50%;
+      margin-top: -6px;
+      right: 8px;
+    }
+  }
 
   .dropdown-menu {
+    width: 200px;
     @include border-left-radius(0);
     display: none;
     top: 0;
     left: 100%;
-    margin-top: -3px;
+    margin-top: -1px;
     margin-left: -1px;
     border-left: 1px solid darken($nav-bg, 15%);
+
+    &:before, &:after {
+      display: none;
+    }
   }
 
   &:hover {
+    .show-submenu {
+      background: $nav-hover;
+      color: #fff;
+    }
+
     > .dropdown-menu {
       display: block;
     }
+  }
+
+  li.title {
+    text-transform: uppercase;
+    font-size: $base-font-size-small-2 - 1;
+    color: $nav-color;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
+    padding: 3px 15px;
+    font-weight: bold;
+    background: hsla(0, 0%, 0%, 0.2);
   }
 }
 

@@ -17,8 +17,8 @@
 %nav-anchor {
   color: #fff;
   display: block;
-  font-size: $base-font-size-small-1;
-  font-weight: 600;
+  font-size: $base-font-size-small-1 - 1;
+  font-weight: 700;
   padding: 8px 10px;
   text-decoration: none;
   @include transition(all 0.08s);

@@ -16,12 +16,18 @@
       <div id="dropdown-categories" class="dropdown-menu" role="menu">
         <ol>
           <li class="dropdown-submenu">
-            <a href="/categories/1">Anticircumvention (DMCA)</a>
+            <a href="/categories/1">Anticircumvention</a>
+
             <ol class="dropdown-menu">
+              <li class="title">Subcategories</li>
               <li><a href="#">Foodbar</a></li>
+
               <li class="dropdown-submenu">
-                <a href="/categories/1">Anticircumvention (DMCA)</a>
+                <a href="/categories/1">Anticircumvention</a>
+                <div class="show-submenu"></div>
+
                 <ol class="dropdown-menu">
+                  <li class="title">Subcategories</li>
                   <li><a href="#">Foodbar</a></li>
                   <li><a href="#">Foodbar</a></li>
                 </ol>
@@ -34,9 +40,10 @@
           <li>
             <a href="/categories/3">Chilling Effects</a>
           </li>
-          <%# <% available_categories.each do |category| %> %>
-            <%# <%= link_to(category.name, category_path(category)) %> %>
-          <%# <% end %> %>
+
+          <% available_categories.each do |category| %>
+            <li><%= link_to(category.name, category_path(category)) %></li>
+          <% end %>
         </ol>
       </div>
     </li>
