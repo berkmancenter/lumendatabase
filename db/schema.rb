@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130606190917) do
+ActiveRecord::Schema.define(:version => 20130611203318) do
 
   create_table "blog_entries", :force => true do |t|
     t.integer  "user_id"
@@ -162,8 +162,8 @@ ActiveRecord::Schema.define(:version => 20130606190917) do
   end
 
   create_table "relevant_questions", :force => true do |t|
-    t.string "question", :null => false
-    t.string "answer",   :null => false
+    t.text "question", :null => false
+    t.text "answer",   :null => false
   end
 
   create_table "taggings", :force => true do |t|
