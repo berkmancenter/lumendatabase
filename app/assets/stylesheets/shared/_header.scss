@@ -48,33 +48,3 @@ header.app {
     }
   }
 }
-
-//************************************************************************//
-// Navigation
-//************************************************************************//
-header.app {
-  ol.nav-list {
-    @include container;
-    margin: 0;
-    padding: 0 0 0 $left-margin;
-
-    li.nav-item a {
-      font-size: $base-font-size-small-1;
-      padding: 6px 15px;
-    }
-
-    li.about {
-      float: right;
-      margin-right: $base-padding;
-    }
-  }
-
-  #dropdown-categories {
-    @include ui-dropdown(left, $width: 200px);
-    margin-top: 4px;
-
-    li a {
-      @extend %nav-anchor;
-    }
-  }
-}

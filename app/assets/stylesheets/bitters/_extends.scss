@@ -15,7 +15,7 @@
 // Navigation Anchor
 //************************************************************************//
 %nav-anchor {
-  color: $nav-link-color;
+  color: #fff;
   display: block;
   font-size: $base-font-size-small-1;
   font-weight: 600;
@@ -25,7 +25,6 @@
 
   &:hover {
     background: $nav-hover;
-    box-shadow: inset 0 0 0 1px $nav-hover-border;
     color: white;
   }
 }

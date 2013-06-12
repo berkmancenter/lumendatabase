@@ -1,0 +1,134 @@
+//************************************************************************//
+// Main Navigation
+//************************************************************************//
+nav.main-nav {
+  background: $nav-bg;
+  border-bottom: 1px solid darken($nav-bg, 15%);
+  clear: left;
+
+  .nav-item {
+    float: left;
+    list-style: none;
+    position: relative;
+
+    > a {
+      @extend %nav-anchor;
+      color: hsla(0, 0%, 100%, 0.75);
+      font-weight: bold;
+      text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
+
+      &:focus {
+        outline: none;
+      }
+
+      &:hover {
+        color: #fff;
+      }
+    }
+
+    a.dropdown-open {
+      background: lighten($nav-bg, 5%);
+      color: #fff;
+    }
+  }
+}
+
+body.home-index {
+  nav.main-nav {
+    ol.nav-list {
+      max-width: $home-width;
+      margin: 0 auto;
+      border-radius: 0 0 3px 3px;
+      @include clearfix;
+      margin-top: 0;
+      padding: 0;
+      width: 100%;
+
+      li.nav-item {
+        text-align: center;
+        width: 25%;
+      }
+
+      li.search {
+        display: none;
+      }
+    }
+  }
+}
+
+
+// Parent
+//************************************************************************//
+li.dropdown {
+  &.open > .dropdown-menu {
+    display: block;
+  }
+}
+
+// Global Dropdown Menu
+//************************************************************************//
+.dropdown-menu {
+  @include ui-dropdown(center, $width: 240px, $nub-bg-color: $nav-bg, $nub-border-color: none);
+  background: $nav-bg;
+  border: 0;
+  border-radius: 3px;
+  box-shadow: none;
+  margin-top: 14px;
+
+  ol {
+    overflow: visible;
+  }
+
+  li a {
+    @extend %nav-anchor;
+    font-weight: 700;
+    padding: 8px 15px;
+  }
+}
+
+// Submenu
+//************************************************************************//
+.dropdown-submenu {
+  position: relative;
+
+  .dropdown-menu {
+    @include border-left-radius(0);
+    display: none;
+    top: 0;
+    left: 100%;
+    margin-top: -3px;
+    margin-left: -1px;
+    border-left: 1px solid darken($nav-bg, 15%);
+  }
+
+  &:hover {
+    > .dropdown-menu {
+      display: block;
+    }
+  }
+}
+
+//************************************************************************//
+// Navigation
+//************************************************************************//
+header.app {
+  ol.nav-list {
+    @include container;
+    margin: 0;
+    padding: 0 0 0 $left-margin;
+
+    li.nav-item > a {
+      font-size: $base-font-size-small-1;
+      padding: 6px 15px;
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    li.about {
+      float: right;
+      margin-right: $base-padding;
+    }
+  }
+}
