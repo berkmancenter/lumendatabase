@@ -107,7 +107,7 @@ class FakeNotice
   end
 end
 
-count = ENV['NOTICE_COUNT'] || 500
+count = (ENV['NOTICE_COUNT'] || "500").to_i
 
 print "\n--> Generating #{count} Fake Notices"
 
