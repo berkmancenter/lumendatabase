@@ -4,8 +4,9 @@ class Notice < ActiveRecord::Base
 
   RECENT_LIMIT = 7
 
-  HIGHLIGHTS = [ :title, :tags, :'categories.name', :submitter_name,
-                 :recipient_name, :'infringing_urls.url' ]
+  HIGHLIGHTS = [ :title, :tag_list, :'categories.name', :submitter_name,
+                 :recipient_name, :'works.description', :'works.url',
+                 :'infringing_urls.url' ]
 
   has_many :categorizations, dependent: :destroy
   has_many :categories, through: :categorizations
@@ -37,15 +38,15 @@ class Notice < ActiveRecord::Base
   end
 
   def to_indexed_json
-    {
-      id: id,
-      title: title,
-      categories: categories,
-      tags: tag_list,
-      submitter_name: submitter_name,
-      recipient_name: recipient_name,
-      infringing_urls: infringing_urls.as_json(only: :url)
-    }.to_json
+    to_json(
+      only: [:id, :title],
+      methods: [:tag_list, :submitter_name, :recipient_name],
+      include: [
+        :categories,
+        { works: { only: [:description, :url] } },
+        { infringing_urls: { only: :url } }
+      ]
+    )
   end
 
   def all_relevant_questions
