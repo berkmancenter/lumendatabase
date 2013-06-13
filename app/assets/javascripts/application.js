@@ -16,5 +16,3 @@
 //= require jquery.collapse
 // require jquery.dropdown
 //= require_tree .
-
-$('.dropdown-toggle').dropdown()

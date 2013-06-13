@@ -1,5 +1,5 @@
 //************************************************************************//
-// Main Navigation
+// Main Navigation Shared
 //************************************************************************//
 nav.main-nav {
   background: $nav-bg;
@@ -10,6 +10,10 @@ nav.main-nav {
     float: left;
     list-style: none;
     position: relative;
+
+    @include media($small-screen){
+      position: static;
+    }
 
     > a {
       @extend %nav-anchor;
@@ -27,13 +31,44 @@ nav.main-nav {
       }
     }
 
-    a.dropdown-open {
+    &.open {
       background: lighten($nav-bg, 5%);
       color: #fff;
     }
   }
+
+  #dropdown-categories {
+    @include media($small-screen){
+      background: darken($nav-bg, 4%);
+      @include border-top-radius(0);
+      left: 0;
+      margin-left: 0;
+      margin-top: 0;
+      width: 100%;
+      padding-top: 2px;
+
+      > ol {
+        position: relative;
+        width: 33.4%;
+        background: $nav-bg;
+      }
+
+      li.dropdown-submenu {
+        position: static;
+
+        .dropdown-menu {
+          margin-top: 0;
+          height: 100%;
+          width: 100%;
+        }
+      }
+    }
+  }
 }
 
+//************************************************************************//
+// Landing Page
+//************************************************************************//
 body.home-index {
   nav.main-nav {
     ol.nav-list {
@@ -57,16 +92,46 @@ body.home-index {
   }
 }
 
-
-// Parent
 //************************************************************************//
-li.dropdown {
-  &.open > .dropdown-menu {
-    display: block;
+// App Header Navigation - not landing
+//************************************************************************//
+header.app {
+  ol.nav-list {
+    @include container;
+    margin: 0;
+    padding: 0 0 0 $left-margin;
+
+    @include media($small-screen) {
+      padding-left: $gutter;
+      padding: 0;
+    }
+
+    li.nav-item > a {
+      font-size: $base-font-size-small-1;
+      padding: 6px 15px;
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    li.about {
+      float: right;
+      margin-right: $base-padding;
+    }
   }
 }
 
-// Global Dropdown Menu
+//************************************************************************//
+// Dropdown Menu
+//************************************************************************//
+li.dropdown {
+  &.open > .dropdown-menu {
+    display: block; // Open dropdown menu on click
+  }
+}
+
+// Global Dropdown Menu Styles
 //************************************************************************//
 .dropdown-menu {
   @include ui-dropdown(center, $width: 240px, $nub-bg-color: $nav-bg, $nub-border-color: none);
@@ -75,6 +140,13 @@ li.dropdown {
   border-radius: 3px;
   box-shadow: none;
   margin-top: 14px;
+
+  // Remove nub
+  @include media($small-screen){
+    &:before, &:after {
+      display: none;
+    }
+  }
 
   ol {
     overflow: visible;
@@ -95,6 +167,8 @@ li.dropdown-submenu {
 
   > a {
     padding-right: 30px;
+    position: relative;
+
     &:after {
       @include triangle(12px, hsla(0, 0%, 100%, 0.6), right);
       position: absolute;
@@ -121,6 +195,8 @@ li.dropdown-submenu {
   }
 
   &:hover {
+    background: $nav-hover;
+
     .show-submenu {
       background: $nav-hover;
       color: #fff;
@@ -139,30 +215,5 @@ li.dropdown-submenu {
     padding: 3px 15px;
     font-weight: bold;
     background: hsla(0, 0%, 0%, 0.2);
-  }
-}
-
-//************************************************************************//
-// Navigation
-//************************************************************************//
-header.app {
-  ol.nav-list {
-    @include container;
-    margin: 0;
-    padding: 0 0 0 $left-margin;
-
-    li.nav-item > a {
-      font-size: $base-font-size-small-1;
-      padding: 6px 15px;
-
-      &:focus {
-        outline: none;
-      }
-    }
-
-    li.about {
-      float: right;
-      margin-right: $base-padding;
-    }
   }
 }
