@@ -6,10 +6,12 @@
 <div class="site-news">
   <section class="news-snippets wip">
     <h2>Weather Reports</h2>
+    <div id="recent-blog-entries">
+      <%= render partial: 'blog_entry', collection: @blog_entries %>
+    </div>
   </section >
   <section class="recent-notices">
     <h2>Recent Cease & Desists</h2>
-
     <div id="recent-notices">
       <%= render @notices %>
     </div>

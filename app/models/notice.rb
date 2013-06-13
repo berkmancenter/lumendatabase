@@ -1,8 +1,10 @@
+require 'recent_scope'
+
 class Notice < ActiveRecord::Base
   include Tire::Model::Search
   include Tire::Model::Callbacks
 
-  RECENT_LIMIT = 7
+  extend RecentScope
 
   HIGHLIGHTS = [ :title, :tag_list, :'categories.name', :submitter_name,
                  :recipient_name, :'works.description', :'works.url',
@@ -32,10 +34,6 @@ class Notice < ActiveRecord::Base
   accepts_nested_attributes_for :works
 
   after_touch { tire.update_index }
-
-  def self.recent
-    order('created_at DESC').limit(RECENT_LIMIT)
-  end
 
   def to_indexed_json
     to_json(

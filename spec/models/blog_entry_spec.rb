@@ -5,6 +5,8 @@ describe BlogEntry do
   it { should validate_presence_of(:title) }
   it { should belong_to(:user) }
 
+  it_behaves_like "an object with a recent scope"
+
   context "#content_html" do
     it "returns the post's content as html" do
       blog_entry = BlogEntry.new(content: "Some *markdown* content")

@@ -1,4 +1,8 @@
+require 'recent_scope'
+
 class BlogEntry < ActiveRecord::Base
+  extend RecentScope
+
   # TODO: is the simple :author attribute enough? Does the Association
   # really give us anything?
   belongs_to :user
