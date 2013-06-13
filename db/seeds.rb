@@ -1,6 +1,9 @@
 Tire.index(Notice.index_name).delete
 
-Dir[Rails.root.join('db/seeds/**/*.rb')].each { |s| load(s) }
+#Execute seeds in a logical order
+%w(relevant_questions.rb blog_entries.rb categories.rb).each do|file|
+  load("db/seeds/#{file}")
+end
 
 class FakeNotice
   attr_reader :title, :source, :subject, :date_received
@@ -107,34 +110,36 @@ class FakeNotice
   end
 end
 
-count = (ENV['NOTICE_COUNT'] || "500").to_i
+unless ENV['SKIP_FAKE_DATA']
+  count = (ENV['NOTICE_COUNT'] || "500").to_i
 
-print "\n--> Generating #{count} Fake Notices"
+  print "\n--> Generating #{count} Fake Notices"
 
-count.times do
-  fake = FakeNotice.new
+  count.times do
+    fake = FakeNotice.new
 
-  Notice.create!(
-    title: fake.title,
-    subject: fake.subject,
-    date_received: fake.date_received,
-    source: fake.source,
-    category_ids: fake.categories.map(&:id),
-    tag_list: fake.tags,
-    works_attributes: [ {
+    Notice.create!(
+      title: fake.title,
+      subject: fake.subject,
+      date_received: fake.date_received,
+      source: fake.source,
+      category_ids: fake.categories.map(&:id),
+      tag_list: fake.tags,
+      works_attributes: [ {
       url: fake.work_url,
       description: fake.work_description,
       kind: fake.kind,
       infringing_urls_attributes: fake.urls
     }],
-    entity_notice_roles_attributes: [ {
+      entity_notice_roles_attributes: [ {
       name: 'recipient', entity_attributes: fake.recipient
     }, {
       name: 'submitter', entity_attributes: fake.submitter
     }]
-  )
+    )
 
-  print '.'
+    print '.'
+  end
+
+  puts
 end
-
-puts

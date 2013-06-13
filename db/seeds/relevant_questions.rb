@@ -47,3 +47,37 @@ or not, so long as the mark:
   the Red Cross or the U.S. Olympic Committee.
   }
 )
+
+
+unless ENV['SKIP_FAKE_DATA']
+  10.times do |i|
+    RelevantQuestion.create!(
+      question: "Question ##{i}",
+      answer: %{
+An answered question ##{i}
+
+* list item
+* list item
+* list item
+
+1. ordered list item
+2. ordered list item
+3. ordered list item
+4. ordered list item
+
+`code formatting`
+
+**bold**
+
+> quoted paragraph
+> quoted paragraph
+> quoted paragraph
+> quoted paragraph
+
+## Heading 2
+### Heading 3
+#### Heading 4
+
+    })
+  end
+end

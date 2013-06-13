@@ -31,6 +31,12 @@ If you need to reset your database and seed data, then run:
 
 before proceeding with the rest of the commmands.
 
+During seeding, you can customize behavior with a couple environment variables:
+
+* `NOTICE_COUNT=10` will generate 10 (or any number you pass it) notices
+  instead of the default 500
+* `SKIP_FAKE_DATA=1` will skip generating fake seed data entirely.
+
 License
 =======
 

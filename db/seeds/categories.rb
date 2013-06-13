@@ -69,3 +69,11 @@ Category.create!(name: 'Trademark').tap do |p|
 end
 
 Category.create!(name: 'Uncategorized')
+
+
+unless ENV['SKIP_FAKE_DATA']
+  Category.all.each do|category|
+    category.relevant_questions << RelevantQuestion.all.sample((2..10).to_a.sample)
+    category.save
+  end
+end
