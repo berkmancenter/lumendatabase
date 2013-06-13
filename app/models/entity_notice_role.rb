@@ -1,6 +1,6 @@
 class EntityNoticeRole < ActiveRecord::Base
   belongs_to :entity
-  belongs_to :notice
+  belongs_to :notice, touch: true
 
   ROLES = %w[principal agent recipient submitter target]
 
