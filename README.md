@@ -14,22 +14,21 @@ Requirements:
 
 Setup:
 
-The order of these commands is important, as we need a running elasticsearch
-before adding seed data. foreman starts up a web server on port 5000 by
-default, available at http://localhost:5000/
+    ./bin/setup
 
-    bundle install
-    rake db:create
-    # foreman will install elasticsearch under tmp/ the first time you start
+Running the app:
+
     foreman start -f Procfile.dev
-    # Run this next command after foreman has started elasticsearch
-    rake db:migrate db:seed db:test:prepare
 
-If you need to reset your database and seed data, then run:
+Viewing the app:
 
-    rake db:drop db:create
+    $BROWSER 'http://localhost:5000'
 
-before proceeding with the rest of the commmands.
+Resetting the database:
+
+    DB_RESET=1 ./bin/setup
+
+*Note*: foreman cannot be running during a db-reset.
 
 During seeding, you can customize behavior with a couple environment variables:
 
