@@ -27,7 +27,7 @@ feature "Searching via the API", search: true do
     expect_api_search_to_find("king") do |json|
       json_item = json['notices'].first
       expect(json_item).to have_key('title').with_value(notice.title)
-      expect(json_item).to have_key('id').with_value(notice.id.to_s)
+      expect(json_item).to have_key('id').with_value(notice.id)
       expect(json_item).to have_key('categories').with_value([category.name])
       expect(json_item).to have_key('score')
     end

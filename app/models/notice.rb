@@ -8,9 +8,10 @@ class Notice < ActiveRecord::Base
 
   extend RecentScope
 
-  HIGHLIGHTS = [ :title, :tag_list, :'categories.name', :submitter_name,
-                 :recipient_name, :'works.description', :'works.url',
-                 :'infringing_urls.url' ]
+  HIGHLIGHTS = %i(
+    title tag_list categories.name submitter_name recipient_name
+    works.description works.url infringing_urls.url
+  )
 
   has_many :categorizations, dependent: :destroy
   has_many :categories, through: :categorizations

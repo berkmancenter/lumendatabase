@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'searches/show.html.erb' do
   it "display the results" do
-    mock_results(build_list(:notice, 5))
+    mock_results(build_stubbed_list(:notice, 5))
 
     render
 
@@ -10,7 +10,7 @@ describe 'searches/show.html.erb' do
   end
 
   it "includes facets" do
-    mock_results(build_list(:notice, 5))
+    mock_results(build_stubbed_list(:notice, 5))
 
     render
 
@@ -48,30 +48,40 @@ describe 'searches/show.html.erb' do
     end
   end
 
-  it "includes excerpts" do
-    notice = create(:notice)
-    notice.stub(:highlight).and_return(
-      stub(title: ['foo <em>bar</em> baz']).as_null_object
-    )
-    mock_results([notice])
+  context 'excerpts' do
+    it "includes excerpts" do
+      mock_results(
+        [build_stubbed(:notice)],
+        'highlight' => { 'title' => ["foo <em>bar</em> baz"] }
+      )
 
-    render
+      render
 
-    within('.result') do
-      expect(page).to have_content('foo bar baz')
+      within('.result') do
+        expect(page).to have_content('foo bar baz')
+      end
+    end
+
+    it 'sanatizes excerpts' do
+      mock_results(
+        [build_stubbed(:notice)],
+        'highlight' => { 'title' => ["<strong>foo</strong> and <em>bar</em>"] }
+      )
+
+      render
+
+      expect(rendered).to include('foo and <em>bar</em>')
     end
   end
 
-  def mock_results(notices)
-    notices.each do |notice|
-      unless notice.respond_to?(:highlight)
-        notice.stub(:highlight)
-      end
-    end
-    notices.stub(:total_entries).and_return(notices.length)
-    notices.stub(:total_pages).and_return(1)
-    notices.stub(:facets).and_return(facet_data)
-    assign(:results, notices)
+  private
+
+  def mock_results(notices, options = {})
+    results = notices.map { |notice| as_tire_result(notice, options) }
+    results.stub(:total_entries).and_return(results.length)
+    results.stub(:total_pages).and_return(1)
+    results.stub(:facets).and_return(facet_data)
+    assign(:results, results)
   end
 
   def facet_data
@@ -97,4 +107,5 @@ describe 'searches/show.html.erb' do
       }
     }
   end
+
 end
