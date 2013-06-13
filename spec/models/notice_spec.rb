@@ -18,21 +18,7 @@ describe Notice do
   it { should have_many(:categories).through(:categorizations) }
   it { should have_and_belong_to_many :relevant_questions }
 
-  context ".recent" do
-    it "returns a limited number of notices" do
-      create_list(:notice, Notice::RECENT_LIMIT + 1)
-
-      expect(Notice.recent.size).to eq Notice::RECENT_LIMIT
-    end
-
-    it "returns notices in descending created_at sent order" do
-      third_notice = Timecop.travel(16.hours.ago) { create(:notice) }
-      first_notice = Timecop.travel(1.hour.ago) { create(:notice) }
-      second_notice = Timecop.travel(10.hours.ago) { create(:notice) }
-
-      expect(Notice.recent).to eq [first_notice, second_notice, third_notice]
-    end
-  end
+  it_behaves_like "an object with a recent scope"
 
   context "tagging" do
     it "accepts a comma-delimited string and turns it into an array of tags" do

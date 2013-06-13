@@ -1,0 +1,4 @@
+<%= content_tag_for(:article, blog_entry) do %>
+  <%= link_to(blog_entry.title, blog_entry_path(blog_entry)) %>
+  <%= blog_entry.author %>. <%= published_at(blog_entry) %>
+<% end %>
