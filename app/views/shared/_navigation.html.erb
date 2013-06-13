@@ -14,7 +14,7 @@
       <div id="dropdown-categories" class="dropdown-menu" role="menu">
         <ol>
           <% Category.roots.each do |root| %>
-            <%= render "dropdown_item", category: root %>
+            <%= render "shared/category_dropdown", category: root %>
           <% end %>
         </ol>
       </div>
