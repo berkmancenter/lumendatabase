@@ -13,7 +13,7 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">Categories</a>
       <div id="dropdown-categories" class="dropdown-menu" role="menu">
         <ol>
-          <% Category.roots.each do |root| %>
+          <% category_roots.each do |root| %>
             <%= render "shared/category_dropdown", category: root %>
           <% end %>
         </ol>

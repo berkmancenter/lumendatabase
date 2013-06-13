@@ -6,6 +6,10 @@ class Category < ActiveRecord::Base
 
   has_ancestry
 
+  def self.ordered
+    order(:name)
+  end
+
   after_update { notices.each(&:touch) }
 
   def description_html
