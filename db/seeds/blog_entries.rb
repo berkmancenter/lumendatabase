@@ -107,3 +107,40 @@ willful misuse of the DMCA's takedown process.
 Keep an eye on this case!
   }
 )
+
+unless ENV['SKIP_FAKE_DATA']
+  20.times do |i|
+    BlogEntry.create!(
+      author: "Adam Holland",
+      title: "A blog entry, numbered ##{i}",
+      abstract: "An abstract of blog entry ##{i}",
+      published_at: Time.now,
+      content: %{
+A blog entry ##{i}
+
+* list item
+* list item
+* list item
+
+1. ordered list item
+2. ordered list item
+3. ordered list item
+4. ordered list item
+
+`code formatting`
+
+**bold**
+
+> quoted paragraph
+> quoted paragraph
+> quoted paragraph
+> quoted paragraph
+
+## Heading 2
+### Heading 3
+#### Heading 4
+
+    }
+   )
+  end
+end
