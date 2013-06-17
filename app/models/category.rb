@@ -1,4 +1,7 @@
+require 'validates_automatically'
+
 class Category < ActiveRecord::Base
+  include ValidatesAutomatically
   has_many :categorizations, dependent: :destroy
   has_many :notices, through: :categorizations
 

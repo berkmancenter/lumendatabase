@@ -1,8 +1,10 @@
 require 'recent_scope'
+require 'validates_automatically'
 
 class Notice < ActiveRecord::Base
   include Tire::Model::Search
   include Tire::Model::Callbacks
+  include ValidatesAutomatically
 
   extend RecentScope
 

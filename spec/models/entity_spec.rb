@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe Entity do
-  context 'schema_validations' do
+  context 'automatic validations' do
     it { should validate_presence_of :name }
     it { should validate_presence_of :kind }
     it { should ensure_length_of(:address_line_1).is_at_most(255) }

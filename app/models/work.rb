@@ -1,4 +1,8 @@
+require 'validates_automatically'
+
 class Work < ActiveRecord::Base
+  include ValidatesAutomatically
+
   has_and_belongs_to_many :notices
   has_and_belongs_to_many :infringing_urls
 
