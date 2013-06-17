@@ -1,0 +1,327 @@
+## Create notice
+
+Submits a new Notice to the chillingeffects system via JSON-encoded parameters. Authentication is not required for now.
+
+**Method**: `POST`
+
+**Endpoint**: `http://chillingeffects.herokuapp.com/notices`
+
+### Request
+
+| Field      | Type       | Description
+| ---        | ---        | ---
+| notice     | Notice     | Required
+
+**Notice**
+
+| Field                          | Type               | Description
+| ---                            | ---                | ---
+| title                          | string             | Required
+| subject                        | string             |
+| date_received                  | string             | Any parseable time value, e.g. "2013-05-21", "2013-05-21 10:01:01 -04:00"
+| source                         | string             | How did you receive this notice - mail? online form?
+| category_ids                   | [int]              | An array of integers representing category ids - See **Request a list of Categories** below.
+| tag_list                       | string             | Comma separated tags, spaces are OK. Automatically lowercased.
+| works_attributes               | [Work]             | A list of Works
+| entity_notice_roles_attributes | [EntityNoticeRole] | A list of EntityNoticeRoles
+**Work**
+
+| Field                      | Type            | Description
+| ---                        | ---             | ---
+| url                        | string          | Required, the url of the original work
+| kind                       | string          | Book, movie, video, etc.
+| description                | string          | Description of the work, which may include the copyright holder information
+| infringing_urls_attributes | [InfringingUrl] | List of urls which infringe on the work
+
+**InfringingUrl**
+
+| Field          | Type     | Description
+| ---            | ---      | ---
+| url            | string   | A Url that infringes upon the Work 
+
+**EntityNoticeRole**
+
+| Field             | Type    | Description
+| ---               | ---     | ---
+| name              | string  | The name of the role, one of "principal", "agent", "recipient", "submitter" or "target". "recipient" and "submitter" are displayed on the chillingeffects website.
+| entity_attributes | Entity  | An entity that has this role on this notice
+
+**Entity**
+
+| Field          | Type   | Description
+| ---            | ---    | ---
+| name           | string | Required
+| kind           | string | one of "organization" or "individual"
+| address_line_1 | string |
+| address_line_2 | string |
+| city           | string |
+| state          | string |
+| country_code   | string | A two-digit ISO country code
+| phone          | string |
+| email          | string |
+| url            | string |
+
+### Example Request
+
+```
+curl -H "Accept: application/json" -H "Content-type: application/json" 'http://chillingeffects.herokuapp.com/notices/' -d '{
+  "notice": {
+    "title": "DMCA (Copyright) Complaint to Google",
+    "subject": "Infringement Notfication via Blogger Complaint",
+    "date_received": "2013-05-23",
+    "source": "Online form",
+    "category_ids": [19, 27],
+    "tag_list": "movies, disney, youtube",
+    "works_attributes": [
+      {
+        "url": "http://disney.com/lion_king.mp4",
+        "description": "Lion King Video",
+        "infringing_urls_attributes": [
+          { "url": "http://youtube.com/bad_url_1" },
+          { "url": "http://youtube.com/bad_url_2" },
+          { "url": "http://youtube.com/bad_url_3" },
+          { "url": "http://youtube.com/bad_url_4" },
+          { "url": "http://youtube.com/bad_url_5" }
+        ]
+      }
+    ],
+    "entity_notice_roles_attributes": [
+      {
+        "name": "recipient",
+        "entity_attributes": {
+          "name": "Google",
+          "kind": "organization",
+          "address_line_1": "1600 Amphitheatre Parkway",
+          "city": "Mountain View",
+          "state": "CA", 
+          "zip": "94043",
+          "country_code": "US"
+        }
+      },
+      {
+        "name": "submitter",
+        "entity_attributes": {
+          "name": "Joe Lawyer",
+          "kind": "individual",
+          "address_line_1": "1234 Anystreet St.",
+          "city": "Anytown",
+          "state": "CA",
+          "zip": "94044",
+          "country_code": "US"
+        }
+      }
+    ]
+  }
+}'
+```
+
+### Successful Responses
+
+Successful responses will have HTTP status 201 (Created) and include a `Location:` HTTP header with the location of the created object.
+
+#### Example:
+
+**Note:** Unimportant headers have been removed.
+
+```
+> curl -H "Accept: application/json" -H "Content-type: application/json" 'http://chillingeffects.herokuapp.com/notices/' -d @tmp/curl.json --dump-header - 
+HTTP/1.1 201 Created 
+Location: http://localhost:3000/notices/4
+Content-Type: application/json; charset=utf-8
+Cache-Control: max-age=0, private, must-revalidate
+Date: Wed, 05 Jun 2013 20:43:34 GMT
+Content-Length: 1
+```
+
+### Unsuccessful responses
+
+Unsuccessful responses will have HTTP status 422 (Unprocessable Entity) and include a JSON response enumerating the validation failures.
+
+#### Example:
+```
+{
+  "works":["can't be blank"],
+  "entity_notice_roles":["can't be blank"],
+  "title":["can't be blank"]
+}
+```
+
+## Request a notice
+
+**Method**: `GET`
+
+**Endpoint**: `http://chillingeffects.herokuapp.com/notices/<notice id>.json`
+
+
+#### Example Request:
+
+```
+curl http://chillingeffects.herokuapp.com/notices/1.json
+```
+
+### Successful Responses
+
+Return a JSON-encoded representation of selected notice attributes.
+
+#### Example Successful Response:
+
+```
+{
+  "notice":{
+    "id":1,
+    "title":"Lion King on YouTube",
+    "body":null,
+    "date_received":"2013-06-05T20:31:44Z",
+    "categories":[
+      "Anticircumvention (DMCA)",
+      "Bookmarks",
+      "Chilling Effects"
+    ]
+  }
+}
+```
+
+### Unsuccessful Responses
+
+Return a 404 HTTP status header.
+
+## Request a list of Categories
+
+**Method**: GET
+
+**Endpoint**: `http://chillingeffects.herokuapp.com/categories.json`
+
+```
+curl http://chillingeffects.herokuapp.com/categories.json
+```
+
+### Successful Responses
+
+Return a JSON-encoded array of categories, including the following attributes:
+
+| Field      | Type       | Description
+| ---        | ---        | ---
+| id         | Integer    | The unique ID used for the category_ids array during notice creation.
+| name       | String     | The category name
+| parent_id  | Integer    | The parent category id of this category, or "null" if this is a root category.
+
+#### Example Successful Response:
+
+```
+{
+  "categories": [
+    {
+      "id": 1,
+      "name": "Chilling Effects",
+      "parent_id": null
+    },
+    {
+      "id": 2,
+      "name": "Copyright",
+      "parent_id": null
+    },
+    {
+      "id": 3,
+      "name": "Anticircumvention (DMCA)",
+      "parent_id": 2
+    }
+  ]
+}
+```
+
+### Unsuccessful Responses
+
+Undefined.
+
+## Search notices via fulltext
+
+Chillingeffects allows for paginatable full-text searches of notices and relevant metadata. Results are sorted with the most relevant at the top. Notice search results contain the same data as an individually-requested Notice, with an additional "score" field. "score" articulates how "relevant" this result is to the query term. Higher numbers are more relevant.
+
+**Method**: `GET`
+
+**Endpoint**: `http://chillingeffects.herokuapp.com/search?q=url_escaped_query&page=1`
+
+**Parameters**
+
+| Parameters  | Description
+| ---         | ---
+| q           | The full-text query term
+| page        | The page you're requesting - defaults to the first page of results.
+
+
+### Successful Responses
+
+Return a JSON-encoded hash including an array of notices and metadata about the search results.
+
+
+| Field       | Type       | Description
+| ---         | ---        | ---
+| notices     | Array      | An array of Notices encoded as JSON data structures
+| meta        | Hash       | Search Metadata about the results of the search
+
+**Search Metadata**
+
+
+| Field         | Type      | Description
+| ---           | ---       | ---
+| q             | String    | The search query that was executed
+| current_page  | Integer   | The page number of the current set of results.
+| next_page     | Integer   | The page number of the next set of results, or `null` if this is the last page.
+| offset        | Integer   | How many total results in the result set before the current list of results.
+| per_page      | Integer   | Number of results per page
+| previous_page | Integer   | The page number of the previous set of results, or `null` if this is the first page.
+| total_entries | Integer   | The total number of results for the search query.
+| total_pages   | Integer   | The total number of pages in this result set.
+
+### Example Successful Response
+
+```
+curl -H "Accept: application/json" -H "Content-type: application/json" 'http://chillingeffects.herokuapp.com/search?q=star'
+```
+
+```
+{
+  "notices": [
+    {
+      "id": "491",
+      "title": "Star Wars",
+      "body": null,
+      "date_received": null,
+      "categories": [
+        "Trademark",
+        "DMCA Notices",
+        "John Doe Anonymity"
+      ],
+      "score": 0.64636606
+    }
+  ],
+  "meta": {
+    "q": "star",
+    "current_page": 1,
+    "next_page": null,
+    "offset": 0,
+    "per_page": 10,
+    "previous_page": null,
+    "total_entries": 1,
+    "total_pages": 1
+  }
+}
+```
+
+### Example Unsuccessful Response
+
+```
+{
+  "notices": [ ],
+  "meta": {
+    "q": "nonexistent",
+    "current_page": 3,
+    "next_page": null,
+    "offset": 20,
+    "per_page": 10,
+    "previous_page": 2,
+    "total_entries": 0,
+    "total_pages": 0
+  }
+}
+```
