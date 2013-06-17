@@ -37,16 +37,28 @@ class Notice < ActiveRecord::Base
 
   after_touch { tire.update_index }
 
-  def to_indexed_json
-    to_json(
-      only: [:id, :title],
-      methods: [:tag_list, :submitter_name, :recipient_name],
-      include: [
-        :categories,
-        { works: { only: [:description, :url] } },
-        { infringing_urls: { only: :url } }
-      ]
-    )
+  mapping do
+    indexes :id, index: 'not_analyzed', include_in_all: false
+    indexes :title
+    indexes :date_received, type: 'date', include_in_all: false
+    indexes :tag_list, as: 'tag_list'
+    indexes :submitter_name, as: 'submitter_name'
+    indexes :submitter_name_facet,
+      analyzer: 'keyword', as: 'submitter_name',
+      include_in_all: false
+    indexes :recipient_name, as: 'recipient_name'
+    indexes :recipient_name_facet,
+      analyzer: 'keyword',  as: 'recipient_name', include_in_all: false
+    indexes :categories, type: 'object', as: 'categories'
+    indexes :category_facet,
+      analyzer: 'keyword', as: ->(notice){ notice.categories.map(&:name) },
+      include_in_all: false
+    indexes :works,
+      type: 'object',
+      as: ->(notice){ notice.works.as_json({ only: [:description, :url] }) }
+    indexes :infringing_urls,
+      type: 'object',
+      as: ->(notice){ notice.infringing_urls.as_json({ only: :url})}
   end
 
   def all_relevant_questions

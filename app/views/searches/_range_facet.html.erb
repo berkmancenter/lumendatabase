@@ -1,0 +1,8 @@
+<li class="<%= type %>">
+  <span><%= type.titleize %></span>
+  <select class="facet" name="<%= type %>">
+    <% results.facets[type]['ranges'].each do |range| %>
+      <option>From today to <%= formatted_facet_range_time(range['from']) %> - <%= range['count'] %> total</option>
+    <% end %>
+  </select>
+</li>

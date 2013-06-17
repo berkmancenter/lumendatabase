@@ -1,4 +1,5 @@
-Tire.index(Notice.index_name).delete
+Notice.index.delete
+Notice.create_elasticsearch_index
 
 #Execute seeds in a logical order
 %w(relevant_questions.rb blog_entries.rb categories.rb).each do|file|
@@ -16,7 +17,7 @@ class FakeNotice
 
     @source = ["Online form", "Email", "Phone"].sample
     @subject = "Websearch Infringment Notification via #{@source}"
-    @date_received = (1..10).to_a.sample.days.ago
+    @date_received = (0..100).to_a.sample.days.ago
   end
 
   def categories
