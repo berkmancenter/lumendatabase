@@ -5,7 +5,7 @@
   <% if has_children %>
     <ol class="dropdown-menu">
       <li class="title">Subcategories</li>
-      <% category.children.each do |child| %>
+      <% category.children.ordered.each do |child| %>
         <%= render "shared/category_dropdown", category: child %>
       <% end %>
     </ol>
