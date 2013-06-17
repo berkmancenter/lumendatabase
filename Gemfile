@@ -26,6 +26,8 @@ gem 'redcarpet', '~>2.3.0'
 gem 'country_select'
 gem 'will_paginate', '~>3.0'
 gem 'tire', '~> 0.6.0'
+gem 'select2-rails'
+gem 'bootstrap-datepicker-rails'
 
 group :assets do
   gem 'coffee-rails'

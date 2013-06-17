@@ -6,9 +6,13 @@ article.post {
   @include pad(40px);
   @include span-columns(10);
 
-  h3 {
+  h3.title {
     font-weight: 800;
     font-size: em(32, 15);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
   }
 
   div.metadata {

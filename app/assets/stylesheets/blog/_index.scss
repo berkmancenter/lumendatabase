@@ -3,12 +3,10 @@ section.posts {
 }
 
 article.post-item {
-  border-radius: 3px;
-  background: #fff;
-  @include pad(30px);
+  @extend %content-container;
   margin-bottom: 30px;
   box-shadow: 0 -0px 0 $shadow-2, inset 0 1px 0 #eaeaea, $base-shadow;
-  @include transition;
+  @include transition(box-shadow 0.15s);
 
   &:hover {
     box-shadow: 0 -3px 0 $shadow-2, inset 0 0px 0 #eaeaea, $base-shadow;

@@ -12,7 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require jquery-ui
 //= require jquery.collapse
-// require jquery.dropdown
+//= require select2
+//= require bootstrap-datepicker/core
 //= require_tree .

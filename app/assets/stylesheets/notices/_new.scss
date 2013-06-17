@@ -1,37 +1,239 @@
+$label-width: 120px;
+$label-margin: 20px;
+
+section.notice-new {
+  @extend %content-container;
+  box-shadow: 0 -3px 0 $shadow-1, $base-shadow;
+  padding: $base-padding 0;
+
+  section {
+    @include clearfix;
+    padding: 30px $base-padding;
+
+    &:nth-of-type(2n) {
+      background: hsla(0, 0%, 0%, 0.02);
+    }
+
+    div.body-wrapper {
+      float: left;
+      width: 50%;
+
+      &.left {
+        padding-right: 5%;
+      }
+    }
+  }
+
+  h3 {
+    margin: auto $base-padding;
+  }
+
+  h4 {
+    margin: 1.5em 0;
+  }
+}
+
+
 form.new_notice {
-  $label-width: 200px;
-  $label-margin: 20px;
-  width: 600px;
+  section {
+    margin-bottom: 20px;
+  }
 
   div {
     @include clearfix;
   }
 
+  div.input {
+    position: relative;
+    margin-bottom: 10px;
+  }
+
   label {
-    float: left;
-    text-align: right;
+    background: #eee;
+    border-radius: $form-border-radius 0 0 $form-border-radius;
+    border-right: 1px solid $form-border-color;
+    font-family: $helvetica;
+    height: calc(100% - 2px);
+    left: 1px;
+    margin-bottom: 2px;
+    padding: 6px 10px;
+    position: absolute;
+    text-shadow: 0 1px 0 hsla(0, 0%, 100%, 0.8);
+    top: 1px;
     width: $label-width;
-    margin-right: 20px;
-  }
+    z-index: 1;
 
-  div.input label {
-    margin-top: 12px;
-  }
-
-  div.input.file label {
-    margin-top: 0;
-  }
-
-  select, input {
-    float: left;
+    &.text {
+      border-bottom: 1px solid $form-border-color;
+      border-right: 0;
+      height: auto;
+      left: 1px;
+      right: 1px;
+      width: auto;
+      border-radius: $form-border-radius $form-border-radius 0 0;
+    }
   }
 
   select {
     padding: 10px 10px 5px 10px;
+    margin-left: $label-width + 10px;
+    width: 270px;
+    margin-top: 5px;
+  }
+
+  input {
+    padding: 6px;
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  #{$all-text-inputs} {
+    padding-left: $label-width + 10px;
+  }
+
+  textarea {
+    height: 150px;
+    width: 100%;
+    resize: vertical;
+    margin-bottom: 0;
+    padding-top: 32px + 10px;
+  }
+
+  input.file {
+    border: 1px solid $form-border-color;
+    border-radius: $form-border-radius;
+    line-height: 0;
+    padding-left: $label-width + 10px;
   }
 
   div.buttons-wrapper {
     margin-top: 20px;
     padding-left: $label-width + $label-margin;
+  }
+}
+
+
+%float-left {
+  display: inline-block;
+  width: 49%;
+}
+
+form.new_notice {
+  .notice_entity_notice_roles_entity_state,
+  .notice_entity_notice_roles_entity_zip {
+    @extend %float-left;
+
+    input {
+      width: 100%;
+    }
+  }
+
+  .notice_entity_notice_roles_entity_state {
+    padding-right: 30px;
+  }
+}
+
+// Multi-Select using Select2
+//************************************************************************//
+form {
+  $input-height: 30px;
+
+  .select2-container {
+    box-shadow: $form-box-shadow;
+    font-size: $base-font-size-small-1;
+    width: 100%;
+
+    .select2-search-choice-close {
+      top: 3px;
+    }
+
+    .select2-choice {
+      border-color: $form-border-color;
+      border-radius: $form-border-radius 4px 4px $form-border-radius;
+      color: #000;
+      font-size: $base-font-size-small-1;
+      height: $input-height + 4px;
+      padding-left: $label-width + 10px;
+      padding-top: 3px;
+
+      &:focus {
+        border-color: $form-border-color-focus;
+        box-shadow: $form-box-shadow-focus;
+        outline: none;
+      }
+
+      b {
+        background-position-y: 4px;
+      }
+    }
+
+    ul.select2-choices {
+      background: #fff;
+      border-color: $form-border-color;
+      border-radius: $form-border-radius;
+      padding-left: $label-width;
+      width: 100%;
+    }
+
+    input {
+      height: $input-height;
+    }
+  }
+}
+
+
+// Datepicker
+//************************************************************************//
+div.datepicker {
+  @include ui-dropdown(left, $width: 284px);
+  margin-left: $label-width - 5px;
+  margin-top: 3px;
+
+  th, td {
+    padding: 8px 10px;
+  }
+
+  th {
+    &.prev,
+    &.next {
+      min-width: 30px;
+      position: relative;
+
+      &:before {
+        content: "";
+      }
+    }
+
+    $x: 9px;
+    $y: 12px;
+    &.prev:before {
+      @include triangle(12px, #999, left);
+      @include position(absolute, $y 0 0 $x);
+    }
+
+    &.next:before {
+      @include triangle(12px, #999, right);
+      @include position(absolute, $y $x 0 0);
+    }
+  }
+
+  thead {
+    border-bottom: 1px solid $light-gray;
+    border: 0;
+  }
+
+}
+
+// Works Section
+//************************************************************************//
+section.works {
+  $work-label-width: $label-width + 30px;
+
+  label {
+    width: $work-label-width;
+  }
+
+  #{$all-text-inputs} {
+    padding-left: $work-label-width + 10px;
   }
 }

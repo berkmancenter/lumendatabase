@@ -18,6 +18,10 @@
 @import 'components/base';
 @import 'extends/blog';
 
+// Vendor
+@import 'select2';
+@import 'bootstrap-datepicker';
+
 @import 'shared/fontello';
 @import 'shared/header';
 @import 'shared/pagination';

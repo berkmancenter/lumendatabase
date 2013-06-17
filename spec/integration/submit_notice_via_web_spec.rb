@@ -53,15 +53,19 @@ feature "notice submission" do
 
   scenario "submitting a notice with entities" do
     submit_recent_notice do
-      fill_in "Recipient Name", with: "Recipient the first"
-      select "organization", from: "Recipient Kind"
-      fill_in "Recipient Address Line 1", with: "Recipient Line 1"
-      fill_in "Recipient Address Line 2", with: "Recipient Line 2"
-      fill_in "Recipient City", with: "Recipient City"
-      fill_in "Recipient State", with: "Recipient State"
-      select "United States", from: "Recipient Country Code"
+      within('section.recipient') do
+        fill_in "Name", with: "Recipient the first"
+        select "organization", from: "Recipient Kind"
+        fill_in "Address Line 1", with: "Recipient Line 1"
+        fill_in "Address Line 2", with: "Recipient Line 2"
+        fill_in "City", with: "Recipient City"
+        fill_in "State", with: "MA"
+        select "United States", from: "Country"
+      end
 
-      fill_in "Submitter Name", with: "Submitter the first"
+      within('section.submitter') do
+        fill_in "Name", with: "Submitter the first"
+      end
     end
 
     open_recent_notice
@@ -72,7 +76,7 @@ feature "notice submission" do
       expect(page).to have_content "Recipient Line 1"
       expect(page).to have_content "Recipient Line 2"
       expect(page).to have_content "Recipient City"
-      expect(page).to have_content "Recipient State"
+      expect(page).to have_content "MA"
       expect(page).to have_content "United States"
 
       expect(page).to have_content "Submitter the first"
@@ -155,8 +159,12 @@ feature "notice submission" do
     fill_in "Title", with: title
     fill_in "Date received", with: Time.now
 
-    fill_in "Recipient Name", with: "Recipient the first"
-    fill_in "Submitter Name", with: "Submitter the first"
+    within('section.recipient') do
+      fill_in "Name", with: "Recipient the first"
+    end
+    within('section.submitter') do
+      fill_in "Name", with: "Submitter the first"
+    end
 
     fill_in 'Work URL', with: 'http://www.example.com/original_work.pdf'
     fill_in 'Kind of Work', with: 'movie'
@@ -177,7 +185,7 @@ feature "notice submission" do
       fh.write content
       fh.flush
 
-      attach_file "Notice File", fh.path
+      attach_file "Attach Notice", fh.path
     end
   end
 

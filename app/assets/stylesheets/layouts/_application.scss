@@ -6,7 +6,7 @@ section.main.app {
   @include container;
   padding: 40px $gutter 40px 210px;
 
-  @include media($tablet) {
+  @include media($small-screen) {
     padding: 40px $gutter;
   }
 }
