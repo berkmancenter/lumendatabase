@@ -4,7 +4,7 @@ describe Notice do
   it { should validate_presence_of :works }
   it { should validate_presence_of :entity_notice_roles }
 
-  context 'schema_validations' do
+  context 'automatic validations' do
     it { should validate_presence_of :title }
     it { should ensure_length_of(:title).is_at_most(255) }
   end

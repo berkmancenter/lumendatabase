@@ -4,12 +4,13 @@ describe EntityNoticeRole do
   it { should belong_to :entity }
   it { should belong_to :notice }
 
-  context 'schema_validations' do
+  context 'automatic validations' do
     it { should validate_presence_of :name }
-    it { should validate_presence_of :entity }
-    it { should validate_presence_of :notice }
     it { should ensure_length_of(:name).is_at_most(255) }
   end
+
+  it { should validate_presence_of :entity }
+  it { should validate_presence_of :notice }
 
   it { should have_db_index :entity_id }
   it { should have_db_index :notice_id }

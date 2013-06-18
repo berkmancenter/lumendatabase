@@ -1,8 +1,10 @@
 require 'spec_helper'
 
 describe BlogEntry do
-  it { should validate_presence_of(:author) }
-  it { should validate_presence_of(:title) }
+  context "automatic validations" do
+    it { should validate_presence_of(:author) }
+    it { should validate_presence_of(:title) }
+  end
   it { should belong_to(:user) }
 
   it_behaves_like "an object with a recent scope"

@@ -1,4 +1,7 @@
+require 'validates_automatically'
+
 class EntityNoticeRole < ActiveRecord::Base
+  include ValidatesAutomatically
   belongs_to :entity
   belongs_to :notice, touch: true
 
@@ -23,5 +26,6 @@ class EntityNoticeRole < ActiveRecord::Base
   end
 
   validates_inclusion_of :name, in: ROLES
+  validates_presence_of :entity, :notice
 
 end

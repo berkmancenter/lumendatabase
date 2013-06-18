@@ -1,7 +1,9 @@
 require 'recent_scope'
+require 'validates_automatically'
 
 class BlogEntry < ActiveRecord::Base
   extend RecentScope
+  include ValidatesAutomatically
 
   # TODO: is the simple :author attribute enough? Does the Association
   # really give us anything?
