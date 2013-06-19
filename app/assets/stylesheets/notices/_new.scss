@@ -11,6 +11,9 @@ section.notice-new {
     padding: 30px $base-padding;
 
     &:nth-of-type(2n) {
+      border: 1px solid $light-gray;
+      border-left: 0;
+      border-right: 0;
       background: hsla(0, 0%, 0%, 0.02);
     }
 
@@ -29,7 +32,13 @@ section.notice-new {
   }
 
   h4 {
-    margin: 1.5em 0;
+    color: $base-title-color;
+    font-weight: 800;
+    margin: 1.5em 0 .4em;
+
+    & + p {
+      margin-bottom: 2em;
+    }
   }
 }
 
@@ -49,7 +58,8 @@ form.new_notice {
   }
 
   label {
-    background: #eee;
+    @include linear-gradient(#eee, #eaeaea);
+    box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, 0.5);
     border-radius: $form-border-radius 0 0 $form-border-radius;
     border-right: 1px solid $form-border-color;
     font-family: $helvetica;
@@ -107,8 +117,18 @@ form.new_notice {
   }
 
   div.buttons-wrapper {
-    margin-top: 20px;
-    padding-left: $label-width + $label-margin;
+    @include clearfix;
+
+    input {
+      @include button(simple, #4383Ed);
+      float: right;
+      font-size: $base-font-size;
+      font-weight: 500;
+      margin-right: $base-padding;
+      padding: 1em;
+      width: 46%;
+      width: calc(50% - #{$base-padding});
+    }
   }
 }
 

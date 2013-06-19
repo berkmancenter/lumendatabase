@@ -1,13 +1,14 @@
 <section class="notice-new">
-  <h3 class="title">Report a DMCA Notice</h3>
+  <h3 class="title">Report a DMCA Takedown Notice</h3>
   <%= simple_form_for(@notice) do |form| %>
     <section class="notice-body">
       <h4><span>Step 1.</span> Describe the Notice</h4>
+      <p>Provide us with information about the DMCA takedown notice you sent or received.</p>
       <div class="body-wrapper left main">
         <%= form.input :title, label: "Notice Title" %>
         <%= form.input :subject %>
-        <%= form.input :date_received, as: :string %>
-        <%= form.input :source, label: "Sent via", placeholder: 'e.g. Online form, phone' %>
+        <%= form.input :date_received, as: :string, placeholder: "YYYY-MM-DD" %>
+        <%= form.input :source, label: "Sent via", placeholder: 'Online form, Email, Postal mail, etc.' %>
         <%= form.input :tag_list, placeholder: 'movie, youtube, video, etc.' %>
         <%=
           form.input :category_ids,
@@ -26,13 +27,14 @@
     </section>
 
     <section class="works">
-      <h4><span>Step 2.<span> Works in Question</h4>
+      <h4><span>Step 2.<span> Original Works in Question</h4>
+      <p>Enter information about the original work(s) which are being questioned.</p>
       <div class="body-wrapper left">
       <%= form.simple_fields_for(:works) do |works_form| %>
         <%= works_form.simple_fields_for(:infringing_urls) do |urls_form| %>
-          <%= urls_form.input :url, label: "Infringing URL" %>
+          <%= urls_form.input :url, label: "Infringing URL", placeholder: "http://" %>
         <% end %>
-        <%= works_form.input :url, label: "Original Work URL" %>
+        <%= works_form.input :url, label: "Original Work URL", placeholder: "http://" %>
         <%= works_form.input :kind, label: "Kind of Work", placeholder: "Movie, Music, Book" %>
       </div>
       <div class="body-wrapper left">
@@ -44,7 +46,8 @@
     <%= form.simple_fields_for(:entity_notice_roles) do |roles_form| %>
       <% role = roles_form.object.name.titleize %>
       <section class="role <%= role.downcase %>">
-        <h4><span>Step 3.</span> Notice <%= role %></h4>
+        <h4><span class="wip">Step 3.</span> <%= role %> of the Notice</h4>
+        <p>Enter information about the <b><%= role %></b> of the DMCA takedown notice.</p>
         <%= roles_form.input :name, as: :hidden %>
         <%= roles_form.simple_fields_for(:entity) do |entity_form| %>
         <div class="body-wrapper left required">
@@ -69,7 +72,7 @@
     <% end %>
 
     <div class="buttons-wrapper">
-      <%= form.submit "Submit", :class => "submit" %>
+      <%= form.submit "Submit Notice", :class => "submit" %>
     </div>
   <% end %>
 </section>
