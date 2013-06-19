@@ -1,85 +1,86 @@
-body {
+.high_voltage-pages {
   color: $base-title-color;
-}
 
-.info ul, .clinic ul, .contact ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-}
+  section {
+    margin-bottom: 30px;
+  }
 
-li {
-  margin: 10px 10px 0 0;
-}
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
 
-h3 {
-  font-size: 18px;
-  color: $base-font-color-2;
-}
-
-.info {
-  padding-top: 10px;
+  li {
+    margin: 10px 10px 0 0;
+  }
 
   h2 {
-    font-size: 18px;
+    font-size: 20px;
     line-height: 1.4em;
     color: $base-title-color;
+  }
+
+  h3 {
+    font-size: 18px;
+    color: $base-font-color-2;
   }
 }
 
 .clinics {
-  padding: 10px 0 0 0;
-}
+  .clinic {
+    margin: 0;
+    height: 430px;
+    @include span-columns(6);
+    @include omega();
 
-.clinic {
-  height: 430px;
-  @include span-columns(6);
-  @include omega();
-  @include media($tablet) {
-    @include span-columns(8);
-    height: 100%;
-  }
-
-  h2 {
-    font-size: 18px;
-    line-height: 1.4em;
-    color: $base-title-color;
-  }
-
-  .topics {
-    margin-bottom: 15px;
-  }
-
-  .topics li {
-    display: inline;
-  }
-
-  .note {
-    margin-top: 25px;
-  }
-
-  &:nth-child(2n+1) {
-    padding: 10px 30px 20px 0px;
-    box-shadow: 1px 1px darken($light-gray,10);
     @include media($tablet) {
-      box-shadow:none;
-      padding: 0;
+      @include span-columns(8);
+      height: 100%;
     }
-  }
 
-  &:nth-child(2n) {
-    padding: 10px 0px 20px 35px;
-    box-shadow: 0 1px 0 darken($light-gray,10);
-    @include media($tablet) {
-      box-shadow:none;
-      padding: 0px;
+    .topics {
+      margin-bottom: 15px;
+
+      > li {
+        display: inline;
+      }
+    }
+
+    .people li {
+      margin: 3px 0;
+    }
+
+    .note {
+      margin-top: 25px;
+    }
+
+    &:nth-child(2n+1) {
+      padding: 10px 30px 20px 0px;
+      box-shadow: 1px 1px darken($light-gray,10);
+
+      @include media($tablet) {
+        box-shadow:none;
+        padding: 0;
+      }
+    }
+
+    &:nth-child(2n) {
+      padding: 10px 0px 20px 35px;
+      box-shadow: 0 1px 0 darken($light-gray,10);
+
+      @include media($tablet) {
+        box-shadow:none;
+        padding: 0px;
+      }
     }
   }
 }
 
 .contact {
-  padding-top: 25px;
+  @include outer-container;
   clear: left;
+  padding-top: 25px;
 
   .label {
     font-weight: bold;
@@ -108,7 +109,6 @@ h3 {
     }
 
     li {
-      float:left;
       @include span-columns(4);
 
       @include media($tablet) {
@@ -134,13 +134,13 @@ h3 {
   }
 }
 
-ol {
+ol.privacy {
   list-style-type: none;
-  counter-reset:li;
+  counter-reset: li;
   border-bottom: 1px solid darken($light-gray,10);
   padding-bottom: 25px;
 
-  >li {
+  > li {
     padding: 4px 8px;
     position: relative;
     margin: 0 0 20px 1em;
@@ -157,13 +157,14 @@ ol {
     }
 
     &:nth-child(2) {
-      margin-top:10px;
+      margin-top: 10px;
     }
   }
 }
 
 ul.bulleted {
   margin: 20px 25px;
+
   li {
     list-style-type: disc;
     margin: 8px 0px;
