@@ -1,9 +1,12 @@
 <section class="notice-new">
-  <h3 class="title">Report a DMCA Takedown Notice</h3>
+  <header>
+    <h3 class="title">Report a DMCA Takedown Notice</h3>
+    <p>If you have sent or received a DMCA takedown notice and want to submit it to our database, fill out the form below.</p>
+  </header>
   <%= simple_form_for(@notice) do |form| %>
     <section class="notice-body">
       <h4><span>Step 1.</span> Describe the Notice</h4>
-      <p>Provide us with information about the DMCA takedown notice you sent or received.</p>
+      <p>Provide us with information about the DMCA takedown notice you <em>sent</em> or <em>received</em>.</p>
       <div class="body-wrapper left main">
         <%= form.input :title, label: "Notice Title" %>
         <%= form.input :subject %>
@@ -27,8 +30,8 @@
     </section>
 
     <section class="works">
-      <h4><span>Step 2.<span> Original Works in Question</h4>
-      <p>Enter information about the original work(s) which are being questioned.</p>
+      <h4><span>Step 2.</span> Original Works in Question</h4>
+      <p>Enter information about the original work(s) and infringing URL(s).</p>
       <div class="body-wrapper left">
       <%= form.simple_fields_for(:works) do |works_form| %>
         <%= works_form.simple_fields_for(:infringing_urls) do |urls_form| %>
@@ -37,7 +40,7 @@
         <%= works_form.input :url, label: "Original Work URL", placeholder: "http://" %>
         <%= works_form.input :kind, label: "Kind of Work", placeholder: "Movie, Music, Book" %>
       </div>
-      <div class="body-wrapper left">
+      <div class="body-wrapper right">
         <%= works_form.input :description, label: "Work Description" %>
       </div>
       <% end %>
@@ -60,7 +63,7 @@
           <%= entity_form.input :address_line_2, label: "Address Line 2" %>
           <%= entity_form.input :city, label: "City" %>
           <%= entity_form.input :state, label: "State", maxlength: "2" %>
-          <%= entity_form.input :zip, label: "Zip" %>
+          <%= entity_form.input :zip, label: "Zip Code" %>
           <%= entity_form.input :country_code, label: "Country" %>
           <%= entity_form.input :phone, label: "Phone" %>
           <%= entity_form.input :email, label: "Email" %>

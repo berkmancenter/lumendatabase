@@ -1,0 +1,40 @@
+// Datepicker
+//************************************************************************//
+div.datepicker {
+  @include ui-dropdown(left, $width: 284px);
+  margin-left: $form-label-width - 5px;
+  margin-top: 3px;
+
+  th, td {
+    padding: 8px 10px;
+  }
+
+  th {
+    &.prev,
+    &.next {
+      min-width: 30px;
+      position: relative;
+
+      &:before {
+        content: "";
+      }
+    }
+
+    $x: 9px;
+    $y: 12px;
+    &.prev:before {
+      @include triangle(12px, #999, left);
+      @include position(absolute, $y 0 0 $x);
+    }
+
+    &.next:before {
+      @include triangle(12px, #999, right);
+      @include position(absolute, $y $x 0 0);
+    }
+  }
+
+  thead {
+    border-bottom: 1px solid $light-gray;
+    border: 0;
+  }
+}

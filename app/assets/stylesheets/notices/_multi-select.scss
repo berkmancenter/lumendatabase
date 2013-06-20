@@ -1,0 +1,47 @@
+// Multi-Select using Select2
+//************************************************************************//
+form.new_notice {
+  $input-height: 30px;
+
+  .select2-container {
+    box-shadow: $form-box-shadow;
+    font-size: $base-font-size-small-1;
+    width: 100%;
+
+    .select2-search-choice-close {
+      top: 3px;
+    }
+
+    .select2-choice {
+      border-color: $form-border-color;
+      border-radius: $form-border-radius 4px 4px $form-border-radius;
+      color: #000;
+      font-size: $base-font-size-small-1;
+      height: $input-height + 4px;
+      padding-left: $form-label-width + $form-label-margin;
+      padding-top: 3px;
+
+      &:focus {
+        border-color: $form-border-color-focus;
+        box-shadow: $form-box-shadow-focus;
+        outline: none;
+      }
+
+      b {
+        background-position-y: 4px;
+      }
+    }
+
+    ul.select2-choices {
+      background: #fff;
+      border-color: $form-border-color;
+      border-radius: $form-border-radius;
+      padding-left: $form-label-width;
+      width: 100%;
+    }
+
+    input {
+      height: $input-height;
+    }
+  }
+}

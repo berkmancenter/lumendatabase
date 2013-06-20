@@ -1,5 +1,5 @@
-$label-width: 120px;
-$label-margin: 20px;
+@import "multi-select";
+@import "datepicker";
 
 section.notice-new {
   @extend %content-container;
@@ -8,7 +8,7 @@ section.notice-new {
 
   section {
     @include clearfix;
-    padding: 30px $base-padding;
+    padding: 45px $base-padding;
 
     &:nth-of-type(2n) {
       border: 1px solid $light-gray;
@@ -27,14 +27,21 @@ section.notice-new {
     }
   }
 
-  h3 {
-    margin: auto $base-padding;
+  header {
+    margin: 0 $base-padding;
+    margin-bottom: 45px;
+
+    h3 {
+      margin: 10px 0;
+      color: darken($base-title-color, 5%);
+      font-weight: 800;
+    }
   }
 
   h4 {
     color: $base-title-color;
     font-weight: 800;
-    margin: 1.5em 0 .4em;
+    margin: 0 0 .4em;
 
     & + p {
       margin-bottom: 2em;
@@ -42,12 +49,10 @@ section.notice-new {
   }
 }
 
-
+//************************************************************************//
+// Form
+//************************************************************************//
 form.new_notice {
-  section {
-    margin-bottom: 20px;
-  }
-
   div {
     @include clearfix;
   }
@@ -55,6 +60,7 @@ form.new_notice {
   div.input {
     position: relative;
     margin-bottom: 10px;
+    clear: left;
   }
 
   label {
@@ -70,7 +76,7 @@ form.new_notice {
     position: absolute;
     text-shadow: 0 1px 0 hsla(0, 0%, 100%, 0.8);
     top: 1px;
-    width: $label-width;
+    width: $form-label-width;
     z-index: 1;
 
     &.text {
@@ -86,7 +92,7 @@ form.new_notice {
 
   select {
     padding: 10px 10px 5px 10px;
-    margin-left: $label-width + 10px;
+    margin-left: $form-label-width + $form-label-margin;
     width: 270px;
     margin-top: 5px;
   }
@@ -98,7 +104,7 @@ form.new_notice {
   }
 
   #{$all-text-inputs} {
-    padding-left: $label-width + 10px;
+    padding-left: $form-label-width + $form-label-margin;
   }
 
   textarea {
@@ -106,18 +112,19 @@ form.new_notice {
     width: 100%;
     resize: vertical;
     margin-bottom: 0;
-    padding-top: 32px + 10px;
+    padding-top: 32px + $form-label-margin;
   }
 
   input.file {
     border: 1px solid $form-border-color;
     border-radius: $form-border-radius;
     line-height: 0;
-    padding-left: $label-width + 10px;
+    padding-left: $form-label-width + $form-label-margin;
   }
 
   div.buttons-wrapper {
     @include clearfix;
+    padding: 45px 0 15px;
 
     input {
       @include button(simple, #4383Ed);
@@ -132,16 +139,14 @@ form.new_notice {
   }
 }
 
-
-%float-left {
-  display: inline-block;
-  width: 49%;
-}
-
+// Float some fields left
+//************************************************************************//
 form.new_notice {
-  .notice_entity_notice_roles_entity_state,
-  .notice_entity_notice_roles_entity_zip {
-    @extend %float-left;
+  div.notice_entity_notice_roles_entity_state,
+  div.notice_entity_notice_roles_entity_zip {
+    float: left;
+    width: 50%;
+    clear: none;
 
     input {
       width: 100%;
@@ -153,107 +158,27 @@ form.new_notice {
   }
 }
 
-// Multi-Select using Select2
+
+// Works Section
 //************************************************************************//
-form {
-  $input-height: 30px;
+section.notice-body {
+  border-top: 1px solid $light-gray;
 
-  .select2-container {
-    box-shadow: $form-box-shadow;
-    font-size: $base-font-size-small-1;
-    width: 100%;
-
-    .select2-search-choice-close {
-      top: 3px;
-    }
-
-    .select2-choice {
-      border-color: $form-border-color;
-      border-radius: $form-border-radius 4px 4px $form-border-radius;
-      color: #000;
-      font-size: $base-font-size-small-1;
-      height: $input-height + 4px;
-      padding-left: $label-width + 10px;
-      padding-top: 3px;
-
-      &:focus {
-        border-color: $form-border-color-focus;
-        box-shadow: $form-box-shadow-focus;
-        outline: none;
-      }
-
-      b {
-        background-position-y: 4px;
-      }
-    }
-
-    ul.select2-choices {
-      background: #fff;
-      border-color: $form-border-color;
-      border-radius: $form-border-radius;
-      padding-left: $label-width;
-      width: 100%;
-    }
-
-    input {
-      height: $input-height;
-    }
+  h4 {
+    margin-top: 0;
   }
-}
-
-
-// Datepicker
-//************************************************************************//
-div.datepicker {
-  @include ui-dropdown(left, $width: 284px);
-  margin-left: $label-width - 5px;
-  margin-top: 3px;
-
-  th, td {
-    padding: 8px 10px;
-  }
-
-  th {
-    &.prev,
-    &.next {
-      min-width: 30px;
-      position: relative;
-
-      &:before {
-        content: "";
-      }
-    }
-
-    $x: 9px;
-    $y: 12px;
-    &.prev:before {
-      @include triangle(12px, #999, left);
-      @include position(absolute, $y 0 0 $x);
-    }
-
-    &.next:before {
-      @include triangle(12px, #999, right);
-      @include position(absolute, $y $x 0 0);
-    }
-  }
-
-  thead {
-    border-bottom: 1px solid $light-gray;
-    border: 0;
-  }
-
 }
 
 // Works Section
 //************************************************************************//
 section.works {
-  $work-label-width: $label-width + 30px;
+  $work-form-label-width: $form-label-width + 30px;
 
   label {
-    width: $work-label-width;
+    width: $work-form-label-width;
   }
 
   #{$all-text-inputs} {
-    padding-left: $work-label-width + 10px;
+    padding-left: $work-form-label-width + $form-label-margin;
   }
 }
