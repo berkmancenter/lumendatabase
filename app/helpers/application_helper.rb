@@ -1,6 +1,6 @@
 module ApplicationHelper
   def available_categories
-    Category.all
+    Category.ordered
   end
 
   def category_roots
