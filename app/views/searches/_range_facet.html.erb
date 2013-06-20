@@ -1,9 +1,9 @@
-<li class="dropdown">
+<li class="dropdown <%= type %> <%= facet_dropdown_active_indicator(type) %>">
   <a class="dropdown-toggle title" data-toggle="dropdown" href="#"><%= type.titleize %></a>
   <ol class="dropdown-menu <%= type %>" role="menu">
     <% results.facets[type]['ranges'].each do |range| %>
-      <li class="facet" name="<%= type %>">
-        <a href="#" class="facet">From today to <%= formatted_facet_range_time(range['from']) %><span class="total-count"><%= range['count'] %> Results</span></a>
+      <li class="facet <%= facet_active_indicator(type, range_facet_param(range)) %>" name="<%= type %>">
+      <a href="<%= url_for(search_path(q: params[:q], type => range_facet_param(range) )) %>" class="facet">Since <%= formatted_facet_range_time(range['from']) %><span class="total-count"><%= range['count'] %> Results</span></a>
       </li>
     <% end %>
   </ol>

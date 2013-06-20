@@ -14,6 +14,7 @@ class Notice < ActiveRecord::Base
   )
 
   UNDER_REVIEW_VALUE = 'Under review'
+  RANGE_SEPARATOR = '..'
 
   has_many :categorizations, dependent: :destroy
   has_many :categories, through: :categorizations

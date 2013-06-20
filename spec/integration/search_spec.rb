@@ -2,6 +2,8 @@ require 'spec_helper'
 require 'yaml'
 
 feature "Search", search: true do
+  include SearchHelpers
+
   before do
     enable_live_searches
   end
@@ -17,7 +19,9 @@ feature "Search", search: true do
   scenario "for full-text on a single model" do
     notice = create(:notice, title: "The Lion King on Youtube")
 
-    expect_search_to_find("king", notice) do
+    within_search_results_for("king") do
+      expect(page).to have_n_results(1)
+      expect(page).to have_content(notice.title)
       expect(page.html).to have_excerpt('King', 'The Lion', 'on Youtube')
     end
   end
@@ -27,7 +31,9 @@ feature "Search", search: true do
       category = create(:category, name: "Lion King")
       notice = create(:notice, categories: [category])
 
-      expect_search_to_find("king", notice) do
+      within_search_results_for("king") do
+        expect(page).to have_n_results(1)
+        expect(page).to have_content(notice.title)
         expect(page).to have_content(category.name)
         expect(page).to contain_link(category_path(category))
         expect(page.html).to have_excerpt('King', 'Lion')
@@ -37,7 +43,9 @@ feature "Search", search: true do
     scenario "for tags" do
       notice = create(:notice, tag_list: 'foo, bar')
 
-      expect_search_to_find("bar", notice) do
+      within_search_results_for("bar") do
+        expect(page).to have_n_results(1)
+        expect(page).to have_content(notice.title)
         expect(page.html).to have_excerpt("bar")
       end
     end
@@ -45,12 +53,16 @@ feature "Search", search: true do
     scenario "for entities" do
       notice = create(:notice, role_names: ['submitter','recipient'])
 
-      expect_search_to_find(notice.recipient_name, notice) do
+      within_search_results_for(notice.recipient_name) do
+        expect(page).to have_n_results(1)
+        expect(page).to have_content(notice.title)
         expect(page).to have_content(notice.recipient_name)
         expect(page.html).to have_excerpt('Entity')
       end
 
-      expect_search_to_find(notice.submitter_name, notice) do
+      within_search_results_for(notice.submitter_name) do
+        expect(page).to have_n_results(1)
+        expect(page).to have_content(notice.title)
         expect(page).to have_content(notice.submitter_name)
         expect(page.html).to have_excerpt('Entity')
       end
@@ -60,7 +72,9 @@ feature "Search", search: true do
       work = create(:work, :with_infringing_urls)
       notice = create(:notice, works: [work])
 
-      expect_search_to_find(notice.infringing_urls.first.url, notice) do
+      within_search_results_for(notice.infringing_urls.first.url) do
+        expect(page).to have_n_results(1)
+        expect(page).to have_content(notice.title)
         expect(page.html).to have_excerpt('example.com')
       end
     end
@@ -69,12 +83,15 @@ feature "Search", search: true do
       work = create(:work, description: "An arbitrary description")
       notice = create(:notice, works: [work])
 
-      expect_search_to_find("arbitrary", notice) do
+      within_search_results_for("arbitrary") do
+        expect(page).to have_n_results(1)
+        expect(page).to have_content(notice.title)
         expect(page).to have_content(work.description)
         expect(page.html).to have_excerpt("arbitrary", "An", "description")
       end
 
-      expect_search_to_find(work.url, notice) do
+      within_search_results_for(work.url) do
+        expect(page).to have_n_results(1)
         expect(page.html).to have_excerpt('example.com')
       end
     end
@@ -85,7 +102,10 @@ feature "Search", search: true do
       notice = create(:notice)
       notice.categories.create!(name: "arbitrary")
 
-      expect_search_to_find("arbitrary", notice)
+      within_search_results_for("arbitrary") do
+        expect(page).to have_n_results(1)
+        expect(page).to have_content(notice.title)
+      end
     end
 
     scenario "a category is destroyed" do
@@ -101,36 +121,10 @@ feature "Search", search: true do
       notice = create(:notice, categories: [category])
       category.update_attributes!(name: "arbitrary")
 
-      expect_search_to_find("arbitrary", notice)
-    end
-  end
-
-  def submit_search(term)
-    sleep 1 # required for indexing to complete
-
-    visit '/'
-
-    fill_in 'search', with: term
-    click_on 'submit'
-  end
-
-  def expect_search_to_find(term, notice)
-    submit_search(term)
-
-    expect(page).to have_css('.result', count: 1)
-
-    within('.result') do
-      expect(page).to have_content(notice.title)
-
-      yield if block_given?
-    end
-  end
-
-  def within_search_facets(term, notice)
-    submit_search(term)
-
-    within('.results-facets') do
-      yield if block_given?
+      within_search_results_for("arbitrary") do
+        expect(page).to have_n_results(1)
+        expect(page).to have_content(notice.title)
+      end
     end
   end
 
@@ -145,4 +139,5 @@ feature "Search", search: true do
   def have_excerpt(excerpt, prefix = nil, suffix = nil)
     include([prefix, "<em>#{excerpt}</em>", suffix].compact.join(' '))
   end
+
 end
