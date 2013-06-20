@@ -31,4 +31,23 @@ describe 'notices/new.html.erb' do
       have_css("option:nth-child(#{n})", text: value)
     end
   end
+
+  context "step headings" do
+    it "has the correct step headings" do
+      ordered_sections = %w( notice-body works submitter recipient )
+      assign(:notice, build(:notice, role_names: %w( submitter recipient )))
+
+      render
+
+      ordered_sections.each_with_index do |section, index|
+        expect(page).to have_step_heading(section, index + 1)
+      end
+    end
+
+    private
+
+    def have_step_heading(section_class, step_number)
+      have_css(".#{section_class} h4:contains('Step #{step_number}.')")
+    end
+  end
 end

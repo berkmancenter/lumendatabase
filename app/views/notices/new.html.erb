@@ -46,10 +46,11 @@
       <% end %>
     </section>
 
+    <% step_number = 3 %>
     <%= form.simple_fields_for(:entity_notice_roles) do |roles_form| %>
       <% role = roles_form.object.name.titleize %>
       <section class="role <%= role.downcase %>">
-        <h4><span class="wip">Step 3.</span> <%= role %> of the Notice</h4>
+        <h4><span>Step <%= step_number %>.</span> <%= role %> of the Notice</h4>
         <p>Enter information about the <b><%= role %></b> of the DMCA takedown notice.</p>
         <%= roles_form.input :name, as: :hidden %>
         <%= roles_form.simple_fields_for(:entity) do |entity_form| %>
@@ -72,6 +73,7 @@
         <% end %>
         </div>
       </section>
+      <% step_number += 1 %>
     <% end %>
 
     <div class="buttons-wrapper">
