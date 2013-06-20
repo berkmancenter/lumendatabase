@@ -17,6 +17,8 @@ class Notice < ActiveRecord::Base
   has_many :categories, through: :categorizations
   has_many :category_relevant_questions,
     through: :categories, source: :relevant_questions
+  has_many :related_blog_entries,
+    through: :categories, source: :blog_entries, uniq: true
   has_many :entity_notice_roles, dependent: :destroy, inverse_of: :notice
   has_many :entities, through: :entity_notice_roles
   has_many :file_uploads

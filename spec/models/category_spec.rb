@@ -8,6 +8,8 @@ describe Category do
 
   it { should have_many(:categorizations).dependent(:destroy) }
   it { should have_many(:notices).through(:categorizations) }
+  it { should have_many(:blog_entry_categorizations).dependent(:destroy) }
+  it { should have_many(:blog_entries).through(:blog_entry_categorizations) }
   it { should have_and_belong_to_many :relevant_questions }
 
   context "#description_html" do
