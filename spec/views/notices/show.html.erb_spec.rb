@@ -111,4 +111,21 @@ describe 'notices/show.html.erb' do
     expect(page).to have_content("Re: Some subject")
   end
 
+  it "displays related blog entries" do
+    blog_entries = build_stubbed_list(:blog_entry, 3)
+    notice = build(:notice)
+    notice.stub(:related_blog_entries).and_return(blog_entries)
+    assign(:notice, notice)
+
+    render
+
+    blog_entries.each do |blog_entry|
+      within("#blog_entry_#{blog_entry.id}") do
+        expect(page).to(
+          contain_link(blog_entry_path(blog_entry), blog_entry.title)
+        )
+      end
+    end
+  end
+
 end

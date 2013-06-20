@@ -2,7 +2,7 @@ Notice.index.delete
 Notice.create_elasticsearch_index
 
 #Execute seeds in a logical order
-%w(relevant_questions.rb blog_entries.rb categories.rb).each do|file|
+%w(relevant_questions.rb categories.rb blog_entries.rb).each do|file|
   load("db/seeds/#{file}")
 end
 

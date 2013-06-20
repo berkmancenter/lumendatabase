@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130613142221) do
+ActiveRecord::Schema.define(:version => 20130620152026) do
 
   create_table "blog_entries", :force => true do |t|
     t.integer  "user_id"
@@ -23,6 +23,14 @@ ActiveRecord::Schema.define(:version => 20130613142221) do
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
   end
+
+  create_table "blog_entry_categorizations", :force => true do |t|
+    t.integer "blog_entry_id"
+    t.integer "category_id"
+  end
+
+  add_index "blog_entry_categorizations", ["blog_entry_id"], :name => "index_blog_entry_categorizations_on_blog_entry_id"
+  add_index "blog_entry_categorizations", ["category_id"], :name => "index_blog_entry_categorizations_on_category_id"
 
   create_table "categories", :force => true do |t|
     t.string "name",        :null => false

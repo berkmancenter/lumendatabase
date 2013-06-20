@@ -5,7 +5,10 @@ describe BlogEntry do
     it { should validate_presence_of(:author) }
     it { should validate_presence_of(:title) }
   end
+
   it { should belong_to(:user) }
+  it { should have_many(:blog_entry_categorizations).dependent(:destroy) }
+  it { should have_many(:categories).through(:blog_entry_categorizations) }
 
   it_behaves_like "an object with a recent scope"
 

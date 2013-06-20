@@ -112,6 +112,39 @@ describe Notice do
     end
   end
 
+  context "#related_blog_entries" do
+    it "returns blog_entries that share categories with itself" do
+      notice = create(:notice, :with_categories)
+      expected_blog_entries = [
+        create(:blog_entry, categories: [notice.categories.sample]),
+        create(:blog_entry, categories: [notice.categories.sample]),
+        create(:blog_entry, categories: [notice.categories.sample])
+      ]
+
+      related_blog_entries = notice.related_blog_entries
+
+      expect(related_blog_entries).to match_array(expected_blog_entries)
+    end
+
+    it "does not return blog entries with different categories" do
+      notice = create(:notice, :with_categories)
+      create(:blog_entry, categories: [create(:category)])
+
+      related_blog_entries = notice.related_blog_entries
+
+      expect(related_blog_entries).to be_empty
+    end
+
+    it "does not duplicate blog entries" do
+      notice = create(:notice, :with_categories)
+      blog_entry = create(:blog_entry, categories: notice.categories)
+
+      related_blog_entries = notice.related_blog_entries
+
+      expect(related_blog_entries).to eq [blog_entry]
+    end
+  end
+
   context "search index" do
     before do
       tire = double("Tire proxy").as_null_object

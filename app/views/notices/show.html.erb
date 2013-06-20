@@ -5,7 +5,7 @@
   <section class="body">
     <header id="entities">
       <% if @notice.submitter %>
-        <%= render @notice.submitter,  css_class: 'sender' %>
+        <%= render @notice.submitter, css_class: 'sender' %>
       <% end %>
       <% if @notice.recipient %>
         <%= render @notice.recipient, css_class: 'receiver' %>
@@ -36,6 +36,10 @@
 
   <section id="relevant-questions">
     <%= render @notice.all_relevant_questions %>
+  </section>
+
+  <section id="related-blog-entries">
+    <%= render partial: 'blog_entry', collection: @notice.related_blog_entries %>
   </section>
 
 </article>

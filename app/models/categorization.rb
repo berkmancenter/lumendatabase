@@ -1,4 +1,7 @@
+require 'categorizer'
+
 class Categorization < ActiveRecord::Base
-  belongs_to :notice, touch: true
-  belongs_to :category
+  extend Categorizer
+
+  categorizes :notice, touch: true
 end
