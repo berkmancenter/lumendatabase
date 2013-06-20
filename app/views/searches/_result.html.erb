@@ -1,5 +1,5 @@
 <%= content_tag_for(:li, result, class: "result") do %>
-  <h3 class="title"><%= link_to result.title, result %></h3>
+  <h3 class="title"><%= link_to result.title, notice_path(result.id) %></h3>
   <div class="metadata">
     <div class="date-received"><%= date_received(result) %></div>
     <div class="sender-receiver">
@@ -8,7 +8,11 @@
       <a href="#" class="receiver"><%= result.recipient_name %></a>
     </div>
     <ol class="excerpt">
-      <%= render 'highlights', result: result %>
+      <% result.with_excerpts do |excerpt| %>
+        <li class="excerpt">
+          <%= sanitize(excerpt, tags: 'em') %>
+        </li>
+      <% end %>
     </ol>
     <div class="category">
       <%= render 'shared/category_list', categories: result.categories %>
