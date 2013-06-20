@@ -44,6 +44,12 @@ FactoryGirl.define do
         notice.works = build_list(:work, 3, :with_infringing_urls)
       end
     end
+
+    trait :with_facet_data do
+      with_categories
+      role_names ['submitter', 'recipient']
+      date_received Time.now
+    end
   end
 
   factory :file_upload do

@@ -1,0 +1,8 @@
+<li class="<%= type %>">
+  <span><%= type.titleize %></span>
+  <select class="facet" name="<%= type %>">
+    <% results.facets[type]['terms'].each do |term| %>
+      <option><%= term['term'] %> - <%= term['count'] %> total</option>
+    <% end %>
+  </select>
+</li>

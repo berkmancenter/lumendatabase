@@ -2,10 +2,7 @@ require 'spec_helper'
 
 feature "Searching via the API", search: true do
   before do
-    FakeWeb.clean_registry
-    FakeWeb.allow_net_connect = true
-
-    Tire.index(Notice.index_name).delete
+    enable_live_searches
   end
 
   scenario "the results array has relevant metadata" do

@@ -6,4 +6,8 @@ module SearchHelper
       end
     end
   end
+
+  def formatted_facet_range_time(time)
+    Time.at(time / 1000).to_datetime.to_s(:simple)
+  end
 end

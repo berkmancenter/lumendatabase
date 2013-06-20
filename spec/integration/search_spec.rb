@@ -3,10 +3,7 @@ require 'yaml'
 
 feature "Search", search: true do
   before do
-    FakeWeb.clean_registry
-    FakeWeb.allow_net_connect = true
-
-    Tire.index(Notice.index_name).delete
+    enable_live_searches
   end
 
   scenario "displays search terms" do
@@ -125,6 +122,14 @@ feature "Search", search: true do
     within('.result') do
       expect(page).to have_content(notice.title)
 
+      yield if block_given?
+    end
+  end
+
+  def within_search_facets(term, notice)
+    submit_search(term)
+
+    within('.results-facets') do
       yield if block_given?
     end
   end

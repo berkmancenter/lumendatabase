@@ -2,6 +2,16 @@
   <header>
     <div class="result-stats">About <%= @results.total_entries %> results</div>
   </header>
+  <%= form_tag(search_path, method: :get) do %>
+    <% if @results.facets %>
+      <ol class="results-facets">
+        <%= render 'term_facet', type: 'submitter_name', results: @results %>
+        <%= render 'term_facet', type: 'recipient_name', results: @results %>
+        <%= render 'term_facet', type: 'categories', results: @results %>
+        <%= render 'range_facet', type: 'date_received', results: @results %>
+      </ol>
+    <% end %>
+  <% end %>
   <ol class="results-list">
     <%= render partial: 'result', collection: @results %>
   </ol>
