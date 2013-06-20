@@ -1,8 +1,10 @@
-<li class="<%= type %>">
-  <span><%= type.titleize %></span>
-  <select class="facet" name="<%= type %>">
+<li class="dropdown">
+  <a class="dropdown-toggle title" data-toggle="dropdown" href="#"><%= type.titleize %></a>
+  <ol class="dropdown-menu <%= type %>" role="menu">
     <% results.facets[type]['terms'].each do |term| %>
-      <option><%= term['term'] %> - <%= term['count'] %> total</option>
+      <li class="facet" name="<%= type %>">
+        <a href="#" class="facet"><%= term['term'] %><span class="total-count"><%= term['count'] %> Results</span></a>
+      </li>
     <% end %>
-  </select>
+  </ol>
 </li>

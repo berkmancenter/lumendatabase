@@ -125,7 +125,7 @@ header.app {
 //************************************************************************//
 // Dropdown Menu
 //************************************************************************//
-li.dropdown {
+.dropdown {
   &.open > .dropdown-menu {
     display: block; // Open dropdown menu on click
   }

@@ -14,10 +14,10 @@ describe 'searches/show.html.erb' do
 
     render
 
-    expect(page).to have_css('.submitter_name option', count: 2)
-    expect(page).to have_css('.recipient_name option', count: 1)
-    expect(page).to have_css('.categories option', count: 3)
-    expect(page).to have_css('.date_received option', count: 1)
+    expect(page).to have_css('.submitter_name span', count: 2)
+    expect(page).to have_css('.recipient_name span', count: 1)
+    expect(page).to have_css('.categories span', count: 3)
+    expect(page).to have_css('.date_received span', count: 1)
   end
 
   it "includes the notice data" do

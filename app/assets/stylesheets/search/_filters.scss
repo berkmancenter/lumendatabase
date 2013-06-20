@@ -1,0 +1,105 @@
+%active-filter {
+  position: relative;
+
+  &:before {
+    content: "\2022";
+    font-size: 28px;
+    left: 9px;
+    position: absolute;
+    top: 7px;
+    font-family: $helvetica;
+    color: $shadow-4;
+  }
+}
+
+%hover-effect {
+  box-shadow: 0 -4px 0 $shadow-4;
+  color: $base-title-color;
+}
+
+
+ol.results-facets {
+  $border-color: #ddd;
+  @include clearfix;
+  // background: #fff;
+  border-bottom: 1px solid $border-color;
+  margin: 0;
+  padding: 0 0 0 15px;
+  @extend %gray-gradient;
+
+  > li {
+    float: left;
+    list-style: none;
+    border-right: 1px solid $border-color;
+  }
+
+  li.title {
+    padding: 10px 30px 10px 20px;
+    font-size: $base-font-size-small-2;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: $base-title-color;
+  }
+
+  li.dropdown {
+    position: relative;
+    @include transition(padding 0.1s);
+
+    &:hover,
+    &.open a.dropdown-toggle {
+      @extend %hover-effect;
+    }
+
+    &.active {
+      a.dropdown-toggle {
+        color: $shadow-4;
+      }
+    }
+
+    a.dropdown-toggle {
+      color: lighten(desaturate($base-title-color, 15%), 15%);
+      display: block;
+      font-size: $base-font-size-small-1 - 1px;
+      font-weight: 600;
+      padding: 10px 30px 10px 20px;
+      position: relative;
+      text-decoration: none;
+
+      &:after {
+        @include triangle(10px, darken($base-border-color, 15%), down);
+        position: absolute;
+        content: "";
+        right: 10px;
+        top: calc(50% - 2px);
+      }
+    }
+  }
+
+  ol.dropdown-menu {
+    @include ui-dropdown(left, $width: 300px, $nub-bg-color: none, $nub-border-color: none);
+    margin-top: 5px;
+    border-radius: 2px;
+    font-size: $base-font-size-small-1;
+    font-weight: 600;
+    margin-left: -10x;
+
+    li.active {
+      @extend %active-filter;
+    }
+
+    a {
+      color: darken($base-font-color-2, 15%);
+      padding-left: 28px;
+    }
+  }
+}
+
+.total-count {
+  display: block;
+  font-size: 10px;
+  color: #888;
+  font-weight: 700;
+  line-height: 1.2;
+  // float: right;
+  margin-top: 2px;
+}
