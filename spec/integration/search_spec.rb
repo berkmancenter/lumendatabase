@@ -9,6 +9,14 @@ feature "Search", search: true do
     Tire.index(Notice.index_name).delete
   end
 
+  scenario "displays search terms" do
+    notice = create(:notice, title: "The Lion King on Youtube")
+
+    submit_search 'awesome blossom'
+
+    expect(page).to have_css("input#search[value='awesome blossom']")
+  end
+
   scenario "for full-text on a single model" do
     notice = create(:notice, title: "The Lion King on Youtube")
 
