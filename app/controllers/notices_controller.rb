@@ -13,6 +13,7 @@ class NoticesController < ApplicationController
 
     respond_to do |format|
       if @notice.save
+        @notice.mark_for_review
         format.html { redirect_to :root, notice: "Notice created!" }
         format.json { head :created, location: @notice }
       else
@@ -40,6 +41,7 @@ class NoticesController < ApplicationController
       :title,
       :subject,
       :body,
+      :legal_other,
       :date_received,
       :source,
       :tag_list,

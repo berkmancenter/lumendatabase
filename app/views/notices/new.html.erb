@@ -23,6 +23,7 @@
       </div>
       <div class="body-wrapper right attach">
         <%= form.input :body, label: "Notice Body" %>
+        <%= form.input :legal_other, label: "Legal (Other)" %>
         <%= form.simple_fields_for(:file_uploads) do |file_uploads_form| %>
           <%= file_uploads_form.input :file, label: 'Attach Notice' %>
         <% end %>

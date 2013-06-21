@@ -182,4 +182,45 @@ describe Notice do
       entity.destroy
     end
   end
+
+  context "#redacted" do
+    it "returns '#{Notice::UNDER_REVIEW_VALUE}' when review is required" do
+      notice = Notice.new(review_required: true, legal_other: "A value")
+
+      expect(notice.redacted(:legal_other)).to eq Notice::UNDER_REVIEW_VALUE
+    end
+
+    it "returns the actual value when review is not required" do
+      notice = Notice.new(review_required: false, legal_other: "A value")
+
+      expect(notice.redacted(:legal_other)).to eq "A value"
+    end
+  end
+
+  context "#mark_for_review" do
+    it "Sets review_required to true if risk is assessed as high" do
+      notice = create(:notice, review_required: false)
+      mock_assessment(notice, true)
+
+      notice.mark_for_review
+
+      expect(notice).to be_review_required
+    end
+
+    it "Sets review_required to false if risk is assessed as low" do
+      notice = create(:notice, review_required: true)
+      mock_assessment(notice, false)
+
+      notice.mark_for_review
+
+      expect(notice).not_to be_review_required
+    end
+
+    def mock_assessment(notice, high_risk)
+      assessment = RiskAssessment.new(notice)
+      assessment.stub(:high_risk?).and_return(high_risk)
+
+      RiskAssessment.should_receive(:new).with(notice).and_return(assessment)
+    end
+  end
 end
