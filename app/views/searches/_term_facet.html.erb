@@ -1,9 +1,13 @@
-<li class="dropdown">
-  <a class="dropdown-toggle title" data-toggle="dropdown" href="#"><%= type.titleize %></a>
+<li class="dropdown <%= type %> <%= facet_dropdown_active_indicator(type) %>">
+<a class="dropdown-toggle title <%= type %>" data-toggle="dropdown" href="#">
+  <%= type.titleize %>
+</a>
   <ol class="dropdown-menu <%= type %>" role="menu">
     <% results.facets[type]['terms'].each do |term| %>
-      <li class="facet" name="<%= type %>">
-        <a href="#" class="facet"><%= term['term'] %><span class="total-count"><%= term['count'] %> Results</span></a>
+      <li class="facet <%= facet_active_indicator(type, term['term']) %>" name="<%= type %>">
+      <a href="<%= url_for(search_path(q: params[:q], type => term['term'] )) %>">
+        <%= term['term'] %><span class="total-count"><%= term['count'] %> Results</span>
+      </a>
       </li>
     <% end %>
   </ol>
