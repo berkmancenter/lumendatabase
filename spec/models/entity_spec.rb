@@ -24,4 +24,20 @@ describe Entity do
     end
   end
 
+  context "#addressed?" do
+    it "returns false when all address fields are empty" do
+      entity = Entity.new
+
+      expect(entity).to_not be_addressed
+    end
+
+    Entity::ADDRESS_FIELDS.each do |field|
+      it "returns true when '#{field}' is present" do
+        entity = Entity.new(field => "not-empty")
+
+        expect(entity).to be_addressed
+      end
+    end
+  end
+
 end

@@ -5,10 +5,10 @@
   <section class="body">
     <header id="entities">
       <% if @notice.submitter %>
-        <%= render @notice.submitter, css_class: 'sender' %>
+        <%= render @notice.submitter, role: 'sender' %>
       <% end %>
       <% if @notice.recipient %>
-        <%= render @notice.recipient, css_class: 'receiver' %>
+        <%= render @notice.recipient, role: 'receiver' %>
       <% end %>
     </header>
 
