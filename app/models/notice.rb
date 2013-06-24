@@ -13,6 +13,8 @@ class Notice < ActiveRecord::Base
     works.description works.url infringing_urls.url
   )
 
+  UNDER_REVIEW_VALUE = 'Under review'
+
   has_many :categorizations, dependent: :destroy
   has_many :categories, through: :categorizations
   has_many :category_relevant_questions,
@@ -39,6 +41,8 @@ class Notice < ActiveRecord::Base
   accepts_nested_attributes_for :works
 
   after_touch { tire.update_index }
+
+  delegate :country_code, to: :recipient, allow_nil: true
 
   mapping do
     indexes :id, index: 'not_analyzed', include_in_all: false
@@ -82,6 +86,18 @@ class Notice < ActiveRecord::Base
 
   def recipient_name
     recipient && recipient.name
+  end
+
+  def mark_for_review
+    update_column(:review_required, RiskAssessment.new(self).high_risk?)
+  end
+
+  def redacted(field)
+    if review_required?
+      UNDER_REVIEW_VALUE
+    else
+      send(field)
+    end
   end
 
   private

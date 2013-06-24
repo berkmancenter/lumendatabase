@@ -1,10 +1,12 @@
 Notice.index.delete
 Notice.create_elasticsearch_index
 
-#Execute seeds in a logical order
-%w(relevant_questions.rb categories.rb blog_entries.rb).each do|file|
-  load("db/seeds/#{file}")
-end
+# Execute seeds in a logical order
+seed_files = %w(
+  relevant_questions.rb categories.rb blog_entries.rb risk_triggers.rb
+)
+
+seed_files.each { |file| load("db/seeds/#{file}") }
 
 class FakeNotice
   attr_reader :title, :source, :subject, :date_received

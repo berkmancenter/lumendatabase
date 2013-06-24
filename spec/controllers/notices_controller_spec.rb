@@ -124,6 +124,9 @@ describe NoticesController do
   end
 
   def notice_double
-    double("Notice", save: true, notice_id: 1)
+    Notice.new.tap do |notice|
+      notice.stub(:save).and_return(true)
+      notice.stub(:mark_for_review)
+    end
   end
 end
