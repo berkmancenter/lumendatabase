@@ -59,14 +59,16 @@ class Notice < ActiveRecord::Base
       analyzer: 'keyword',  as: 'recipient_name', include_in_all: false
     indexes :categories, type: 'object', as: 'categories'
     indexes :category_facet,
-      analyzer: 'keyword', as: ->(notice){ notice.categories.map(&:name) },
+      analyzer: 'keyword', as: ->(notice) { notice.categories.map(&:name) },
       include_in_all: false
     indexes :works,
       type: 'object',
-      as: ->(notice){ notice.works.as_json({ only: [:description, :url] }) }
-    indexes :infringing_urls,
-      type: 'object',
-      as: ->(notice){ notice.infringing_urls.as_json({ only: :url})}
+      as: -> (notice){
+        notice.works.as_json({
+          only: [:description, :url],
+          include: { infringing_urls: { only: [:url] } }
+        })
+      }
   end
 
   def all_relevant_questions

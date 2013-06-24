@@ -110,7 +110,7 @@ FactoryGirl.define do
     description "Something copyrighted"
 
     trait :with_infringing_urls do
-      before(:create) do |work|
+      after(:build) do |work|
         work.infringing_urls = build_list(:infringing_url, 3)
       end
     end
