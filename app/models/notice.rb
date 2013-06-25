@@ -91,6 +91,10 @@ class Notice < ActiveRecord::Base
     recipient && recipient.name
   end
 
+  def auto_redact
+    RedactsNotices.new.redact(self)
+  end
+
   def mark_for_review
     update_column(:review_required, RiskAssessment.new(self).high_risk?)
   end
