@@ -11,8 +11,34 @@ feature "Searching via the API", search: true do
       metadata = json['meta']
       expect(metadata).to have_key('current_page').with_value(1)
       expect(metadata).to have_key('next_page').with_value(nil)
-      expect(metadata).to have_key('q').with_value("king")
+      expect(metadata).to have_key('query').with_value("term" => "king")
       expect(json).to have_key('notices')
+    end
+  end
+
+  context "facets" do
+    scenario "returns facet information" do
+      notice = create(:notice, :with_facet_data, title: "The Lion King")
+
+      expect_api_search_to_find("king") do |json|
+        facets = json['meta']['facets']
+        expect(facets.keys).to include(
+          'submitter_name', 'recipient_name', 'categories', 'date_received'
+        )
+      end
+    end
+
+    scenario "return facet query information" do
+      notice = create(:notice, :with_facet_data, title: "The Lion King")
+      expect_api_search_to_find(
+        "king", submitter_name: notice.submitter_name
+      ) do |json|
+        metadata = json['meta']
+        expect(metadata).to have_key('query').with_value(
+          "term" => "king",
+          "submitter_name" => notice.submitter_name
+        )
+      end
     end
   end
 
@@ -33,9 +59,9 @@ feature "Searching via the API", search: true do
     end
   end
 
-  def expect_api_search_to_find(term)
+  def expect_api_search_to_find(term, options = {})
     sleep 1
-    get('/search.json', { q: term })
+    get('/search.json', options.merge( term: term ) )
 
     json = JSON.parse(response.body)
     yield(json) if block_given?

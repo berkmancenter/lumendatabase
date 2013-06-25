@@ -1,7 +1,7 @@
 class SearchesController < ApplicationController
 
   def show
-    q = params[:q]
+    term = params[:term]
     p = params[:page]
     category_filter = params[:categories]
     submitter_name_filter = params[:submitter_name]
@@ -11,7 +11,7 @@ class SearchesController < ApplicationController
     date_filters = date_received_filters
 
     @results = Notice.search(page: p) do
-      query { match(:_all, q) }
+      query { match(:_all, term) }
 
       if category_filter.present?
         filter :terms, category_facet: [ category_filter ]
@@ -81,8 +81,25 @@ class SearchesController < ApplicationController
     %i(
       current_page next_page offset per_page
       previous_page total_entries total_pages
-    ).each_with_object({ q: params['q'] }) do |attribute, memo|
+    ).each_with_object(query_meta(results)) do |attribute, memo|
       memo[attribute] = results.send(attribute)
+    end
+  end
+
+  def query_meta(results)
+    {
+      query: {
+        term: params[:term]
+      }.merge(facet_query_meta(results)),
+      facets: results.facets
+    }
+  end
+
+  def facet_query_meta(results)
+    results.facets.keys.each_with_object({}) do |facet, memo|
+      if params[facet.to_sym].present?
+        memo[facet.to_sym] = params[facet.to_sym]
+      end
     end
   end
 
