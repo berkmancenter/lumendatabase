@@ -176,6 +176,19 @@ Return a JSON-encoded representation of selected notice attributes.
       "Anticircumvention (DMCA)",
       "Bookmarks",
       "Chilling Effects"
+    ],
+    "submitter_name": "Joe Lawyer",
+    "recipient_name": "Google, Inc.",
+    "works": [
+      {
+        "description": "Lion King Video",
+        "url": "http://www.example.com/lion_king.mp4",
+        "infringing_urls": [
+          { "url": "http://www.example.com/infringing1" },
+          { "url": "http://www.example.com/infringing2" },
+          { "url": "http://www.example.com/infringing3" }
+        ]
+      }
     ]
   }
 }
@@ -291,6 +304,19 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'http://c
         "Trademark",
         "DMCA Notices",
         "John Doe Anonymity"
+      ],
+      "submitter_name": "Joe Lawyer",
+      "recipient_name": "Google, Inc.",
+      "works": [
+        {
+          "description": "Lion King Video",
+          "url": "http://www.example.com/lion_king.mp4",
+          "infringing_urls": [
+            { "url": "http://www.example.com/infringing1" },
+            { "url": "http://www.example.com/infringing2" },
+            { "url": "http://www.example.com/infringing3" }
+          ]
+        }
       ],
       "score": 0.64636606
     }
