@@ -2,131 +2,141 @@ require 'spec_helper'
 
 describe NoticesController do
   context "#show" do
-    it "successfully loads the notice by ID" do
-      Notice.should_receive(:find).with('42')
+    it "finds the notice by ID" do
+      notice = Notice.new
+      Notice.should_receive(:find).with('42').and_return(notice)
 
       get :show, id: 42
 
-      expect(response).to be_successful
+      expect(assigns(:notice)).to eq notice
     end
 
-    it "renders the show template" do
-      Notice.stub(:find)
+    context "as HTML" do
+      it "renders a template" do
+        stub_find_notice
 
-      get :show, id: 1
+        get :show, id: 1
 
-      expect(response).to render_template(:show)
-    end
-  end
-
-  context "#show as JSON" do
-    it "serializes the notice metadata" do
-      notice = create(:notice)
-
-      get :show, id: notice.id, format: :json
-
-      json = JSON.parse(response.body)["notice"]
-      expect(json).to have_key(:id).with_value(notice.id)
-      expect(json).to have_key(:title).with_value(notice.title)
-      expect(json).to have_key(:body).with_value(notice.body)
-      expect(json).to have_key(:date_received).with_value(notice.date_received)
+        expect(response).to be_successful
+        expect(response).to render_template(:show)
+      end
     end
 
-    it "includes the notice category names" do
-      notice = create(:notice, :with_categories)
+    context "as JSON" do
+      it "returns a serialized notice" do
+        notice = stub_find_notice
+        serialized = NoticeSerializer.new(notice)
+        NoticeSerializer.should_receive(:new).
+          with(notice, anything).and_return(serialized)
 
-      get :show, id: notice.id, format: :json
+        get :show, id: 1, format: :json
 
-      json = JSON.parse(response.body)["notice"]
-      expect(json).to have_key(:categories)
-      expect(json["categories"]).to match_array notice.categories.map(&:name)
+        json = JSON.parse(response.body)["notice"]
+        expect(json).to have_key(:id).with_value(notice.id)
+        expect(json).to have_key(:title).with_value(notice.title)
+      end
+    end
+
+    def stub_find_notice
+      Notice.new.tap { |notice| Notice.stub(:find).and_return(notice) }
     end
   end
 
-  context "#create from JSON" do
-    it "accepts JSON parameters" do
-      post :create, notice: {
-        title: 'title',
-        works_attributes: [
-          url: "http://example.com/the_work",
-          description: "Work description",
-          infringing_urls_attributes: [
-            { url: "http://example.com/infringer_1" },
-            { url: "http://example.com/infringer_2" }
-          ]
-        ],
-        entity_notice_roles_attributes: [
-          {
-            name: 'principal',
-            entity_attributes: { name: 'An entity' }
-          }
-        ]
-      }, format: :json
+  context "#create" do
+    it "initializes a notice from params" do
+      notice = Notice.new
+      notice_params = HashWithIndifferentAccess.new(title: "A title")
+      Notice.should_receive(:new).with(notice_params).and_return(notice)
 
-      expect(response).to be_successful
-      expect(response.headers['Location']).to eq notice_url(Notice.last)
+      post :create, notice: notice_params
+
+      expect(assigns(:notice)).to eq notice
     end
 
-    it "returns a useful status code when a required parameter is missing" do
-      post :create, notice: { title: "A title" }, format: :json
+    it "auto-redacts the notice" do
+      notice = stub_new_notice
+      notice.should_receive(:auto_redact)
 
-      expect(response).to be_unprocessable
+      post_create
     end
 
-    it "returns errors about missing required parameters" do
-      post :create, notice: { title: "A title" }, format: :json
+    it "marks the notice for review" do
+      notice = stub_new_notice
+      notice.should_receive(:mark_for_review)
 
-      json = JSON.parse(response.body)
-      expect(json).to have_key('works')
-    end
-  end
-
-  context "#create from HTML" do
-    it "redirects when saved successfully" do
-      post_valid_notice(format: :html)
-
-      expect(response).to redirect_to(:root)
+      post_create
     end
 
-    it "renders the new template" do
-      post_invalid_notice(format: :html)
+    context "as HTML" do
+      it "redirects when saved successfully" do
+        stub_new_notice
 
-      expect(response).to render_template(:new)
+        post_create
+
+        expect(response).to redirect_to(:root)
+      end
+
+      it "renders the new template when unsuccessful" do
+        notice = stub_new_notice
+        notice.stub(:save).and_return(false)
+
+        post_create
+
+        expect(response).to render_template(:new)
+      end
     end
-  end
 
-  private
+    context "as JSON" do
+      it "returns a proper Location header when saved successfully" do
+        notice = stub_new_notice
 
-  def post_valid_notice(options = {})
-    notice = notice_double
+        post_create :json
 
-    yield(notice) if block_given?
+        expect(response).to be_successful
+        expect(response.headers['Location']).to eq notice_url(notice)
+      end
 
-    post_notice(notice, options)
-  end
+      it "returns a useful status code when there are errors" do
+        notice = stub_new_notice
+        notice.stub(:save).and_return(false)
 
-  def post_invalid_notice(options = {})
-    notice = notice_double
-    notice.stub(:save).and_return(false)
-    notice.stub(:errors).and_return(double(full_messages: []))
+        post_create :json
 
-    yield(notice) if block_given?
+        expect(response).to be_unprocessable
+      end
 
-    post_notice(notice, options)
-  end
+      it "includes any errors in the response" do
+        notice = stub_new_notice
+        notice.stub(:save).and_return(false)
+        notice.stub(:errors).
+          and_return(mock_errors(notice, works: "can't be blank"))
 
-  def post_notice(notice, options = {})
-    format = options.fetch(:format) { :json }
+        post_create :json
 
-    Notice.stub(:new).and_return(notice)
+        json = JSON.parse(response.body)
+        expect(json).to have_key('works').with_value(["can't be blank"])
+      end
+    end
 
-    post :create, notice: { title: "A title" }, format: format
-  end
+    def stub_new_notice
+      build_stubbed(:notice).tap do |notice|
+        notice.stub(:save).and_return(true)
+        notice.stub(:auto_redact)
+        notice.stub(:mark_for_review)
+        Notice.stub(:new).and_return(notice)
+      end
+    end
 
-  def notice_double
-    Notice.new.tap do |notice|
-      notice.stub(:save).and_return(true)
-      notice.stub(:mark_for_review)
+    def post_create(format = :html)
+      post :create, notice: { title: "A title" }, format: format
+    end
+
+    def mock_errors(model, field_errors = {})
+      ActiveModel::Errors.new(model).tap do |errors|
+        field_errors.each do |field, message|
+          errors.add(field, message)
+        end
+      end
     end
   end
 end

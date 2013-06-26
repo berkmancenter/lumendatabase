@@ -197,6 +197,17 @@ describe Notice do
     end
   end
 
+  context "#auto_redact" do
+    it "calls RedactsNotices#redact on itself" do
+      notice = Notice.new
+      redactor = RedactsNotices.new
+      redactor.should_receive(:redact).with(notice)
+      RedactsNotices.should_receive(:new).and_return(redactor)
+
+      notice.auto_redact
+    end
+  end
+
   context "#mark_for_review" do
     it "Sets review_required to true if risk is assessed as high" do
       notice = create(:notice, review_required: false)

@@ -10,6 +10,7 @@ class NoticesController < ApplicationController
 
   def create
     @notice = Notice.new(notice_params)
+    @notice.auto_redact
 
     respond_to do |format|
       if @notice.save
