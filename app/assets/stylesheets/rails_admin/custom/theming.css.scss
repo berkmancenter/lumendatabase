@@ -1,0 +1,12 @@
+#redaction-form {
+  margin-top: 25px;
+
+  label {
+    font-weight: bold;
+  }
+
+  #redacted-fields {
+    float: left;
+    margin-right: 20px;
+  }
+}
