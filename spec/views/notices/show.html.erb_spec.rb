@@ -39,7 +39,12 @@ describe 'notices/show.html.erb' do
     within('#entities') do
       notice.entities.each do |entity|
         expect(page).to have_content(entity.name)
-        expect(page).to have_content("[Address Redacted]")
+        expect(page).to have_content(entity.city)
+        expect(page).to have_content(entity.state)
+        expect(page).to have_content(entity.country_code)
+        expect(page).to have_content("[Private]")
+        expect(page).not_to have_content(entity.address_line_1)
+        expect(page).not_to have_content(entity.address_line_2)
       end
     end
   end

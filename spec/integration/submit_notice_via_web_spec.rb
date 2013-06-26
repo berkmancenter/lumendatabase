@@ -56,28 +56,6 @@ feature "notice submission" do
       within('section.recipient') do
         fill_in "Name", with: "Recipient the first"
         select "organization", from: "Recipient Kind"
-      end
-
-      within('section.submitter') do
-        fill_in "Name", with: "Submitter the first"
-      end
-    end
-
-    open_recent_notice
-
-    within('#entities') do
-      expect(page).to have_content "Recipient the first"
-      expect(page).to have_content "organization"
-      expect(page).to have_content "Submitter the first"
-      expect(page).to_not have_content "[Address Redacted]"
-    end
-  end
-
-  scenario "submitting a notice with addressed entities" do
-    submit_recent_notice do
-      within('section.recipient') do
-        fill_in "Name", with: "Recipient the first"
-        select "organization", from: "Recipient Kind"
         fill_in "Address Line 1", with: "Recipient Line 1"
         fill_in "Address Line 2", with: "Recipient Line 2"
         fill_in "City", with: "Recipient City"
@@ -93,7 +71,39 @@ feature "notice submission" do
     open_recent_notice
 
     within('#entities') do
-      expect(page).to have_content "[Address Redacted]"
+      expect(page).to have_content "Recipient the first"
+      expect(page).to have_content "organization"
+      expect(page).to have_content "[Private]"
+      expect(page).to have_content "Recipient City"
+      expect(page).to have_content "MA"
+      expect(page).to have_content "United States"
+
+      expect(page).to have_content "Submitter the first"
+    end
+  end
+
+  scenario "entity addresses are partially private" do
+    submit_recent_notice do
+      within('section.recipient') do
+        fill_in "Name", with: "Recipient the first"
+        fill_in "Address Line 1", with: "Recipient Line 1"
+        fill_in "Address Line 2", with: "Recipient Line 2"
+      end
+
+      within('section.submitter') do
+        fill_in "Name", with: "Submitter the first"
+        fill_in "Address Line 1", with: "Submitter Line 1"
+        fill_in "Address Line 2", with: "Submitter Line 2"
+      end
+    end
+
+    open_recent_notice
+
+    within('#entities') do
+      expect(page).not_to have_content "Recipient Line 1"
+      expect(page).not_to have_content "Recipient Line 2"
+      expect(page).not_to have_content "Submitter Line 1"
+      expect(page).not_to have_content "Submitter Line 2"
     end
   end
 
