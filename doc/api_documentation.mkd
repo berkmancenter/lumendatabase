@@ -1,6 +1,7 @@
 ## Create notice
 
-Submits a new Notice to the chillingeffects system via JSON-encoded parameters. Authentication is not required for now.
+Submits a new Notice to the chillingeffects system via JSON-encoded parameters.
+Authentication is not required for now.
 
 **Method**: `POST`
 
@@ -117,7 +118,8 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'http://c
 
 ### Successful Responses
 
-Successful responses will have HTTP status 201 (Created) and include a `Location:` HTTP header with the location of the created object.
+Successful responses will have HTTP status 201 (Created) and include a
+`Location:` HTTP header with the location of the created object.
 
 #### Example:
 
@@ -135,7 +137,8 @@ Content-Length: 1
 
 ### Unsuccessful responses
 
-Unsuccessful responses will have HTTP status 422 (Unprocessable Entity) and include a JSON response enumerating the validation failures.
+Unsuccessful responses will have HTTP status 422 (Unprocessable Entity) and
+include a JSON response enumerating the validation failures.
 
 #### Example:
 ```
@@ -248,36 +251,47 @@ Undefined.
 
 ## Search notices via fulltext
 
-Chillingeffects allows for paginatable full-text searches of notices and relevant metadata. Results are sorted with the most relevant at the top. Notice search results contain the same data as an individually-requested Notice, with an additional "score" field. "score" articulates how "relevant" this result is to the query term. Higher numbers are more relevant.
+Chillingeffects allows for paginatable full-text searches of notices and
+relevant metadata. Results are sorted with the most relevant at the top. Notice
+search results contain the same data as an individually-requested Notice, with
+an additional "score" field. "score" articulates how "relevant" this result is
+to the query term. Higher numbers are more relevant.
 
 **Method**: `GET`
 
-**Endpoint**: `http://chillingeffects.herokuapp.com/search?q=url_escaped_query&page=1`
+**Endpoint**: `http://chillingeffects.herokuapp.com/search?term=url_escaped_query&submitter_name=Joe%20Smith&page=1`
 
 **Parameters**
 
-| Parameters  | Description
-| ---         | ---
-| q           | The full-text query term
-| page        | The page you're requesting - defaults to the first page of results.
+| Parameters      | Description
+| ---             | ---
+| term            | The full-text query term
+| submitter_name  | Filter on submitter_name facet
+| recipient_name  | Filter on recipient_name facet
+| categories      | Filter on categories facet
+| date_received   | The date range (in microseconds since the unix epoc) separated by ".."
+| page            | The page you're requesting - defaults to the first page of results.
 
+See below for more information about available facets. You can get an idea of
+how facets are formatted by submitting facet-less fulltext queries and then
+inspecting the **Facets** metadata returned by the search.
 
 ### Successful Responses
 
-Return a JSON-encoded hash including an array of notices and metadata about the search results.
-
+Return a JSON-encoded hash including an array of notices and metadata about the
+search results.
 
 | Field       | Type       | Description
 | ---         | ---        | ---
-| notices     | Array      | An array of Notices encoded as JSON data structures
-| meta        | Hash       | Search Metadata about the results of the search
+| notices     | Array      | An array of Notices encoded as JSON data structures.
+| meta        | Hash       | Search Metadata about the results of the search. See **Search Metadata**.
 
 **Search Metadata**
 
-
 | Field         | Type      | Description
 | ---           | ---       | ---
-| q             | String    | The search query that was executed
+| query         | Query     | The search query meta information. See **Query** below.
+| facets        | Facet     | How the result set "falls" into metadata facets. See **Facets**
 | current_page  | Integer   | The page number of the current set of results.
 | next_page     | Integer   | The page number of the next set of results, or `null` if this is the last page.
 | offset        | Integer   | How many total results in the result set before the current list of results.
@@ -286,10 +300,58 @@ Return a JSON-encoded hash including an array of notices and metadata about the 
 | total_entries | Integer   | The total number of results for the search query.
 | total_pages   | Integer   | The total number of pages in this result set.
 
+**Query**
+
+| Field           | Type      | Description
+| ---             | ---       | ---
+| term            | String    | The full-text search term
+| submitter_name  | String    | The submitter_name value if this facet was submitted in this search.
+| recipient_name  | String    | The recipient_name value if this facet was submitted in this search.
+| categories      | String    | The category value if this facet was submitted in this search.
+| date_received   | String    | The date range used (in microseconds since the unix epoc) separated by ".."
+
+**Facet**
+
+Facets aggregate documents along specific metadata. [See the elasticsearch
+documentation for more information on
+facets](http://www.elasticsearch.org/guide/reference/api/search/facets/).
+
+Currently we're using [terms](http://www.elasticsearch.org/guide/reference/api/search/facets/terms-facet/) and [range](http://www.elasticsearch.org/guide/reference/api/search/facets/range-facet/) facets.
+
+| Facet           | Facet Type | Description
+| ---             | ---        | ---
+| submitter_name  | Terms      | The top 10 submitter_names in this result set.
+| recipient_name  | Terms      | The top 10 recipient_names in this result set.
+| categories      | Terms      | The top 10 categories in this result set.
+| date_received   | Range      | The available date range facets.
+
+**Terms Facet**
+
+Only the most relevant metadata is described below. See the elasticsearch
+documentation for more information. We only return the 10 most populous facets.
+
+| Field           | Type     | Description
+| ---             | ---      | ---
+| total           | Integer  | The total number of results that can be facetted on this term and query.
+| other           | Integer  | The number of results not included in the facets returned.
+| terms           | Array    | An array including the term and count of items that are in that term facet.
+
+**Range Facet**
+
+| Field           | Type     | Description
+| ---             | ---      | ---
+| from            | Integer  | The start of this facet, in unix epoc microseconds.
+| to              | Integer  | The end of this facet, in unix epoc microseconds.
+| from_str        | String   | A textual representation of the start of this facet.
+| to_str          | String   | A textual representation of the end of this facet.
+| count           | Integer  | The number of documents that fall in this facet.
+
 ### Example Successful Response
 
+**Note:** Some facet information has been omitted to keep examples brief.
+
 ```
-curl -H "Accept: application/json" -H "Content-type: application/json" 'http://chillingeffects.herokuapp.com/search?q=star'
+curl -H "Accept: application/json" -H "Content-type: application/json" 'http://chillingeffects.herokuapp.com/search?term=star'
 ```
 
 ```
@@ -322,7 +384,43 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'http://c
     }
   ],
   "meta": {
-    "q": "star",
+    "query": {
+      "term": "star"
+    },
+    "facets": {
+      "submitter_name": {
+        "_type": "terms",
+        "missing": 0,
+        "total": 7,
+        "other": 0,
+        "terms": [
+          {
+            "term": "Steve Simpson",
+            "count": 5
+          },
+          {
+            "term": "Mike Itten",
+            "count": 2
+          }
+        ]
+      },
+      "recipient_name": {
+        "_type": "terms",
+        "missing": 0,
+        "total": 7,
+        "other": 0,
+        "terms": [
+          {
+            "term": "Google",
+            "count": 5
+          },
+          {
+            "term": "Twitter",
+            "count": 2
+          }
+        ]
+      },
+    },
     "current_page": 1,
     "next_page": null,
     "offset": 0,
@@ -340,7 +438,9 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'http://c
 {
   "notices": [ ],
   "meta": {
-    "q": "nonexistent",
+    "query": {
+      "term": "nonexistent"
+    },
     "current_page": 3,
     "next_page": null,
     "offset": 20,
