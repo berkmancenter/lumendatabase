@@ -26,6 +26,20 @@ feature "Search", search: true do
     end
   end
 
+  scenario "paginates properly" do
+    3.times do
+      create(:notice, title: "The Lion King on Youtube")
+    end
+    sleep 1
+
+    visit "/search?page=2&per_page=1&term=lion"
+    within('.pagination') do
+      expect(page).to have_css('em.current', text: 2)
+      expect(page).to have_css('a[rel="next"]')
+      expect(page).to have_css('a[rel="prev start"]')
+    end
+  end
+
   context "within associated models" do
     scenario "for category names" do
       category = create(:category, name: "Lion King")

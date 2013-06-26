@@ -1,6 +1,6 @@
 <section class="<%= css_class %>">
 <h5><%= css_class %></h5>
-<h6><%= entity.name %></h6>
+<h6><%= link_to(entity.name, facetted_search_path("#{role}_name" => entity.name)) %></h6>
 <span class="private">[Private]</span>
 <span><%= entity.city %>, <%= entity.state %>, <%= entity.zip %>, <%= entity.country_code %></span>
 <span><%= entity.kind %></span>

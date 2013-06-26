@@ -1,0 +1,22 @@
+require 'spec_helper'
+
+describe DateRangeFilter do
+
+  it_behaves_like 'a search filter'
+
+  it "properly creates facet parameters" do
+    to = Time.now
+    from = to - 1.month
+
+    date_range_filter = described_class.new(:date_facet, [])
+
+    filter = date_range_filter.filter_for(
+      "#{from.to_i * 1000}..#{to.to_i * 1000}"
+    )
+
+    expect(filter[0]).to eq :range
+    expect(filter[1][:date_facet][:to]).to be_within(1).of(to)
+    expect(filter[1][:date_facet][:from]).to be_within(1).of(from)
+  end
+
+end

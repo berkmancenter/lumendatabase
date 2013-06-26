@@ -1,59 +1,9 @@
 class SearchesController < ApplicationController
 
   def show
-    term = params[:term]
-    p = params[:page]
-    category_filter = params[:categories]
-    submitter_name_filter = params[:submitter_name]
-    recipient_name_filter = params[:recipient_name]
-    now = Time.now.beginning_of_day
+    search = notice_searcher.search
 
-    date_filters = date_received_filters
-
-    @results = Notice.search(page: p) do
-      query { match(:_all, term) }
-
-      if category_filter.present?
-        filter :terms, category_facet: [ category_filter ]
-      end
-
-      if submitter_name_filter.present?
-        filter :terms, submitter_name_facet: [ submitter_name_filter ]
-      end
-
-      if recipient_name_filter.present?
-        filter :terms, recipient_name_facet: [ recipient_name_filter ]
-      end
-
-      if date_filters
-        filter :range, date_received: {
-          from: date_filters.from, to: date_filters.to
-        }
-      end
-
-      facet :submitter_name do
-        terms :submitter_name_facet
-      end
-
-      facet :recipient_name do
-        terms :recipient_name_facet
-      end
-
-      facet :categories do
-        terms :category_facet
-      end
-
-      facet :date_received do
-        range :date_received, [
-          { from: now - 1.day, to: now },
-          { from: now - 1.month, to: now },
-          { from: now - 6.months, to: now },
-          { from: now - 12.months, to: now }
-        ]
-      end
-
-      highlight(*Notice::HIGHLIGHTS)
-    end
+    @results = search.results
 
     respond_to do |format|
       format.html
@@ -71,9 +21,24 @@ class SearchesController < ApplicationController
 
   private
 
-  def date_received_filters
-    if params[:date_received].present?
-      @date_received_filters ||= DateReceivedFilters.new(params[:date_received])
+  def notice_searcher
+    now = Time.now.beginning_of_day
+
+    NoticeSearcher.new(params).tap do |searcher|
+      searcher.register TermSearch.new(:term, :_all)
+
+      searcher.register TermFilter.new(:categories, :category_facet)
+      searcher.register TermFilter.new(:submitter_name, :submitter_name_facet)
+      searcher.register TermFilter.new(:recipient_name, :recipient_name_facet)
+      searcher.register DateRangeFilter.new(
+        :date_received,
+        [
+          { from: now - 1.day, to: now },
+          { from: now - 1.month, to: now },
+          { from: now - 6.months, to: now },
+          { from: now - 12.months, to: now }
+        ]
+      )
     end
   end
 
@@ -102,17 +67,4 @@ class SearchesController < ApplicationController
       end
     end
   end
-
-  class DateReceivedFilters
-    def initialize(date_received)
-      @date_received = date_received
-    end
-    def to
-      Time.at(@date_received.split(Notice::RANGE_SEPARATOR)[1].to_i / 1000)
-    end
-    def from
-      Time.at(@date_received.split(Notice::RANGE_SEPARATOR)[0].to_i / 1000)
-    end
-  end
-
 end

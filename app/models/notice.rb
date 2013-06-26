@@ -14,6 +14,7 @@ class Notice < ActiveRecord::Base
   )
 
   REDACTABLE_FIELDS = %i( legal_other body )
+  PER_PAGE = 10
 
   UNDER_REVIEW_VALUE = 'Under review'
   RANGE_SEPARATOR = '..'
