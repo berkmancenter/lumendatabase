@@ -9,9 +9,43 @@ RailsAdmin.config do |config|
   #   redirect_to '/', alert: "Not an admin" unless current_user.admin?
   # end
 
-  # TODO: Model setup
-  # For now, we'll just use the auto-introspected model metadata. See
-  # https://github.com/sferik/rails_admin/wiki when we decide to
-  # customize.
+  config.model 'Notice' do
+    edit do
+      configure(:categorizations) { hide }
+      configure(:blog_categorizations) { hide }
+      configure(:category_relevant_questions) { hide }
+      configure(:entities) { hide }
+      configure(:infringing_urls) { hide }
+    end
+  end
+
+  config.model 'EntityNoticeRole' do
+    edit do
+      configure(:notice) { hide }
+    end
+  end
+
+  config.model 'Entity' do
+    edit do
+      configure(:notices) { hide }
+      configure(:entity_notice_roles) { hide }
+    end
+  end
+
+  config.model 'RelevantQuestion' do
+    object_label_method { :question }
+  end
+
+  config.model 'Work' do
+    object_label_method { :description }
+
+    edit do
+      configure(:notices) { hide }
+    end
+  end
+
+  config.model 'InfringingUrl' do
+    object_label_method { :url }
+  end
 
 end

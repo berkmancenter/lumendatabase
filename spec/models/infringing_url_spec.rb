@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 describe InfringingUrl do
-  it { should have_and_belong_to_many :works }
-  it { should have_many(:notices).through(:works) }
   it { should validate_uniqueness_of(:url) }
 
   context 'automatic validations' do
