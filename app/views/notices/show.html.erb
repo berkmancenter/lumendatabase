@@ -13,7 +13,7 @@
     </header>
 
     <div class="main">
-      <h2 class="notice-title">Re: <%= @notice.subject %></h2>
+      <h2>Re: <%= @notice.subject %></h2>
       <p class="source">Sent via: <%= @notice.source || 'Unknown' %></p>
       <p class="legal-other">
         Legal (Other): <%= @notice.redacted(:legal_other) %>
