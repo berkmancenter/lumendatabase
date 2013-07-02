@@ -29,7 +29,12 @@
 
     <div class="form-actions">
       <%= form.submit('Save', class: 'btn btn-primary') %>
-      <%= form.submit('Save and next', name: 'save_and_next', class: 'btn btn-info') %>
+
+      <% if @next_notice %>
+        <%= form.submit('Save and next', name: 'save_and_next', class: 'btn btn-info') %>
+        <%= link_to('Next', redact_notice_path(@abstract_model, @next_notice.id), class: 'btn') %>
+      <% end %>
+
       <%= link_to('Done', dashboard_path, class: 'btn') %>
     </div>
   <% end %>

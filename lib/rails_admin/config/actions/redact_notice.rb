@@ -3,6 +3,7 @@ require 'rails_admin/config/actions/base'
 
 RedactNoticeProc = Proc.new do
   @redactable_fields = %i( legal_other )
+  @next_notice = @object.next_requiring_review
 
   if request.get?
     respond_to do |format|
@@ -20,9 +21,9 @@ RedactNoticeProc = Proc.new do
     if @object.save
       respond_to do |format|
         format.html {
-          if params[:save_and_next] && next_notice = @object.next_requiring_review
+          if params[:save_and_next] && @next_notice
             redirect_to(
-              redact_notice_path(@abstract_model, next_notice.id)
+              redact_notice_path(@abstract_model, @next_notice.id)
             )
           else
             redirect_to_on_success
