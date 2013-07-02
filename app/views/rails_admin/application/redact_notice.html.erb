@@ -1,3 +1,8 @@
+<p>
+  <strong>Time in queue:</strong>
+  <%= time_ago_in_words(@object.created_at) %>
+</p>
+
 <section id="redaction-tools">
   <button id="redact-selected" class="btn">Redact selected text</button>
   <button id="unredact-selected" class="btn">Unredact selected field</button>

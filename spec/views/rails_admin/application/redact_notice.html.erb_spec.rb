@@ -7,6 +7,17 @@ describe 'rails_admin/application/redact_notice.html.erb' do
     end
 
     assign(:abstract_model, RailsAdmin::AbstractModel.new(Notice))
+    assign(:redactable_fields, [])
+  end
+
+  it 'displays elapsed time in queue' do
+    notice = build_stubbed(:notice)
+    notice.stub(:created_at).and_return(2.hours.ago)
+    assign(:object, notice)
+
+    render
+
+    expect(page).to have_content("Time in queue: about 2 hours")
   end
 
   it 'shows redactable_fields alongside originals' do
