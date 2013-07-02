@@ -46,6 +46,15 @@ feature "Manual redaction" do
     expect(redactable_field).to have_content(notice.legal_other_original)
   end
 
+  scenario "Publishing after review" do
+    notice = visit_redact_notice
+
+    uncheck 'Review required'
+    click_on 'Save'
+
+    visit "/notices/#{notice.id}"
+    expect(page).not_to have_content(Notice::UNDER_REVIEW_VALUE)
+  end
 
   private
 
@@ -58,8 +67,9 @@ feature "Manual redaction" do
 
     notice = create(
       :notice,
-      legal_other: "Some sensitive text",
-      legal_other_original: "Some [REDACTED] text"
+      legal_other: "Some [REDACTED] text",
+      legal_other_original: "Some sensitive text",
+      review_required: true
     )
 
     visit "/admin/notice/#{notice.id}/redact_notice"

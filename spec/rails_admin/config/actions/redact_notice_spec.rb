@@ -53,9 +53,14 @@ describe RedactNoticeProc do
     end
 
     it "updates the object's attributes" do
-      stub_notice_params(legal_other: "A", legal_other_original: "B")
+      stub_notice_params(
+        legal_other: "A",
+        legal_other_original: "B",
+        review_required: "1"
+      )
       object.should_receive(:legal_other=).with("A")
       object.should_receive(:legal_other_original=).with("B")
+      object.should_receive(:review_required=).with("1")
       object.should_receive(:save)
 
       instance_eval(&RedactNoticeProc)

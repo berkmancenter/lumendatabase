@@ -18,6 +18,8 @@ RedactNoticeProc = Proc.new do
       @object.send(:"#{field}_original=", attributes["#{field}_original"])
     end
 
+    @object.review_required = attributes[:review_required]
+
     if @object.save
       respond_to do |format|
         format.html {
