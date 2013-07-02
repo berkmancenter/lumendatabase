@@ -234,4 +234,23 @@ describe Notice do
       RiskAssessment.should_receive(:new).with(notice).and_return(assessment)
     end
   end
+
+  context "#next_requiring_review" do
+    it "returns the next notice (by id) which requires review" do
+      create(:notice, review_required: true)
+      notice = create(:notice, review_required: true)
+      create(:notice, review_required: false)
+      expected_notice = create(:notice, review_required: true)
+
+      next_notice = notice.next_requiring_review
+
+      expect(next_notice).to eq expected_notice
+    end
+
+    it "returns nil when none exist" do
+      notice = create(:notice)
+
+      expect(notice.next_requiring_review).not_to be
+    end
+  end
 end

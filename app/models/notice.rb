@@ -107,6 +107,13 @@ class Notice < ActiveRecord::Base
     end
   end
 
+  def next_requiring_review
+    self.class.
+      where('id > ? and review_required = ?', id, true).
+      order('id asc').
+      first
+  end
+
   private
 
   def entities_that_have_submitted

@@ -1,13 +1,15 @@
+require 'rails_admin/config/actions/redact_notice'
+
 RailsAdmin.config do |config|
 
   config.main_app_name = ['Chilling Effects', 'Admin']
 
   config.current_user_method { current_user }
 
-  # TODO: Admin authorization
-  # config.authorize_with do
-  #   redirect_to '/', alert: "Not an admin" unless current_user.admin?
-  # end
+  config.actions do
+    init_actions!
+    redact_notice
+  end
 
   config.model 'Notice' do
     edit do

@@ -9,3 +9,11 @@ en:
       default: '%a, %b %-d, %Y at %r'
       date: '%b %-d, %Y'
       short: '%B %d'
+
+  admin:
+    actions:
+      redact_notice:
+        breadcrumb: 'Redact notice'
+        done: 'Redacted'
+        menu: 'Redact'
+        title: 'Redact notice'

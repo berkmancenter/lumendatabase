@@ -1,0 +1,36 @@
+<section id="redaction-tools">
+  <button id="redact-selected" class="btn">Redact selected text</button>
+  <button id="unredact-selected" class="btn">Unredact selected field</button>
+</section>
+
+<section id="redaction-form">
+  <%
+    form_options = {
+      url: redact_notice_path(@abstract_model, @object.id),
+      as: @abstract_model.param_key,
+      html: {
+        method: :put,
+        multipart: true,
+      }
+    }
+  %>
+  <%= simple_form_for(@object, form_options) do |form| %>
+    <div id="redacted-fields">
+      <% @redactable_fields.each do |field| %>
+          <%= form.input(field) %>
+      <% end %>
+    </div>
+
+    <div id="original-fields">
+      <% @redactable_fields.each do |field| %>
+        <%= form.input(:"#{field}_original", input_html: { readonly: true }) %>
+      <% end %>
+    </div>
+
+    <div class="form-actions">
+      <%= form.submit('Save', class: 'btn btn-primary') %>
+      <%= form.submit('Save and next', name: 'save_and_next', class: 'btn btn-info') %>
+      <%= link_to('Done', dashboard_path, class: 'btn') %>
+    </div>
+  <% end %>
+</section>
