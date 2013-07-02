@@ -15,6 +15,7 @@
     <div class="main">
       <h2>Re: <%= @notice.subject %></h2>
       <p class="source">Sent via: <%= @notice.source || 'Unknown' %></p>
+      <p class="body">Body: <%= @notice.redacted(:body) %></p>
       <p class="legal-other">
         Legal (Other): <%= @notice.redacted(:legal_other) %>
       </p>

@@ -3,7 +3,7 @@ class RedactsNotices
     @redactors = redactors
   end
 
-  def redact(notice, field_or_fields = %i( legal_other ))
+  def redact(notice, field_or_fields = Notice::REDACTABLE_FIELDS)
     Array(field_or_fields).each { |field| redact_field(notice, field) }
   end
 

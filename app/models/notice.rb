@@ -13,6 +13,8 @@ class Notice < ActiveRecord::Base
     works.description works.url infringing_urls.url
   )
 
+  REDACTABLE_FIELDS = %i( legal_other body )
+
   UNDER_REVIEW_VALUE = 'Under review'
   RANGE_SEPARATOR = '..'
 

@@ -50,6 +50,14 @@ FactoryGirl.define do
       role_names ['submitter', 'recipient']
       date_received Time.now
     end
+
+    trait :redactable do
+      legal_other "Some [REDACTED] legal other"
+      legal_other_original "Some sensitive legal other"
+      body "Some [REDACTED] body"
+      body_original "Some sensitive body"
+      review_required true
+    end
   end
 
   factory :file_upload do
