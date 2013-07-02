@@ -3,6 +3,7 @@ require 'rails_admin/config/actions/redact_notice'
 
 describe RedactNoticeProc do
   before do
+    @object = double("Object", save: false).as_null_object
     @action = double("Action", template_name: '')
     @request = double("Request", get?: false, put?: false)
     @format = double("Format", html: nil, js: nil)
@@ -12,6 +13,14 @@ describe RedactNoticeProc do
     instance_eval(&RedactNoticeProc)
 
     expect(@redactable_fields).to match_array %i( legal_other )
+  end
+
+  it "sets next requiring review correctly" do
+    object.stub(:next_requiring_review).and_return(:not_nil)
+
+    instance_eval(&RedactNoticeProc)
+
+    expect(@next_notice).to eq :not_nil
   end
 
   context "Handling GET requests" do
@@ -38,7 +47,6 @@ describe RedactNoticeProc do
     before do
       request.stub(:put?).and_return(true)
 
-      @object = double("Object", save: false).as_null_object
       @abstract_model = double("Abstract model", param_key: nil)
       @model_config = double("Model config", with: nil)
       @params = {}
@@ -96,7 +104,7 @@ describe RedactNoticeProc do
       end
     end
 
-    attr_reader :object, :abstract_model, :model_config, :params
+    attr_reader :abstract_model, :model_config, :params
 
     def stub_notice_params(notice_params = {})
       abstract_model.stub(:param_key).and_return(:notice)
@@ -107,7 +115,7 @@ describe RedactNoticeProc do
     end
   end
 
-  attr_reader :action, :request, :format
+  attr_reader :object, :action, :request, :format
 
   def respond_to
     yield(format)
