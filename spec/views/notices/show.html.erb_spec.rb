@@ -10,6 +10,14 @@ describe 'notices/show.html.erb' do
     expect(rendered).to include notice.title
   end
 
+  it "displays the date sent in the proper format" do
+    assign(:notice, build(:notice, date_sent: Time.local(2013, 5, 4)))
+
+    render
+
+    expect(rendered).to include "May 04, 2013"
+  end
+
   it "displays the date received in the proper format" do
     assign(:notice, build(:notice, date_received: Time.local(2013, 6, 5)))
 

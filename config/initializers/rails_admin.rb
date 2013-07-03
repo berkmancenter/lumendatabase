@@ -12,6 +12,19 @@ RailsAdmin.config do |config|
   end
 
   config.model 'Notice' do
+    list do
+      field :id
+      field :title
+      field(:date_sent)     { label 'Sent' }
+      field(:date_received) { label 'Received' }
+      field(:created_at)    { label 'Submitted' }
+      field :source
+      field :review_required
+      field :body
+      field :entities
+      field :categories
+      field :works
+    end
     edit do
       configure(:categorizations) { hide }
       configure(:blog_categorizations) { hide }
