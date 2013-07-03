@@ -22,10 +22,6 @@ class NoticeSearchResult < SimpleDelegator
     end
   end
 
-  def readonly?
-    true
-  end
-
   private
 
   attr_reader :notice, :highlight

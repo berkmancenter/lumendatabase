@@ -13,6 +13,12 @@ shared_examples "a redactor of" do |values|
   end
 end
 
+describe RedactsNotices::RedactsRegex do
+  it "raises if #regex is not defined" do
+    expect { described_class.new('').regex }.to raise_error(NotImplementedError)
+  end
+end
+
 describe RedactsNotices::RedactsPhoneNumbers do
   it_behaves_like "a redactor of",
     %w( 123-456-7890 123.456.7890 123\ 456\ 7890 (123)\ 456-7890
