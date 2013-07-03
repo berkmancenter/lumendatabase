@@ -177,6 +177,8 @@ GEM
       coderay (~> 1.0.5)
       method_source (~> 0.8)
       slop (~> 3.4)
+    pry-rails (0.3.1)
+      pry (>= 0.9.10)
     rack (1.4.5)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -334,7 +336,7 @@ DEPENDENCIES
   newrelic_rpm
   paperclip
   pg
-  pry
+  pry-rails
   rack-timeout
   rails (>= 3.2.11)
   rails_admin (~> 0.4.8)
