@@ -7,6 +7,14 @@ describe RiskTrigger do
     expect(example_trigger).to be_risky(notice)
   end
 
+  it "uses negated to reverse the comparison" do
+    notice = double("Notice", country_code: 'Spain', legal_other: "nonempty")
+    trigger = example_trigger
+    trigger.negated = false
+
+    expect(trigger).not_to be_risky(notice)
+  end
+
   it "sees a safe notice as safe" do
     notice_1 = double("Notice", country_code: 'United States', legal_other: "nonempty")
     notice_2 = double("Notice", country_code: 'Spain', legal_other: nil)
