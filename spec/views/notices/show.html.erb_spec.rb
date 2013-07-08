@@ -120,10 +120,10 @@ describe 'notices/show.html.erb' do
     expect(page).to have_content("Re: Some subject")
   end
 
-  it "displays related blog entries" do
+  it "displays limited related blog entries" do
     blog_entries = build_stubbed_list(:blog_entry, 3)
     notice = build(:notice)
-    notice.stub(:related_blog_entries).and_return(blog_entries)
+    notice.stub(:limited_related_blog_entries).and_return(blog_entries)
     assign(:notice, notice)
 
     render

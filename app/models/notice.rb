@@ -77,6 +77,10 @@ class Notice < ActiveRecord::Base
     relevant_questions | category_relevant_questions
   end
 
+  def limited_related_blog_entries(limit = 5)
+    related_blog_entries.limit(limit)
+  end
+
   def submitter
     entities_that_have_submitted.first
   end
