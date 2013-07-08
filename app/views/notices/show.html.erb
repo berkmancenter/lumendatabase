@@ -17,13 +17,13 @@
       <h2>Re: <%= @notice.subject %></h2>
       <p class="source">Sent via: <%= @notice.source || 'Unknown' %></p>
       <p class="body">Body: <%= @notice.redacted(:body) %></p>
-      <p class="legal-other">
-        Legal (Other): <%= @notice.redacted(:legal_other) %>
-      </p>
-
       <ol id="works" class="copyright-claims">
         <%= render @notice.works %>
       </ol>
+      <p class="legal-other">
+        <b>Legal (Other):</b> <%= @notice.redacted(:legal_other) %>
+      </p>
+
     </div>
   </section>
 
@@ -39,12 +39,16 @@
     </section>
   </footer>
 
-  <section id="relevant-questions">
-    <%= render @notice.all_relevant_questions %>
-  </section>
+  <aside class="notice">
+    <section id="relevant-questions">
+      <h4 class="title"><span>Related FAQs</span></h3>
+      <%= render @notice.all_relevant_questions %>
+    </section>
 
-  <section id="related-blog-entries">
-    <%= render partial: 'blog_entry', collection: @notice.related_blog_entries %>
-  </section>
+    <section id="related-blog-entries">
+      <h4 class="title"><span>Related Blog Entries</span></h3>
+      <%= render partial: 'blog_entry', collection: @notice.related_blog_entries %>
+    </section>
+  </aside>
 
 </article>

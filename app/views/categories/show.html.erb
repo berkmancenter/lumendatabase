@@ -7,10 +7,12 @@
 
 <section class="category-faqs" id="category-faqs">
   <h2>Frequently Asked Questions</h2>
+  <div class="wrapper">
   <% @category.relevant_questions.each do |question| %>
     <article>
       <div class="question"><%= question.question %></div>
       <div class="answer"><%=raw question.answer_html %></div>
     </article>
   <% end %>
+  </div>
 </section>

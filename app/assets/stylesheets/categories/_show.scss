@@ -1,3 +1,7 @@
 section.category-faqs {
   @extend %faq-accordion;
+
+  div.wrapper {
+    background: #fff;
+  }
 }

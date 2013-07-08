@@ -119,11 +119,11 @@ article.notice-show {
     padding: 0;
 
     li.work {
+      @include clearfix;
       list-style-type: none;
 
       h6 {
         border-bottom: 2px solid lighten($base-border-color, 5%);
-        color: $base-title-color;
         font-size: $base-font-size + 1;
         font-weight: bold;
         margin-bottom: 1em;
@@ -150,6 +150,10 @@ article.notice-show {
         float: left;
         padding-left: 0px;
         list-style-position: inside;
+        margin-bottom: 20px;
+      }
+
+      .legal-other {
       }
     }
   }
@@ -181,7 +185,6 @@ article.notice-show {
     }
 
     a {
-      color: darken($base-font-color-2, 5%);
       color: $base-font-color;
       text-decoration: none;
       border-bottom: 1px dotted #aaa;
@@ -194,9 +197,57 @@ article.notice-show {
   }
 }
 
+aside.notice {
+  margin: 0 15px;
+
+  h4.title {
+    font-size: $base-font-size + 1;
+    font-weight: 800;
+    text-transform: uppercase;
+    margin: 15px 20px 10px;
+  }
+
+  section {
+    background: #fff;
+    border: 1px solid $base-border-color;
+    border-radius: 3px;
+  }
+}
+
 // FAQ Section
 //************************************************************************//
 section#relevant-questions {
   @extend %faq-accordion;
-  padding: 0 $base-padding;
+  padding: 0;
+}
+
+section#related-blog-entries {
+  margin-top: 30px;
+
+  article {
+    margin: 20px 0;
+    padding: 0 20px 0;
+
+    h3 {
+      font-weight: 500;
+      line-height: 1em;
+      margin: 0 0 0.2em;
+      font-size: $base-font-size-2 + 1;
+
+      a {
+        color: lighten($base-font-color, 10%);
+        text-decoration: none;
+
+        &:hover {
+          color: $base-link-color;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  div.metadata {
+    font-size: $base-font-size-small-1;
+    color: $base-font-color-3;
+  }
 }
