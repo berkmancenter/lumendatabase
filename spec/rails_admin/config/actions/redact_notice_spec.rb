@@ -2,12 +2,9 @@ require 'spec_helper'
 require 'rails_admin/config/actions/redact_notice'
 
 describe RedactNoticeProc do
-  before do
-    @object = double("Object", save: false).as_null_object
-    @action = double("Action", template_name: '')
-    @request = double("Request", get?: false, put?: false)
-    @format = double("Format", html: nil, js: nil)
-  end
+  include RailsAdminActionContext
+
+  before { setup_action_context }
 
   it "sets the correct redactable fields" do
     instance_eval(&RedactNoticeProc)
@@ -15,12 +12,21 @@ describe RedactNoticeProc do
     expect(@redactable_fields).to eq Notice::REDACTABLE_FIELDS
   end
 
-  it "sets next requiring review correctly" do
-    object.stub(:next_requiring_review).and_return(:not_nil)
+  it "does not set next notice path if the param's not present" do
+    instance_eval(&RedactNoticeProc)
+
+    expect(@next_notice_path).to be_nil
+  end
+
+  it "sets next notice path when param is present" do
+    params[:next_notices] = %w( 1 2 3 )
+    should_receive(:redact_notice_path).
+      with(@abstract_model, '1', next_notices: %w( 2 3 )).
+      and_return(:some_path)
 
     instance_eval(&RedactNoticeProc)
 
-    expect(@next_notice).to eq :not_nil
+    expect(@next_notice_path).to eq :some_path
   end
 
   context "Handling GET requests" do
@@ -28,7 +34,7 @@ describe RedactNoticeProc do
 
     it "renders the action template for html" do
       format.stub(:html).and_yield
-      action.stub(:template_name).and_return('template_name')
+      @action.stub(:template_name).and_return('template_name')
       should_receive(:render).with('template_name')
 
       instance_eval(&RedactNoticeProc)
@@ -36,7 +42,7 @@ describe RedactNoticeProc do
 
     it "renders with layout false for js" do
       format.stub(:js).and_yield
-      action.stub(:template_name).and_return('template_name')
+      @action.stub(:template_name).and_return('template_name')
       should_receive(:render).with('template_name', layout: false)
 
       instance_eval(&RedactNoticeProc)
@@ -44,13 +50,7 @@ describe RedactNoticeProc do
   end
 
   context "Handling PUT requests" do
-    before do
-      request.stub(:put?).and_return(true)
-
-      @abstract_model = double("Abstract model", param_key: nil)
-      @model_config = double("Model config", with: nil)
-      @params = {}
-    end
+    before { request.stub(:put?).and_return(true) }
 
     it "updates the object's attributes" do
       stub_notice_params(
@@ -58,18 +58,18 @@ describe RedactNoticeProc do
         legal_other_original: "B",
         review_required: "1"
       )
-      object.should_receive(:legal_other=).with("A")
-      object.should_receive(:legal_other_original=).with("B")
-      object.should_receive(:review_required=).with("1")
-      object.should_receive(:save)
+      @object.should_receive(:legal_other=).with("A")
+      @object.should_receive(:legal_other_original=).with("B")
+      @object.should_receive(:review_required=).with("1")
+      @object.should_receive(:save)
 
       instance_eval(&RedactNoticeProc)
     end
 
     it "calls handle_save_error on failure" do
       stub_notice_params
-      object.stub(:save).and_return(false)
-      should_receive(:handle_save_error).with(:edit)
+      @object.stub(:save).and_return(false)
+      should_receive(:handle_save_error).with(:redact_notice)
 
       instance_eval(&RedactNoticeProc)
     end
@@ -77,52 +77,51 @@ describe RedactNoticeProc do
     context "successful save" do
       before do
         stub_notice_params
-        object.stub(:save).and_return(true)
+        @object.stub(:save).and_return(true)
       end
 
-      it "calls redirect_to_on_success" do
+      it "redirects to the queue path" do
         format.stub(:html).and_yield
-        should_receive(:redirect_to_on_success)
+        should_receive(:redact_queue_path).
+          with(@abstract_model).and_return(:some_path)
+        should_receive(:redirect_to).with(:some_path)
 
         instance_eval(&RedactNoticeProc)
       end
 
       it "redirects to next when appropriate" do
         params[:save_and_next] = true
-        next_notice = double("Next notice", id: 1)
+        params[:next_notices] = %w( 1 2 3 )
         format.stub(:html).and_yield
-        object.stub(:next_requiring_review).and_return(next_notice)
-        should_receive(:redact_notice_path).and_return(:some_path)
+        should_receive(:redact_notice_path).
+          with(@abstract_model, '1', next_notices: %w( 2 3 )).
+          and_return(:some_path)
         should_receive(:redirect_to).with(:some_path)
 
         instance_eval(&RedactNoticeProc)
       end
 
       it "renders JSON for js requests" do
-        object.stub(:id).and_return(1)
         format.stub(:js).and_yield
-        config = double("Config", object_label: "Label")
-        model_config.should_receive(:with).with(object: object).and_return(config)
+        @object.stub(:id).and_return(1)
+        mock_model_config(object_label: "Label")
         should_receive(:render).with(json: { id: "1", label: "Label" })
 
         instance_eval(&RedactNoticeProc)
       end
+
+      def mock_model_config(attrs)
+        config = double("Config", attrs)
+        @model_config.stub(:with).and_return(config)
+      end
     end
 
-    attr_reader :abstract_model, :model_config, :params
-
     def stub_notice_params(notice_params = {})
-      abstract_model.stub(:param_key).and_return(:notice)
-      @params = HashWithIndifferentAccess.new(notice: notice_params)
+      @abstract_model.stub(:param_key).and_return(:notice)
+      params[:notice] = notice_params
     end
 
     def handle_save_error(*)
     end
-  end
-
-  attr_reader :object, :action, :request, :format
-
-  def respond_to
-    yield(format)
   end
 end

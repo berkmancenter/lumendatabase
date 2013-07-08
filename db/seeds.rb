@@ -4,12 +4,14 @@ Notice.create_elasticsearch_index
 # Execute seeds in a logical order
 seed_files = %w(
   relevant_questions.rb categories.rb blog_entries.rb risk_triggers.rb
+  users.rb
 )
 
 seed_files.each { |file| load("db/seeds/#{file}") }
 
 class FakeNotice
-  attr_reader :title, :source, :subject, :date_sent, :date_received
+  attr_reader :title, :source, :subject, :date_sent, :date_received,
+    :body, :body_original, :review_required
 
   def initialize
     @title = [
@@ -21,6 +23,14 @@ class FakeNotice
     @subject = "Websearch Infringment Notification via #{@source}"
     @date_sent = (0..100).to_a.sample.days.ago
     @date_received = (0..100).to_a.sample.days.ago
+
+    if rand(100) < 15
+      @body = "Some [REDACTED] text"
+      @body_original = "Some sensitive text"
+      @review_required = true
+    else
+      @review_required = false
+    end
   end
 
   def categories
@@ -130,13 +140,16 @@ unless ENV['SKIP_FAKE_DATA']
       source: fake.source,
       category_ids: fake.categories.map(&:id),
       tag_list: fake.tags,
-      works_attributes: [ {
-      url: fake.work_url,
-      description: fake.work_description,
-      kind: fake.kind,
-      infringing_urls_attributes: fake.urls
-    }],
-      entity_notice_roles_attributes: [ {
+      body: fake.body,
+      body_original: fake.body_original,
+      review_required: fake.review_required,
+      works_attributes: [{
+        url: fake.work_url,
+        description: fake.work_description,
+        kind: fake.kind,
+        infringing_urls_attributes: fake.urls
+      }],
+      entity_notice_roles_attributes: [{
       name: 'recipient', entity_attributes: fake.recipient
     }, {
       name: 'submitter', entity_attributes: fake.submitter

@@ -1,3 +1,4 @@
+require 'rails_admin/config/actions/redact_queue'
 require 'rails_admin/config/actions/redact_notice'
 
 RailsAdmin.config do |config|
@@ -8,6 +9,8 @@ RailsAdmin.config do |config|
 
   config.actions do
     init_actions!
+
+    redact_queue
     redact_notice
   end
 
