@@ -145,6 +145,19 @@ describe Notice do
     end
   end
 
+  context "#limited_related_blog_entries" do
+    it "returns a limited set of related blog entries" do
+      notice = create(:notice, :with_categories)
+      create(:blog_entry, categories: [notice.categories.sample])
+      create(:blog_entry, categories: [notice.categories.sample])
+      create(:blog_entry, categories: [notice.categories.sample])
+
+      blog_entries = notice.limited_related_blog_entries(2)
+
+      expect(blog_entries.length).to eq 2
+    end
+  end
+
   context "search index" do
     before do
       tire = double("Tire proxy").as_null_object
