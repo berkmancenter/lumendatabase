@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130621174322) do
+ActiveRecord::Schema.define(:version => 20130702185326) do
 
   create_table "blog_entries", :force => true do |t|
     t.integer  "user_id"
@@ -151,6 +151,7 @@ ActiveRecord::Schema.define(:version => 20130621174322) do
     t.text     "legal_other"
     t.text     "legal_other_original"
     t.boolean  "review_required"
+    t.text     "body_original"
   end
 
   create_table "notices_relevant_questions", :force => true do |t|

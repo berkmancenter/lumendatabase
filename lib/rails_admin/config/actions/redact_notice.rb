@@ -2,7 +2,7 @@ require 'rails_admin/config/actions'
 require 'rails_admin/config/actions/base'
 
 RedactNoticeProc = Proc.new do
-  @redactable_fields = %i( legal_other )
+  @redactable_fields = Notice::REDACTABLE_FIELDS
   @next_notice = @object.next_requiring_review
 
   if request.get?

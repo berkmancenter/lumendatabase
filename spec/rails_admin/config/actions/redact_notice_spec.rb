@@ -12,7 +12,7 @@ describe RedactNoticeProc do
   it "sets the correct redactable fields" do
     instance_eval(&RedactNoticeProc)
 
-    expect(@redactable_fields).to match_array %i( legal_other )
+    expect(@redactable_fields).to eq Notice::REDACTABLE_FIELDS
   end
 
   it "sets next requiring review correctly" do
