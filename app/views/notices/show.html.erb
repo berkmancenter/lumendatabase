@@ -1,5 +1,6 @@
 <article class="notice-show">
   <h1><%= @notice.title %></h1>
+  <span class="date-sent">Date Sent: <%= date_sent(@notice) %></span>
   <span class="date-received">Date Received: <%= date_received(@notice) %></span>
 
   <section class="body">

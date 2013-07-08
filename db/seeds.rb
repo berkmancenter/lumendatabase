@@ -9,7 +9,7 @@ seed_files = %w(
 seed_files.each { |file| load("db/seeds/#{file}") }
 
 class FakeNotice
-  attr_reader :title, :source, :subject, :date_received
+  attr_reader :title, :source, :subject, :date_sent, :date_received
 
   def initialize
     @title = [
@@ -19,6 +19,7 @@ class FakeNotice
 
     @source = ["Online form", "Email", "Phone"].sample
     @subject = "Websearch Infringment Notification via #{@source}"
+    @date_sent = (0..100).to_a.sample.days.ago
     @date_received = (0..100).to_a.sample.days.ago
   end
 
@@ -124,6 +125,7 @@ unless ENV['SKIP_FAKE_DATA']
     Notice.create!(
       title: fake.title,
       subject: fake.subject,
+      date_sent: fake.date_sent,
       date_received: fake.date_received,
       source: fake.source,
       category_ids: fake.categories.map(&:id),

@@ -19,6 +19,7 @@ Authentication is not required for now.
 | ---                            | ---                | ---
 | title                          | string             | Required
 | subject                        | string             |
+| date_sent                      | string             | Any parseable time value, e.g. "2013-05-21", "2013-05-21 10:01:01 -04:00"
 | date_received                  | string             | Any parseable time value, e.g. "2013-05-21", "2013-05-21 10:01:01 -04:00"
 | source                         | string             | How did you receive this notice - mail? online form?
 | category_ids                   | [int]              | An array of integers representing category ids - See **Request a list of Categories** below.
@@ -69,6 +70,7 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'http://c
   "notice": {
     "title": "DMCA (Copyright) Complaint to Google",
     "subject": "Infringement Notfication via Blogger Complaint",
+    "date_sent": "2013-05-22",
     "date_received": "2013-05-23",
     "source": "Online form",
     "category_ids": [19, 27],
@@ -174,6 +176,7 @@ Return a JSON-encoded representation of selected notice attributes.
     "id":1,
     "title":"Lion King on YouTube",
     "body":null,
+    "date_sent":"2013-06-04T19:23:12Z",
     "date_received":"2013-06-05T20:31:44Z",
     "categories":[
       "Anticircumvention (DMCA)",

@@ -43,6 +43,7 @@ class NoticesController < ApplicationController
       :subject,
       :body,
       :legal_other,
+      :date_sent,
       :date_received,
       :source,
       :tag_list,

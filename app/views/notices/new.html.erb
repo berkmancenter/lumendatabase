@@ -10,6 +10,7 @@
       <div class="body-wrapper left main">
         <%= form.input :title, label: "Notice Title" %>
         <%= form.input :subject %>
+        <%= form.input :date_sent, as: :string, placeholder: "YYYY-MM-DD" %>
         <%= form.input :date_received, as: :string, placeholder: "YYYY-MM-DD" %>
         <%= form.input :source, label: "Sent via", placeholder: 'Online form, Email, Postal mail, etc.' %>
         <%= form.input :tag_list, placeholder: 'movie, youtube, video, etc.' %>

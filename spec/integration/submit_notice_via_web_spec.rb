@@ -11,6 +11,18 @@ feature "notice submission" do
     end
   end
 
+  scenario "submitting a notice with dates" do
+    submit_recent_notice do
+      fill_in "Date sent", with: Time.local(2013, 5, 4)
+      fill_in "Date received", with: Time.local(2013, 5, 5)
+    end
+
+    open_recent_notice
+
+    expect(page).to have_content("Date Sent: May 04, 2013")
+    expect(page).to have_content("Date Received: May 05, 2013")
+  end
+
   scenario "submitting a notice with an attached file" do
     submit_recent_notice do
       attach_notice_file("Some content")
