@@ -2,13 +2,20 @@
 // Pagination
 //************************************************************************//
 .pagination {
-  margin-left: $base-padding;
-  margin-bottom: 40px;
+  background: #fff;
+  border: 1px solid $base-border-color;
+  border-radius: 2px;
+  @include clearfix;
+  overflow: hidden;
+  position: relative;
+  background: #fcfcfc;
 
   span, em, a {
-    border: 1px solid $base-border-color;
+    background: #fff;
+    border-right: 1px solid $base-border-color;
     font-size: $base-font-size - 1;
-    padding: 0.2em 0.5em
+    float: left;
+    padding: 0.6em 1em
   }
 
   a {
@@ -20,11 +27,27 @@
     font-weight: 700;
   }
 
-  span.disabled.previous_page {
+  span.disabled.previous_page,
+  span.disabled.next_page {
     display: none;
   }
 
   span.gap {
     border: 0;
+  }
+
+  .previous_page,
+  .next_page {
+    font-weight: 600;
+    @include linear-gradient(#F8F8F8, #EFF1F5);
+  }
+
+  .next_page {
+    border-left: 1px solid $base-border-color;
+    border-right: 0;
+    float: right;
+    position: absolute;
+    right: 0;
+    top: 0;
   }
 }
