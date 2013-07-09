@@ -5,6 +5,8 @@ Chill::Application.routes.draw do
 
   resources :notices, only: [:show, :new, :create]
 
+  get '/n/:id', to: 'notices#show'
+
   resources :categories, only: [:show]
 
   scope format: true, constraints: { format: :json } do
