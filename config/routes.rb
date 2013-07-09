@@ -15,5 +15,7 @@ Chill::Application.routes.draw do
 
   resource :search, only: [:show]
 
+  resource :facetted_search, only: [:show], controller: :searches
+
   root to: 'home#index'
 end

@@ -54,50 +54,76 @@ feature "Advanced search", search: true do
   end
 
   context "filtering" do
-    [:categories, :submitter_name, :recipient_name].each do |facet_type|
-      it "on #{facet_type}" do
-        outside_facet = create(:notice, title: "King of New York")
-        inside_facet = create(:notice, :with_facet_data, title: "Lion King two")
 
-        within_search_results_for('king') do
+    context "without a full-text search term" do
+      [:submitter_name, :recipient_name, :categories].each do |facet_type|
+        it "displays #{facet_type} facet results correctly" do
+          notice = create(:notice, :with_facet_data, title: "Lion King two")
+          sleep 1
+          facet = ''
+          if facet_type == :categories
+            facet = notice.categories.first.name
+          else
+            facet = notice.send(facet_type)
+          end
+
+          visit("/facetted_search?#{facet_type}=" + URI.escape(facet))
+
+          within('.search-results') do
+            expect(page).to have_n_results 1
+          end
+        end
+      end
+    end
+
+    context "with a full-text search term" do
+
+      [:categories, :submitter_name, :recipient_name].each do |facet_type|
+        it "on #{facet_type}" do
+          outside_facet = create(:notice, title: "King of New York")
+          inside_facet = create(:notice, :with_facet_data, title: "Lion King two")
+
+          within_search_results_for('king') do
+            expect(page).to have_n_results 2
+          end
+
+          facet = ''
+          if facet_type == :categories
+            facet = inside_facet.categories.first.name
+          else
+            facet = inside_facet.send(facet_type)
+          end
+
+          within_facetted_search_results_for("king", facet_type, facet) do
+            expect(page).to have_active_facet_dropdown(facet_type)
+            expect(page).to have_active_facet(facet)
+            expect(page).to have_n_results 1
+            expect(page).to have_content(inside_facet.title)
+          end
+        end
+      end
+
+      it "on date ranges" do
+        outside_facet = create(
+          :notice, title: 'A title', date_received: Time.now - 10.months
+        )
+        inside_facet = create(
+          :notice, title: 'A title', date_received: Time.now - 1.day
+        )
+        within_search_results_for('title') do
           expect(page).to have_n_results 2
         end
 
-        facet = ''
-        if facet_type == :categories
-          facet = inside_facet.categories.first.name
-        else
-          facet = inside_facet.send(facet_type)
-        end
+        facet = page.find('ol.date_received li:nth-child(1)').text
 
-        within_facetted_search_results_for("king", facet_type, facet) do
-          expect(page).to have_active_facet_dropdown(facet_type)
-          expect(page).to have_active_facet(facet)
+        within_facetted_search_results_for("title", :date_received, facet) do
+          expect(page).to have_active_facet_dropdown(:date_received)
           expect(page).to have_n_results 1
           expect(page).to have_content(inside_facet.title)
         end
       end
     end
 
-    it "on date ranges" do
-      outside_facet = create(
-        :notice, title: 'A title', date_received: Time.now - 10.months
-      )
-      inside_facet = create(
-        :notice, title: 'A title', date_received: Time.now - 1.day
-      )
-      within_search_results_for('title') do
-        expect(page).to have_n_results 2
-      end
-
-      facet = page.find('ol.date_received li:nth-child(1)').text
-
-      within_facetted_search_results_for("title", :date_received, facet) do
-        expect(page).to have_active_facet_dropdown(:date_received)
-        expect(page).to have_n_results 1
-        expect(page).to have_content(inside_facet.title)
-      end
-    end
   end
 
   def have_active_facet_dropdown(facet_type)

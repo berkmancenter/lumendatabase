@@ -34,8 +34,10 @@ describe 'searches/show.html.erb' do
 
     within('.result') do
       expect(page).to have_css('.title', text: 'A notice')
-      expect(page).to have_css('.sender-receiver', text: notice.recipient.name)
-      expect(page).to have_css('.sender-receiver', text: notice.submitter.name)
+      expect(page).to have_css('.sender-receiver', text: notice.recipient_name)
+      expect(page).to have_css('.sender-receiver', text: notice.submitter_name)
+      expect(page).to have_facetted_search_role_link(:submitter_name, notice)
+      expect(page).to have_facetted_search_role_link(:recipient_name, notice)
       expect(page).to have_css(
         '.date-received', text: notice.date_received.to_s(:simple)
       )
@@ -106,6 +108,10 @@ describe 'searches/show.html.erb' do
         [{ "from" => 1371583484000.0, "to" => 1371669884000.0, "count" => 1}]
       }
     }
+  end
+
+  def have_facetted_search_role_link(role, notice)
+    have_css(%Q(a[href="#{facetted_search_path(role => notice.send(role))}"]), text: notice.send(role))
   end
 
 end

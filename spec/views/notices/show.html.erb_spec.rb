@@ -57,6 +57,19 @@ describe 'notices/show.html.erb' do
     end
   end
 
+  it "displays submitter_names such that they are clickable" do
+    notice = create(:notice, role_names: ['submitter', 'recipient'])
+
+    assign(:notice, notice)
+
+    render
+
+    within('#entities') do
+      expect(page).to have_facet_link(:submitter_name, notice.submitter_name)
+      expect(page).to have_facet_link(:recipient_name, notice.recipient_name)
+    end
+  end
+
   it "displays a notice with all relevant questions" do
     category_question = create(:relevant_question, question: "Q 1", answer: "A 1")
     notice_question = create(:relevant_question, question: "Q 2", answer: "A 2")
@@ -135,6 +148,13 @@ describe 'notices/show.html.erb' do
         )
       end
     end
+  end
+
+  def have_facet_link(facet, value)
+    have_css(
+      "a[href='#{facetted_search_path(facet => value)}']",
+      text: value
+    )
   end
 
 end

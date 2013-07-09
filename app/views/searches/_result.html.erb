@@ -3,9 +3,9 @@
   <div class="metadata">
     <div class="date-received"><%= date_received(result) %></div>
     <div class="sender-receiver">
-      <a href="#" class="sender"><%= result.submitter_name %></a>
+      <%= link_to(result.submitter_name, facetted_search_path(submitter_name: result.submitter_name), class: 'sender' )%>
       <span class="arrow"><%= image_tag 'arrow-small.svg' %></span>
-      <a href="#" class="receiver"><%= result.recipient_name %></a>
+      <%= link_to(result.recipient_name, facetted_search_path(recipient_name: result.recipient_name), class: 'receiver' )%>
     </div>
     <ol class="excerpt">
       <% result.with_excerpts do |excerpt| %>
