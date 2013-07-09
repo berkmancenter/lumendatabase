@@ -5,6 +5,13 @@
   </article>
 </section>
 
+<% if @notices.any? %>
+  <section class="category-notices">
+    <h2>Recent Notices</h2>
+    <%= render @notices %>
+  </section>
+<% end %>
+
 <section class="category-faqs" id="category-faqs">
   <h2>Frequently Asked Questions</h2>
   <div class="wrapper">

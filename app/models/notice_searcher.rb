@@ -1,5 +1,7 @@
 class NoticeSearcher
 
+  attr_accessor :sort_by
+
   def initialize(params = {})
     @params = params
     @page = params[:page] || 1
@@ -27,6 +29,11 @@ class NoticeSearcher
     @search.highlight(*Notice::HIGHLIGHTS)
     @search.size @per_page
     @search.from this_page
+
+    local_sort_by = sort_by
+    if sort_by
+      @search.sort{ by *local_sort_by }
+    end
 
     @search
   end

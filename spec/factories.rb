@@ -5,7 +5,7 @@ FactoryGirl.define do
   sequence(:url) { |n| "http://example.com/url_#{n}" }
 
   factory :category do
-    name "Category name"
+    sequence(:name) { |n| "Category Name #{n}" }
   end
 
   factory :notice do

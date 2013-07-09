@@ -31,7 +31,7 @@ feature "Advanced search", search: true do
       with_a_facetted_search(
         :categories, :category_facet) do |results|
         expect(results).to have_facets('categories').
-          with_terms(notice.categories.map(&:name).uniq)
+          with_terms(notice.categories.map(&:name))
       end
     end
 

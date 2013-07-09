@@ -12,6 +12,18 @@ describe CategoriesController do
       expect(response).to be_successful
       expect(response).to render_template(:show)
     end
+
+    it "uses NoticeSearcher to find recent notices" do
+      category = double("Category")
+      category.stub(:name).and_return('A category name')
+      Category.stub(:find).and_return(category)
+
+      notice_searcher = NoticeSearcher.new
+      NoticeSearcher.should_receive(:new).with(
+        { category: category.name }).and_return(notice_searcher)
+
+      get :show, id: 42
+    end
   end
 
   context "#index as html" do
