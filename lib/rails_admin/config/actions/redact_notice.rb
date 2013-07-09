@@ -52,7 +52,10 @@ module RailsAdmin
         register_instance_option(:action_name) { :redact_notice }
         register_instance_option(:link_icon) { 'icon-adjust' }
         register_instance_option(:controller) { RedactNoticeProc }
-        register_instance_option(:visible?) { bindings[:object].review_required? }
+        register_instance_option :visible? do
+          bindings && (object = bindings[:object]) &&
+            object.respond_to?(:review_required) && object.review_required?
+        end
       end
 
       register RedactNotice
