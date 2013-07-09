@@ -8,10 +8,11 @@ article.notice-show {
     margin-top: 0;
   }
 
-  .date-received {
-    font-weight: bold;
-    font-size: $base-font-size-small-1 - 1px;
+  .date {
+    margin-right: 10px;
     color: $base-font-color-3;
+    font-size: $base-font-size-small-1 - 1px;
+    font-weight: bold;
   }
 }
 

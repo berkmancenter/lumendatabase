@@ -1,29 +1,28 @@
 .high_voltage-pages {
   color: $base-title-color;
 
-  section {
-    margin-bottom: 30px;
-  }
+  section.main {
+    section {
+      margin-bottom: 30px;
+    }
 
-  ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-  }
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
 
-  li {
-    margin: 10px 10px 0 0;
-  }
+    h2 {
+      font-size: 20px;
+      line-height: 1.4em;
+      color: $base-title-color;
+      font-weight: 700;
+    }
 
-  h2 {
-    font-size: 20px;
-    line-height: 1.4em;
-    color: $base-title-color;
-  }
-
-  h3 {
-    font-size: 18px;
-    color: $base-font-color-2;
+    h3 {
+      font-size: 18px;
+      color: $base-font-color-2;
+    }
   }
 }
 

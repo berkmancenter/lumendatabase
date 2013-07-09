@@ -1,7 +1,7 @@
 <article class="notice-show">
   <h1><%= @notice.title %></h1>
-  <span class="date-sent">Date Sent: <%= date_sent(@notice) %></span>
-  <span class="date-received">Date Received: <%= date_received(@notice) %></span>
+  <span class="date sent">Date Sent: <%= date_sent(@notice) %></span>
+  <span class="date received">Date Received: <%= date_received(@notice) %></span>
 
   <section class="body">
     <header id="entities">
@@ -16,14 +16,15 @@
     <div class="main">
       <h2>Re: <%= @notice.subject %></h2>
       <p class="source">Sent via: <%= @notice.source || 'Unknown' %></p>
-      <p class="body">Body: <%= @notice.redacted(:body) %></p>
+      <p class="body">
+        <b>Body:</b> <%= @notice.redacted(:body) %>
+      </p>
       <ol id="works" class="copyright-claims">
         <%= render @notice.works %>
       </ol>
       <p class="legal-other">
         <b>Legal (Other):</b> <%= @notice.redacted(:legal_other) %>
       </p>
-
     </div>
   </section>
 
