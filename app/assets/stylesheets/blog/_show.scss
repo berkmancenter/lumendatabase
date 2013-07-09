@@ -31,10 +31,13 @@ article.post {
     $border-size: 6px;
     $margin-left: 41px;
     border-left: $border-size solid $shadow-2;
-    color: $base-font-color;
+    color: lighten($base-font-color, 12%);
     font-style: italic;
-    line-height: 1.6em;
     margin-left: -$margin-left;
     padding-left: $margin-left - $border-size;
+
+    &, p {
+      line-height: 1.7em;
+    }
   }
 }

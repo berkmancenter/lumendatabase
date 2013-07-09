@@ -5,7 +5,7 @@ feature "The Blog" do
     blog_entry = create(:blog_entry, :with_content)
 
     visit '/'
-    click_on 'Weather Reports'
+    click_on 'Blog'
     click_on blog_entry.title
 
     expect(page.html).to include(blog_entry.content_html)
