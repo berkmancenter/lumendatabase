@@ -1,5 +1,73 @@
 require 'spec_helper'
 
+feature "Redaction queue" do
+  scenario "A user processes their queue" do
+    Redaction::Queue.stub(:queue_max).and_return(2)
+
+    user = create(:user)
+    notice_one = create(:notice, :redactable)
+    notice_two = create(:notice, :redactable)
+    notice_three = create(:notice, :redactable)
+
+    queue = QueueOnPage.new
+    queue.visit_as(user)
+
+    expect(queue).to have_notices([notice_one, notice_two])
+
+    queue.select_notice(notice_one)
+    queue.select_notice(notice_two)
+    queue.process_selected
+
+    queue.publish_and_next
+
+    expect(queue).not_to have_next
+
+    queue.publish
+
+    expect(queue).to have_notices([notice_three])
+  end
+
+  class QueueOnPage < PageObject
+    def visit_as(user)
+      visit '/users/sign_in'
+      fill_in "Email", with: user.email
+      fill_in "Password", with: user.password
+      click_on "Sign in"
+
+      visit "/admin/notice/redact_queue"
+    end
+
+    def has_notices?(notices)
+      actual_ids = page.all(".queue_item").map { |element| element[:id] }
+      expected_ids = notices.map { |notice| "notice_#{notice.id}" }
+
+      actual_ids == expected_ids
+    end
+
+    def select_notice(notice)
+      within("tr#notice_#{notice.id}") { check "selected[]" }
+    end
+
+    def process_selected
+      click_on 'Process selected'
+    end
+
+    def publish_and_next
+      uncheck 'Review required'
+      click_on 'Save and next'
+    end
+
+    def publish
+      uncheck 'Review required'
+      click_on 'Save'
+    end
+
+    def has_next?
+      has_css?("input[value='Save and next']")
+    end
+  end
+end
+
 feature "Redactable fields" do
   Notice::REDACTABLE_FIELDS.each do |field|
 
@@ -75,9 +143,7 @@ feature "Redactable fields" do
         notice
       end
 
-      class RedactableFieldOnPage
-        include Capybara::DSL
-
+      class RedactableFieldOnPage < PageObject
         def initialize(name)
           @name = name
         end

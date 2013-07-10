@@ -266,4 +266,31 @@ describe Notice do
       expect(notice.next_requiring_review).not_to be
     end
   end
+
+  context ".available_for_review" do
+    it "returns notices with no reviewer" do
+      user = create(:user)
+      expected_notices = create_list(:notice, 2, review_required: true)
+      create_list(:notice, 2, review_required: true, reviewer: user)
+      create_list(:notice, 2, review_required: false)
+
+      notices = Notice.available_for_review(10)
+
+      expect(notices).to match_array(expected_notices)
+    end
+  end
+
+  context ".in_review" do
+    it "returns notices in review with that user" do
+      user_one, user_two = create_list(:user, 2)
+      expected_notices = create_list(
+        :notice, 2, review_required: true, reviewer: user_one
+      )
+      create_list(:notice, 2, review_required: true, reviewer: user_two)
+
+      notices = Notice.in_review(user_one)
+
+      expect(notices).to match_array(expected_notices)
+    end
+  end
 end

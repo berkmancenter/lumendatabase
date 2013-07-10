@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130703144431) do
+ActiveRecord::Schema.define(:version => 20130709185131) do
 
   create_table "blog_entries", :force => true do |t|
     t.integer  "user_id"
@@ -153,7 +153,10 @@ ActiveRecord::Schema.define(:version => 20130703144431) do
     t.boolean  "review_required"
     t.text     "body_original"
     t.datetime "date_sent"
+    t.integer  "reviewer_id"
   end
+
+  add_index "notices", ["reviewer_id"], :name => "index_notices_on_reviewer_id"
 
   create_table "notices_relevant_questions", :force => true do |t|
     t.integer "notice_id"

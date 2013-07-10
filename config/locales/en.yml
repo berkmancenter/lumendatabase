@@ -17,3 +17,8 @@ en:
         done: 'Redacted'
         menu: 'Redact'
         title: 'Redact notice'
+
+      redact_queue:
+        breadcrumb: 'Redact queue'
+        menu: 'Redact queue'
+        title: 'Redact queue'

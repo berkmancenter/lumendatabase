@@ -3,7 +3,14 @@ require 'rails_admin/config/actions/base'
 
 RedactNoticeProc = Proc.new do
   @redactable_fields = Notice::REDACTABLE_FIELDS
-  @next_notice = @object.next_requiring_review
+
+  if params[:next_notices].present?
+    next_notice, *next_notices = params[:next_notices]
+
+    @next_notice_path = redact_notice_path(
+      @abstract_model, next_notice, next_notices: next_notices
+    )
+  end
 
   if request.get?
     respond_to do |format|
@@ -23,12 +30,10 @@ RedactNoticeProc = Proc.new do
     if @object.save
       respond_to do |format|
         format.html {
-          if params[:save_and_next] && @next_notice
-            redirect_to(
-              redact_notice_path(@abstract_model, @next_notice.id)
-            )
+          if params[:save_and_next] && @next_notice_path
+            redirect_to @next_notice_path
           else
-            redirect_to_on_success
+            redirect_to redact_queue_path(@abstract_model)
           end
         }
         format.js {
@@ -39,7 +44,7 @@ RedactNoticeProc = Proc.new do
         }
       end
     else
-      handle_save_error :edit
+      handle_save_error :redact_notice
     end
   end
 end

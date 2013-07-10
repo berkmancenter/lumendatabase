@@ -11,7 +11,9 @@
 <section id="redaction-form">
   <%
     form_options = {
-      url: redact_notice_path(@abstract_model, @object.id),
+      url: redact_notice_path(
+        @abstract_model, @object.id, next_notices: params[:next_notices]
+      ),
       as: @abstract_model.param_key,
       html: {
         method: :put,
@@ -40,12 +42,12 @@
     <div class="form-actions">
       <%= form.submit('Save', class: 'btn btn-primary') %>
 
-      <% if @next_notice %>
+      <% if @next_notice_path %>
         <%= form.submit('Save and next', name: 'save_and_next', class: 'btn btn-info') %>
-        <%= link_to('Next', redact_notice_path(@abstract_model, @next_notice.id), class: 'btn') %>
+        <%= link_to('Next', @next_notice_path, class: 'btn') %>
       <% end %>
 
-      <%= link_to('Done', dashboard_path, class: 'btn') %>
+      <%= link_to('Done', redact_queue_path(@abstract_model), class: 'btn') %>
     </div>
   <% end %>
 </section>

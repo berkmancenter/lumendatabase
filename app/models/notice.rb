@@ -19,6 +19,8 @@ class Notice < ActiveRecord::Base
   UNDER_REVIEW_VALUE = 'Under review'
   RANGE_SEPARATOR = '..'
 
+  belongs_to :reviewer, class_name: 'User'
+
   has_many :categorizations, dependent: :destroy
   has_many :categories, through: :categorizations
   has_many :category_relevant_questions,
@@ -72,6 +74,14 @@ class Notice < ActiveRecord::Base
           include: { infringing_urls: { only: [:url] } }
         })
       }
+  end
+
+  def self.available_for_review(limit)
+    in_review(nil).limit(limit)
+  end
+
+  def self.in_review(user)
+    where(review_required: true, reviewer_id: user).order(:created_at)
   end
 
   def all_relevant_questions

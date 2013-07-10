@@ -8,6 +8,7 @@ describe 'rails_admin/application/redact_notice.html.erb' do
 
     assign(:abstract_model, RailsAdmin::AbstractModel.new(Notice))
     assign(:redactable_fields, [])
+    assign(:next_notice_path, nil)
   end
 
   it 'displays elapsed time in queue' do
@@ -53,7 +54,7 @@ describe 'rails_admin/application/redact_notice.html.erb' do
     end
 
     it "shows 'Save and next' and 'Next' if there is a next model" do
-      assign(:next_notice, build_stubbed(:notice))
+      assign(:next_notice_path, 'http://example.com')
 
       render
 
