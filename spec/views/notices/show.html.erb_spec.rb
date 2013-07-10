@@ -11,7 +11,9 @@ describe 'notices/show.html.erb' do
   end
 
   it "displays the date sent in the proper format" do
-    assign(:notice, build(:notice, date_sent: Time.local(2013, 5, 4)))
+    notice = build(:notice, date_sent: Time.local(2013, 5, 4))
+    notice.stub(:submitter).and_return(build(:entity))
+    assign(:notice, notice)
 
     render
 
@@ -19,7 +21,9 @@ describe 'notices/show.html.erb' do
   end
 
   it "displays the date received in the proper format" do
-    assign(:notice, build(:notice, date_received: Time.local(2013, 6, 5)))
+    notice = build(:notice, date_received: Time.local(2013, 6, 5))
+    notice.stub(:recipient).and_return(build(:entity))
+    assign(:notice, notice)
 
     render
 
