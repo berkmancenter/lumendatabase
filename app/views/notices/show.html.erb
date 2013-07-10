@@ -1,15 +1,13 @@
 <article class="notice-show">
   <h1><%= @notice.title %></h1>
-  <span class="date sent">Date Sent: <%= date_sent(@notice) %></span>
-  <span class="date received">Date Received: <%= date_received(@notice) %></span>
 
   <section class="body">
     <header id="entities">
       <% if @notice.submitter %>
-        <%= render @notice.submitter, css_class: 'sender', role: :submitter %>
+        <%= render @notice.submitter, notice: @notice, role: :submitter %>
       <% end %>
       <% if @notice.recipient %>
-        <%= render @notice.recipient, css_class: 'receiver', role: :recipient %>
+        <%= render @notice.recipient, notice: @notice, role: :recipient %>
       <% end %>
     </header>
 

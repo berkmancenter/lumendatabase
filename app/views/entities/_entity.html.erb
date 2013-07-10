@@ -1,7 +1,13 @@
-<section class="<%= css_class %>">
-<h5><%= css_class %></h5>
-<h6><%= link_to(entity.name, facetted_search_path("#{role}_name" => entity.name)) %></h6>
-<span class="private">[Private]</span>
-<span><%= entity.city %>, <%= entity.state %>, <%= entity.zip %>, <%= entity.country_code %></span>
-<span><%= entity.kind %></span>
-</section>
+<% if role == :submitter %>
+  <section class="sender">
+    <h5>sender</h5>
+    <%= render 'entities/address', entity: entity, role: role %>
+    <span class="date sent">Date Sent: <%= date_sent(notice) %></span>
+  </section>
+<% elsif role == :recipient %>
+  <section class="receiver">
+    <h5>receiver</h5>
+    <%= render 'entities/address', entity: entity, role: role %>
+    <span class="date received">Date Received: <%= date_received(notice) %></span>
+  </section>
+<% end %>
