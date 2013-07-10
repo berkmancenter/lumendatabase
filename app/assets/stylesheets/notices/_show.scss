@@ -76,11 +76,12 @@ article.notice-show {
 
     h5 {
       text-transform: uppercase;
-      color: darken($light-gray, 5%);
+      color: darken($light-gray, 10%);
       font-weight: bold;
       margin-bottom: 5px;
       font-size: $base-font-size-small-1 - 1;
     }
+
     h6 {
       font-size: $base-font-size-small-1;
       font-weight: bold;
@@ -89,6 +90,10 @@ article.notice-show {
     span {
       display: block;
       font-size: $base-font-size-small-1;
+    }
+
+    a {
+      text-decoration: none;
     }
   }
 }

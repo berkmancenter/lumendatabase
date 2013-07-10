@@ -331,6 +331,7 @@ DEPENDENCIES
   guard-spork
   high_voltage
   jquery-rails
+  jquery-ui-rails
   launchy
   neat
   newrelic_rpm

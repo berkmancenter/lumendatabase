@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery.ui.effect.all
 //= require jquery.collapse
 //= require select2
 //= require bootstrap-datepicker/core
