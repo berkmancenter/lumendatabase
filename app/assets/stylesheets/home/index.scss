@@ -1,11 +1,3 @@
-//************************************************************************//
-// Layout
-//************************************************************************//
-section.main.home {
-  @include outer-container;
-  max-width: $home-width;
-}
-
 // Search form
 //************************************************************************//
 section.home-search-form {
@@ -30,6 +22,9 @@ section.home-search-form {
 // Site News
 //************************************************************************//
 .site-news {
+  @include clearfix;
+  margin-bottom: 20px;
+
   section {
     background: #fff;
     border-radius: 3px;

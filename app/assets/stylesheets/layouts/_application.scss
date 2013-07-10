@@ -1,8 +1,12 @@
 body {
+  background: #fff;
+}
+
+.main {
   background: $base-background-color;
 }
 
-section.main.app {
+.main-inner {
   @include container;
   padding: 40px $gutter 40px 210px;
 

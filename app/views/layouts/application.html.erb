@@ -11,7 +11,9 @@
   <%= render 'flashes' -%>
   <%= render 'shared/header' -%>
   <section class="main app">
-    <%= yield %>
+    <div class="main-inner">
+      <%= yield %>
+    </div>
   </section>
   <%= render 'shared/footer' -%>
   <%= render 'javascript' %>

@@ -1,6 +1,4 @@
 .high_voltage-pages {
-  color: $base-title-color;
-
   section.main {
     section {
       margin-bottom: 30px;
@@ -56,7 +54,7 @@
 
     &:nth-child(2n+1) {
       padding: 10px 30px 20px 0px;
-      box-shadow: 1px 1px darken($light-gray,10);
+      box-shadow: 1px 1px $base-border-color;
 
       @include media($tablet) {
         box-shadow:none;
@@ -66,7 +64,7 @@
 
     &:nth-child(2n) {
       padding: 10px 0px 20px 35px;
-      box-shadow: 0 1px 0 darken($light-gray,10);
+      box-shadow: 0 1px 0 $base-border-color;
 
       @include media($tablet) {
         box-shadow:none;
@@ -136,7 +134,7 @@
 ol.privacy {
   list-style-type: none;
   counter-reset: li;
-  border-bottom: 1px solid darken($light-gray,10);
+  border-bottom: 1px solid $base-border-color;
   padding-bottom: 25px;
 
   > li {

@@ -1,20 +1,39 @@
 footer.main {
   background: #fff;
-  // background: $nav-bg;
-  min-height: 100px;
-  padding: 20px 0;
-  // color: #efefef;
-  color: $base-title-color;
+  border-top: 1px solid #F0F0F0;
   color: $base-font-color-3;
+  font-size: $base-font-size-small-1;
+  font-weight: 600;
 
   div.inner-wrapper {
+    @include clearfix;
     @include container;
     margin: 0;
     padding: 0 0 0 $left-margin;
-    @include clearfix;
 
     @include media($small-screen) {
       padding-left: $gutter;
+    }
+  }
+
+  span, a {
+    margin: 40px 25px;
+    display: inline-block;
+  }
+
+  @include media($mobile) {
+    span, a {
+      margin: 10px 25px;
+      display: block;
+    }
+  }
+
+  a {
+    color: $base-font-color-3;
+    text-decoration: none;
+
+    &:hover {
+      color: $base-link-color;
     }
   }
 }
