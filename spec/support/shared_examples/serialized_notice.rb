@@ -2,7 +2,7 @@ shared_examples 'a serialized notice' do
 
   it 'includes base notice metadata' do
     with_a_serialized_notice do |notice, json|
-      %i(title body date_sent date_received submitter_name recipient_name).each do |att|
+      %i(title body date_sent date_received sender_name recipient_name).each do |att|
         expect(json[att]).to eq notice.send(att)
       end
     end
@@ -41,7 +41,7 @@ end
 def build_notice
   build(:notice).tap do|notice|
     notice.stub(:recipient_name).and_return('recipient name')
-    notice.stub(:submitter_name).and_return('submitter name')
+    notice.stub(:sender_name).and_return('sender name')
     notice.stub(:categories).and_return(
       build_list(:category, 2)
     )

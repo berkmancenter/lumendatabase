@@ -1,4 +1,4 @@
-# results.facets['submitter_name']['terms'].map{|f| f['term']}
+# results.facets['sender_name']['terms'].map{|f| f['term']}
 
 RSpec::Matchers.define :have_facets do |facet|
   match do |results|

@@ -75,8 +75,8 @@ feature "notice submission" do
         select "United States", from: "Country"
       end
 
-      within('section.submitter') do
-        fill_in "Name", with: "Submitter the first"
+      within('section.sender') do
+        fill_in "Name", with: "Sender the first"
       end
     end
 
@@ -90,7 +90,7 @@ feature "notice submission" do
       expect(page).to have_content "MA"
       expect(page).to have_content "United States"
 
-      expect(page).to have_content "Submitter the first"
+      expect(page).to have_content "Sender the first"
     end
   end
 
@@ -102,10 +102,10 @@ feature "notice submission" do
         fill_in "Address Line 2", with: "Recipient Line 2"
       end
 
-      within('section.submitter') do
-        fill_in "Name", with: "Submitter the first"
-        fill_in "Address Line 1", with: "Submitter Line 1"
-        fill_in "Address Line 2", with: "Submitter Line 2"
+      within('section.sender') do
+        fill_in "Name", with: "Sender the first"
+        fill_in "Address Line 1", with: "Sender Line 1"
+        fill_in "Address Line 2", with: "Sender Line 2"
       end
     end
 
@@ -114,8 +114,8 @@ feature "notice submission" do
     within('#entities') do
       expect(page).not_to have_content "Recipient Line 1"
       expect(page).not_to have_content "Recipient Line 2"
-      expect(page).not_to have_content "Submitter Line 1"
-      expect(page).not_to have_content "Submitter Line 2"
+      expect(page).not_to have_content "Sender Line 1"
+      expect(page).not_to have_content "Sender Line 2"
     end
   end
 

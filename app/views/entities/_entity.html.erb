@@ -1,13 +1,9 @@
-<% if role == :submitter %>
-  <section class="sender">
-    <h5>sender</h5>
-    <%= render 'entities/address', entity: entity, role: role %>
+<section class="<%= role %>">
+  <h5><%= role %></h5>
+  <%= render 'entities/address', entity: entity, role: role %>
+  <% if role == :sender %>
     <span class="date sent">Date Sent: <%= date_sent(notice) %></span>
-  </section>
-<% elsif role == :recipient %>
-  <section class="receiver">
-    <h5>receiver</h5>
-    <%= render 'entities/address', entity: entity, role: role %>
+  <% elsif role == :recipient %>
     <span class="date received">Date Received: <%= date_received(notice) %></span>
-  </section>
-<% end %>
+  <% end %>
+</section>

@@ -44,7 +44,7 @@ describe Notice do
 
   context "entity notice roles" do
     context 'with entities' do
-      %w( submitter recipient ).each do |role_name|
+      %w( sender recipient ).each do |role_name|
         context "##{role_name}" do
           it "returns entity of type #{role_name}" do
             entity = create(:entity)
@@ -64,10 +64,10 @@ describe Notice do
     end
 
     context "without notice roles" do
-      it "returns nil for recipient and submitter" do
+      it "returns nil for recipient and sender" do
         notice = create(:notice)
         expect(notice.recipient).to be_nil
-        expect(notice.submitter).to be_nil
+        expect(notice.sender).to be_nil
       end
     end
   end
@@ -187,7 +187,7 @@ describe Notice do
 
       create(
         :entity_notice_role,
-        name: 'submitter',
+        name: 'sender',
         notice: notice,
         entity: entity
       )

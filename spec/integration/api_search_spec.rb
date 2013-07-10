@@ -23,7 +23,7 @@ feature "Searching via the API", search: true do
       expect_api_search_to_find("king") do |json|
         facets = json['meta']['facets']
         expect(facets.keys).to include(
-          'submitter_name', 'recipient_name', 'categories', 'date_received'
+          'sender_name', 'recipient_name', 'categories', 'date_received'
         )
       end
     end
@@ -31,12 +31,12 @@ feature "Searching via the API", search: true do
     scenario "return facet query information" do
       notice = create(:notice, :with_facet_data, title: "The Lion King")
       expect_api_search_to_find(
-        "king", submitter_name: notice.submitter_name
+        "king", sender_name: notice.sender_name
       ) do |json|
         metadata = json['meta']
         expect(metadata).to have_key('query').with_value(
           "term" => "king",
-          "submitter_name" => notice.submitter_name
+          "sender_name" => notice.sender_name
         )
       end
     end

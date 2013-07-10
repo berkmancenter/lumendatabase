@@ -65,7 +65,7 @@ feature "Search", search: true do
     end
 
     scenario "for entities" do
-      notice = create(:notice, role_names: ['submitter','recipient'])
+      notice = create(:notice, role_names: ['sender','recipient'])
 
       within_search_results_for(notice.recipient_name) do
         expect(page).to have_n_results(1)
@@ -74,10 +74,10 @@ feature "Search", search: true do
         expect(page.html).to have_excerpt('Entity')
       end
 
-      within_search_results_for(notice.submitter_name) do
+      within_search_results_for(notice.sender_name) do
         expect(page).to have_n_results(1)
         expect(page).to have_content(notice.title)
-        expect(page).to have_content(notice.submitter_name)
+        expect(page).to have_content(notice.sender_name)
         expect(page.html).to have_excerpt('Entity')
       end
     end

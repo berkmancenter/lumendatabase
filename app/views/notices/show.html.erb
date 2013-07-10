@@ -3,8 +3,8 @@
 
   <section class="body">
     <header id="entities">
-      <% if @notice.submitter %>
-        <%= render @notice.submitter, notice: @notice, role: :submitter %>
+      <% if @notice.sender %>
+        <%= render @notice.sender, notice: @notice, role: :sender %>
       <% end %>
       <% if @notice.recipient %>
         <%= render @notice.recipient, notice: @notice, role: :recipient %>

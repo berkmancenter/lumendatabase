@@ -45,7 +45,7 @@ Authentication is not required for now.
 
 | Field             | Type    | Description
 | ---               | ---     | ---
-| name              | string  | The name of the role, one of "principal", "agent", "recipient", "submitter" or "target". "recipient" and "submitter" are displayed on the chillingeffects website.
+| name              | string  | The name of the role, one of "principal", "agent", "recipient", "sender" or "target". "recipient" and "sender" are displayed on the chillingeffects website.
 | entity_attributes | Entity  | An entity that has this role on this notice
 
 **Entity**
@@ -102,7 +102,7 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'http://c
         }
       },
       {
-        "name": "submitter",
+        "name": "sender",
         "entity_attributes": {
           "name": "Joe Lawyer",
           "kind": "individual",
@@ -183,7 +183,7 @@ Return a JSON-encoded representation of selected notice attributes.
       "Bookmarks",
       "Chilling Effects"
     ],
-    "submitter_name": "Joe Lawyer",
+    "sender_name": "Joe Lawyer",
     "recipient_name": "Google, Inc.",
     "works": [
       {
@@ -262,14 +262,14 @@ to the query term. Higher numbers are more relevant.
 
 **Method**: `GET`
 
-**Endpoint**: `http://chillingeffects.herokuapp.com/search?term=url_escaped_query&submitter_name=Joe%20Smith&page=1`
+**Endpoint**: `http://chillingeffects.herokuapp.com/search?term=url_escaped_query&sender_name=Joe%20Smith&page=1`
 
 **Parameters**
 
 | Parameters      | Description
 | ---             | ---
 | term            | The full-text query term
-| submitter_name  | Filter on submitter_name facet
+| sender_name     | Filter on sender_name facet
 | recipient_name  | Filter on recipient_name facet
 | categories      | Filter on categories facet
 | date_received   | The date range (in microseconds since the unix epoc) separated by ".."
@@ -308,7 +308,7 @@ search results.
 | Field           | Type      | Description
 | ---             | ---       | ---
 | term            | String    | The full-text search term
-| submitter_name  | String    | The submitter_name value if this facet was submitted in this search.
+| sender_name     | String    | The sender_name value if this facet was submitted in this search.
 | recipient_name  | String    | The recipient_name value if this facet was submitted in this search.
 | categories      | String    | The category value if this facet was submitted in this search.
 | date_received   | String    | The date range used (in microseconds since the unix epoc) separated by ".."
@@ -323,7 +323,7 @@ Currently we're using [terms](http://www.elasticsearch.org/guide/reference/api/s
 
 | Facet           | Facet Type | Description
 | ---             | ---        | ---
-| submitter_name  | Terms      | The top 10 submitter_names in this result set.
+| sender_name     | Terms      | The top 10 sender_names in this result set.
 | recipient_name  | Terms      | The top 10 recipient_names in this result set.
 | categories      | Terms      | The top 10 categories in this result set.
 | date_received   | Range      | The available date range facets.
@@ -370,7 +370,7 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'http://c
         "DMCA Notices",
         "John Doe Anonymity"
       ],
-      "submitter_name": "Joe Lawyer",
+      "sender_name": "Joe Lawyer",
       "recipient_name": "Google, Inc.",
       "works": [
         {
@@ -391,7 +391,7 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'http://c
       "term": "star"
     },
     "facets": {
-      "submitter_name": {
+      "sender_name": {
         "_type": "terms",
         "missing": 0,
         "total": 7,

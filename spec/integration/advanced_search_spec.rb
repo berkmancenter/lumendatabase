@@ -8,12 +8,12 @@ feature "Advanced search", search: true do
   end
 
   context 'facets' do
-    it 'on submitter names' do
+    it 'on sender names' do
       notice = create(:notice, :with_facet_data)
       with_a_facetted_search(
-        :submitter_name, :submitter_name_facet) do |results|
-        expect(results).to have_facets('submitter_name').
-          with_terms([notice.submitter_name])
+        :sender_name, :sender_name_facet) do |results|
+        expect(results).to have_facets('sender_name').
+          with_terms([notice.sender_name])
       end
     end
 
@@ -56,7 +56,7 @@ feature "Advanced search", search: true do
   context "filtering" do
 
     context "without a full-text search term" do
-      [:submitter_name, :recipient_name, :categories].each do |facet_type|
+      [:sender_name, :recipient_name, :categories].each do |facet_type|
         it "displays #{facet_type} facet results correctly" do
           notice = create(:notice, :with_facet_data, title: "Lion King two")
           sleep 1
@@ -78,7 +78,7 @@ feature "Advanced search", search: true do
 
     context "with a full-text search term" do
 
-      [:categories, :submitter_name, :recipient_name].each do |facet_type|
+      [:categories, :sender_name, :recipient_name].each do |facet_type|
         it "on #{facet_type}" do
           outside_facet = create(:notice, title: "King of New York")
           inside_facet = create(:notice, :with_facet_data, title: "Lion King two")
