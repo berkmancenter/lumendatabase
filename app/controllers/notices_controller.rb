@@ -4,7 +4,7 @@ class NoticesController < ApplicationController
     @notice = Notice.new
     @notice.file_uploads.build
     @notice.entity_notice_roles.build(name: 'recipient').build_entity
-    @notice.entity_notice_roles.build(name: 'submitter').build_entity
+    @notice.entity_notice_roles.build(name: 'sender').build_entity
     @notice.works.build.infringing_urls.build
   end
 

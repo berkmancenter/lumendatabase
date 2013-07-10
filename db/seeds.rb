@@ -84,7 +84,7 @@ class FakeNotice
     }].sample
   end
 
-  def submitter
+  def sender
     [{
       name: 'Joe Lawyer',
       kind: 'individual',
@@ -152,7 +152,7 @@ unless ENV['SKIP_FAKE_DATA']
       entity_notice_roles_attributes: [{
       name: 'recipient', entity_attributes: fake.recipient
     }, {
-      name: 'submitter', entity_attributes: fake.submitter
+      name: 'sender', entity_attributes: fake.sender
     }]
     )
 

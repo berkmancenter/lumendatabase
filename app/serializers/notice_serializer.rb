@@ -1,6 +1,6 @@
 class NoticeSerializer < ActiveModel::Serializer
   attributes :id, :title, :body, :date_sent, :date_received,
-    :categories, :submitter_name, :recipient_name, :works
+    :categories, :sender_name, :recipient_name, :works
 
   def categories
     object.categories.map(&:name)

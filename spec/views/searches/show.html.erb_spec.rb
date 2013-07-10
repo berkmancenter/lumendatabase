@@ -14,7 +14,7 @@ describe 'searches/show.html.erb' do
 
     render
 
-    expect(page).to have_css('.submitter_name span', count: 2)
+    expect(page).to have_css('.sender_name span', count: 2)
     expect(page).to have_css('.recipient_name span', count: 1)
     expect(page).to have_css('.categories span', count: 3)
     expect(page).to have_css('.date_received span', count: 1)
@@ -23,7 +23,7 @@ describe 'searches/show.html.erb' do
   it "includes the notice data" do
     notice = create(
       :notice,
-      role_names: ['recipient','submitter'],
+      role_names: ['recipient','sender'],
       title: 'A notice',
       date_received: Time.now,
       categories: build_list(:category, 2)
@@ -35,8 +35,8 @@ describe 'searches/show.html.erb' do
     within('.result') do
       expect(page).to have_css('.title', text: 'A notice')
       expect(page).to have_css('.sender-receiver', text: notice.recipient_name)
-      expect(page).to have_css('.sender-receiver', text: notice.submitter_name)
-      expect(page).to have_facetted_search_role_link(:submitter_name, notice)
+      expect(page).to have_css('.sender-receiver', text: notice.sender_name)
+      expect(page).to have_facetted_search_role_link(:sender_name, notice)
       expect(page).to have_facetted_search_role_link(:recipient_name, notice)
       expect(page).to have_css(
         '.date-received', text: notice.date_received.to_s(:simple)
@@ -88,7 +88,7 @@ describe 'searches/show.html.erb' do
 
   def facet_data
     {
-      "submitter_name" => { "terms" =>
+      "sender_name" => { "terms" =>
         [
           { "term" => "Mike Itten", "count" => 27 },
           { "term" => "Imak Itten", "count" => 27 }

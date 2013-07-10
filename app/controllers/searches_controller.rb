@@ -28,7 +28,7 @@ class SearchesController < ApplicationController
       searcher.register TermSearch.new(:term, :_all)
 
       searcher.register TermFilter.new(:categories, :category_facet)
-      searcher.register TermFilter.new(:submitter_name, :submitter_name_facet)
+      searcher.register TermFilter.new(:sender_name, :sender_name_facet)
       searcher.register TermFilter.new(:recipient_name, :recipient_name_facet)
       searcher.register DateRangeFilter.new(
         :date_received,

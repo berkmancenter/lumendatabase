@@ -8,8 +8,8 @@ module NoticeActions
     within('section.recipient') do
       fill_in "Name", with: "Recipient the first"
     end
-    within('section.submitter') do
-      fill_in "Name", with: "Submitter the first"
+    within('section.sender') do
+      fill_in "Name", with: "Sender the first"
     end
 
     fill_in 'Work URL', with: 'http://www.example.com/original_work.pdf'

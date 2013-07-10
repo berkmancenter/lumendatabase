@@ -47,7 +47,7 @@ FactoryGirl.define do
 
     trait :with_facet_data do
       with_categories
-      role_names ['submitter', 'recipient']
+      role_names ['sender', 'recipient']
       date_received Time.now
     end
 

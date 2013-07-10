@@ -3,7 +3,7 @@
   <div class="metadata">
     <div class="date-received"><%= date_received(result) %></div>
     <div class="sender-receiver">
-      <%= link_to(result.submitter_name, facetted_search_path(submitter_name: result.submitter_name), class: 'sender' )%>
+      <%= link_to(result.sender_name, facetted_search_path(sender_name: result.sender_name), class: 'sender' )%>
       <span class="arrow"><%= image_tag 'arrow-small.svg' %></span>
       <%= link_to(result.recipient_name, facetted_search_path(recipient_name: result.recipient_name), class: 'receiver' )%>
     </div>

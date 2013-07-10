@@ -12,7 +12,7 @@ describe 'notices/show.html.erb' do
 
   it "displays the date sent in the proper format" do
     notice = build(:notice, date_sent: Time.local(2013, 5, 4))
-    notice.stub(:submitter).and_return(build(:entity))
+    notice.stub(:sender).and_return(build(:entity))
     assign(:notice, notice)
 
     render
@@ -42,7 +42,7 @@ describe 'notices/show.html.erb' do
   end
 
   it "displays a notice with entities" do
-    notice = create(:notice, role_names: ['submitter', 'recipient'])
+    notice = create(:notice, role_names: ['sender', 'recipient'])
 
     assign(:notice, notice)
 
@@ -61,15 +61,15 @@ describe 'notices/show.html.erb' do
     end
   end
 
-  it "displays submitter_names such that they are clickable" do
-    notice = create(:notice, role_names: ['submitter', 'recipient'])
+  it "displays sender_names such that they are clickable" do
+    notice = create(:notice, role_names: ['sender', 'recipient'])
 
     assign(:notice, notice)
 
     render
 
     within('#entities') do
-      expect(page).to have_facet_link(:submitter_name, notice.submitter_name)
+      expect(page).to have_facet_link(:sender_name, notice.sender_name)
       expect(page).to have_facet_link(:recipient_name, notice.recipient_name)
     end
   end

@@ -9,7 +9,7 @@ class Notice < ActiveRecord::Base
   extend RecentScope
 
   HIGHLIGHTS = %i(
-    title tag_list categories.name submitter_name recipient_name
+    title tag_list categories.name sender_name recipient_name
     works.description works.url infringing_urls.url
   )
 
@@ -55,9 +55,9 @@ class Notice < ActiveRecord::Base
     indexes :title
     indexes :date_received, type: 'date', include_in_all: false
     indexes :tag_list, as: 'tag_list'
-    indexes :submitter_name, as: 'submitter_name'
-    indexes :submitter_name_facet,
-      analyzer: 'keyword', as: 'submitter_name',
+    indexes :sender_name, as: 'sender_name'
+    indexes :sender_name_facet,
+      analyzer: 'keyword', as: 'sender_name',
       include_in_all: false
     indexes :recipient_name, as: 'recipient_name'
     indexes :recipient_name_facet,
@@ -92,12 +92,12 @@ class Notice < ActiveRecord::Base
     related_blog_entries.limit(limit)
   end
 
-  def submitter
-    entities_that_have_submitted.first
+  def sender
+    entities_that_have_sent.first
   end
 
-  def submitter_name
-    submitter && submitter.name
+  def sender_name
+    sender && sender.name
   end
 
   def recipient
@@ -133,8 +133,8 @@ class Notice < ActiveRecord::Base
 
   private
 
-  def entities_that_have_submitted
-    entity_notice_roles.submitters.map(&:entity)
+  def entities_that_have_sent
+    entity_notice_roles.senders.map(&:entity)
   end
 
   def entities_that_have_received

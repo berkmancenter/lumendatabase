@@ -34,8 +34,8 @@ describe 'notices/new.html.erb' do
 
   context "step headings" do
     it "has the correct step headings" do
-      ordered_sections = %w( notice-body works submitter recipient )
-      assign(:notice, build(:notice, role_names: %w( submitter recipient )))
+      ordered_sections = %w( notice-body works sender recipient )
+      assign(:notice, build(:notice, role_names: %w( sender recipient )))
 
       render
 
