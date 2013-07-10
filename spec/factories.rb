@@ -46,6 +46,7 @@ FactoryGirl.define do
     end
 
     trait :with_facet_data do
+      with_tags
       with_categories
       role_names ['sender', 'recipient']
       date_received Time.now

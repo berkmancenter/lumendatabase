@@ -40,7 +40,9 @@ class FakeNotice
   end
 
   def tags
-    ["movie", "disney", "youtube"]
+    (1..5).to_a.sample.times.map do
+      %w|movie disney youtube sharknado snakes planes|.sample
+    end.uniq
   end
 
   def kind
@@ -76,11 +78,11 @@ class FakeNotice
     {
       kind: 'organization',
       name: 'Twitter, Inc.',
-      address_line_1: '1355 Market St, Suite 900',
-      city: 'San Francisco',
-      state: 'CA',
-      zip: '94103',
-      country_code: 'US'
+      address_line_1: '100 Maple Leaf Rd.',
+      city: 'Quebec',
+      state: 'ON',
+      zip: 'FFF 222',
+      country_code: 'CA'
     }].sample
   end
 
@@ -99,9 +101,9 @@ class FakeNotice
       kind: 'individual',
       address_line_1: '123 Any St.',
       city: 'Town',
-      state: 'CA',
-      zip: '94044',
-      country_code: 'US'
+      state: 'ON',
+      zip: 'FFF 123',
+      country_code: 'CA'
     },
     {
       name: 'Steve Simpson',

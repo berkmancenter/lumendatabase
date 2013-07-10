@@ -1,0 +1,3 @@
+<%- tags.each do |tag| %>
+  <%= render tag %><%- unless tags.last == tag %>, <% end %>
+<% end %>

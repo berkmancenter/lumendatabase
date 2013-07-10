@@ -29,7 +29,7 @@
   <footer>
     <section id="tags">
       <h6>Tags</h6>
-      <%= @notice.tag_list %>
+      <%= render 'shared/tag_list', tags: @notice.tags %>
     </section>
 
     <section id="categories">
