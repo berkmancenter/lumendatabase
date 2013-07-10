@@ -2,8 +2,8 @@
   <h5><%= role %></h5>
   <%= render 'entities/address', entity: entity, role: role %>
   <% if role == :sender %>
-    <span class="date sent">Date Sent: <%= date_sent(notice) %></span>
+    <span class="date sent">Sent on <%= date_sent(notice) %></span>
   <% elsif role == :recipient %>
-    <span class="date received">Date Received: <%= date_received(notice) %></span>
+    <span class="date received">Received on <%= date_received(notice) %></span>
   <% end %>
 </section>

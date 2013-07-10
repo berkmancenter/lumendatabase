@@ -7,13 +7,6 @@ article.notice-show {
     margin-bottom: 0.15em;
     margin-top: 0;
   }
-
-  .date {
-    margin-right: 10px;
-    color: $base-font-color-3;
-    font-size: $base-font-size-small-1 - 1px;
-    font-weight: bold;
-  }
 }
 
 article.notice-show {
@@ -76,7 +69,7 @@ article.notice-show {
 
     h5 {
       text-transform: uppercase;
-      color: darken($light-gray, 10%);
+      color: darken($light-gray, 15%);
       font-weight: bold;
       margin-bottom: 5px;
       font-size: $base-font-size-small-1 - 1;
@@ -85,6 +78,14 @@ article.notice-show {
     h6 {
       font-size: $base-font-size-small-1;
       font-weight: bold;
+
+      a {
+        color: $base-font-color;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
     }
 
     span {
@@ -141,15 +142,19 @@ article.notice-show {
         margin-bottom: 6px;
       }
 
+      $label-width: 160px;
+      $margin: 15px;
       span.label,
       span.infringing-title {
         color: $base-font-color-3;
-        float: left;
         font-size: $base-font-size - 1;
         font-weight: bold;
-        margin-right: 15px;
-        text-align: right;
-        width: 160px;
+        @include span-columns(2.5);
+        @include pad(0 0 0 20px);
+      }
+
+      span.field {
+        @include span-columns(9.5);
       }
 
       ol.infringing-urls {
