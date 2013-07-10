@@ -31,7 +31,7 @@ article.notice-show {
     @include clearfix;
 
     section.sender,
-    section.receiver {
+    section.recipient {
       float: left;
       min-height: 150px;
       @include pad(15px default 25px $base-padding);
@@ -45,7 +45,7 @@ article.notice-show {
       }
     }
 
-    section.receiver {
+    section.recipient {
       box-shadow: inset 0 4px 0 #18A753;
     }
 
