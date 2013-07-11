@@ -19,8 +19,13 @@ feature "notice submission" do
 
     open_recent_notice
 
-    expect(page).to have_content("Date Sent: May 04, 2013")
-    expect(page).to have_content("Date Received: May 05, 2013")
+    within('.recipient .date') do
+      expect(page).to have_content("May 05, 2013")
+    end
+
+    within('.sender .date') do
+      expect(page).to have_content("May 04, 2013")
+    end
   end
 
   scenario "submitting a notice with an attached file" do

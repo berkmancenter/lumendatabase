@@ -9,7 +9,7 @@ RSpec::Matchers.define :have_facets do |facet|
     return_value = result
 
     if @check_terms
-      return_value = (result == @expected_terms)
+      return_value = (result.sort == @expected_terms.sort)
     end
     return_value
   end
