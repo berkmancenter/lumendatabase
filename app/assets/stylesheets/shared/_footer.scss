@@ -16,6 +16,10 @@ footer.main {
     }
   }
 
+  span, nav {
+    float: left;
+  }
+
   span, a {
     margin: 40px 25px;
     display: inline-block;
