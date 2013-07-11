@@ -21,7 +21,6 @@
 ol.results-facets {
   $border-color: #ddd;
   @include clearfix;
-  // background: #fff;
   border-bottom: 1px solid $border-color;
   margin: 0;
   padding: 0 0 0 15px;
@@ -31,6 +30,20 @@ ol.results-facets {
     float: left;
     list-style: none;
     border-right: 1px solid $border-color;
+
+  }
+
+  @include media($mobile) {
+    padding: 0;
+
+    > li {
+      float: none;
+      border-bottom: 1px solid $base-border-color;
+
+      &:last-child {
+        border-bottom: 0;
+      }
+    }
   }
 
   li.title {

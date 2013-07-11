@@ -128,6 +128,10 @@ ol.results-list {
       color: $base-font-color-2;
       font-weight: 400;
 
+      @include media($tablet) {
+        opacity: 1;
+      }
+
       a {
         color: $base-font-color-2;
       }
