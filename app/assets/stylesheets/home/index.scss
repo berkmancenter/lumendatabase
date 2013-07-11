@@ -4,6 +4,14 @@ section.home-search-form {
   margin: 25vh 0;
   @extend %search-form;
 
+  @include media($tablet) {
+    margin: 15vh 0;
+  }
+
+  @include media($mobile) {
+    margin: 8vh 0;
+  }
+
   h1 {
     margin: 0 0 32px 0;
     text-align: center;
@@ -14,6 +22,15 @@ section.home-search-form {
 
     input {
       font-size: $base-font-size + 1px;
+    }
+
+    @include media($mobile) {
+      width: auto;
+      margin: 5%;
+
+      div.input input {
+        width: 100%;
+      }
     }
   }
 }
