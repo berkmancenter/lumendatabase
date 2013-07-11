@@ -7,6 +7,8 @@
           <%= render 'term_facet', type: 'sender_name', results: @results %>
           <%= render 'term_facet', type: 'recipient_name', results: @results %>
           <%= render 'term_facet', type: 'categories', results: @results %>
+          <%= render 'term_facet', type: 'tags', results: @results %>
+          <%= render 'term_facet', type: 'country_code', results: @results %>
           <%= render 'range_facet', type: 'date_received', results: @results %>
         </ol>
       <% end %>

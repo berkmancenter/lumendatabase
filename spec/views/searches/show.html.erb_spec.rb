@@ -10,14 +10,13 @@ describe 'searches/show.html.erb' do
   end
 
   it "includes facets" do
-    mock_results(build_stubbed_list(:notice, 5))
+    mock_results(build_stubbed_list(:notice, 1))
 
     render
 
-    expect(page).to have_css('.sender_name span', count: 2)
-    expect(page).to have_css('.recipient_name span', count: 1)
-    expect(page).to have_css('.categories span', count: 3)
-    expect(page).to have_css('.date_received span', count: 1)
+    facet_data.keys.each do|facet|
+      expect(page).to have_css(".#{facet} span", count: 2)
+    end
   end
 
   it "includes the notice data" do
@@ -95,17 +94,34 @@ describe 'searches/show.html.erb' do
         ]
       },
       "recipient_name" => { "terms" =>
-        [{ "term" => "Twitter", "count" => 10 }]
+        [
+          { "term" => "Twitter", "count" => 10 },
+          { "term" => "Twooter", "count" => 10 }
+        ]
       },
       "categories" => { "terms" =>
         [
           { "term" => "DMCA", "count" => 10 },
-          { "term" => "DMCA Takedown", "count" => 10 },
           { "term" => "DMCA Giveup", "count" => 10 }
         ]
       },
+      "tags" => { "terms" =>
+        [
+          { "term" => "a tag", "count" => 27 },
+          { "term" => "another tag", "count" => 27 }
+        ]
+      },
+      "country_code" => { "terms" =>
+        [
+          { "term" => "US", "count" => 27 },
+          { "term" => "CA", "count" => 27 }
+        ]
+      },
       "date_received"=>{ "ranges"=>
-        [{ "from" => 1371583484000.0, "to" => 1371669884000.0, "count" => 1}]
+        [
+          { "from" => 1371583484000.0, "to" => 1371669884000.0, "count" => 1},
+          { "from" => 1371583485000.0, "to" => 1371669885000.0, "count" => 1}
+        ]
       }
     }
   end

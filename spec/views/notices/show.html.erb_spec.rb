@@ -38,6 +38,7 @@ describe 'notices/show.html.erb' do
 
     within('#tags') do
       expect(page).to have_content("a_tag")
+      expect(page).to have_facet_link(:tags, 'a_tag')
     end
   end
 

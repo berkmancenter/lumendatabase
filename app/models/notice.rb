@@ -49,6 +49,8 @@ class Notice < ActiveRecord::Base
   after_touch { tire.update_index }
 
   delegate :country_code, to: :recipient, allow_nil: true
+  delegate :name, to: :sender, prefix: true, allow_nil: true
+  delegate :name, to: :recipient, prefix: true, allow_nil: true
 
   mapping do
     indexes :id, index: 'not_analyzed', include_in_all: false
@@ -59,9 +61,14 @@ class Notice < ActiveRecord::Base
     indexes :sender_name_facet,
       analyzer: 'keyword', as: 'sender_name',
       include_in_all: false
+    indexes :tag_list_facet,
+      analyzer: 'keyword', as: 'tag_list',
+      include_in_all: false
     indexes :recipient_name, as: 'recipient_name'
     indexes :recipient_name_facet,
-      analyzer: 'keyword',  as: 'recipient_name', include_in_all: false
+      analyzer: 'keyword', as: 'recipient_name', include_in_all: false
+    indexes :country_code_facet,
+      analyzer: 'keyword', as: 'country_code', include_in_all: false
     indexes :categories, type: 'object', as: 'categories'
     indexes :category_facet,
       analyzer: 'keyword', as: ->(notice) { notice.categories.map(&:name) },
@@ -96,16 +103,8 @@ class Notice < ActiveRecord::Base
     entities_that_have_sent.first
   end
 
-  def sender_name
-    sender && sender.name
-  end
-
   def recipient
     entities_that_have_received.first
-  end
-
-  def recipient_name
-    recipient && recipient.name
   end
 
   def auto_redact

@@ -17,6 +17,24 @@ feature "Advanced search", search: true do
       end
     end
 
+    it 'on tags' do
+      notice = create(:notice, :with_facet_data)
+      with_a_facetted_search(
+        :tags, :tag_list_facet) do |results|
+        expect(results).to have_facets('tags').
+          with_terms(notice.tag_list)
+      end
+    end
+
+    it 'on country' do
+      notice = create(:notice, :with_facet_data)
+      with_a_facetted_search(
+        :country_code, :country_code_facet) do |results|
+        expect(results).to have_facets('country_code').
+          with_terms([notice.country_code])
+      end
+    end
+
     it 'on recipient names' do
       notice = create(:notice, :with_facet_data)
       with_a_facetted_search(
@@ -56,13 +74,17 @@ feature "Advanced search", search: true do
   context "filtering" do
 
     context "without a full-text search term" do
-      [:sender_name, :recipient_name, :categories].each do |facet_type|
+      [
+        :sender_name, :recipient_name, :categories, :tags, :country_code
+      ].each do |facet_type|
         it "displays #{facet_type} facet results correctly" do
           notice = create(:notice, :with_facet_data, title: "Lion King two")
           sleep 1
           facet = ''
           if facet_type == :categories
             facet = notice.categories.first.name
+          elsif facet_type == :tags
+            facet = notice.tag_list.first
           else
             facet = notice.send(facet_type)
           end
@@ -77,8 +99,9 @@ feature "Advanced search", search: true do
     end
 
     context "with a full-text search term" do
-
-      [:categories, :sender_name, :recipient_name].each do |facet_type|
+      [
+        :categories, :sender_name, :recipient_name, :tags, :country_code
+      ].each do |facet_type|
         it "on #{facet_type}" do
           outside_facet = create(:notice, title: "King of New York")
           inside_facet = create(:notice, :with_facet_data, title: "Lion King two")
@@ -90,6 +113,8 @@ feature "Advanced search", search: true do
           facet = ''
           if facet_type == :categories
             facet = inside_facet.categories.first.name
+          elsif facet_type == :tags
+            facet = inside_facet.tags.first
           else
             facet = inside_facet.send(facet_type)
           end
