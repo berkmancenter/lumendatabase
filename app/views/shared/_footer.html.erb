@@ -4,7 +4,11 @@
     <nav>
     <%= link_to "Privacy", page_path("privacy") %>
     <%= link_to "Disclaimer", page_path("disclaimer") %>
-    <%= link_to "Login", user_session_path %>
+    <% if current_user %>
+      <%= link_to "Admin", rails_admin_path %>
+    <% else %>
+      <%= link_to "Sign In", new_user_session_path %>
+    <% end %>
     </nav>
   </div>
 </footer>
