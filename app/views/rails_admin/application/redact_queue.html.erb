@@ -1,5 +1,22 @@
 <%= form_tag do %>
   <%= token_tag(nil) %>
+
+  <div id="refill-queue">
+    <% @refill.each_input do |input| %>
+      <span>
+        <%= label(@refill.root_key, input.key, input.label_text) %>
+        <%=
+          select_tag(
+            :"#{@refill.root_key}[#{input.key}]",
+            options_from_collection_for_select(input.collection, :id, :name),
+            include_blank: true, multiple: true
+          )
+        %>
+      </span>
+    <% end %>
+    <%= submit_tag 'Fill', name: 'fill_queue', class: 'btn' %>
+  </div>
+
   <table class="table table-condensed table-striped">
     <thead>
       <tr>

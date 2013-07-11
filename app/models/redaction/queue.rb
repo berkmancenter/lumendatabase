@@ -1,31 +1,30 @@
 module Redaction
   class Queue
+    attr_reader :user, :notices
+
     def self.queue_max
       15
     end
 
     def initialize(user)
       @user = user
+      @notices = Notice.in_review(@user)
     end
 
-    def fill
-      return if full?
+    def reload
+      @notices = Notice.in_review(user)
+    end
 
-      Notice.available_for_review(space).update_all(reviewer_id: @user)
+    def available_space
+      self.class.queue_max - notices.count
     end
 
     def full?
-      space.zero?
+      available_space.zero?
     end
 
-    def notices
-      @notices ||= Notice.in_review(@user)
-    end
-
-    private
-
-    def space
-      self.class.queue_max - notices.count
+    def empty?
+      available_space == self.class.queue_max
     end
   end
 end

@@ -6,26 +6,29 @@ describe RedactQueueProc do
 
   before { setup_action_context }
 
-  it "fills the user's queue and assigns @objects from it" do
-    user = User.new
-    self.current_user = user
-    notices = double("Notices")
-    queue = Redaction::Queue.new(user)
-    queue.stub(:notices).and_return(notices)
-    queue.should_receive(:fill)
-    Redaction::Queue.should_receive(:new).with(user).and_return(queue)
-
-    instance_eval(&RedactQueueProc)
-
-    expect(@objects).to eq notices
-  end
-
-  context "rendering" do
+  context "GET request" do
     before do
-      queue = Redaction::Queue.new(nil)
+      queue = stub_new(Redaction::Queue, current_user)
       queue.stub(:notices).and_return([])
-      Redaction::Queue.stub(:new).and_return(queue)
-      Redaction::Queue.stub(:fill)
+    end
+
+    it "assigns a refill instance" do
+      refill = Redaction::RefillQueue.new(params)
+      Redaction::RefillQueue.should_receive(:new).with(params).and_return(refill)
+
+      instance_eval(&RedactQueueProc)
+
+      expect(@refill).to eq refill
+    end
+
+    it "assigns objects from the user's queue" do
+      queue = Redaction::Queue.new(current_user)
+      queue.stub(:notices).and_return(:notices)
+      Redaction::Queue.should_receive(:new).with(current_user).and_return(queue)
+
+      instance_eval(&RedactQueueProc)
+
+      expect(@objects).to eq :notices
     end
 
     it "renders the action template for html" do
@@ -46,17 +49,35 @@ describe RedactQueueProc do
   end
 
   context "POST request" do
-    it "redirects to redact notice with the proper parameters" do
-      request.stub(:post?).and_return(true)
-      params[:selected] = %w( 1 3 5 9 )
-      redact_path = double("Redact path")
-      should_receive(:redact_notice_path).
-        with(@abstract_model, '1', next_notices: %w( 3 5 9 )).
-        and_return(redact_path)
-      should_receive(:redirect_to).with(redact_path)
+    before { request.stub(:post?).and_return(true) }
+
+    it "fills the users queue before redirecting" do
+      params[:fill_queue] = true
+      queue = stub_new(Redaction::Queue, current_user)
+      refill = stub_new(Redaction::RefillQueue, params)
+      refill.should_receive(:fill).with(queue)
+      should_receive(:redact_queue_path).with(@abstract_model).and_return(:path)
+      should_receive(:redirect_to).with(:path)
       should_not_receive(:respond_to)
 
       instance_eval(&RedactQueueProc)
+    end
+
+    it "redirects to redact notice with the proper parameters" do
+      params[:selected] = %w( 1 3 5 9 )
+      should_receive(:redact_notice_path).
+        with(@abstract_model, '1', next_notices: %w( 3 5 9 )).
+        and_return(:path)
+      should_receive(:redirect_to).with(:path)
+      should_not_receive(:respond_to)
+
+      instance_eval(&RedactQueueProc)
+    end
+  end
+
+  def stub_new(klass, *args)
+    klass.new(*args).tap do |instance|
+      klass.stub(:new).and_return(instance)
     end
   end
 end
