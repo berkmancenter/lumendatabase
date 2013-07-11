@@ -6,6 +6,12 @@ article.post {
   @include pad(40px);
   @include span-columns(10);
 
+  @include media($small-screen) {
+    @include span-columns(10);
+  }
+
+
+
   h3.title {
     font-weight: 800;
     font-size: em(32, 15);
@@ -25,6 +31,10 @@ article.post {
     font-size: $base-font-size-2;
     line-height: 1.5;
     margin: 2em 0;
+
+    @include media($mobile) {
+      font-size: $base-font-size-1;
+    }
   }
 
   blockquote {

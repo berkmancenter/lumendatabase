@@ -24,15 +24,39 @@ header.app {
     img {
       margin-top: 5px;
       height: 30px;
+    }
+
+    @include media($mobile) {
+      float: none;
       display: block;
+      text-align: center;
+      margin: 0;
+
+      img {
+        margin: 0 auto 15px;
+        display: block;
+      }
     }
   }
 
   $input-height: 42px;
   form {
-    margin: 0;
     float: left;
+    margin: 0;
     width: 530px;
+
+    @include media($tablet) {
+      padding-left: 210px;
+      position: absolute;
+      right: 10px;
+      width: 100%;
+    }
+
+    @include media($mobile) {
+      padding: 0;
+      position: relative;
+      right: 0;
+    }
 
     div.input input {
       height: 42px;

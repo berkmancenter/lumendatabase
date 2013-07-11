@@ -21,6 +21,11 @@ section.notice-new {
       float: left;
       width: 50%;
 
+      @include media($mobile) {
+        float: none;
+        width: 100%;
+      }
+
       &.left {
         padding-right: 5%;
       }

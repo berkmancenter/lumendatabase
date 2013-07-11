@@ -1,11 +1,16 @@
 section.posts {
   @include span-columns(8);
+
+  @include media($mobile) {
+    float: none;
+    @include span-columns(4);
+  }
 }
 
 article.post-item {
   @extend %content-container;
-  margin-bottom: 30px;
   box-shadow: 0 -0px 0 $shadow-2, inset 0 1px 0 #eaeaea, $base-shadow;
+  margin-bottom: 30px;
   @include transition(box-shadow 0.15s);
 
   &:hover {
@@ -49,6 +54,11 @@ aside.sidebar {
   @include pad(0 0 0 default);
   margin-top: 28px;
 
+  @include media($mobile) {
+    float: none;
+    @include span-columns(4);
+  }
+
   h4 {
     font-weight: bold;
   }
@@ -58,10 +68,10 @@ aside.sidebar {
   }
 
   li {
+    border-bottom: 1px solid lighten($base-border-color, 5%);
     list-style: none;
     margin-bottom: 0.6em;
     padding-bottom: 0.6em;
-    border-bottom: 1px solid lighten($base-border-color, 5%);
 
     a {
       text-decoration: none;
