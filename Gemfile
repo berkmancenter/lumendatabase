@@ -60,6 +60,7 @@ group :test do
   gem 'guard-spork'
   gem 'rb-inotify', require: false
   gem 'fakeweb'
+  gem 'curb'
 end
 
 group :staging, :production do
