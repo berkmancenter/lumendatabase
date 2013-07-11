@@ -26,6 +26,7 @@ Authentication is not required for now.
 | tag_list                       | string             | Comma separated tags, spaces are OK. Automatically lowercased.
 | works_attributes               | [Work]             | A list of Works
 | entity_notice_roles_attributes | [EntityNoticeRole] | A list of EntityNoticeRoles
+
 **Work**
 
 | Field                      | Type            | Description
@@ -273,7 +274,10 @@ to the query term. Higher numbers are more relevant.
 | recipient_name  | Filter on recipient_name facet
 | categories      | Filter on categories facet
 | date_received   | The date range (in microseconds since the unix epoc) separated by ".."
+| tags            | Filter on a tag
+| country_code    | Filter on the recipient's country code
 | page            | The page you're requesting - defaults to the first page of results.
+| per_page        | The number of results per page. Defaults to 10.
 
 See below for more information about available facets. You can get an idea of
 how facets are formatted by submitting facet-less fulltext queries and then

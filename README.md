@@ -39,8 +39,7 @@ During seeding, you can customize behavior with a couple environment variables:
 License
 =======
 
-Chilling Effects is licensed under the MIT License, the same terms as Rails
-itself. See LICENSE.txt for more information
+Chilling Effects is licensed under GPLv2. See LICENSE.txt for more information.
 
 Copyright
 =========
