@@ -47,6 +47,7 @@ Authentication is not required for now.
 | Field             | Type    | Description
 | ---               | ---     | ---
 | name              | string  | The name of the role, one of "principal", "agent", "recipient", "sender" or "target". "recipient" and "sender" are displayed on the chillingeffects website.
+| entity_id         | integer | (Optional) The ID of an existing entity. You should not specify the entity_attributes values below if you include `entity_id` here.
 | entity_attributes | Entity  | An entity that has this role on this notice
 
 **Entity**

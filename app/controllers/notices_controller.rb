@@ -50,6 +50,7 @@ class NoticesController < ApplicationController
       category_ids: [],
       file_uploads_attributes: [:file],
       entity_notice_roles_attributes: [
+        :entity_id,
         :name,
         entity_attributes: entity_params
       ],

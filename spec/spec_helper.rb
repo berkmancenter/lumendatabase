@@ -12,7 +12,6 @@ Spork.prefork do
   require 'rspec/rails'
   require 'rspec/autorun'
   require 'capybara/rspec'
-  DatabaseCleaner.strategy = :truncation
 
   # https://github.com/sporkrb/spork/issues/188
   ActiveRecord::Base.remove_connection
