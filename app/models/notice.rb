@@ -83,12 +83,23 @@ class Notice < ActiveRecord::Base
       }
   end
 
-  def self.available_for_review(limit)
-    in_review(nil).limit(limit)
+  def self.available_for_review
+    where(review_required: true, reviewer_id: nil)
   end
 
   def self.in_review(user)
     where(review_required: true, reviewer_id: user).order(:created_at)
+  end
+
+  def self.in_categories(categories)
+    joins(categorizations: :category).
+      where('categories.id' => categories).uniq
+  end
+
+  def self.submitted_by(submitters)
+    joins(entity_notice_roles: :entity).
+      where('entity_notice_roles.name' => :submitter).
+      where('entities.id' => submitters)
   end
 
   def all_relevant_questions
@@ -97,6 +108,10 @@ class Notice < ActiveRecord::Base
 
   def limited_related_blog_entries(limit = 5)
     related_blog_entries.limit(limit)
+  end
+
+  def submitter
+    entities_that_have_submitted.first
   end
 
   def sender
@@ -131,6 +146,10 @@ class Notice < ActiveRecord::Base
   end
 
   private
+
+  def entities_that_have_submitted
+    entity_notice_roles.submitters.map(&:entity)
+  end
 
   def entities_that_have_sent
     entity_notice_roles.senders.map(&:entity)

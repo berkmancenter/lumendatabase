@@ -24,4 +24,19 @@ describe Entity do
     end
   end
 
+  context ".submitters" do
+    it "returns only submitter types" do
+      create(:entity, entity_notice_roles: [
+        build(:entity_notice_role, name: 'sender')
+      ])
+      entity = create(:entity, entity_notice_roles: [
+        build(:entity_notice_role, name: 'submitter')
+      ])
+
+      entities = Entity.submitters
+
+      expect(entities).to eq [entity]
+    end
+
+  end
 end

@@ -274,7 +274,7 @@ describe Notice do
       create_list(:notice, 2, review_required: true, reviewer: user)
       create_list(:notice, 2, review_required: false)
 
-      notices = Notice.available_for_review(10)
+      notices = Notice.available_for_review
 
       expect(notices).to match_array(expected_notices)
     end
@@ -289,6 +289,30 @@ describe Notice do
       create_list(:notice, 2, review_required: true, reviewer: user_two)
 
       notices = Notice.in_review(user_one)
+
+      expect(notices).to match_array(expected_notices)
+    end
+  end
+
+  context ".in_categories" do
+    it "returns notices in the given categories" do
+      create(:notice) # not to be found
+      expected_notices = create_list(:notice, 3, :with_categories)
+      categories = expected_notices.map(&:categories).flatten
+
+      notices = Notice.in_categories(categories)
+
+      expect(notices).to match_array(expected_notices)
+    end
+  end
+
+  context ".submitted_by" do
+    it "returns the notices submitted by the given submitters" do
+      create(:notice) # not to be found
+      expected_notices = create_list(:notice, 3, role_names: %w( submitter ))
+      submitters = expected_notices.map(&:submitter)
+
+      notices = Notice.submitted_by(submitters)
 
       expect(notices).to match_array(expected_notices)
     end

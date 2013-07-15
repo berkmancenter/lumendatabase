@@ -12,4 +12,10 @@ class Entity < ActiveRecord::Base
   validates_uniqueness_of :name
 
   after_update { notices.each(&:touch) }
+
+  def self.submitters
+    submitter_ids = EntityNoticeRole.submitters.map(&:entity_id)
+
+    where(id: submitter_ids)
+  end
 end

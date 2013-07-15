@@ -2,22 +2,28 @@ require 'rails_admin/config/actions'
 require 'rails_admin/config/actions/base'
 
 RedactQueueProc = Proc.new do
-  if request.post? && params[:selected].present?
-    notice_id, *next_notices = params[:selected]
-    redact_path = redact_notice_path(
-      @abstract_model,
-      notice_id,
-      next_notices: next_notices
-    )
+  queue = Redaction::Queue.new(current_user)
+  refill = Redaction::RefillQueue.new(params)
 
-    redirect_to(redact_path)
+  if request.post?
+    if params[:fill_queue].present?
+      refill.fill(queue)
+      redirect_to redact_queue_path(@abstract_model)
+    elsif params[:selected].present?
+      notice_id, *next_notices = params[:selected]
+      redact_path = redact_notice_path(
+        @abstract_model,
+        notice_id,
+        next_notices: next_notices
+      )
+
+      redirect_to(redact_path)
+    end
   else
+    @refill = refill
+    @objects = queue.notices
+
     respond_to do |format|
-      queue = Redaction::Queue.new(current_user)
-      queue.fill
-
-      @objects = queue.notices
-
       format.html { render @action.template_name }
       format.js   { render @action.template_name, :layout => false }
     end
