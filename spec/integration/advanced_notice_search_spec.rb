@@ -1,14 +1,10 @@
 require 'spec_helper'
 
-feature "Advanced search", search: true do
+feature "Advanced search of Notices", search: true do
   include SearchHelpers
 
-  before do
-    enable_live_searches
-  end
-
   context 'facets' do
-    it 'on sender names' do
+    it 'on sender names', search: true do
       notice = create(:notice, :with_facet_data)
       with_a_facetted_search(
         :sender_name, :sender_name_facet) do |results|
@@ -17,7 +13,7 @@ feature "Advanced search", search: true do
       end
     end
 
-    it 'on tags' do
+    it 'on tags', search: true do
       notice = create(:notice, :with_facet_data)
       with_a_facetted_search(
         :tags, :tag_list_facet) do |results|
@@ -26,7 +22,7 @@ feature "Advanced search", search: true do
       end
     end
 
-    it 'on country' do
+    it 'on country', search: true do
       notice = create(:notice, :with_facet_data)
       with_a_facetted_search(
         :country_code, :country_code_facet) do |results|
@@ -35,7 +31,7 @@ feature "Advanced search", search: true do
       end
     end
 
-    it 'on recipient names' do
+    it 'on recipient names', search: true do
       notice = create(:notice, :with_facet_data)
       with_a_facetted_search(
         :recipient_name, :recipient_name_facet) do |results|
@@ -44,7 +40,7 @@ feature "Advanced search", search: true do
       end
     end
 
-    it 'on categories' do
+    it 'on categories', search: true do
       notice = create(:notice, :with_facet_data)
       with_a_facetted_search(
         :categories, :category_facet) do |results|
@@ -53,7 +49,7 @@ feature "Advanced search", search: true do
       end
     end
 
-    it 'on date_received' do
+    it 'on date_received', search: true do
       notice = create(:notice, :with_facet_data)
       sleep 1
 
@@ -77,7 +73,7 @@ feature "Advanced search", search: true do
       [
         :sender_name, :recipient_name, :categories, :tags, :country_code
       ].each do |facet_type|
-        it "displays #{facet_type} facet results correctly" do
+        it "displays #{facet_type} facet results correctly", search: true do
           notice = create(:notice, :with_facet_data, title: "Lion King two")
           sleep 1
           facet = ''
@@ -102,7 +98,7 @@ feature "Advanced search", search: true do
       [
         :categories, :sender_name, :recipient_name, :tags, :country_code
       ].each do |facet_type|
-        it "on #{facet_type}" do
+        it "on #{facet_type}", search: true do
           outside_facet = create(:notice, title: "King of New York")
           inside_facet = create(:notice, :with_facet_data, title: "Lion King two")
 
@@ -128,7 +124,7 @@ feature "Advanced search", search: true do
         end
       end
 
-      it "on date ranges" do
+      it "on date ranges", search: true do
         outside_facet = create(
           :notice, title: 'A title', date_received: Time.now - 10.months
         )

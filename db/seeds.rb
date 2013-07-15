@@ -1,6 +1,9 @@
 Notice.index.delete
 Notice.create_elasticsearch_index
 
+Entity.index.delete
+Entity.create_elasticsearch_index
+
 # Execute seeds in a logical order
 seed_files = %w(
   relevant_questions.rb categories.rb blog_entries.rb risk_triggers.rb

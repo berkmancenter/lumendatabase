@@ -1,6 +1,6 @@
 <section class="search-results">
   <header>
-    <%= form_tag(search_path, method: :get) do %>
+    <%= form_tag(notices_search_index_path, method: :get) do %>
       <% if @results.facets %>
         <ol class="results-facets">
           <li class="title"><span>Search Filters<span></li>

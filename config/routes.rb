@@ -3,7 +3,15 @@ Chill::Application.routes.draw do
 
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
 
+  namespace :notices do
+    resources :search, only: [:index]
+  end
+
   resources :notices, only: [:show, :new, :create]
+
+  namespace :entities do
+    resources :search, only: [:index]
+  end
 
   get '/n/:id', to: 'notices#show'
   get '/N/:id', to: 'notices#show'
@@ -16,9 +24,7 @@ Chill::Application.routes.draw do
 
   resources :blog_entries, only: [:index, :show]
 
-  resource :search, only: [:show]
-
-  resource :facetted_search, only: [:show], controller: :searches
+  match :facetted_search, controller: 'notices/search', action: 'index'
 
   root to: 'home#index'
 end

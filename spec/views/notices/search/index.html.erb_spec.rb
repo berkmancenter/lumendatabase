@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'searches/show.html.erb' do
+describe 'notices/search/index.html.erb' do
   it "display the results" do
     mock_results(build_stubbed_list(:notice, 5))
 

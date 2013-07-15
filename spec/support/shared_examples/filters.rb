@@ -2,7 +2,7 @@ shared_examples "a search filter" do
 
   before do
     @filter = described_class.new(:facet, [])
-    @searcher = double("NoticeSearcher Instance")
+    @searcher = double("SearchesModels Instance")
   end
 
   it "registers a facet" do

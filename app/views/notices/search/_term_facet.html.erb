@@ -5,7 +5,7 @@
   <ol class="dropdown-menu <%= type %>" role="menu">
     <% results.facets[type]['terms'].each do |term| %>
       <li class="facet <%= facet_active_indicator(type, term['term']) %>" name="<%= type %>">
-      <a href="<%= url_for(search_path(term: params[:term], type => term['term'] )) %>">
+      <a href="<%= url_for(notices_search_index_path(term: params[:term], type => term['term'] )) %>">
         <%= term['term'] %><span class="total-count"><%= term['count'] %> Results</span>
       </a>
       </li>

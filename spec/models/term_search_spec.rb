@@ -4,7 +4,7 @@ describe TermSearch do
 
   before do
     @term_search = described_class.new(:term, :_all)
-    @searcher = double("NoticeSearcher Instance")
+    @searcher = double("SearchesModels Instance")
   end
 
   it "queries the searcher given a param it handles" do
