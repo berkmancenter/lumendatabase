@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Notice do
   it { should validate_presence_of :works }
   it { should validate_presence_of :entity_notice_roles }
+  it { should ensure_inclusion_of(:language).in_array(Language.codes) }
 
   context 'automatic validations' do
     it { should validate_presence_of :title }

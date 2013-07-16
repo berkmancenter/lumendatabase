@@ -11,7 +11,7 @@ seed_files.each { |file| load("db/seeds/#{file}") }
 
 class FakeNotice
   attr_reader :title, :source, :subject, :date_sent, :date_received,
-    :body, :body_original, :review_required
+    :body, :body_original, :review_required, :language
 
   def initialize
     @title = [
@@ -30,6 +30,12 @@ class FakeNotice
       @review_required = true
     else
       @review_required = false
+    end
+
+    if rand(100) < 85
+      @language = 'en'
+    else
+      @language = Language.codes.sample
     end
   end
 
@@ -145,6 +151,7 @@ unless ENV['SKIP_FAKE_DATA']
       body: fake.body,
       body_original: fake.body_original,
       review_required: fake.review_required,
+      language: fake.language,
       works_attributes: [{
         url: fake.work_url,
         description: fake.work_description,

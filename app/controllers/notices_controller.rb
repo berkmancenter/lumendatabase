@@ -47,6 +47,7 @@ class NoticesController < ApplicationController
       :date_received,
       :source,
       :tag_list,
+      :language,
       category_ids: [],
       file_uploads_attributes: [:file],
       entity_notice_roles_attributes: [

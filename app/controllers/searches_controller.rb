@@ -32,6 +32,7 @@ class SearchesController < ApplicationController
       searcher.register TermFilter.new(:recipient_name, :recipient_name_facet)
       searcher.register TermFilter.new(:tags, :tag_list_facet)
       searcher.register TermFilter.new(:country_code, :country_code_facet)
+      searcher.register TermFilter.new(:language, :language_facet)
       searcher.register DateRangeFilter.new(
         :date_received,
         [
