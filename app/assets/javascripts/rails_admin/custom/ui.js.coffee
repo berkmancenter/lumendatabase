@@ -3,10 +3,11 @@ selectedField = null
 class Redactable
   constructor: (@input) ->
 
+  storeSelection: ->
+    $("#selected_text").val(this._selectedText())
+
   redactSelection: ->
-    selectedText = @input.value.substring(
-      @input.selectionStart, @input.selectionEnd
-    )
+    selectedText = this._selectedText()
 
     if selectedText
       @input.value = @input.value.replace(
@@ -18,6 +19,11 @@ class Redactable
   unredact: ->
     if originalInput = $("##{@input.id}_original")[0]
       @input.value = originalInput.value
+
+  _selectedText: ->
+    @input.value.substring(
+      @input.selectionStart, @input.selectionEnd
+    )
 
   _literal: (text) ->
     text.replace /([\.\+\*\?\(\[\{\)\]\}])/g, '\\$1'
@@ -32,10 +38,13 @@ addHandlers = ->
     $(textarea).focus ->
       selectedField = new Redactable this
 
-  $("button#redact-selected").click ->
+  $("#redact-selected").click ->
     selectedField?.redactSelection()
 
-  $("button#unredact-selected").click ->
+  $("#redact-selected-everywhere").click ->
+    selectedField?.storeSelection()
+
+  $("#unredact-selected").click ->
     selectedField?.unredact()
 
 $(document).ready -> addHandlers()

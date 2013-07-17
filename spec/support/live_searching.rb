@@ -1,7 +1,6 @@
 RSpec.configure do |config|
   config.before(:each, search: false) do
     # Mock Elasticsearch for non-search scenarios
-    FakeWeb.allow_net_connect = false
     FakeWeb.register_uri(:any, %r|\Ahttp://localhost:9200|, :body => "{}")
   end
 

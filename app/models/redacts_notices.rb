@@ -1,10 +1,17 @@
 class RedactsNotices
-  def initialize(redactors = [RedactsPhoneNumbers])
+  def initialize(redactors = [RedactsPhoneNumbers.new])
     @redactors = redactors
   end
 
   def redact(notice, field_or_fields = Notice::REDACTABLE_FIELDS)
     Array(field_or_fields).each { |field| redact_field(notice, field) }
+  end
+
+  def redact_all(notice_ids, field_or_fields = Notice::REDACTABLE_FIELDS)
+    Notice.where(id: notice_ids).each do |notice|
+      redact(notice, field_or_fields)
+      notice.save
+    end
   end
 
   private
@@ -14,7 +21,7 @@ class RedactsNotices
   def redact_field(notice, field)
     if (text = notice.send(field)).present?
       new_text = redactors.inject(text) do |result, redactor|
-        redactor.new(result).redacted
+        redactor.redact(result)
       end
 
       notice.send(:"#{field}=", new_text)
@@ -22,29 +29,29 @@ class RedactsNotices
     end
   end
 
-  class RedactsRegex
-    def initialize(text)
-      @text = text
+  class RedactsContent
+    def initialize(string_or_regex)
+      @string_or_regex = string_or_regex
     end
 
-    def redacted
-      @text.gsub(regex, mask)
+    def redact(content)
+      content.gsub(@string_or_regex, mask)
     end
 
     def mask
       '[REDACTED]'
     end
-
-    def regex
-      raise NotImplementedError, "#{self.class} did not implement #{__method__}"
-    end
   end
 
-  class RedactsPhoneNumbers < RedactsRegex
-    def regex
-      /(\(?\d{3}\)?.?)? # optional area code
-       \d{3}[^\d]?\d{4} # phone number, optional single-char separator
-      /x
+  class RedactsPhoneNumbers
+    def redact(text)
+      redactor = RedactsContent.new(
+        /(\(?\d{3}\)?.?)? # optional area code
+         \d{3}[^\d]?\d{4} # phone number, optional single-char separator
+        /x
+      )
+
+      redactor.redact(text)
     end
   end
 end

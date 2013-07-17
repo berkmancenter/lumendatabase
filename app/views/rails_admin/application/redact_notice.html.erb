@@ -3,51 +3,26 @@
   <%= time_ago_in_words(@object.created_at) %>
 </p>
 
-<section id="redaction-tools">
-  <button id="redact-selected" class="btn">Redact selected text</button>
-  <button id="unredact-selected" class="btn">Unredact selected field</button>
-</section>
+<aside id="redaction-tools">
+  <%=
+    render(
+      'redact_everywhere_form',
+      abstract_model: @abstract_model,
+      object: @object
+    )
+  %>
+  <button id="redact-selected" class="btn">Redact selection</button>
+  <button id="unredact-selected" class="btn">Unredact field</button>
+</aside>
 
 <section id="redaction-form">
-  <%
-    form_options = {
-      url: redact_notice_path(
-        @abstract_model, @object.id, next_notices: params[:next_notices]
-      ),
-      as: @abstract_model.param_key,
-      html: {
-        method: :put,
-        multipart: true,
-      }
-    }
+  <%=
+    render(
+      'redaction_form',
+      abstract_model: @abstract_model,
+      object: @object,
+      redactable_fields: @redactable_fields,
+      next_notice_path: @next_notice_path
+    )
   %>
-  <%= simple_form_for(@object, form_options) do |form| %>
-    <div id="redacted-fields">
-      <% @redactable_fields.each do |field| %>
-          <%= form.input(field) %>
-      <% end %>
-    </div>
-
-    <div id="original-fields">
-      <% @redactable_fields.each do |field| %>
-        <%= form.input(:"#{field}_original", input_html: { readonly: true }) %>
-      <% end %>
-    </div>
-
-    <div id="review-required">
-      <%= form.input(:review_required) %>
-      <%= form.hint "Uncheck to publish" %>
-    </div>
-
-    <div class="form-actions">
-      <%= form.submit('Save', class: 'btn btn-primary') %>
-
-      <% if @next_notice_path %>
-        <%= form.submit('Save and next', name: 'save_and_next', class: 'btn btn-info') %>
-        <%= link_to('Next', @next_notice_path, class: 'btn') %>
-      <% end %>
-
-      <%= link_to('Done', redact_queue_path(@abstract_model), class: 'btn') %>
-    </div>
-  <% end %>
 </section>
