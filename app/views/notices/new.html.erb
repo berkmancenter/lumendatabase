@@ -21,6 +21,7 @@
             collection: available_categories,
             input_html: { multiple: true }
         %>
+        <%= form.input :language, collection: Language.codes %>
       </div>
       <div class="body-wrapper right attach">
         <%= form.input :body, label: "Notice Body" %>

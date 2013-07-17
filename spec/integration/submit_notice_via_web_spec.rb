@@ -11,6 +11,16 @@ feature "notice submission" do
     end
   end
 
+  scenario "submitting a notice with language" do
+    submit_recent_notice do
+      select "en", from: "Language"
+    end
+
+    open_recent_notice
+
+    pending "We don't display language yet"
+  end
+
   scenario "submitting a notice with dates" do
     submit_recent_notice do
       fill_in "Date sent", with: Time.local(2013, 5, 4)

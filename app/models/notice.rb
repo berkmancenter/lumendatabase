@@ -1,3 +1,4 @@
+require 'language'
 require 'recent_scope'
 require 'validates_automatically'
 
@@ -35,6 +36,7 @@ class Notice < ActiveRecord::Base
 
   has_and_belongs_to_many :works
 
+  validates_inclusion_of :language, in: Language.codes, allow_blank: true
   validates_presence_of :works, :entity_notice_roles
 
   acts_as_taggable
@@ -69,6 +71,8 @@ class Notice < ActiveRecord::Base
       analyzer: 'keyword', as: 'recipient_name', include_in_all: false
     indexes :country_code_facet,
       analyzer: 'keyword', as: 'country_code', include_in_all: false
+    indexes :language_facet,
+      analyzer: 'keyword', as: 'language', include_in_all: false
     indexes :categories, type: 'object', as: 'categories'
     indexes :category_facet,
       analyzer: 'keyword', as: ->(notice) { notice.categories.map(&:name) },
