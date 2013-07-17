@@ -1,11 +1,9 @@
 require 'spec_helper'
 
-feature "Searching via the API", search: true do
-  before do
-    enable_live_searches
-  end
+feature "Searching for Notices via the API" do
+  include CurbHelpers
 
-  scenario "the results array has relevant metadata" do
+  scenario "the results array has relevant metadata", js: true, search: true do
     create(:notice, title: "The Lion King on Youtube")
     expect_api_search_to_find("king") do |json|
       metadata = json['meta']
@@ -17,7 +15,7 @@ feature "Searching via the API", search: true do
   end
 
   context "facets" do
-    scenario "returns facet information" do
+    scenario "returns facet information", js: true, search: true do
       notice = create(:notice, :with_facet_data, title: "The Lion King")
 
       expect_api_search_to_find("king") do |json|
@@ -28,7 +26,7 @@ feature "Searching via the API", search: true do
       end
     end
 
-    scenario "return facet query information" do
+    scenario "return facet query information", js: true, search: true do
       notice = create(:notice, :with_facet_data, title: "The Lion King")
       expect_api_search_to_find(
         "king", sender_name: notice.sender_name
@@ -42,7 +40,7 @@ feature "Searching via the API", search: true do
     end
   end
 
-  scenario "a notice has relevant metadata" do
+  scenario "a notice has relevant metadata", js: true, search: true do
     category = create(:category, name: "Lion King")
     notice = create(
       :notice,
@@ -61,9 +59,13 @@ feature "Searching via the API", search: true do
 
   def expect_api_search_to_find(term, options = {})
     sleep 1
-    get('/search.json', options.merge( term: term ) )
 
-    json = JSON.parse(response.body)
-    yield(json) if block_given?
+    with_curb_get_for_json(
+      "notices/search.json",
+      options.merge(term: term)) do |curb|
+      json = JSON.parse(curb.body_str)
+      yield(json) if block_given?
+    end
   end
+
 end

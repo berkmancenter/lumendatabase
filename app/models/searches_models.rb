@@ -1,11 +1,12 @@
-class NoticeSearcher
+class SearchesModels
 
   attr_accessor :sort_by
 
-  def initialize(params = {})
+  def initialize(params = {}, model_class = Notice)
     @params = params
     @page = params[:page] || 1
-    @per_page = params[:per_page] || Notice::PER_PAGE
+    @model_class = model_class
+    @per_page = params[:per_page] || model_class::PER_PAGE
   end
 
   def register(search_type)
@@ -17,7 +18,7 @@ class NoticeSearcher
   end
 
   def search
-    @search = Tire.search(Notice.index_name)
+    @search = Tire.search(@model_class.index_name)
     register_filters
 
     @params.each do |param, value|
@@ -26,7 +27,7 @@ class NoticeSearcher
       end
     end
 
-    @search.highlight(*Notice::HIGHLIGHTS)
+    @search.highlight(*@model_class::HIGHLIGHTS)
     @search.size @per_page
     @search.from this_page
 

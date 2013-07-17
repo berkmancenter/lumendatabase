@@ -14,7 +14,7 @@ class CategoriesController < ApplicationController
   private
 
   def category_notice_searcher(category_name)
-    searcher = NoticeSearcher.new({ category: category_name })
+    searcher = SearchesModels.new({ category: category_name })
     searcher.register TermSearch.new(:category, :category_facet)
     searcher.sort_by = :date_received, :desc
     searcher.search

@@ -1,20 +1,16 @@
 require 'spec_helper'
 
 feature "Categories" do
-  scenario "a user views a category" do
+  scenario "user views a category", search: true do
+    category = create(:category, name: 'An awesome name')
+    notice = create(:notice, categories: [category])
 
-    pending "@notices.any? returns true, but can't be enumerated over"
+    sleep 2
 
-    category = create(:category)
-    notice = create(:notice, :with_facet_data)
-    notice.categories << category
-    notice.save!
+    visit "/categories/#{category.id}"
 
-    visit '/'
-    click_link(notice.title)
-    within('section#categories') do
-      click_link(category.name)
+    within('section.category-notices') do
+      expect(page).to have_content notice.title
     end
-
   end
 end

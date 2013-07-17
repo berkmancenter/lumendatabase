@@ -96,9 +96,14 @@ FactoryGirl.define do
     url "http://www.example.com"
 
     trait :with_children do
-      after(:create) do |parent_entity|
-        create(:entity, parent: parent_entity)
-        create(:entity, parent: parent_entity)
+      after(:create) do |instance|
+        create(:entity, parent: instance)
+        create(:entity, parent: instance)
+      end
+    end
+    trait :with_parent do
+      before(:create) do |instance|
+        instance.parent = create(:entity)
       end
     end
   end

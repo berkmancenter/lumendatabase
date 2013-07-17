@@ -2,10 +2,10 @@ RSpec::Matchers.define :have_key do |key|
   match do |json|
     @actual_value = json[key.to_s]
 
-    ret   = json.key?(key.to_s)
-    ret &&= @actual_value == @expected_value if @check_value
+    return_value = json.key?(key.to_s)
+    return_value &&= @actual_value == @expected_value if @check_value
 
-    ret
+    return_value
   end
 
   chain :with_value do |value|

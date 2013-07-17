@@ -1,9 +1,16 @@
 require 'spec_helper'
 
-describe NoticeSearcher do
+describe SearchesModels do
 
   it "returns an elasticsearch search instance" do
     expect(subject.search).to be_instance_of(Tire::Search::Search)
+  end
+
+  it "finds the index_name from the model_class" do
+    FakeModel.should_receive(:index_name)
+
+    searcher = described_class.new({foo: 'bar'}, FakeModel)
+    searcher.search
   end
 
   it "allows searches / filters to be registered" do
@@ -44,6 +51,11 @@ describe NoticeSearcher do
       searcher.search
     end
   end
+end
+
+class FakeModel
+  PER_PAGE = 10
+  HIGHLIGHTS = %i(foo bar)
 end
 
 def params_hash

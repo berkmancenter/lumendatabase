@@ -31,12 +31,6 @@ Spork.each_run do
     config.use_transactional_fixtures = false
     config.infer_base_class_for_anonymous_controllers = false
     config.order = "random"
-
-    config.before(:each) do
-      # Mock Elastic Search by default
-      FakeWeb.allow_net_connect = false
-      FakeWeb.register_uri(:any, %r|\Ahttp://localhost:9200|, :body => "{}")
-    end
   end
 end
 

@@ -39,4 +39,16 @@ describe Entity do
     end
 
   end
+
+  context 'search index' do
+    it "updates the index when created" do
+      tire = double("Tire proxy")
+      entity = build(:entity)
+      entity.stub(:tire).and_return(tire)
+
+      entity.tire.should_receive(:update_index)
+      entity.save
+    end
+
+  end
 end

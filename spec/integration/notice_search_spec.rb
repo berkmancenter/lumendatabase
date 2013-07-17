@@ -1,14 +1,10 @@
 require 'spec_helper'
 require 'yaml'
 
-feature "Search", search: true do
+feature "Searching Notices" do
   include SearchHelpers
 
-  before do
-    enable_live_searches
-  end
-
-  scenario "displays search terms" do
+  scenario "displays search terms", search: true do
     notice = create(:notice, title: "The Lion King on Youtube")
 
     submit_search 'awesome blossom'
@@ -16,7 +12,7 @@ feature "Search", search: true do
     expect(page).to have_css("input#search[value='awesome blossom']")
   end
 
-  scenario "for full-text on a single model" do
+  scenario "for full-text on a single model", search: true do
     notice = create(:notice, title: "The Lion King on Youtube")
 
     within_search_results_for("king") do
@@ -26,13 +22,13 @@ feature "Search", search: true do
     end
   end
 
-  scenario "paginates properly" do
+  scenario "paginates properly", search: true do
     3.times do
       create(:notice, title: "The Lion King on Youtube")
     end
     sleep 1
 
-    visit "/search?page=2&per_page=1&term=lion"
+    visit "/notices/search?page=2&per_page=1&term=lion"
     within('.pagination') do
       expect(page).to have_css('em.current', text: 2)
       expect(page).to have_css('a[rel="next"]')
@@ -41,7 +37,7 @@ feature "Search", search: true do
   end
 
   context "within associated models" do
-    scenario "for category names" do
+    scenario "for category names", search: true do
       category = create(:category, name: "Lion King")
       notice = create(:notice, categories: [category])
 
@@ -54,7 +50,7 @@ feature "Search", search: true do
       end
     end
 
-    scenario "for tags" do
+    scenario "for tags", search: true do
       notice = create(:notice, tag_list: 'foo, bar')
 
       within_search_results_for("bar") do
@@ -64,7 +60,7 @@ feature "Search", search: true do
       end
     end
 
-    scenario "for entities" do
+    scenario "for entities", search: true do
       notice = create(:notice, role_names: ['sender','recipient'])
 
       within_search_results_for(notice.recipient_name) do
@@ -82,7 +78,7 @@ feature "Search", search: true do
       end
     end
 
-    scenario "for infringing urls" do
+    scenario "for infringing urls", search: true do
       work = create(:work, :with_infringing_urls)
       notice = create(:notice, works: [work])
 
@@ -93,7 +89,7 @@ feature "Search", search: true do
       end
     end
 
-    scenario "for works" do
+    scenario "for works", search: true do
       work = create(:work, description: "An arbitrary description")
       notice = create(:notice, works: [work])
 
@@ -112,7 +108,7 @@ feature "Search", search: true do
   end
 
   context "changes to assocated models" do
-    scenario "a category is created" do
+    scenario "a category is created", search: true do
       notice = create(:notice)
       notice.categories.create!(name: "arbitrary")
 
@@ -122,7 +118,7 @@ feature "Search", search: true do
       end
     end
 
-    scenario "a category is destroyed" do
+    scenario "a category is destroyed", search: true do
       category = create(:category, name: "arbitrary")
       notice = create(:notice, categories: [category])
       category.destroy
@@ -130,7 +126,7 @@ feature "Search", search: true do
       expect_search_to_not_find("arbitrary", notice)
     end
 
-    scenario "a category updates its name" do
+    scenario "a category updates its name", search: true do
       category = create(:category, name: "something")
       notice = create(:notice, categories: [category])
       category.update_attributes!(name: "arbitrary")

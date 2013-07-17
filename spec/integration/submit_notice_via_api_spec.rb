@@ -1,13 +1,14 @@
 require 'spec_helper'
 
 feature "notice submission" do
+  include CurbHelpers
 
   before do
     FakeWeb.allow_net_connect = true
   end
 
   scenario "submitting an incomplete notice", js: true do
-    with_curb_post_for('{"notice": {"title": "foo" } }') do |curb_response|
+    with_curb_post_for_json('notices','{"notice": {"title": "foo" } }') do |curb_response|
       expect(curb_response.response_code).to eq 422
     end
   end
@@ -15,7 +16,7 @@ feature "notice submission" do
   scenario "submitting a notice", js: true do
     notice_hash = default_notice_hash(title: 'A superduper title')
 
-    with_curb_post_for(request_hash(notice_hash).to_json) do |curb_response|
+    with_curb_post_for_json('notices', request_hash(notice_hash).to_json) do |curb_response|
       expect(curb_response.response_code).to eq 201
       expect(Notice.last.title).to eq 'A superduper title'
     end
@@ -34,22 +35,12 @@ feature "notice submission" do
       ]
     )
 
-    with_curb_post_for(request_hash(notice_hash).to_json) do |curb_response|
+    with_curb_post_for_json('notices', request_hash(notice_hash).to_json) do |curb_response|
       expect(curb_response.response_code).to eq 201
       expect(Notice.last.recipient).to eq entity
       expect(Notice.last.title).to eq 'A notice with an entity created by id'
     end
   end
-end
-
-def with_curb_post_for(json)
-  host = Capybara.current_session.server.host
-  port = Capybara.current_session.server.port
-  curb = Curl.post("http://#{host}:#{port}/notices", json) do |curl|
-    curl.headers['Accept'] = 'application/json'
-    curl.headers['Content-Type'] = 'application/json'
-  end
-  yield curb
 end
 
 def default_notice_hash(opts = {})
