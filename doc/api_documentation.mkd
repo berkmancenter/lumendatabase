@@ -15,55 +15,55 @@ Authentication is not required for now.
 
 **Notice**
 
-| Field                          | Type               | Description
-| ---                            | ---                | ---
-| title                          | string             | Required
-| subject                        | string             |
-| date_sent                      | string             | Any parseable time value, e.g. "2013-05-21", "2013-05-21 10:01:01 -04:00"
-| date_received                  | string             | Any parseable time value, e.g. "2013-05-21", "2013-05-21 10:01:01 -04:00"
-| source                         | string             | How did you receive this notice - mail? online form?
-| category_ids                   | [int]              | An array of integers representing category ids - See **Request a list of Categories** below.
-| tag_list                       | string             | Comma separated tags, spaces are OK. Automatically lowercased.
-| works_attributes               | [Work]             | A list of Works
-| entity_notice_roles_attributes | [EntityNoticeRole] | A list of EntityNoticeRoles
+| Field                              | Type               | Description
+| ---                                | ---                | ---
+| title                              | string             | Required
+| `subject`                          | string             |
+| `date_sent`                        | string             | Any parseable time value, e.g. "2013-05-21", "2013-05-21 10:01:01 -04:00"
+| `date_received`                    | string             | Any parseable time value, e.g. "2013-05-21", "2013-05-21 10:01:01 -04:00"
+| `source`                           | string             | How did you receive this notice - mail? online form?
+| `category_ids`                     | [int]              | An array of integers representing `category_ids` - See **Request a list of Categories** below.
+| `tag_list`                         | string             | Comma separated tags, spaces are OK. Automatically lowercased.
+| `works_attributes`                 | [Work]             | A list of Works
+| `entity_notice_roles_attributes`   | [EntityNoticeRole] | A list of EntityNoticeRoles
 
 **Work**
 
-| Field                      | Type            | Description
-| ---                        | ---             | ---
-| url                        | string          | Required, the url of the original work
-| kind                       | string          | Book, movie, video, etc.
-| description                | string          | Description of the work, which may include the copyright holder information
-| infringing_urls_attributes | [InfringingUrl] | List of urls which infringe on the work
+| Field                           | Type            | Description
+| ---                             | ---             | ---
+| `url`                           | string          | Required, the url of the original work
+| `kind`                          | string          | Book, movie, video, etc.
+| `description`                   | string          | Description of the work, which may include the copyright holder information
+| `infringing_urls_attributes`    | [InfringingUrl] | List of urls which infringe on the work
 
 **InfringingUrl**
 
 | Field          | Type     | Description
 | ---            | ---      | ---
-| url            | string   | A Url that infringes upon the Work 
+| `url`          | string   | A Url that infringes upon the Work
 
 **EntityNoticeRole**
 
-| Field             | Type    | Description
-| ---               | ---     | ---
-| name              | string  | The name of the role, one of "principal", "agent", "recipient", "sender" or "target". "recipient" and "sender" are displayed on the chillingeffects website.
-| entity_id         | integer | (Optional) The ID of an existing entity. You should not specify the entity_attributes values below if you include `entity_id` here.
-| entity_attributes | Entity  | An entity that has this role on this notice
+| Field                | Type    | Description
+| ---                  | ---     | ---
+| `name`               | string  | The name of the role, one of "principal", "agent", "recipient", "sender" or "target". "recipient" and "sender" are displayed on the chillingeffects website.
+| `entity_id`          | integer | (Optional) The ID of an existing entity. You should not specify the `entity_attributes` values below if you include `entity_id` here.
+| `entity_attributes`  | Entity  | A new entity that has this role on this notice. If you specify `entity_attributes`, you should not specify an `entity_id`
 
 **Entity**
 
-| Field          | Type   | Description
-| ---            | ---    | ---
-| name           | string | Required
-| kind           | string | one of "organization" or "individual"
-| address_line_1 | string |
-| address_line_2 | string |
-| city           | string |
-| state          | string |
-| country_code   | string | A two-digit ISO country code
-| phone          | string |
-| email          | string |
-| url            | string |
+| Field             | Type   | Description
+| ---               | ---    | ---
+| `name`            | string | Required
+| `kind`            | string | one of "organization" or "individual"
+| `address_line_1`  | string |
+| `address_line_2`  | string |
+| `city`            | string |
+| `state`           | string |
+| `country_code`    | string | A two-digit ISO country code
+| `phone`           | string |
+| `email`           | string |
+| `url`             | string |
 
 ### Example Request
 
@@ -222,9 +222,9 @@ Return a JSON-encoded array of categories, including the following attributes:
 
 | Field      | Type       | Description
 | ---        | ---        | ---
-| id         | Integer    | The unique ID used for the category_ids array during notice creation.
-| name       | String     | The category name
-| parent_id  | Integer    | The parent category id of this category, or "null" if this is a root category.
+| `id`       | Integer    | The unique ID used for the `category_ids` array during notice creation.
+| `name`     | String     | The category name
+| `parent_id`| Integer    | The parent `category_id` of this category, or "null" if this is a root category.
 
 #### Example Successful Response:
 
@@ -264,21 +264,21 @@ to the query term. Higher numbers are more relevant.
 
 **Method**: `GET`
 
-**Endpoint**: `http://chillingeffects.herokuapp.com/search?term=url_escaped_query&sender_name=Joe%20Smith&page=1`
+**Endpoint**: `http://chillingeffects.herokuapp.com/notices/search?term=url_escaped_query&sender_name=Joe%20Smith&page=1`
 
 **Parameters**
 
-| Parameters      | Description
-| ---             | ---
-| term            | The full-text query term
-| sender_name     | Filter on sender_name facet
-| recipient_name  | Filter on recipient_name facet
-| categories      | Filter on categories facet
-| date_received   | The date range (in microseconds since the unix epoc) separated by ".."
-| tags            | Filter on a tag
-| country_code    | Filter on the recipient's country code
-| page            | The page you're requesting - defaults to the first page of results.
-| per_page        | The number of results per page. Defaults to 10.
+| Parameters        | Description
+| ---               | ---
+| `term`            | The full-text query term
+| `sender_name`     | Filter on `sender_name` facet
+| `recipient_name`  | Filter on `recipient_name` facet
+| `categories`      | Filter on categories facet
+| `date_received`   | The date range (in microseconds since the unix epoc) separated by ".."
+| `tags`            | Filter on a tag
+| `country_code`    | Filter on the recipient's country code
+| `page`            | The page you're requesting - defaults to the first page of results.
+| `per_page`        | The number of results per page. Defaults to 10.
 
 See below for more information about available facets. You can get an idea of
 how facets are formatted by submitting facet-less fulltext queries and then
@@ -291,32 +291,32 @@ search results.
 
 | Field       | Type       | Description
 | ---         | ---        | ---
-| notices     | Array      | An array of Notices encoded as JSON data structures.
-| meta        | Hash       | Search Metadata about the results of the search. See **Search Metadata**.
+| `notices`   | Array      | An array of Notices encoded as JSON data structures.
+| `meta`      | Hash       | Search Metadata about the results of the search. See **Search Metadata**.
 
 **Search Metadata**
 
-| Field         | Type      | Description
-| ---           | ---       | ---
-| query         | Query     | The search query meta information. See **Query** below.
-| facets        | Facet     | How the result set "falls" into metadata facets. See **Facets**
-| current_page  | Integer   | The page number of the current set of results.
-| next_page     | Integer   | The page number of the next set of results, or `null` if this is the last page.
-| offset        | Integer   | How many total results in the result set before the current list of results.
-| per_page      | Integer   | Number of results per page
-| previous_page | Integer   | The page number of the previous set of results, or `null` if this is the first page.
-| total_entries | Integer   | The total number of results for the search query.
-| total_pages   | Integer   | The total number of pages in this result set.
+| Field           | Type      | Description
+| ---             | ---       | ---
+| `query`         | Query     | The search query meta information. See **Query** below.
+| `facets`        | Facet     | How the result set "falls" into metadata facets. See **Facets**
+| `current_page`  | Integer   | The page number of the current set of results.
+| `next_page`     | Integer   | The page number of the next set of results, or `null` if this is the last page.
+| `offset`        | Integer   | How many total results in the result set before the current list of results.
+| `per_page`      | Integer   | Number of results per page
+| `previous_page` | Integer   | The page number of the previous set of results, or `null` if this is the first page.
+| `total_entries` | Integer   | The total number of results for the search query.
+| `total_pages`   | Integer   | The total number of pages in this result set.
 
 **Query**
 
-| Field           | Type      | Description
-| ---             | ---       | ---
-| term            | String    | The full-text search term
-| sender_name     | String    | The sender_name value if this facet was submitted in this search.
-| recipient_name  | String    | The recipient_name value if this facet was submitted in this search.
-| categories      | String    | The category value if this facet was submitted in this search.
-| date_received   | String    | The date range used (in microseconds since the unix epoc) separated by ".."
+| Field             | Type      | Description
+| ---               | ---       | ---
+| `term`            | String    | The full-text search term
+| `sender_name`     | String    | The sender_name value if this facet was submitted in this search.
+| `recipient_name`  | String    | The recipient_name value if this facet was submitted in this search.
+| `categories`      | String    | The category value if this facet was submitted in this search.
+| `date_received`   | String    | The date range used (in microseconds since the unix epoc) separated by ".."
 
 **Facet**
 
@@ -326,12 +326,12 @@ facets](http://www.elasticsearch.org/guide/reference/api/search/facets/).
 
 Currently we're using [terms](http://www.elasticsearch.org/guide/reference/api/search/facets/terms-facet/) and [range](http://www.elasticsearch.org/guide/reference/api/search/facets/range-facet/) facets.
 
-| Facet           | Facet Type | Description
-| ---             | ---        | ---
-| sender_name     | Terms      | The top 10 sender_names in this result set.
-| recipient_name  | Terms      | The top 10 recipient_names in this result set.
-| categories      | Terms      | The top 10 categories in this result set.
-| date_received   | Range      | The available date range facets.
+| Facet            | Facet Type | Description
+| ---              | ---        | ---
+| `sender_name`    | Terms      | The top 10 sender_names in this result set.
+| `recipient_name` | Terms      | The top 10 recipient_names in this result set.
+| `categories`     | Terms      | The top 10 categories in this result set.
+| `date_received`  | Range      | The available date range facets.
 
 **Terms Facet**
 
@@ -340,26 +340,26 @@ documentation for more information. We only return the 10 most populous facets.
 
 | Field           | Type     | Description
 | ---             | ---      | ---
-| total           | Integer  | The total number of results that can be facetted on this term and query.
-| other           | Integer  | The number of results not included in the facets returned.
-| terms           | Array    | An array including the term and count of items that are in that term facet.
+| `total`         | Integer  | The total number of results that can be facetted on this term and query.
+| `other`         | Integer  | The number of results not included in the facets returned.
+| `terms`         | Array    | An array including the term and count of items that are in that term facet.
 
 **Range Facet**
 
 | Field           | Type     | Description
 | ---             | ---      | ---
-| from            | Integer  | The start of this facet, in unix epoc microseconds.
-| to              | Integer  | The end of this facet, in unix epoc microseconds.
-| from_str        | String   | A textual representation of the start of this facet.
-| to_str          | String   | A textual representation of the end of this facet.
-| count           | Integer  | The number of documents that fall in this facet.
+| `from`          | Integer  | The start of this facet, in unix epoc microseconds.
+| `to`            | Integer  | The end of this facet, in unix epoc microseconds.
+| `from_str`      | String   | A textual representation of the start of this facet.
+| `to_str`        | String   | A textual representation of the end of this facet.
+| `count`         | Integer  | The number of documents that fall in this facet.
 
 ### Example Successful Response
 
 **Note:** Some facet information has been omitted to keep examples brief.
 
 ```
-curl -H "Accept: application/json" -H "Content-type: application/json" 'http://chillingeffects.herokuapp.com/search?term=star'
+curl -H "Accept: application/json" -H "Content-type: application/json" 'http://chillingeffects.herokuapp.com/notices/search?term=star'
 ```
 
 ```
@@ -449,11 +449,120 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'http://c
     "query": {
       "term": "nonexistent"
     },
-    "current_page": 3,
+    "current_page": 1,
     "next_page": null,
-    "offset": 20,
+    "offset": 0,
     "per_page": 10,
-    "previous_page": 2,
+    "previous_page": null,
+    "total_entries": 0,
+    "total_pages": 0
+  }
+}
+```
+
+## Search for Entities via fulltext
+
+Chillingeffects allows for paginatable full-text searches of Entities, useful
+to select existing entities during notice creation. For information about
+pagination metadata, please see 'Search notices via fulltext'
+
+**Method**: `GET`
+
+**Endpoint**: `http://chillingeffects.herokuapp.com/entities/search?term=url_escaped_query&page=1`
+
+**Parameters**
+
+| Parameters        | Description
+| ---               | ---
+| `term`            | The full-text query term
+| `page`            | The page you're requesting - defaults to the first page of results.
+| `per_page`        | The number of results per page. Defaults to 10.
+
+
+### Successful Responses
+
+Return a JSON-encoded hash including an array of entities and metadata about
+the search results.
+
+| Field        | Type       | Description
+| ---          | ---        | ---
+| `entities`   | Array      | An array of Entities encoded as JSON data structures.
+| `meta`       | Hash       | Search Metadata about the results of the search. See **Search Metadata**.
+
+**Entity**
+
+| Field             | Type               | Description
+| ---               | ---                | ---
+| `id`              | string             | The unique ID
+| `parent_id`       | string             | The parent ID or "null" if this is a "root" entity.
+| `name`            | string             | Full name
+| `address_line_1`  | string             |
+| `address_line_2`  | string             |
+| `state`           | string             |
+| `country_code`    | string             | Ideally, an ISO country code.
+| `phone`           | string             |
+| `email`           | string             |
+| `url`             | string             |
+| `city`            | string             |
+
+### Successful Responses
+
+Return a JSON-encoded representation of selected entity attributes.
+
+#### Example Successful Response:
+
+```
+curl -H "Accept: application/json" -H "Content-type: application/json" 'http://chillingeffects.herokuapp.com/entities/search?term=joe&page=1'
+```
+
+```
+{
+  "entities": [
+    {
+      "id": "6",
+      "parent_id": null,
+      "name": "Steve Simpson",
+      "address_line_1": "23 My St.",
+      "address_line_2": null,
+      "state": "CA",
+      "country_code": "US",
+      "phone": null,
+      "email": null,
+      "url": null,
+      "city": "Scranton"
+    }
+  ],
+  "meta": {
+    "query": {
+      "term": "simpson"
+    },
+    "facets": null,
+    "current_page": 1,
+    "next_page": null,
+    "offset": 0,
+    "per_page": 10,
+    "previous_page": null,
+    "total_entries": 1,
+    "total_pages": 1
+  }
+}
+```
+
+### Example Unsuccessful Response
+
+```
+{
+  "entities": [ ],
+  "meta": {
+    "query": {
+      "term": "nonexistent"
+    },
+    "facets": null,
+    "current_page": 1,
+    "next_page": null,
+    "offset": 0,
+    "per_page": 10,
+    "previous_page": null,
     "total_entries": 0,
     "total_pages": 0
   }
