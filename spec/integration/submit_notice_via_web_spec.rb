@@ -18,7 +18,23 @@ feature "notice submission" do
 
     open_recent_notice
 
+    notice = Notice.last
+    expect(notice.language).to eq 'en'
+
     pending "We don't display language yet"
+  end
+
+  scenario "submitting a notice with a jurisdiction" do
+    submit_recent_notice do
+      fill_in "Jurisdiction", with: 'US, foobar'
+    end
+
+    open_recent_notice
+
+    notice = Notice.last
+    expect(notice.jurisdiction_list).to match_array ['US', 'foobar']
+
+    pending "We don't display jurisdiction yet"
   end
 
   scenario "submitting a notice with dates" do

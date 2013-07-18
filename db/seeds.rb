@@ -54,6 +54,12 @@ class FakeNotice
     end.uniq
   end
 
+  def jurisdictions
+    (1..2).to_a.sample.times.map do
+      %w|US CA MX GB FI JP|.sample
+    end.uniq
+  end
+
   def kind
     %w( movie book video ).sample
   end
@@ -151,6 +157,7 @@ unless ENV['SKIP_FAKE_DATA']
       source: fake.source,
       category_ids: fake.categories.map(&:id),
       tag_list: fake.tags,
+      jurisdiction_list: fake.jurisdictions,
       body: fake.body,
       body_original: fake.body_original,
       review_required: fake.review_required,

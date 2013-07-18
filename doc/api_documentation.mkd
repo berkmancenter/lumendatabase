@@ -24,6 +24,7 @@ Authentication is not required for now.
 | `source`                           | string             | How did you receive this notice - mail? online form?
 | `category_ids`                     | [int]              | An array of integers representing `category_ids` - See **Request a list of Categories** below.
 | `tag_list`                         | string             | Comma separated tags, spaces are OK. Automatically lowercased.
+| `jurisidiction_list`               | string             | Comma separated list of jurisdictions, spaces are OK.
 | `works_attributes`                 | [Work]             | A list of Works
 | `entity_notice_roles_attributes`   | [EntityNoticeRole] | A list of EntityNoticeRoles
 
@@ -77,6 +78,7 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'http://c
     "source": "Online form",
     "category_ids": [19, 27],
     "tag_list": "movies, disney, youtube",
+    "jurisidiction_list": "US, CA",
     "works_attributes": [
       {
         "url": "http://disney.com/lion_king.mp4",
@@ -184,6 +186,14 @@ Return a JSON-encoded representation of selected notice attributes.
       "Anticircumvention (DMCA)",
       "Bookmarks",
       "Chilling Effects"
+    ],
+    "tags": [
+      "tag_1",
+      "tag_2"
+    ],
+    "jurisdictions": [
+      "US",
+      "CA"
     ],
     "sender_name": "Joe Lawyer",
     "recipient_name": "Google, Inc.",
@@ -377,6 +387,14 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'http://c
       ],
       "sender_name": "Joe Lawyer",
       "recipient_name": "Google, Inc.",
+      "tags": [
+        "tag_1",
+        "tag_2"
+      ],
+      "jurisdictions": [
+        "US",
+        "CA"
+      ],
       "works": [
         {
           "description": "Lion King Video",

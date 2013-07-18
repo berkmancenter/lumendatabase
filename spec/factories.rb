@@ -33,6 +33,12 @@ FactoryGirl.define do
       end
     end
 
+    trait :with_jurisdictions do
+      before(:create) do |notice|
+        notice.jurisdiction_list = 'us, ca'
+      end
+    end
+
     trait :with_categories do
       before(:create) do |notice|
         notice.categories = build_list(:category, 3)
@@ -47,6 +53,7 @@ FactoryGirl.define do
 
     trait :with_facet_data do
       with_tags
+      with_jurisdictions
       with_categories
       role_names ['sender', 'recipient']
       date_received Time.now
