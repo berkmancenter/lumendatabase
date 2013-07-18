@@ -14,6 +14,18 @@ shared_examples 'a serialized notice' do
     end
   end
 
+  it 'includes tags' do
+    with_a_serialized_notice do |notice, json|
+      expect(json[:tags]).to match_array notice.tag_list
+    end
+  end
+
+  it 'includes jurisdictions' do
+    with_a_serialized_notice do |notice, json|
+      expect(json[:jurisdictions]).to match_array notice.jurisdiction_list
+    end
+  end
+
   it 'includes works' do
     with_a_serialized_notice do |notice, json|
       expect(json[:works].map { |w| w['url'] }).to eq(notice.works.map(&:url))
@@ -42,6 +54,8 @@ def build_notice
   build(:notice).tap do|notice|
     notice.stub(:recipient_name).and_return('recipient name')
     notice.stub(:sender_name).and_return('sender name')
+    notice.stub(:tag_list).and_return(['foo', 'bar'])
+    notice.stub(:jurisdiction_list).and_return(['US', 'CA'])
     notice.stub(:categories).and_return(
       build_list(:category, 2)
     )

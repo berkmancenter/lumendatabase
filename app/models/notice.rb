@@ -39,7 +39,7 @@ class Notice < ActiveRecord::Base
   validates_inclusion_of :language, in: Language.codes, allow_blank: true
   validates_presence_of :works, :entity_notice_roles
 
-  acts_as_taggable
+  acts_as_taggable_on :tags, :jurisdictions
 
   accepts_nested_attributes_for :file_uploads,
     reject_if: ->(attributes) { attributes['file'].blank? }
@@ -59,12 +59,16 @@ class Notice < ActiveRecord::Base
     indexes :title
     indexes :date_received, type: 'date', include_in_all: false
     indexes :tag_list, as: 'tag_list'
+    indexes :jurisdiction_list, as: 'jurisdiction_list'
     indexes :sender_name, as: 'sender_name'
     indexes :sender_name_facet,
       analyzer: 'keyword', as: 'sender_name',
       include_in_all: false
     indexes :tag_list_facet,
       analyzer: 'keyword', as: 'tag_list',
+      include_in_all: false
+    indexes :jurisdiction_list_facet,
+      analyzer: 'keyword', as: 'jurisdiction_list',
       include_in_all: false
     indexes :recipient_name, as: 'recipient_name'
     indexes :recipient_name_facet,
@@ -147,6 +151,16 @@ class Notice < ActiveRecord::Base
       where('id > ? and review_required = ?', id, true).
       order('id asc').
       first
+  end
+
+  def tag_list=(tag_list_value = '')
+    if tag_list_value.respond_to?(:each)
+      tag_list_value = tag_list_value.flatten.map{|tag|tag.downcase}
+    else
+      tag_list_value = tag_list_value.downcase
+    end
+
+    super(tag_list_value)
   end
 
   private

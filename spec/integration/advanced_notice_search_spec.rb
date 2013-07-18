@@ -22,6 +22,15 @@ feature "Advanced search of Notices", search: true do
       end
     end
 
+    it 'on jurisdictions', search: true do
+      notice = create(:notice, :with_facet_data)
+      with_a_facetted_search(
+        :jurisdiction, :jurisdiction_list_facet) do |results|
+        expect(results).to have_facets('jurisdiction').
+          with_terms(notice.jurisdiction_list)
+      end
+    end
+
     it 'on country', search: true do
       notice = create(:notice, :with_facet_data)
       with_a_facetted_search(
