@@ -4,7 +4,7 @@ feature "Redaction queue" do
   scenario "A user processes their queue" do
     Redaction::Queue.stub(:queue_max).and_return(3)
 
-    user = create(:user)
+    user = create(:user, :admin)
     notices = [
       notice_one = create(:notice, :redactable),
       notice_two = create(:notice, :redactable),
@@ -31,7 +31,7 @@ feature "Redaction queue" do
   end
 
   scenario "A user refills their queue by category and submitter" do
-    user = create(:user)
+    user = create(:user, :admin)
     category_one = create(:category, name: "Cat 1")
     category_two = create(:category, name: "Cat 2")
     submitter = create(:entity, name: "Jim Smith")
@@ -67,7 +67,7 @@ feature "Redaction queue" do
   end
 
   scenario "A user redacts a pattern everywhere", js: true do
-    user = create(:user)
+    user = create(:user, :admin)
     effected_notices = create_list(:notice, 3, :redactable, body: "Some text")
     unaffected_notices = create_list(:notice, 3, :redactable, body: "Some text")
 

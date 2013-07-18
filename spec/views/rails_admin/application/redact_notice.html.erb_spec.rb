@@ -9,6 +9,10 @@ describe 'rails_admin/application/redact_notice.html.erb' do
     assign(:abstract_model, RailsAdmin::AbstractModel.new(Notice))
     assign(:redactable_fields, [])
     assign(:next_notice_path, nil)
+
+    @ability = Object.new
+    @ability.extend(CanCan::Ability)
+    controller.stub(:current_ability) { @ability }
   end
 
   it 'displays elapsed time in queue' do
@@ -38,6 +42,23 @@ describe 'rails_admin/application/redact_notice.html.erb' do
     expect(page).to have_css(
       "textarea#notice_legal_other_original:contains('Original')"
     )
+  end
+
+  it 'does not show publish checkbox if user cannot publish' do
+    assign(:object, build_stubbed(:notice))
+
+    render
+
+    expect(page).not_to have_css('input#notice_review_required')
+  end
+
+  it 'shows publish checkbox if user can publish' do
+    @ability.can :publish, Notice
+    assign(:object, build_stubbed(:notice))
+
+    render
+
+    expect(page).to have_css('input#notice_review_required')
   end
 
   context "buttons and links" do
