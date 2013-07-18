@@ -156,6 +156,10 @@ header.app {
     margin-bottom: 10px;
   }
 
+  div.field-group.hidden{
+    display: none;
+  }
+
   $input-height: 32px;
   $input-width: 280px;
   $select-width: 160px;

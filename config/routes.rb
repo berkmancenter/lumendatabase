@@ -24,7 +24,7 @@ Chill::Application.routes.draw do
 
   resources :blog_entries, only: [:index, :show]
 
-  match :facetted_search, controller: 'notices/search', action: 'index'
+  match :faceted_search, controller: 'notices/search', action: 'index'
 
   root to: 'home#index'
 end

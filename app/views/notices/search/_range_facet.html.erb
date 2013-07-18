@@ -1,10 +1,12 @@
 <li class="dropdown <%= type %> <%= facet_dropdown_active_indicator(type) %>">
-  <a class="dropdown-toggle title" data-toggle="dropdown" href="#"><%= type.titleize %></a>
+  <a class="dropdown-toggle title <%= type %>" data-toggle="dropdown" href="#"><%= facet_display_name(type) %></a>
   <ol class="dropdown-menu <%= type %>" role="menu">
+    <li class="facet"><a href="#" data-facet-name="<%= type %>" data-value="">All</a></li>
     <% results.facets[type]['ranges'].each do |range| %>
-      <li class="facet <%= facet_active_indicator(type, range_facet_param(range)) %>" name="<%= type %>">
-      <a href="<%= url_for(notices_search_index_path(term: params[:term], type => range_facet_param(range) )) %>" class="facet">Since <%= formatted_facet_range_time(range['from']) %><span class="total-count"><%= range['count'] %> Results</span></a>
+      <li class="facet <%= facet_active_indicator(type, range_facet_param(range)) %>" name="<%= type %>" >
+      <a href="#" data-facet-name="<%= type %>" data-value="<%= range_facet_param(range) %>">Since <%= formatted_facet_range_time(range['from']) %><span class="total-count"><%= range['count'] %> Results</span></a>
       </li>
     <% end %>
   </ol>
+  <%= hidden_field_tag(type, params[type]) %>
 </li>

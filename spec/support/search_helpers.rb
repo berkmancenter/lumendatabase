@@ -16,7 +16,11 @@ module SearchHelpers
     end
   end
 
-  def submit_facetted_search(term, facet, facet_value)
+  def open_dropdown_for_facet(facet)
+    find(".dropdown-toggle.#{facet}").click
+  end
+
+  def submit_faceted_search(term, facet, facet_value)
     sleep 0.5 # required for indexing to complete
 
     visit '/'
@@ -24,13 +28,19 @@ module SearchHelpers
     fill_in 'search', with: term
     click_on 'submit'
 
+    open_dropdown_for_facet(facet)
+
     within("ol.#{facet}") do
       find('a', text: /#{facet_value}/).click
     end
+
+    within('.search-results') do
+      find('button').click
+    end
   end
 
-  def within_facetted_search_results_for(term, facet, facet_value)
-    submit_facetted_search(term, facet, facet_value)
+  def within_faceted_search_results_for(term, facet, facet_value)
+    submit_faceted_search(term, facet, facet_value)
 
     within('.search-results') do
       yield if block_given?

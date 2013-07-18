@@ -1,4 +1,8 @@
 $('li.facet').on 'click', 'a', ->
+
+  facet_hidden_input = $('input#' + $(this).attr('data-facet-name'))
+  $(facet_hidden_input).val($(this).attr('data-value'))
+
   $parent = $(this).parent()
   $grandparent = $(this).parents('.dropdown')
 

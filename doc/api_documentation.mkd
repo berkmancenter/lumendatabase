@@ -290,17 +290,18 @@ to the query term. Higher numbers are more relevant.
 
 **Parameters**
 
-| Parameters        | Description
-| ---               | ---
-| `term`            | The full-text query term
-| `sender_name`     | Filter on `sender_name` facet
-| `recipient_name`  | Filter on `recipient_name` facet
-| `categories`      | Filter on categories facet
-| `date_received`   | The date range (in microseconds since the unix epoc) separated by ".."
-| `tags`            | Filter on a tag
-| `country_code`    | Filter on the recipient's country code
-| `page`            | The page you're requesting - defaults to the first page of results.
-| `per_page`        | The number of results per page. Defaults to 10.
+| Parameters              | Description
+| ---                     | ---
+| `term`                  | The full-text query term
+| `sender_name_facet`     | Filter on `sender_name` facet
+| `recipient_name_facet`  | Filter on `recipient_name` facet
+| `category_facet`        | Filter on categories facet
+| `date_received_facet`   | The date range (in microseconds since the unix epoc) separated by ".."
+| `tag_list_facet`        | Filter on a tag
+| `country_code_facet`    | Filter on the recipient's country code
+| `language_facet`        | Filter on the notice language code
+| `page`                  | The page you're requesting - defaults to the first page of results.
+| `per_page`              | The number of results per page. Defaults to 10.
 
 See below for more information about available facets. You can get an idea of
 how facets are formatted by submitting facet-less fulltext queries and then
@@ -332,13 +333,16 @@ search results.
 
 **Query**
 
-| Field             | Type      | Description
-| ---               | ---       | ---
-| `term`            | String    | The full-text search term
-| `sender_name`     | String    | The sender_name value if this facet was submitted in this search.
-| `recipient_name`  | String    | The recipient_name value if this facet was submitted in this search.
-| `categories`      | String    | The category value if this facet was submitted in this search.
-| `date_received`   | String    | The date range used (in microseconds since the unix epoc) separated by ".."
+| Field                   | Type      | Description
+| ---                     | ---       | ---
+| `term`                  | String    | The full-text search term
+| `sender_name_facet`     | String    | The `sender_name` value if this facet was submitted in this search.
+| `recipient_name_facet`  | String    | The `recipient_name` value if this facet was submitted in this search.
+| `category_facet`        | String    | The `category` value if this facet was submitted in this search.
+| `date_received_facet`   | String    | The date range used (in microseconds since the unix epoc) separated by ".."
+| `tag_list_facet`        | String    | The `tag_list` value if this facet was submitted in this search.
+| `country_code_facet`    | String    | The `country_code` value if this facet was submitted in this search.
+| `language_facet`        | String    | The `language` value if this facet was submitted in this search.
 
 **Facet**
 
@@ -348,12 +352,15 @@ facets](http://www.elasticsearch.org/guide/reference/api/search/facets/).
 
 Currently we're using [terms](http://www.elasticsearch.org/guide/reference/api/search/facets/terms-facet/) and [range](http://www.elasticsearch.org/guide/reference/api/search/facets/range-facet/) facets.
 
-| Facet            | Facet Type | Description
-| ---              | ---        | ---
-| `sender_name`    | Terms      | The top 10 sender_names in this result set.
-| `recipient_name` | Terms      | The top 10 recipient_names in this result set.
-| `categories`     | Terms      | The top 10 categories in this result set.
-| `date_received`  | Range      | The available date range facets.
+| Facet                     | Facet Type | Description
+| ---                       | ---        | ---
+| `sender_name_facet`       | Terms      | The top 10 `sender_names` in this result set.
+| `recipient_name_facet`    | Terms      | The top 10 `recipient_names` in this result set.
+| `category_facet`          | Terms      | The top 10 `categories` in this result set.
+| `tag_list_facet`          | Terms      | The top 10 `tags` in this result set.
+| `country_code_facet`      | Terms      | The top 10 `country_codes` in this result set.
+| `language_facet`          | Terms      | The top 10 `languages` in this result set.
+| `date_received`           | Range      | The available date range facets.
 
 **Terms Facet**
 
@@ -362,7 +369,7 @@ documentation for more information. We only return the 10 most populous facets.
 
 | Field           | Type     | Description
 | ---             | ---      | ---
-| `total`         | Integer  | The total number of results that can be facetted on this term and query.
+| `total`         | Integer  | The total number of results that can be faceted on this term and query.
 | `other`         | Integer  | The number of results not included in the facets returned.
 | `terms`         | Array    | An array including the term and count of items that are in that term facet.
 
@@ -429,7 +436,7 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'http://c
       "term": "star"
     },
     "facets": {
-      "sender_name": {
+      "sender_name_facet": {
         "_type": "terms",
         "missing": 0,
         "total": 7,
@@ -445,7 +452,7 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'http://c
           }
         ]
       },
-      "recipient_name": {
+      "recipient_name_facet": {
         "_type": "terms",
         "missing": 0,
         "total": 7,

@@ -163,7 +163,7 @@ describe 'notices/show.html.erb' do
 
   def have_facet_link(facet, value)
     have_css(
-      "a[href='#{facetted_search_path(facet => value)}']",
+      "a[href='#{faceted_search_path(facet => value)}']",
       text: value
     )
   end

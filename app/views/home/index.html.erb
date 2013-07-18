@@ -1,6 +1,8 @@
 <section class="home-search-form">
   <h1><%= image_tag("logo.svg") %></h1>
-  <%= render 'shared/search' %>
+  <%= form_tag(notices_search_index_path, method: :get) do %>
+    <%= render 'shared/search' %>
+  <% end %>
 </section>
 
 <div class="site-news">

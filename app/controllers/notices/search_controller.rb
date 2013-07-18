@@ -25,16 +25,20 @@ class Notices::SearchController < ApplicationController
     now = Time.now.beginning_of_day
 
     SearchesModels.new(params).tap do |searcher|
-      searcher.register TermSearch.new(:term, :_all)
+      Notice::SEARCHABLE_FIELDS.each do |field|
+        searcher.register TermSearch.new(
+          field[:parameter], field[:indexed_field]
+        )
+      end
 
-      searcher.register TermFilter.new(:categories, :category_facet)
-      searcher.register TermFilter.new(:sender_name, :sender_name_facet)
-      searcher.register TermFilter.new(:recipient_name, :recipient_name_facet)
-      searcher.register TermFilter.new(:tags, :tag_list_facet)
-      searcher.register TermFilter.new(:country_code, :country_code_facet)
-      searcher.register TermFilter.new(:language, :language_facet)
+      searcher.register TermFilter.new(:category_facet)
+      searcher.register TermFilter.new(:sender_name_facet)
+      searcher.register TermFilter.new(:recipient_name_facet)
+      searcher.register TermFilter.new(:tag_list_facet)
+      searcher.register TermFilter.new(:country_code_facet)
+      searcher.register TermFilter.new(:language_facet)
       searcher.register DateRangeFilter.new(
-        :date_received,
+        :date_received_facet, :date_received,
         [
           { from: now - 1.day, to: now },
           { from: now - 1.month, to: now },
