@@ -1,0 +1,29 @@
+<%= redact_notice_form(abstract_model, object, params, :put) do |form| %>
+  <div id="redacted-fields">
+    <% redactable_fields.each do |field| %>
+      <%= form.input(field) %>
+    <% end %>
+  </div>
+
+  <div id="original-fields">
+    <% redactable_fields.each do |field| %>
+      <%= form.input(:"#{field}_original", input_html: { readonly: true }) %>
+    <% end %>
+  </div>
+
+  <div id="review-required">
+    <%= form.input(:review_required) %>
+    <%= form.hint "Uncheck to publish" %>
+  </div>
+
+  <div class="form-actions">
+    <%= form.submit('Save', class: 'btn btn-primary') %>
+
+    <% if next_notice_path %>
+      <%= form.submit('Save and next', name: 'save_and_next', class: 'btn btn-info') %>
+      <%= link_to('Next', next_notice_path, class: 'btn') %>
+    <% end %>
+
+    <%= link_to('Done', redact_queue_path(abstract_model), class: 'btn') %>
+  </div>
+<% end %>

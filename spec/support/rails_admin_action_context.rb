@@ -8,7 +8,7 @@ module RailsAdminActionContext
     @format = double("Format", html: nil, js: nil)
     @params = HashWithIndifferentAccess.new
 
-    @object = double("Object", save: false).as_null_object
+    @object = double("Object", id: 1, save: false).as_null_object
     @action = double("Action", template_name: '')
     @abstract_model = double("Abstract model", param_key: nil)
     @model_config = double("Model config", with: nil)

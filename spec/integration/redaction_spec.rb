@@ -27,8 +27,6 @@ feature "Redactable fields" do
     end
 
     context "Manual redaction" do
-      before { FakeWeb.allow_net_connect = true }
-
       scenario "Redacting selected text in #{field}", js: true do
         visit_redact_notice
         redactable_field = RedactableFieldOnPage.new(field)
@@ -73,32 +71,6 @@ feature "Redactable fields" do
         visit "/admin/notice/#{notice.id}/redact_notice"
 
         notice
-      end
-
-      class RedactableFieldOnPage < PageObject
-        def initialize(name)
-          @name = name
-        end
-
-        def unredact
-          page.find("#notice_#{@name}").click
-
-          click_on "Unredact selected field"
-        end
-
-        def select_and_redact
-          page.execute_script <<-EOS
-            document.getElementById('notice_#{@name}').focus();
-            document.getElementById('notice_#{@name}').select();
-          EOS
-
-          click_on 'Redact selected text'
-        end
-
-        def has_content?(content)
-          page.find("#notice_#{@name}").value == content
-        end
-
       end
     end
   end

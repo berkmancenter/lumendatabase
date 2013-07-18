@@ -1,62 +1,95 @@
 require 'spec_helper'
 
-shared_examples "a redactor of" do |values|
-  values.each do |value|
-    it "redacts values that look like '#{value}'" do
-      original_text = "Some text with #{value} in it twice: #{value}."
-      redacted_text = "Some text with [REDACTED] in it twice: [REDACTED]."
+describe RedactsNotices::RedactsContent do
+  it "redacts a literal string" do
+    redactor = described_class.new('sens[itive]')
 
-      result = described_class.new(original_text).redacted
+    redacted = redactor.redact("Some Sens[itive] thing with text: sens[itive]")
 
-      expect(result).to eq redacted_text
-    end
+    expect(redacted).to eq "Some Sens[itive] thing with text: [REDACTED]"
   end
-end
 
-describe RedactsNotices::RedactsRegex do
-  it "raises if #regex is not defined" do
-    expect { described_class.new('').regex }.to raise_error(NotImplementedError)
+  it "redacts a regex" do
+    redactor = described_class.new(/[Ss]ensitive/)
+
+    redacted = redactor.redact("Some sensitive thing with text: Sensitive.")
+
+    expect(redacted).to eq "Some [REDACTED] thing with text: [REDACTED]."
   end
 end
 
 describe RedactsNotices::RedactsPhoneNumbers do
-  it_behaves_like "a redactor of",
-    %w( 123-456-7890 123.456.7890 123\ 456\ 7890 (123)\ 456-7890
-        456-7890 456.7890 456\ 7890 )
+  PHONE_NUMBERS = %w(
+    123-456-7890
+    123.456.7890
+    123\ 456\ 7890
+    (123)\ 456-7890
+    456-7890
+    456.7890
+    456\ 7890
+  )
+
+  PHONE_NUMBERS.each do |phone_number|
+    it "redacts content like `#{phone_number}'" do
+      original_text = "Something with #{phone_number} twice, #{phone_number}."
+      redacted_text = "Something with [REDACTED] twice, [REDACTED]."
+      redactor = described_class.new
+
+      redacted = redactor.redact(original_text)
+
+      expect(redacted).to eq redacted_text
+    end
+  end
 end
 
 describe RedactsNotices do
   context "#redact" do
     it "passes the field's text through all redactors" do
-      notice = create(:notice, legal_other: 'foo bar baz bat')
+      notice = build(:notice, legal_other: 'sensative-a and sensative-b')
       redactor = RedactsNotices.new([
-        simple_redactor('foo', 'bar'),
-        simple_redactor('bar', 'baz')
+        RedactsNotices::RedactsContent.new('sensative-a'),
+        RedactsNotices::RedactsContent.new('sensative-b')
       ])
 
       redactor.redact(notice, :legal_other)
 
-      expect(notice.legal_other).to eq 'baz baz baz bat'
+      expect(notice.legal_other).to eq '[REDACTED] and [REDACTED]'
     end
 
     it "preserves the original text" do
-      notice = create(:notice, legal_other: 'foo bar baz')
+      notice = build(:notice, legal_other: 'Some sensitive text')
       redactor = RedactsNotices.new([
-        simple_redactor('foo', 'bar')
+        RedactsNotices::RedactsContent.new('sensitive')
       ])
 
       redactor.redact(notice, :legal_other)
 
-      expect(notice.legal_other_original).to eq 'foo bar baz'
+      expect(notice.legal_other_original).to eq 'Some sensitive text'
     end
 
-    def simple_redactor(from, to)
-      Class.new(RedactsNotices::RedactsRegex) do
-        class_eval <<-EOC
-          def regex; /#{from}/ end
-          def mask; '#{to}' end
-        EOC
-      end
+  end
+
+  context "#redact_all" do
+    it "redacts all notices by id" do
+      notice_one = create(:notice, legal_other: 'One sensitive thing')
+      notice_two = create(:notice, legal_other: 'Two sensitive thing')
+      unaffected = create(:notice, legal_other: 'Three sensitive thing')
+      redactor = RedactsNotices.new([
+        RedactsNotices::RedactsContent.new('sensitive')
+      ])
+
+      redactor.redact_all([notice_one.id, notice_two.id], :legal_other)
+
+      expect(notice_one.reload.legal_other).to eq 'One [REDACTED] thing'
+      expect(notice_two.reload.legal_other).to eq 'Two [REDACTED] thing'
+      expect(unaffected.reload.legal_other).to eq 'Three sensitive thing'
     end
+  end
+
+  def simple_redactor(from, to)
+    redactor = RedactsNotices::RedactsContent.new(from)
+    redactor.stub(:mask).and_return(to)
+
+    redactor
   end
 end

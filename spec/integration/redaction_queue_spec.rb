@@ -11,7 +11,7 @@ feature "Redaction queue" do
       notice_three = create(:notice, :redactable)
     ]
 
-    queue = QueueOnPage.new
+    queue = RedactionQueueOnPage.new
     queue.visit_as(user)
     queue.fill
 
@@ -55,7 +55,7 @@ feature "Redaction queue" do
       )
     ]
 
-    queue = QueueOnPage.new
+    queue = RedactionQueueOnPage.new
     queue.visit_as(user)
 
     queue.select_category_profile(category_one)
@@ -66,61 +66,34 @@ feature "Redaction queue" do
     expect(queue).to have_notices(expected_notices)
   end
 
-  class QueueOnPage < PageObject
-    def visit_as(user)
-      visit '/users/sign_in'
-      fill_in "Email", with: user.email
-      fill_in "Password", with: user.password
-      click_on "Sign in"
+  scenario "A user redacts a pattern everywhere", js: true do
+    user = create(:user)
+    effected_notices = create_list(:notice, 3, :redactable, body: "Some text")
+    unaffected_notices = create_list(:notice, 3, :redactable, body: "Some text")
 
-      visit "/admin/notice/redact_queue"
+    queue = RedactionQueueOnPage.new
+    queue.visit_as(user)
+    queue.fill
+
+    effected_notices.each { |notice| queue.select_notice(notice) }
+
+    queue.process_selected
+
+    body_field = RedactableFieldOnPage.new(:body)
+    body_field.select
+
+    queue.redact_everywhere
+
+    expect(body_field).to have_content('[REDACTED]')
+
+    effected_notices.each do |notice|
+      notice.reload
+      expect(notice.body).to eq '[REDACTED]'
     end
 
-    def fill
-      within_profiles { click_on 'Fill' }
-    end
-
-    def select_category_profile(category)
-      select category.name, from: "In categories"
-    end
-
-    def select_submitter_profile(entity)
-      select entity.name, from: "Submitted by"
-    end
-
-    def has_notices?(notices)
-      actual_ids = page.all(".queue_item").map { |element| element[:id] }
-      expected_ids = notices.map { |notice| "notice_#{notice.id}" }
-
-      actual_ids.sort == expected_ids.sort
-    end
-
-    def select_notice(notice)
-      within("tr#notice_#{notice.id}") { check "selected[]" }
-    end
-
-    def process_selected
-      click_on 'Process selected'
-    end
-
-    def publish_and_next
-      uncheck 'Review required'
-      click_on 'Save and next'
-    end
-
-    def publish
-      uncheck 'Review required'
-      click_on 'Save'
-    end
-
-    def has_next?
-      has_css?("input[value='Save and next']")
-    end
-
-    private
-
-    def within_profiles(&block)
-      within('#refill-queue', &block)
+    unaffected_notices.each do |notice|
+      notice.reload
+      expect(notice.body).to eq "Some text"
     end
   end
 end

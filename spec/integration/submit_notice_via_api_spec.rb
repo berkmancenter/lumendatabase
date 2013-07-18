@@ -3,10 +3,6 @@ require 'spec_helper'
 feature "notice submission" do
   include CurbHelpers
 
-  before do
-    FakeWeb.allow_net_connect = true
-  end
-
   scenario "submitting an incomplete notice", js: true do
     with_curb_post_for_json('notices','{"notice": {"title": "foo" } }') do |curb_response|
       expect(curb_response.response_code).to eq 422
