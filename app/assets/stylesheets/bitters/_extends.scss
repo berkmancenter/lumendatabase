@@ -101,7 +101,8 @@
     right: 0;
 
     button {
-      @include border-left-radius(0);
+      // @include border-left-radius(0);
+      border-radius: 0;
       height: $home-search-input-h;
       font-size: 22px;
       @include icon(icon-search);

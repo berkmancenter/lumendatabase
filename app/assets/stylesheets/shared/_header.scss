@@ -66,7 +66,53 @@ header.app {
       width: 100%;
     }
 
+    div.submit .search-dropdown {
+      border: 1px solid darken($button-border, 3%);
+      @include border-right-radius(2px);
+      border-left: 0;
+      float: left;
+      @include linear-gradient(#2868D1, #295EB8);
+      box-shadow: -1px 0 0 darken($button-border, 6%);
+        width: 24px;
+        height: $input-height;
+
+      a.dropdown-toggle {
+        display: block;
+        height: 100%;
+        @include hide-text;
+        position: relative;
+
+        &:after {
+          position: absolute;
+          content: "";
+          left: 7px;
+          top: 50%;
+          margin-top: -2px;
+          @include triangle(8px, #fff, down);
+        }
+      }
+
+      ol {
+        @extend %dropdown-menu;
+        display: none;
+        font-size: $base-font-size-small-1 - 1;
+        left: auto;
+        list-style: none;
+        margin-top: 2px;
+        padding: 0;
+        position: absolute;
+        right: 0;
+        text-align: left;
+        width: 200px;
+      }
+
+      &.open ol {
+        display: block;
+      }
+    }
+
     div.submit button {
+      float: left;
       height: $input-height;
       font-size: 22px;
     }
@@ -77,6 +123,7 @@ div.advanced-search {
   margin-top: 30px;
   font-size: $base-font-size-small-1;
   text-align: left;
+  display: none;
 
   h5 {
     font-size: $base-font-size-small-1;
