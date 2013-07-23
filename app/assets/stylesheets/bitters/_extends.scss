@@ -101,16 +101,12 @@
     right: 0;
 
     button {
-      border: 1px solid #2D61BA;
-      @include border-right-radius(3px);
-      color: white;
+      @include border-left-radius(0);
       height: $home-search-input-h;
       font-size: 22px;
       @include icon(icon-search);
-      @include linear-gradient(#4383ED, #2C68CD);
       line-height: 1em;
       padding: 0;
-      text-shadow: 0 -1px 0 hsla(0, 0%, 0%, 0.4);
       width: $home-search-button-w;
 
       &:before {

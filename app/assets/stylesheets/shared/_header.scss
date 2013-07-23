@@ -72,3 +72,89 @@ header.app {
     }
   }
 }
+
+div.advanced-search {
+  margin-top: 30px;
+  font-size: $base-font-size-small-1;
+  text-align: left;
+
+  h5 {
+    font-size: $base-font-size-small-1;
+    margin-bottom: 10px;
+
+    span {
+      text-transform: uppercase;
+    }
+  }
+
+  div.field-group {
+    border-radius: 2px;
+    box-shadow: 0 1px 0 hsla(0, 0%, 0%, 0.2);
+    // clear: right;
+    @include clearfix;
+    float: left;
+    margin-bottom: 10px;
+  }
+
+  $input-height: 32px;
+  $input-width: 280px;
+  $select-width: 160px;
+  div.select {
+    @include clearfix;
+    float: left;
+    position: relative;
+
+    &:after {
+      content: "";
+      font-weight: 600;
+      margin-top: -2px;
+      pointer-events: none;
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      @include triangle(8px, $base-font-color-3, down);
+    }
+
+    select {
+      @extend %gray-gradient;
+      @include appearance(none);
+      @include linear-gradient(#FAFAFA, #E9E9E9);
+      font-weight: 600;
+      border: 1px solid $base-border-color-2;
+      border-radius: 2px 0 0 2px;
+      border-right: 0;
+      font-size: $base-font-size-small-1 - 1;
+      height: $input-height;
+      margin-bottom: 0;
+      padding: 5px 30px 5px 10px;
+      width: $select-width;
+      color: darken($base-font-color-2, 5%);
+    }
+  }
+
+  input {
+    font-size: $base-font-size-small-1;
+    padding: 5px 10px;
+    height: $input-height;
+    @include border-left-radius(0);
+    margin: 0;
+    width: $input-width;
+  }
+
+  a.add-group {
+    font-weight: 600;
+    float: right;
+    display: inline-block;
+    margin-top: 5px;
+  }
+
+  div.resubmit {
+    button {
+      font-size: $base-font-size-small-2;
+      font-weight: 600;
+      display: block;
+      padding: 0.65em 1.8em;
+      width: $select-width + $input-width;
+    }
+  }
+}

@@ -95,13 +95,18 @@ select {
 
 button:not(.reset),
 input[type="submit"]:not(.reset) {
-  @include button(simple, #fafafa);
+  // @include button(simple, #fafafa);
 
   // Button Overrides
-  border-color: #BBB;
+  color: white;
+  // border-color: #BBB;
+  border: 1px solid #2D61BA;
+  border-radius: 3px;
   box-shadow: 0 1px 1px hsla(0, 0%, 0%, 0.06);
   font-size: $form-font-size;
+  @include linear-gradient(#4383ED, #2C68CD);
   padding: 0.7em 1.9em;
+  text-shadow: 0 -1px 0 hsla(0, 0%, 0%, 0.4);
 }
 
 input {
