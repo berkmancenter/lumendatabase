@@ -20,8 +20,18 @@ section.home-search-form {
   form {
     margin: 0 auto;
 
-    input {
+    input#search {
       font-size: $base-font-size + 1px;
+      height: $home-search-input-h + 10px;
+    }
+
+    button#submit {
+      @include border-right-radius(3px);
+      height: $home-search-input-h + 10px;
+    }
+
+    div.search-dropdown {
+      display: none;
     }
 
     @include media($mobile) {
