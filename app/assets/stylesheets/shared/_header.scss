@@ -2,10 +2,6 @@
 // Header
 //************************************************************************//
 header.app {
-  @extend %search-form;
-  @include clearfix;
-  @include linear-gradient(hsl(43, 41%, 98%), hsl(43, 7%, 92%));
-  border-bottom: 1px solid $base-border-color;
 }
 
 //************************************************************************//
@@ -13,8 +9,18 @@ header.app {
 //************************************************************************//
 header.app {
   .container {
-    @include container;
+    @extend %search-form;
+    border-bottom: 1px solid $base-border-color;
+    @include clearfix;
     padding: 20px;
+
+    &.search {
+      @include linear-gradient(hsl(43, 41%, 98%), hsl(43, 7%, 92%));
+    }
+  }
+
+  .width-wrapper {
+    @include container;
   }
 
   h1 {
@@ -40,7 +46,7 @@ header.app {
   }
 
   $input-height: 42px;
-  form {
+  .container form {
     float: left;
     margin: 0;
     width: 530px;
@@ -59,7 +65,7 @@ header.app {
     }
 
     div.input input {
-      height: 42px;
+      height: $home-search-input-h;
       padding-top: 6px;
       padding-bottom: 6px;
       margin-bottom: 0;
@@ -119,25 +125,29 @@ header.app {
   }
 }
 
-div.advanced-search {
-  margin-top: 30px;
+//************************************************************************//
+// Advanced Search
+//************************************************************************//
+
+.container.advanced-search {
+  background: #fff;
   font-size: $base-font-size-small-1;
   text-align: left;
   display: none;
 
+  .width-wrapper {
+    padding-left: $left-margin - 11px;
+  }
+
   h5 {
     font-size: $base-font-size-small-1;
     margin-bottom: 10px;
-
-    span {
-      text-transform: uppercase;
-    }
   }
 
   div.field-group {
     border-radius: 2px;
-    box-shadow: 0 1px 0 hsla(0, 0%, 0%, 0.2);
-    // clear: right;
+    box-shadow: 0 1px 0 hsla(0, 0%, 0%, 0.04);
+    clear: left;
     @include clearfix;
     float: left;
     margin-bottom: 10px;
@@ -190,12 +200,16 @@ div.advanced-search {
 
   a.add-group {
     font-weight: 600;
-    float: right;
+    // float: right;
     display: inline-block;
     margin-top: 5px;
+    float: left;
+    margin-left: 15px;
   }
 
   div.resubmit {
+    clear: both;
+
     button {
       font-size: $base-font-size-small-2;
       font-weight: 600;

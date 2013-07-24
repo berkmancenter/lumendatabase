@@ -1,16 +1,18 @@
 <header class="app">
   <%= render 'shared/navigation' -%>
-  <div class="container">
-    <h1>
-      <%= link_to root_path, :id => "root" do %>
-        <%= image_tag("logo.svg") %>
-      <% end %>
-    </h1>
-    <%= render 'shared/search' %>
+  <div class="container search">
+    <div class="width-wrapper">
+      <h1>
+        <%= link_to root_path, :id => "root" do %>
+          <%= image_tag("logo.svg") %>
+        <% end %>
+      </h1>
+      <%= render 'shared/search' %>
+    </div>
   </div>
   <div class="container advanced-search">
-    <div class="advanced-search">
-      <h5><span>Advanced Search</span> &ndash; Add additional search queries</h5>
+    <div class="width-wrapper">
+      <h5><b>Advanced Search</b> &ndash; Add additional search queries</h5>
       <div class="field-group">
         <div class="input select">
           <select class="field">
@@ -21,10 +23,10 @@
         </div>
         <input type="text">
       </div>
-      <a href="#" class="add-group">Add query +</a>
+      <a id="duplicate-field" href="#" class="add-group">Add query +</a>
       <div class="resubmit">
         <button class="button">Advanced Search</button>
       </div>
     </div>
-</div>
+  </div>
 </header>
