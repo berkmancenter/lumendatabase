@@ -128,7 +128,6 @@ header.app {
 //************************************************************************//
 // Advanced Search
 //************************************************************************//
-
 .container.advanced-search {
   background: #fff;
   font-size: $base-font-size-small-1;
@@ -137,6 +136,10 @@ header.app {
 
   .width-wrapper {
     padding-left: $left-margin - 11px;
+
+    @include media($tablet) {
+      padding-left: 0;
+    }
   }
 
   h5 {
@@ -186,6 +189,10 @@ header.app {
       padding: 5px 30px 5px 10px;
       width: $select-width;
       color: darken($base-font-color-2, 5%);
+
+      @include media($mobile) {
+        width: $select-width / 2;
+      }
     }
   }
 
@@ -196,11 +203,14 @@ header.app {
     @include border-left-radius(0);
     margin: 0;
     width: $input-width;
+
+    @include media($mobile) {
+      width: $input-width - 20px;
+    }
   }
 
   a.add-group {
     font-weight: 600;
-    // float: right;
     display: inline-block;
     margin-top: 5px;
     float: left;
