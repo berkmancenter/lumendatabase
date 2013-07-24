@@ -9,8 +9,8 @@ class SearchesModels
     @per_page = params[:per_page] || model_class::PER_PAGE
   end
 
-  def register(search_type)
-    registry << search_type
+  def register(filter)
+    registry << filter
   end
 
   def registry
@@ -18,25 +18,19 @@ class SearchesModels
   end
 
   def search
-    @search = Tire.search(@model_class.index_name)
-    register_filters
+    Tire.search(@model_class.index_name).tap do |search|
+      register_filters(search)
 
-    @params.each do |param, value|
-      if value.present?
-        add_searches_for(param, value)
+      apply_filters(search)
+
+      search.highlight(*@model_class::HIGHLIGHTS)
+      search.size @per_page
+      search.from this_page
+
+      if local_sort_by = sort_by
+        search.sort { by(*local_sort_by) }
       end
     end
-
-    @search.highlight(*@model_class::HIGHLIGHTS)
-    @search.size @per_page
-    @search.from this_page
-
-    local_sort_by = sort_by
-    if sort_by
-      @search.sort{ by *local_sort_by }
-    end
-
-    @search
   end
 
   private
@@ -45,16 +39,23 @@ class SearchesModels
     @per_page.to_i * (@page.to_i - 1)
   end
 
-  def register_filters
+  def register_filters(search)
     registry.each do |filter|
-      filter.register_filter(@search)
+      filter.register_filter(search)
     end
   end
 
-  def add_searches_for(param, value)
-    registry.each do |search_type|
-      search_type.apply_to_search(@search, param, value)
+  def apply_filters(search)
+    if @model_class.respond_to?(:add_default_filter)
+      @model_class.add_default_filter(search)
+    end
+
+    @params.each do |param, value|
+      if value.present?
+        registry.each do |filter|
+          filter.apply_to_search(search, param, value)
+        end
+      end
     end
   end
-
 end

@@ -5,7 +5,7 @@ feature "Searching Notices" do
   include SearchHelpers
 
   scenario "displays search terms", search: true do
-    notice = create(:notice, title: "The Lion King on Youtube")
+    create(:notice, title: "The Lion King on Youtube")
 
     submit_search 'awesome blossom'
 
@@ -34,6 +34,12 @@ feature "Searching Notices" do
       expect(page).to have_css('a[rel="next"]')
       expect(page).to have_css('a[rel="prev start"]')
     end
+  end
+
+  scenario "it does not include rescinded notices", search: true do
+    notice = create(:notice, title: "arbitrary", rescinded: true)
+
+    expect_search_to_not_find("arbitrary", notice)
   end
 
   context "within associated models" do

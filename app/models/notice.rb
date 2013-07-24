@@ -59,6 +59,7 @@ class Notice < ActiveRecord::Base
     indexes :id, index: 'not_analyzed', include_in_all: false
     indexes :title
     indexes :date_received, type: 'date', include_in_all: false
+    indexes :rescinded, type: 'boolean', include_in_all: false
     indexes :tag_list, as: 'tag_list'
     indexes :jurisdiction_list, as: 'jurisdiction_list'
     indexes :sender_name, as: 'sender_name'
@@ -112,6 +113,19 @@ class Notice < ActiveRecord::Base
     joins(entity_notice_roles: :entity).
       where('entity_notice_roles.name' => :submitter).
       where('entities.id' => submitters)
+  end
+
+  def self.add_default_filter(search)
+    filter = TermFilter.new(:rescinded)
+    filter.apply_to_search(search, :rescinded, false)
+  end
+
+  def active_model_serializer
+    if rescinded?
+      RescindedNoticeSerializer
+    else
+      super
+    end
   end
 
   def all_relevant_questions

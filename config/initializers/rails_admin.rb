@@ -43,6 +43,13 @@ RailsAdmin.config do |config|
           ability.can? :publish, Notice
         end
       end
+
+      configure :rescinded do
+        visible do
+          ability = Ability.new(bindings[:view]._current_user)
+          ability.can? :rescind, Notice
+        end
+      end
     end
   end
 

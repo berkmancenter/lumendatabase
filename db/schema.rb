@@ -157,11 +157,11 @@ ActiveRecord::Schema.define(:version => 20130725180215) do
   add_index "infringing_urls_works", ["work_id"], :name => "index_infringing_urls_works_on_work_id"
 
   create_table "notices", :force => true do |t|
-    t.string   "title",                :null => false
+    t.string   "title",                                   :null => false
     t.text     "body"
     t.datetime "date_received"
-    t.datetime "created_at",           :null => false
-    t.datetime "updated_at",           :null => false
+    t.datetime "created_at",                              :null => false
+    t.datetime "updated_at",                              :null => false
     t.string   "source"
     t.string   "subject"
     t.text     "legal_other"
@@ -171,6 +171,7 @@ ActiveRecord::Schema.define(:version => 20130725180215) do
     t.datetime "date_sent"
     t.integer  "reviewer_id"
     t.string   "language"
+    t.boolean  "rescinded",            :default => false, :null => false
   end
 
   add_index "notices", ["reviewer_id"], :name => "index_notices_on_reviewer_id"

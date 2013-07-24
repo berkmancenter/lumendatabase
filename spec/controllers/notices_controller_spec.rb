@@ -12,13 +12,22 @@ describe NoticesController do
     end
 
     context "as HTML" do
-      it "renders a template" do
+      it "renders the show template" do
         stub_find_notice
 
         get :show, id: 1
 
         expect(response).to be_successful
         expect(response).to render_template(:show)
+      end
+
+      it "renders the rescinded template if the notice is rescinded" do
+        stub_find_notice(build(:notice, rescinded: true))
+
+        get :show, id: 1
+
+        expect(response).to be_successful
+        expect(response).to render_template(:rescinded)
       end
     end
 
@@ -35,10 +44,23 @@ describe NoticesController do
         expect(json).to have_key(:id).with_value(notice.id)
         expect(json).to have_key(:title).with_value(notice.title)
       end
+
+      it "returns id, title and 'Notice Rescinded' as body for a rescinded notice" do
+        notice = build(:notice, rescinded: true)
+        stub_find_notice(notice)
+
+        get :show, id: 1, format: :json
+
+        json = JSON.parse(response.body)["notice"]
+        expect(json).to have_key(:id).with_value(notice.id)
+        expect(json).to have_key(:title).with_value(notice.title)
+        expect(json).to have_key(:body).with_value("Notice Rescinded")
+      end
     end
 
-    def stub_find_notice
-      Notice.new.tap { |notice| Notice.stub(:find).and_return(notice) }
+    def stub_find_notice(notice = nil)
+      notice ||= Notice.new
+      notice.tap { |n| Notice.stub(:find).and_return(n) }
     end
   end
 
