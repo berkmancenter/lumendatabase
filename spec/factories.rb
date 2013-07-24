@@ -47,7 +47,13 @@ FactoryGirl.define do
 
     trait :with_infringing_urls do # through works
       before(:create) do |notice|
-        notice.works = build_list(:work, 3, :with_infringing_urls)
+        notice.works.first.infringing_urls = build_list(:infringing_url, 3)
+      end
+    end
+
+    trait :with_copyrighted_urls do # through works
+      before(:create) do |notice|
+        notice.works.first.copyrighted_urls = build_list(:copyrighted_url, 3)
       end
     end
 
@@ -127,7 +133,6 @@ FactoryGirl.define do
   end
 
   factory :work do
-    url
     description "Something copyrighted"
 
     trait :with_infringing_urls do
@@ -135,9 +140,19 @@ FactoryGirl.define do
         work.infringing_urls = build_list(:infringing_url, 3)
       end
     end
+
+    trait :with_copyrighted_urls do
+      after(:build) do |work|
+        work.copyrighted_urls = build_list(:copyrighted_url, 3)
+      end
+    end
   end
 
   factory :infringing_url do
+    url
+  end
+
+  factory :copyrighted_url do
     url
   end
 

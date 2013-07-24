@@ -1,16 +1,13 @@
 class DeterminesWorkKind
-  def initialize(primary_url, secondary_urls)
-    @primary_url = primary_url
+  def initialize(primary_urls, secondary_urls)
+    @primary_urls = primary_urls
     @secondary_urls = secondary_urls
     @results = { unknown: 0 }
   end
 
   def kind
-    classify_url(@primary_url, 5)
-
-    @secondary_urls.each do|url|
-      classify_url(url, 1)
-    end
+    classify_urls(@primary_urls, 5)
+    classify_urls(@secondary_urls, 1)
 
     pick_result
   end
@@ -21,16 +18,16 @@ class DeterminesWorkKind
     @results.max_by{|kind, weight| weight}.first
   end
 
-
-  def classify_url(url, weight)
-    url_classifier = ClassifyUrl.new(url, weight)
-    @results.merge!(url_classifier.classify) do |key, old_value, new_value|
-      old_value + new_value
+  def classify_urls(urls, weight)
+    urls.each do |url|
+      url_classifier = ClassifyUrl.new(url, weight)
+      @results.merge!(url_classifier.classify) do |key, old_value, new_value|
+        old_value + new_value
+      end
     end
   end
 
   class ClassifyUrl
-
     PATTERNS = {
       music: %r{mp3|aac|album|flac|song}i,
       movie: %r{mp4|mov|movies|dvd|xvid|rip|bluray}i,

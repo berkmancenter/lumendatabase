@@ -3,7 +3,7 @@ require 'spec_helper'
 describe DeterminesWorkKind do
   it "returns unknown when a URL can't be classified" do
     determiner = described_class.new(
-      'http://www.example.com/foo.something', []
+      ['http://www.example.com/foo.something'], []
     )
     expect(determiner.kind).to be :unknown
   end
@@ -12,7 +12,7 @@ describe DeterminesWorkKind do
     %w(mp3 aac album flac MP3 song).each do |string|
       it "classifies a primary URL including #{string} as music" do
         determiner = described_class.new(
-          "http://www.example.com/foo.#{string}", []
+          ["http://www.example.com/foo.#{string}"], []
         )
         expect(determiner.kind).to be :music
       end
@@ -21,7 +21,7 @@ describe DeterminesWorkKind do
     %w( mp4 mov movies dvd xvid rip bluray ).each do |string|
       it "classifies a primary URL including #{string} as a movie" do
         determiner = described_class.new(
-          "http://www.example.com/foo.#{string}", []
+          ["http://www.example.com/foo.#{string}"], []
         )
         expect(determiner.kind).to be :movie
       end
@@ -30,7 +30,7 @@ describe DeterminesWorkKind do
     %w( page novel book epub kindle ).each do |string|
       it "classifies a primary URL including #{string} as a book" do
         determiner = described_class.new(
-          "http://www.example.com/foo.#{string}", []
+          ["http://www.example.com/foo.#{string}"], []
         )
         expect(determiner.kind).to be :book
       end
@@ -40,7 +40,7 @@ describe DeterminesWorkKind do
   context 'infringing urls' do
     it "classifies as music" do
       determiner = described_class.new(
-        "http://www.example.com/foo",
+        ["http://www.example.com/foo"],
         [
           'http://mp3.com/asfdasdf',
           'http://example.com/aac',
@@ -53,7 +53,7 @@ describe DeterminesWorkKind do
 
     it "classifies as a movie" do
       determiner = described_class.new(
-        "http://www.example.com/foo",
+        ["http://www.example.com/foo"],
         [
           'http://mp3.com/dvd',
           'http://example.com/torrent/xvid',
@@ -66,7 +66,7 @@ describe DeterminesWorkKind do
 
     it "classifies as a book" do
       determiner = described_class.new(
-        "http://www.example.com/foo",
+        ["http://www.example.com/foo"],
         [
           'http://mp3.com/book',
           'http://example.com/ebook/xvid',

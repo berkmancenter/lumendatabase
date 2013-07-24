@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130715205823) do
+ActiveRecord::Schema.define(:version => 20130724140858) do
 
   create_table "blog_entries", :force => true do |t|
     t.integer  "user_id"
@@ -67,6 +67,22 @@ ActiveRecord::Schema.define(:version => 20130715205823) do
   create_table "category_managers", :force => true do |t|
     t.string "name", :null => false
   end
+
+  create_table "copyrighted_urls", :force => true do |t|
+    t.string   "url",        :limit => 1024, :null => false
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
+  end
+
+  add_index "copyrighted_urls", ["url"], :name => "index_copyrighted_urls_on_url", :unique => true
+
+  create_table "copyrighted_urls_works", :id => false, :force => true do |t|
+    t.integer "copyrighted_url_id", :null => false
+    t.integer "work_id",            :null => false
+  end
+
+  add_index "copyrighted_urls_works", ["copyrighted_url_id"], :name => "index_copyrighted_urls_works_on_copyrighted_url_id"
+  add_index "copyrighted_urls_works", ["work_id"], :name => "index_copyrighted_urls_works_on_work_id"
 
   create_table "delayed_jobs", :force => true do |t|
     t.integer  "priority",   :default => 0
@@ -235,10 +251,9 @@ ActiveRecord::Schema.define(:version => 20130715205823) do
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
 
   create_table "works", :force => true do |t|
-    t.string   "url",         :limit => 1024, :null => false
     t.text     "description"
-    t.datetime "created_at",                  :null => false
-    t.datetime "updated_at",                  :null => false
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
     t.string   "kind"
   end
 

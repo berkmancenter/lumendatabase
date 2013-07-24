@@ -28,17 +28,19 @@ shared_examples 'a serialized notice' do
 
   it 'includes works' do
     with_a_serialized_notice do |notice, json|
-      expect(json[:works].map { |w| w['url'] }).to eq(notice.works.map(&:url))
+      expect(json[:works].map { |w| w['description'] }).to eq(notice.works.map(&:description))
     end
   end
 
-  it 'includes infringing_urls' do
-    with_a_serialized_notice do |notice, json|
-      infringing_urls_json = json[:works].first[:infringing_urls].map{|u| u['url']}
-      expect(infringing_urls_json).to eq(
-        notice.works.first.infringing_urls.map(&:url)
-      )
-      expect(infringing_urls_json.length).not_to eq 0
+  %i|infringing_urls copyrighted_urls|.each do |url_relation|
+    it "includes #{url_relation}" do
+      with_a_serialized_notice do |notice, json|
+        relation_json = json[:works].first[url_relation].map{|u| u['url']}
+        expect(relation_json).to eq(
+          notice.works.first.send(url_relation).map(&:url)
+        )
+        expect(relation_json.length).not_to eq 0
+      end
     end
   end
 
@@ -60,7 +62,7 @@ def build_notice
       build_list(:category, 2)
     )
     notice.stub(:works).and_return(
-      build_list(:work, 3, :with_infringing_urls)
+      build_list(:work, 3, :with_infringing_urls, :with_copyrighted_urls)
     )
     if described_class == NoticeSearchResultSerializer
       notice.stub(:_score).and_return(1)

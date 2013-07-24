@@ -45,7 +45,6 @@ def default_notice_hash(opts = {})
     works_attributes:
     [
       {
-        url: 'http://example.com',
         description: 'A work'
       }
     ],
