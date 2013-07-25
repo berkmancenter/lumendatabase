@@ -11,7 +11,7 @@ class RedactionQueueOnPage < PageObject
   end
 
   def fill
-    within_profiles { click_on 'Fill' }
+    within_profiles { click_on 'Fill Queue' }
   end
 
   def select_category_profile(category)

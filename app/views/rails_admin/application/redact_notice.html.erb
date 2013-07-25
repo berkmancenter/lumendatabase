@@ -1,9 +1,14 @@
-<p>
-  <strong>Time in queue:</strong>
-  <%= time_ago_in_words(@object.created_at) %>
-</p>
 
-<aside id="redaction-tools">
+<div class="well">
+  <ul class="redact-info">
+    <li>Highlight text then click <b>Redact Selection</b>.</li>
+    <li>Click <b>Unredact field</b> to unredact <i>all</i> redacted text in the chosen textarea.</li>
+    <li>Click <b>Redact Selection Everywhere</b> to redact highlighted text within all <i>selected</i> items in the queue.</li>
+  </ul>
+</div>
+<aside id="redaction-tools" class="">
+  <button id="redact-selected" class="btn btn-primary"><i class="icon-pencil"></i> Redact selection</button>
+  <button id="unredact-selected" class="btn btn-warning"><i class="icon-repeat"></i> Unredact field</button>
   <%=
     render(
       'redact_everywhere_form',
@@ -11,8 +16,6 @@
       object: @object
     )
   %>
-  <button id="redact-selected" class="btn">Redact selection</button>
-  <button id="unredact-selected" class="btn">Unredact field</button>
 </aside>
 
 <section id="redaction-form">

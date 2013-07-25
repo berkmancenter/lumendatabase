@@ -2,8 +2,9 @@
   <%= token_tag(nil) %>
 
   <div id="refill-queue">
+    <h4>1. Fill your queue with notices</h4>
     <% @refill.each_input do |input| %>
-      <span>
+      <div>
         <%= label(@refill.root_key, input.key, input.label_text) %>
         <%=
           select_tag(
@@ -12,11 +13,12 @@
             include_blank: true, multiple: true
           )
         %>
-      </span>
+      </div>
     <% end %>
-    <%= submit_tag 'Fill', name: 'fill_queue', class: 'btn' %>
+    <%= submit_tag 'Fill Queue', name: 'fill_queue', class: 'btn btn-small btn-primary' %>
   </div>
 
+  <h4>2. Select notices to process</h4>
   <table class="table table-condensed table-striped">
     <thead>
       <tr>
@@ -43,6 +45,6 @@
   </table>
 
   <div class="form-actions">
-    <%= submit_tag 'Process selected', class: 'btn' %>
+    <%= submit_tag 'Process selected', class: 'btn btn-primary' %>
   </div>
 <% end %>

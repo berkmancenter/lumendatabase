@@ -11,6 +11,10 @@
     <% end %>
   </div>
 
+  <p>
+    <strong>Time in queue:</strong>
+    <%= time_ago_in_words(@object.created_at) %>
+  </p>
   <% if can? :publish, @object %>
     <div id="review-required">
       <%= form.input(:review_required) %>

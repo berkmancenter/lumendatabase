@@ -31,3 +31,52 @@
     }
   }
 }
+
+// Redaction queue
+//************************************************************************//
+
+#refill-queue {
+  $label-width: 110px;
+  margin-bottom: 45px;
+
+  h4 {
+    margin-bottom: 1.2em;
+  }
+
+  label {
+    float: left;
+    min-width: $label-width;
+    font-weight: bold;
+    margin-top: 7px;
+  }
+
+  .btn {
+    margin-left: $label-width;
+  }
+}
+div.select2-container {
+  margin-bottom: 1em;
+}
+
+// Redaction Edit
+//************************************************************************//
+.redact-info {
+  margin-bottom: 0;
+}
+
+aside#redaction-tools {
+  padding-top: 10px;
+
+  form {
+    display: inline-block;
+    margin-left: 30px;
+    margin-bottom: 0;
+  }
+}
+
+#edit_notice {
+  textarea {
+    height: 100px;
+    width: 400px;
+  }
+}
