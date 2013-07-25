@@ -1,3 +1,5 @@
+<% require_asset 'select2' %>
+
 selectedField = null
 
 class Redactable
@@ -46,6 +48,8 @@ addHandlers = ->
 
   $("#unredact-selected").click ->
     selectedField?.unredact()
+
+  $('#notice_scopes_in_categories').select2()
 
 $(document).ready -> addHandlers()
 $(document).on 'pjax:end', -> addHandlers()
