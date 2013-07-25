@@ -45,10 +45,10 @@ end
 describe RedactsNotices do
   context "#redact" do
     it "passes the field's text through all redactors" do
-      notice = build(:notice, legal_other: 'sensative-a and sensative-b')
+      notice = build(:notice, legal_other: 'sensitive-a and sensitive-b')
       redactor = RedactsNotices.new([
-        RedactsNotices::RedactsContent.new('sensative-a'),
-        RedactsNotices::RedactsContent.new('sensative-b')
+        RedactsNotices::RedactsContent.new('sensitive-a'),
+        RedactsNotices::RedactsContent.new('sensitive-b')
       ])
 
       redactor.redact(notice, :legal_other)
