@@ -72,11 +72,19 @@ class FakeNotice
     "#{title} #{kind}".titleize
   end
 
-  def urls
+  def infringing_urls
     n = (5..100).to_a.sample
 
     n.times.map do |i|
       { url: "http://example.com/bad/url_#{i}" }
+    end
+  end
+
+  def copyrighted_urls
+    n = (1..3).to_a.sample
+
+    n.times.map do |i|
+      { url: "http://example.com/original_work/url_#{i}" }
     end
   end
 
@@ -163,10 +171,10 @@ unless ENV['SKIP_FAKE_DATA']
       review_required: fake.review_required,
       language: fake.language,
       works_attributes: [{
-        url: fake.work_url,
         description: fake.work_description,
         kind: fake.kind,
-        infringing_urls_attributes: fake.urls
+        infringing_urls_attributes: fake.infringing_urls,
+        copyrighted_urls_attributes: fake.copyrighted_urls
       }],
       entity_notice_roles_attributes: [{
       name: 'recipient', entity_attributes: fake.recipient

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe InfringingUrl do
+describe CopyrightedUrl do
   it { should validate_uniqueness_of(:url) }
   it { should have_db_index(:url).unique(true) }
 

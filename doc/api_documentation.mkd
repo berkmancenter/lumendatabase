@@ -30,12 +30,18 @@ Authentication is not required for now.
 
 **Work**
 
-| Field                           | Type            | Description
-| ---                             | ---             | ---
-| `url`                           | string          | Required, the url of the original work
-| `kind`                          | string          | Book, movie, video, etc.
-| `description`                   | string          | Description of the work, which may include the copyright holder information
-| `infringing_urls_attributes`    | [InfringingUrl] | List of urls which infringe on the work
+| Field                            | Type              | Description
+| ---                              | ---               | ---
+| `copyrighted_urls_attributes`    | [CopyrightedUrl]  | List of urls that represent the original work.
+| `kind`                           | string            | Book, movie, video, etc.
+| `description`                    | string            | Description of the work, which may include the copyright holder information
+| `infringing_urls_attributes`     | [InfringingUrl]   | List of urls which infringe on the work
+
+**CopyrightedURL**
+
+| Field          | Type     | Description
+| ---            | ---      | ---
+| `url`          | string   | A Url that represents the original work.
 
 **InfringingUrl**
 
@@ -81,8 +87,11 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'http://c
     "jurisidiction_list": "US, CA",
     "works_attributes": [
       {
-        "url": "http://disney.com/lion_king.mp4",
         "description": "Lion King Video",
+        "copyrighted_urls_attributes": [
+          { "url": "http://disney.com/lion_king.mp4" },
+          { "url": "http://disney.com/lion_king.mov" }
+        ],
         "infringing_urls_attributes": [
           { "url": "http://youtube.com/bad_url_1" },
           { "url": "http://youtube.com/bad_url_2" },
@@ -200,7 +209,10 @@ Return a JSON-encoded representation of selected notice attributes.
     "works": [
       {
         "description": "Lion King Video",
-        "url": "http://www.example.com/lion_king.mp4",
+        "copyrighted_urls": [
+          { "url": "http://www.example.com/lion_king.mp4" },
+          { "url": "http://www.example.com/lion_king.mov" }
+        ],
         "infringing_urls": [
           { "url": "http://www.example.com/infringing1" },
           { "url": "http://www.example.com/infringing2" },
@@ -398,7 +410,10 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'http://c
       "works": [
         {
           "description": "Lion King Video",
-          "url": "http://www.example.com/lion_king.mp4",
+          "copyrighted_urls": [
+            { "url": "http://www.example.com/lion_king.mp4" },
+            { "url": "http://www.example.com/lion_king.mov" }
+          ],
           "infringing_urls": [
             { "url": "http://www.example.com/infringing1" },
             { "url": "http://www.example.com/infringing2" },

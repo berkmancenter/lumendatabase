@@ -5,7 +5,10 @@ class NoticesController < ApplicationController
     @notice.file_uploads.build
     @notice.entity_notice_roles.build(name: 'recipient').build_entity
     @notice.entity_notice_roles.build(name: 'sender').build_entity
-    @notice.works.build.infringing_urls.build
+    @notice.works.build do |notice|
+      notice.copyrighted_urls.build
+      notice.infringing_urls.build
+    end
   end
 
   def create
@@ -66,7 +69,10 @@ class NoticesController < ApplicationController
   end
 
   def work_params
-    [:url, :description, :kind, infringing_urls_attributes: [:url]]
+    [
+      :description, :kind, infringing_urls_attributes: [:url],
+      copyrighted_urls_attributes: [:url],
+    ]
   end
 
 end

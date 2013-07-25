@@ -94,7 +94,7 @@ describe 'notices/show.html.erb' do
   end
 
   it "displays a notice's works and infringing urls" do
-    notice = create(:notice, :with_infringing_urls)
+    notice = create(:notice, :with_infringing_urls, :with_copyrighted_urls)
     assign(:notice, notice)
 
     render
@@ -102,7 +102,13 @@ describe 'notices/show.html.erb' do
     notice.works.each do |work|
       within("#work_#{work.id}") do
         expect(page).to have_content(work.description)
-        expect(page).to have_content(work.url)
+
+        expect(notice.copyrighted_urls).to exist
+        expect(notice.copyrighted_urls).to exist
+
+        work.copyrighted_urls.each do |copyrighted_url|
+          expect(page).to have_content(copyrighted_url.url)
+        end
 
         work.infringing_urls.each do |url|
           within("#infringing_url_#{url.id}") do

@@ -11,7 +11,7 @@ class Notice < ActiveRecord::Base
 
   HIGHLIGHTS = %i(
     title tag_list categories.name sender_name recipient_name
-    works.description works.url infringing_urls.url
+    works.description works.infringing_urls.url works.copyrighted_urls.url
   )
 
   REDACTABLE_FIELDS = %i( legal_other body )
@@ -32,6 +32,7 @@ class Notice < ActiveRecord::Base
   has_many :entities, through: :entity_notice_roles
   has_many :file_uploads
   has_many :infringing_urls, through: :works
+  has_many :copyrighted_urls, through: :works
   has_and_belongs_to_many :relevant_questions
 
   has_and_belongs_to_many :works
@@ -85,8 +86,11 @@ class Notice < ActiveRecord::Base
       type: 'object',
       as: -> (notice){
         notice.works.as_json({
-          only: [:description, :url],
-          include: { infringing_urls: { only: [:url] } }
+          only: [:description],
+          include: {
+            infringing_urls: { only: [:url] },
+            copyrighted_urls: { only: [:url]}
+          }
         })
       }
   end

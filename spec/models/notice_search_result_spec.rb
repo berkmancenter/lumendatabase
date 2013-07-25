@@ -26,28 +26,28 @@ describe NoticeSearchResult do
     end
   end
 
-  it "includes url and description from works" do
+  it "includes description from works" do
     work = build_stubbed(:work)
     notice = build_stubbed(:notice, works: [work])
 
     result = NoticeSearchResult.new(with_metadata(notice))
 
-    %i( url description ).each do |attribute|
-      expect(result.works.map(&attribute)).to(
-        match_array notice.works.map(&attribute)
-      )
-    end
+    expect(result.works.map(&:description)).to(
+      match_array notice.works.map(&:description)
+    )
   end
 
-  it "includes url from infringing_urls" do
-    work = build_stubbed(:work, :with_infringing_urls)
-    notice = build_stubbed(:notice, works: [work])
+  %i(infringing_urls copyrighted_urls).each do |url_relation|
+    it "includes url from #{url_relation}" do
+      work = build_stubbed(:work, "with_#{url_relation}".to_sym)
+      notice = build_stubbed(:notice, works: [work])
 
-    result = NoticeSearchResult.new(with_metadata(notice))
+      result = NoticeSearchResult.new(with_metadata(notice))
 
-    expect(result.infringing_urls.map(&:url)).to(
-      match_array notice.infringing_urls.map(&:url)
-    )
+      expect(result.send(url_relation).map(&:url)).to(
+        match_array notice.send(url_relation).map(&:url)
+      )
+    end
   end
 
   it "provides access to excerpts" do

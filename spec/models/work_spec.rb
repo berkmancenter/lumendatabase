@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Work do
   it { should have_and_belong_to_many :notices }
   it { should have_and_belong_to_many :infringing_urls }
+  it { should have_and_belong_to_many :copyrighted_urls }
 
   context 'automatic validations' do
     it { should ensure_length_of(:kind).is_at_most(255) }
@@ -33,14 +34,35 @@ describe Work do
     end
   end
 
-  context '#url' do
-    it_behaves_like 'an object with a url'
+  context '#copyrighted_urls' do
+    it "does not create duplicate copyrighted_urls" do
+      existing_copyrighted_url = create(
+        :copyrighted_url, url: 'http://www.example.com/copyrighted'
+      )
+      duplicate_copyrighted_url = build(
+        :copyrighted_url, url: 'http://www.example.com/copyrighted'
+      )
+      new_copyrighted_url = build(
+        :copyrighted_url, url: 'http://example.com/new'
+      )
+
+      work = build(
+        :work,
+        copyrighted_urls: [duplicate_copyrighted_url, new_copyrighted_url]
+      )
+      work.save
+
+      work.reload
+
+      expect(work.copyrighted_urls).to include existing_copyrighted_url
+      expect(CopyrightedUrl.count).to eq 2
+    end
   end
 
   context '#kind' do
     it "auto classifies before saving if kind is not set" do
       DeterminesWorkKind.any_instance.should_receive(:kind).and_return('foo')
-      work = build(:work, url: 'http://www.example.com/foo.mp3')
+      work = build(:work)
 
       work.save
       expect(work.kind).to eq 'foo'
@@ -48,7 +70,7 @@ describe Work do
 
     it "does not auto classify if kind is set" do
       DeterminesWorkKind.any_instance.should_not_receive(:kind)
-      work = build(:work, url: 'http://www.example.com/foo.mp3', kind: 'foo')
+      work = build(:work, kind: 'foo')
 
       work.save
     end

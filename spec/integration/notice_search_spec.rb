@@ -78,19 +78,11 @@ feature "Searching Notices" do
       end
     end
 
-    scenario "for infringing urls", search: true do
-      work = create(:work, :with_infringing_urls)
-      notice = create(:notice, works: [work])
-
-      within_search_results_for(notice.infringing_urls.first.url) do
-        expect(page).to have_n_results(1)
-        expect(page).to have_content(notice.title)
-        expect(page.html).to have_excerpt('example.com')
-      end
-    end
-
     scenario "for works", search: true do
-      work = create(:work, description: "An arbitrary description")
+      work = create(
+        :work, description: "An arbitrary description"
+      )
+
       notice = create(:notice, works: [work])
 
       within_search_results_for("arbitrary") do
@@ -99,10 +91,31 @@ feature "Searching Notices" do
         expect(page).to have_content(work.description)
         expect(page.html).to have_excerpt("arbitrary", "An", "description")
       end
+    end
 
-      within_search_results_for(work.url) do
+    scenario "for urls associated through works", search: true do
+      work = create(
+        :work,
+        infringing_urls: [
+          create(:infringing_url, url: 'http://example.com/infringing_url')
+        ],
+        copyrighted_urls: [
+          create(:copyrighted_url, url: 'http://example.com/copyrighted_url')
+        ]
+      )
+
+      notice = create(:notice, works: [work])
+
+      within_search_results_for('infringing_url') do
         expect(page).to have_n_results(1)
-        expect(page.html).to have_excerpt('example.com')
+        expect(page).to have_content(notice.title)
+        expect(page.html).to have_excerpt('infringing_url')
+      end
+
+      within_search_results_for('copyrighted_url') do
+        expect(page).to have_n_results(1)
+        expect(page).to have_content(notice.title)
+        expect(page.html).to have_excerpt('copyrighted_url')
       end
     end
   end
