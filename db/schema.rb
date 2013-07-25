@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130724140858) do
+ActiveRecord::Schema.define(:version => 20130725180215) do
 
   create_table "blog_entries", :force => true do |t|
     t.integer  "user_id"
@@ -218,6 +218,18 @@ ActiveRecord::Schema.define(:version => 20130724140858) do
     t.string  "condition_value"
     t.boolean "negated"
   end
+
+  create_table "roles", :force => true do |t|
+    t.string "name", :null => false
+  end
+
+  create_table "roles_users", :force => true do |t|
+    t.integer "role_id"
+    t.integer "user_id"
+  end
+
+  add_index "roles_users", ["role_id"], :name => "index_roles_users_on_role_id"
+  add_index "roles_users", ["user_id"], :name => "index_roles_users_on_user_id"
 
   create_table "taggings", :force => true do |t|
     t.integer  "tag_id"

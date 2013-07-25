@@ -125,6 +125,22 @@ FactoryGirl.define do
     email
     password "secretsauce"
     password_confirmation "secretsauce"
+
+    trait :redactor do
+      roles { [Role.redactor] }
+    end
+
+    trait :publisher do
+      roles { [Role.publisher] }
+    end
+
+    trait :admin do
+      roles { [Role.admin] }
+    end
+
+    trait :super_admin do
+      roles { [Role.super_admin] }
+    end
   end
 
   factory :relevant_question do
@@ -171,6 +187,10 @@ FactoryGirl.define do
     trait :with_content do
       content "Some *markdown* content"
     end
+  end
+
+  factory :role do
+    name 'test_role'
   end
 
 end

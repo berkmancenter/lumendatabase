@@ -11,10 +11,12 @@
     <% end %>
   </div>
 
-  <div id="review-required">
-    <%= form.input(:review_required) %>
-    <%= form.hint "Uncheck to publish" %>
-  </div>
+  <% if can? :publish, @object %>
+    <div id="review-required">
+      <%= form.input(:review_required) %>
+      <%= form.hint "Uncheck to publish" %>
+    </div>
+  <% end %>
 
   <div class="form-actions">
     <%= form.submit('Save', class: 'btn btn-primary') %>

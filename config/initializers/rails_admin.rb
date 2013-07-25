@@ -7,6 +7,8 @@ RailsAdmin.config do |config|
 
   config.current_user_method { current_user }
 
+  config.authorize_with :cancan
+
   config.actions do
     init_actions!
 
@@ -34,6 +36,19 @@ RailsAdmin.config do |config|
       configure(:category_relevant_questions) { hide }
       configure(:entities) { hide }
       configure(:infringing_urls) { hide }
+
+      configure :review_required do
+        visible do
+          ability = Ability.new(bindings[:view]._current_user)
+          ability.can? :publish, Notice
+        end
+      end
+    end
+  end
+
+  config.model 'Category' do
+    edit do
+      configure(:ancestry) { hide }
     end
   end
 

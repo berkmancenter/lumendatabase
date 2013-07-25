@@ -60,7 +60,7 @@ feature "Redactable fields" do
       private
 
       def visit_redact_notice
-        user = create(:user)
+        user = create(:user, :admin)
         visit '/users/sign_in'
         fill_in "Email", with: user.email
         fill_in "Password", with: user.password
