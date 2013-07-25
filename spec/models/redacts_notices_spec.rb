@@ -67,6 +67,21 @@ describe RedactsNotices do
       expect(notice.legal_other_original).to eq 'Some sensitive text'
     end
 
+    it "handles cases where the field's already redacted" do
+      notice = build(
+        :notice,
+        legal_other: "Some [REDACTED] text",
+        legal_other_original: "Some sensitive text"
+      )
+      redactor = RedactsNotices.new([
+        RedactsNotices::RedactsContent.new('sensitive')
+      ])
+
+      redactor.redact(notice, :legal_other)
+
+      expect(notice.legal_other).to eq "Some [REDACTED] text"
+      expect(notice.legal_other_original).to eq "Some sensitive text"
+    end
   end
 
   context "#redact_all" do

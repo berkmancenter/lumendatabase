@@ -25,7 +25,10 @@ class RedactsNotices
       end
 
       notice.send(:"#{field}=", new_text)
-      notice.send(:"#{field}_original=", text)
+
+      if notice.send(:"#{field}_original").blank?
+        notice.send(:"#{field}_original=", text)
+      end
     end
   end
 
