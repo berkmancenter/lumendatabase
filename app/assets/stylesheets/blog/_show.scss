@@ -1,16 +1,14 @@
 article.post {
+  @include span-columns(10);
   background: #fff;
   border-radius: 3px;
   box-shadow: 0 -0px 0 $shadow-2, inset 0 1px 0 #eaeaea, $base-shadow;
   margin-bottom: 30px;
   @include pad(40px);
-  @include span-columns(10);
 
   @include media($small-screen) {
     @include span-columns(10);
   }
-
-
 
   h3.title {
     font-weight: 800;
@@ -28,8 +26,8 @@ article.post {
 
   p, blockquote {
     font-family: $serif;
-    font-size: $base-font-size-2;
-    line-height: 1.5;
+    font-size: $base-font-size-2 - 1;
+    line-height: 1.85;
     margin: 2em 0;
 
     @include media($mobile) {
@@ -45,9 +43,5 @@ article.post {
     font-style: italic;
     margin-left: -$margin-left;
     padding-left: $margin-left - $border-size;
-
-    &, p {
-      line-height: 1.7em;
-    }
   }
 }
