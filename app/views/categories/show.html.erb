@@ -1,5 +1,5 @@
-<section class="category-description>">
-  <h1><%= @category.name %></h1>
+<h1><%= @category.name %></h1>
+<section class="category-description">
   <article>
     <p><%=raw @category.description_html %></p>
   </article>
@@ -7,13 +7,13 @@
 
 <% if @notices.any? %>
   <section class="category-notices">
-    <h2>Recent Notices</h2>
+    <h4>Recent Notices</h4>
     <%= render @notices %>
   </section>
 <% end %>
 
 <section class="category-faqs" id="category-faqs">
-  <h2>Frequently Asked Questions</h2>
+  <h3>Frequently Asked Questions</h3>
   <div class="wrapper">
   <% @category.relevant_questions.each do |question| %>
     <article>

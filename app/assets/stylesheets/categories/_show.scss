@@ -1,5 +1,61 @@
+section.category-description {
+  margin-bottom: 30px;
+  @include span-columns(8.5);
+  @include pad(0 15px 0 0);
+
+  article {
+  }
+
+  p {
+    font-size: $base-font-size-1 + 1;
+    line-height: 1.7em;
+    margin-bottom: 2em;
+  }
+}
+
+section.category-notices {
+  @include span-columns(3.5);
+  @include omega;
+  @include pad(0 20px);
+  border-left: 3px solid lighten($base-border-color-1, 5%);
+
+  article {
+    display: block;
+    margin-bottom: 0.75em;
+  }
+
+  h4 {
+    font-size: $base-font-size - 1;
+    font-weight: bold;
+    line-height: 1.7em;
+    text-transform: uppercase;
+  }
+
+  a {
+    font-size: $base-font-size - 1;
+    text-decoration: none;
+
+    &:hover {
+      color: $base-font-color;
+      text-decoration: underline;
+    }
+  }
+
+  h4, a {
+    color: $base-font-color-2;
+  }
+
+  span {
+    font-size: $base-font-size-small-2;
+    display: none;
+  }
+}
+
 section.category-faqs {
   @extend %faq-accordion;
+  clear: left;
+  margin-top: 2em;
+  padding-top: 1px;
 
   div.wrapper {
     background: #fff;
@@ -7,3 +63,4 @@ section.category-faqs {
     border-left: 1px solid $base-border-color;
   }
 }
+
