@@ -10,10 +10,18 @@ class EntityNoticeRole < ActiveRecord::Base
   accepts_nested_attributes_for :entity
 
   def validate_associated_records_for_entity
-    if self.entity && existing_entity = Entity.where(
-      name: self.entity.name
-    ).first
+    return unless entity.present?
+
+    if existing_entity = Entity.find_by_name(entity.name)
       self.entity = existing_entity
+    else
+      # Since all validations are run before all inserts, the above does
+      # not handle the same new entity appearing twice in one create
+      # (earlier records have not been inserted when later records are
+      # validated). To support this, we explicitly save the records as
+      # part of validation. There is a small and accepted risk of
+      # unnecessary saves and/or orphan entities.
+      entity.save
     end
   end
 
