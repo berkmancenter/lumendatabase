@@ -64,10 +64,6 @@ class FakeNotice
     %w( movie book video ).sample
   end
 
-  def work_url
-    "http://example.com/works/#{title.downcase.gsub(/\s+/, '_')}.ext"
-  end
-
   def work_description
     "#{title} #{kind}".titleize
   end
@@ -89,7 +85,7 @@ class FakeNotice
   end
 
   def recipient
-    [{
+    @recipient ||= [{
       kind: 'organization',
       name: 'Google',
       address_line_1: '1600 Amphitheatre Parkway',
@@ -110,7 +106,7 @@ class FakeNotice
   end
 
   def sender
-    [{
+    @sender ||= [{
       name: 'Joe Lawyer',
       kind: 'individual',
       address_line_1: '1234 Anystreet St.',
@@ -147,6 +143,10 @@ class FakeNotice
       country_code: 'US'
     }].sample
   end
+
+  def submitter
+    @submitter ||= rand(100) < 60 ? sender : recipient
+  end
 end
 
 unless ENV['SKIP_FAKE_DATA']
@@ -177,10 +177,12 @@ unless ENV['SKIP_FAKE_DATA']
         copyrighted_urls_attributes: fake.copyrighted_urls
       }],
       entity_notice_roles_attributes: [{
-      name: 'recipient', entity_attributes: fake.recipient
-    }, {
-      name: 'sender', entity_attributes: fake.sender
-    }]
+        name: 'recipient', entity_attributes: fake.recipient
+      }, {
+        name: 'sender', entity_attributes: fake.sender
+      }, {
+        name: 'submitter', entity_attributes: fake.submitter
+      }]
     )
 
     print '.'
