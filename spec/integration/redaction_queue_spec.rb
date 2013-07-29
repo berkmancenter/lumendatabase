@@ -6,8 +6,8 @@ feature "Redaction queue" do
 
     user = create(:user, :admin)
     notices = [
-      notice_one = create(:notice, :redactable),
-      notice_two = create(:notice, :redactable),
+      create(:notice, :redactable),
+      create(:notice, :redactable),
       notice_three = create(:notice, :redactable)
     ]
 
@@ -17,8 +17,8 @@ feature "Redaction queue" do
 
     expect(queue).to have_notices(notices)
 
-    queue.select_notice(notice_one)
-    queue.select_notice(notice_two)
+    # defaults all checked
+    queue.unselect_notice(notice_three)
     queue.process_selected
 
     queue.publish_and_next
@@ -68,14 +68,14 @@ feature "Redaction queue" do
 
   scenario "A user redacts a pattern everywhere", js: true do
     user = create(:user, :admin)
-    effected_notices = create_list(:notice, 3, :redactable, body: "Some text")
+    affected_notices = create_list(:notice, 3, :redactable, body: "Some text")
     unaffected_notices = create_list(:notice, 3, :redactable, body: "Some text")
 
     queue = RedactionQueueOnPage.new
     queue.visit_as(user)
     queue.fill
 
-    effected_notices.each { |notice| queue.select_notice(notice) }
+    unaffected_notices.each { |notice| queue.unselect_notice(notice) }
 
     queue.process_selected
 
@@ -86,7 +86,7 @@ feature "Redaction queue" do
 
     expect(body_field).to have_content('[REDACTED]')
 
-    effected_notices.each do |notice|
+    affected_notices.each do |notice|
       notice.reload
       expect(notice.body).to eq '[REDACTED]'
     end
