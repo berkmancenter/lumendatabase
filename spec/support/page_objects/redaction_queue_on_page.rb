@@ -29,8 +29,8 @@ class RedactionQueueOnPage < PageObject
     actual_ids.sort == expected_ids.sort
   end
 
-  def select_notice(notice)
-    within("tr#notice_#{notice.id}") { check "selected[]" }
+  def unselect_notice(notice)
+    within("tr#notice_#{notice.id}") { uncheck "selected[]" }
   end
 
   def process_selected

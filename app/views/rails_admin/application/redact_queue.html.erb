@@ -33,7 +33,7 @@
     <tbody>
       <% @objects.each do |object| %>
         <tr class="queue_item" id="notice_<%= object.id %>">
-          <td><%= check_box_tag('selected[]', object.id) %></td>
+          <td><%= check_box_tag('selected[]', object.id, true) %></td>
           <td><%= object.title %></td>
           <td><%= date_sent(object) %></td>
           <td><%= date_received(object) %></td>
