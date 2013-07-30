@@ -31,3 +31,8 @@ $('#duplicate-field').on 'click', ->
 
   $($field).find('input[type="text"]').val('')
   $($field).find('select').val('')
+
+$('.advanced-search').on 'click', '.remove-group', ->
+  $parent = $(event.target).parent()
+  if $parent.siblings().hasClass('field-group')
+    $parent.remove()

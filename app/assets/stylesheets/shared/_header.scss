@@ -154,6 +154,28 @@ header.app {
     @include clearfix;
     float: left;
     margin-bottom: 10px;
+    position: relative;
+  }
+
+  div.remove-group {
+    position: absolute;
+    left: -24px;
+    top: 7px;
+    height: 16px;
+    width: 16px;
+    line-height: 1em;
+    font-size: $base-font-size + 1;
+    color: $base-border-color-2;
+    @include icon(icon-cancel);
+    cursor: pointer;
+    @include transition(all 0.4s);
+    @include transform-origin(center);
+
+    &:hover {
+      left: -25px;
+      color: #F6343B;
+      @include transform(rotate(360deg) scale(1.1));
+    }
   }
 
   div.field-group.hidden{
