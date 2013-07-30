@@ -2,18 +2,31 @@ class NoticesController < ApplicationController
   layout :resolve_layout
 
   def new
-    @notice = Notice.new
-    @notice.file_uploads.build
-    @notice.entity_notice_roles.build(name: 'recipient').build_entity
-    @notice.entity_notice_roles.build(name: 'sender').build_entity
-    @notice.works.build do |notice|
-      notice.copyrighted_urls.build
-      notice.infringing_urls.build
+    if params[:type].blank?
+      render :select_type
+    else
+      model_class = params[:type].classify.constantize
+      @notice = model_class.new
+      @notice.file_uploads.build
+      @notice.entity_notice_roles.build(name: 'recipient').build_entity
+      @notice.entity_notice_roles.build(name: 'sender').build_entity
+      @notice.works.build do |notice|
+        notice.copyrighted_urls.build
+        notice.infringing_urls.build
+      end
     end
   end
 
   def create
-    @notice = Notice.new(notice_params)
+    if params[:notice][:type].present?
+      model_class = params[:notice][:type].classify.constantize
+    else
+      model_class = Notice
+    end
+
+    params[:notice].delete(:type)
+
+    @notice = model_class.new(notice_params)
     @notice.auto_redact
 
     respond_to do |format|
@@ -50,6 +63,7 @@ class NoticesController < ApplicationController
 
   def notice_params
     params.require(:notice).permit(
+      :type,
       :title,
       :subject,
       :body,

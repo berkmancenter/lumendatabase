@@ -4,19 +4,21 @@
     <div class="kind"><span class="label">Kind of Work:</span> <span class="field"><%= work.kind %></span></div>
   </div>
   <div class="row">
-    <div class="description"><span class="label">Description:</span> <span class="field"><%= work.description %></span></div>
+    <div class="description"><span class="label"><%= t("notices.#{notice.type}.description") %></span> <span class="field"><%= work.description %></span></div>
   </div>
 
-  <div class="row">
-    <span class="label original-title">Original URLs:</span>
-    <ol class="list original-urls">
-      <% work.copyrighted_urls.each do |url| %>
-        <%= content_tag_for(:li, url) do %>
-          <%= url.url %>
+  <% if work.copyrighted_urls.present? %>
+    <div class="row">
+      <span class="label original-title">Original URLs:</span>
+      <ol class="list original-urls">
+        <% work.copyrighted_urls.each do |url| %>
+          <%= content_tag_for(:li, url) do %>
+            <%= url.url %>
+          <% end %>
         <% end %>
-      <% end %>
-    </ol>
-  </div>
+      </ol>
+    </div>
+  <% end %>
 
   <div class="row">
     <span class="label infringing-title">Infringing URLs:</span>

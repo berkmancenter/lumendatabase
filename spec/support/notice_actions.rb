@@ -1,6 +1,6 @@
 module NoticeActions
   def submit_recent_notice(title = "A title")
-    visit "/notices/new"
+    visit "/notices/new?type=Notice"
 
     fill_in "Title", with: title
     fill_in "Date received", with: Time.now
@@ -14,7 +14,7 @@ module NoticeActions
 
     fill_in 'Work URL', with: 'http://www.example.com/original_work.pdf'
     fill_in 'Kind of Work', with: 'movie'
-    fill_in 'Work Description', with: 'A series of videos and still images'
+    fill_in 'Description', with: 'A series of videos and still images'
     fill_in 'Infringing URL', with: "http://example.com/infringing_url1"
 
     yield if block_given?

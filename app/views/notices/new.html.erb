@@ -3,12 +3,13 @@
     <h3 class="title">Report a DMCA Takedown Notice</h3>
     <p>If you have sent or received a DMCA takedown notice and want to submit it to our database, fill out the form below.</p>
   </header>
-  <%= simple_form_for(@notice) do |form| %>
+  <%= simple_form_for(@notice, as: :notice, url: notices_path) do |form| %>
     <section class="notice-body">
       <h4><span>Step 1.</span> Describe the Notice</h4>
       <p>Provide us with information about the DMCA takedown notice you <em>sent</em> or <em>received</em>.</p>
       <div class="body-wrapper left main">
-        <%= form.input :title, label: "Notice Title" %>
+        <%= form.input :type, as: :hidden %>
+        <%= form.input :title %>
         <%= form.input :subject %>
         <%= form.input :date_sent, as: :string, placeholder: "YYYY-MM-DD" %>
         <%= form.input :date_received, as: :string, placeholder: "YYYY-MM-DD" %>
@@ -26,7 +27,7 @@
         <%= form.input :action_taken, collection: Notice::VALID_ACTIONS %>
       </div>
       <div class="body-wrapper right attach">
-        <%= form.input :body, label: "Notice Body" %>
+        <%= form.input :body, label: t("notices.#{@notice.type}.body") %>
         <%= form.input :legal_other, label: "Legal (Other)" %>
         <%= form.simple_fields_for(:file_uploads) do |file_uploads_form| %>
           <%= file_uploads_form.input :file, label: 'Attach Notice' %>
@@ -49,7 +50,7 @@
         <%= works_form.input :kind, label: "Kind of Work", placeholder: "Movie, Music, Book" %>
       </div>
       <div class="body-wrapper right">
-        <%= works_form.input :description, label: "Work Description" %>
+        <%= works_form.input :description, label: t("notices.#{@notice.type}.description") %>
       </div>
       <% end %>
     </section>

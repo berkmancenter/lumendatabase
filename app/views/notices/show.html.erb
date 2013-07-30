@@ -1,5 +1,5 @@
 <article class="notice-show">
-  <h1><%= @notice.title %></h1>
+  <h1><%= @notice.type %> - <%= @notice.title %></h1>
 
   <section class="body">
     <header id="entities">
@@ -16,13 +16,13 @@
       <p class="source">Sent via: <%= @notice.source || 'Unknown' %></p>
 
       <section class="notice-body">
-        <h5 class="title">Notice Body</h5>
+        <h5 class="title"><%= t("notices.#{@notice.type}.body") %></h5>
         <p class="body"><%= @notice.redacted(:body) %></p>
       </section>
 
       <section class="works">
         <ol id="works" class="copyright-claims">
-          <%= render @notice.works %>
+          <%= render @notice.works, notice: @notice %>
         </ol>
       </section>
 

@@ -22,3 +22,11 @@ en:
         breadcrumb: 'Redact queue'
         menu: 'Redact queue'
         title: 'Redact queue'
+
+
+  notices:
+    Trademark:
+      description: 'Mark'
+      body: 'Alleged Infringment'
+    Dmca:
+      description: 'Work'
