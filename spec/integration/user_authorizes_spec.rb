@@ -19,7 +19,7 @@ feature "User authorization" do
   end
 
   scenario "All levels can edit notices" do
-    notice = create(:notice)
+    notice = create(:dmca)
     users = [
       AdminOnPage.new(create(:user, :redactor)),
       AdminOnPage.new(create(:user, :publisher)),
@@ -37,7 +37,7 @@ feature "User authorization" do
 
   scenario "Redactors cannot publish (admin)" do
     user = AdminOnPage.new(create(:user, :redactor))
-    notice = create(:notice, review_required: true)
+    notice = create(:dmca, review_required: true)
 
     user.sign_in
     user.edit(notice)
@@ -46,7 +46,7 @@ feature "User authorization" do
   end
 
   scenario "Publishers+ can publish (admin)" do
-    notice = create(:notice, review_required: true)
+    notice = create(:dmca, review_required: true)
     users = [
       AdminOnPage.new(create(:user, :publisher)),
       AdminOnPage.new(create(:user, :admin)),
@@ -63,7 +63,7 @@ feature "User authorization" do
 
   scenario "Redactors cannot publish (redact tool)" do
     user = AdminOnPage.new(create(:user, :redactor))
-    notice = create(:notice, review_required: true)
+    notice = create(:dmca, review_required: true)
 
     user.sign_in
     user.redact(notice)
@@ -72,7 +72,7 @@ feature "User authorization" do
   end
 
   scenario "Publishers+ can publish (redact tool)" do
-    notice = create(:notice, review_required: true)
+    notice = create(:dmca, review_required: true)
     users = [
       AdminOnPage.new(create(:user, :publisher)),
       AdminOnPage.new(create(:user, :admin)),
@@ -88,7 +88,7 @@ feature "User authorization" do
   end
 
   scenario "Redactors and Publishers cannot create/delete notices" do
-    notice = create(:notice)
+    notice = create(:dmca)
     users = [
       AdminOnPage.new(create(:user, :redactor)),
       AdminOnPage.new(create(:user, :publisher))
@@ -131,7 +131,7 @@ feature "User authorization" do
   end
 
   scenario "Redactors and Publishers cannot rescind notices" do
-    notice = create(:notice)
+    notice = create(:dmca)
     users = [
       AdminOnPage.new(create(:user, :redactor)),
       AdminOnPage.new(create(:user, :publisher))
@@ -161,7 +161,7 @@ feature "User authorization" do
   end
 
   scenario "Admins and Super admins can rescind notices" do
-    notice = create(:notice)
+    notice = create(:dmca)
     users = [
       AdminOnPage.new(create(:user, :admin)),
       AdminOnPage.new(create(:user, :super_admin))

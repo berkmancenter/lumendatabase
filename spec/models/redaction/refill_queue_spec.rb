@@ -18,7 +18,7 @@ describe Redaction::RefillQueue do
 
   context "#fill" do
     it "finds notices available for review" do
-      notice = create(:notice, review_required: true)
+      notice = create(:dmca, review_required: true)
       queue = new_queue
       refill = Redaction::RefillQueue.new
 
@@ -29,8 +29,8 @@ describe Redaction::RefillQueue do
     end
 
     it "can be scoped by category" do
-      create(:notice, :with_categories, review_required: true) # not to be found
-      notice = create(:notice, :with_categories, review_required: true)
+      create(:dmca, :with_categories, review_required: true) # not to be found
+      notice = create(:dmca, :with_categories, review_required: true)
       queue = new_queue
       refill = Redaction::RefillQueue.new(notice_scopes: {
         in_categories: [notice.categories.first.id]
@@ -43,8 +43,8 @@ describe Redaction::RefillQueue do
     end
 
     it "can be scoped by submitter" do
-      create(:notice, role_names: %w( submitter ), review_required: true) # not to be found
-      notice = create(:notice, role_names: %w( submitter ), review_required: true)
+      create(:dmca, role_names: %w( submitter ), review_required: true) # not to be found
+      notice = create(:dmca, role_names: %w( submitter ), review_required: true)
       queue = new_queue
       refill = Redaction::RefillQueue.new(notice_scopes: {
         submitted_by: [notice.submitter.id]
@@ -57,7 +57,7 @@ describe Redaction::RefillQueue do
     end
 
     it "does not find notices not up for review" do
-      create(:notice, review_required: false)
+      create(:dmca, review_required: false)
       queue = new_queue
       refill = Redaction::RefillQueue.new
 
@@ -68,7 +68,7 @@ describe Redaction::RefillQueue do
     end
 
     it "does not find other user's notices" do
-      create(:notice, review_required: true, reviewer_id: 1)
+      create(:dmca, review_required: true, reviewer_id: 1)
       queue = new_queue
       refill = Redaction::RefillQueue.new
 

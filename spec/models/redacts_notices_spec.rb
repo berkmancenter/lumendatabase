@@ -45,7 +45,7 @@ end
 describe RedactsNotices do
   context "#redact" do
     it "passes the field's text through all redactors" do
-      notice = build(:notice, legal_other: 'sensitive-a and sensitive-b')
+      notice = build(:dmca, legal_other: 'sensitive-a and sensitive-b')
       redactor = RedactsNotices.new([
         RedactsNotices::RedactsContent.new('sensitive-a'),
         RedactsNotices::RedactsContent.new('sensitive-b')
@@ -57,7 +57,7 @@ describe RedactsNotices do
     end
 
     it "preserves the original text" do
-      notice = build(:notice, legal_other: 'Some sensitive text')
+      notice = build(:dmca, legal_other: 'Some sensitive text')
       redactor = RedactsNotices.new([
         RedactsNotices::RedactsContent.new('sensitive')
       ])
@@ -69,7 +69,7 @@ describe RedactsNotices do
 
     it "handles cases where the field's already redacted" do
       notice = build(
-        :notice,
+        :dmca,
         legal_other: "Some [REDACTED] text",
         legal_other_original: "Some sensitive text"
       )
@@ -86,9 +86,9 @@ describe RedactsNotices do
 
   context "#redact_all" do
     it "redacts all notices by id" do
-      notice_one = create(:notice, legal_other: 'One sensitive thing')
-      notice_two = create(:notice, legal_other: 'Two sensitive thing')
-      unaffected = create(:notice, legal_other: 'Three sensitive thing')
+      notice_one = create(:dmca, legal_other: 'One sensitive thing')
+      notice_two = create(:dmca, legal_other: 'Two sensitive thing')
+      unaffected = create(:dmca, legal_other: 'Three sensitive thing')
       redactor = RedactsNotices.new([
         RedactsNotices::RedactsContent.new('sensitive')
       ])

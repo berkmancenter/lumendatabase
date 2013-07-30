@@ -163,7 +163,7 @@ feature "notice submission" do
     end
   end
 
-  scenario "submmiting notices with duplicate items" do
+  scenario "submitting notices with duplicate items" do
     submit_recent_notice
     submit_recent_notice
 
@@ -176,7 +176,7 @@ feature "notice submission" do
   scenario "submitting a notice with works" do
     submit_recent_notice do
       fill_in 'Work URL', with: 'http://www.example.com/original_work.pdf'
-      fill_in 'Work Description', with: 'A series of videos and still images'
+      fill_in 'Description', with: 'A series of videos and still images'
       fill_in 'Infringing URL', with: "http://example.com/infringing_url1"
     end
 
@@ -213,7 +213,7 @@ feature "notice submission" do
   end
 
   scenario "a form articulates its required fields correctly" do
-    visit "/notices/new"
+    visit "/notices/new?type=Dmca"
 
     within('form#new_notice') do
       expect(page).to have_css('input#notice_title.required')
@@ -222,7 +222,7 @@ feature "notice submission" do
   end
 
   scenario "submitting a notice without required fields present" do
-    visit "/notices/new"
+    visit "/notices/new?type=Dmca"
 
     click_on "Submit"
 

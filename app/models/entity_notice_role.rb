@@ -5,7 +5,17 @@ class EntityNoticeRole < ActiveRecord::Base
   belongs_to :entity
   belongs_to :notice, touch: true
 
-  ROLES = %w( principal agent recipient sender submitter target )
+  ROLES = %w(
+    principal
+    agent
+    recipient
+    sender
+    submitter
+    target
+    court
+    plaintiff
+    defendant
+  )
 
   accepts_nested_attributes_for :entity
 

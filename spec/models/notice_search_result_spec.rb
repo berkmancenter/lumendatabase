@@ -1,23 +1,20 @@
 require 'spec_helper'
 
 describe NoticeSearchResult do
-  it "can only proxy for Notices" do
-    expect { NoticeSearchResult.new('_type' => 'not-notice') }.to raise_error
-  end
 
   it "delegates id and title attributes to notice" do
-    notice = build_stubbed(:notice)
+    notice = build_stubbed(:dmca)
 
-    result = NoticeSearchResult.new(with_metadata(notice))
+    result = NoticeSearchResult.new(Notice.new, with_metadata(notice))
 
     expect(result.id).to eq notice.id
     expect(result.title).to eq notice.title
   end
 
   it "includes id, name, and parent_id from categories" do
-    notice = build_stubbed(:notice, :with_categories)
+    notice = build_stubbed(:dmca, :with_categories)
 
-    result = NoticeSearchResult.new(with_metadata(notice))
+    result = NoticeSearchResult.new(Notice.new, with_metadata(notice))
 
     %i( id name parent_id ).each do |attribute|
       expect(result.categories.map(&attribute)).to(
@@ -28,9 +25,9 @@ describe NoticeSearchResult do
 
   it "includes description from works" do
     work = build_stubbed(:work)
-    notice = build_stubbed(:notice, works: [work])
+    notice = build_stubbed(:dmca, works: [work])
 
-    result = NoticeSearchResult.new(with_metadata(notice))
+    result = NoticeSearchResult.new(Notice.new, with_metadata(notice))
 
     expect(result.works.map(&:description)).to(
       match_array notice.works.map(&:description)
@@ -40,9 +37,9 @@ describe NoticeSearchResult do
   %i(infringing_urls copyrighted_urls).each do |url_relation|
     it "includes url from #{url_relation}" do
       work = build_stubbed(:work, "with_#{url_relation}".to_sym)
-      notice = build_stubbed(:notice, works: [work])
+      notice = build_stubbed(:dmca, works: [work])
 
-      result = NoticeSearchResult.new(with_metadata(notice))
+      result = NoticeSearchResult.new(Notice.new, with_metadata(notice))
 
       expect(result.send(url_relation).map(&:url)).to(
         match_array notice.send(url_relation).map(&:url)
@@ -51,11 +48,12 @@ describe NoticeSearchResult do
   end
 
   it "provides access to excerpts" do
-    notice = build_stubbed(:notice)
+    notice = build_stubbed(:dmca)
     highlight = { 'title' => ["Lion <em>King</em>"] }
     excerpts = []
 
     result = NoticeSearchResult.new(
+      Notice.new,
       with_metadata(notice, 'highlight' => highlight)
     )
 

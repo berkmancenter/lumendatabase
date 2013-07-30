@@ -14,10 +14,10 @@ class FieldedSearchNoticeGenerator
 
   def for_title
     in_field = create(
-      :notice, :with_facet_data, @field[:indexed_field] => "Notice with #{@field[:name]}"
+      :dmca, :with_facet_data, @field[:indexed_field] => "Notice with #{@field[:name]}"
     )
     outside_field = create(
-      :notice, :with_facet_data, title: "N/A", tag_list: [ @field[:name] ]
+      :dmca, :with_facet_data, title: "N/A", tag_list: [ @field[:name] ]
     )
     return in_field, outside_field
   end
@@ -29,14 +29,14 @@ class FieldedSearchNoticeGenerator
     non_matching_entity = build(:entity, name: 'Joe Schmoe')
 
     in_field = build(
-      :notice, entity_notice_roles: [
+      :dmca, entity_notice_roles: [
         build(:entity_notice_role, name: role_of_concern, entity: matching_entity),
       ]
     )
     in_field.save!
 
     outside_field = build(
-      :notice, title: "I am not found",
+      :dmca, title: "I am not found",
       entity_notice_roles: [
         build(:entity_notice_role, name: role_of_concern, entity: non_matching_entity)
       ]
@@ -50,12 +50,12 @@ class FieldedSearchNoticeGenerator
 
   def for_tags
     in_field = build(
-      :notice, :with_facet_data, @field[:indexed_field] => [ @field[:name] ]
+      :dmca, :with_facet_data, @field[:indexed_field] => [ @field[:name] ]
     )
     in_field.save!
 
     outside_field = create(
-      :notice, :with_facet_data, title: "I am not found"
+      :dmca, :with_facet_data, title: "I am not found"
     )
     return in_field, outside_field
   end
@@ -67,12 +67,12 @@ class FieldedSearchNoticeGenerator
     non_matching_category = build(:category, name: 'Non matching')
 
     in_field = build(
-      :notice, :with_facet_data, categories: [ matching_category ]
+      :dmca, :with_facet_data, categories: [ matching_category ]
     )
     in_field.save!
 
     outside_field = build(
-      :notice, :with_facet_data, title: 'I am not found', 
+      :dmca, :with_facet_data, title: 'I am not found', 
       categories: [ non_matching_category ]
     )
     outside_field.save!
@@ -84,12 +84,12 @@ class FieldedSearchNoticeGenerator
     non_matching_work = build(:work, description: 'Non matching')
 
     in_field = build(
-      :notice, :with_facet_data, works: [ matching_work ]
+      :dmca, :with_facet_data, works: [ matching_work ]
     )
     in_field.save!
 
     outside_field = build(
-      :notice, :with_facet_data, title: 'I am not found', 
+      :dmca, :with_facet_data, title: 'I am not found', 
       works: [ non_matching_work ]
     )
     outside_field.save!

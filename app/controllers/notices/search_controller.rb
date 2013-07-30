@@ -11,7 +11,7 @@ class Notices::SearchController < ApplicationController
       format.json do
         render(
           json: @results,
-          each_serializer: NoticeSearchResultSerializer,
+          each_serializer: NoticeSerializerProxy,
           serializer: ActiveModel::ArraySerializer,
           root: 'notices',
           meta: meta_hash_for(@results)
