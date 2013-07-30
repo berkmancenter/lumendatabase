@@ -59,6 +59,7 @@ class NoticesController < ApplicationController
       :tag_list,
       :jurisdiction_list,
       :language,
+      :action_taken,
       category_ids: [],
       file_uploads_attributes: [:file],
       entity_notice_roles_attributes: [

@@ -4,6 +4,7 @@ describe Notice do
   it { should validate_presence_of :works }
   it { should validate_presence_of :entity_notice_roles }
   it { should ensure_inclusion_of(:language).in_array(Language.codes) }
+  it { should ensure_inclusion_of(:action_taken).in_array(Notice::VALID_ACTIONS) }
 
   context 'automatic validations' do
     it { should validate_presence_of :title }
@@ -22,6 +23,12 @@ describe Notice do
   it_behaves_like "an object with a recent scope"
   it_behaves_like "an object tagged in the context of", "tag", case_insensitive: true
   it_behaves_like "an object tagged in the context of", "jurisdiction"
+
+  it "defaults to no action taken" do
+    notice = Notice.new
+
+    expect(notice.action_taken).to eq 'No'
+  end
 
   context "entity notice roles" do
     context 'with entities' do
