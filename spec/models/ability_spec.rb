@@ -27,6 +27,10 @@ describe Ability do
     it "cannot publish" do
       expect(subject.can? :publish, notice).to be_false
     end
+
+    it "cannot rescind" do
+      expect(subject.can? :rescind, notice).to be_false
+    end
   end
 
   context "a publisher" do
@@ -36,6 +40,10 @@ describe Ability do
 
     it "can publish" do
       expect(subject.can? :publish, notice).to be_true
+    end
+
+    it "cannot rescind" do
+      expect(subject.can? :rescind, notice).to be_false
     end
   end
 
@@ -52,6 +60,10 @@ describe Ability do
       expect(subject.can? :edit, notice).to be_true
       expect(subject.can? :edit, category).to be_true
       expect(subject.can? :edit, blog_entry).to be_true
+    end
+
+    it "can rescind" do
+      expect(subject.can? :rescind, notice).to be_true
     end
 
     it "cannot edit users or role" do

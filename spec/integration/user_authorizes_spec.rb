@@ -130,6 +130,21 @@ feature "User authorization" do
     end
   end
 
+  scenario "Redactors and Publishers cannot rescind notices" do
+    notice = create(:notice)
+    users = [
+      AdminOnPage.new(create(:user, :redactor)),
+      AdminOnPage.new(create(:user, :publisher))
+    ]
+
+    users.each do |user|
+      user.sign_in
+      user.edit(notice)
+
+      expect(page).not_to have_css('input#notice_rescinded')
+    end
+  end
+
   scenario "Admins and Super admins can edit site data" do
     category = create(:category)
     users = [
@@ -142,6 +157,21 @@ feature "User authorization" do
       user.edit(category, Name: "New name #{idx}")
 
       expect(category.reload.name).to eq "New name #{idx}"
+    end
+  end
+
+  scenario "Admins and Super admins can rescind notices" do
+    notice = create(:notice)
+    users = [
+      AdminOnPage.new(create(:user, :admin)),
+      AdminOnPage.new(create(:user, :super_admin))
+    ]
+
+    users.each do |user|
+      user.sign_in
+      user.edit(notice)
+
+      expect(page).to have_css('input#notice_rescinded')
     end
   end
 

@@ -33,7 +33,14 @@ class NoticesController < ApplicationController
     @notice = Notice.find(params[:id])
 
     respond_to do |format|
-      format.html
+      format.html do
+        if @notice.rescinded?
+          render :rescinded
+        else
+          render :show
+        end
+      end
+
       format.json { render json: @notice }
     end
   end

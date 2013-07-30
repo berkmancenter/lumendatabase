@@ -28,6 +28,7 @@ class Ability
       can :redact_notice, Notice
       can :redact_queue, Notice
       can :publish, Notice
+      can :rescind, Notice
     end
 
     if user.has_role?(Role.super_admin)
