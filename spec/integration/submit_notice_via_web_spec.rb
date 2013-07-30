@@ -24,6 +24,19 @@ feature "notice submission" do
     pending "We don't display language yet"
   end
 
+  scenario "submitting a notice with action taken" do
+    submit_recent_notice do
+      select "Yes", from: "Action taken"
+    end
+
+    open_recent_notice
+
+    notice = Notice.last
+    expect(notice.action_taken).to eq 'Yes'
+
+    pending "We don't display action taken yet"
+  end
+
   scenario "submitting a notice with a jurisdiction" do
     submit_recent_notice do
       fill_in "Jurisdiction", with: 'US, foobar'

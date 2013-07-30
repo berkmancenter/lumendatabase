@@ -20,6 +20,8 @@ class Notice < ActiveRecord::Base
   UNDER_REVIEW_VALUE = 'Under review'
   RANGE_SEPARATOR = '..'
 
+  VALID_ACTIONS = %w( Yes No Partial )
+
   belongs_to :reviewer, class_name: 'User'
 
   has_many :categorizations, dependent: :destroy
@@ -37,6 +39,7 @@ class Notice < ActiveRecord::Base
 
   has_and_belongs_to_many :works
 
+  validates_inclusion_of :action_taken, in: VALID_ACTIONS
   validates_inclusion_of :language, in: Language.codes, allow_blank: true
   validates_presence_of :works, :entity_notice_roles
 
@@ -48,6 +51,8 @@ class Notice < ActiveRecord::Base
   accepts_nested_attributes_for :entity_notice_roles
 
   accepts_nested_attributes_for :works
+
+  after_initialize :set_default_action_taken
 
   after_touch { tire.update_index }
 
@@ -182,6 +187,12 @@ class Notice < ActiveRecord::Base
   end
 
   private
+
+  def set_default_action_taken
+    if action_taken.blank?
+      self.action_taken = 'No'
+    end
+  end
 
   def entities_that_have_submitted
     entity_notice_roles.submitters.map(&:entity)
