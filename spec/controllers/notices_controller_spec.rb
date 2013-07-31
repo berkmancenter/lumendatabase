@@ -85,9 +85,9 @@ describe NoticesController do
     end
 
     it "defaults to Notice if the type is missing or invalid" do
-      invalid_types = ['', 'Object', 'User', 'Hash']
+      invalid_types = ['', 'FlimFlam', 'Object', 'User', 'Hash']
       notice = Notice.new
-      Notice.should_receive(:new).exactly(4).times.and_return(notice)
+      Notice.should_receive(:new).exactly(5).times.and_return(notice)
 
       invalid_types.each do |invalid_type|
         post :create, notice: { type: invalid_type, title: "A title" }
