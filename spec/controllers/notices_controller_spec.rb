@@ -75,6 +75,27 @@ describe NoticesController do
       expect(assigns(:notice)).to eq notice
     end
 
+    it "uses the type param to instantiate the correct class" do
+      notice = Trademark.new
+      Trademark.should_receive(:new).and_return(notice)
+
+      post :create, notice: { type: 'trademark', title: "A title"}
+
+      expect(assigns(:notice)).to eq notice
+    end
+
+    it "defaults to Notice if the type is missing or invalid" do
+      invalid_types = ['', 'Object', 'User', 'Hash']
+      notice = Notice.new
+      Notice.should_receive(:new).exactly(4).times.and_return(notice)
+
+      invalid_types.each do |invalid_type|
+        post :create, notice: { type: invalid_type, title: "A title" }
+
+        expect(assigns(:notice)).to eq notice
+      end
+    end
+
     it "auto-redacts the notice" do
       notice = stub_new_notice
       notice.should_receive(:auto_redact)

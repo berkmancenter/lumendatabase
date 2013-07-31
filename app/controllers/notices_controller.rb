@@ -3,28 +3,23 @@ class NoticesController < ApplicationController
 
   def new
     if params[:type].blank?
-      render :select_type
-    else
-      model_class = params[:type].classify.constantize
-      @notice = model_class.new
-      @notice.file_uploads.build
-      @notice.entity_notice_roles.build(name: 'recipient').build_entity
-      @notice.entity_notice_roles.build(name: 'sender').build_entity
-      @notice.works.build do |notice|
-        notice.copyrighted_urls.build
-        notice.infringing_urls.build
-      end
+      render :select_type and return
+    end
+
+    model_class = get_notice_type(params)
+
+    @notice = model_class.new
+    @notice.file_uploads.build
+    @notice.entity_notice_roles.build(name: 'recipient').build_entity
+    @notice.entity_notice_roles.build(name: 'sender').build_entity
+    @notice.works.build do |notice|
+      notice.copyrighted_urls.build
+      notice.infringing_urls.build
     end
   end
 
   def create
-    if params[:notice][:type].present?
-      model_class = params[:notice][:type].classify.constantize
-    else
-      model_class = Notice
-    end
-
-    params[:notice].delete(:type)
+    model_class = get_notice_type(params[:notice])
 
     @notice = model_class.new(notice_params)
     @notice.auto_redact
@@ -63,7 +58,6 @@ class NoticesController < ApplicationController
 
   def notice_params
     params.require(:notice).permit(
-      :type,
       :title,
       :subject,
       :body,
@@ -105,6 +99,21 @@ class NoticesController < ApplicationController
     else
       "application"
     end
+  end
+
+  def get_notice_type(params)
+    notice_type = params.fetch(:type, 'notice').classify.constantize
+
+    if notice_type <= Notice
+      notice_type
+    else
+      Notice
+    end
+
+  rescue NameError
+    Notice
+  ensure
+    params.delete(:type)
   end
 
 end
