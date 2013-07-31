@@ -1,4 +1,4 @@
-class Trademark < Notice
+class Dmca < Notice
   include SearchableNotice
 
   def self.model_name

@@ -65,10 +65,10 @@ describe NoticesController do
   end
 
   context "#create" do
-    it "initializes a notice from params" do
-      notice = Notice.new
+    it "initializes a Dmca by default from params" do
+      notice = Dmca.new
       notice_params = HashWithIndifferentAccess.new(title: "A title")
-      Notice.should_receive(:new).with(notice_params).and_return(notice)
+      Dmca.should_receive(:new).with(notice_params).and_return(notice)
 
       post :create, notice: notice_params
 
@@ -84,10 +84,10 @@ describe NoticesController do
       expect(assigns(:notice)).to eq notice
     end
 
-    it "defaults to Notice if the type is missing or invalid" do
+    it "defaults to Dmca if the type is missing or invalid" do
       invalid_types = ['', 'FlimFlam', 'Object', 'User', 'Hash']
-      notice = Notice.new
-      Notice.should_receive(:new).exactly(5).times.and_return(notice)
+      notice = Dmca.new
+      Dmca.should_receive(:new).exactly(5).times.and_return(notice)
 
       invalid_types.each do |invalid_type|
         post :create, notice: { type: invalid_type, title: "A title" }
@@ -162,11 +162,11 @@ describe NoticesController do
     end
 
     def stub_new_notice
-      build_stubbed(:notice).tap do |notice|
+      build_stubbed(:dmca).tap do |notice|
         notice.stub(:save).and_return(true)
         notice.stub(:auto_redact)
         notice.stub(:mark_for_review)
-        Notice.stub(:new).and_return(notice)
+        Dmca.stub(:new).and_return(notice)
       end
     end
 

@@ -16,7 +16,7 @@
       <p class="source">Sent via: <%= @notice.source || 'Unknown' %></p>
 
       <section class="notice-body">
-        <h5 class="title"><%= t("notices.#{@notice.type}.body") %></h5>
+        <h5 class="title"><%= t("#{@notice.type}.body") %></h5>
         <p class="body"><%= @notice.redacted(:body) %></p>
       </section>
 
@@ -61,7 +61,6 @@
           <% end %>
         </ol>
       </section>
-
     </div>
   </section>
 

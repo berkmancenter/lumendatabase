@@ -24,9 +24,12 @@ en:
         title: 'Redact queue'
 
 
-  notices:
-    Trademark:
+  Trademark:
+    body: 'Alleged Infringment'
+    works:
       description: 'Mark'
-      body: 'Alleged Infringment'
-    Dmca:
-      description: 'Work'
+
+  Dmca:
+    body: 'Explanation of Infringment'
+    works:
+      description: 'Description'
