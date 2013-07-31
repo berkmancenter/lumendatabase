@@ -1,7 +1,8 @@
 class DateRangeFilter
 
-  def initialize(parameter, ranges = [])
+  def initialize(parameter, indexed_attribute = nil, ranges = [])
     @parameter = parameter
+    @indexed_attribute = indexed_attribute || parameter
     @ranges = ranges
   end
 
@@ -15,10 +16,11 @@ class DateRangeFilter
   def register_filter(searcher)
     # These must be local variables to be passed into the Tire searcher
     local_parameter = @parameter
+    local_indexed_attribute = @indexed_attribute
     local_ranges = @ranges
 
     searcher.facet local_parameter do
-      range local_parameter, local_ranges
+      range local_indexed_attribute, local_ranges
     end
   end
 
@@ -26,7 +28,7 @@ class DateRangeFilter
     filter_values = FilterRangeValues.new(value)
     [
       :range,
-      @parameter => { from: filter_values.from, to: filter_values.to }
+      @indexed_attribute => { from: filter_values.from, to: filter_values.to }
     ]
   end
 

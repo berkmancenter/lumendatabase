@@ -14,6 +14,17 @@ class Notice < ActiveRecord::Base
     works.description works.infringing_urls.url works.copyrighted_urls.url
   )
 
+  SEARCHABLE_FIELDS = [
+    { indexed_field: :_all, parameter: :term, name: 'All Fields' },
+    { indexed_field: :title, parameter: :title, name: 'Title' },
+    { indexed_field: 'categories.name', parameter: :categories, name: 'Categories' },
+    { indexed_field: :tag_list, parameter: :tags, name: 'Tags' },
+    { indexed_field: :jurisdiction_list, parameter: :jurisdictions, name: 'Jurisdictions' },
+    { indexed_field: :sender_name, parameter: :sender_name, name: 'Sender Name' },
+    { indexed_field: :recipient_name, parameter: :recipient_name, name: 'Recipient Name' },
+    { indexed_field: 'works.description', parameter: :works, name: 'Works Descriptions' }
+  ]
+
   REDACTABLE_FIELDS = %i( legal_other body )
   PER_PAGE = 10
 

@@ -35,8 +35,8 @@ describe 'notices/search/index.html.erb' do
       expect(page).to have_css('.title', text: 'A notice')
       expect(page).to have_css('.sender-receiver', text: notice.recipient_name)
       expect(page).to have_css('.sender-receiver', text: notice.sender_name)
-      expect(page).to have_facetted_search_role_link(:sender_name, notice)
-      expect(page).to have_facetted_search_role_link(:recipient_name, notice)
+      expect(page).to have_faceted_search_role_link(:sender_name, notice)
+      expect(page).to have_faceted_search_role_link(:recipient_name, notice)
       expect(page).to have_css(
         '.date-received', text: notice.date_received.to_s(:simple)
       )
@@ -87,37 +87,37 @@ describe 'notices/search/index.html.erb' do
 
   def facet_data
     {
-      "sender_name" => { "terms" =>
+      "sender_name_facet" => { "terms" =>
         [
           { "term" => "Mike Itten", "count" => 27 },
           { "term" => "Imak Itten", "count" => 27 }
         ]
       },
-      "recipient_name" => { "terms" =>
+      "recipient_name_facet" => { "terms" =>
         [
           { "term" => "Twitter", "count" => 10 },
           { "term" => "Twooter", "count" => 10 }
         ]
       },
-      "categories" => { "terms" =>
+      "category_facet" => { "terms" =>
         [
           { "term" => "DMCA", "count" => 10 },
           { "term" => "DMCA Giveup", "count" => 10 }
         ]
       },
-      "tags" => { "terms" =>
+      "tag_list_facet" => { "terms" =>
         [
           { "term" => "a tag", "count" => 27 },
           { "term" => "another tag", "count" => 27 }
         ]
       },
-      "country_code" => { "terms" =>
+      "country_code_facet" => { "terms" =>
         [
           { "term" => "US", "count" => 27 },
           { "term" => "CA", "count" => 27 }
         ]
       },
-      "date_received"=>{ "ranges"=>
+      "date_received_facet"=>{ "ranges"=>
         [
           { "from" => 1371583484000.0, "to" => 1371669884000.0, "count" => 1},
           { "from" => 1371583485000.0, "to" => 1371669885000.0, "count" => 1}
@@ -126,8 +126,8 @@ describe 'notices/search/index.html.erb' do
     }
   end
 
-  def have_facetted_search_role_link(role, notice)
-    have_css(%Q(a[href="#{facetted_search_path(role => notice.send(role))}"]), text: notice.send(role))
+  def have_faceted_search_role_link(role, notice)
+    have_css(%Q(a[href="#{faceted_search_path(role => notice.send(role))}"]), text: notice.send(role))
   end
 
 end

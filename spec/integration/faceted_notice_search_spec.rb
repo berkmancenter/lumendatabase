@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-feature "Advanced search of Notices", search: true do
+feature "Faceted search of Notices", search: true do
   include SearchHelpers
 
   context 'facets' do
     it 'on sender names', search: true do
       notice = create(:notice, :with_facet_data)
-      with_a_facetted_search(
+      with_a_faceted_search(
         :sender_name, :sender_name_facet) do |results|
         expect(results).to have_facets('sender_name').
           with_terms([notice.sender_name])
@@ -15,7 +15,7 @@ feature "Advanced search of Notices", search: true do
 
     it 'on tags', search: true do
       notice = create(:notice, :with_facet_data)
-      with_a_facetted_search(
+      with_a_faceted_search(
         :tags, :tag_list_facet) do |results|
         expect(results).to have_facets('tags').
           with_terms(notice.tag_list)
@@ -24,7 +24,7 @@ feature "Advanced search of Notices", search: true do
 
     it 'on jurisdictions', search: true do
       notice = create(:notice, :with_facet_data)
-      with_a_facetted_search(
+      with_a_faceted_search(
         :jurisdiction, :jurisdiction_list_facet) do |results|
         expect(results).to have_facets('jurisdiction').
           with_terms(notice.jurisdiction_list)
@@ -33,7 +33,7 @@ feature "Advanced search of Notices", search: true do
 
     it 'on country', search: true do
       notice = create(:notice, :with_facet_data)
-      with_a_facetted_search(
+      with_a_faceted_search(
         :country_code, :country_code_facet) do |results|
         expect(results).to have_facets('country_code').
           with_terms([notice.country_code])
@@ -42,7 +42,7 @@ feature "Advanced search of Notices", search: true do
 
     it 'on recipient names', search: true do
       notice = create(:notice, :with_facet_data)
-      with_a_facetted_search(
+      with_a_faceted_search(
         :recipient_name, :recipient_name_facet) do |results|
         expect(results).to have_facets('recipient_name').
           with_terms([notice.recipient_name])
@@ -51,7 +51,7 @@ feature "Advanced search of Notices", search: true do
 
     it 'on categories', search: true do
       notice = create(:notice, :with_facet_data)
-      with_a_facetted_search(
+      with_a_faceted_search(
         :categories, :category_facet) do |results|
         expect(results).to have_facets('categories').
           with_terms(notice.categories.map(&:name))
@@ -77,37 +77,15 @@ feature "Advanced search of Notices", search: true do
   end
 
   context "filtering" do
-
-    context "without a full-text search term" do
-      [
-        :sender_name, :recipient_name, :categories, :tags, :country_code
-      ].each do |facet_type|
-        it "displays #{facet_type} facet results correctly", search: true do
-          notice = create(:notice, :with_facet_data, title: "Lion King two")
-          sleep 1
-          facet = ''
-          if facet_type == :categories
-            facet = notice.categories.first.name
-          elsif facet_type == :tags
-            facet = notice.tag_list.first
-          else
-            facet = notice.send(facet_type)
-          end
-
-          visit("/facetted_search?#{facet_type}=" + URI.escape(facet))
-
-          within('.search-results') do
-            expect(page).to have_n_results 1
-          end
-        end
-      end
-    end
-
     context "with a full-text search term" do
+      it "clones terms from search form" do
+        pending "Implement this after advanced search is working"
+      end
+
       [
-        :categories, :sender_name, :recipient_name, :tags, :country_code
+        :category_facet, :sender_name_facet, :recipient_name_facet, :tag_list_facet, :country_code_facet
       ].each do |facet_type|
-        it "on #{facet_type}", search: true do
+        it "on #{facet_type}", js: true, search: true do
           outside_facet = create(:notice, title: "King of New York")
           inside_facet = create(:notice, :with_facet_data, title: "Lion King two")
 
@@ -116,24 +94,24 @@ feature "Advanced search of Notices", search: true do
           end
 
           facet = ''
-          if facet_type == :categories
+          if facet_type == :category_facet
             facet = inside_facet.categories.first.name
-          elsif facet_type == :tags
+          elsif facet_type == :tag_list_facet
             facet = inside_facet.tags.first
           else
-            facet = inside_facet.send(facet_type)
+            facet = inside_facet.send(facet_type.to_s.gsub(/_facet/, '').to_sym)
           end
 
-          within_facetted_search_results_for("king", facet_type, facet) do
+          within_faceted_search_results_for("king", facet_type, facet) do
             expect(page).to have_active_facet_dropdown(facet_type)
-            expect(page).to have_active_facet(facet)
+            expect(page).to have_active_facet(facet_type, facet)
             expect(page).to have_n_results 1
             expect(page).to have_content(inside_facet.title)
           end
         end
       end
 
-      it "on date ranges", search: true do
+      it "on date ranges", js: true, search: true do
         outside_facet = create(
           :notice, title: 'A title', date_received: Time.now - 10.months
         )
@@ -144,27 +122,28 @@ feature "Advanced search of Notices", search: true do
           expect(page).to have_n_results 2
         end
 
-        facet = page.find('ol.date_received li:nth-child(1)').text
+        open_dropdown_for_facet('date_received_facet')
+        facet = page.find('ol.date_received_facet li:nth-child(2)').text
 
-        within_facetted_search_results_for("title", :date_received, facet) do
-          expect(page).to have_active_facet_dropdown(:date_received)
+        within_faceted_search_results_for("title", :date_received_facet, facet) do
+          expect(page).to have_active_facet_dropdown(:date_received_facet)
           expect(page).to have_n_results 1
           expect(page).to have_content(inside_facet.title)
         end
       end
     end
-
   end
 
   def have_active_facet_dropdown(facet_type)
     have_css(".dropdown.#{facet_type}.active")
   end
 
-  def have_active_facet(facet)
+  def have_active_facet(facet_type, facet)
+    find(".dropdown-toggle.#{facet_type}").click
     have_css('.dropdown-menu li.active a', text: /^#{facet}/)
   end
 
-  def with_a_facetted_search(facet_name, facet_attribute_name)
+  def with_a_faceted_search(facet_name, facet_attribute_name)
     sleep 1
     results = Notice.search do
       query { match(:_all, 'title') }
