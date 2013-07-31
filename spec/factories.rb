@@ -9,6 +9,7 @@ FactoryGirl.define do
   end
 
   factory :notice do
+
     title "A title"
     works { build_list(:work, 1) }
 
@@ -72,6 +73,8 @@ FactoryGirl.define do
       body_original "Some sensitive body"
       review_required true
     end
+
+    factory :trademark, class: 'Trademark'
   end
 
   factory :file_upload do

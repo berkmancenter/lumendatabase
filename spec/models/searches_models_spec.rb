@@ -7,7 +7,7 @@ describe SearchesModels do
   end
 
   it "finds the index_name from the model_class" do
-    FakeModel.should_receive(:index_name)
+    FakeModel.should_receive(:index_names)
 
     searcher = described_class.new({foo: 'bar'}, FakeModel)
     searcher.search

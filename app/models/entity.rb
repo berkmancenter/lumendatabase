@@ -26,6 +26,10 @@ class Entity < ActiveRecord::Base
 
   after_update { notices.each(&:touch) }
 
+  def self.index_names
+    index_name
+  end
+
   def self.submitters
     submitter_ids = EntityNoticeRole.submitters.map(&:entity_id)
 

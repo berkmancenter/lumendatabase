@@ -1,9 +1,6 @@
 require 'spec_helper'
 
 describe NoticeSearchResult do
-  it "can only proxy for Notices" do
-    expect { NoticeSearchResult.new('_type' => 'not-notice') }.to raise_error
-  end
 
   it "delegates id and title attributes to notice" do
     notice = build_stubbed(:notice)

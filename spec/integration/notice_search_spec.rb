@@ -14,10 +14,12 @@ feature "Searching Notices" do
 
   scenario "for full-text on a single model", search: true do
     notice = create(:notice, title: "The Lion King on Youtube")
+    trademark = create(:trademark, title: "Coke - it's the King thing")
 
     within_search_results_for("king") do
-      expect(page).to have_n_results(1)
+      expect(page).to have_n_results(2)
       expect(page).to have_content(notice.title)
+      expect(page).to have_content(trademark.title)
       expect(page.html).to have_excerpt('King', 'The Lion', 'on Youtube')
     end
   end

@@ -4,9 +4,6 @@ class NoticeSearchResult < SimpleDelegator
   attr_reader :_score
 
   def initialize(attributes = {})
-    if attributes['_type'] != 'notice'
-      raise ArgumentError, "NoticeSearchResult can only proxy for notices"
-    end
 
     @notice = assign_attributes(Notice.new, attributes)
 
