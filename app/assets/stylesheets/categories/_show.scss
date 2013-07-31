@@ -2,6 +2,10 @@ section.category-description {
   @include span-columns(8.5);
   @include pad(0 15px 0 0);
 
+  @include media($mobile) {
+    width: 100%;
+  }
+
   article {
   }
 
@@ -17,6 +21,13 @@ section.category-notices {
   @include omega;
   @include pad(0 20px);
   border-left: 3px solid lighten($base-border-color-1, 5%);
+
+  @include media($mobile) {
+    width: 100%;
+    border-left: 0;
+    padding: 0;
+    margin: 0;
+  }
 
   article {
     display: block;
@@ -52,14 +63,13 @@ section.category-notices {
 
 section.category-faqs {
   @extend %faq-accordion;
+  @extend %faq-wrapper;
   clear: left;
   margin-top: 2em;
   padding-top: 1px;
 
-  div.wrapper {
-    background: #fff;
-    border-right: 1px solid $base-border-color;
-    border-left: 1px solid $base-border-color;
+  h3.title {
+    @extend %header-title;
   }
 }
 

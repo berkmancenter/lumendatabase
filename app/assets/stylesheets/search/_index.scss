@@ -24,30 +24,25 @@ ol.results-list {
   margin-top: 2em;
   padding: 0 $base-padding;
 
+  @include media($mobile) {
+    padding: 0 15px;
+  }
+
   li {
     list-style-type: none;
     margin-bottom: 23px;
-
-    &:hover {
-      div.metadata div.category {
-        @include transition;
-        opacity: 1;
-      }
-    }
   }
 
   h3 {
-    font-size: $base-font-size-1;
+    font-size: $base-font-size + 1;
     line-height: 1.2em;
     margin: 0;
 
     a {
       color: saturate(darken($base-link-color-1, 5%), 100%);
-      text-decoration: none;
 
       &:hover {
         color: darken($base-link-color-1, 5%);
-        text-decoration: underline;
       }
 
       &:visited {
@@ -103,7 +98,7 @@ ol.results-list {
     ol.excerpt {
       font-size: $base-font-size-small-1;
       font-weight: normal;
-      margin: 0;
+      margin: 3px 0 0;
       padding: 0;
 
       li {
@@ -124,16 +119,32 @@ ol.results-list {
     }
 
     div.category {
-      opacity: 0;
-      color: $base-font-color-2;
-      font-weight: 400;
+      $color: lighten($base-font-color-2, 10%);
+      color: $color;
+      display: inline-block;
+      font-size: $base-font-size-small-2 - 1;
+      font-weight: 600;
+      margin-top: 3px;
+      opacity: 0.7;
+      text-transform: uppercase;
+      @include transition(all 0.08s);
 
-      @include media($tablet) {
+      &:hover {
         opacity: 1;
       }
 
       a {
+        color: $color;
+        margin-left: 2px;
+        white-space: nowrap;
+
+        &:first-child {
+          margin-left: 0;
+        }
+
+        &:hover {
         color: $base-font-color-2;
+        }
       }
     }
 

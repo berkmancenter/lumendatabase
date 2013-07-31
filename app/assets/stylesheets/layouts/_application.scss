@@ -13,4 +13,7 @@ section.main {
   @include media($small-screen) {
     padding: 40px $gutter;
   }
+  @include media($mobile) {
+    padding: 40px 10px;
+  }
 }

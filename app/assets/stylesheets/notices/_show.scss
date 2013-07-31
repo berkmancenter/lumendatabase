@@ -209,16 +209,11 @@ aside.notice {
   margin: 0 15px;
 
   h4.title {
-    font-size: $base-font-size + 1;
-    font-weight: 800;
-    text-transform: uppercase;
-    margin: 15px 20px 10px;
+    @extend %header-title;
   }
 
   section {
-    background: #fff;
-    border: 1px solid $base-border-color;
-    border-radius: 3px;
+    @extend %faq-wrapper;
   }
 }
 

@@ -6,6 +6,10 @@ article.post {
   margin-bottom: 30px;
   @include pad(40px);
 
+  @include media($mobile) {
+    @include pad(20px);
+  }
+
   @include media($small-screen) {
     @include span-columns(10);
   }

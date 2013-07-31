@@ -46,7 +46,8 @@ header.app {
   }
 
   $input-height: 42px;
-  .container form {
+  .container .search-wrapper {
+    position: relative;
     float: left;
     margin: 0;
     width: 530px;
@@ -138,6 +139,9 @@ header.app {
     padding-left: $left-margin - 11px;
 
     @include media($tablet) {
+      padding-left: 30px;
+    }
+    @include media($mobile) {
       padding-left: 0;
     }
   }
@@ -145,6 +149,10 @@ header.app {
   h5 {
     font-size: $base-font-size-small-1;
     margin-bottom: 10px;
+
+    @include media($mobile) {
+      font-size: $base-font-size-small-2;
+    }
   }
 
   div.field-group {
@@ -176,6 +184,17 @@ header.app {
       color: #F6343B;
       @include transform(rotate(360deg) scale(1.1));
     }
+
+    @include media($mobile) {
+      z-index: 1;
+      left: auto;
+      right: -24px;
+
+      &:hover {
+        left: auto;
+      }
+    }
+
   }
 
   div.field-group.hidden{
@@ -231,7 +250,7 @@ header.app {
     width: $input-width;
 
     @include media($mobile) {
-      width: $input-width - 20px;
+      width: 180px;
     }
   }
 
@@ -241,10 +260,19 @@ header.app {
     margin-top: 5px;
     float: left;
     margin-left: 15px;
+
+    @include media($mobile) {
+      margin: 3px 0 8px 0;
+    }
   }
 
   div.resubmit {
     clear: both;
+
+    @include media($mobile) {
+      float: right;
+      clear: none;
+    }
 
     button {
       font-size: $base-font-size-small-2;
@@ -252,6 +280,10 @@ header.app {
       display: block;
       padding: 0.65em 1.8em;
       width: $select-width + $input-width;
+
+      @include media($mobile) {
+        width: 100%;
+      }
     }
   }
 }

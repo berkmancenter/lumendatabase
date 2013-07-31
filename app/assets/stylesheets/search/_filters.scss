@@ -23,7 +23,7 @@ ol.results-facets {
   @include clearfix;
   border-bottom: 1px solid $border-color;
   margin: 0;
-  padding: 0 0 0 15px;
+  padding: 0;
   @extend %gray-gradient;
 
   > li {
@@ -31,14 +31,22 @@ ol.results-facets {
     list-style: none;
     border-right: 1px solid $border-color;
 
+    &:first-child {
+      margin: 0 0 0 15px;
+    }
+
   }
 
-  @include media($mobile) {
+  @include media($tablet) {
     padding: 0;
 
     > li {
       float: none;
       border-bottom: 1px solid $base-border-color;
+
+      &:first-child {
+        margin: 0;
+      }
 
       &:last-child {
         border-bottom: 0;
