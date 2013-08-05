@@ -13,6 +13,7 @@
 }
 
 %hover-effect {
+  background: white;
   box-shadow: 0 -4px 0 $shadow-4;
   color: $base-title-color;
 }
@@ -20,19 +21,25 @@
 
 ol.results-facets {
   $border-color: #ddd;
-  @include clearfix;
+  @extend %gray-gradient;
   border-bottom: 1px solid $border-color;
+  @include clearfix;
   margin: 0;
   padding: 0;
-  @extend %gray-gradient;
+  position: relative;
 
   > li {
     float: left;
     list-style: none;
     border-right: 1px solid $border-color;
+    @extend %gray-gradient;
 
     &:first-child {
       margin: 0 0 0 15px;
+    }
+
+    &:last-child {
+      border-right: 0;
     }
 
   }
@@ -43,6 +50,7 @@ ol.results-facets {
     > li {
       float: none;
       border-bottom: 1px solid $base-border-color;
+      border-right: 0;
 
       &:first-child {
         margin: 0;
@@ -60,6 +68,15 @@ ol.results-facets {
     text-transform: uppercase;
     font-weight: 700;
     color: $base-title-color;
+
+    @include media($small-screen) {
+      display: none;
+    }
+
+    @include media($tablet) {
+      display: block;
+      padding-left: 15px;
+    }
   }
 
   li.dropdown {
@@ -69,6 +86,11 @@ ol.results-facets {
     &:hover,
     &.open a.dropdown-toggle {
       @extend %hover-effect;
+
+      @include media($tablet) {
+        box-shadow: none;
+        background: #fff;
+      }
     }
 
     &.active {
@@ -82,16 +104,66 @@ ol.results-facets {
       display: block;
       font-size: $base-font-size-small-1 - 1px;
       font-weight: 600;
-      padding: 10px 30px 10px 20px;
+      padding: 10px 24px 10px 10px;
       position: relative;
       text-decoration: none;
 
       &:after {
-        @include triangle(10px, darken($base-border-color, 15%), down);
+        @include triangle(8px, darken($base-border-color, 15%), down);
         position: absolute;
         content: "";
         right: 10px;
         top: calc(50% - 2px);
+      }
+    }
+  }
+
+  li.date_received_facet {
+    border: 0;
+  }
+
+  $button-height: 40px;
+  $button-width: 100px;
+  li.active ~ li.button-wrapper {
+    button {
+      @include transform(translateX(0)); // show button
+    }
+
+    @include media($tablet) {
+      height: $button-height; // show button
+    }
+  }
+
+  li.button-wrapper {
+    overflow: hidden;
+    position: absolute;
+    right: 0;
+
+
+    @include media($tablet) {
+      height: 0; // hide button
+      position: static;
+      @include transition(all 0.4s $ease-out-cubic);
+    }
+
+    button {
+      border-radius: 0;
+      border-width: 0 0 0 1px;
+      box-shadow: inset -1px 0 0 hsla(0, 0%, 0%, 0.1), inset 0 1px 0 hsla(0, 0%, 0%, 0.05), 0 1px 0 $button-border;
+      font-size: $base-font-size-small-2;
+      font-weight: 700;
+      height: $button-height;
+      padding: 5px 10px;
+      text-transform: uppercase;
+      @include transform(translateX($button-width)); //hide button
+      @include transition(all 0.5s $ease-out-cubic);
+      width: $button-width;
+
+      @include media($tablet) {
+        border-width: 1px 0 0 0;
+        display: block;
+        @include transform(translate(0));
+        width: 100%;
       }
     }
   }

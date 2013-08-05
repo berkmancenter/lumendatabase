@@ -39,7 +39,7 @@
   .previous_page,
   .next_page {
     font-weight: 600;
-    @include linear-gradient(#F8F8F8, #EFF1F5);
+    @extend %pagination-gradient;
   }
 
   .next_page {

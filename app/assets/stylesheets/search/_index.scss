@@ -21,7 +21,7 @@ section.search-results {
 }
 
 ol.results-list {
-  margin-top: 2em;
+  margin: 2em 0 3em;
   padding: 0 $base-padding;
 
   @include media($mobile) {
