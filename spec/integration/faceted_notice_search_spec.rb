@@ -78,10 +78,6 @@ feature "Faceted search of Notices", search: true do
 
   context "filtering" do
     context "with a full-text search term" do
-      it "clones terms from search form" do
-        pending "Implement this after advanced search is working"
-      end
-
       [
         :category_facet, :sender_name_facet, :recipient_name_facet, :tag_list_facet, :country_code_facet
       ].each do |facet_type|
@@ -108,6 +104,8 @@ feature "Faceted search of Notices", search: true do
             expect(page).to have_n_results 1
             expect(page).to have_content(inside_facet.title)
           end
+
+          expect(page).to have_css("input#search[value='king']")
         end
       end
 
@@ -132,15 +130,6 @@ feature "Faceted search of Notices", search: true do
         end
       end
     end
-  end
-
-  def have_active_facet_dropdown(facet_type)
-    have_css(".dropdown.#{facet_type}.active")
-  end
-
-  def have_active_facet(facet_type, facet)
-    find(".dropdown-toggle.#{facet_type}").click
-    have_css('.dropdown-menu li.active a', text: /^#{facet}/)
   end
 
   def with_a_faceted_search(facet_name, facet_attribute_name)

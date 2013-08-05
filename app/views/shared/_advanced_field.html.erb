@@ -5,6 +5,7 @@
   end
 %>
 <div class="field-group<%= extra_class %>">
+  <div class="remove-group <%= field[:parameter] %>"></div>
   <div class="input select">
     <%=
       select_tag(
@@ -15,5 +16,5 @@
         )
     ) %>
   </div>
-  <%= text_field_tag field[:parameter], params[field[:parameter]], id: nil %>
+  <%= text_field_tag field[:parameter], params[field[:parameter]], id: nil, disabled: 'disabled' %>
 </div>

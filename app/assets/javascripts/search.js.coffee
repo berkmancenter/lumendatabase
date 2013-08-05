@@ -1,38 +1,54 @@
-toggleAdvancedSearch = (duration) ->
-  $('.container.advanced-search').slideToggle
-    duration: duration
-    easing: 'easeOutCirc'
-    complete: ->
-      $.cookie('advanced_search_visibility',
-        $('.container.advanced-search').filter(':visible').length,
-        { expires: 365 }
-      )
+$('form[action="/notices/search"]:not("#facets-form")').on 'submit', ->
+  $(this)
+    .find('[name="search-field"],[name="search-term"]')
+    .attr('disabled','disabled')
 
-if $.cookie('advanced_search_visibility') == "1"
-  toggleAdvancedSearch(0)
-
-$('form[action="/notices/search"]').on 'submit', ->
-  $(this).find('[name="search-field"],[name="search-term"]').remove()
-
-$('#toggle-advanced-search').on 'click', -> 
-  toggleAdvancedSearch('fast')
+updateRows = (field, value) ->
+  $rows = new AdvancedSearchRows field, value
+  activatedFieldGroup = $rows.activatedField()
+  $rows.setActivatedFieldValue()
+  $rows.ensureFieldOptionsExist()
+  $rows.removeFieldOptionsFromOtherDropdowns()
+  $(activatedFieldGroup).removeClass('hidden')
+  $rows.resetTemplateRow()
+  $rows.enableRowsWithValues()
 
 $('#duplicate-field').on 'click', ->
-  $field = $('.field-group:last')
-  # So - we need to find the hidden field, remove the hidden class, set the value
-  # and "reset" the selector thing.
+  field = $(this).prev().find('select').val()
+  value = $(this).prev().find('input[type="text"]').val()
 
-  selectedField = $(this).prev().find('select').val()
-  selectedFieldQueryTerm = $(this).prev().find('input[type="text"]').val()
-  activatedFieldGroup = $(this).parentsUntil('.advanced-search').find('.field-group.' + selectedField)
+  updateRows(field, value)
 
-  $(activatedFieldGroup).find('input[type="text"]').val(selectedFieldQueryTerm)
-  $(activatedFieldGroup).removeClass('hidden')
+$('.field-group:not(.template-row) select').on 'change', ->
+  newInputName = $(this).val()
+  fieldGroup = $(this).closest('.field-group')
+  oldInputName = $(fieldGroup).find('input').attr('name')
+  value = $(fieldGroup).find('input').val()
+  optionClone = $('.advanced-search')
+    .find("option[value='#{oldInputName}']").first().clone()
 
-  $($field).find('input[type="text"]').val('')
-  $($field).find('select').val('')
+  $(fieldGroup).removeClass(oldInputName).addClass(newInputName)
+  $(fieldGroup).find('input').attr('name', newInputName)
+
+  $rows = new AdvancedSearchRows newInputName, value
+  $rows.ensureFieldOptionsExist()
+  $rows.removeFieldOptionsFromOtherDropdowns()
+  $rows.enableRowsWithValues()
+  $rows.templateRow().find('select').prepend(optionClone)
 
 $('.advanced-search').on 'click', '.remove-group', ->
-  $parent = $(event.target).parent()
-  if $parent.siblings().hasClass('field-group')
-    $parent.remove()
+  $fieldGroup = $(event.target).parent()
+  field = $fieldGroup.find('input[type="text"]').attr('name')
+  option = $fieldGroup.find("option[value='#{field}']")
+  $('.field-group:last select').prepend(option)
+  $fieldGroup.find('input,select').attr('disabled','disabled')
+  $fieldGroup.addClass('hidden')
+  $('.field-group.template-row,#duplicate-field').show()
+
+correctAdvancedSearchDropdowns = ->
+  $rows = new AdvancedSearchRows()
+  $rows.enableRowsWithValues()
+  $rows.removeOptionsforActiveRows()
+
+$ ->
+  correctAdvancedSearchDropdowns()
