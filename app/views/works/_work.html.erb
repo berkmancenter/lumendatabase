@@ -1,15 +1,31 @@
 <%= content_tag_for(:li, work) do %>
   <h6>Copyright claim #<%= work_counter %></h6>
-  <div class="kind"><span class="label">Kind of Work:</span> <span class="field"><%= work.kind %></span></div>
-  <div class="description"><span class="label">Description:</span> <span class="field"><%= work.description %></span></div>
-  <div class="url"><span class="label">Original Work URLs:</span> <span class="field"><%= work.copyrighted_urls.map(&:url).join(', ') %></span></div>
+  <div class="row">
+    <div class="kind"><span class="label">Kind of Work:</span> <span class="field"><%= work.kind %></span></div>
+  </div>
+  <div class="row">
+    <div class="description"><span class="label">Description:</span> <span class="field"><%= work.description %></span></div>
+  </div>
 
-  <span class="infringing-title">Infringing URLs:</span>
-  <ol class="infringing-urls">
-    <% work.infringing_urls.each do |url| %>
-      <%= content_tag_for(:li, url) do %>
-        <%= url.url %>
+  <div class="row">
+    <span class="label original-title">Original URLs:</span>
+    <ol class="list original-urls">
+      <% work.copyrighted_urls.each do |url| %>
+        <%= content_tag_for(:li, url) do %>
+          <%= url.url %>
+        <% end %>
       <% end %>
-    <% end %>
-  </ol>
+    </ol>
+  </div>
+
+  <div class="row">
+    <span class="label infringing-title">Infringing URLs:</span>
+    <ol class="list infringing-urls">
+      <% work.infringing_urls.each do |url| %>
+        <%= content_tag_for(:li, url) do %>
+          <%= url.url %>
+        <% end %>
+      <% end %>
+    </ol>
+  </div>
 <% end %>

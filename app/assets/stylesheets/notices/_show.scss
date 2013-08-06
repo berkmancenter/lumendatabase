@@ -115,10 +115,11 @@ article.notice-show {
     }
 
     p.source {
-      color: $base-font-color-3;
-      font-weight: 600;
-      font-size: $base-font-size-small-1;
+      color: $medium-gray;
+      font-size: $base-font-size-small-2;
+      font-weight: 700;
       margin-bottom: 25px;
+      text-transform: uppercase;
     }
   }
 
@@ -130,11 +131,9 @@ article.notice-show {
       list-style-type: none;
 
       h6 {
-        border-bottom: 2px solid lighten($base-border-color, 5%);
         font-size: $base-font-size + 1;
         font-weight: bold;
         margin-bottom: 1em;
-        padding-bottom: 0.5em;
       }
 
       div {
@@ -142,26 +141,63 @@ article.notice-show {
         margin-bottom: 6px;
       }
 
+      div.row {
+       @include row;
+      }
+
       $label-width: 160px;
       $margin: 15px;
-      span.label,
-      span.infringing-title {
-        color: $base-font-color-3;
-        font-size: $base-font-size - 1;
+      span.label {
+        clear: left;
+        color: $medium-gray;
+        font-size: $base-font-size-small-1 - 1;
         font-weight: bold;
-        @include span-columns(2.5);
         @include pad(0 0 0 20px);
+        @include span-columns(2.5);
+        text-transform: uppercase;
+
+        @include media($mobile) {
+          display: block;
+          float: none;
+          @include omega;
+          padding: 0;
+          width: 100%;
+        }
       }
 
       span.field {
         @include span-columns(9.5);
       }
 
-      ol.infringing-urls {
-        float: left;
-        padding-left: 0px;
+      ol.list {
+        counter-reset: li;
         list-style-position: inside;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
+        padding-left: 0px;
+        @include span-columns(9.5);
+        @include omega;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        word-break: break-all; // latest spec
+
+        li {
+          list-style: none;
+          margin-bottom: 6px;
+          position: relative;
+
+          &:before {
+            color: darken($light-gray, 15%);
+            content: counter(li, decimal-leading-zero)".";
+            counter-increment: li;
+            font-size: $base-font-size-small-1;
+            font-weight: 600;
+            left: -26px;
+            margin-left: -0.5em;
+            position: absolute;
+            text-align: right;
+            width: 2em;
+          }
+        }
       }
     }
   }
