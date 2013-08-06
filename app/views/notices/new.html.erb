@@ -30,6 +30,7 @@
         <%= form.input :legal_other, label: "Legal (Other)" %>
         <%= form.simple_fields_for(:file_uploads) do |file_uploads_form| %>
           <%= file_uploads_form.input :file, label: 'Attach Notice' %>
+          <a href="#" onclick="return false;" class="add wip">Attach another</a>
         <% end %>
       </div>
     </section>

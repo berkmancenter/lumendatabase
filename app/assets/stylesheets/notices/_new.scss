@@ -127,6 +127,10 @@ form.new_notice {
     padding-left: $form-label-width + $form-label-margin;
   }
 
+  a.add {
+    font-size: $base-font-size-small-1;
+  }
+
   div.buttons-wrapper {
     @include clearfix;
     padding: 45px 0 15px;
