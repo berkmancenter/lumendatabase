@@ -14,15 +14,56 @@
     <div class="main">
       <h2>Re: <%= @notice.subject %></h2>
       <p class="source">Sent via: <%= @notice.source || 'Unknown' %></p>
-      <p class="body">
-        <b>Body:</b> <%= @notice.redacted(:body) %>
-      </p>
-      <ol id="works" class="copyright-claims">
-        <%= render @notice.works %>
-      </ol>
-      <p class="legal-other">
-        <b>Legal (Other):</b> <%= @notice.redacted(:legal_other) %>
-      </p>
+
+      <section class="notice-body">
+        <p class="body">
+          <b>Body:</b> <%= @notice.redacted(:body) %>
+        </p>
+      </section>
+
+      <section class="works">
+        <ol id="works" class="copyright-claims">
+          <%= render @notice.works %>
+        </ol>
+      </section>
+
+      <section class="legal">
+        <p class="legal-other">
+          <b>Legal (Other):</b> <%= @notice.redacted(:legal_other) %>
+        </p>
+      </section>
+
+      <section class="attachments">
+        <h6 class="title">Supporting Documents</h6>
+        <ol class="attachments">
+          <% 3.times do %>
+            <li class="pdf">
+              <a href="#">
+                <span>Supporting PDF</span>
+                <span class="download">Download</span>
+              </a>
+            </li>
+          <% end %>
+
+          <% 3.times do %>
+            <li class="image">
+              <a href="#">
+                <span>Supporting Image</span>
+                <span class="download">Download</span>
+              </a>
+            </li>
+          <% end %>
+          <% 3.times do %>
+            <li class="">
+              <a href="#">
+                <span>Supporting Document</span>
+                <span class="download">Download</span>
+              </a>
+            </li>
+          <% end %>
+        </ol>
+      </section>
+
     </div>
   </section>
 

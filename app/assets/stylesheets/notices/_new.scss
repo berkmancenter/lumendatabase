@@ -170,24 +170,28 @@ form.new_notice {
 
 // Works Section
 //************************************************************************//
-section.notice-body {
-  border-top: 1px solid $light-gray;
+form.new_notice {
+  section.notice-body {
+    border-top: 1px solid $light-gray;
 
-  h4 {
-    margin-top: 0;
+    h4 {
+      margin-top: 0;
+    }
   }
 }
 
 // Works Section
 //************************************************************************//
-section.works {
-  $work-form-label-width: $form-label-width + 30px;
+form.new_notice {
+  section.works {
+    $work-form-label-width: $form-label-width + 30px;
 
-  label {
-    width: $work-form-label-width;
-  }
+    label {
+      width: $work-form-label-width;
+    }
 
-  #{$all-text-inputs} {
-    padding-left: $work-form-label-width + $form-label-margin;
+    #{$all-text-inputs} {
+      padding-left: $work-form-label-width + $form-label-margin;
+    }
   }
 }
