@@ -172,7 +172,6 @@ ActiveRecord::Schema.define(:version => 20130730200445) do
     t.integer  "reviewer_id"
     t.string   "language"
     t.boolean  "rescinded",            :default => false, :null => false
-    t.string   "action_taken",         :default => "No",  :null => false
     t.string   "type"
   end
 
