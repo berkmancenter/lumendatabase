@@ -1,7 +1,7 @@
 class SearchResultsProxy < SimpleDelegator
 
   def initialize(result)
-    if ['notice', 'trademark'].include?(result['_type'])
+    if ['Notice', 'Dmca', 'Defamation', 'Trademark'].include?(result['class_name'])
       result_instance = NoticeSearchResult.new(result)
     else
       result_instance = Tire::Results::Item.new(result)

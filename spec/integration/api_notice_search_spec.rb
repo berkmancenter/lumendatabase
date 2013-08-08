@@ -4,7 +4,7 @@ feature "Searching for Notices via the API" do
   include CurbHelpers
 
   scenario "the results array has relevant metadata", js: true, search: true do
-    create(:notice, title: "The Lion King on Youtube")
+    create(:dmca, title: "The Lion King on Youtube")
     expect_api_search_to_find("king") do |json|
       metadata = json['meta']
       expect(metadata).to have_key('current_page').with_value(1)
@@ -16,7 +16,7 @@ feature "Searching for Notices via the API" do
 
   context "facets" do
     scenario "returns facet information", js: true, search: true do
-      notice = create(:notice, :with_facet_data, title: "The Lion King")
+      notice = create(:dmca, :with_facet_data, title: "The Lion King")
 
       expect_api_search_to_find("king") do |json|
         facets = json['meta']['facets']
@@ -27,7 +27,7 @@ feature "Searching for Notices via the API" do
     end
 
     scenario "return facet query information", js: true, search: true do
-      notice = create(:notice, :with_facet_data, title: "The Lion King")
+      notice = create(:dmca, :with_facet_data, title: "The Lion King")
       expect_api_search_to_find(
         "king", sender_name_facet: notice.sender_name
       ) do |json|
@@ -40,20 +40,40 @@ feature "Searching for Notices via the API" do
     end
   end
 
-  scenario "a notice has relevant metadata", js: true, search: true do
-    category = create(:category, name: "Lion King")
-    notice = create(
-      :notice,
-      categories: [category],
-      title: "The Lion King on Youtube"
-    )
+  [Dmca, Trademark, Defamation].each do |klass|
+    class_factory = klass.to_s.downcase.to_sym
+    scenario "a #{klass} notice has basic notice metadata", js: true, search: true do
 
-    expect_api_search_to_find("king") do |json|
-      json_item = json['notices'].first
-      expect(json_item).to have_key('title').with_value(notice.title)
-      expect(json_item).to have_key('id').with_value(notice.id)
-      expect(json_item).to have_key('categories').with_value([category.name])
-      expect(json_item).to have_key('score')
+      category = create(:category, name: "Lion King")
+      notice = create(
+        class_factory,
+        categories: [category],
+        title: "The Lion King on Youtube"
+      )
+
+      expect_api_search_to_find("king") do |json|
+        json_item = json['notices'].first
+        expect(json_item).to have_key('title').with_value(notice.title)
+        expect(json_item).to have_key('id').with_value(notice.id)
+        expect(json_item).to have_key('categories').with_value([category.name])
+        expect(json_item).to have_key('score')
+      end
+    end
+  end
+
+  context "Trademark" do
+    scenario "has model-specific metadata", js: true, search: true do
+      category = create(:category, name: "Lion King")
+      notice = create(
+        :trademark,
+        categories: [category],
+        title: "The Lion King on Youtube"
+      )
+
+      expect_api_search_to_find("king") do |json|
+        json_item = json['notices'].first
+        expect(json_item).to have_key('marks')
+      end
     end
   end
 

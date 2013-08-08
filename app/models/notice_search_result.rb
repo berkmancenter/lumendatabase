@@ -5,7 +5,9 @@ class NoticeSearchResult < SimpleDelegator
 
   def initialize(attributes = {})
 
-    @notice = assign_attributes(Notice.new, attributes)
+    # FIXME - this dynamic class resolution may not be necessary.
+    klass = attributes['class_name'].titleize.constantize
+    @notice = assign_attributes(klass.new, attributes)
 
     @_score = attributes['_score']
     @highlight = attributes['highlight']

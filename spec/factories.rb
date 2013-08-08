@@ -76,6 +76,7 @@ FactoryGirl.define do
 
     factory :trademark, class: 'Trademark'
     factory :dmca, class: 'Dmca'
+    factory :defamation, class: 'Defamation'
   end
 
   factory :file_upload do
