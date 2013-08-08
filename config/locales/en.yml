@@ -23,13 +23,23 @@ en:
         menu: 'Redact queue'
         title: 'Redact queue'
 
-
   Trademark:
     body: 'Alleged Infringment'
     works:
       description: 'Mark'
+      infringing_urls:
+        url: 'Infringing URL'
 
   Dmca:
     body: 'Explanation of Infringment'
     works:
       description: 'Description'
+      infringing_urls:
+        url: 'Infringing URL'
+
+  Defamation:
+    body: 'Legal Complaint'
+    works:
+      description: 'Description'
+      infringing_urls:
+        url: 'Defamatory URL'

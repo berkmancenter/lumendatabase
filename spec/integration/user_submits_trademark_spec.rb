@@ -2,23 +2,24 @@ require 'spec_helper'
 
 feature "Trademark notice type submission" do
   scenario "User submits and views a Trademark type notice" do
-    visit '/'
+    submission = NoticeSubmissionOnPage.new(Trademark)
+    submission.open_submission_form
 
-    click_on 'Report Notice'
-    click_on 'Trademark'
+    submission.fill_in_form_with({
+      "Title" => "A title",
+      "Mark" => "My trademark (TM)",
+      "Infringing URL" => "http://example.com/infringing_url1",
+      "Alleged Infringment" => "They used my thing",
+    })
 
-    fill_in "Title", with: "A title"
-    fill_in "Mark", with: "My trademark (TM)"
-    fill_in "Infringing URL", with: "http://example.com/infringing_url1"
-    fill_in "Alleged Infringment", with: "They used my thing"
-    within('section.recipient') do
-      fill_in "Name", with: "Recipient"
-    end
-    within('section.sender') do
-      fill_in "Name", with: "Sender"
-    end
+    submission.fill_in_entity_form_with(:recipient, {
+      'Name' => 'Recipient',
+    })
+    submission.fill_in_entity_form_with(:sender, {
+      'Name' => 'Sender',
+    })
 
-    click_on 'Submit'
+    submission.submit
 
     open_recent_notice
 

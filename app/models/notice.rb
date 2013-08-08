@@ -161,6 +161,14 @@ class Notice < ActiveRecord::Base
     super(tag_list_value)
   end
 
+  def has_copyrighted_urls?
+    true
+  end
+
+  def has_works_kind?
+    true
+  end
+
   private
 
   def set_default_action_taken
