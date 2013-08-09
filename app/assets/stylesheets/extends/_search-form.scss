@@ -1,0 +1,45 @@
+//************************************************************************//
+// Search Form Base Styles
+//************************************************************************//
+%search-form {
+  form {
+    @include clearfix;
+    font-size: 0;
+    position: relative;
+    text-align: center;
+    width: $home-search-input-w;
+  }
+
+  div.input {
+    input {
+      height: $home-search-input-h;
+      padding-right: $home-search-button-w + 15px;
+      width: $home-search-input-w;
+
+      &:not(:focus) {
+        border-color: #A4B6C5;
+      }
+    }
+  }
+
+  div.submit {
+    position: absolute;
+    float: right;
+    top: 0;
+    right: 0;
+
+    button {
+      border-radius: 0;
+      height: $home-search-input-h;
+      font-size: 22px;
+      @include icon(icon-search);
+      line-height: 1em;
+      padding: 0;
+      width: $home-search-button-w;
+
+      &:before {
+        margin-right: -0.1em;
+      }
+    }
+  }
+}

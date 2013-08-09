@@ -262,6 +262,7 @@ header.app {
     margin-left: 15px;
 
     @include media($mobile) {
+      clear: left;
       margin: 3px 0 8px 0;
     }
   }

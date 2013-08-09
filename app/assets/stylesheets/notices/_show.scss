@@ -64,6 +64,10 @@ article.notice-show {
         top: 50px;
         width: 62%;
         z-index: 1;
+
+        @include media($mobile) {
+          display: none;
+        }
       }
     }
 
@@ -107,11 +111,21 @@ article.notice-show {
     @include clearfix;
     padding: $base-padding;
 
+    @include media($mobile) {
+      padding: $base-padding / 2;
+    }
+
     h2 {
-      font-size: 17px;
+      font-size: $base-font-size-2;
       margin: 0;
       line-height: 1.5em;
       font-weight: 700;
+    }
+
+    h5 {
+      font-size: $base-font-size;
+      font-weight: 700;
+      margin-bottom: 0.5em;
     }
 
     p.source {
@@ -120,6 +134,14 @@ article.notice-show {
       font-weight: 700;
       margin-bottom: 25px;
       text-transform: uppercase;
+    }
+
+    > section {
+      margin-bottom: 2em;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
   }
 
@@ -130,15 +152,15 @@ article.notice-show {
       @include clearfix;
       list-style-type: none;
 
-      h6 {
+      h4 {
         font-size: $base-font-size + 1;
         font-weight: bold;
-        margin-bottom: 1em;
+        margin: 0 0 1em 0;
       }
 
       div {
         @include clearfix;
-        margin-bottom: 6px;
+        margin-bottom: 10px;
       }
 
       div.row {
@@ -180,10 +202,15 @@ article.notice-show {
         overflow-wrap: break-word;
         word-break: break-all; // latest spec
 
+        @include media($mobile) {
+          width: 100%;
+        }
+
         li {
           list-style: none;
           margin-bottom: 6px;
           position: relative;
+          padding-left: 25px;
 
           &:before {
             color: darken($light-gray, 15%);
@@ -191,11 +218,11 @@ article.notice-show {
             counter-increment: li;
             font-size: $base-font-size-small-1;
             font-weight: 600;
-            left: -26px;
-            margin-left: -0.5em;
+            left: -8px;
             position: absolute;
             text-align: right;
             width: 2em;
+            top: 1px;
           }
         }
       }
@@ -221,7 +248,8 @@ section.attachments {
       background-repeat: no-repeat;
       border: 1px solid transparent;
       cursor: pointer;
-      margin-top: 20px;
+      margin-bottom: 10px;
+      margin-top: 5px;
       padding: $pad $pad $pad (50px + $pad);
       @include span-columns(4);
       @include transition;

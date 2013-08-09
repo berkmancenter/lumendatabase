@@ -57,6 +57,7 @@ section.notice-new {
 //************************************************************************//
 // Form
 //************************************************************************//
+$long-label-width: $form-label-width + 30px;
 form.new_notice {
   div {
     @include clearfix;
@@ -120,11 +121,16 @@ form.new_notice {
     padding-top: 32px + $form-label-margin;
   }
 
+  label.file {
+    width: $long-label-width;
+  }
+
   input.file {
     border: 1px solid $form-border-color;
     border-radius: $form-border-radius;
+    font-size: $base-font-size-small-1 - 1;
     line-height: 0;
-    padding-left: $form-label-width + $form-label-margin;
+    padding-left: $long-label-width + $form-label-margin;
   }
 
   a.add {
@@ -184,14 +190,12 @@ form.new_notice {
 //************************************************************************//
 form.new_notice {
   section.works {
-    $work-form-label-width: $form-label-width + 30px;
-
-    label {
-      width: $work-form-label-width;
+    label.url, label.string {
+      width: $long-label-width;
     }
 
     #{$all-text-inputs} {
-      padding-left: $work-form-label-width + $form-label-margin;
+      padding-left: $long-label-width + $form-label-margin;
     }
   }
 }

@@ -16,9 +16,8 @@
       <p class="source">Sent via: <%= @notice.source || 'Unknown' %></p>
 
       <section class="notice-body">
-        <p class="body">
-          <b>Body:</b> <%= @notice.redacted(:body) %>
-        </p>
+        <h5 class="title">Notice Body</h5>
+        <p class="body"><%= @notice.redacted(:body) %></p>
       </section>
 
       <section class="works">
@@ -28,13 +27,12 @@
       </section>
 
       <section class="legal">
-        <p class="legal-other">
-          <b>Legal (Other):</b> <%= @notice.redacted(:legal_other) %>
-        </p>
+        <h5 class="title">Legal (Other)</h5>
+        <p class="legal-other"><%= @notice.redacted(:legal_other) %></p>
       </section>
 
       <section class="attachments">
-        <h6 class="title">Supporting Documents</h6>
+        <h5 class="title">Supporting Documents</h5>
         <ol class="attachments">
           <% 3.times do %>
             <li class="pdf">
