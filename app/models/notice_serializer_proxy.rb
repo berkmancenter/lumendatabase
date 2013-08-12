@@ -1,4 +1,4 @@
-class NoticeSearchResultSerializerProxy < SimpleDelegator
+class NoticeSerializerProxy < SimpleDelegator
   def initialize(*args)
     model_instance = args[0]
     if model_instance.type == 'Trademark'
