@@ -39,7 +39,7 @@ feature "Defamation notice type submission" do
       expect(page).to have_content('http://example.com/defamatory_url')
     end
 
-    within('.notice-show .main .body') do
+    within('.notice-body') do
       expect(page).to have_content('Legal Complaint')
       expect(page).to have_content('They called me a doodie-head')
     end

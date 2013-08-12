@@ -28,7 +28,7 @@ feature "Trademark notice type submission" do
       expect(page).to have_content('Mark')
       expect(page).to have_content('My trademark (TM)')
     end
-    within('.notice-show .main .body') do
+    within('.notice-body') do
       expect(page).to have_content('Alleged Infringment')
       expect(page).to have_content('They used my thing')
     end
