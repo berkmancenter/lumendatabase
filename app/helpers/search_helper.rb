@@ -18,4 +18,5 @@ module SearchHelper
       'active'
     end
   end
+
 end

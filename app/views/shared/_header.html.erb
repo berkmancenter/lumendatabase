@@ -1,5 +1,4 @@
 <header class="app">
-<%= form_tag(notices_search_index_path, method: :get) do %>
   <%= render 'shared/navigation' -%>
   <div class="container search">
     <div class="width-wrapper">
@@ -11,20 +10,21 @@
       <%= render 'shared/search' %>
     </div>
   </div>
+  <%= form_tag(notices_search_index_path, method: :get) do %>
   <div class="container advanced-search">
     <div class="width-wrapper">
       <h5><b>Advanced Search</b> &ndash; Add additional search queries</h5>
       <% Notice::SEARCHABLE_FIELDS.each do |field| %>
         <%= render 'shared/advanced_field', field: field %>
       <% end %>
-      <div class="field-group">
-        <div class="remove-group"></div>
+      <div class="field-group template-row">
         <div class="input select">
-          <select class="field-select" name="search-field">
-            <% Notice::SEARCHABLE_FIELDS.each do |field| %>
-              <option value="<%= field[:parameter] %>"><%= field[:name] %></option>
-            <% end %>
-          </select>
+          <%= select_tag(
+              'search-field',
+              options_for_select(
+                Notice::SEARCHABLE_FIELDS.collect{|f| [f[:name], f[:parameter]]}
+              )
+            ) %>
         </div>
         <input type="text" name="search-term">
       </div>
