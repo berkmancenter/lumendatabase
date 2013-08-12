@@ -48,12 +48,12 @@ end
 
 def with_a_serialized_notice
   notice = build_notice
-  serializer = described_class.new(notice, root: :notice)
-  yield notice, serializer.as_json[:notice]
+  serializer = described_class.new(notice, root: class_as_symbol)
+  yield notice, serializer.as_json[class_as_symbol]
 end
 
 def build_notice
-  build(:notice).tap do|notice|
+  build(class_as_symbol).tap do|notice|
     notice.stub(:recipient_name).and_return('recipient name')
     notice.stub(:sender_name).and_return('sender name')
     notice.stub(:tag_list).and_return(['foo', 'bar'])
@@ -69,4 +69,8 @@ def build_notice
       notice.stub(:score).and_return(1)
     end
   end
+end
+
+def class_as_symbol
+  described_class.to_s.downcase.gsub(/serializer/,'').to_sym
 end

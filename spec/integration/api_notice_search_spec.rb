@@ -70,7 +70,6 @@ feature "Searching for Notices via the API" do
 
       expect_api_search_to_find("king") do |json|
         json_item = json['notices'].first
-        binding.pry
         expect(json_item).to have_key('marks')
         expect(json_item).not_to have_key('works')
       end

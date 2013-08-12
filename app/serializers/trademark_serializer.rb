@@ -2,7 +2,9 @@ class TrademarkSerializer < NoticeSerializer
   attribute :marks
 
   def as_json(*)
-    super.except(:works)
+   super.tap do |json|
+     json[:trademark].delete(:works)
+   end
   end
 
   def marks
