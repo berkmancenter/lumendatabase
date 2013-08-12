@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe NoticeSerializer do
-  it_behaves_like 'a serialized notice'
+  it_behaves_like 'a serialized notice with base metadata'
 
   it 'includes works' do
     with_a_serialized_notice do |notice, json|

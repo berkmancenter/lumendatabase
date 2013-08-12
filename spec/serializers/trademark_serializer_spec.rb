@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe TrademarkSerializer do
-  it_behaves_like 'a serialized notice', :trademark
+  it_behaves_like 'a serialized notice with base metadata', :trademark
 
   it "includes mark as work.description" do
     work = build(:work, description: 'Description')

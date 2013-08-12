@@ -1,4 +1,4 @@
-shared_examples 'a serialized notice' do |factory_name|
+shared_examples 'a serialized notice with base metadata' do |factory_name|
 
   factory_name ||= :notice
 
