@@ -4,12 +4,12 @@
       <% if @results.facets %>
         <ol class="results-facets">
           <li class="title"><span>Search Filters<span></li>
-          <%= render 'term_facet', type: 'sender_name_facet', results: @results %>
-          <%= render 'term_facet', type: 'recipient_name_facet', results: @results %>
-          <%= render 'term_facet', type: 'category_facet', results: @results %>
-          <%= render 'term_facet', type: 'tag_list_facet', results: @results %>
-          <%= render 'term_facet', type: 'country_code_facet', results: @results %>
-          <%= render 'range_facet', type: 'date_received_facet', results: @results %>
+            <%= render 'term_facet', type: 'sender_name_facet', results: @results, display_name: 'Sender' %>
+            <%= render 'term_facet', type: 'recipient_name_facet', results: @results, display_name: 'Recipient' %>
+            <%= render 'term_facet', type: 'category_facet', results: @results, display_name: 'Category' %>
+            <%= render 'term_facet', type: 'tag_list_facet', results: @results, display_name: 'Tags' %>
+            <%= render 'term_facet', type: 'country_code_facet', results: @results, display_name: 'Country' %>
+            <%= render 'range_facet', type: 'date_received_facet', results: @results, display_name: 'Date' %>
           <li class="button-wrapper"><button class="">Apply</button></li>
         </ol>
       <% end %>
