@@ -13,6 +13,8 @@
     h2 {
       font-size: 20px;
       line-height: 1.4em;
+      margin-top: 1.5em;
+      margin-bottom: 0.4em;
       color: $base-title-color;
       font-weight: 700;
     }
@@ -20,6 +22,10 @@
     h3 {
       font-size: 18px;
       color: $base-font-color-2;
+    }
+
+    p, li {
+      line-height: 1.6em;
     }
   }
 }

@@ -4,6 +4,7 @@
     <nav>
     <%= link_to "Privacy", page_path("privacy") %>
     <%= link_to "Disclaimer", page_path("disclaimer") %>
+    <%= link_to "Researchers", page_path("researchers") %>
     <% if user_signed_in? %>
       <%= link_to "Admin", rails_admin_path %>
     <% else %>
