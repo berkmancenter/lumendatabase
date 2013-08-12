@@ -41,8 +41,8 @@ describe NoticesController do
         get :show, id: 1, format: :json
 
         json = JSON.parse(response.body)["notice"]
-        expect(json).to have_key(:id).with_value(notice.id)
-        expect(json).to have_key(:title).with_value(notice.title)
+        expect(json).to have_key('id').with_value(notice.id)
+        expect(json).to have_key('title').with_value(notice.title)
       end
 
       it "returns id, title and 'Notice Rescinded' as body for a rescinded notice" do
@@ -52,9 +52,9 @@ describe NoticesController do
         get :show, id: 1, format: :json
 
         json = JSON.parse(response.body)["notice"]
-        expect(json).to have_key(:id).with_value(notice.id)
-        expect(json).to have_key(:title).with_value(notice.title)
-        expect(json).to have_key(:body).with_value("Notice Rescinded")
+        expect(json).to have_key('id').with_value(notice.id)
+        expect(json).to have_key('title').with_value(notice.title)
+        expect(json).to have_key('body').with_value("Notice Rescinded")
       end
     end
 

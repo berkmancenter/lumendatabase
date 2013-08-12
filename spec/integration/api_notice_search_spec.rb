@@ -61,7 +61,23 @@ feature "Searching for Notices via the API" do
     end
   end
 
-  context "Trademark" do
+  context Trademark do
+    scenario "has model-specific metadata", js: true, search: true do
+      notice = create(
+        :trademark,
+        title: "The Lion King on Youtube"
+      )
+
+      expect_api_search_to_find("king") do |json|
+        json_item = json['notices'].first
+        binding.pry
+        expect(json_item).to have_key('marks')
+        expect(json_item).not_to have_key('works')
+      end
+    end
+  end
+
+  context Defamation do
     scenario "has model-specific metadata", js: true, search: true do
       category = create(:category, name: "Lion King")
       notice = create(
@@ -73,6 +89,7 @@ feature "Searching for Notices via the API" do
       expect_api_search_to_find("king") do |json|
         json_item = json['notices'].first
         expect(json_item).to have_key('marks')
+        expect(json_item).not_to have_key('works')
       end
     end
   end
