@@ -72,10 +72,6 @@ class Notice < ActiveRecord::Base
 
   include SearchableNotice
 
-  def self.index_names
-    [index_name, Trademark.index_name] # FIXME: meta this later
-  end
-
   def self.available_for_review
     where(review_required: true, reviewer_id: nil)
   end

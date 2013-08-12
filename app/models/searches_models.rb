@@ -18,7 +18,7 @@ class SearchesModels
   end
 
   def search
-    Tire.search(@model_class.index_names).tap do |search|
+    Tire.search(@model_class.index_name).tap do |search|
       register_filters(search)
 
       apply_filters(search)
