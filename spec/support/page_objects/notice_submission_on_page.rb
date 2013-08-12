@@ -1,3 +1,5 @@
+require_relative '../page_object'
+
 class NoticeSubmissionOnPage < PageObject
 
   def initialize(notice_class)
