@@ -2,6 +2,7 @@ class NoticeSerializer < ActiveModel::Serializer
   attributes :id, :title, :body, :date_sent, :date_received,
     :categories, :sender_name, :recipient_name, :works, :tags, :jurisdictions
 
+
   def categories
     object.categories.map(&:name)
   end
@@ -23,4 +24,17 @@ class NoticeSerializer < ActiveModel::Serializer
   def jurisdictions
     object.jurisdiction_list
   end
+
+  private
+
+  def attributes
+    hsh = super
+
+    if object.respond_to?(:_score)
+      hsh.merge!(score: object._score)
+    end
+
+    hsh
+  end
+
 end
