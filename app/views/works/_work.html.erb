@@ -1,10 +1,14 @@
 <%= content_tag_for(:li, work) do %>
   <h4>Copyright claim #<%= work_counter %></h4>
   <div class="row">
-    <div class="kind"><span class="label">Kind of Work:</span> <span class="field"><%= work.kind %></span></div>
+    <div class="kind">
+      <span class="label">Kind of Work:</span> <span class="field"><%= work.kind %></span>
+    </div>
   </div>
   <div class="row">
-    <div class="description"><span class="label"><%= t("#{notice.type}.description") %></span> <span class="field"><%= work.description %></span></div>
+    <div class="description">
+      <span class="label"><%= t("#{notice.type}.works.description") %></span> <span class="field"><%= work.description %></span>
+    </div>
   </div>
 
   <% if work.copyrighted_urls.present? %>
