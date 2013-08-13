@@ -1,11 +1,8 @@
 class NoticeSerializerProxy < SimpleDelegator
-  def initialize(*args)
-    model_instance = args[0]
-    if model_instance.type == 'Trademark'
-      model_instance = TrademarkSerializer.new(model_instance)
-    else
-      model_instance = NoticeSerializer.new(model_instance)
-    end
-    super(model_instance)
+  def initialize(instance, *args)
+    serializer = instance.active_model_serializer || NoticeSerializer
+    serialized = serializer.new(instance, *args)
+
+    super(serialized)
   end
 end

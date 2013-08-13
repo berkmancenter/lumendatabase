@@ -16,7 +16,7 @@ feature "Searching for Notices via the API" do
 
   context "facets" do
     scenario "returns facet information", js: true, search: true do
-      notice = create(:dmca, :with_facet_data, title: "The Lion King")
+      create(:dmca, :with_facet_data, title: "The Lion King")
 
       expect_api_search_to_find("king") do |json|
         facets = json['meta']['facets']
@@ -63,7 +63,7 @@ feature "Searching for Notices via the API" do
 
   context Trademark do
     scenario "has model-specific metadata", js: true, search: true do
-      notice = create(
+      create(
         :trademark,
         title: "The Lion King on Youtube"
       )
@@ -79,7 +79,7 @@ feature "Searching for Notices via the API" do
   context Defamation do
     scenario "has model-specific metadata", js: true, search: true do
       category = create(:category, name: "Lion King")
-      notice = create(
+      create(
         :trademark,
         categories: [category],
         title: "The Lion King on Youtube"
