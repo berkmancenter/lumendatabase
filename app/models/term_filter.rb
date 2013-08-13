@@ -1,8 +1,15 @@
 class TermFilter
 
-  def initialize(parameter, indexed_attribute = nil)
+  attr_reader :title, :parameter
+
+  def initialize(parameter, title = '', indexed_attribute = nil)
     @parameter = parameter
+    @title = title
     @indexed_attribute = indexed_attribute || parameter
+  end
+
+  def to_partial_path
+    'notices/search/term_filter'
   end
 
   def filter_for(value)

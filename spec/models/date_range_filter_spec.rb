@@ -8,7 +8,7 @@ describe DateRangeFilter do
     to = Time.now
     from = to - 1.month
 
-    date_range_filter = described_class.new(:date_facet, :date_received, [])
+    date_range_filter = described_class.new(:date_facet, :date_received)
 
     filter = date_range_filter.filter_for(
       "#{from.to_i * 1000}..#{to.to_i * 1000}"

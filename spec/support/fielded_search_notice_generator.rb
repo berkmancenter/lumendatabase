@@ -7,25 +7,25 @@ class FieldedSearchNoticeGenerator
 
   def self.generate(field)
     instance = new(field)
-    instance.send("for_#{field[:parameter]}".to_sym).tap do
+    instance.send("for_#{field.parameter}".to_sym).tap do
       sleep 1
     end
   end
 
   def for_title
     in_field = create(
-      :dmca, :with_facet_data, @field[:indexed_field] => "Notice with #{@field[:name]}"
+      :dmca, :with_facet_data, @field.field => "Notice with #{@field.title}"
     )
     outside_field = create(
-      :dmca, :with_facet_data, title: "N/A", tag_list: [ @field[:name] ]
+      :dmca, :with_facet_data, title: "N/A", tag_list: [ @field.title ]
     )
     return in_field, outside_field
   end
 
   def for_sender_name
-    role_of_concern = @field[:parameter].to_s.gsub(/_name/,'')
+    role_of_concern = @field.parameter.to_s.gsub(/_name/,'')
 
-    matching_entity = build(:entity, name: @field[:name])
+    matching_entity = build(:entity, name: @field.title)
     non_matching_entity = build(:entity, name: 'Joe Schmoe')
 
     in_field = build(
@@ -50,7 +50,7 @@ class FieldedSearchNoticeGenerator
 
   def for_tags
     in_field = build(
-      :dmca, :with_facet_data, @field[:indexed_field] => [ @field[:name] ]
+      :dmca, :with_facet_data, @field.field => [ @field.title ]
     )
     in_field.save!
 

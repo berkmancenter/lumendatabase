@@ -1,9 +1,15 @@
 class DateRangeFilter
 
-  def initialize(parameter, indexed_attribute = nil, ranges = [])
+  attr_reader :title, :parameter
+
+  def initialize(parameter, indexed_attribute = nil, title = '')
     @parameter = parameter
+    @title = title
     @indexed_attribute = indexed_attribute || parameter
-    @ranges = ranges
+  end
+
+  def to_partial_path
+    'notices/search/date_range_filter'
   end
 
   def apply_to_search(searcher, param, value)
@@ -17,7 +23,7 @@ class DateRangeFilter
     # These must be local variables to be passed into the Tire searcher
     local_parameter = @parameter
     local_indexed_attribute = @indexed_attribute
-    local_ranges = @ranges
+    local_ranges = ranges
 
     searcher.facet local_parameter do
       range local_indexed_attribute, local_ranges
@@ -33,6 +39,16 @@ class DateRangeFilter
   end
 
   private
+
+  def ranges
+    now = Time.now.beginning_of_day
+    [
+      { from: now - 1.day, to: now },
+      { from: now - 1.month, to: now  },
+      { from: now - 6.months, to: now },
+      { from: now - 12.months, to: now },
+    ]
+  end
 
   def handles?(parameter_of_concern)
     @parameter == parameter_of_concern.to_sym

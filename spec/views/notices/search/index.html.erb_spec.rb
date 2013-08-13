@@ -117,6 +117,12 @@ describe 'notices/search/index.html.erb' do
           { "term" => "CA", "count" => 27 }
         ]
       },
+      "language_facet" => { "terms" =>
+        [
+          { "term" => "EN", "count" => 27 },
+          { "term" => "SP", "count" => 27 }
+        ]
+      },
       "date_received_facet"=>{ "ranges"=>
         [
           { "from" => 1371583484000.0, "to" => 1371669884000.0, "count" => 1},
