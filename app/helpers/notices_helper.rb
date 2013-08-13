@@ -1,4 +1,9 @@
 module NoticesHelper
+
+  def form_partial_for(instance)
+    "#{instance.type.tableize.singularize}_form"
+  end
+
   def display_date_field(record, field)
     if date = record.send(field)
       time_tag date, date.to_s(:simple)
