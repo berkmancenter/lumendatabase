@@ -65,6 +65,8 @@ class Notice < ActiveRecord::Base
 
   after_initialize :set_default_action_taken
 
+  after_touch { tire.update_index }
+
   delegate :country_code, to: :recipient, allow_nil: true
   delegate :name, to: :sender, prefix: true, allow_nil: true
   delegate :name, to: :recipient, prefix: true, allow_nil: true

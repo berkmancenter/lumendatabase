@@ -16,7 +16,7 @@ describe 'rails_admin/application/redact_notice.html.erb' do
   end
 
   it 'displays elapsed time in queue' do
-    notice = build_stubbed(:notice)
+    notice = build_stubbed(:dmca)
     notice.stub(:created_at).and_return(2.hours.ago)
     assign(:object, notice)
 
@@ -41,7 +41,7 @@ describe 'rails_admin/application/redact_notice.html.erb' do
 
   it 'shows redactable_fields alongside originals' do
     notice = build_stubbed(
-      :notice,
+      :dmca,
       legal_other: 'Redacted',
       legal_other_original: 'Original'
     )
@@ -59,7 +59,7 @@ describe 'rails_admin/application/redact_notice.html.erb' do
   end
 
   it 'does not show publish checkbox if user cannot publish' do
-    assign(:object, build_stubbed(:notice))
+    assign(:object, build_stubbed(:dmca))
 
     render
 
@@ -68,7 +68,7 @@ describe 'rails_admin/application/redact_notice.html.erb' do
 
   it 'shows publish checkbox if user can publish' do
     @ability.can :publish, Notice
-    assign(:object, build_stubbed(:notice))
+    assign(:object, build_stubbed(:dmca))
 
     render
 
@@ -77,7 +77,7 @@ describe 'rails_admin/application/redact_notice.html.erb' do
 
   context "buttons and links" do
     before do
-      assign(:object, build_stubbed(:notice))
+      assign(:object, build_stubbed(:dmca))
       assign(:redactable_fields, [])
     end
 

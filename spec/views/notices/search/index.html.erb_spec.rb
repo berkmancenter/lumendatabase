@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'notices/search/index.html.erb' do
   it "display the results" do
-    mock_results(build_stubbed_list(:notice, 5))
+    mock_results(build_stubbed_list(:dmca, 5))
 
     render
 
@@ -10,7 +10,7 @@ describe 'notices/search/index.html.erb' do
   end
 
   it "includes facets" do
-    mock_results(build_stubbed_list(:notice, 1))
+    mock_results(build_stubbed_list(:dmca, 1))
 
     render
 
@@ -21,7 +21,7 @@ describe 'notices/search/index.html.erb' do
 
   it "includes the notice data" do
     notice = create(
-      :notice,
+      :dmca,
       role_names: ['recipient','sender'],
       title: 'A notice',
       date_received: Time.now,
@@ -52,7 +52,7 @@ describe 'notices/search/index.html.erb' do
   context 'excerpts' do
     it "includes excerpts" do
       mock_results(
-        [build_stubbed(:notice)],
+        [build_stubbed(:dmca)],
         'highlight' => { 'title' => ["foo <em>bar</em> baz"] }
       )
 
@@ -65,7 +65,7 @@ describe 'notices/search/index.html.erb' do
 
     it 'sanatizes excerpts' do
       mock_results(
-        [build_stubbed(:notice)],
+        [build_stubbed(:dmca)],
         'highlight' => { 'title' => ["<strong>foo</strong> and <em>bar</em>"] }
       )
 

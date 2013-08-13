@@ -1,6 +1,6 @@
 shared_examples 'a serialized notice with base metadata' do |factory_name|
 
-  factory_name ||= :notice
+  factory_name ||= :dmca
 
   it 'includes base notice metadata' do
     with_a_serialized_notice(factory_name) do |notice, json|
@@ -30,13 +30,13 @@ shared_examples 'a serialized notice with base metadata' do |factory_name|
 
 end
 
-def with_a_serialized_notice(factory_name = :notice)
+def with_a_serialized_notice(factory_name = :dmca)
   notice = build_notice(factory_name)
   serializer = described_class.new(notice, root: factory_name)
   yield notice, serializer.as_json[factory_name]
 end
 
-def build_notice(factory_name = :notice)
+def build_notice(factory_name = :dmca)
   build(factory_name).tap do|notice|
     notice.stub(:recipient_name).and_return('recipient name')
     notice.stub(:sender_name).and_return('sender name')

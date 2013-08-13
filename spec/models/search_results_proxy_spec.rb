@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe SearchResultsProxy do
   it 'proxies notice results to NoticeSearchResult' do
-    notice = build_stubbed(:notice)
+    notice = build_stubbed(:dmca)
     attributes = with_metadata(notice).merge('class_name' => 'notice')
     new_notice = Notice.new
     Notice.stub(:new).and_return(new_notice)

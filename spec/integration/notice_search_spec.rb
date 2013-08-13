@@ -5,7 +5,7 @@ feature "Searching Notices" do
   include SearchHelpers
 
   scenario "displays search terms", search: true do
-    create(:notice, title: "The Lion King on Youtube")
+    create(:dmca, title: "The Lion King on Youtube")
 
     submit_search 'awesome blossom'
 
@@ -13,7 +13,7 @@ feature "Searching Notices" do
   end
 
   scenario "for full-text on a single model", search: true do
-    notice = create(:notice, title: "The Lion King on Youtube")
+    notice = create(:dmca, title: "The Lion King on Youtube")
     trademark = create(:trademark, title: "Coke - it's the King thing")
 
     within_search_results_for("king") do
@@ -26,7 +26,7 @@ feature "Searching Notices" do
 
   scenario "paginates properly", search: true do
     3.times do
-      create(:notice, title: "The Lion King on Youtube")
+      create(:dmca, title: "The Lion King on Youtube")
     end
     sleep 1
 
@@ -39,7 +39,7 @@ feature "Searching Notices" do
   end
 
   scenario "it does not include rescinded notices", search: true do
-    notice = create(:notice, title: "arbitrary", rescinded: true)
+    notice = create(:dmca, title: "arbitrary", rescinded: true)
 
     expect_search_to_not_find("arbitrary", notice)
   end
@@ -47,7 +47,7 @@ feature "Searching Notices" do
   context "within associated models" do
     scenario "for category names", search: true do
       category = create(:category, name: "Lion King")
-      notice = create(:notice, categories: [category])
+      notice = create(:dmca, categories: [category])
 
       within_search_results_for("king") do
         expect(page).to have_n_results(1)
@@ -59,7 +59,7 @@ feature "Searching Notices" do
     end
 
     scenario "for tags", search: true do
-      notice = create(:notice, tag_list: 'foo, bar')
+      notice = create(:dmca, tag_list: 'foo, bar')
 
       within_search_results_for("bar") do
         expect(page).to have_n_results(1)
@@ -69,7 +69,7 @@ feature "Searching Notices" do
     end
 
     scenario "for entities", search: true do
-      notice = create(:notice, role_names: ['sender','recipient'])
+      notice = create(:dmca, role_names: ['sender','recipient'])
 
       within_search_results_for(notice.recipient_name) do
         expect(page).to have_n_results(1)
@@ -91,7 +91,7 @@ feature "Searching Notices" do
         :work, description: "An arbitrary description"
       )
 
-      notice = create(:notice, works: [work])
+      notice = create(:dmca, works: [work])
 
       within_search_results_for("arbitrary") do
         expect(page).to have_n_results(1)
@@ -112,7 +112,7 @@ feature "Searching Notices" do
         ]
       )
 
-      notice = create(:notice, works: [work])
+      notice = create(:dmca, works: [work])
 
       within_search_results_for('infringing_url') do
         expect(page).to have_n_results(1)
@@ -130,7 +130,7 @@ feature "Searching Notices" do
 
   context "changes to assocated models" do
     scenario "a category is created", search: true do
-      notice = create(:notice)
+      notice = create(:dmca)
       notice.categories.create!(name: "arbitrary")
 
       within_search_results_for("arbitrary") do
@@ -141,7 +141,7 @@ feature "Searching Notices" do
 
     scenario "a category is destroyed", search: true do
       category = create(:category, name: "arbitrary")
-      notice = create(:notice, categories: [category])
+      notice = create(:dmca, categories: [category])
       category.destroy
 
       expect_search_to_not_find("arbitrary", notice)
@@ -149,7 +149,7 @@ feature "Searching Notices" do
 
     scenario "a category updates its name", search: true do
       category = create(:category, name: "something")
-      notice = create(:notice, categories: [category])
+      notice = create(:dmca, categories: [category])
       category.update_attributes!(name: "arbitrary")
 
       within_search_results_for("arbitrary") do

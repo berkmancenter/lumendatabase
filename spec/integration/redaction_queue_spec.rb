@@ -6,9 +6,9 @@ feature "Redaction queue" do
 
     user = create(:user, :admin)
     notices = [
-      create(:notice, :redactable),
-      create(:notice, :redactable),
-      notice_three = create(:notice, :redactable)
+      create(:dmca, :redactable),
+      create(:dmca, :redactable),
+      notice_three = create(:dmca, :redactable)
     ]
 
     queue = RedactionQueueOnPage.new
@@ -58,10 +58,10 @@ feature "Redaction queue" do
     category_one = create(:category, name: "Cat 1")
     category_two = create(:category, name: "Cat 2")
     submitter = create(:entity, name: "Jim Smith")
-    create(:notice) # not to be found
+    create(:dmca) # not to be found
     expected_notices = [
       create(
-        :notice,
+        :dmca,
         review_required: true,
         categories: [category_one],
         entity_notice_roles: [
@@ -69,7 +69,7 @@ feature "Redaction queue" do
         ]
       ),
       create(
-        :notice,
+        :dmca,
         review_required: true,
         categories: [category_two],
         entity_notice_roles: [
@@ -91,8 +91,8 @@ feature "Redaction queue" do
 
   scenario "A user redacts a pattern everywhere", js: true do
     user = create(:user, :admin)
-    affected_notices = create_list(:notice, 3, :redactable, body: "Some text")
-    unaffected_notices = create_list(:notice, 3, :redactable, body: "Some text")
+    affected_notices = create_list(:dmca, 3, :redactable, body: "Some text")
+    unaffected_notices = create_list(:dmca, 3, :redactable, body: "Some text")
 
     queue = RedactionQueueOnPage.new
     queue.visit_as(user)

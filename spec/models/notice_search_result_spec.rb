@@ -3,7 +3,7 @@ require 'spec_helper'
 describe NoticeSearchResult do
 
   it "delegates id and title attributes to notice" do
-    notice = build_stubbed(:notice)
+    notice = build_stubbed(:dmca)
 
     result = NoticeSearchResult.new(Notice.new, with_metadata(notice))
 
@@ -12,7 +12,7 @@ describe NoticeSearchResult do
   end
 
   it "includes id, name, and parent_id from categories" do
-    notice = build_stubbed(:notice, :with_categories)
+    notice = build_stubbed(:dmca, :with_categories)
 
     result = NoticeSearchResult.new(Notice.new, with_metadata(notice))
 
@@ -25,7 +25,7 @@ describe NoticeSearchResult do
 
   it "includes description from works" do
     work = build_stubbed(:work)
-    notice = build_stubbed(:notice, works: [work])
+    notice = build_stubbed(:dmca, works: [work])
 
     result = NoticeSearchResult.new(Notice.new, with_metadata(notice))
 
@@ -37,7 +37,7 @@ describe NoticeSearchResult do
   %i(infringing_urls copyrighted_urls).each do |url_relation|
     it "includes url from #{url_relation}" do
       work = build_stubbed(:work, "with_#{url_relation}".to_sym)
-      notice = build_stubbed(:notice, works: [work])
+      notice = build_stubbed(:dmca, works: [work])
 
       result = NoticeSearchResult.new(Notice.new, with_metadata(notice))
 
@@ -48,7 +48,7 @@ describe NoticeSearchResult do
   end
 
   it "provides access to excerpts" do
-    notice = build_stubbed(:notice)
+    notice = build_stubbed(:dmca)
     highlight = { 'title' => ["Lion <em>King</em>"] }
     excerpts = []
 

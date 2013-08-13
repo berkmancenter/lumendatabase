@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe Notice do
+describe Dmca do
   it { should validate_presence_of :works }
   it { should validate_presence_of :entity_notice_roles }
   it { should ensure_inclusion_of(:language).in_array(Language.codes) }
-  it { should ensure_inclusion_of(:action_taken).in_array(Notice::VALID_ACTIONS) }
+  it { should ensure_inclusion_of(:action_taken).in_array(Dmca::VALID_ACTIONS) }
 
   context 'automatic validations' do
     it { should validate_presence_of :title }
@@ -25,7 +25,7 @@ describe Notice do
   it_behaves_like "an object tagged in the context of", "jurisdiction"
 
   it "defaults to no action taken" do
-    notice = Notice.new
+    notice = Dmca.new
 
     expect(notice.action_taken).to eq 'No'
   end
@@ -36,7 +36,7 @@ describe Notice do
         context "##{role_name}" do
           it "returns entity of type #{role_name}" do
             entity = create(:entity)
-            notice = create(:notice)
+            notice = create(:dmca)
 
             create(
               :entity_notice_role,
@@ -53,7 +53,7 @@ describe Notice do
 
     context "without notice roles" do
       it "returns nil for recipient and sender" do
-        notice = create(:notice)
+        notice = create(:dmca)
         expect(notice.recipient).to be_nil
         expect(notice.sender).to be_nil
       end
@@ -69,7 +69,7 @@ describe Notice do
       ]
       notice_questions = [create(:relevant_question, question: "Q4")]
       notice = create(
-        :notice,
+        :dmca,
         categories: [
           create(:category, relevant_questions: category1_questions),
           create(:category, relevant_questions: category2_questions)
@@ -89,7 +89,7 @@ describe Notice do
         create(:relevant_question, question: "Q2")
       ]
       notice = create(
-        :notice,
+        :dmca,
         categories: [create(:category, relevant_questions: category_questions)],
         relevant_questions: [shared_question]
       )
@@ -102,7 +102,7 @@ describe Notice do
 
   context "#related_blog_entries" do
     it "returns blog_entries that share categories with itself" do
-      notice = create(:notice, :with_categories)
+      notice = create(:dmca, :with_categories)
       expected_blog_entries = [
         create(:blog_entry, categories: [notice.categories.sample]),
         create(:blog_entry, categories: [notice.categories.sample]),
@@ -115,7 +115,7 @@ describe Notice do
     end
 
     it "does not return blog entries with different categories" do
-      notice = create(:notice, :with_categories)
+      notice = create(:dmca, :with_categories)
       create(:blog_entry, categories: [create(:category)])
 
       related_blog_entries = notice.related_blog_entries
@@ -124,7 +124,7 @@ describe Notice do
     end
 
     it "does not duplicate blog entries" do
-      notice = create(:notice, :with_categories)
+      notice = create(:dmca, :with_categories)
       blog_entry = create(:blog_entry, categories: notice.categories)
 
       related_blog_entries = notice.related_blog_entries
@@ -135,7 +135,7 @@ describe Notice do
 
   context "#limited_related_blog_entries" do
     it "returns a limited set of related blog entries" do
-      notice = create(:notice, :with_categories)
+      notice = create(:dmca, :with_categories)
       create(:blog_entry, categories: [notice.categories.sample])
       create(:blog_entry, categories: [notice.categories.sample])
       create(:blog_entry, categories: [notice.categories.sample])
@@ -149,18 +149,18 @@ describe Notice do
   context "search index" do
     before do
       tire = double("Tire proxy").as_null_object
-      Notice.any_instance.stub(:tire).and_return(tire)
+      Dmca.any_instance.stub(:tire).and_return(tire)
     end
 
     it "updates the index after touch" do
-      notice = create(:notice)
+      notice = create(:dmca)
       notice.tire.should_receive(:update_index)
 
       notice.touch
     end
 
     it "is touched on category changes" do
-      notice = create(:notice)
+      notice = create(:dmca)
       notice.tire.should_receive(:update_index).exactly(3).times
 
       category = notice.categories.create!(name: "name 1")
@@ -169,7 +169,7 @@ describe Notice do
     end
 
     it "is touched on entity changes" do
-      notice = create(:notice)
+      notice = create(:dmca)
       entity = create(:entity)
       notice.tire.should_receive(:update_index).exactly(3).times
 
@@ -185,14 +185,14 @@ describe Notice do
   end
 
   context "#redacted" do
-    it "returns '#{Notice::UNDER_REVIEW_VALUE}' when review is required" do
-      notice = Notice.new(review_required: true, legal_other: "A value")
+    it "returns '#{Dmca::UNDER_REVIEW_VALUE}' when review is required" do
+      notice = Dmca.new(review_required: true, legal_other: "A value")
 
-      expect(notice.redacted(:legal_other)).to eq Notice::UNDER_REVIEW_VALUE
+      expect(notice.redacted(:legal_other)).to eq Dmca::UNDER_REVIEW_VALUE
     end
 
     it "returns the actual value when review is not required" do
-      notice = Notice.new(review_required: false, legal_other: "A value")
+      notice = Dmca.new(review_required: false, legal_other: "A value")
 
       expect(notice.redacted(:legal_other)).to eq "A value"
     end
@@ -200,7 +200,7 @@ describe Notice do
 
   context "#auto_redact" do
     it "calls RedactsNotices#redact on itself" do
-      notice = Notice.new
+      notice = Dmca.new
       redactor = RedactsNotices.new
       redactor.should_receive(:redact).with(notice)
       RedactsNotices.should_receive(:new).and_return(redactor)
@@ -211,7 +211,7 @@ describe Notice do
 
   context "#mark_for_review" do
     it "Sets review_required to true if risk is assessed as high" do
-      notice = create(:notice, review_required: false)
+      notice = create(:dmca, review_required: false)
       mock_assessment(notice, true)
 
       notice.mark_for_review
@@ -220,7 +220,7 @@ describe Notice do
     end
 
     it "Sets review_required to false if risk is assessed as low" do
-      notice = create(:notice, review_required: true)
+      notice = create(:dmca, review_required: true)
       mock_assessment(notice, false)
 
       notice.mark_for_review
@@ -238,10 +238,10 @@ describe Notice do
 
   context "#next_requiring_review" do
     it "returns the next notice (by id) which requires review" do
-      create(:notice, review_required: true)
-      notice = create(:notice, review_required: true)
-      create(:notice, review_required: false)
-      expected_notice = create(:notice, review_required: true)
+      create(:dmca, review_required: true)
+      notice = create(:dmca, review_required: true)
+      create(:dmca, review_required: false)
+      expected_notice = create(:dmca, review_required: true)
 
       next_notice = notice.next_requiring_review
 
@@ -249,7 +249,7 @@ describe Notice do
     end
 
     it "returns nil when none exist" do
-      notice = create(:notice)
+      notice = create(:dmca)
 
       expect(notice.next_requiring_review).not_to be
     end
@@ -258,11 +258,11 @@ describe Notice do
   context ".available_for_review" do
     it "returns notices with no reviewer" do
       user = create(:user)
-      expected_notices = create_list(:notice, 2, review_required: true)
-      create_list(:notice, 2, review_required: true, reviewer: user)
-      create_list(:notice, 2, review_required: false)
+      expected_notices = create_list(:dmca, 2, review_required: true)
+      create_list(:dmca, 2, review_required: true, reviewer: user)
+      create_list(:dmca, 2, review_required: false)
 
-      notices = Notice.available_for_review
+      notices = Dmca.available_for_review
 
       expect(notices).to match_array(expected_notices)
     end
@@ -272,11 +272,11 @@ describe Notice do
     it "returns notices in review with that user" do
       user_one, user_two = create_list(:user, 2)
       expected_notices = create_list(
-        :notice, 2, review_required: true, reviewer: user_one
+        :dmca, 2, review_required: true, reviewer: user_one
       )
-      create_list(:notice, 2, review_required: true, reviewer: user_two)
+      create_list(:dmca, 2, review_required: true, reviewer: user_two)
 
-      notices = Notice.in_review(user_one)
+      notices = Dmca.in_review(user_one)
 
       expect(notices).to match_array(expected_notices)
     end
@@ -284,11 +284,11 @@ describe Notice do
 
   context ".in_categories" do
     it "returns notices in the given categories" do
-      create(:notice) # not to be found
-      expected_notices = create_list(:notice, 3, :with_categories)
+      create(:dmca) # not to be found
+      expected_notices = create_list(:dmca, 3, :with_categories)
       categories = expected_notices.map(&:categories).flatten
 
-      notices = Notice.in_categories(categories)
+      notices = Dmca.in_categories(categories)
 
       expect(notices).to match_array(expected_notices)
     end
@@ -296,11 +296,11 @@ describe Notice do
 
   context ".submitted_by" do
     it "returns the notices submitted by the given submitters" do
-      create(:notice) # not to be found
-      expected_notices = create_list(:notice, 3, role_names: %w( submitter ))
+      create(:dmca) # not to be found
+      expected_notices = create_list(:dmca, 3, role_names: %w( submitter ))
       submitters = expected_notices.map(&:submitter)
 
-      notices = Notice.submitted_by(submitters)
+      notices = Dmca.submitted_by(submitters)
 
       expect(notices).to match_array(expected_notices)
     end

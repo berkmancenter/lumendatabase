@@ -8,7 +8,7 @@ FactoryGirl.define do
     sequence(:name) { |n| "Category Name #{n}" }
   end
 
-  factory :notice do
+  factory :dmca do
 
     title "A title"
     works { build_list(:work, 1) }
@@ -75,7 +75,6 @@ FactoryGirl.define do
     end
 
     factory :trademark, class: 'Trademark'
-    factory :dmca, class: 'Dmca'
     factory :defamation, class: 'Defamation'
   end
 
@@ -95,8 +94,8 @@ FactoryGirl.define do
   end
 
   factory :entity_notice_role do
-    notice
     entity
+    association(:notice, factory: :dmca)
     name 'principal'
   end
 

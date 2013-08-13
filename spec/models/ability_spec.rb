@@ -86,7 +86,7 @@ describe Ability do
 
   private
 
-  def notice;     build(:notice) end
+  def notice;     build(:dmca) end
   def category;   build(:category) end
   def blog_entry; build(:blog_entry) end
   def user;       build(:user) end

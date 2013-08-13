@@ -1,7 +1,5 @@
-module SearchableNotice
+module SearchableNotice # FIXME: rename this
   def self.included(base)
-    base.after_touch { tire.update_index }
-
     base.mapping do
       base.indexes :id, index: 'not_analyzed', include_in_all: false
       base.indexes :class_name, index: 'not_analyzed', include_in_all: false,

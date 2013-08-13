@@ -22,7 +22,7 @@ describe NoticesController do
       end
 
       it "renders the rescinded template if the notice is rescinded" do
-        stub_find_notice(build(:notice, rescinded: true))
+        stub_find_notice(build(:dmca, rescinded: true))
 
         get :show, id: 1
 
@@ -46,7 +46,7 @@ describe NoticesController do
       end
 
       it "returns id, title and 'Notice Rescinded' as body for a rescinded notice" do
-        notice = build(:notice, rescinded: true)
+        notice = build(:dmca, rescinded: true)
         stub_find_notice(notice)
 
         get :show, id: 1, format: :json
