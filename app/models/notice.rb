@@ -5,6 +5,7 @@ require 'validates_automatically'
 class Notice < ActiveRecord::Base
   include Tire::Model::Search
   include Tire::Model::Callbacks
+  include Searchability
   include ValidatesAutomatically
 
   extend RecentScope
@@ -63,16 +64,12 @@ class Notice < ActiveRecord::Base
 
   accepts_nested_attributes_for :works
 
-  after_initialize :set_default_action_taken
-
-  after_touch { tire.update_index }
-
   delegate :country_code, to: :recipient, allow_nil: true
   delegate :name, to: :sender, prefix: true, allow_nil: true
   delegate :name, to: :recipient, prefix: true, allow_nil: true
   delegate :name, to: :submitter, prefix: true, allow_nil: true
 
-  include SearchableNotice
+  define_elasticsearch_mapping
 
   def self.available_for_review
     where(review_required: true, reviewer_id: nil)
@@ -159,21 +156,7 @@ class Notice < ActiveRecord::Base
     super(tag_list_value)
   end
 
-  def has_copyrighted_urls?
-    true
-  end
-
-  def has_works_kind?
-    true
-  end
-
   private
-
-  def set_default_action_taken
-    if action_taken.blank?
-      self.action_taken = 'No'
-    end
-  end
 
   def entities_that_have_submitted
     entity_notice_roles.submitters.map(&:entity)

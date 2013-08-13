@@ -1,5 +1,6 @@
 class Defamation < Notice
-  include SearchableNotice
+
+  define_elasticsearch_mapping
 
   def self.model_name
     Notice.model_name
@@ -9,11 +10,4 @@ class Defamation < Notice
     'notices/notice'
   end
 
-  def has_copyrighted_urls?
-    false
-  end
-
-  def has_works_kind?
-    false
-  end
 end

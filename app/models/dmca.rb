@@ -1,5 +1,6 @@
 class Dmca < Notice
-  include SearchableNotice
+
+  define_elasticsearch_mapping
 
   def self.model_name
     Notice.model_name
