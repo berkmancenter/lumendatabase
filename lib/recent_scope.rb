@@ -4,6 +4,6 @@ module RecentScope
   end
 
   def recent_limit
-    7
+    5
   end
 end
