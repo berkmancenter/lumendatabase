@@ -3,11 +3,8 @@ class NoticeSearchResult < SimpleDelegator
 
   attr_reader :_score
 
-  def initialize(attributes = {})
-
-    # FIXME - this dynamic class resolution may not be necessary.
-    klass = attributes['class_name'].titleize.constantize
-    @notice = assign_attributes(klass.new, attributes)
+  def initialize(notice, attributes = {})
+    @notice = assign_attributes(notice, attributes)
 
     @_score = attributes['_score']
     @highlight = attributes['highlight']

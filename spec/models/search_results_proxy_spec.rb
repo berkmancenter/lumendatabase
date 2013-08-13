@@ -3,10 +3,13 @@ require 'spec_helper'
 describe SearchResultsProxy do
   it 'proxies notice results to NoticeSearchResult' do
     notice = build_stubbed(:notice)
+    attributes = with_metadata(notice).merge('class_name' => 'notice')
+    new_notice = Notice.new
+    Notice.stub(:new).and_return(new_notice)
 
-    described_class.should_receive(:new).with(with_metadata(notice))
+    NoticeSearchResult.should_receive(:new).with(new_notice, attributes)
 
-    described_class.new(with_metadata(notice))
+    described_class.new(attributes)
   end
 
   it 'proxies to the default wrapper' do
