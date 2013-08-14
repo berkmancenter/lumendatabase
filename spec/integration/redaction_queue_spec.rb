@@ -30,6 +30,29 @@ feature "Redaction queue" do
     expect(queue).to have_notices([notice_three])
   end
 
+  scenario "A user releases some of the notices in their queue" do
+    Redaction::Queue.stub(:queue_max).and_return(3)
+
+    user = create(:user, :admin)
+    notices = [
+      create(:notice, :redactable),
+      create(:notice, :redactable),
+      notice_three = create(:notice, :redactable)
+    ]
+
+    queue = RedactionQueueOnPage.new
+    queue.visit_as(user)
+    queue.fill
+
+    expect(queue).to have_notices(notices)
+
+    # defaults all checked
+    queue.unselect_notice(notice_three)
+    queue.release_selected
+
+    expect(queue).to have_notices([notice_three])
+  end
+
   scenario "A user refills their queue by category and submitter" do
     user = create(:user, :admin)
     category_one = create(:category, name: "Cat 1")

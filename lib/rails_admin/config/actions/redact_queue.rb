@@ -9,6 +9,9 @@ RedactQueueProc = Proc.new do
     if params[:fill_queue].present?
       refill.fill(queue)
       redirect_to redact_queue_path(@abstract_model)
+    elsif params[:release_selected].present?
+      queue.release(params[:selected])
+      redirect_to redact_queue_path(@abstract_model)
     elsif params[:selected].present?
       notice_id, *next_notices = params[:selected]
       redact_path = redact_notice_path(

@@ -37,6 +37,10 @@ class RedactionQueueOnPage < PageObject
     click_on 'Process selected'
   end
 
+  def release_selected
+    click_on 'Release selected'
+  end
+
   def redact_everywhere
     page.execute_script 'window.original_confirm = window.confirm'
     page.execute_script 'window.confirm = function(msg) { return true; }'
