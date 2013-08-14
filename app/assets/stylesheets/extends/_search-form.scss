@@ -7,7 +7,6 @@
     font-size: 0;
     position: relative;
     text-align: center;
-    width: $home-search-input-w;
   }
 
   div.input {
@@ -27,6 +26,7 @@
     float: right;
     top: 0;
     right: 0;
+    min-width: $home-search-button-w;
 
     button {
       border-radius: 0;

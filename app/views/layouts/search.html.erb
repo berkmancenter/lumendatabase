@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="ROBOTS" content="NOODP" />
+  <title><%= page_title %></title>
+  <%= render 'shared/head' -%>
+  <link href='http://fonts.googleapis.com/css?family=Merriweather:400,400italic,700,700italic' rel='stylesheet' type='text/css'>
+</head>
+<body class="<%= body_class %>">
+  <%= render 'flashes' -%>
+  <%= render 'shared/header_search' -%>
+  <section class="main app">
+    <div class="main-inner">
+      <%= yield %>
+    </div>
+  </section>
+  <%= render 'shared/footer' -%>
+  <%= render 'javascript' %>
+</body>
+</html>
+

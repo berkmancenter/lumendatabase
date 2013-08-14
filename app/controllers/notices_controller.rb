@@ -1,4 +1,5 @@
 class NoticesController < ApplicationController
+  layout :resolve_layout
 
   def new
     @notice = Notice.new
@@ -81,6 +82,15 @@ class NoticesController < ApplicationController
       :description, :kind, infringing_urls_attributes: [:url],
       copyrighted_urls_attributes: [:url],
     ]
+  end
+
+  def resolve_layout
+    case action_name
+    when "show"
+      "search"
+    else
+      "application"
+    end
   end
 
 end

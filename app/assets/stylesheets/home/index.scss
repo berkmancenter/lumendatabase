@@ -19,6 +19,7 @@ section.home-search-form {
 
   form {
     margin: 0 auto;
+    width: $home-search-input-w;
 
     input#search {
       font-size: $base-font-size + 1px;

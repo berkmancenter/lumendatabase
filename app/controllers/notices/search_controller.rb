@@ -1,4 +1,5 @@
 class Notices::SearchController < ApplicationController
+  layout 'search'
 
   def index
     search = notice_searcher.search

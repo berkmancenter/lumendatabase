@@ -117,6 +117,11 @@ header.app {
     li.about {
       float: right;
       margin-right: $base-padding;
+
+      @include media($small-screen) {
+        float: left;
+        margin: 0;
+      }
     }
   }
 }

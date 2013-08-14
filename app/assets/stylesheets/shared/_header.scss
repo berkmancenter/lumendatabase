@@ -8,11 +8,20 @@ header.app {
 // Form
 //************************************************************************//
 header.app {
+  $padding: 20px;
+
+  &.search-header {
+    .container {
+      padding-left: $padding;
+    }
+  }
+
   .container {
     @extend %search-form;
     border-bottom: 1px solid $base-border-color;
     @include clearfix;
-    padding: 20px;
+    padding: $padding;
+    padding-left: $left-margin + 15px;
 
     &.search {
       @include linear-gradient(hsl(43, 41%, 98%), hsl(43, 7%, 92%));
@@ -80,8 +89,8 @@ header.app {
       float: left;
       @include linear-gradient(#2868D1, #295EB8);
       box-shadow: -1px 0 0 darken($button-border, 6%);
-        width: 24px;
-        height: $input-height;
+      width: 24px;
+      height: $input-height;
 
       a.dropdown-toggle {
         display: block;
@@ -174,8 +183,8 @@ header.app {
     line-height: 1em;
     font-size: $base-font-size + 1;
     color: $base-border-color-2;
-    @include icon(icon-cancel);
     cursor: pointer;
+    @include icon(icon-cancel);
     @include transition(all 0.4s);
     @include transform-origin(center);
 
