@@ -32,6 +32,8 @@ class Notice < ActiveRecord::Base
   UNDER_REVIEW_VALUE = 'Under review'
   RANGE_SEPARATOR = '..'
 
+  DEFAULT_ENTITY_NOTICE_ROLES = %w|recipient sender|
+
   VALID_ACTIONS = %w( Yes No Partial )
 
   belongs_to :reviewer, class_name: 'User'

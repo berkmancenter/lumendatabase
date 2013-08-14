@@ -74,11 +74,11 @@ feature "typed notice submissions" do
       "Title" => "A title",
 
       "Subject of Complaint" => "I am English", # works.description
-      "URL of Complaint" => "http://example.com/original_object1", # copyrighted_urls
+      "URL of original work" => "http://example.com/original_object1", # copyrighted_urls
       "Offending URL" => "http://example.com/offending_url1", # infringing_urls
 
       "Explanation of Complaint" => "I am wicked unhappy with the French", #notice.body
-      "Law or Regulation" => "USC foo bar 21"
+      "Relevant laws or regulations" => "USC foo bar 21"
     })
 
     submission.fill_in_entity_form_with(:recipient, {
@@ -99,10 +99,13 @@ feature "typed notice submissions" do
     within("#works") do
       expect(page).to have_content('Offending URLs')
       expect(page).to have_content('http://example.com/offending_url1')
+      expect(page).to have_content('URLs of original work')
+      expect(page).to have_content('http://example.com/original_object1')
     end
     within('.notice-body') do
-      expect(page).to have_content('Legal Complaint')
-      expect(page).to have_content('They impuned upon my good character')
+      expect(page).to have_content('Explanation of complaint')
+      expect(page).to have_content('I am wicked unhappy with the French')
+      expect(page).to have_content('USC foo bar 21')
     end
   end
 end

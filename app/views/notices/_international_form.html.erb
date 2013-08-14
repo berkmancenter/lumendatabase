@@ -26,7 +26,7 @@
       <%= form.input :action_taken, collection: Notice::VALID_ACTIONS %>
     </div>
     <div class="body-wrapper right attach">
-      <%= form.input :body %>
+      <%= form.input :body, label: "Explanation of Complaint" %>
       <%= form.input :legal_other, label: "Legal (Other)" %>
       <%= form.simple_fields_for(:file_uploads) do |file_uploads_form| %>
         <%= file_uploads_form.input :file, label: 'Attach Notice' %>
@@ -41,10 +41,10 @@
     <div class="body-wrapper left">
       <%= form.simple_fields_for(:works) do |works_form| %>
         <%= works_form.simple_fields_for(:copyrighted_urls) do |urls_form| %>
-          <%= urls_form.input :url, label: "Original Work URL", placeholder: "http://" %>
+          <%= urls_form.input :url, label: "URL of original work", placeholder: "http://" %>
         <% end %>
         <%= works_form.simple_fields_for(:infringing_urls) do |urls_form| %>
-          <%= urls_form.input :url, label: "Infringing URL", placeholder: "http://" %>
+          <%= urls_form.input :url, label: "Offending URL", placeholder: "http://" %>
         <% end %>
         <%= works_form.input :kind, label: "Kind of Work", placeholder: "Movie, Music, Book" %>
       </div>
@@ -52,6 +52,7 @@
         <%= works_form.input :description, label: 'Subject of Complaint' %>
       </div>
     <% end %>
+    <%= form.input :regulation_list, label: 'Relevant laws or regulations', placeholder: 'A comma separated list' %>
   </section>
 
   <% step_number = 3 %>
