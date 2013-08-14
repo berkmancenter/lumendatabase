@@ -152,4 +152,50 @@ feature "typed notice submissions" do
       expect(page).to have_content('USC foo bar 21')
     end
   end
+
+  scenario "User submits and views a Law Enforcement Request type notice" do
+    submission = NoticeSubmissionOnPage.new(LawEnforcementRequest)
+    submission.open_submission_form
+
+    submission.fill_in_form_with({
+      "Title" => "A title",
+
+      "Subject of Enforcement Request" => "My Tiny Tim fansite", # works.description
+      "URL of original work" => "http://example.com/original_object1", # copyrighted_urls
+      "URL mentioned in request" => "http://example.com/offending_url1", # infringing_urls
+
+      "Explanation of Law Enforcement Request" => "I don't get it. He made sick music.", #notice.body
+      "Relevant laws or regulations" => "USC foo bar 21"
+    })
+
+    submission.fill_in_entity_form_with(:recipient, {
+      'Name' => 'Recipient',
+    })
+    submission.fill_in_entity_form_with(:sender, {
+      'Name' => 'Sender',
+    })
+    submission.fill_in_entity_form_with(:principal, {
+      'Name' => 'Principal Issuing Authority',
+    })
+
+    submission.submit
+
+    open_recent_notice
+
+    expect(page).to have_content("Law Enforcement Request - A title")
+
+    within("#works") do
+      expect(page).to have_content('URLs mentioned in request')
+      expect(page).to have_content('http://example.com/offending_url1')
+      expect(page).to have_content('URLs of original work')
+      expect(page).to have_content('http://example.com/original_object1')
+    end
+
+    within('.notice-body') do
+      expect(page).to have_content('Explanation of Request')
+      expect(page).to have_content("I don't get it. He made sick music.")
+      expect(page).to have_content('USC foo bar 21')
+    end
+  end
+
 end

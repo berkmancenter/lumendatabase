@@ -40,7 +40,9 @@ feature "Searching for Notices via the API" do
     end
   end
 
-  [Dmca, Trademark, Defamation, International, CourtOrder].each do |klass|
+  [
+    Dmca, Trademark, Defamation, International, CourtOrder, LawEnforcementRequest
+  ].each do |klass|
     class_factory = klass.to_s.tableize.singularize.to_sym
     scenario "a #{klass} notice has basic notice metadata", js: true, search: true do
 
@@ -104,8 +106,9 @@ feature "Searching for Notices via the API" do
         json_item = json['notices'].first
         work = json_item['works'].first
 
-        expect(json_item).to have_key('regulations').
-          with_value(['Baz blee 22', 'Foo bar 21'])
+        expect(json_item['regulations']).to match_array(
+          ['Baz blee 22', 'Foo bar 21']
+        )
         expect(json_item).to have_key('explanation')
         expect(work).to have_key('original_work_urls')
         expect(work).to have_key('offending_urls')
@@ -131,14 +134,41 @@ feature "Searching for Notices via the API" do
         json_item = json['notices'].first
         work = json_item['works'].first
 
-        expect(json_item).to have_key('regulations').
-          with_value(['Baz blee 22', 'Foo bar 21'])
+        expect(json_item['regulations']).to match_array(
+          ['Baz blee 22', 'Foo bar 21']
+        )
         expect(json_item).to have_key('explanation')
 
         expect(work).to have_key('targetted_urls')
         expect(work).to have_key('subject_of_court_order')
 
         expect(work).not_to have_key('copyrighted_urls')
+        expect(work).not_to have_key('description')
+        expect(work).not_to have_key('body')
+      end
+    end
+  end
+
+  context LawEnforcementRequest do
+    scenario "has model-specific metadata", js: true, search: true do
+      create(
+        :law_enforcement_request,
+        title: "The Lion King on Youtube",
+        regulation_list: 'Foo bar 21, Baz blee 22'
+      )
+
+      expect_api_search_to_find("king") do |json|
+        json_item = json['notices'].first
+        work = json_item['works'].first
+
+        expect(json_item['regulations']).to match_array(
+          ['Baz blee 22', 'Foo bar 21']
+        )
+        expect(json_item).to have_key('explanation')
+        expect(work).to have_key('original_work_urls')
+        expect(work).to have_key('urls_in_request')
+        expect(work).to have_key('subject_of_enforcement_request')
+
         expect(work).not_to have_key('description')
         expect(work).not_to have_key('body')
       end

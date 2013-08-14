@@ -78,6 +78,7 @@ FactoryGirl.define do
     factory :defamation, class: 'Defamation'
     factory :international, class: 'International'
     factory :court_order, class: 'CourtOrder'
+    factory :law_enforcement_request, class: 'LawEnforcementRequest'
   end
 
   factory :file_upload do

@@ -32,7 +32,9 @@ describe NoticesController do
     end
 
     context "as JSON" do
-      [Dmca, Trademark, Defamation, International, CourtOrder].each do |model_class|
+      [
+        Dmca, Trademark, Defamation, International, CourtOrder, LawEnforcementRequest
+      ].each do |model_class|
         it "returns a serialized notice for #{model_class}" do
           notice = stub_find_notice(model_class.new)
           serializer_class = model_class.active_model_serializer || NoticeSerializer
@@ -45,6 +47,7 @@ describe NoticesController do
           json = JSON.parse(response.body)[model_class.to_s.tableize.singularize]
           expect(json).to have_key('id').with_value(notice.id)
           expect(json).to have_key('title').with_value(notice.title)
+          expect(json).to have_key('sender_name')
         end
       end
 
