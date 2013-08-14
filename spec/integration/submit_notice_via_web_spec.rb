@@ -67,14 +67,41 @@ feature "notice submission" do
     end
   end
 
-  scenario "submitting a notice with an attached file" do
+  scenario "submitting a notice with an original attached" do
+    submit_recent_notice { attach_notice }
+
+    open_recent_notice
+
+    pending "We don't display originals yet"
+  end
+
+  scenario "submitting a notice with a supporting document", js: true do
     submit_recent_notice do
-      attach_notice_file("Some content")
+      add_supporting_document("Some supporting content")
     end
 
     open_recent_notice
 
-    pending "We don't use the attached file yet"
+    within('ol.attachments') do
+      click_on "Supporting Document"
+
+      # page.html is actually plain-text in this case
+      expect(page.html).to eq "Some supporting content"
+    end
+  end
+
+  scenario "submitting a notice with multiple supporting documents", js: true do
+    submit_recent_notice do
+      add_supporting_document
+      add_supporting_document
+      add_supporting_document
+    end
+
+    open_recent_notice
+
+    within('ol.attachments') do
+      expect(page).to have_css('li', 3)
+    end
   end
 
   scenario "submitting a notice with tags" do
