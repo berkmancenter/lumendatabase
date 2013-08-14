@@ -40,7 +40,7 @@ feature "Searching for Notices via the API" do
     end
   end
 
-  [Dmca, Trademark, Defamation].each do |klass|
+  [Dmca, Trademark, Defamation, International].each do |klass|
     class_factory = klass.to_s.downcase.to_sym
     scenario "a #{klass} notice has basic notice metadata", js: true, search: true do
 
@@ -57,6 +57,7 @@ feature "Searching for Notices via the API" do
         expect(json_item).to have_key('id').with_value(notice.id)
         expect(json_item).to have_key('categories').with_value([category.name])
         expect(json_item).to have_key('score')
+        expect(json_item).to have_key('tags')
       end
     end
   end
@@ -78,10 +79,8 @@ feature "Searching for Notices via the API" do
 
   context Defamation do
     scenario "has model-specific metadata", js: true, search: true do
-      category = create(:category, name: "Lion King")
       create(
         :trademark,
-        categories: [category],
         title: "The Lion King on Youtube"
       )
 
@@ -89,6 +88,31 @@ feature "Searching for Notices via the API" do
         json_item = json['notices'].first
         expect(json_item).to have_key('marks')
         expect(json_item).not_to have_key('works')
+      end
+    end
+  end
+
+  context International do
+    scenario "has model-specific metadata", js: true, search: true do
+      create(
+        :international,
+        title: "The Lion King on Youtube",
+        regulation_list: 'Foo bar 21, Baz blee 22'
+      )
+
+      expect_api_search_to_find("king") do |json|
+        json_item = json['notices'].first
+        work = json_item['works'].first
+
+        expect(json_item).to have_key('regulations').
+          with_value(['Baz blee 22', 'Foo bar 21'])
+        expect(json_item).to have_key('explanation')
+        expect(work).to have_key('original_work_urls')
+        expect(work).to have_key('offending_urls')
+        expect(work).to have_key('subject_of_complaint')
+
+        expect(work).not_to have_key('description')
+        expect(work).not_to have_key('body')
       end
     end
   end

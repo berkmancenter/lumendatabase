@@ -51,11 +51,18 @@ class NoticesController < ApplicationController
         end
       end
 
-      format.json { render json: @notice }
+      format.json do
+        render json: @notice, serializer: NoticeSerializerProxy,
+          root: json_root_for(@notice.class)
+      end
     end
   end
 
   private
+
+  def json_root_for(klass)
+    klass.to_s.tableize.singularize
+  end
 
   def notice_params
     params.require(:notice).permit(

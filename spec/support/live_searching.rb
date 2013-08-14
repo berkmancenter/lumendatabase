@@ -8,9 +8,6 @@ RSpec.configure do |config|
     Notice.index.delete
     Notice.create_elasticsearch_index
 
-    Trademark.index.delete
-    Trademark.create_elasticsearch_index
-
     Entity.index.delete
     Entity.create_elasticsearch_index
   end

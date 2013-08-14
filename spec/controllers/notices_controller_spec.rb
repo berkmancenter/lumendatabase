@@ -32,17 +32,20 @@ describe NoticesController do
     end
 
     context "as JSON" do
-      it "returns a serialized notice" do
-        notice = stub_find_notice
-        serialized = NoticeSerializer.new(notice)
-        NoticeSerializer.should_receive(:new).
-          with(notice, anything).and_return(serialized)
+      [Dmca, Trademark, Defamation, International].each do |model_class|
+        it "returns a serialized notice for #{model_class}" do
+          notice = stub_find_notice(model_class.new)
+          serializer_class = model_class.active_model_serializer || NoticeSerializer
+          serialized = serializer_class.new(notice)
+          serializer_class.should_receive(:new).
+            with(notice, anything).and_return(serialized)
 
-        get :show, id: 1, format: :json
+          get :show, id: 1, format: :json
 
-        json = JSON.parse(response.body)["notice"]
-        expect(json).to have_key('id').with_value(notice.id)
-        expect(json).to have_key('title').with_value(notice.title)
+          json = JSON.parse(response.body)[model_class.to_s.tableize.singularize]
+          expect(json).to have_key('id').with_value(notice.id)
+          expect(json).to have_key('title').with_value(notice.title)
+        end
       end
 
       it "returns id, title and 'Notice Rescinded' as body for a rescinded notice" do
@@ -51,7 +54,7 @@ describe NoticesController do
 
         get :show, id: 1, format: :json
 
-        json = JSON.parse(response.body)["notice"]
+        json = JSON.parse(response.body)["dmca"]
         expect(json).to have_key('id').with_value(notice.id)
         expect(json).to have_key('title').with_value(notice.title)
         expect(json).to have_key('body').with_value("Notice Rescinded")

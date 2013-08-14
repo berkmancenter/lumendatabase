@@ -28,13 +28,18 @@ class NoticeSerializer < ActiveModel::Serializer
   private
 
   def attributes
-    hsh = super
+    attributes = super
 
     if object.respond_to?(:_score)
-      hsh.merge!(score: object._score)
+      attributes.merge!(score: object._score)
     end
 
-    hsh
+    attributes
+  end
+
+  def swap_keys(hash, original_key, new_key)
+    original_value = hash.delete(original_key)
+    hash[new_key] = original_value
   end
 
 end
