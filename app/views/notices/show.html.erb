@@ -1,5 +1,5 @@
 <article class="notice-show">
-  <h1><%= @notice.type %> - <%= @notice.title %></h1>
+  <h1><%= @notice.type.titleize %> - <%= @notice.title %></h1>
 
   <section class="body">
     <header id="entities">
@@ -9,6 +9,7 @@
       <% if @notice.recipient %>
         <%= render @notice.recipient, notice: @notice, role: :recipient %>
       <% end %>
+      <p class="wip">TODO: Display other entities here</p>
     </header>
 
     <div class="main">

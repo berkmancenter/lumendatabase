@@ -40,8 +40,8 @@ feature "Searching for Notices via the API" do
     end
   end
 
-  [Dmca, Trademark, Defamation, International].each do |klass|
-    class_factory = klass.to_s.downcase.to_sym
+  [Dmca, Trademark, Defamation, International, CourtOrder].each do |klass|
+    class_factory = klass.to_s.tableize.singularize.to_sym
     scenario "a #{klass} notice has basic notice metadata", js: true, search: true do
 
       category = create(:category, name: "Lion King")
@@ -111,6 +111,34 @@ feature "Searching for Notices via the API" do
         expect(work).to have_key('offending_urls')
         expect(work).to have_key('subject_of_complaint')
 
+        expect(work).not_to have_key('description')
+        expect(work).not_to have_key('body')
+      end
+    end
+  end
+
+  context CourtOrder do
+    scenario "has model-specific metadata", js: true, search: true do
+      create(
+        :court_order,
+        title: "The Lion King on Youtube",
+        regulation_list: 'Foo bar 21, Baz blee 22'
+      )
+
+      # TODO - figure out what to do with additional entities.
+
+      expect_api_search_to_find("king") do |json|
+        json_item = json['notices'].first
+        work = json_item['works'].first
+
+        expect(json_item).to have_key('regulations').
+          with_value(['Baz blee 22', 'Foo bar 21'])
+        expect(json_item).to have_key('explanation')
+
+        expect(work).to have_key('targetted_urls')
+        expect(work).to have_key('subject_of_court_order')
+
+        expect(work).not_to have_key('copyrighted_urls')
         expect(work).not_to have_key('description')
         expect(work).not_to have_key('body')
       end

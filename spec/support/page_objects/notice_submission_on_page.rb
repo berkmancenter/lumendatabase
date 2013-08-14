@@ -10,7 +10,7 @@ class NoticeSubmissionOnPage < PageObject
     visit '/'
 
     click_on 'Report Notice'
-    click_on @notice_class.to_s
+    click_on @notice_class.to_s.titleize
   end
 
   def within_form(&block)
