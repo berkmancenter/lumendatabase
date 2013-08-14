@@ -70,6 +70,7 @@ class Notice < ActiveRecord::Base
   delegate :country_code, to: :recipient, allow_nil: true
   delegate :name, to: :sender, prefix: true, allow_nil: true
   delegate :name, to: :recipient, prefix: true, allow_nil: true
+  delegate :name, to: :submitter, prefix: true, allow_nil: true
 
   mapping do
     indexes :id, index: 'not_analyzed', include_in_all: false

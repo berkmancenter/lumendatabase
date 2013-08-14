@@ -25,6 +25,20 @@ describe 'rails_admin/application/redact_notice.html.erb' do
     expect(page).to have_content("Time in queue: about 2 hours")
   end
 
+  it 'displays notice id, and entity names' do
+    notice = build_stubbed(
+      :notice, role_names: %w( submitter recipient sender )
+    )
+    assign(:object, notice)
+
+    render
+
+    expect(page).to have_content(notice.id)
+    expect(page).to have_content(notice.submitter_name)
+    expect(page).to have_content(notice.recipient_name)
+    expect(page).to have_content(notice.sender_name)
+  end
+
   it 'shows redactable_fields alongside originals' do
     notice = build_stubbed(
       :notice,
