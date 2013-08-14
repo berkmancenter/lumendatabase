@@ -63,6 +63,18 @@ describe RedactQueueProc do
       instance_eval(&RedactQueueProc)
     end
 
+    it "releases notices and redirects if required" do
+      params[:selected] = %w( 1 3 5 9 )
+      params[:release_selected] = true
+      queue = stub_new(Redaction::Queue, current_user)
+      queue.should_receive(:release).with(%w( 1 3 5 9 ))
+      should_receive(:redact_queue_path).with(@abstract_model).and_return(:path)
+      should_receive(:redirect_to).with(:path)
+      should_not_receive(:respond_to)
+
+      instance_eval(&RedactQueueProc)
+    end
+
     it "redirects to redact notice with the proper parameters" do
       params[:selected] = %w( 1 3 5 9 )
       should_receive(:redact_notice_path).

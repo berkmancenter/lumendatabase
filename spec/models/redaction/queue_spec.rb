@@ -29,6 +29,45 @@ describe Redaction::Queue do
     end
   end
 
+  context "#release" do
+    it "updates reviewer_id to nil for the passed notice ids" do
+      user = create(:user)
+      queue = new_queue(user)
+      notice_one = notice_in_review(user)
+      notice_two = notice_in_review(user)
+      notice_three = notice_in_review(user)
+
+      queue.release([notice_one.id, notice_three.id])
+
+      expect(notice_one.reload.reviewer).to be_nil
+      expect(notice_three.reload.reviewer).to be_nil
+      expect(notice_two.reload.reviewer).to eq user
+    end
+
+    it "ignores notices not in my queue" do
+      user = create(:user)
+      other_user = create(:user)
+      queue = new_queue(user)
+      notice_one = notice_in_review(user)
+      notice_two = notice_in_review(other_user)
+
+      queue.release([notice_one.id, notice_two.id])
+
+      expect(notice_one.reload.reviewer).to be_nil
+      expect(notice_two.reload.reviewer).to eq other_user
+    end
+
+    it "handles a nil parameter" do
+      expect { new_queue.release(nil) }.not_to raise_error
+    end
+
+    private
+
+    def notice_in_review(user)
+      create(:notice, review_required: true, reviewer: user)
+    end
+  end
+
   context "#available_space" do
     it "returns the amount of space in the queue" do
       stub_notices_in_review(FAKE_QUEUE_MAX - 1)
