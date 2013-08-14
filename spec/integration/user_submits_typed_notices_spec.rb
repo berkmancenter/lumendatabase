@@ -65,4 +65,44 @@ feature "typed notice submissions" do
       expect(page).to have_content('They impuned upon my good character')
     end
   end
+
+  scenario "User submits and views an International type notice" do
+    submission = NoticeSubmissionOnPage.new(International)
+    submission.open_submission_form
+
+    submission.fill_in_form_with({
+      "Title" => "A title",
+
+      "Subject of Complaint" => "I am English", # works.description
+      "URL of Complaint" => "http://example.com/original_object1", # copyrighted_urls
+      "Offending URL" => "http://example.com/offending_url1", # infringing_urls
+
+      "Explanation of Complaint" => "I am wicked unhappy with the French", #notice.body
+      "Law or Regulation" => "USC foo bar 21"
+    })
+
+    submission.fill_in_entity_form_with(:recipient, {
+      'Name' => 'Recipient',
+    })
+    submission.fill_in_entity_form_with(:sender, {
+      'Name' => 'Sender',
+    })
+    submission.fill_in_entity_form_with(:principal, {
+      'Name' => 'Principal Issuing Authority',
+    })
+
+    submission.submit
+
+    open_recent_notice
+
+    expect(page).to have_content("International - A title")
+    within("#works") do
+      expect(page).to have_content('Offending URLs')
+      expect(page).to have_content('http://example.com/offending_url1')
+    end
+    within('.notice-body') do
+      expect(page).to have_content('Legal Complaint')
+      expect(page).to have_content('They impuned upon my good character')
+    end
+  end
 end
