@@ -67,14 +67,17 @@ feature "Searching for Notices via the API" do
 
   context Trademark do
     scenario "has model-specific metadata", js: true, search: true do
-      create(
+      notice = create(
         :trademark,
+        :with_facet_data,
         title: "The Lion King on Youtube"
       )
 
+      marks = notice.works.collect{|work| work.description}
+
       expect_api_search_to_find("king") do |json|
         json_item = json['notices'].first
-        expect(json_item).to have_key('marks')
+        expect(json_item).to have_key('marks').with_value(marks)
         expect(json_item).not_to have_key('works')
       end
     end
@@ -82,15 +85,22 @@ feature "Searching for Notices via the API" do
 
   context Defamation do
     scenario "has model-specific metadata", js: true, search: true do
-      create(
-        :trademark,
-        title: "The Lion King on Youtube"
+      notice = create(
+        :defamation,
+        title: "The Lion King on Youtube",
+        body: "A test body"
       )
 
       expect_api_search_to_find("king") do |json|
         json_item = json['notices'].first
-        expect(json_item).to have_key('marks')
-        expect(json_item).not_to have_key('works')
+        work = json_item['works'].first
+
+        expect(json_item).to have_key('legal_complaint')
+        expect(json_item).not_to have_key('body')
+
+        expect(work).to have_key('defamatory_urls')
+
+        expect(work).not_to have_key('copyrighted_urls')
       end
     end
   end
@@ -111,12 +121,13 @@ feature "Searching for Notices via the API" do
           ['Baz blee 22', 'Foo bar 21']
         )
         expect(json_item).to have_key('explanation')
+        expect(json_item).not_to have_key('body')
+
         expect(work).to have_key('original_work_urls')
         expect(work).to have_key('offending_urls')
-        expect(work).to have_key('subject_of_complaint')
 
+        expect(work).to have_key('subject_of_complaint')
         expect(work).not_to have_key('description')
-        expect(work).not_to have_key('body')
       end
     end
   end
