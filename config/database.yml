@@ -9,3 +9,15 @@ development: &default
 test:
   <<: *default
   database: chill_test
+
+production:
+  adapter: postgresql
+  username: <%= ENV['DATABASE_USERNAME'] %>
+  password: <%= ENV['DATABASE_PASSWORD'] %>
+  database: <%= ENV['DATABASE_NAME'] %>
+  host: <%= ENV['DATABASE_HOST'] %>
+  port: <%= ENV['DATABASE_PORT'].to_i %>
+  encoding: utf8
+  min_messages: warning
+  pool: 5
+  timeout: 5000
