@@ -64,7 +64,7 @@ describe Redaction::Queue do
     private
 
     def notice_in_review(user)
-      create(:notice, review_required: true, reviewer: user)
+      create(:dmca, review_required: true, reviewer: user)
     end
   end
 

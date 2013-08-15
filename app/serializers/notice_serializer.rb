@@ -2,6 +2,8 @@ class NoticeSerializer < ActiveModel::Serializer
   attributes :id, :title, :body, :date_sent, :date_received,
     :categories, :sender_name, :recipient_name, :works, :tags, :jurisdictions
 
+  # TODO - serialize additional entities
+
   def categories
     object.categories.map(&:name)
   end
@@ -23,4 +25,22 @@ class NoticeSerializer < ActiveModel::Serializer
   def jurisdictions
     object.jurisdiction_list
   end
+
+  private
+
+  def attributes
+    attributes = super
+
+    if object.respond_to?(:_score)
+      attributes.merge!(score: object._score)
+    end
+
+    attributes
+  end
+
+  def swap_keys(hash, original_key, new_key)
+    original_value = hash.delete(original_key)
+    hash[new_key] = original_value
+  end
+
 end

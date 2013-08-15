@@ -1,0 +1,45 @@
+<h2>Re: <%= notice.subject %></h2>
+<p class="source">Sent via: <%= notice.source || 'Unknown' %></p>
+
+<section class="notice-body">
+  <h5 class="title">Body</h5>
+  <p class="body"><%= notice.redacted(:body) %></p>
+</section>
+
+<%= render works_partial_for(notice), works: notice.works %>
+
+<section class="legal">
+  <h5 class="title">Legal (Other)</h5>
+  <p class="legal-other"><%= notice.redacted(:legal_other) %></p>
+</section>
+
+<section class="attachments">
+  <h5 class="title">Supporting Documents</h5>
+  <ol class="attachments">
+    <% 3.times do %>
+      <li class="pdf">
+        <a href="#">
+          <span>Supporting PDF</span>
+          <span class="download">Download</span>
+        </a>
+      </li>
+    <% end %>
+
+    <% 3.times do %>
+      <li class="image">
+        <a href="#">
+          <span>Supporting Image</span>
+          <span class="download">Download</span>
+        </a>
+      </li>
+    <% end %>
+    <% 3.times do %>
+      <li class="">
+        <a href="#">
+          <span>Supporting Document</span>
+          <span class="download">Download</span>
+        </a>
+      </li>
+    <% end %>
+  </ol>
+</section>

@@ -3,7 +3,7 @@ require 'spec_helper'
 feature "Categories" do
   scenario "user views a category", search: true do
     category = create(:category, name: 'An awesome name')
-    notice = create(:notice, categories: [category])
+    notice = create(:dmca, categories: [category])
 
     sleep 2
 

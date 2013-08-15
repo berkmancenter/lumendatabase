@@ -8,7 +8,8 @@ FactoryGirl.define do
     sequence(:name) { |n| "Category Name #{n}" }
   end
 
-  factory :notice do
+  factory :dmca do
+
     title "A title"
     works { build_list(:work, 1) }
 
@@ -72,6 +73,14 @@ FactoryGirl.define do
       body_original "Some sensitive body"
       review_required true
     end
+
+    factory :trademark, class: 'Trademark'
+    factory :defamation, class: 'Defamation'
+    factory :international, class: 'International'
+    factory :court_order, class: 'CourtOrder'
+    factory :law_enforcement_request, class: 'LawEnforcementRequest'
+    factory :private_information, class: 'PrivateInformation'
+    factory :other, class: 'Other'
   end
 
   factory :file_upload do
@@ -90,8 +99,8 @@ FactoryGirl.define do
   end
 
   factory :entity_notice_role do
-    notice
     entity
+    association(:notice, factory: :dmca)
     name 'principal'
   end
 

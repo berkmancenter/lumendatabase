@@ -2,10 +2,17 @@ class NoticesController < ApplicationController
   layout :resolve_layout
 
   def new
-    @notice = Notice.new
+    if params[:type].blank?
+      render :select_type and return
+    end
+
+    model_class = get_notice_type(params)
+
+    @notice = model_class.new
     @notice.file_uploads.build
-    @notice.entity_notice_roles.build(name: 'recipient').build_entity
-    @notice.entity_notice_roles.build(name: 'sender').build_entity
+    model_class::DEFAULT_ENTITY_NOTICE_ROLES.each do |role|
+      @notice.entity_notice_roles.build(name: role).build_entity
+    end
     @notice.works.build do |notice|
       notice.copyrighted_urls.build
       notice.infringing_urls.build
@@ -13,7 +20,9 @@ class NoticesController < ApplicationController
   end
 
   def create
-    @notice = Notice.new(notice_params)
+    model_class = get_notice_type(params[:notice])
+
+    @notice = model_class.new(notice_params)
     @notice.auto_redact
 
     respond_to do |format|
@@ -42,11 +51,18 @@ class NoticesController < ApplicationController
         end
       end
 
-      format.json { render json: @notice }
+      format.json do
+        render json: @notice, serializer: NoticeSerializerProxy,
+          root: json_root_for(@notice.class)
+      end
     end
   end
 
   private
+
+  def json_root_for(klass)
+    klass.to_s.tableize.singularize
+  end
 
   def notice_params
     params.require(:notice).permit(
@@ -59,6 +75,7 @@ class NoticesController < ApplicationController
       :source,
       :tag_list,
       :jurisdiction_list,
+      :regulation_list,
       :language,
       :action_taken,
       category_ids: [],
@@ -91,6 +108,21 @@ class NoticesController < ApplicationController
     else
       "application"
     end
+  end
+
+  def get_notice_type(params)
+    notice_type = params.fetch(:type, 'dmca').classify.constantize
+
+    if notice_type < Notice
+      notice_type
+    else
+      Dmca
+    end
+
+  rescue NameError
+    Dmca
+  ensure
+    params.delete(:type)
   end
 
 end
