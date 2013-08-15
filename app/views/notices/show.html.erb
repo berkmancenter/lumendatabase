@@ -1,8 +1,7 @@
 <article class="notice-show">
-  <h1><%= @notice.type.titleize %> - <%= @notice.title %></h1>
-
   <section class="body">
     <header id="entities">
+      <h1><%= @notice.type.titleize %> - <%= @notice.title %></h1>
       <% if @notice.sender %>
         <%= render @notice.sender, notice: @notice, role: :sender %>
       <% end %>
@@ -31,6 +30,20 @@
     </div>
   </section>
 
+  <aside class="notice">
+    <section id="relevant-questions">
+      <h4 class="title"><span>Related FAQs</span></h3>
+      <div class="wrapper">
+        <%= render @notice.all_relevant_questions %>
+      </div>
+    </section>
+
+    <section id="related-blog-entries">
+      <h4 class="title"><span>Related Blog Entries</span></h3>
+      <%= render partial: 'blog_entry', collection: @notice.limited_related_blog_entries %>
+    </section>
+  </aside>
+
   <footer>
     <section id="tags">
       <h6>Tags</h6>
@@ -42,17 +55,4 @@
       <%= render 'shared/category_list', categories: @notice.categories %>
     </section>
   </footer>
-
-  <aside class="notice">
-    <section id="relevant-questions">
-      <h4 class="title"><span>Related FAQs</span></h3>
-      <%= render @notice.all_relevant_questions %>
-    </section>
-
-    <section id="related-blog-entries">
-      <h4 class="title"><span>Related Blog Entries</span></h3>
-      <%= render partial: 'blog_entry', collection: @notice.limited_related_blog_entries %>
-    </section>
-  </aside>
-
 </article>

@@ -1,4 +1,4 @@
-<%= content_tag_for(:article, blog_entry) do %>
+<%= content_tag_for(:li, blog_entry) do %>
   <%= link_to(blog_entry.title, blog_entry_path(blog_entry)) %>
   <span class="metadata"><%= blog_entry.author %> on <%= published_at(blog_entry) %></span>
 <% end %>

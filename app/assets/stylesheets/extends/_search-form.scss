@@ -10,13 +10,39 @@
   }
 
   div.input {
+    @include icon(icon-search);
+    position: relative;
+
+    &:before {
+      color: $search-input-color;
+      font-size: 22px;
+      font-weight: 600;
+      height: 20px;
+      left: 15px;
+      line-height: 1em;
+      position: absolute;
+      top: 15px;
+      width: 20px;
+      z-index: 1;
+    }
+
     input {
+      border: 0;
+      border-radius: 2px 5px 5px 2px;
+      font-weight: 600;
       height: $home-search-input-h;
+      margin: 0;
+      padding-left: 50px;
       padding-right: $home-search-button-w + 15px;
       width: $home-search-input-w;
 
       &:not(:focus) {
         border-color: #A4B6C5;
+      }
+
+      @include placeholder {
+        font-weight: 500;
+        color: $search-input-color;
       }
     }
   }
@@ -30,9 +56,9 @@
 
     button {
       border-radius: 0;
+      font-size: $base-font-size-2 - 1;
+      font-weight: 600;
       height: $home-search-input-h;
-      font-size: 22px;
-      @include icon(icon-search);
       line-height: 1em;
       padding: 0;
       width: $home-search-button-w;

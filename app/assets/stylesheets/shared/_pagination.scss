@@ -2,17 +2,15 @@
 // Pagination
 //************************************************************************//
 .pagination {
-  background: #fff;
-  border: 1px solid $base-border-color;
-  border-radius: 2px;
+  background: $header-background-2;
+  border-radius: 0 0 4px 4px;
   @include clearfix;
   overflow: hidden;
   position: relative;
-  background: #fcfcfc;
 
   span, em, a {
-    background: #fff;
-    border-right: 1px solid $base-border-color;
+    color: #fff;
+    border-right: 1px solid hsla(0, 0%, 0%, 0.1);
     font-size: $base-font-size - 1;
     float: left;
     padding: 0.6em 1em
@@ -20,11 +18,22 @@
 
   a {
     text-decoration: none;
+
+    &:hover {
+      background: $header-background-3;
+      box-shadow: -1px 0 0 hsla(0, 0%, 0%, 0.1);
+      color: #fff;
+      position: relative;
+    }
   }
 
   em {
     font-style: normal;
     font-weight: 700;
+
+    &.current {
+      color: hsla(0, 0%, 100%, 0.4);
+    }
   }
 
   span.disabled.previous_page,
@@ -39,15 +48,19 @@
   .previous_page,
   .next_page {
     font-weight: 600;
-    @extend %pagination-gradient;
+    background: $header-background-2;
   }
 
   .next_page {
-    border-left: 1px solid $base-border-color;
+    border-left: 1px solid hsla(0, 0%, 0%, 0.1);
     border-right: 0;
     float: right;
     position: absolute;
     right: 0;
     top: 0;
+
+    &:hover {
+      box-shadow: none;
+    }
   }
 }

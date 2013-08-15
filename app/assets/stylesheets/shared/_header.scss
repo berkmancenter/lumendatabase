@@ -3,39 +3,16 @@
 //************************************************************************//
 header.app {
   $padding: 20px;
-
-  &.search-header {
-    .container {
-      padding: $padding;
-    }
-  }
-
-  .container {
-    @extend %search-form;
-    border-bottom: 1px solid $base-border-color;
-    @include clearfix;
-    padding: $padding $padding ($padding - 6px) ($left-margin + 15px);
-
-    @include media($small-screen) {
-      padding-left: 30px;
-    }
-
-    &.search {
-      @include linear-gradient(hsl(43, 41%, 98%), hsl(43, 7%, 92%));
-    }
-  }
-
-  .width-wrapper {
-    @include container;
-  }
+  background: $base-background-color-alt;
 
   h1 {
-    margin: 0 30px 0 0;
+    display: block;
+    margin: 0 30px 30px 10px;
     float: left;
 
     img {
-      margin-top: 5px;
-      height: 30px;
+      margin-top: 10px;
+      display: block;
     }
 
     @include media($mobile) {
@@ -45,89 +22,94 @@ header.app {
       margin: 0;
 
       img {
-        margin: 0 auto 15px;
+        margin: 10px auto 15px;
         display: block;
+        width: 80%;
+        height: 80%;
       }
     }
   }
 
+  h2 {
+    color: white;
+    font-size: em(22, 15);
+    font-weight: 800;
+    margin: 0 0 0 (35px - 12px);
+
+    @include media($mobile) {
+      margin-left: 20px - 12px;
+    }
+  }
+
+  .container {
+    @extend %search-form;
+    background: $header-background-1;
+    clear: both;
+    @include clearfix;
+    padding: $form-bg-padding;
+
+    &.header-bar {
+      border-radius: 4px 4px 0 0;
+    }
+  }
+
+  // Main Search input and buttons
+  //************************************************************************//
   $input-height: 42px;
   .container .search-wrapper {
     position: relative;
     float: left;
     margin: 0;
-    width: 530px;
+    width: 100%;
 
-    @include media($tablet) {
-      padding-left: 210px;
-      position: absolute;
-      right: 10px;
-      width: 100%;
+    div.input {
+      &:before {
+        top: 11px;
+      }
+
+      input {
+        font-size: $base-font-size + 1;
+        height: $home-search-input-h;
+        padding-right:($search-button-width + $search-button-width-adv + 20px);
+        width: 100%;
+      }
     }
 
-    @include media($mobile) {
-      padding: 0;
-      position: relative;
-      right: 0;
-    }
+    div.submit {
+      width: $search-button-width + $search-button-width-adv;
 
-    div.input input {
-      height: $home-search-input-h;
-      padding-top: 6px;
-      padding-bottom: 6px;
-      margin-bottom: 0;
-      width: 100%;
-    }
+      .search-dropdown {
+        background: darken($search-button-bg, 5%);
+        @include border-right-radius(2px);
+        box-shadow: -1px 0 0 darken($search-button-bg, 8%);
+        float: left;
+        height: $input-height;
+        width: $search-button-width-adv;
 
-    div.submit .search-dropdown {
-      border: 1px solid darken($button-border, 3%);
-      @include border-right-radius(2px);
-      border-left: 0;
-      float: left;
-      @include linear-gradient(#2868D1, #295EB8);
-      box-shadow: -1px 0 0 darken($button-border, 6%);
-      width: 24px;
-      height: $input-height;
+        a.dropdown-toggle {
+          display: block;
+          height: 100%;
+          @include hide-text;
+          position: relative;
 
-      a.dropdown-toggle {
-        display: block;
-        height: 100%;
-        @include hide-text;
-        position: relative;
-
-        &:after {
-          position: absolute;
-          content: "";
-          left: 7px;
-          top: 50%;
-          margin-top: -2px;
-          @include triangle(8px, #fff, down);
+          &:after {
+            content: "";
+            left: 7px;
+            margin-top: -2px;
+            position: absolute;
+            top: 50%;
+            @include triangle(8px, #fff, down);
+          }
         }
       }
 
-      ol {
-        @extend %dropdown-menu;
-        display: none;
-        font-size: $base-font-size-small-1 - 1;
-        left: auto;
-        list-style: none;
-        margin-top: 2px;
-        padding: 0;
-        position: absolute;
-        right: 0;
-        text-align: left;
-        width: 200px;
+      button {
+        border: 0;
+        float: left;
+        font-size: 16px;
+        height: $input-height;
+        width: $search-button-width;
       }
-
-      &.open ol {
-        display: block;
-      }
-    }
-
-    div.submit button {
-      float: left;
-      height: $input-height;
-      font-size: 22px;
     }
   }
 }
@@ -135,26 +117,28 @@ header.app {
 //************************************************************************//
 // Advanced Search
 //************************************************************************//
-.container.advanced-search {
-  background: #fff;
-  font-size: $base-font-size-small-1;
-  text-align: left;
+header.app .container.advanced-search {
+  border-radius: 0;
+  color: #fff;
   display: none;
+  font-size: $base-font-size-small-1;
+  margin: 0;
+  text-align: left;
+  padding: 12px $base-padding 24px $base-padding;
 
-  .width-wrapper {
-    padding-left: $left-margin - 11px;
-
-    @include media($tablet) {
-      padding-left: 30px;
-    }
-    @include media($mobile) {
-      padding-left: 0;
-    }
+  @include media($mobile) {
+    padding-left: 12px;
+    padding-right: 12px;
   }
 
   h5 {
     font-size: $base-font-size-small-1;
     margin-bottom: 10px;
+    font-weight: 700;
+
+    span {
+      font-weight: 500;
+    }
 
     @include media($mobile) {
       font-size: $base-font-size-small-2;
@@ -187,7 +171,7 @@ header.app {
 
     &:hover {
       left: -25px;
-      color: #F6343B;
+      color: #FFD656;
       @include transform(rotate(360deg) scale(1.1));
     }
 
@@ -227,13 +211,12 @@ header.app {
     }
 
     select {
-      @extend %gray-gradient;
       @include appearance(none);
       @include linear-gradient(#FAFAFA, #E9E9E9);
       font-weight: 600;
-      border: 1px solid $base-border-color-2;
+      border: 0;
+      border-right: 1px solid hsla(0, 0%, 0%, 0.2);
       border-radius: 2px 0 0 2px;
-      border-right: 0;
       font-size: $base-font-size-small-1 - 1;
       height: $input-height;
       margin-bottom: 0;
@@ -248,11 +231,12 @@ header.app {
   }
 
   input {
-    font-size: $base-font-size-small-1;
-    padding: 5px 10px;
-    height: $input-height;
+    border: 0;
     @include border-left-radius(0);
+    font-size: $base-font-size-small-1;
+    height: $input-height;
     margin: 0;
+    padding: 5px 10px;
     width: $input-width;
 
     @include media($mobile) {
@@ -261,11 +245,12 @@ header.app {
   }
 
   a.add-group {
-    font-weight: 600;
+    color: #fff;
     display: inline-block;
-    margin-top: 5px;
     float: left;
+    font-weight: 600;
     margin-left: 15px;
+    margin-top: 5px;
 
     @include media($mobile) {
       clear: left;

@@ -7,7 +7,7 @@ feature "notice submission" do
     expect(page).to have_css('#flash_notice')
 
     within("#recent-notices") do
-      expect(page).to have_css(%{article:contains("A title")})
+      expect(page).to have_css(%{li:contains("A title")})
     end
   end
 

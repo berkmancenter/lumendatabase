@@ -1,19 +1,14 @@
 footer.main {
-  background: #fff;
-  border-top: 1px solid #F0F0F0;
+  background: $base-background-color-alt;
   color: $base-font-color-3;
   font-size: $base-font-size-small-1;
-  font-weight: 600;
+  font-weight: 500;
 
   div.inner-wrapper {
     @include clearfix;
     @include container;
-    margin: 0;
-    padding: 0 0 0 $left-margin;
-
-    @include media($small-screen) {
-      padding-left: $gutter;
-    }
+    margin: 0 auto;
+    padding: 0;
   }
 
   span, nav {

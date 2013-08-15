@@ -1,7 +1,5 @@
 section.search-results {
-  background: #fff;
   border-radius: 3px;
-  box-shadow: 0 -4px 0 $shadow-1, $base-shadow;
   @include clearfix;
 
   div.result-stats {
@@ -15,7 +13,6 @@ section.search-results {
     border-left: 0;
     border-right: 0;
     box-shadow: 0 1px 1px hsla(0, 0%, 0%, 0.1);
-    border-radius: 0 0 2px 2px;
     margin: 0;
   }
 }
@@ -35,6 +32,7 @@ ol.results-list {
 
   h3 {
     font-size: $base-font-size + 1;
+    font-weight: 600;
     line-height: 1.2em;
     margin: 0;
 
@@ -46,7 +44,7 @@ ol.results-list {
       }
 
       &:visited {
-        color: #609;
+        color: #A42DDF;
       }
     }
   }
@@ -86,11 +84,11 @@ ol.results-list {
         white-space: nowrap;
 
         &.sender {
-          color: #915959;
+          color: #D46969;
         }
 
         &.receiver {
-          color: #65A16A;
+          color: #69AC6F;
         }
       }
     }

@@ -41,7 +41,7 @@ describe 'categories/show.html.erb' do
       render
 
       within('.category-notices') do
-        expect(page).to have_css('article.notice', count: 2)
+        expect(page).to have_css('li.notice', count: 2)
       end
     end
 

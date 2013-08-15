@@ -4,7 +4,8 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 $base-padding: 35px;
-$left-margin: 200px;
+$base-padding-mobile: 20px;
+$form-bg-padding: 12px;
 
 
 // New-Submission Form
@@ -19,21 +20,30 @@ $button-gradient-2: #2C68CD;
 $button-border: #2D61BA;
 
 $home-width: 750px;
-$home-search-input-w: 500px;
+$home-search-input-w: 600px - $form-bg-padding*2;
 $home-search-input-h: 42px;
 $home-search-button-w: 70px;
 
-$header-background: #E9E9E9;
+$search-input-color: #4C6FBE;
+$search-button-bg: #72C97D;
+$search-button-width: 70px;
+$search-button-width-adv: 24px;
+
+$header-background-1: #5E8FD5;
+$header-background-2: #4F6D9B;
+$header-background-3: #425E8A;
 
 $blue: #477DCA;
-$dark-gray: #333;
+$dark-gray: #444;
 $medium-gray: #808080;
 $light-gray: #DDD;
 $light-red: #FBE3E4;
 $light-yellow: #FFF6BF;
 $light-green: #E6EFC2;
 
-$base-background-color: #FAFAFA;
+$home-background-color: #FAFAFA;
+$base-background-color: #DAE2EF; // blue
+$base-background-color-alt: #F7F9FB; //whiteish
 
 //  Font Colors
 $base-font-color: $dark-gray;
@@ -55,7 +65,7 @@ $hover-link-color: darken($blue, 15%);
 $base-link-color-1: #1C7ED6;
 $hover-link-color-1: darken($base-link-color-1, 15%);
 
-$nav-link-color: #656C7E;
+$nav-link-color: darken(#4C6FBE, 5%);
 $nav-hover-link-color: darken($nav-link-color, 20%);
 
 // Border color
@@ -66,16 +76,15 @@ $base-border-color-2: #D1D3D8;
 $base-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.22);
 
 // Navigation
-$nav-hover: #1C7ED6;
+$nav-hover: #A379CE;
 $nav-hover-border: darken($nav-hover, 20%);
-$nav-bg: #3B4758;
+$nav-bg: $header-background-3;
 $nav-color: hsla(0, 0%, 100%, 0.75);
 
 // Box-shadow borders
 $shadow-1: #8793B1; // blueish gray
 $shadow-2: #1dbea2; // Blue - Blog
 $shadow-3: #80C761; // Green - Recent
-$shadow-4: #FF8158; // Orange
 
 // Flash Colors
 $error-color: $light-red;

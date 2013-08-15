@@ -1,5 +1,5 @@
-<h1><%= @category.name %></h1>
 <section class="category-description">
+  <h1><%= @category.name %></h1>
   <article>
     <p><%=raw @category.description_html %></p>
   </article>
@@ -8,7 +8,9 @@
 <% if @notices.any? %>
   <section class="category-notices">
     <h4>Recent Notices</h4>
-    <%= render @notices %>
+    <ol>
+      <%= render @notices %>
+    </ol>
   </section>
 <% end %>
 

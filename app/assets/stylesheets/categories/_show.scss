@@ -1,12 +1,15 @@
 section.category-description {
-  @include span-columns(8.5);
-  @include pad(0 15px 0 0);
+  @include span-columns(9);
+  @include pad(0 25px 0 0);
+  margin-bottom: 40px;
 
   @include media($mobile) {
     width: 100%;
   }
 
-  article {
+  h1 {
+    font-weight: 800;
+    margin-bottom: 12px;
   }
 
   p {
@@ -17,10 +20,11 @@ section.category-description {
 }
 
 section.category-notices {
-  @include span-columns(3.5);
+  @include span-columns(3);
   @include omega;
   @include pad(0 20px);
-  border-left: 3px solid lighten($base-border-color-1, 5%);
+  margin-top: 21px;
+  margin-bottom: 40px;
 
   @include media($mobile) {
     width: 100%;
@@ -29,16 +33,24 @@ section.category-notices {
     margin: 0;
   }
 
-  article {
-    display: block;
-    margin-bottom: 0.75em;
+  ol {
+    margin: 0;
+    padding: 0;
+
+    li {
+      $pad: 0.75em;
+      border-bottom: 1px solid lighten($base-border-color, 5%);
+      display: block;
+      margin-bottom: $pad;
+      padding-bottom: $pad;
+    }
   }
 
   h4 {
-    font-size: $base-font-size - 1;
+    color: $base-link-color;
+    font-size: $base-font-size-1 + 1;
     font-weight: bold;
-    line-height: 1.7em;
-    text-transform: uppercase;
+    margin-bottom: 23px;
   }
 
   a {
@@ -46,30 +58,28 @@ section.category-notices {
     text-decoration: none;
 
     &:hover {
-      color: $base-font-color;
       text-decoration: underline;
     }
   }
 
-  h4, a {
-    color: $base-font-color-2;
-  }
-
   span {
-    font-size: $base-font-size-small-2;
     display: none;
   }
 }
 
 section.category-faqs {
   @extend %faq-accordion;
-  @extend %faq-wrapper;
   clear: left;
   margin-top: 2em;
   padding-top: 1px;
 
   h3.title {
     @extend %header-title;
+    font-size: $base-font-size-1;
+
+    @include media($mobile) {
+      margin-left: 0;
+    }
   }
 }
 

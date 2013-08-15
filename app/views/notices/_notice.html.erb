@@ -1,4 +1,4 @@
-<%= content_tag_for(:article, notice) do %>
-  <%= link_to(notice.title, notice_path(notice)) %> 
+<%= content_tag_for(:li, notice) do %>
+  <%= link_to(notice.title, notice_path(notice)) %>
   <span class="metadata"><%= date_received(notice) %></span>
 <% end %>

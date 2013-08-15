@@ -98,13 +98,15 @@ input[type="submit"]:not(.reset) {
 
   // Button Overrides
   color: white;
-  border: 1px solid $button-border;
+  // border: 1px solid $button-border;
+  border: 0;
   border-radius: 3px;
-  box-shadow: 0 1px 1px hsla(0, 0%, 0%, 0.06);
   font-size: $form-font-size;
-  @include linear-gradient($button-gradient-1, $button-gradient-2);
+  background: $search-button-bg;
+  // background: darken($search-button-bg, 5%);
+  // @include linear-gradient($button-gradient-1, $button-gradient-2);
   padding: 0.7em 1.9em;
-  text-shadow: 0 -1px 0 hsla(0, 0%, 0%, 0.4);
+  // text-shadow: 0 -1px 0 hsla(0, 0%, 0%, 0.4);
 }
 
 input {
