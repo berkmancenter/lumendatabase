@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'notices/new.html.erb' do
   it "has a form for notices" do
-    assign(:notice, Notice.new)
+    assign(:notice, Dmca.new)
 
     render
 
@@ -14,7 +14,7 @@ describe 'notices/new.html.erb' do
       second_category = create(:category, name: "B Category")
       third_category = create(:category, name: "C Category")
       first_category = create(:category, name: "A Category")
-      assign(:notice, Notice.new)
+      assign(:notice, Dmca.new)
 
       render
 
@@ -35,7 +35,7 @@ describe 'notices/new.html.erb' do
   context "step headings" do
     it "has the correct step headings" do
       ordered_sections = %w( notice-body works sender recipient )
-      assign(:notice, build(:notice, role_names: %w( sender recipient )))
+      assign(:notice, build(:dmca, role_names: %w( sender recipient )))
 
       render
 

@@ -7,7 +7,7 @@ describe 'home/index.html.erb' do
   end
 
   it 'shows metadata and a link to each of its notices' do
-    notices = build_stubbed_list(:notice, 3, date_received: 1.hour.ago)
+    notices = build_stubbed_list(:dmca, 3, date_received: 1.hour.ago)
     assign(:notices, notices)
 
     render

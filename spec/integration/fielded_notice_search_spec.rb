@@ -40,7 +40,7 @@ feature "Fielded searches of Notices", search: true do
 
   context "advanced search" do
     it "copies search parameters to the facet form.", js: true do
-      notice = create(:notice, :with_facet_data, title: "Lion King two")
+      notice = create(:dmca, :with_facet_data, title: "Lion King two")
       sleep 1
 
       search_on_page.visit_search_page

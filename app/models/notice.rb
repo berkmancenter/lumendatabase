@@ -5,6 +5,7 @@ require 'validates_automatically'
 class Notice < ActiveRecord::Base
   include Tire::Model::Search
   include Tire::Model::Callbacks
+  include Searchability
   include ValidatesAutomatically
 
   extend RecentScope
@@ -30,6 +31,8 @@ class Notice < ActiveRecord::Base
 
   UNDER_REVIEW_VALUE = 'Under review'
   RANGE_SEPARATOR = '..'
+
+  DEFAULT_ENTITY_NOTICE_ROLES = %w|recipient sender|
 
   VALID_ACTIONS = %w( Yes No Partial )
 
@@ -63,55 +66,12 @@ class Notice < ActiveRecord::Base
 
   accepts_nested_attributes_for :works
 
-  after_initialize :set_default_action_taken
-
-  after_touch { tire.update_index }
-
   delegate :country_code, to: :recipient, allow_nil: true
   delegate :name, to: :sender, prefix: true, allow_nil: true
   delegate :name, to: :recipient, prefix: true, allow_nil: true
   delegate :name, to: :submitter, prefix: true, allow_nil: true
 
-  mapping do
-    indexes :id, index: 'not_analyzed', include_in_all: false
-    indexes :title
-    indexes :date_received, type: 'date', include_in_all: false
-    indexes :rescinded, type: 'boolean', include_in_all: false
-    indexes :tag_list, as: 'tag_list'
-    indexes :jurisdiction_list, as: 'jurisdiction_list'
-    indexes :sender_name, as: 'sender_name'
-    indexes :sender_name_facet,
-      analyzer: 'keyword', as: 'sender_name',
-      include_in_all: false
-    indexes :tag_list_facet,
-      analyzer: 'keyword', as: 'tag_list',
-      include_in_all: false
-    indexes :jurisdiction_list_facet,
-      analyzer: 'keyword', as: 'jurisdiction_list',
-      include_in_all: false
-    indexes :recipient_name, as: 'recipient_name'
-    indexes :recipient_name_facet,
-      analyzer: 'keyword', as: 'recipient_name', include_in_all: false
-    indexes :country_code_facet,
-      analyzer: 'keyword', as: 'country_code', include_in_all: false
-    indexes :language_facet,
-      analyzer: 'keyword', as: 'language', include_in_all: false
-    indexes :categories, type: 'object', as: 'categories'
-    indexes :category_facet,
-      analyzer: 'keyword', as: ->(notice) { notice.categories.map(&:name) },
-      include_in_all: false
-    indexes :works,
-      type: 'object',
-      as: -> (notice){
-        notice.works.as_json({
-          only: [:description],
-          include: {
-            infringing_urls: { only: [:url] },
-            copyrighted_urls: { only: [:url]}
-          }
-        })
-      }
-  end
+  define_elasticsearch_mapping
 
   def self.available_for_review
     where(review_required: true, reviewer_id: nil)
@@ -199,12 +159,6 @@ class Notice < ActiveRecord::Base
   end
 
   private
-
-  def set_default_action_taken
-    if action_taken.blank?
-      self.action_taken = 'No'
-    end
-  end
 
   def entities_that_have_submitted
     entity_notice_roles.submitters.map(&:entity)

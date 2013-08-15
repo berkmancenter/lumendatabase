@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'notices/show.html.erb' do
   it "displays a metadata from a notice" do
-    notice = build(:notice)
+    notice = build(:dmca)
     assign(:notice, notice)
 
     render
@@ -11,7 +11,7 @@ describe 'notices/show.html.erb' do
   end
 
   it "displays the date sent in the proper format" do
-    notice = build(:notice, date_sent: Time.local(2013, 5, 4))
+    notice = build(:dmca, date_sent: Time.local(2013, 5, 4))
     notice.stub(:sender).and_return(build(:entity))
     assign(:notice, notice)
 
@@ -21,7 +21,7 @@ describe 'notices/show.html.erb' do
   end
 
   it "displays the date received in the proper format" do
-    notice = build(:notice, date_received: Time.local(2013, 6, 5))
+    notice = build(:dmca, date_received: Time.local(2013, 6, 5))
     notice.stub(:recipient).and_return(build(:entity))
     assign(:notice, notice)
 
@@ -31,7 +31,7 @@ describe 'notices/show.html.erb' do
   end
 
   it "displays a notice with tags" do
-    notice = create(:notice, :with_tags)
+    notice = create(:dmca, :with_tags)
     assign(:notice, notice)
 
     render
@@ -43,7 +43,7 @@ describe 'notices/show.html.erb' do
   end
 
   it "displays a notice with entities" do
-    notice = create(:notice, role_names: ['sender', 'recipient'])
+    notice = create(:dmca, role_names: ['sender', 'recipient'])
 
     assign(:notice, notice)
 
@@ -63,7 +63,7 @@ describe 'notices/show.html.erb' do
   end
 
   it "displays sender_names such that they are clickable" do
-    notice = create(:notice, role_names: ['sender', 'recipient'])
+    notice = create(:dmca, role_names: ['sender', 'recipient'])
 
     assign(:notice, notice)
 
@@ -78,7 +78,7 @@ describe 'notices/show.html.erb' do
   it "displays a notice with all relevant questions" do
     category_question = create(:relevant_question, question: "Q 1", answer: "A 1")
     notice_question = create(:relevant_question, question: "Q 2", answer: "A 2")
-    assign(:notice, create(:notice,
+    assign(:notice, create(:dmca,
       categories: [create(:category, relevant_questions: [category_question])],
       relevant_questions: [notice_question]
     ))
@@ -94,7 +94,7 @@ describe 'notices/show.html.erb' do
   end
 
   it "displays a notice's works and infringing urls" do
-    notice = create(:notice, :with_infringing_urls, :with_copyrighted_urls)
+    notice = create(:dmca, :with_infringing_urls, :with_copyrighted_urls)
     assign(:notice, notice)
 
     render
@@ -120,7 +120,7 @@ describe 'notices/show.html.erb' do
   end
 
   it "displays the notice source" do
-    assign(:notice, build(:notice, source: "Arbitrary source"))
+    assign(:notice, build(:dmca, source: "Arbitrary source"))
 
     render
 
@@ -129,7 +129,7 @@ describe 'notices/show.html.erb' do
 
 
   it "displays correctly for a notice of unknown source" do
-    assign(:notice, build(:notice, source: nil))
+    assign(:notice, build(:dmca, source: nil))
 
     render
 
@@ -137,7 +137,7 @@ describe 'notices/show.html.erb' do
   end
 
   it "displays the notice's subject" do
-    assign(:notice, build(:notice, subject: "Some subject"))
+    assign(:notice, build(:dmca, subject: "Some subject"))
 
     render
 
@@ -146,7 +146,7 @@ describe 'notices/show.html.erb' do
 
   it "displays limited related blog entries" do
     blog_entries = build_stubbed_list(:blog_entry, 3)
-    notice = build(:notice)
+    notice = build(:dmca)
     notice.stub(:limited_related_blog_entries).and_return(blog_entries)
     assign(:notice, notice)
 

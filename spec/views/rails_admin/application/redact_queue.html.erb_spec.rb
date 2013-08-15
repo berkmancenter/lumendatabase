@@ -13,7 +13,7 @@ describe 'rails_admin/application/redact_queue.html.erb' do
 
   it "Includes the ID, Title, Body, Entities, and Date received" do
     notice = build_stubbed(
-      :notice,
+      :dmca,
       :with_body,
       role_names: %w( sender, recipient, submitter ),
       date_received: Time.now

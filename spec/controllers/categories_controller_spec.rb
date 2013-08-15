@@ -53,13 +53,13 @@ describe CategoriesController do
       get :index, format: :json
 
       json = JSON.parse(response.body)["categories"]
-      expect(json.first).to have_key(:id).with_value(parent_category.id)
-      expect(json.first).to have_key(:name).with_value(parent_category.name)
-      expect(json.first).to have_key(:parent_id).with_value(nil)
+      expect(json.first).to have_key('id').with_value(parent_category.id)
+      expect(json.first).to have_key('name').with_value(parent_category.name)
+      expect(json.first).to have_key('parent_id').with_value(nil)
 
-      expect(json.last).to have_key(:id).with_value(child_category.id)
-      expect(json.last).to have_key(:name).with_value(child_category.name)
-      expect(json.last).to have_key(:parent_id).with_value(child_category.parent_id)
+      expect(json.last).to have_key('id').with_value(child_category.id)
+      expect(json.last).to have_key('name').with_value(child_category.name)
+      expect(json.last).to have_key('parent_id').with_value(child_category.parent_id)
     end
 
   end

@@ -5,7 +5,7 @@ feature "Faceted search of Notices", search: true do
 
   context 'facets' do
     it 'on sender names', search: true do
-      notice = create(:notice, :with_facet_data)
+      notice = create(:dmca, :with_facet_data)
       with_a_faceted_search(
         :sender_name, :sender_name_facet) do |results|
         expect(results).to have_facets('sender_name').
@@ -14,7 +14,7 @@ feature "Faceted search of Notices", search: true do
     end
 
     it 'on tags', search: true do
-      notice = create(:notice, :with_facet_data)
+      notice = create(:dmca, :with_facet_data)
       with_a_faceted_search(
         :tags, :tag_list_facet) do |results|
         expect(results).to have_facets('tags').
@@ -23,7 +23,7 @@ feature "Faceted search of Notices", search: true do
     end
 
     it 'on jurisdictions', search: true do
-      notice = create(:notice, :with_facet_data)
+      notice = create(:dmca, :with_facet_data)
       with_a_faceted_search(
         :jurisdiction, :jurisdiction_list_facet) do |results|
         expect(results).to have_facets('jurisdiction').
@@ -32,7 +32,7 @@ feature "Faceted search of Notices", search: true do
     end
 
     it 'on country', search: true do
-      notice = create(:notice, :with_facet_data)
+      notice = create(:dmca, :with_facet_data)
       with_a_faceted_search(
         :country_code, :country_code_facet) do |results|
         expect(results).to have_facets('country_code').
@@ -41,7 +41,7 @@ feature "Faceted search of Notices", search: true do
     end
 
     it 'on recipient names', search: true do
-      notice = create(:notice, :with_facet_data)
+      notice = create(:dmca, :with_facet_data)
       with_a_faceted_search(
         :recipient_name, :recipient_name_facet) do |results|
         expect(results).to have_facets('recipient_name').
@@ -50,7 +50,7 @@ feature "Faceted search of Notices", search: true do
     end
 
     it 'on categories', search: true do
-      notice = create(:notice, :with_facet_data)
+      notice = create(:dmca, :with_facet_data)
       with_a_faceted_search(
         :categories, :category_facet) do |results|
         expect(results).to have_facets('categories').
@@ -59,7 +59,7 @@ feature "Faceted search of Notices", search: true do
     end
 
     it 'on date_received', search: true do
-      notice = create(:notice, :with_facet_data)
+      notice = create(:dmca, :with_facet_data)
       sleep 1
 
       results = Notice.search do
@@ -82,8 +82,8 @@ feature "Faceted search of Notices", search: true do
         :category_facet, :sender_name_facet, :recipient_name_facet, :tag_list_facet, :country_code_facet
       ].each do |facet_type|
         it "on #{facet_type}", js: true, search: true do
-          outside_facet = create(:notice, title: "King of New York")
-          inside_facet = create(:notice, :with_facet_data, title: "Lion King two")
+          outside_facet = create(:dmca, title: "King of New York")
+          inside_facet = create(:dmca, :with_facet_data, title: "Lion King two")
 
           within_search_results_for('king') do
             expect(page).to have_n_results 2
@@ -111,10 +111,10 @@ feature "Faceted search of Notices", search: true do
 
       it "on date ranges", js: true, search: true do
         outside_facet = create(
-          :notice, title: 'A title', date_received: Time.now - 10.months
+          :dmca, title: 'A title', date_received: Time.now - 10.months
         )
         inside_facet = create(
-          :notice, title: 'A title', date_received: Time.now - 1.day
+          :dmca, title: 'A title', date_received: Time.now - 1.day
         )
         within_search_results_for('title') do
           expect(page).to have_n_results 2
