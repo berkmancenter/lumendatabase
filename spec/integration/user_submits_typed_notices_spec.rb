@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 feature "typed notice submissions" do
-  scenario "User submits and views a Trademark type notice" do
+  scenario "User submits and views a Trademark notice" do
     submission = NoticeSubmissionOnPage.new(Trademark)
     submission.open_submission_form
 
@@ -36,7 +36,7 @@ feature "typed notice submissions" do
     end
   end
 
-  scenario "User submits and views a Defamation type notice" do
+  scenario "User submits and views a Defamation notice" do
     submission = NoticeSubmissionOnPage.new(Defamation)
     submission.open_submission_form
 
@@ -70,7 +70,7 @@ feature "typed notice submissions" do
     end
   end
 
-  scenario "User submits and views an International type notice" do
+  scenario "User submits and views an International notice" do
     submission = NoticeSubmissionOnPage.new(International)
     submission.open_submission_form
 
@@ -115,7 +115,7 @@ feature "typed notice submissions" do
     end
   end
 
-  scenario "User submits and views a CourtOrder type notice" do
+  scenario "User submits and views a CourtOrder notice" do
     submission = NoticeSubmissionOnPage.new(CourtOrder)
     submission.open_submission_form
 
@@ -153,7 +153,7 @@ feature "typed notice submissions" do
     end
   end
 
-  scenario "User submits and views a Law Enforcement Request type notice" do
+  scenario "User submits and views a Law Enforcement Request notice" do
     submission = NoticeSubmissionOnPage.new(LawEnforcementRequest)
     submission.open_submission_form
 
@@ -189,6 +189,7 @@ feature "typed notice submissions" do
       expect(page).to have_content('http://example.com/offending_url1')
       expect(page).to have_content('URLs of original work')
       expect(page).to have_content('http://example.com/original_object1')
+      expect(page).to have_content("My Tiny Tim fansite")
     end
 
     within('.notice-body') do
@@ -198,4 +199,44 @@ feature "typed notice submissions" do
     end
   end
 
+  scenario "User submits and views a PrivateInformation notice" do
+    submission = NoticeSubmissionOnPage.new(PrivateInformation)
+    submission.open_submission_form
+
+    submission.fill_in_form_with({
+      "Title" => "A title",
+
+      "Complaint" => "These URLs disclose my existence", # works.description
+      "Original Work URL" => "http://example.com/original_object1", # copyrighted_urls
+      "URL with private information" => "http://example.com/offending_url1", # infringing_urls
+
+      "Explanation of Complaint" => "I am in witness protection", #notice.body
+    })
+
+    submission.fill_in_entity_form_with(:recipient, {
+      'Name' => 'Recipient',
+    })
+    submission.fill_in_entity_form_with(:sender, {
+      'Name' => 'Sender',
+    })
+
+    submission.submit
+
+    open_recent_notice
+
+    expect(page).to have_content("Private Information - A title")
+
+    within("#works") do
+      expect(page).to have_content('URLs with private information')
+      expect(page).to have_content('http://example.com/offending_url1')
+      expect(page).to have_content('URLs of original work')
+      expect(page).to have_content('http://example.com/original_object1')
+      expect(page).to have_content('These URLs disclose my existence')
+    end
+
+    within('.notice-body') do
+      expect(page).to have_content('Explanation of complaint')
+      expect(page).to have_content('I am in witness protection')
+    end
+  end
 end
