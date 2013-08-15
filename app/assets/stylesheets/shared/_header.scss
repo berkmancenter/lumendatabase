@@ -1,10 +1,4 @@
 //************************************************************************//
-// Header
-//************************************************************************//
-header.app {
-}
-
-//************************************************************************//
 // Form
 //************************************************************************//
 header.app {
@@ -12,7 +6,7 @@ header.app {
 
   &.search-header {
     .container {
-      padding-left: $padding;
+      padding: $padding;
     }
   }
 
@@ -20,8 +14,11 @@ header.app {
     @extend %search-form;
     border-bottom: 1px solid $base-border-color;
     @include clearfix;
-    padding: $padding;
-    padding-left: $left-margin + 15px;
+    padding: $padding $padding ($padding - 6px) ($left-margin + 15px);
+
+    @include media($small-screen) {
+      padding-left: 30px;
+    }
 
     &.search {
       @include linear-gradient(hsl(43, 41%, 98%), hsl(43, 7%, 92%));

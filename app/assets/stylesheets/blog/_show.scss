@@ -1,22 +1,27 @@
 article.post {
-  @include span-columns(10);
   background: #fff;
   border-radius: 3px;
   box-shadow: 0 -0px 0 $shadow-2, inset 0 1px 0 #eaeaea, $base-shadow;
   margin-bottom: 30px;
-  @include pad(40px);
-
-  @include media($mobile) {
-    @include pad(20px);
-  }
+  overflow: hidden;
+  @include span-columns(10);
 
   @include media($small-screen) {
     @include span-columns(10);
   }
 
+  .content {
+    padding: 40px;
+
+    @include media($mobile) {
+      padding: 20px;
+    }
+  }
+
   h3.title {
-    font-weight: 800;
     font-size: em(32, 15);
+    font-weight: 800;
+    line-height: 1.3em;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -47,5 +52,27 @@ article.post {
     font-style: italic;
     margin-left: -$margin-left;
     padding-left: $margin-left - $border-size;
+  }
+}
+
+article.post {
+  .imagery {
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 200px;
+    position: relative;
+
+    &:after {
+      box-shadow: inset 0 0 0 1px hsla(0, 0%, 0%, 0.3);
+      content: "";
+      height: 100%;
+      position: absolute;
+      width: 100%;
+    }
+
+    &.lightning {
+      background-image: image_url('blog/lightning.jpg');
+      background-position: 50% 80%;
+    }
   }
 }

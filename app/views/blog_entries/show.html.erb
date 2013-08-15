@@ -1,5 +1,8 @@
 <article class="post">
-  <h3 class="title"><%= @blog_entry.title %></h1>
-  <%= render 'metadata', blog_entry: @blog_entry %>
-  <%= raw @blog_entry.content_html %>
+  <div class="imagery lightning"></div>
+  <div class="content">
+    <h3 class="title"><%= @blog_entry.title %></h1>
+    <%= render 'metadata', blog_entry: @blog_entry %>
+    <%= raw @blog_entry.content_html %>
+  </div>
 </article>
