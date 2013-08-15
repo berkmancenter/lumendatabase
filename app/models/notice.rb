@@ -158,6 +158,10 @@ class Notice < ActiveRecord::Base
     super(tag_list_value)
   end
 
+  def supporting_documents
+    file_uploads.where(kind: 'supporting')
+  end
+
   private
 
   def entities_that_have_submitted

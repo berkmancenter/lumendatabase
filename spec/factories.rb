@@ -74,6 +74,34 @@ FactoryGirl.define do
       review_required true
     end
 
+    trait :with_original do
+      before(:create) do |notice|
+        notice.file_uploads << build(:file_upload, kind: 'original')
+      end
+    end
+
+    trait :with_document do
+      before(:create) do |notice|
+        notice.file_uploads << build(:file_upload, kind: 'supporting')
+      end
+    end
+
+    trait :with_pdf do
+      before(:create) do |notice|
+        notice.file_uploads << build(
+          :file_upload, kind: 'supporting', file_content_type: 'application/pdf'
+        )
+      end
+    end
+
+    trait :with_image do
+      before(:create) do |notice|
+        notice.file_uploads << build(
+          :file_upload, kind: 'supporting', file_content_type: 'image/jpeg'
+        )
+      end
+    end
+
     factory :trademark, class: 'Trademark'
     factory :defamation, class: 'Defamation'
     factory :international, class: 'International'

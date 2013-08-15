@@ -161,6 +161,33 @@ describe 'notices/show.html.erb' do
     end
   end
 
+  it "does not link to the notices original" do
+    notice = create(:dmca, :with_original)
+    original = notice.file_uploads.first
+    assign(:notice, notice)
+
+    render
+
+    within('ol.attachments') do
+      expect(page).not_to contain_link(original.url)
+    end
+  end
+
+  it "shows links to supporting documents" do
+    notice = create(:dmca, :with_pdf, :with_image, :with_document)
+    assign(:notice, notice)
+
+    render
+
+    notice.file_uploads.each do |file_upload|
+      within("ol.attachments .#{file_upload.file_type.downcase}") do
+        expect(page).to contain_link(file_upload.url)
+      end
+    end
+  end
+
+  private
+
   def have_facet_link(facet, value)
     have_css(
       "a[href='#{faceted_search_path(facet => value)}']",
