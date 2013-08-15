@@ -239,4 +239,45 @@ feature "typed notice submissions" do
       expect(page).to have_content('I am in witness protection')
     end
   end
+
+  scenario "User submits and views an Other notice" do
+    submission = NoticeSubmissionOnPage.new(Other)
+    submission.open_submission_form
+
+    submission.fill_in_form_with({
+      "Title" => "A title",
+
+      "Complaint" => "These URLs are a serious problem", # works.description
+      "Original Work URL" => "http://example.com/original_object1", # copyrighted_urls
+      "Problematic URL" => "http://example.com/offending_url1", # infringing_urls
+
+      "Explanation of Complaint" => "I am complaining", #notice.body
+    })
+
+    submission.fill_in_entity_form_with(:recipient, {
+      'Name' => 'Recipient',
+    })
+    submission.fill_in_entity_form_with(:sender, {
+      'Name' => 'Sender',
+    })
+
+    submission.submit
+
+    open_recent_notice
+
+    expect(page).to have_content("Other - A title")
+
+    within("#works") do
+      expect(page).to have_content('Problematic URLs')
+      expect(page).to have_content('http://example.com/offending_url1')
+      expect(page).to have_content('URLs of original work')
+      expect(page).to have_content('http://example.com/original_object1')
+      expect(page).to have_content('These URLs are a serious problem')
+    end
+
+    within('.notice-body') do
+      expect(page).to have_content('Explanation of complaint')
+      expect(page).to have_content('I am complaining')
+    end
+  end
 end

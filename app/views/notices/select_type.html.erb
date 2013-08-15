@@ -1,8 +1,10 @@
 <ul>
+  <li><%= link_to("DMCA", new_notice_path(type: :dmca)) %></li>
   <li><%= link_to("Trademark", new_notice_path(type: :trademark)) %></li>
   <li><%= link_to("Defamation", new_notice_path(type: :defamation)) %></li>
   <li><%= link_to("International", new_notice_path(type: :international)) %></li>
   <li><%= link_to("Court Order", new_notice_path(type: :court_order)) %></li>
   <li><%= link_to("Law Enforcement Request", new_notice_path(type: :law_enforcement_request)) %></li>
   <li><%= link_to("Private Information", new_notice_path(type: :private_information)) %></li>
+  <li><%= link_to("Other", new_notice_path(type: :other)) %></li>
 </ul>

@@ -80,6 +80,7 @@ FactoryGirl.define do
     factory :court_order, class: 'CourtOrder'
     factory :law_enforcement_request, class: 'LawEnforcementRequest'
     factory :private_information, class: 'PrivateInformation'
+    factory :other, class: 'Other'
   end
 
   factory :file_upload do
