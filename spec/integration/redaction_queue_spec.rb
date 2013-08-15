@@ -35,9 +35,9 @@ feature "Redaction queue" do
 
     user = create(:user, :admin)
     notices = [
-      create(:notice, :redactable),
-      create(:notice, :redactable),
-      notice_three = create(:notice, :redactable)
+      create(:dmca, :redactable),
+      create(:dmca, :redactable),
+      notice_three = create(:dmca, :redactable)
     ]
 
     queue = RedactionQueueOnPage.new

@@ -27,7 +27,7 @@ describe 'rails_admin/application/redact_notice.html.erb' do
 
   it 'displays notice id, and entity names' do
     notice = build_stubbed(
-      :notice, role_names: %w( submitter recipient sender )
+      :dmca, role_names: %w( submitter recipient sender )
     )
     assign(:object, notice)
 
