@@ -305,4 +305,19 @@ describe Dmca do
       expect(notices).to match_array(expected_notices)
     end
   end
+
+  context "#supporting_documents" do
+    it "returns file uploads of kind 'supporting'" do
+      file_uploads = [
+        build(:file_upload, kind: 'original'),
+        build(:file_upload, kind: 'supporting'),
+        build(:file_upload, kind: 'supporting'),
+      ]
+
+      notice = create(:dmca, file_uploads: file_uploads)
+
+      expect(notice).to have(2).supporting_documents
+      expect(notice.supporting_documents).to be_all { |d| d.kind == 'supporting' }
+    end
+  end
 end

@@ -18,29 +18,12 @@
       <section class="attachments">
         <h5 class="title">Supporting Documents</h5>
         <ol class="attachments">
-          <% 3.times do %>
-            <li class="pdf">
-            <a href="#">
-              <span>Supporting PDF</span>
-              <span class="download">Download</span>
-            </a>
-            </li>
-          <% end %>
-
-          <% 3.times do %>
-            <li class="image">
-            <a href="#">
-              <span>Supporting Image</span>
-              <span class="download">Download</span>
-            </a>
-            </li>
-          <% end %>
-          <% 3.times do %>
-            <li class="">
-            <a href="#">
-              <span>Supporting Document</span>
-              <span class="download">Download</span>
-            </a>
+          <% @notice.supporting_documents.each do |document| %>
+            <li class="<%= document.file_type.downcase %>">
+              <%= link_to(document.url) do %>
+                <span>Supporting <%= document.file_type %></span>
+                <span class="download">Download</span>
+              <% end %>
             </li>
           <% end %>
         </ol>
