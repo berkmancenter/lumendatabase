@@ -54,6 +54,18 @@ class FakeNotice
     end.uniq
   end
 
+  def regulations
+    (1..5).to_a.sample.times.map do
+      [
+        '46 C.F.R. § 294',
+        '21 C.F.R. § 24',
+        '1337 C.F.R. § 255',
+        '1 C.F.R. § 3',
+        '5 C.F.R. § 7',
+      ].sample
+    end.uniq
+  end
+
   def jurisdictions
     (1..2).to_a.sample.times.map do
       %w|US CA MX GB FI JP|.sample
@@ -150,6 +162,9 @@ class FakeNotice
 end
 
 unless ENV['SKIP_FAKE_DATA']
+  # Necessary to ensure we can see all the notice subclasses
+  Chill::Application.eager_load!
+
   count = (ENV['NOTICE_COUNT'] || "500").to_i
 
   print "\n--> Generating #{count} Fake Notices"
@@ -157,7 +172,9 @@ unless ENV['SKIP_FAKE_DATA']
   count.times do
     fake = FakeNotice.new
 
-    Notice.create!(
+    random_notice_class = Notice.subclasses.sample
+
+    fake_attributes = {
       title: fake.title,
       subject: fake.subject,
       date_sent: fake.date_sent,
@@ -183,6 +200,14 @@ unless ENV['SKIP_FAKE_DATA']
       }, {
         name: 'submitter', entity_attributes: fake.submitter
       }]
+    }
+
+    if random_notice_class.respond_to?(:regulation_counts)
+      fake_attributes.merge!(regulation_list: fake.regulations)
+    end
+
+    random_notice_class.create!(
+      fake_attributes
     )
 
     print '.'
