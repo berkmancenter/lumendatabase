@@ -4,6 +4,7 @@ describe FileUpload do
   it { should have_attached_file(:file) }
   it { should belong_to :notice }
   it { should have_db_index :notice_id }
+  it { should ensure_inclusion_of(:kind).in_array %w( original supporting ) }
 
   context 'automatic validations' do
     it { should ensure_length_of(:kind).is_at_most(255) }

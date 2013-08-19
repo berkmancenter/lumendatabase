@@ -9,7 +9,7 @@ class NoticesController < ApplicationController
     model_class = get_notice_type(params)
 
     @notice = model_class.new
-    @notice.file_uploads.build
+    @notice.file_uploads.build(kind: 'original')
     model_class::DEFAULT_ENTITY_NOTICE_ROLES.each do |role|
       @notice.entity_notice_roles.build(name: role).build_entity
     end
@@ -79,7 +79,7 @@ class NoticesController < ApplicationController
       :language,
       :action_taken,
       category_ids: [],
-      file_uploads_attributes: [:file],
+      file_uploads_attributes: [:kind, :file],
       entity_notice_roles_attributes: [
         :entity_id,
         :name,

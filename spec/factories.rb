@@ -116,6 +116,8 @@ FactoryGirl.define do
       content "Content"
     end
 
+    kind 'original'
+
     file do
       Tempfile.open('factory_file') do |fh|
         fh.write(content)

@@ -3,6 +3,8 @@ require 'validates_automatically'
 class FileUpload < ActiveRecord::Base
   include ValidatesAutomatically
 
+  validates_inclusion_of :kind, in: %w( original supporting )
+
   belongs_to :notice
 
   has_attached_file :file

@@ -26,12 +26,29 @@ module NoticeActions
     within('#recent-notices') { click_on title }
   end
 
-  def attach_notice_file(content)
-    Tempfile.open('notice_file') do |fh|
-      fh.write content
-      fh.flush
+  def attach_notice(content = "Some content")
+    with_file(content) { |file| attach_file "Attach Notice", file.path }
+  end
 
-      attach_file "Attach Notice", fh.path
+  def add_supporting_document(content = "Some content")
+    @field_index ||= 0
+    @field_index  += 1
+
+    click_on "Attach another"
+
+    field_name = "notice_file_uploads_attributes_#{@field_index}_file"
+
+    with_file(content) do |file|
+      attach_file field_name, file.path
+    end
+  end
+
+  def with_file(content)
+    Tempfile.open('file') do |file|
+      file.write content
+      file.flush
+
+      yield(file)
     end
   end
 end
