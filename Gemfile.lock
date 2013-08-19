@@ -144,6 +144,7 @@ GEM
     kgio (2.8.0)
     launchy (2.3.0)
       addressable (~> 2.3)
+    libv8 (3.11.8.17)
     listen (1.2.2)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
@@ -234,6 +235,7 @@ GEM
     recipient_interceptor (0.1.1)
       mail
     redcarpet (2.3.0)
+    ref (1.0.5)
     remotipart (1.0.5)
     rest-client (1.6.7)
       mime-types (>= 1.16)
@@ -279,6 +281,9 @@ GEM
       actionpack (~> 3.0)
       activemodel (~> 3.0)
       railties (~> 3.0)
+    therubyracer (0.11.4)
+      libv8 (~> 3.11.8.12)
+      ref
     thor (0.18.1)
     tilt (1.4.1)
     timecop (0.6.1)
@@ -356,6 +361,7 @@ DEPENDENCIES
   simple_form
   simplecov
   strong_parameters
+  therubyracer
   timecop
   tire (~> 0.6.0)
   uglifier
