@@ -4,17 +4,17 @@ describe TermSearch do
 
   before do
     @term_search = described_class.new(:term, :_all)
-    @searcher = double("SearchesModels Instance")
+    @query = double("SearchesModels query object")
   end
 
   it "queries the searcher given a param it handles" do
-    @searcher.should_receive(:query)
-    @term_search.apply_to_search(@searcher, :term, 'foo')
+    @query.should_receive(:boolean)
+    @term_search.apply_to_query(@query, :term, 'foo')
   end
 
   it "does not query with a parameter it is not bound to" do
-    @searcher.should_not_receive(:query)
-    @term_search.apply_to_search(@searcher, :unknown_term, 'foo')
+    @query.should_not_receive(:boolean)
+    @term_search.apply_to_query(@query, :unknown_term, 'foo')
   end
 
 end

@@ -19,16 +19,17 @@ class TermSearch
     end
   end
 
-  def apply_to_search(searcher, param, value)
+  def apply_to_search(*)
+  end
+
+  def apply_to_query(query, param, value)
     if handles?(param)
-      searcher.query do |q|
-        term_query = query_for(value)
-        q.boolean &term_query
-      end
+      term_query = query_for(value)
+      query.boolean(&term_query)
     end
   end
 
-  def register_filter(noop)
+  def register_filter(*)
   end
 
   private

@@ -21,7 +21,10 @@ class SearchesModels
     Tire.search(@model_class.index_name).tap do |search|
       register_filters(search)
 
-      apply_filters(search)
+      if parameters_present?
+        # avoid sending an empty query to elasticsearch
+        apply_filters(search)
+      end
 
       search.highlight(*@model_class::HIGHLIGHTS)
       search.size @per_page
@@ -50,12 +53,22 @@ class SearchesModels
       @model_class.add_default_filter(search)
     end
 
-    @params.each do |param, value|
-      if value.present?
-        registry.each do |filter|
-          filter.apply_to_search(search, param, value)
+    search.query do |query|
+      @params.each do |param, value|
+        if value.present?
+          registry.each do |filter|
+            filter.apply_to_query(query, param, value)
+            filter.apply_to_search(search, param, value)
+          end
         end
       end
+    end
+  end
+
+  def parameters_present?
+    Notice::SEARCHABLE_FIELDS.any? do |field|
+      @params.key?(field.parameter) &&
+        @params[field.parameter].present?
     end
   end
 end

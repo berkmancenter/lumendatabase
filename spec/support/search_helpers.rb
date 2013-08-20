@@ -9,6 +9,14 @@ module SearchHelpers
     click_on 'submit'
   end
 
+  def search_for(searches)
+    sleep 1 # required for indexing to complete
+
+    query = searches.map { |k,v| "#{k}=#{CGI.escape(v.to_s)}" }.join('&')
+
+    visit "/notices/search?#{query}"
+  end
+
   def within_search_results_for(term)
     submit_search(term)
     within('.search-results') do

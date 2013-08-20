@@ -19,7 +19,7 @@ class TermFilter
   def apply_to_search(searcher, param, value)
     if handles?(param)
       term_filter = filter_for(value)
-      searcher.filter *term_filter
+      searcher.filter(*term_filter)
     end
   end
 
@@ -31,6 +31,9 @@ class TermFilter
     searcher.facet local_parameter do
       terms local_indexed_attribute
     end
+  end
+
+  def apply_to_query(*)
   end
 
   private
