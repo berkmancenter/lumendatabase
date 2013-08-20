@@ -12,6 +12,7 @@ module AsTireResult
       '_version' => nil,
       '_explanation' => nil,
       'sort' => nil,
+      'class_name' => notice.class.to_s,
       'highlight' => nil
     }.merge(options)
 

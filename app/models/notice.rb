@@ -16,14 +16,24 @@ class Notice < ActiveRecord::Base
   )
 
   SEARCHABLE_FIELDS = [
-    { indexed_field: :_all, parameter: :term, name: 'All Fields' },
-    { indexed_field: :title, parameter: :title, name: 'Title' },
-    { indexed_field: 'categories.name', parameter: :categories, name: 'Categories' },
-    { indexed_field: :tag_list, parameter: :tags, name: 'Tags' },
-    { indexed_field: :jurisdiction_list, parameter: :jurisdictions, name: 'Jurisdictions' },
-    { indexed_field: :sender_name, parameter: :sender_name, name: 'Sender Name' },
-    { indexed_field: :recipient_name, parameter: :recipient_name, name: 'Recipient Name' },
-    { indexed_field: 'works.description', parameter: :works, name: 'Works Descriptions' }
+    TermSearch.new(:term, :_all, 'All Fields'),
+    TermSearch.new(:title, :title,'Title'),
+    TermSearch.new(:categories, 'categories.name','Categories'),
+    TermSearch.new(:tags, :tag_list, 'Tags'),
+    TermSearch.new(:jurisdictions, :jurisdiction_list,'Jurisdictions'),
+    TermSearch.new(:sender_name, :sender_name,'Sender Name'),
+    TermSearch.new(:recipient_name, :recipient_name,'Recipient Name'),
+    TermSearch.new(:works, 'works.description', 'Works Descriptions'),
+  ]
+
+  FILTERABLE_FIELDS = [
+    TermFilter.new(:category_facet, 'Category'),
+    TermFilter.new(:sender_name_facet, 'Sender'),
+    TermFilter.new(:recipient_name_facet, 'Recipient'),
+    TermFilter.new(:tag_list_facet, 'Tags'),
+    TermFilter.new(:country_code_facet, 'Country'),
+    TermFilter.new(:language_facet, 'Language'),
+    DateRangeFilter.new(:date_received_facet, :date_received, 'Date')
   ]
 
   REDACTABLE_FIELDS = %i( legal_other body )
@@ -175,5 +185,6 @@ class Notice < ActiveRecord::Base
   def entities_that_have_received
     entity_notice_roles.recipients.map(&:entity)
   end
+
 
 end
