@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-feature "Fielded searches of Notices", search: true do
+feature "Fielded searches of Notices" do
   include SearchHelpers
 
   context "via parameters only" do
-    Notice::SEARCHABLE_FIELDS.reject{|f| f.parameter == :term}.each do |field|
-      it %Q|within #{field.title}|, search: true do
+    Notice::SEARCHABLE_FIELDS.reject { |f| f.parameter == :term }.each do |field|
+      scenario %Q|within #{field.title}|, search: true do
         in_field, outside_field = FieldedSearchNoticeGenerator.generate(field)
 
         search_on_page = FieldedSearchOnPage.new
@@ -21,8 +21,8 @@ feature "Fielded searches of Notices", search: true do
   end
 
   context "via the web UI" do
-    Notice::SEARCHABLE_FIELDS.reject{|f| f.parameter == :term}.each do |field|
-      it "within #{field.title}", search: true, js: true do
+    Notice::SEARCHABLE_FIELDS.reject { |f| f.parameter == :term }.each do |field|
+      scenario "within #{field.title}", search: true, js: true do
         in_field, outside_field = FieldedSearchNoticeGenerator.generate(field)
         search_on_page = FieldedSearchOnPage.new
         search_on_page.visit_search_page
@@ -39,7 +39,7 @@ feature "Fielded searches of Notices", search: true do
   end
 
   context "advanced search" do
-    it "copies search parameters to the facet form.", js: true do
+    scenario "copies search parameters to the facet form.", search: true, js: true do
       notice = create(:dmca, :with_facet_data, title: "Lion King two")
       sleep 1
 
@@ -58,7 +58,7 @@ feature "Fielded searches of Notices", search: true do
     end
 
     context "not active" do
-      it "dropdown not displayed by default", js: true do
+      scenario "dropdown not displayed by default", search: true, js: true do
         search_on_page = FieldedSearchOnPage.new
         search_on_page.visit_search_page
 
@@ -72,7 +72,7 @@ feature "Fielded searches of Notices", search: true do
         search_on_page.open_advanced_search
       end
 
-      it "dropdown retains visibility between page views", js: true do
+      scenario "dropdown retains visibility between page views", search: true, js: true do
         pending 'Javascript set cookies do not appear to work in capybara-webkit'
 
         expect(page).to have_visible_advanced_search_controls
@@ -81,7 +81,7 @@ feature "Fielded searches of Notices", search: true do
         expect(page).to have_visible_advanced_search_controls
       end
 
-      it "retains query parameters", js: true do
+      scenario "retains query parameters", search: true, js: true do
         search_on_page.add_fielded_search_for('Title', 'lion')
 
         search_on_page.run_search
@@ -93,7 +93,7 @@ feature "Fielded searches of Notices", search: true do
         end
       end
 
-      it "allows you to remove a fielded search", js: true do
+      scenario "allows you to remove a fielded search", search: true, js: true do
         search_on_page.add_fielded_search_for('Title', 'lion')
 
         search_on_page.remove_fielded_search_for(:title)
@@ -103,7 +103,7 @@ feature "Fielded searches of Notices", search: true do
         end
       end
 
-      it "allows you to change a fielded search", js: true do
+      scenario "allows you to change a fielded search", search: true, js: true do
         search_on_page.add_fielded_search_for('Title', 'lion')
         search_on_page.change_field(:title, 'Tags')
 
@@ -120,7 +120,7 @@ feature "Fielded searches of Notices", search: true do
         end
       end
 
-      it "removes the option from other drop-downs for a search that's been added", js: true do
+      scenario "removes the option from other drop-downs for a search that's been added", search: true, js: true do
         search_on_page.add_fielded_search_for('Title', 'lion')
 
         search_on_page.within_fielded_searches do
@@ -130,7 +130,7 @@ feature "Fielded searches of Notices", search: true do
         end
       end
 
-      it "removes the options for a search from a previous page", js: true do
+      scenario "removes the options for a search from a previous page", search: true, js: true do
         search_on_page.add_fielded_search_for('Title', 'lion')
         search_on_page.run_search
 
@@ -141,7 +141,7 @@ feature "Fielded searches of Notices", search: true do
         end
       end
 
-      it "allows you to select a search after you delete it", js: true do
+      scenario "allows you to select a search after you delete it", search: true, js: true do
         search_on_page.add_fielded_search_for('Title', 'lion')
         search_on_page.remove_fielded_search_for(:title)
 
@@ -154,7 +154,7 @@ feature "Fielded searches of Notices", search: true do
         end
       end
 
-      it "does not allow you to select the same search twice", js: true do
+      scenario "does not allow you to select the same search twice", search: true, js: true do
         search_on_page.add_fielded_search_for('Title', 'lion')
 
         search_on_page.within_template_row do
@@ -169,7 +169,7 @@ feature "Fielded searches of Notices", search: true do
         end
       end
 
-      it "removes the add query link after all searches have been added", js: true do
+      scenario "removes the add query link after all searches have been added", search: true, js: true do
         Notice::SEARCHABLE_FIELDS.each do |field|
           search_on_page.add_fielded_search_for(field.title, 'test')
         end
@@ -180,7 +180,7 @@ feature "Fielded searches of Notices", search: true do
         end
       end
 
-      it "activates the add query link when they are available", js: true do
+      scenario "activates the add query link when they are available", search: true, js: true do
         Notice::SEARCHABLE_FIELDS.each do |field|
           search_on_page.add_fielded_search_for(field.title, 'test')
         end
@@ -196,7 +196,6 @@ feature "Fielded searches of Notices", search: true do
           )
         end
       end
-
 
     end
   end

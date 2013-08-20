@@ -15,7 +15,7 @@ class DateRangeFilter
   def apply_to_search(searcher, param, value)
     if handles?(param)
       date_range_filter = filter_for(value)
-      searcher.filter *date_range_filter
+      searcher.filter(*date_range_filter)
     end
   end
 
@@ -32,10 +32,12 @@ class DateRangeFilter
 
   def filter_for(value)
     filter_values = FilterRangeValues.new(value)
-    [
-      :range,
-      @indexed_attribute => { from: filter_values.from, to: filter_values.to }
-    ]
+
+    [:range, @indexed_attribute => filter_values.to_attribute]
+  end
+
+
+  def apply_to_query(*)
   end
 
   private
@@ -55,12 +57,14 @@ class DateRangeFilter
   end
 
   class FilterRangeValues
-    attr_reader :from, :to
-
     def initialize(time_value)
       @from, @to = time_value.split(Notice::RANGE_SEPARATOR, 2).map do |str|
         Time.at(str.to_i / 1000)
       end
+    end
+
+    def to_attribute
+      { from: @from, to: @to }
     end
   end
 

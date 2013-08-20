@@ -28,9 +28,9 @@ feature "Searching Notices" do
     3.times do
       create(:dmca, title: "The Lion King on Youtube")
     end
-    sleep 1
 
-    visit "/notices/search?page=2&per_page=1&term=lion"
+    search_for(term: 'lion', page: 2, per_page: 1)
+
     within('.pagination') do
       expect(page).to have_css('em.current', text: 2)
       expect(page).to have_css('a[rel="next"]')
@@ -159,6 +159,24 @@ feature "Searching Notices" do
     end
   end
 
+  scenario "advanced search on multiple fields", search: true do
+    create_notice_with_entities("Jim & Jon's", "Jim", "Jon")
+    create_notice_with_entities("Jim & Dan's", "Jim", "Dan")
+    create_notice_with_entities("Dan & Jon's", "Dan", "Jon")
+
+    search_for(sender_name: "Jim", recipient_name: "Jon")
+
+    expect(page).to have_content("Jim & Jon's")
+    expect(page).not_to have_content("Jim & Dan's")
+    expect(page).not_to have_content("Dan & Jon's")
+  end
+
+  scenario "searching with a blank parameter", search: true do
+    expect { submit_search('') }.not_to raise_error
+  end
+
+  private
+
   def expect_search_to_not_find(term, notice)
     submit_search(term)
 
@@ -169,6 +187,26 @@ feature "Searching Notices" do
 
   def have_excerpt(excerpt, prefix = nil, suffix = nil)
     include([prefix, "<em>#{excerpt}</em>", suffix].compact.join(' '))
+  end
+
+  def create_notice_with_entities(title, sender_name, recipient_name)
+    sender = Entity.find_or_create_by_name(sender_name)
+    recipient = Entity.find_or_create_by_name(recipient_name)
+
+    create(:dmca, title: title).tap do |notice|
+      create(
+        :entity_notice_role,
+        name: 'sender',
+        notice: notice,
+        entity: sender
+      )
+      create(
+        :entity_notice_role,
+        name: 'recipient',
+        notice: notice,
+        entity: recipient
+      )
+    end
   end
 
 end

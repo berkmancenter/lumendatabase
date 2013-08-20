@@ -85,7 +85,7 @@ feature "Searching for Notices via the API" do
 
   context Defamation do
     scenario "has model-specific metadata", js: true, search: true do
-      notice = create(
+      create(
         :defamation,
         title: "The Lion King on Youtube",
         body: "A test body"
