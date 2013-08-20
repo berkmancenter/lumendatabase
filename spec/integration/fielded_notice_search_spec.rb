@@ -4,13 +4,13 @@ feature "Fielded searches of Notices", search: true do
   include SearchHelpers
 
   context "via parameters only" do
-    Notice::SEARCHABLE_FIELDS.reject{|f| f[:parameter] == :term}.each do |field|
-      it %Q|within #{field[:name]}|, search: true do
+    Notice::SEARCHABLE_FIELDS.reject{|f| f.parameter == :term}.each do |field|
+      it %Q|within #{field.title}|, search: true do
         in_field, outside_field = FieldedSearchNoticeGenerator.generate(field)
 
         search_on_page = FieldedSearchOnPage.new
 
-        search_on_page.parameterized_search_for(field[:parameter], field[:name])
+        search_on_page.parameterized_search_for(field.parameter, field.title)
 
         search_on_page.within_results do
           expect(page).to have_content(in_field.title)
@@ -21,12 +21,12 @@ feature "Fielded searches of Notices", search: true do
   end
 
   context "via the web UI" do
-    Notice::SEARCHABLE_FIELDS.reject{|f| f[:parameter] == :term}.each do |field|
-      it "within #{field[:name]}", search: true, js: true do
+    Notice::SEARCHABLE_FIELDS.reject{|f| f.parameter == :term}.each do |field|
+      it "within #{field.title}", search: true, js: true do
         in_field, outside_field = FieldedSearchNoticeGenerator.generate(field)
         search_on_page = FieldedSearchOnPage.new
         search_on_page.visit_search_page
-        search_on_page.add_fielded_search_for(field[:name], field[:name])
+        search_on_page.add_fielded_search_for(field.title, field.title)
 
         search_on_page.run_search
 
@@ -40,7 +40,7 @@ feature "Fielded searches of Notices", search: true do
 
   context "advanced search" do
     it "copies search parameters to the facet form.", js: true do
-      notice = create(:notice, :with_facet_data, title: "Lion King two")
+      notice = create(:dmca, :with_facet_data, title: "Lion King two")
       sleep 1
 
       search_on_page.visit_search_page
@@ -171,7 +171,7 @@ feature "Fielded searches of Notices", search: true do
 
       it "removes the add query link after all searches have been added", js: true do
         Notice::SEARCHABLE_FIELDS.each do |field|
-          search_on_page.add_fielded_search_for(field[:name], 'test')
+          search_on_page.add_fielded_search_for(field.title, 'test')
         end
 
         search_on_page.within_fielded_searches do
@@ -182,7 +182,7 @@ feature "Fielded searches of Notices", search: true do
 
       it "activates the add query link when they are available", js: true do
         Notice::SEARCHABLE_FIELDS.each do |field|
-          search_on_page.add_fielded_search_for(field[:name], 'test')
+          search_on_page.add_fielded_search_for(field.title, 'test')
         end
 
         search_on_page.remove_fielded_search_for(:title)

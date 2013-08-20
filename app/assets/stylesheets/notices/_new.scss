@@ -2,13 +2,18 @@
 @import "datepicker";
 
 section.notice-new {
-  @extend %content-container;
-  box-shadow: 0 -3px 0 $shadow-1, $base-shadow;
   padding: $base-padding 0;
+
+  section, header {
+    padding: 45px $base-padding;
+
+    @include media($mobile) {
+      padding: 45px $base-padding-mobile;
+    }
+  }
 
   section {
     @include clearfix;
-    padding: 45px $base-padding;
 
     &:nth-of-type(2n) {
       border: 1px solid $light-gray;
@@ -33,8 +38,7 @@ section.notice-new {
   }
 
   header {
-    margin: 0 $base-padding;
-    margin-bottom: 45px;
+    padding-top: 0;
 
     h3 {
       margin: 10px 0;
@@ -142,13 +146,12 @@ form.new_notice {
     padding: 45px 0 15px;
 
     input {
-      @include button(simple, #4383Ed);
       float: right;
       font-size: $base-font-size;
-      font-weight: 500;
+      font-weight: 800;
       margin-right: $base-padding;
       padding: 1em;
-      width: 46%;
+      width: 46%; //fallback
       width: calc(50% - #{$base-padding});
     }
   }

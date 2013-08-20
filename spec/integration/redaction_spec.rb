@@ -66,7 +66,7 @@ feature "Redactable fields" do
         fill_in "Password", with: user.password
         click_on "Sign in"
 
-        notice = create(:notice, :redactable)
+        notice = create(:dmca, :redactable)
 
         visit "/admin/notice/#{notice.id}/redact_notice"
 

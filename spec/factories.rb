@@ -8,7 +8,8 @@ FactoryGirl.define do
     sequence(:name) { |n| "Category Name #{n}" }
   end
 
-  factory :notice do
+  factory :dmca do
+
     title "A title"
     works { build_list(:work, 1) }
 
@@ -72,12 +73,50 @@ FactoryGirl.define do
       body_original "Some sensitive body"
       review_required true
     end
+
+    trait :with_original do
+      before(:create) do |notice|
+        notice.file_uploads << build(:file_upload, kind: 'original')
+      end
+    end
+
+    trait :with_document do
+      before(:create) do |notice|
+        notice.file_uploads << build(:file_upload, kind: 'supporting')
+      end
+    end
+
+    trait :with_pdf do
+      before(:create) do |notice|
+        notice.file_uploads << build(
+          :file_upload, kind: 'supporting', file_content_type: 'application/pdf'
+        )
+      end
+    end
+
+    trait :with_image do
+      before(:create) do |notice|
+        notice.file_uploads << build(
+          :file_upload, kind: 'supporting', file_content_type: 'image/jpeg'
+        )
+      end
+    end
+
+    factory :trademark, class: 'Trademark'
+    factory :defamation, class: 'Defamation'
+    factory :international, class: 'International'
+    factory :court_order, class: 'CourtOrder'
+    factory :law_enforcement_request, class: 'LawEnforcementRequest'
+    factory :private_information, class: 'PrivateInformation'
+    factory :other, class: 'Other'
   end
 
   factory :file_upload do
     ignore do
       content "Content"
     end
+
+    kind 'original'
 
     file do
       Tempfile.open('factory_file') do |fh|
@@ -90,8 +129,8 @@ FactoryGirl.define do
   end
 
   factory :entity_notice_role do
-    notice
     entity
+    association(:notice, factory: :dmca)
     name 'principal'
   end
 

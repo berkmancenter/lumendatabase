@@ -7,7 +7,7 @@ feature "notice submission" do
     expect(page).to have_css('#flash_notice')
 
     within("#recent-notices") do
-      expect(page).to have_css(%{article:contains("A title")})
+      expect(page).to have_css(%{li:contains("A title")})
     end
   end
 
@@ -67,14 +67,41 @@ feature "notice submission" do
     end
   end
 
-  scenario "submitting a notice with an attached file" do
+  scenario "submitting a notice with an original attached" do
+    submit_recent_notice { attach_notice }
+
+    open_recent_notice
+
+    pending "We don't display originals yet"
+  end
+
+  scenario "submitting a notice with a supporting document", js: true do
     submit_recent_notice do
-      attach_notice_file("Some content")
+      add_supporting_document("Some supporting content")
     end
 
     open_recent_notice
 
-    pending "We don't use the attached file yet"
+    within('ol.attachments') do
+      click_on "Supporting Document"
+
+      # page.html is actually plain-text in this case
+      expect(page.html).to eq "Some supporting content"
+    end
+  end
+
+  scenario "submitting a notice with multiple supporting documents", js: true do
+    submit_recent_notice do
+      add_supporting_document
+      add_supporting_document
+      add_supporting_document
+    end
+
+    open_recent_notice
+
+    within('ol.attachments') do
+      expect(page).to have_css('li', 3)
+    end
   end
 
   scenario "submitting a notice with tags" do
@@ -163,7 +190,7 @@ feature "notice submission" do
     end
   end
 
-  scenario "submmiting notices with duplicate items" do
+  scenario "submitting notices with duplicate items" do
     submit_recent_notice
     submit_recent_notice
 
@@ -176,7 +203,7 @@ feature "notice submission" do
   scenario "submitting a notice with works" do
     submit_recent_notice do
       fill_in 'Work URL', with: 'http://www.example.com/original_work.pdf'
-      fill_in 'Work Description', with: 'A series of videos and still images'
+      fill_in 'Description', with: 'A series of videos and still images'
       fill_in 'Infringing URL', with: "http://example.com/infringing_url1"
     end
 
@@ -213,7 +240,7 @@ feature "notice submission" do
   end
 
   scenario "a form articulates its required fields correctly" do
-    visit "/notices/new"
+    visit "/notices/new?type=Dmca"
 
     within('form#new_notice') do
       expect(page).to have_css('input#notice_title.required')
@@ -222,7 +249,7 @@ feature "notice submission" do
   end
 
   scenario "submitting a notice without required fields present" do
-    visit "/notices/new"
+    visit "/notices/new?type=Dmca"
 
     click_on "Submit"
 

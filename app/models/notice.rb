@@ -5,6 +5,7 @@ require 'validates_automatically'
 class Notice < ActiveRecord::Base
   include Tire::Model::Search
   include Tire::Model::Callbacks
+  include Searchability
   include ValidatesAutomatically
 
   extend RecentScope
@@ -15,14 +16,24 @@ class Notice < ActiveRecord::Base
   )
 
   SEARCHABLE_FIELDS = [
-    { indexed_field: :_all, parameter: :term, name: 'All Fields' },
-    { indexed_field: :title, parameter: :title, name: 'Title' },
-    { indexed_field: 'categories.name', parameter: :categories, name: 'Categories' },
-    { indexed_field: :tag_list, parameter: :tags, name: 'Tags' },
-    { indexed_field: :jurisdiction_list, parameter: :jurisdictions, name: 'Jurisdictions' },
-    { indexed_field: :sender_name, parameter: :sender_name, name: 'Sender Name' },
-    { indexed_field: :recipient_name, parameter: :recipient_name, name: 'Recipient Name' },
-    { indexed_field: 'works.description', parameter: :works, name: 'Works Descriptions' }
+    TermSearch.new(:term, :_all, 'All Fields'),
+    TermSearch.new(:title, :title,'Title'),
+    TermSearch.new(:categories, 'categories.name','Categories'),
+    TermSearch.new(:tags, :tag_list, 'Tags'),
+    TermSearch.new(:jurisdictions, :jurisdiction_list,'Jurisdictions'),
+    TermSearch.new(:sender_name, :sender_name,'Sender Name'),
+    TermSearch.new(:recipient_name, :recipient_name,'Recipient Name'),
+    TermSearch.new(:works, 'works.description', 'Works Descriptions'),
+  ]
+
+  FILTERABLE_FIELDS = [
+    TermFilter.new(:category_facet, 'Category'),
+    TermFilter.new(:sender_name_facet, 'Sender'),
+    TermFilter.new(:recipient_name_facet, 'Recipient'),
+    TermFilter.new(:tag_list_facet, 'Tags'),
+    TermFilter.new(:country_code_facet, 'Country'),
+    TermFilter.new(:language_facet, 'Language'),
+    DateRangeFilter.new(:date_received_facet, :date_received, 'Date')
   ]
 
   REDACTABLE_FIELDS = %i( legal_other body )
@@ -30,6 +41,8 @@ class Notice < ActiveRecord::Base
 
   UNDER_REVIEW_VALUE = 'Under review'
   RANGE_SEPARATOR = '..'
+
+  DEFAULT_ENTITY_NOTICE_ROLES = %w|recipient sender|
 
   VALID_ACTIONS = %w( Yes No Partial )
 
@@ -63,55 +76,12 @@ class Notice < ActiveRecord::Base
 
   accepts_nested_attributes_for :works
 
-  after_initialize :set_default_action_taken
-
-  after_touch { tire.update_index }
-
   delegate :country_code, to: :recipient, allow_nil: true
   delegate :name, to: :sender, prefix: true, allow_nil: true
   delegate :name, to: :recipient, prefix: true, allow_nil: true
   delegate :name, to: :submitter, prefix: true, allow_nil: true
 
-  mapping do
-    indexes :id, index: 'not_analyzed', include_in_all: false
-    indexes :title
-    indexes :date_received, type: 'date', include_in_all: false
-    indexes :rescinded, type: 'boolean', include_in_all: false
-    indexes :tag_list, as: 'tag_list'
-    indexes :jurisdiction_list, as: 'jurisdiction_list'
-    indexes :sender_name, as: 'sender_name'
-    indexes :sender_name_facet,
-      analyzer: 'keyword', as: 'sender_name',
-      include_in_all: false
-    indexes :tag_list_facet,
-      analyzer: 'keyword', as: 'tag_list',
-      include_in_all: false
-    indexes :jurisdiction_list_facet,
-      analyzer: 'keyword', as: 'jurisdiction_list',
-      include_in_all: false
-    indexes :recipient_name, as: 'recipient_name'
-    indexes :recipient_name_facet,
-      analyzer: 'keyword', as: 'recipient_name', include_in_all: false
-    indexes :country_code_facet,
-      analyzer: 'keyword', as: 'country_code', include_in_all: false
-    indexes :language_facet,
-      analyzer: 'keyword', as: 'language', include_in_all: false
-    indexes :categories, type: 'object', as: 'categories'
-    indexes :category_facet,
-      analyzer: 'keyword', as: ->(notice) { notice.categories.map(&:name) },
-      include_in_all: false
-    indexes :works,
-      type: 'object',
-      as: -> (notice){
-        notice.works.as_json({
-          only: [:description],
-          include: {
-            infringing_urls: { only: [:url] },
-            copyrighted_urls: { only: [:url]}
-          }
-        })
-      }
-  end
+  define_elasticsearch_mapping
 
   def self.available_for_review
     where(review_required: true, reviewer_id: nil)
@@ -198,13 +168,11 @@ class Notice < ActiveRecord::Base
     super(tag_list_value)
   end
 
-  private
-
-  def set_default_action_taken
-    if action_taken.blank?
-      self.action_taken = 'No'
-    end
+  def supporting_documents
+    file_uploads.where(kind: 'supporting')
   end
+
+  private
 
   def entities_that_have_submitted
     entity_notice_roles.submitters.map(&:entity)
@@ -217,5 +185,6 @@ class Notice < ActiveRecord::Base
   def entities_that_have_received
     entity_notice_roles.recipients.map(&:entity)
   end
+
 
 end

@@ -12,4 +12,6 @@ guard 'spork', :rspec_env => { 'RAILS_ENV' => 'test' } do
   watch('spec/spec_helper.rb') { :rspec }
   watch('spec/factories.rb')
   watch(%r{^lib/.+\.rb$})
+  watch('app/models/search_results_proxy.rb')
+  watch('app/models/user.rb')
 end

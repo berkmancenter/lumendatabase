@@ -12,7 +12,7 @@ describe TermFilter do
   end
 
   it "can override the indexed attribute name" do
-    term_search = described_class.new(:term_facet, :indexed_attribute_name)
+    term_search = described_class.new(:term_facet, 'title', :indexed_attribute_name)
     expect(term_search.filter_for('foo')).to eq(
       [:terms, :indexed_attribute_name => [ 'foo' ]]
     )

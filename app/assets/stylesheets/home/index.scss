@@ -17,18 +17,27 @@ section.home-search-form {
     text-align: center;
   }
 
+  $form-padding: $form-bg-padding - 3px;
   form {
     margin: 0 auto;
-    width: $home-search-input-w;
+    width: $home-search-input-w + ($form-padding*2);
+    background: $header-background-1;
+    padding: $form-padding;
+    border-radius: 4px;
 
     input#search {
       font-size: $base-font-size + 1px;
       height: $home-search-input-h + 10px;
     }
 
-    button#submit {
-      @include border-right-radius(3px);
-      height: $home-search-input-h + 10px;
+    div.submit {
+      top: $form-padding;
+      right: $form-padding;
+
+      button#submit {
+        @include border-right-radius(2px);
+        height: $home-search-input-h + 10px;
+      }
     }
 
     div.search-dropdown {
@@ -59,6 +68,10 @@ section.home-search-form {
     width: $home-width / 2 - 15px;
     padding: 20px;
 
+    &:first-child {
+      margin-right: 30px;
+    }
+
     @include media($tablet) {
       float: none;
       width: auto;
@@ -66,17 +79,20 @@ section.home-search-form {
     }
 
     &.news-snippets {
-      box-shadow: inset 0 4px 0 $shadow-2, 0 1px 2px 0 hsla(0, 0%, 0%, 0.22);
-      margin-right: 30px;
     }
 
     &.recent-notices {
-      box-shadow: inset 0 4px 0 $shadow-3, 0 1px 2px 0 hsla(0, 0%, 0%, 0.22);
     }
   }
 
-  article {
+  ol {
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
     font-size: $base-font-size - 1px;
+    list-style: none;
     margin-bottom: 0.5em;
 
     a {
@@ -92,10 +108,8 @@ section.home-search-form {
 
   h2 {
     @extend %title-caps;
-    margin: 0 0 1em;
     font-size: $base-font-size-small-1;
-    text-transform: uppercase;
-    color: $base-font-color-2;
+    margin: 0 0 1em;
   }
 }
 

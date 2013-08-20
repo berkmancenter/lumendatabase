@@ -1,19 +1,46 @@
 body {
-  background: #fff;
-}
-
-section.main {
   background: $base-background-color;
 }
 
-.main-inner {
+.main.app {
+  // padding-top: 30px;
+}
+
+.main-inner, .header-inner {
   @include container;
-  padding: 40px $gutter 40px 210px;
+  margin: 0 auto;
 
   @include media($small-screen) {
-    padding: 40px $gutter;
+    margin: 0 $base-padding;
   }
+
   @include media($mobile) {
-    padding: 40px 10px;
+    margin: 0 10px;
+  }
+}
+
+.header-inner {
+  padding-top: 20px;
+}
+
+.main-inner {
+  background: #fff;
+  border-radius: 0 0 4px 4px;
+  margin-bottom: 40px;
+
+}
+
+// Add inner padding to certain pages
+body.categories-show,
+body.high_voltage-pages {
+  .main-inner {
+    padding: $base-padding;
+
+    @include media($tablet) {
+    }
+
+    @include media($mobile) {
+      padding: $base-padding-mobile;
+    }
   }
 }

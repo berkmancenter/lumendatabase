@@ -21,22 +21,23 @@ body {
   font-size: $base-font-size;
   line-height: $base-line-height;
   color: $base-font-color;
-  -webkit-font-smoothing: antialiased;
+  // -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-weight: 600;
+  font-weight: 800;
   text-rendering: optimizelegibility; // Fix the character spacing for headings
 }
 
 h1 {
-  font-size: em(32, 15);
+  font-size: em(26, 15);
   line-height: $base-line-height * 2;
-  margin: $base-line-height 0;
+  // margin: $base-line-height * 0;
+  margin: ($base-line-height * .75) 0;
 }
 
 h2 {
-  font-size: em(28, 15);
+  font-size: em(26, 15);
   line-height: $base-line-height * 1.75;
   margin: ($base-line-height * .75) 0;
 }
@@ -61,7 +62,7 @@ h5 {
 
 h6 {
   font-size: $base-font-size;
-  line-height: lh();
+  line-height: $base-line-height;
   margin: 0;
 }
 

@@ -18,7 +18,7 @@
   <% if can? :publish, @object %>
     <div id="review-required">
       <%= form.input(:review_required) %>
-      <%= form.hint "Uncheck to publish" %>
+      <%= form.hint "Uncheck to mark redacted" %>
     </div>
   <% end %>
 

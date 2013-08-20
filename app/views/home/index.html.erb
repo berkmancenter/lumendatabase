@@ -1,21 +1,21 @@
 <section class="home-search-form">
-  <h1><%= image_tag("logo.svg") %></h1>
+  <h1><%= image_tag("logo_2x.png", :size=> "348x51") %></h1>
   <%= form_tag(notices_search_index_path, method: :get) do %>
     <%= render 'shared/search' %>
   <% end %>
 </section>
 
 <div class="site-news">
-  <section class="news-snippets">
-    <h2>From the Blog</h2>
-    <div id="recent-blog-entries">
-      <%= render partial: 'blog_entry', collection: @blog_entries %>
-    </div>
-  </section >
   <section class="recent-notices">
     <h2>Recent Cease & Desists</h2>
-    <div id="recent-notices">
+    <ol id="recent-notices">
       <%= render @notices %>
-    </div>
+    </ol>
   </section>
+  <section class="news-snippets">
+    <h2>From the Blog</h2>
+    <ol id="recent-blog-entries">
+      <%= render partial: 'blog_entry', collection: @blog_entries %>
+    </ol>
+  </section >
 </div>

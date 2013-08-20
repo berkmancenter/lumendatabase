@@ -1,11 +1,12 @@
 %title-caps {
-  font-size: $base-font-size-small-1;
-  text-transform: uppercase;
   color: $base-font-color-2;
+  font-size: $base-font-size-small-1 - 1;
+  font-weight: bold;
+  text-transform: uppercase;
 }
 
 %header-title {
-  font-size: $base-font-size + 1;
+  font-size: $base-font-size;
   font-weight: 800;
   text-transform: uppercase;
   margin: 15px 20px 10px;
@@ -13,10 +14,6 @@
 
 %gray-gradient {
   @include linear-gradient(to top, #fafafa, #fff);
-}
-
-%pagination-gradient {
-  @include linear-gradient(#F8F8F8, #EFF1F5);
 }
 
 %base-shadow {

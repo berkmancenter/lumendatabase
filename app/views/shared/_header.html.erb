@@ -1,12 +1,13 @@
 <header class="app">
-  <%= render 'shared/navigation' -%>
-  <div class="container search">
-    <div class="width-wrapper">
-      <h1>
-        <%= link_to root_path, :id => "root" do %>
-          <%= image_tag("logo.svg") %>
-        <% end %>
-      </h1>
+  <div class="header-inner">
+    <h1>
+      <%= link_to root_path, :id => "root" do %>
+        <%= image_tag("logo_2x.png", :size=> "348x51") %>
+      <% end %>
+    </h1>
+    <%= render 'shared/navigation' -%>
+    <div class="container header-bar">
+      <h2>Blog</h2>
     </div>
   </div>
 </header>

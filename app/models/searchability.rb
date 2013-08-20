@@ -1,0 +1,53 @@
+module Searchability
+  def self.included(base)
+    base.extend ClassMethods
+    base.after_touch { tire.update_index }
+  end
+
+  module ClassMethods
+    def define_elasticsearch_mapping
+      mapping do
+        indexes :id, index: 'not_analyzed', include_in_all: false
+        indexes :class_name, index: 'not_analyzed', include_in_all: false,
+          as: ->(notice) {notice.class.name}
+        indexes :title
+        indexes :date_received, type: 'date', include_in_all: false
+        indexes :rescinded, type: 'boolean', include_in_all: false
+        indexes :tag_list, as: 'tag_list'
+        indexes :jurisdiction_list, as: 'jurisdiction_list'
+        indexes :sender_name, as: 'sender_name'
+        indexes :sender_name_facet,
+          analyzer: 'keyword', as: 'sender_name',
+          include_in_all: false
+        indexes :tag_list_facet,
+          analyzer: 'keyword', as: 'tag_list',
+          include_in_all: false
+        indexes :jurisdiction_list_facet,
+          analyzer: 'keyword', as: 'jurisdiction_list',
+          include_in_all: false
+        indexes :recipient_name, as: 'recipient_name'
+        indexes :recipient_name_facet,
+          analyzer: 'keyword', as: 'recipient_name', include_in_all: false
+        indexes :country_code_facet,
+          analyzer: 'keyword', as: 'country_code', include_in_all: false
+        indexes :language_facet,
+          analyzer: 'keyword', as: 'language', include_in_all: false
+        indexes :categories, type: 'object', as: 'categories'
+        indexes :category_facet,
+          analyzer: 'keyword', as: ->(notice) { notice.categories.map(&:name) },
+          include_in_all: false
+        indexes :works,
+          type: 'object',
+          as: -> (notice){
+            notice.works.as_json({
+              only: [:description],
+              include: {
+                infringing_urls: { only: [:url] },
+                copyrighted_urls: { only: [:url]}
+              }
+            })
+          }
+      end
+    end
+  end
+end

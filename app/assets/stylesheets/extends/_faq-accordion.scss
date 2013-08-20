@@ -1,36 +1,47 @@
 // FAQ - Accordion
 //************************************************************************//
-%faq-wrapper {
-  background: #fff;
-  border: 1px solid $base-border-color;
-  border-radius: 3px;
-}
-
 %faq-accordion {
-  margin: 40px 0 0;
+  .wrapper {
+    overflow: hidden;
+
+    article:first-child .question {
+      border-top: 0;
+    }
+  }
+
+  article {
+    border-radius: 3px;
+    overflow: hidden;
+  }
 
   .question {
-    background: darken($base-background-color, 2%);
-    border-top: 1px solid $base-border-color;
-    box-shadow: inset 0 1px 0 #fff, 0 1px 0 $base-border-color;
-    font-size: $base-font-size-2;
+    font-size: $base-font-size-1;
     font-weight: 500;
-    padding: 12px 20px;
+    @include transition(background 0.25s $ease-out-quad);
 
     a {
+      padding: 10px 20px;
       display: block;
       text-decoration: none;
+    }
+
+    &.open {
+      background: $header-background-1;
+
+      a {
+        color: #fff;
+      }
     }
   }
 
   .answer {
+    background: #fff;
     display: none;
-    margin: 20px 45px 35px;
+    padding: 25px $base-padding $base-padding;
+    box-shadow: inset 0 0 1px 0 rgba(0, 0, 0, 0.54);
 
-    @include media($mobile) {
-      $m: 20px;
-      margin-left: $m;
-      margin-right: $m;
+    &, p {
+      line-height: 1.5em;
     }
 
     h1, h2, h3, h4, h5, h6 {

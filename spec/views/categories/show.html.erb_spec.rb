@@ -36,12 +36,12 @@ describe 'categories/show.html.erb' do
   context "notices" do
     it "shows a list of notices" do
       assign(:category, build(:category))
-      assign(:notices, build_stubbed_list(:notice, 2))
+      assign(:notices, build_stubbed_list(:dmca, 2))
 
       render
 
       within('.category-notices') do
-        expect(page).to have_css('article.notice', count: 2)
+        expect(page).to have_css('li.notice', count: 2)
       end
     end
 

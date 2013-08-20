@@ -22,7 +22,7 @@ describe NoticesController do
       end
 
       it "renders the rescinded template if the notice is rescinded" do
-        stub_find_notice(build(:notice, rescinded: true))
+        stub_find_notice(build(:dmca, rescinded: true))
 
         get :show, id: 1
 
@@ -32,29 +32,36 @@ describe NoticesController do
     end
 
     context "as JSON" do
-      it "returns a serialized notice" do
-        notice = stub_find_notice
-        serialized = NoticeSerializer.new(notice)
-        NoticeSerializer.should_receive(:new).
-          with(notice, anything).and_return(serialized)
+      [
+        Dmca, Trademark, Defamation, International, CourtOrder,
+        LawEnforcementRequest, PrivateInformation, Other
+      ].each do |model_class|
+        it "returns a serialized notice for #{model_class}" do
+          notice = stub_find_notice(model_class.new)
+          serializer_class = model_class.active_model_serializer || NoticeSerializer
+          serialized = serializer_class.new(notice)
+          serializer_class.should_receive(:new).
+            with(notice, anything).and_return(serialized)
 
-        get :show, id: 1, format: :json
+          get :show, id: 1, format: :json
 
-        json = JSON.parse(response.body)["notice"]
-        expect(json).to have_key(:id).with_value(notice.id)
-        expect(json).to have_key(:title).with_value(notice.title)
+          json = JSON.parse(response.body)[model_class.to_s.tableize.singularize]
+          expect(json).to have_key('id').with_value(notice.id)
+          expect(json).to have_key('title').with_value(notice.title)
+          expect(json).to have_key('sender_name')
+        end
       end
 
       it "returns id, title and 'Notice Rescinded' as body for a rescinded notice" do
-        notice = build(:notice, rescinded: true)
+        notice = build(:dmca, rescinded: true)
         stub_find_notice(notice)
 
         get :show, id: 1, format: :json
 
-        json = JSON.parse(response.body)["notice"]
-        expect(json).to have_key(:id).with_value(notice.id)
-        expect(json).to have_key(:title).with_value(notice.title)
-        expect(json).to have_key(:body).with_value("Notice Rescinded")
+        json = JSON.parse(response.body)["dmca"]
+        expect(json).to have_key('id').with_value(notice.id)
+        expect(json).to have_key('title').with_value(notice.title)
+        expect(json).to have_key('body').with_value("Notice Rescinded")
       end
     end
 
@@ -65,14 +72,35 @@ describe NoticesController do
   end
 
   context "#create" do
-    it "initializes a notice from params" do
-      notice = Notice.new
+    it "initializes a Dmca by default from params" do
+      notice = Dmca.new
       notice_params = HashWithIndifferentAccess.new(title: "A title")
-      Notice.should_receive(:new).with(notice_params).and_return(notice)
+      Dmca.should_receive(:new).with(notice_params).and_return(notice)
 
       post :create, notice: notice_params
 
       expect(assigns(:notice)).to eq notice
+    end
+
+    it "uses the type param to instantiate the correct class" do
+      notice = Trademark.new
+      Trademark.should_receive(:new).and_return(notice)
+
+      post :create, notice: { type: 'trademark', title: "A title"}
+
+      expect(assigns(:notice)).to eq notice
+    end
+
+    it "defaults to Dmca if the type is missing or invalid" do
+      invalid_types = ['', 'FlimFlam', 'Object', 'User', 'Hash']
+      notice = Dmca.new
+      Dmca.should_receive(:new).exactly(5).times.and_return(notice)
+
+      invalid_types.each do |invalid_type|
+        post :create, notice: { type: invalid_type, title: "A title" }
+
+        expect(assigns(:notice)).to eq notice
+      end
     end
 
     it "auto-redacts the notice" do
@@ -141,11 +169,11 @@ describe NoticesController do
     end
 
     def stub_new_notice
-      build_stubbed(:notice).tap do |notice|
+      build_stubbed(:dmca).tap do |notice|
         notice.stub(:save).and_return(true)
         notice.stub(:auto_redact)
         notice.stub(:mark_for_review)
-        Notice.stub(:new).and_return(notice)
+        Dmca.stub(:new).and_return(notice)
       end
     end
 

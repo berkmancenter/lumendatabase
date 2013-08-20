@@ -1,0 +1,20 @@
+<%
+  extra_class = " #{term_search.parameter}"
+  if params[term_search.parameter].blank?
+    extra_class += ' hidden'
+  end
+%>
+<div class="field-group<%= extra_class %>">
+  <div class="remove-group <%= term_search.parameter %>"></div>
+  <div class="input select">
+    <%=
+      select_tag(
+        'search-field',
+        options_for_select(
+          Notice::SEARCHABLE_FIELDS.collect{|f| [f.title, f.parameter]},
+          term_search.parameter
+        )
+    ) %>
+  </div>
+  <%= text_field_tag term_search.parameter, params[term_search.parameter], id: nil, disabled: 'disabled' %>
+</div>

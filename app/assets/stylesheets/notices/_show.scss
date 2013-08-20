@@ -1,11 +1,12 @@
 article.notice-show {
   h1 {
-    color: $base-title-color;
-    font-size: em(24, 15);
-    font-weight: bold;
+    color: #fff;
+    font-size: em(18, 15);
+    font-weight: 700;
     line-height: 1em;
-    margin-bottom: 0.15em;
-    margin-top: 0;
+    margin: 0;
+    background: #476491;
+    padding: 25px 35px 15px;
   }
 }
 
@@ -13,11 +14,7 @@ article.notice-show {
   section.body {
     position: relative;
     z-index: 1;
-    background: white;
-    border-radius: 3px;
-    box-shadow: 0 2px 4px 0 hsla(0, 0%, 0%, 0.25);
     clear: left;
-    margin-top: 2em;
     overflow: hidden;
   }
 }
@@ -26,15 +23,15 @@ article.notice-show {
 //************************************************************************//
 article.notice-show {
   header {
-    @extend %gray-gradient;
-    border-bottom: 1px solid $base-border-color-1;
+    background-color: $header-background-2;
     @include clearfix;
+    color: #fff;
+    font-weight: 500;
 
-    section.sender,
-    section.recipient {
+    section.sender, section.recipient {
       float: left;
       min-height: 150px;
-      @include pad(15px default 25px $base-padding);
+      @include pad(20px default 30px $base-padding);
       width: 50%;
 
       @include media($mobile) {
@@ -46,23 +43,25 @@ article.notice-show {
     }
 
     section.recipient {
-      box-shadow: inset 0 4px 0 #18A753;
+      h5 {
+        color: #9DEEBE;
+      }
     }
 
     section.sender {
-      box-shadow: inset 0 4px 0 #DE5024;
       position: relative;
 
       &:before {
-        background-image: image_url("arrow.svg");
+        background-image: image_url("arrow-dark.svg");
         background-repeat: no-repeat;
         background-size: 26.5%;
         content: "";
         height: 48px;
         left: 82%;
+        opacity: 0.1;
         position: absolute;
         top: 50px;
-        width: 62%;
+        width: 50%;
         z-index: 1;
 
         @include media($mobile) {
@@ -73,20 +72,21 @@ article.notice-show {
 
     h5 {
       text-transform: uppercase;
-      color: darken($light-gray, 15%);
-      font-weight: bold;
+      color: #FC9271;
+      font-weight: 700;
       margin-bottom: 5px;
       font-size: $base-font-size-small-1 - 1;
     }
 
     h6 {
-      font-size: $base-font-size-small-1;
+      font-size: $base-font-size-small-1 + 1;
       font-weight: bold;
 
       a {
-        color: $base-font-color;
+        color: #fff;
 
         &:hover {
+          color: #fff;
           text-decoration: underline;
         }
       }
@@ -95,6 +95,12 @@ article.notice-show {
     span {
       display: block;
       font-size: $base-font-size-small-1;
+      font-weight: 300;
+
+      &.date {
+        color: hsla(0, 0%, 100%, 0.6);
+        margin-top: 8px;
+      }
     }
 
     a {
@@ -317,49 +323,58 @@ section.attachments {
 //************************************************************************//
 article.notice-show {
   footer {
+    background: $header-background-2;
+    border-radius: 0 0 4px 4px;
     @include clearfix;
-    margin: 0 15px 40px;
-    position: relative;
-    top: -1px;
-    z-index: 0;
-    background: hsla(0, 0%, 0%, 0.05);
-    box-shadow: 0 0 0 1px hsla(0, 0%, 0%, 0.1);
-    border-radius: 0 0 3px 3px;
+    margin: 0;
+    color: #fff;
 
     section {
       float: left;
       font-size: $base-font-size-small-1;
       min-height: 20px;
       @include span-columns(6);
-      @include pad(15px default);
+      padding: 25px $base-padding;
     }
 
     h6 {
       @extend %title-caps;
+      color: #fff;
     }
 
     a {
-      color: $base-font-color;
+      border-bottom: 1px dotted hsla(0, 0%, 100%, 0.5);
+      color: #fff;
+      line-height: 1.8em;
       text-decoration: none;
-      border-bottom: 1px dotted #aaa;
 
       &:hover {
-        color: darken($base-font-color, 10%);
-        border-bottom: 1px dotted #555;
+        color: #fff;
+        border-bottom: 1px dotted #fff;
       }
     }
   }
 }
 
 aside.notice {
-  margin: 0 15px;
+  background: $base-background-color-alt;
+  padding: 0 $base-padding;
+  @include clearfix;
+
+  @include media($mobile) {
+    padding: 0 5px;
+  }
 
   h4.title {
     @extend %header-title;
   }
 
   section {
-    @extend %faq-wrapper;
+    padding: 30px 0;
+
+    &:first-child {
+      box-shadow: 2px 0 0 #fff;
+    }
   }
 }
 
@@ -367,24 +382,55 @@ aside.notice {
 //************************************************************************//
 section#relevant-questions {
   @extend %faq-accordion;
-  padding: 0;
+  @include omega;
+  padding-right: $base-padding;
+  @include span-columns(7);
+
+  @include media($mobile) {
+    width: 100%;
+    float: none;
+  }
+
+
+  .question {
+    font-size: $base-font-size;
+
+    a {
+      padding: 7px 20px;
+    }
+  }
+
+  .answer {
+    padding: 20px;
+
+    &, p {
+      font-size: $base-font-size-small-1;
+    }
+  }
 }
 
 section#related-blog-entries {
-  margin-top: 30px;
+  @include span-columns(5);
+
+  @include media($mobile) {
+    float: none;
+    margin-right: 0;
+    padding: 0;
+    width: 100%;
+  }
 
   article {
-    margin: 20px 0;
-    padding: 0 20px 0;
+    margin: 16px 0 18px 20px;
 
     h3 {
       font-weight: 500;
       line-height: 1em;
       margin: 0 0 0.2em;
-      font-size: $base-font-size-2;
+      font-size: $base-font-size;
 
       a {
         color: lighten($base-font-color, 10%);
+        line-height: 1.5em;
         text-decoration: none;
 
         &:hover {
@@ -396,7 +442,7 @@ section#related-blog-entries {
   }
 
   div.metadata {
-    font-size: $base-font-size-small-1;
-    color: $base-font-color-3;
+    font-size: $base-font-size-small-1 - 1px;
+    color: rgba($base-font-color-3, 0.7);
   }
 }

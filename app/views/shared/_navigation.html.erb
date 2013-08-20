@@ -3,9 +3,6 @@
     <li class="nav-item search">
       <%= link_to("Search", root_path) %>
     </li>
-    <li class="nav-item new-notice">
-      <%= link_to("Report Notice", new_notice_path) %>
-    </li>
     <li class="nav-item categories dropdown">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown">Topics</a>
       <div id="dropdown-categories" class="dropdown-menu" role="menu">
@@ -15,6 +12,9 @@
           <% end %>
         </ol>
       </div>
+    </li>
+    <li class="nav-item new-notice">
+      <%= link_to("Report Notice", new_notice_path) %>
     </li>
     <li class="nav-item blog">
       <%= link_to("Blog", blog_entries_path) %>

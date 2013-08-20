@@ -1,6 +1,6 @@
 module NoticeActions
   def submit_recent_notice(title = "A title")
-    visit "/notices/new"
+    visit "/notices/new?type=Dmca"
 
     fill_in "Title", with: title
     fill_in "Date received", with: Time.now
@@ -14,7 +14,7 @@ module NoticeActions
 
     fill_in 'Work URL', with: 'http://www.example.com/original_work.pdf'
     fill_in 'Kind of Work', with: 'movie'
-    fill_in 'Work Description', with: 'A series of videos and still images'
+    fill_in 'Description', with: 'A series of videos and still images'
     fill_in 'Infringing URL', with: "http://example.com/infringing_url1"
 
     yield if block_given?
@@ -26,12 +26,29 @@ module NoticeActions
     within('#recent-notices') { click_on title }
   end
 
-  def attach_notice_file(content)
-    Tempfile.open('notice_file') do |fh|
-      fh.write content
-      fh.flush
+  def attach_notice(content = "Some content")
+    with_file(content) { |file| attach_file "Attach Notice", file.path }
+  end
 
-      attach_file "Attach Notice", fh.path
+  def add_supporting_document(content = "Some content")
+    @field_index ||= 0
+    @field_index  += 1
+
+    click_on "Attach another"
+
+    field_name = "notice_file_uploads_attributes_#{@field_index}_file"
+
+    with_file(content) do |file|
+      attach_file field_name, file.path
+    end
+  end
+
+  def with_file(content)
+    Tempfile.open('file') do |file|
+      file.write content
+      file.flush
+
+      yield(file)
     end
   end
 end

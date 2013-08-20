@@ -1,5 +1,6 @@
 section.posts {
   @include span-columns(8);
+  margin-top: 10px;
 
   @include media($mobile) {
     float: none;
@@ -8,13 +9,14 @@ section.posts {
 }
 
 article.post-item {
-  @extend %content-container;
-  box-shadow: 0 -0px 0 $shadow-2, inset 0 1px 0 #eaeaea, $base-shadow;
-  margin-bottom: 30px;
-  @include transition(box-shadow 0.15s);
+  margin: 45px $base-padding 75px 65px;
 
-  &:hover {
-    box-shadow: 0 -3px 0 $shadow-2, inset 0 0px 0 #eaeaea, $base-shadow;
+  @include media($tablet) {
+    margin: 45px $base-padding 75px $base-padding;
+  }
+
+  @include media($mobile) {
+    margin: 45px $base-padding-mobile 75px $base-padding-mobile;
   }
 
   h3 {
@@ -51,16 +53,25 @@ article.post-item {
 aside.sidebar {
   min-height: 300px;
   @include span-columns(4);
-  @include pad(0 0 0 default);
-  margin-top: 28px;
+  @include pad(0 65px 0 default);
+  @include omega;
+  margin-top: 33px + 20px;
+
+  @include media($tablet) {
+    @include pad(0 $base-padding 0 default);
+  }
 
   @include media($mobile) {
     float: none;
+    margin-top: 0;
+    padding: 0 $base-padding-mobile $base-padding-mobile;
     @include span-columns(4);
   }
 
   h4 {
     font-weight: bold;
+    color: $base-link-color;
+    font-size: $base-font-size-1 + 1;
   }
 
   ol {
@@ -70,8 +81,8 @@ aside.sidebar {
   li {
     border-bottom: 1px solid lighten($base-border-color, 5%);
     list-style: none;
-    margin-bottom: 0.6em;
-    padding-bottom: 0.6em;
+    margin-bottom: 0.9em;
+    padding-bottom: 0.9em;
 
     a {
       text-decoration: none;
@@ -82,5 +93,11 @@ aside.sidebar {
         text-decoration: underline;
       }
     }
+  }
+}
+
+body.blog_entries {
+  div.pagination {
+    clear: left;
   }
 }

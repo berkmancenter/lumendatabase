@@ -2,10 +2,6 @@
 // Main Navigation Shared
 //************************************************************************//
 nav.main-nav {
-  background: $nav-bg;
-  border-bottom: 1px solid darken($nav-bg, 15%);
-  clear: left;
-
   .nav-item {
     float: left;
     list-style: none;
@@ -20,7 +16,6 @@ nav.main-nav {
       color: $nav-color;
       font-size: $base-font-size-small-1;
       font-weight: bold;
-      text-shadow: 0 1px 0 rgba(0, 0, 0, 0.2);
 
       &:focus {
         outline: none;
@@ -30,22 +25,16 @@ nav.main-nav {
         color: #fff;
       }
     }
-
-    &.open {
-      background: lighten($nav-bg, 5%);
-      color: #fff;
-    }
   }
 
   #dropdown-categories {
     @include media($small-screen){
       background: darken($nav-bg, 4%);
-      @include border-top-radius(0);
-      left: 0;
+      left: 5%;
       margin-left: 0;
       margin-top: 0;
       padding-top: 0;
-      width: 100%;
+      width: 90%;
 
       > ol {
         position: relative;
@@ -67,16 +56,17 @@ nav.main-nav {
 }
 
 //************************************************************************//
-// Landing Page
+// Landing Page / Home
 //************************************************************************//
 body.home-index {
   nav.main-nav {
+    background: $nav-bg;
+
     ol.nav-list {
-      max-width: $home-width;
-      margin: 0 auto;
-      border-radius: 0 0 3px 3px;
+      clear: left;
       @include clearfix;
-      margin-top: 0;
+      margin: 0 auto;
+      max-width: $home-width;
       padding: 0;
       width: 100%;
 
@@ -88,6 +78,11 @@ body.home-index {
       li.search {
         display: none;
       }
+
+      li.open {
+        background: $header-background-1;
+        color: #fff;
+      }
     }
   }
 }
@@ -96,31 +91,40 @@ body.home-index {
 // App Header Navigation - not landing
 //************************************************************************//
 header.app {
+  nav.main-nav {
+    float: right;
+    @include clearfix;
+    margin-top: 23px;
+  }
+
   ol.nav-list {
-    @include container;
     margin: 0;
-    padding: 0 0 0 $left-margin;
+    padding: 0;
+    @include clearfix;
 
-    @include media($small-screen) {
-      padding: 0;
-    }
 
-    li.nav-item > a {
-      font-size: $base-font-size-small-1;
-      padding: 6px 15px;
+    li.nav-item {
+      > a {
+        border-radius: 2px;
+        color: $nav-link-color;
+        font-size: $base-font-size;
+        font-weight: 500;
+        margin-right: 5px;
+        padding: 6px 15px;
 
-      &:focus {
-        outline: none;
+        &:hover {
+          background: $nav-hover;
+          color: #fff;
+        }
+
+        &:focus {
+          outline: none;
+        }
       }
-    }
 
-    li.about {
-      float: right;
-      margin-right: $base-padding;
-
-      @include media($small-screen) {
-        float: left;
-        margin: 0;
+      &.open > a {
+        background: $nav-hover;
+        color: #fff;
       }
     }
   }
@@ -138,7 +142,7 @@ header.app {
 // Global Dropdown Menu Styles
 //************************************************************************//
 li.nav-item .dropdown-menu {
-  @include ui-dropdown(center, $width: 240px, $nub-bg-color: $nav-bg, $nub-border-color: none);
+  @include ui-dropdown(center, $width: 200px, $nub-bg-color: $nav-bg, $nub-border-color: none);
   background: $nav-bg;
   border: 0;
   border-radius: 3px;
@@ -159,7 +163,8 @@ li.nav-item .dropdown-menu {
   li a {
     @extend %nav-anchor;
     line-height: 1.2;
-    padding: 10px 15px;
+    margin: 0;
+    padding: 12px 15px;
   }
 }
 
@@ -191,7 +196,7 @@ li.dropdown-submenu {
     left: 100%;
     margin-top: -1px;
     margin-left: -1px;
-    border-left: 1px solid darken($nav-bg, 15%);
+    border-left: 1px solid darken($nav-bg, 5%);
 
     &:before, &:after {
       display: none;
@@ -212,12 +217,12 @@ li.dropdown-submenu {
   }
 
   li.title {
+    border-top-right-radius: 2px;
     text-transform: uppercase;
     font-size: $base-font-size-small-2 - 1;
     color: $nav-color;
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.5);
     padding: 3px 15px;
     font-weight: bold;
-    background: hsla(0, 0%, 0%, 0.2);
+    background: $header-background-2;
   }
 }
