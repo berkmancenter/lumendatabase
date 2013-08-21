@@ -10,7 +10,12 @@ body.devise-passwords {
     height: 50%;
     margin: auto;
     @include position(fixed, 0px 0px 0px 0px);
-    width: 360px;
+    min-width: 300px;
+    max-width: 360px;
+
+    @include media($mobile) {
+      margin-top: 40px;
+    }
   }
 
   .container {
