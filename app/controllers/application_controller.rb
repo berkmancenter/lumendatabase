@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  layout :layout_by_resource
+
   rescue_from CanCan::AccessDenied do |ex|
     logger.warn "Unauthorized attempt to #{ex.action} #{ex.subject}"
 
@@ -32,6 +34,14 @@ class ApplicationController < ActionController::Base
       if params[facet.to_sym].present?
         memo[facet.to_sym] = params[facet.to_sym]
       end
+    end
+  end
+
+  def layout_by_resource
+    if devise_controller?
+      "sessions"
+    else
+      "application"
     end
   end
 
