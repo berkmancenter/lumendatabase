@@ -12,21 +12,33 @@
     </header>
 
     <div class="main">
+      <h2>Re: <%= subject(@notice) %></h2>
+      <p class="source">Sent via: <%= sent_via(@notice) %></p>
+
       <%= render show_partial_for(@notice), notice: @notice %>
 
-      <section class="attachments">
-        <h5 class="title">Supporting Documents</h5>
-        <ol class="attachments">
-          <% @notice.supporting_documents.each do |document| %>
-            <li class="<%= document.file_type.downcase %>">
-              <%= link_to(document.url) do %>
-                <span>Supporting <%= document.file_type %></span>
-                <span class="download">Download</span>
-              <% end %>
-            </li>
-          <% end %>
-        </ol>
-      </section>
+      <% if @notice.supporting_documents.present? %>
+        <section class="attachments">
+          <h5 class="title">Supporting Documents</h5>
+          <ol class="attachments">
+            <% @notice.supporting_documents.each do |document| %>
+              <li class="<%= document.file_type.downcase %>">
+                <%= link_to(document.url) do %>
+                  <span>Supporting <%= document.file_type %></span>
+                  <span class="download">Download</span>
+                <% end %>
+              </li>
+            <% end %>
+          </ol>
+        </section>
+      <% end %>
+
+      <% if @notice.legal_other.present? %>
+        <section class="legal">
+          <h5 class="title">Legal (Other)</h5>
+          <p class="legal-other"><%= @notice.redacted(:legal_other) %></p>
+        </section>
+      <% end %>
     </div>
   </section>
 

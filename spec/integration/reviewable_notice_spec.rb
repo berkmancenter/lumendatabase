@@ -16,17 +16,6 @@ feature "Publishing high risk notices" do
     end
   end
 
-  scenario "A non-US notice with no Legal (Other) text" do
-    create_non_us_risk_trigger
-
-    submit_notice_from('Spain')
-
-    open_recent_notice
-    within('.legal-other') do
-      expect(page).not_to have_content Notice::UNDER_REVIEW_VALUE
-    end
-  end
-
   scenario "A US notice with Legal (Other) text" do
     create_non_us_risk_trigger
 
@@ -39,6 +28,8 @@ feature "Publishing high risk notices" do
       expect(page).to have_content harmless_text
     end
   end
+
+  private
 
   def create_non_us_risk_trigger
     RiskTrigger.create!(

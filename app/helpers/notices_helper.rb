@@ -25,4 +25,20 @@ module NoticesHelper
   def date_received(notice)
     display_date_field(notice, :date_received)
   end
+
+  def subject(notice)
+    if notice.subject.present?
+      notice.subject
+    else
+      'Unknown'
+    end
+  end
+
+  def sent_via(notice)
+    if notice.source.present?
+      notice.source
+    else
+      'Unknown'
+    end
+  end
 end
