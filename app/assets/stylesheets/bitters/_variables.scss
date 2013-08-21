@@ -41,9 +41,10 @@ $light-red: #FBE3E4;
 $light-yellow: #FFF6BF;
 $light-green: #E6EFC2;
 
-$home-background-color: #FAFAFA;
+// $home-background-color: #FAFAFA;
 $base-background-color: #DAE2EF; // blue
 $base-background-color-alt: #F7F9FB; //whiteish
+$home-background-color: $base-background-color-alt;
 
 //  Font Colors
 $base-font-color: $dark-gray;
@@ -76,7 +77,7 @@ $base-border-color-2: #D1D3D8;
 $base-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.22);
 
 // Navigation
-$nav-hover: #A379CE;
+$nav-hover: #A379CE; //darken
 $nav-hover-border: darken($nav-hover, 20%);
 $nav-bg: $header-background-3;
 $nav-color: hsla(0, 0%, 100%, 0.75);

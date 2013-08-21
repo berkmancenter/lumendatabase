@@ -59,26 +59,27 @@ section.home-search-form {
 //************************************************************************//
 .site-news {
   @include clearfix;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
+  background: #fff;
+  border-radius: 3px;
 
   section {
-    background: #fff;
-    border-radius: 3px;
     float: left;
-    width: $home-width / 2 - 15px;
-    padding: 20px;
+    width: $home-width / 2;
+    padding: 20px 40px 30px;
 
-    &:first-child {
-      margin-right: 30px;
-    }
-
-    @include media($tablet) {
+    @include media($mobile) {
+      padding: 15px $base-padding-mobile;
       float: none;
       width: auto;
-      margin: 0 $gutter $gutter;
     }
 
     &.news-snippets {
+      border-left: 3px solid $home-background-color;
+
+      @include media($mobile) {
+        border: 0;
+      }
     }
 
     &.recent-notices {
@@ -91,25 +92,34 @@ section.home-search-form {
   }
 
   li {
-    font-size: $base-font-size - 1px;
     list-style: none;
-    margin-bottom: 0.5em;
+    margin-bottom: 0.8em;
 
     a {
+      @include ellipsis;
+      font-size: $base-font-size-small-1;
       font-weight: 600;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
 
     span.metadata {
       display: block;
-      font-size: $base-font-size-small-1;
-      color: $base-font-color-2;
+      font-size: $base-font-size-small-2;
+      color: lighten($base-font-color-2, 20%);
+      line-height: 1.4em;
     }
   }
 
   h2 {
     @extend %title-caps;
+    color: $header-background-2;
+    color: desaturate(darken($base-link-color, 10%), 4%);
     font-size: $base-font-size-small-1;
-    margin: 0 0 1em;
+    margin: 0 0 0.4em;
   }
 }
 

@@ -45,9 +45,9 @@ article.post {
   }
 
   blockquote {
-    $border-size: 6px;
+    $border-size: 4px;
     $margin-left: 41px;
-    border-left: $border-size solid $shadow-2;
+    border-left: $border-size solid $nav-hover;
     color: lighten($base-font-color, 12%);
     font-style: italic;
     margin-left: -$margin-left;

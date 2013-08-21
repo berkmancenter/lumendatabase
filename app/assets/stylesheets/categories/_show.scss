@@ -22,7 +22,7 @@ section.category-description {
 section.category-notices {
   @include span-columns(3);
   @include omega;
-  @include pad(0 20px);
+  padding-left: 20px;
   margin-top: 21px;
   margin-bottom: 40px;
 

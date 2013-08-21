@@ -28,3 +28,11 @@
   #{$property}: -webkit-calc( #{$value} );
   #{$property}:         calc( #{$value} );
 }
+
+@mixin ellipsis($max-width: 100%) {
+  display: inline-block;
+  max-width: $max-width;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

@@ -9,7 +9,7 @@ section.posts {
 }
 
 article.post-item {
-  margin: 45px $base-padding 75px 65px;
+  margin: 45px $base-padding 65px 65px;
 
   @include media($tablet) {
     margin: 45px $base-padding 75px $base-padding;
