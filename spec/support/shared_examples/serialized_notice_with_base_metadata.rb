@@ -4,7 +4,7 @@ shared_examples 'a serialized notice with base metadata' do |factory_name|
 
   it 'includes base notice metadata' do
     with_a_serialized_notice(factory_name) do |notice, json|
-      %i(title body date_sent date_received sender_name recipient_name).each do |att|
+      %i(title type body date_sent date_received sender_name recipient_name).each do |att|
         expect(json[att]).to eq notice.send(att)
       end
     end

@@ -1,5 +1,5 @@
 class NoticeSerializer < ActiveModel::Serializer
-  attributes :id, :title, :body, :date_sent, :date_received,
+  attributes :id, :type, :title, :body, :date_sent, :date_received,
     :categories, :sender_name, :recipient_name, :works, :tags, :jurisdictions
 
   # TODO - serialize additional entities
