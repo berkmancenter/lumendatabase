@@ -15,6 +15,7 @@ module Searchability
         indexes :rescinded, type: 'boolean', include_in_all: false
         indexes :tag_list, as: 'tag_list'
         indexes :jurisdiction_list, as: 'jurisdiction_list'
+        indexes :action_taken, analyzer: 'keyword'
         indexes :sender_name, as: 'sender_name'
         indexes :sender_name_facet,
           analyzer: 'keyword', as: 'sender_name',
@@ -32,6 +33,8 @@ module Searchability
           analyzer: 'keyword', as: 'country_code', include_in_all: false
         indexes :language_facet,
           analyzer: 'keyword', as: 'language', include_in_all: false
+        indexes :action_taken_facet,
+          analyzer: 'keyword', as: 'action_taken', include_in_all: false
         indexes :categories, type: 'object', as: 'categories'
         indexes :category_facet,
           analyzer: 'keyword', as: ->(notice) { notice.categories.map(&:name) },

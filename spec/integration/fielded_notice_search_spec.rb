@@ -3,36 +3,38 @@ require 'spec_helper'
 feature "Fielded searches of Notices" do
   include SearchHelpers
 
+  ADVANCED_SEARCH_FIELDS = Notice::SEARCHABLE_FIELDS.reject do |field|
+    field.parameter == :term
+  end
+
   context "via parameters only" do
-    Notice::SEARCHABLE_FIELDS.reject { |f| f.parameter == :term }.each do |field|
-      scenario %Q|within #{field.title}|, search: true do
-        in_field, outside_field = FieldedSearchNoticeGenerator.generate(field)
-
+    ADVANCED_SEARCH_FIELDS.each do |field|
+      scenario "within #{field.title}", search: true do
+        generator = FieldedSearchNoticeGenerator.for(field)
         search_on_page = FieldedSearchOnPage.new
-
-        search_on_page.parameterized_search_for(field.parameter, field.title)
+        search_on_page.parameterized_search_for(field.parameter, generator.query)
 
         search_on_page.within_results do
-          expect(page).to have_content(in_field.title)
-          expect(page).not_to have_content(outside_field.title)
+          expect(page).to have_content(generator.matched_notice.title)
+          expect(page).not_to have_content(generator.unmatched_notice.title)
         end
       end
     end
   end
 
   context "via the web UI" do
-    Notice::SEARCHABLE_FIELDS.reject { |f| f.parameter == :term }.each do |field|
+    ADVANCED_SEARCH_FIELDS.each do |field|
       scenario "within #{field.title}", search: true, js: true do
-        in_field, outside_field = FieldedSearchNoticeGenerator.generate(field)
+        generator = FieldedSearchNoticeGenerator.for(field)
         search_on_page = FieldedSearchOnPage.new
         search_on_page.visit_search_page
-        search_on_page.add_fielded_search_for(field.title, field.title)
+        search_on_page.add_fielded_search_for(field.title, generator.query)
 
         search_on_page.run_search
 
         search_on_page.within_results do
-          expect(page).to have_content(in_field.title)
-          expect(page).not_to have_content(outside_field.title)
+          expect(page).to have_content(generator.matched_notice.title)
+          expect(page).not_to have_content(generator.unmatched_notice.title)
         end
       end
     end
@@ -41,12 +43,12 @@ feature "Fielded searches of Notices" do
   context "advanced search" do
     scenario "copies search parameters to the facet form.", search: true, js: true do
       notice = create(:dmca, :with_facet_data, title: "Lion King two")
-      sleep 1
 
-      search_on_page.visit_search_page
+      search_on_page.visit_search_page(true)
       search_on_page.open_advanced_search
 
       search_on_page.add_fielded_search_for('Title', 'lion')
+
       open_and_select_facet(:sender_name_facet, notice.sender_name)
       click_faceted_search_button
 
@@ -59,7 +61,6 @@ feature "Fielded searches of Notices" do
 
     context "not active" do
       scenario "dropdown not displayed by default", search: true, js: true do
-        search_on_page = FieldedSearchOnPage.new
         search_on_page.visit_search_page
 
         expect(page).not_to have_visible_advanced_search_controls
@@ -84,7 +85,7 @@ feature "Fielded searches of Notices" do
       scenario "retains query parameters", search: true, js: true do
         search_on_page.add_fielded_search_for('Title', 'lion')
 
-        search_on_page.run_search
+        search_on_page.run_search(false)
         search_on_page.open_advanced_search
 
         search_on_page.within_fielded_searches do
@@ -132,7 +133,7 @@ feature "Fielded searches of Notices" do
 
       scenario "removes the options for a search from a previous page", search: true, js: true do
         search_on_page.add_fielded_search_for('Title', 'lion')
-        search_on_page.run_search
+        search_on_page.run_search(false)
 
         search_on_page.within_fielded_searches do
           expect(page).to have_select(

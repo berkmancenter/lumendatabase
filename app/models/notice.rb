@@ -17,13 +17,14 @@ class Notice < ActiveRecord::Base
 
   SEARCHABLE_FIELDS = [
     TermSearch.new(:term, :_all, 'All Fields'),
-    TermSearch.new(:title, :title,'Title'),
-    TermSearch.new(:categories, 'categories.name','Categories'),
+    TermSearch.new(:title, :title, 'Title'),
+    TermSearch.new(:categories, 'categories.name', 'Categories'),
     TermSearch.new(:tags, :tag_list, 'Tags'),
-    TermSearch.new(:jurisdictions, :jurisdiction_list,'Jurisdictions'),
-    TermSearch.new(:sender_name, :sender_name,'Sender Name'),
-    TermSearch.new(:recipient_name, :recipient_name,'Recipient Name'),
+    TermSearch.new(:jurisdictions, :jurisdiction_list, 'Jurisdictions'),
+    TermSearch.new(:sender_name, :sender_name, 'Sender Name'),
+    TermSearch.new(:recipient_name, :recipient_name, 'Recipient Name'),
     TermSearch.new(:works, 'works.description', 'Works Descriptions'),
+    TermSearch.new(:action_taken, :action_taken, 'Action taken'),
   ]
 
   FILTERABLE_FIELDS = [
@@ -33,6 +34,7 @@ class Notice < ActiveRecord::Base
     TermFilter.new(:tag_list_facet, 'Tags'),
     TermFilter.new(:country_code_facet, 'Country'),
     TermFilter.new(:language_facet, 'Language'),
+    TermFilter.new(:action_taken_facet, 'Action taken'),
     DateRangeFilter.new(:date_received_facet, :date_received, 'Date')
   ]
 

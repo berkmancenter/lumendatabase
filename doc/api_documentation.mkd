@@ -31,6 +31,7 @@ below, which defines what attributes are remapped for each Notice Type.
 | `tag_list`                         | string             | Comma separated tags, spaces are OK. Automatically lowercased.
 | `regulation_list`                  | string             | Comma separated regulations / laws relevant to this notice, spaces are OK. Automatically lowercased. Only available for CourtOrder, LawEnforcementRequest, and International notice types.
 | `jurisidiction_list`               | string             | Comma separated list of jurisdictions, spaces are OK.
+| `action_taken`                     | string             | One of 'Yes', 'No', or 'Partial'. Defaults to 'No' if unspecified.
 | `works_attributes`                 | [Work]             | A list of Works
 | `entity_notice_roles_attributes`   | [EntityNoticeRole] | A list of EntityNoticeRoles
 
@@ -92,6 +93,7 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'http://f
     "category_ids": [19, 27],
     "tag_list": "movies, disney, youtube",
     "jurisidiction_list": "US, CA",
+    "action_taken": "Partial",
     "works_attributes": [
       {
         "description": "Lion King Video",
@@ -283,6 +285,7 @@ articulating their type.
       "US",
       "CA"
     ],
+    "action_taken": "Partial",
     "sender_name": "Joe Lawyer",
     "recipient_name": "Google, Inc.",
     "works": [

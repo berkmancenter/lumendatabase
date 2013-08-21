@@ -31,10 +31,7 @@ feature "notice submission" do
 
     open_recent_notice
 
-    notice = Notice.last
-    expect(notice.action_taken).to eq 'Yes'
-
-    pending "We don't display action taken yet"
+    expect(page).to have_content("Action taken: Yes")
   end
 
   scenario "submitting a notice with a jurisdiction" do

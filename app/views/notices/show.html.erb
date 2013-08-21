@@ -16,6 +16,7 @@
     <div class="main">
       <h2>Re: <%= subject(@notice) %></h2>
       <p class="source">Sent via: <%= sent_via(@notice) %></p>
+      <p class="action-taken">Action taken: <%= @notice.action_taken %></p>
 
       <%= render show_partial_for(@notice), notice: @notice %>
 

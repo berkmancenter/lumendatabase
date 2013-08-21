@@ -127,6 +127,15 @@ describe 'notices/show.html.erb' do
     expect(page).to have_content("Sent via: Arbitrary source")
   end
 
+  Notice::VALID_ACTIONS.each do |action|
+    it "displays Action taken: #{action}" do
+      assign(:notice, build(:dmca, action_taken: action))
+
+      render
+
+      expect(page).to have_content("Action taken: #{action}")
+    end
+  end
 
   it "displays correctly for a notice of unknown source" do
     assign(:notice, build(:dmca, source: nil))

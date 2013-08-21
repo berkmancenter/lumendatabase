@@ -37,15 +37,21 @@ class FieldedSearchOnPage < PageObject
     find(".remove-group.#{field}").click
   end
 
-  def run_search
+  def run_search(wait_for_index = true)
+    wait_for_index and sleep 1
+
     find('.advanced-search .resubmit .button').click
   end
 
-  def visit_search_page
+  def visit_search_page(wait_for_index = false)
+    wait_for_index and sleep 1
+
     visit '/notices/search'
   end
 
   def parameterized_search_for(field, term)
+    sleep 1
+
     visit "/notices/search?#{field}=#{URI.escape(term)}"
   end
 

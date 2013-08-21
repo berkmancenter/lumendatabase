@@ -1,100 +1,73 @@
 class FieldedSearchNoticeGenerator
   include FactoryGirl::Syntax::Methods
 
-  def initialize(field)
-    @field = field
-  end
+  attr_reader :query, :matched_notice, :unmatched_notice
 
-  def self.generate(field)
-    instance = new(field)
-    instance.send("for_#{field.parameter}".to_sym).tap do
-      sleep 1
+  def self.for(field)
+    new(field).tap do |instance|
+      instance.public_send(:"for_#{field.parameter}")
+      instance.matched_notice.save!
+      instance.unmatched_notice.save!
     end
   end
 
+  def initialize(field)
+    @field = field
+    @query = "Something Specific"
+    @matched_notice = create(:dmca, title: "To Be Found")
+    @unmatched_notice = create(:dmca, title: "Not To Be Found")
+  end
+
   def for_title
-    in_field = create(
-      :dmca, :with_facet_data, @field.field => "Notice with #{@field.title}"
-    )
-    outside_field = create(
-      :dmca, :with_facet_data, title: "N/A", tag_list: [ @field.title ]
-    )
-    return in_field, outside_field
+    matched_notice.title = query
+    unmatched_notice.title = "N/A"
   end
 
   def for_sender_name
-    role_of_concern = @field.parameter.to_s.gsub(/_name/,'')
-
-    matching_entity = build(:entity, name: @field.title)
-    non_matching_entity = build(:entity, name: 'Joe Schmoe')
-
-    in_field = build(
-      :dmca, entity_notice_roles: [
-        build(:entity_notice_role, name: role_of_concern, entity: matching_entity),
-      ]
-    )
-    in_field.save!
-
-    outside_field = build(
-      :dmca, title: "I am not found",
-      entity_notice_roles: [
-        build(:entity_notice_role, name: role_of_concern, entity: non_matching_entity)
-      ]
-    )
-    outside_field.save!
-
-    return in_field, outside_field
+    for_role_name('sender')
   end
 
-  alias :for_recipient_name :for_sender_name
+  def for_recipient_name
+    for_role_name('recipient')
+  end
 
   def for_tags
-    in_field = build(
-      :dmca, :with_facet_data, @field.field => [ @field.title ]
-    )
-    in_field.save!
-
-    outside_field = create(
-      :dmca, :with_facet_data, title: "I am not found"
-    )
-    return in_field, outside_field
+    matched_notice.tag_list = query
+    unmatched_notice.tag_list = "N/A"
   end
 
-  alias :for_jurisdictions :for_tags
+  def for_jurisdictions
+    matched_notice.jurisdiction_list = query
+    unmatched_notice.jurisdiction_list = "N/A"
+  end
 
   def for_categories
-    matching_category = build(:category, name: 'Categories name that matches')
-    non_matching_category = build(:category, name: 'Non matching')
-
-    in_field = build(
-      :dmca, :with_facet_data, categories: [ matching_category ]
-    )
-    in_field.save!
-
-    outside_field = build(
-      :dmca, :with_facet_data, title: 'I am not found', 
-      categories: [ non_matching_category ]
-    )
-    outside_field.save!
-    return in_field, outside_field
+    matched_notice.categories = [build(:category, name: query)]
+    unmatched_notice.categories = [build(:category, name: "N/A")]
   end
 
   def for_works
-    matching_work = build(:work, description: 'Works Description that matches')
-    non_matching_work = build(:work, description: 'Non matching')
-
-    in_field = build(
-      :dmca, :with_facet_data, works: [ matching_work ]
-    )
-    in_field.save!
-
-    outside_field = build(
-      :dmca, :with_facet_data, title: 'I am not found', 
-      works: [ non_matching_work ]
-    )
-    outside_field.save!
-
-    return in_field, outside_field
+    matched_notice.works = [build(:work, description: query)]
+    unmatched_notice.works = [build(:work, description: "N/A")]
   end
 
+  def for_action_taken
+    @query = "Yes"
+
+    matched_notice.action_taken = query
+    unmatched_notice.action_taken = "No"
+  end
+
+  private
+
+  def for_role_name(role_name)
+    matched_notice.entity_notice_roles = [build(
+      :entity_notice_role, name: role_name,
+      entity: build(:entity, name: query)
+    )]
+    unmatched_notice.entity_notice_roles = [build(
+      :entity_notice_role, name: role_name,
+      entity: build(:entity, name: "N/A")
+    )]
+  end
 end

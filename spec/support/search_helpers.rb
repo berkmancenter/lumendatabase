@@ -37,7 +37,7 @@ module SearchHelpers
   end
 
   def submit_faceted_search(term, facet, facet_value)
-    sleep 0.5 # required for indexing to complete
+    sleep 1 # required for indexing to complete
 
     visit '/'
 
