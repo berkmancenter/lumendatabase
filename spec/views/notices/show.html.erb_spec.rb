@@ -162,7 +162,7 @@ describe 'notices/show.html.erb' do
   end
 
   it "does not link to the notices original" do
-    notice = create(:dmca, :with_original)
+    notice = create(:dmca, :with_original, :with_pdf)
     original = notice.file_uploads.first
     assign(:notice, notice)
 
@@ -184,6 +184,15 @@ describe 'notices/show.html.erb' do
         expect(page).to contain_link(file_upload.url)
       end
     end
+  end
+
+  it "does not show supporting documents list when empty" do
+    assign(:notice, build(:dmca))
+
+    render
+
+    expect(page).not_to have_content('Supporting Documents')
+    expect(page).not_to have_css('.attachments')
   end
 
   private
