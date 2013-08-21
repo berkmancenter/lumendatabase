@@ -78,7 +78,7 @@ class NoticesController < ApplicationController
       :language,
       :action_taken,
       category_ids: [],
-      file_uploads_attributes: [:kind, :file],
+      file_uploads_attributes: [:kind, :file, :file_name],
       entity_notice_roles_attributes: [
         :entity_id,
         :name,

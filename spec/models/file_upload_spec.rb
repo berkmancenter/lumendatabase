@@ -34,6 +34,35 @@ describe FileUpload do
     end
   end
 
+  context "attachments" do
+    it "have default file names" do
+      file_upload = build(:file_upload)
+      expect(file_upload.file_file_name).to match 'factory_file'
+    end
+
+    it "can have file names overridden" do
+      file_upload = create(:file_upload, file_name: 'foo.jpg')
+      expect(file_upload.file_file_name).to eq 'foo.jpg'
+    end
+
+    it "have valid file name when file_name is blank" do
+      file_upload = create(:file_upload, file_name: '')
+      expect(file_upload.file_file_name).to match 'factory_file'
+    end
+
+    it "have unsavory characters stripped from file names" do
+      [
+       'bsdfsdf asdflkasdfjasdf /.pdf',
+       'b../../.pdf',
+       'c:\\documents\asdfasdf.fdf',
+       'fcwSDFasdf & fldifs.jpg',
+      ].each do |file_name|
+        file_upload = create(:file_upload, file_name: file_name)
+        expect(file_upload.file_file_name).to match /\A[a-z\d\.\-_ ]+\Z/i
+      end
+    end
+  end
+
   private
 
   def for_each_mime_type(mime_types, &block)
