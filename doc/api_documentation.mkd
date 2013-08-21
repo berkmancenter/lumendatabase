@@ -1,11 +1,15 @@
 ## Create notice
 
 Submits a new Notice to the chillingeffects system via JSON-encoded parameters.
-Authentication is not required for now.
+Authentication is not required for now. There are several different "Notice
+Types," these are essentially subclasses of the abstract Notice class.  "Notice
+Types" allow us to track notice-specific attributes and create serialized
+representations with logical attribute names. Please see **Notice Type Mapping**
+below, which defines what attributes are remapped for each Notice Type.
 
 **Method**: `POST`
 
-**Endpoint**: `http://chillingeffects.herokuapp.com/notices`
+**Endpoint**: `http://flutie.law.harvard.edu:8000/notices`
 
 ### Request
 
@@ -17,13 +21,15 @@ Authentication is not required for now.
 
 | Field                              | Type               | Description
 | ---                                | ---                | ---
-| title                              | string             | Required
+| `title`                            | string             | Required
+| `type`                             | string             | Required: one of 'CourtOrder', 'Dmca', 'International', 'LawEnforcementRequest', 'Other', 'PrivateInformation', or 'Trademark'
 | `subject`                          | string             |
 | `date_sent`                        | string             | Any parseable time value, e.g. "2013-05-21", "2013-05-21 10:01:01 -04:00"
 | `date_received`                    | string             | Any parseable time value, e.g. "2013-05-21", "2013-05-21 10:01:01 -04:00"
 | `source`                           | string             | How did you receive this notice - mail? online form?
 | `category_ids`                     | [int]              | An array of integers representing `category_ids` - See **Request a list of Categories** below.
 | `tag_list`                         | string             | Comma separated tags, spaces are OK. Automatically lowercased.
+| `regulation_list`                  | string             | Comma separated regulations / laws relevant to this notice, spaces are OK. Automatically lowercased. Only available for CourtOrder, LawEnforcementRequest, and International notice types.
 | `jurisidiction_list`               | string             | Comma separated list of jurisdictions, spaces are OK.
 | `works_attributes`                 | [Work]             | A list of Works
 | `entity_notice_roles_attributes`   | [EntityNoticeRole] | A list of EntityNoticeRoles
@@ -53,7 +59,7 @@ Authentication is not required for now.
 
 | Field                | Type    | Description
 | ---                  | ---     | ---
-| `name`               | string  | The name of the role, one of "principal", "agent", "recipient", "sender" or "target". "recipient" and "sender" are displayed on the chillingeffects website.
+| `name`               | string  | The name of the role, one of "principal", "agent", "recipient", "sender", "target", "court", "plaintiff", or "defendant". "recipient" and "sender" are displayed for all Notice Types on the ChillingEffects website after automatic redaction.
 | `entity_id`          | integer | (Optional) The ID of an existing entity. You should not specify the `entity_attributes` values below if you include `entity_id` here.
 | `entity_attributes`  | Entity  | A new entity that has this role on this notice. If you specify `entity_attributes`, you should not specify an `entity_id`
 
@@ -75,9 +81,10 @@ Authentication is not required for now.
 ### Example Request
 
 ```
-curl -H "Accept: application/json" -H "Content-type: application/json" 'http://chillingeffects.herokuapp.com/notices/' -d '{
+curl -H "Accept: application/json" -H "Content-type: application/json" 'http://flutie.law.harvard.edu:8000/notices/' -d '{
   "notice": {
     "title": "DMCA (Copyright) Complaint to Google",
+    "type": "Dmca",
     "subject": "Infringement Notfication via Blogger Complaint",
     "date_sent": "2013-05-22",
     "date_received": "2013-05-23",
@@ -141,7 +148,7 @@ Successful responses will have HTTP status 201 (Created) and include a
 **Note:** Unimportant headers have been removed.
 
 ```
-> curl -H "Accept: application/json" -H "Content-type: application/json" 'http://chillingeffects.herokuapp.com/notices/' -d @tmp/curl.json --dump-header - 
+> curl -H "Accept: application/json" -H "Content-type: application/json" 'http://flutie.law.harvard.edu:8000/notices/' -d @tmp/curl.json --dump-header - 
 HTTP/1.1 201 Created 
 Location: http://localhost:3000/notices/4
 Content-Type: application/json; charset=utf-8
@@ -164,28 +171,100 @@ include a JSON response enumerating the validation failures.
 }
 ```
 
+## Notice Type Mapping
+
+**THIS SECTION IS A WORK IN PROGRESS**
+
+All notices are added to the system through the API using the same named
+parameters (see **Create Notice** above). However, fields are "mapped"
+depending on the Notice Type when serialized as JSON through a search request
+or when requested individually.
+
+### Mappings
+
+#### Court Order
+
+| Ingestion Field Name       | Mapped Field Name              | Removed?
+| ---                        | ---                            | ---
+| `body`                     | `explanation`                  |
+| `works.description`        | `works.subject_of_court_order` |
+| `works.infringing_urls`    | `works.targetted_urls`         |
+| `works.copyrighted_urls`   |                                | Yes, not relevant to this type
+
+#### Dmca
+
+Attributes remain unchanged from ingestion.
+
+#### International
+
+| Ingestion Field Name       | Mapped Field Name              | Removed?
+| ---                        | ---                            | ---
+| `body`                     | `explanation`                  |
+| `works.description`        | `works.subject_of_complaint`   |
+| `works.infringing_urls`    | `works.offending_urls`         |
+| `works.copyrighted_urls`   | `works.original_work_urls`     |
+| `regulation_list`          | `regulations`                  |
+
+#### LawEnforcementRequest
+
+| Ingestion Field Name       | Mapped Field Name                        | Removed?
+| ---                        | ---                                      | ---
+| `body`                     | `explanation`                            |
+| `works.description`        | `works.subject_of_enforcement_request`   |
+| `works.infringing_urls`    | `works.urls_in_request`                  |
+| `works.copyrighted_urls`   | `works.original_work_urls`               |
+| `regulation_list`          | `regulations`                            |
+
+#### Other
+
+| Ingestion Field Name       | Mapped Field Name              | Removed?
+| ---                        | ---                            | ---
+| `body`                     | `explanation`                  |
+| `works.description`        | `works.complaint`              |
+| `works.infringing_urls`    | `works.problematic_urls`       |
+| `works.copyrighted_urls`   | `works.original_work_urls`     |
+
+#### PrivateInformation
+
+| Ingestion Field Name       | Mapped Field Name                            | Removed?
+| ---                        | ---                                          | ---
+| `body`                     | `explanation`                                |
+| `works.description`        | `works.complaint`                            |
+| `works.infringing_urls`    | `works.urls_with_private_information`        |
+| `works.copyrighted_urls`   | `works.original_work_urls`                   |
+
+#### Trademark
+
+| Ingestion Field Name       | Mapped Field Name   | Removed?
+| ---                        | ---                 | ---
+| `works.description`        | `marks`             |
+| `works.infringing_urls`    |                     | Yes
+| `works.copyrighted_urls`   |                     | Yes
+
 ## Request a notice
 
 **Method**: `GET`
 
-**Endpoint**: `http://chillingeffects.herokuapp.com/notices/<notice id>.json`
+**Endpoint**: `http://flutie.law.harvard.edu:8000/notices/<notice id>.json`
 
 
 #### Example Request:
 
 ```
-curl http://chillingeffects.herokuapp.com/notices/1.json
+curl http://flutie.law.harvard.edu:8000/notices/1.json
 ```
 
 ### Successful Responses
 
-Return a JSON-encoded representation of selected notice attributes.
+Return a JSON-encoded representation of selected notice attributes.  **Notice
+Types** will have mapped attributes applied, and be under a root key
+articulating their type.
 
 #### Example Successful Response:
 
 ```
 {
-  "notice":{
+  "dmca":{
     "id":1,
     "title":"Lion King on YouTube",
     "body":null,
@@ -232,10 +311,10 @@ Return a 404 HTTP status header.
 
 **Method**: GET
 
-**Endpoint**: `http://chillingeffects.herokuapp.com/categories.json`
+**Endpoint**: `http://flutie.law.harvard.edu:8000/categories.json`
 
 ```
-curl http://chillingeffects.herokuapp.com/categories.json
+curl http://flutie.law.harvard.edu:8000/categories.json
 ```
 
 ### Successful Responses
@@ -286,7 +365,7 @@ to the query term. Higher numbers are more relevant.
 
 **Method**: `GET`
 
-**Endpoint**: `http://chillingeffects.herokuapp.com/notices/search?term=url_escaped_query&sender_name=Joe%20Smith&page=1`
+**Endpoint**: `http://flutie.law.harvard.edu:8000/notices/search?term=url_escaped_query&sender_name=Joe%20Smith&page=1`
 
 **Parameters**
 
@@ -388,7 +467,7 @@ documentation for more information. We only return the 10 most populous facets.
 **Note:** Some facet information has been omitted to keep examples brief.
 
 ```
-curl -H "Accept: application/json" -H "Content-type: application/json" 'http://chillingeffects.herokuapp.com/notices/search?term=star'
+curl -H "Accept: application/json" -H "Content-type: application/json" 'http://flutie.law.harvard.edu:8000/notices/search?term=star'
 ```
 
 ```
@@ -508,7 +587,7 @@ pagination metadata, please see 'Search notices via fulltext'
 
 **Method**: `GET`
 
-**Endpoint**: `http://chillingeffects.herokuapp.com/entities/search?term=url_escaped_query&page=1`
+**Endpoint**: `http://flutie.law.harvard.edu:8000/entities/search?term=url_escaped_query&page=1`
 
 **Parameters**
 
@@ -552,7 +631,7 @@ Return a JSON-encoded representation of selected entity attributes.
 #### Example Successful Response:
 
 ```
-curl -H "Accept: application/json" -H "Content-type: application/json" 'http://chillingeffects.herokuapp.com/entities/search?term=joe&page=1'
+curl -H "Accept: application/json" -H "Content-type: application/json" 'http://flutie.law.harvard.edu:8000/entities/search?term=joe&page=1'
 ```
 
 ```
