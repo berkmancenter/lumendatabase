@@ -475,6 +475,7 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'http://f
   "notices": [
     {
       "id": "491",
+      "type": "Dmca",
       "title": "Star Wars",
       "body": null,
       "date_received": null,
