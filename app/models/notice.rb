@@ -48,6 +48,17 @@ class Notice < ActiveRecord::Base
 
   VALID_ACTIONS = %w( Yes No Partial )
 
+  TYPES = {
+    'Dmca' => 'DMCA',
+    'Trademark' => 'Trademark',
+    'Defamation' => 'Defamation',
+    'International' => 'International',
+    'CourtOrder' => 'Court Order',
+    'LawEnforcementRequest' => 'Law Enforcement Request',
+    'PrivateInformation' => 'Private Information',
+    'Other' => 'Other',
+  }
+
   belongs_to :reviewer, class_name: 'User'
 
   has_many :categorizations, dependent: :destroy
