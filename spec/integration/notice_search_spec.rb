@@ -24,6 +24,21 @@ feature "Searching Notices" do
     end
   end
 
+  scenario "based on action taken", search: true do
+    notices = [
+      create(:dmca, action_taken: 'No'),
+      create(:dmca, action_taken: 'Yes'),
+      create(:dmca, action_taken: 'Partial'),
+    ]
+
+    notices.each do |notice|
+      search_for(action_taken: notice.action_taken)
+
+      expect(page).to have_n_results(1)
+      expect(page).to have_content(notice.title)
+    end
+  end
+
   scenario "paginates properly", search: true do
     3.times do
       create(:dmca, title: "The Lion King on Youtube")
@@ -128,7 +143,7 @@ feature "Searching Notices" do
     end
   end
 
-  context "changes to assocated models" do
+  context "changes to associated models" do
     scenario "a category is created", search: true do
       notice = create(:dmca)
       notice.categories.create!(name: "arbitrary")

@@ -128,7 +128,13 @@ describe 'notices/search/index.html.erb' do
           { "from" => 1371583484000.0, "to" => 1371669884000.0, "count" => 1},
           { "from" => 1371583485000.0, "to" => 1371669885000.0, "count" => 1}
         ]
-      }
+      },
+      "action_taken_facet" => { "terms" =>
+        [
+          { "term" => "No", "count" => 7 },
+          { "term" => "Yes", "count" => 10 },
+        ]
+      },
     }
   end
 
