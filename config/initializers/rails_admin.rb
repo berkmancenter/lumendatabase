@@ -53,6 +53,12 @@ RailsAdmin.config do |config|
     end
   end
 
+  Notice::TYPES.each do |notice_type, type_label|
+    config.model notice_type do
+      label type_label
+    end
+  end
+
   config.model 'Category' do
     edit do
       configure(:ancestry) { hide }
