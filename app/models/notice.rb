@@ -38,7 +38,7 @@ class Notice < ActiveRecord::Base
     DateRangeFilter.new(:date_received_facet, :date_received, 'Date')
   ]
 
-  REDACTABLE_FIELDS = %i( legal_other body )
+  REDACTABLE_FIELDS = %i( body )
   PER_PAGE = 10
 
   UNDER_REVIEW_VALUE = 'Under review'

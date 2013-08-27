@@ -42,19 +42,19 @@ describe 'rails_admin/application/redact_notice.html.erb' do
   it 'shows redactable_fields alongside originals' do
     notice = build_stubbed(
       :dmca,
-      legal_other: 'Redacted',
-      legal_other_original: 'Original'
+      body: 'Redacted',
+      body_original: 'Original'
     )
     assign(:object, notice)
-    assign(:redactable_fields, %i( legal_other ))
+    assign(:redactable_fields, %i( body ))
 
     render
 
     expect(page).to have_css(
-      "textarea#notice_legal_other:contains('Redacted')"
+      "textarea#notice_body:contains('Redacted')"
     )
     expect(page).to have_css(
-      "textarea#notice_legal_other_original:contains('Original')"
+      "textarea#notice_body_original:contains('Original')"
     )
   end
 

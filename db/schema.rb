@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130730200445) do
+ActiveRecord::Schema.define(:version => 20130827142648) do
 
   create_table "blog_entries", :force => true do |t|
     t.integer  "user_id"
@@ -157,22 +157,20 @@ ActiveRecord::Schema.define(:version => 20130730200445) do
   add_index "infringing_urls_works", ["work_id"], :name => "index_infringing_urls_works_on_work_id"
 
   create_table "notices", :force => true do |t|
-    t.string   "title",                                   :null => false
+    t.string   "title",                              :null => false
     t.text     "body"
     t.datetime "date_received"
-    t.datetime "created_at",                              :null => false
-    t.datetime "updated_at",                              :null => false
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
     t.string   "source"
     t.string   "subject"
-    t.text     "legal_other"
-    t.text     "legal_other_original"
     t.boolean  "review_required"
     t.text     "body_original"
     t.datetime "date_sent"
     t.integer  "reviewer_id"
     t.string   "language"
-    t.boolean  "rescinded",            :default => false, :null => false
-    t.string   "action_taken",         :default => "No",  :null => false
+    t.boolean  "rescinded",       :default => false, :null => false
+    t.string   "action_taken",    :default => "No",  :null => false
     t.string   "type"
   end
 

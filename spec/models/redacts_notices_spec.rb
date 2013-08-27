@@ -45,59 +45,59 @@ end
 describe RedactsNotices do
   context "#redact" do
     it "passes the field's text through all redactors" do
-      notice = build(:dmca, legal_other: 'sensitive-a and sensitive-b')
+      notice = build(:dmca, body: 'sensitive-a and sensitive-b')
       redactor = RedactsNotices.new([
         RedactsNotices::RedactsContent.new('sensitive-a'),
         RedactsNotices::RedactsContent.new('sensitive-b')
       ])
 
-      redactor.redact(notice, :legal_other)
+      redactor.redact(notice, :body)
 
-      expect(notice.legal_other).to eq '[REDACTED] and [REDACTED]'
+      expect(notice.body).to eq '[REDACTED] and [REDACTED]'
     end
 
     it "preserves the original text" do
-      notice = build(:dmca, legal_other: 'Some sensitive text')
+      notice = build(:dmca, body: 'Some sensitive text')
       redactor = RedactsNotices.new([
         RedactsNotices::RedactsContent.new('sensitive')
       ])
 
-      redactor.redact(notice, :legal_other)
+      redactor.redact(notice, :body)
 
-      expect(notice.legal_other_original).to eq 'Some sensitive text'
+      expect(notice.body_original).to eq 'Some sensitive text'
     end
 
     it "handles cases where the field's already redacted" do
       notice = build(
         :dmca,
-        legal_other: "Some [REDACTED] text",
-        legal_other_original: "Some sensitive text"
+        body: "Some [REDACTED] text",
+        body_original: "Some sensitive text"
       )
       redactor = RedactsNotices.new([
         RedactsNotices::RedactsContent.new('sensitive')
       ])
 
-      redactor.redact(notice, :legal_other)
+      redactor.redact(notice, :body)
 
-      expect(notice.legal_other).to eq "Some [REDACTED] text"
-      expect(notice.legal_other_original).to eq "Some sensitive text"
+      expect(notice.body).to eq "Some [REDACTED] text"
+      expect(notice.body_original).to eq "Some sensitive text"
     end
   end
 
   context "#redact_all" do
     it "redacts all notices by id" do
-      notice_one = create(:dmca, legal_other: 'One sensitive thing')
-      notice_two = create(:dmca, legal_other: 'Two sensitive thing')
-      unaffected = create(:dmca, legal_other: 'Three sensitive thing')
+      notice_one = create(:dmca, body: 'One sensitive thing')
+      notice_two = create(:dmca, body: 'Two sensitive thing')
+      unaffected = create(:dmca, body: 'Three sensitive thing')
       redactor = RedactsNotices.new([
         RedactsNotices::RedactsContent.new('sensitive')
       ])
 
-      redactor.redact_all([notice_one.id, notice_two.id], :legal_other)
+      redactor.redact_all([notice_one.id, notice_two.id], :body)
 
-      expect(notice_one.reload.legal_other).to eq 'One [REDACTED] thing'
-      expect(notice_two.reload.legal_other).to eq 'Two [REDACTED] thing'
-      expect(unaffected.reload.legal_other).to eq 'Three sensitive thing'
+      expect(notice_one.reload.body).to eq 'One [REDACTED] thing'
+      expect(notice_two.reload.body).to eq 'Two [REDACTED] thing'
+      expect(unaffected.reload.body).to eq 'Three sensitive thing'
     end
   end
 
