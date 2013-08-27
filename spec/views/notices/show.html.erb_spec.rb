@@ -1,6 +1,12 @@
 require 'spec_helper'
 
 describe 'notices/show.html.erb' do
+  before do
+    @ability = Object.new
+    @ability.extend(CanCan::Ability)
+    view.controller.stub(:current_ability) { @ability }
+  end
+
   it "displays a metadata from a notice" do
     notice = build(:dmca)
     assign(:notice, notice)
@@ -202,6 +208,29 @@ describe 'notices/show.html.erb' do
 
     expect(page).not_to have_content('Supporting Documents')
     expect(page).not_to have_css('.attachments')
+  end
+
+  it "shows a link to the admin page for admins" do
+    notice = build_stubbed(:dmca)
+    assign(:notice, notice)
+    @ability.can :access, :rails_admin
+
+    render
+
+    expect(page).to contain_link(
+      rails_admin.show_path(model_name: 'dmca', id: notice.id)
+    )
+  end
+
+  it "does not show a link to admin normally" do
+    notice = build_stubbed(:dmca)
+    assign(:notice, notice)
+
+    render
+
+    expect(page).not_to contain_link(
+      rails_admin.show_path(model_name: 'dmca', id: notice.id)
+    )
   end
 
   private
