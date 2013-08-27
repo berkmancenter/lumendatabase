@@ -64,12 +64,12 @@ describe "RedactNoticeProc" do
     context "PutResponder#handler" do
       it "updates the objects attributes" do
         stub_notice_params(
-          legal_other: "A",
-          legal_other_original: "B",
+          body: "A",
+          body_original: "B",
           review_required: "1"
         )
-        @object.should_receive(:legal_other=).with("A")
-        @object.should_receive(:legal_other_original=).with("B")
+        @object.should_receive(:body=).with("A")
+        @object.should_receive(:body_original=).with("B")
         @object.should_receive(:review_required=).with("1")
         @object.should_receive(:save)
 
@@ -78,12 +78,12 @@ describe "RedactNoticeProc" do
 
       it "updates the object's attributes" do
         stub_notice_params(
-          legal_other: "A",
-          legal_other_original: "B",
+          body: "A",
+          body_original: "B",
           review_required: "1"
         )
-        @object.should_receive(:legal_other=).with("A")
-        @object.should_receive(:legal_other_original=).with("B")
+        @object.should_receive(:body=).with("A")
+        @object.should_receive(:body_original=).with("B")
         @object.should_receive(:review_required=).with("1")
         @object.should_receive(:save)
 

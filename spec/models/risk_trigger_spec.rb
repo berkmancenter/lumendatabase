@@ -2,13 +2,13 @@ require 'spec_helper'
 
 describe RiskTrigger do
   it "sees a risky notice as risky" do
-    notice = double("Notice", country_code: 'Spain', legal_other: "nonempty")
+    notice = double("Notice", country_code: 'Spain', body: "nonempty")
 
     expect(example_trigger).to be_risky(notice)
   end
 
   it "uses negated to reverse the comparison" do
-    notice = double("Notice", country_code: 'Spain', legal_other: "nonempty")
+    notice = double("Notice", country_code: 'Spain', body: "nonempty")
     trigger = example_trigger
     trigger.negated = false
 
@@ -16,8 +16,8 @@ describe RiskTrigger do
   end
 
   it "sees a safe notice as safe" do
-    notice_1 = double("Notice", country_code: 'United States', legal_other: "nonempty")
-    notice_2 = double("Notice", country_code: 'Spain', legal_other: nil)
+    notice_1 = double("Notice", country_code: 'United States', body: "nonempty")
+    notice_2 = double("Notice", country_code: 'Spain', body: nil)
 
     expect(example_trigger).not_to be_risky(notice_1)
     expect(example_trigger).not_to be_risky(notice_2)
@@ -34,7 +34,7 @@ describe RiskTrigger do
 
   def example_trigger
     RiskTrigger.new(
-      field: :legal_other,
+      field: :body,
       condition_field: :country_code,
       condition_value: 'United States',
       negated: true

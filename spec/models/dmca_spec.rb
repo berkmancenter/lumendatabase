@@ -186,15 +186,15 @@ describe Dmca do
 
   context "#redacted" do
     it "returns '#{Dmca::UNDER_REVIEW_VALUE}' when review is required" do
-      notice = Dmca.new(review_required: true, legal_other: "A value")
+      notice = Dmca.new(review_required: true, body: "A value")
 
-      expect(notice.redacted(:legal_other)).to eq Dmca::UNDER_REVIEW_VALUE
+      expect(notice.redacted(:body)).to eq Dmca::UNDER_REVIEW_VALUE
     end
 
     it "returns the actual value when review is not required" do
-      notice = Dmca.new(review_required: false, legal_other: "A value")
+      notice = Dmca.new(review_required: false, body: "A value")
 
-      expect(notice.redacted(:legal_other)).to eq "A value"
+      expect(notice.redacted(:body)).to eq "A value"
     end
   end
 

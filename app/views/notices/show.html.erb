@@ -35,13 +35,6 @@
           </ol>
         </section>
       <% end %>
-
-      <% if @notice.legal_other.present? %>
-        <section class="legal">
-          <h5 class="title">Legal (Other)</h5>
-          <p class="legal-other"><%= @notice.redacted(:legal_other) %></p>
-        </section>
-      <% end %>
     </div>
   </section>
 

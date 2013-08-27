@@ -3,28 +3,28 @@ require 'spec_helper'
 feature "Publishing high risk notices" do
   let(:harmless_text) { "Some harmless text" }
 
-  scenario "A non-US notice with Legal (Other) text" do
+  scenario "A non-US notice with Body text" do
     create_non_us_risk_trigger
 
     submit_notice_from('Spain') do
-      fill_in "Legal (Other)", with: harmless_text
+      fill_in "Body", with: harmless_text
     end
 
     open_recent_notice
-    within('.legal-other') do
+    within('.notice-body .body') do
       expect(page).to have_content Notice::UNDER_REVIEW_VALUE
     end
   end
 
-  scenario "A US notice with Legal (Other) text" do
+  scenario "A US notice with Body text" do
     create_non_us_risk_trigger
 
     submit_notice_from('United States') do
-      fill_in "Legal (Other)", with: harmless_text
+      fill_in "Body", with: harmless_text
     end
 
     open_recent_notice
-    within('.legal-other') do
+    within('.notice-body .body') do
       expect(page).to have_content harmless_text
     end
   end
@@ -33,7 +33,7 @@ feature "Publishing high risk notices" do
 
   def create_non_us_risk_trigger
     RiskTrigger.create!(
-      field: 'legal_other',
+      field: 'body',
       condition_field: 'country_code',
       condition_value: 'United States',
       negated: true

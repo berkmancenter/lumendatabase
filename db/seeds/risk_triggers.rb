@@ -1,5 +1,5 @@
 RiskTrigger.create!(
-  field: :legal_other,
+  field: :body,
   condition_field: :country_code,
   condition_value: 'United States',
   negated: true
