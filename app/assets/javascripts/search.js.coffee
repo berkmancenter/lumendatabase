@@ -36,8 +36,8 @@ $('.field-group:not(.template-row) select').on 'change', ->
   $rows.enableRowsWithValues()
   $rows.templateRow().find('select').prepend(optionClone)
 
-$('.advanced-search').on 'click', '.remove-group', ->
-  $fieldGroup = $(event.target).parent()
+$('.advanced-search').on 'click', '.remove-group', (event) ->
+  $fieldGroup = $((event || window.event).target).parent()
   field = $fieldGroup.find('input[type="text"]').attr('name')
   option = $fieldGroup.find("option[value='#{field}']")
   $('.field-group:last select').prepend(option)
