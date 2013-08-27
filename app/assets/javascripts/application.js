@@ -14,6 +14,7 @@
 //= require jquery_ujs
 //= require jquery.ui.effect.all
 //= require jquery.collapse
+//= require jquery.tipsy
 //= require select2
 //= require bootstrap-datepicker/core
 //= require_tree .

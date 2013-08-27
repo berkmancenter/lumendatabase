@@ -8,8 +8,8 @@
     <p>Provide us with information about the DMCA takedown notice you <em>sent</em> or <em>received</em>.</p>
     <div class="body-wrapper left main">
       <%= form.input :type, as: :hidden %>
-      <%= form.input :title %>
-      <%= form.input :subject %>
+      <%= form.input :title, :label_html => {:data => {:tooltip => "Title is foo" }} %>
+      <%= form.input :subject, :label_html => {:data => {:tooltip => "Subject is bar" }} %>
       <%= form.input :date_sent, as: :string, placeholder: "YYYY-MM-DD" %>
       <%= form.input :date_received, as: :string, placeholder: "YYYY-MM-DD" %>
       <%= form.input :source, label: "Sent via", placeholder: 'Online form, Email, Postal mail, etc.' %>

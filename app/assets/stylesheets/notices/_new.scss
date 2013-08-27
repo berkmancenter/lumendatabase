@@ -141,6 +141,10 @@ form.new_notice {
     font-size: $base-font-size-small-1;
   }
 
+  .hidden {
+    display: none;
+  }
+
   div.buttons-wrapper {
     @include clearfix;
     padding: 45px 0 15px;
