@@ -116,8 +116,14 @@ class Notice < ActiveRecord::Base
   end
 
   def self.add_default_filter(search)
-    filter = TermFilter.new(:rescinded)
-    filter.apply_to_search(search, :rescinded, false)
+    { rescinded: false, spam: false }.each do |field, value|
+      filter = TermFilter.new(field)
+      filter.apply_to_search(search, field, value)
+    end
+  end
+
+  def self.find_visible(notice_id)
+    where(spam: false).find(notice_id)
   end
 
   def active_model_serializer

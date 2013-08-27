@@ -29,36 +29,76 @@ describe Redaction::Queue do
     end
   end
 
-  context "#release" do
-    it "updates reviewer_id to nil for the passed notice ids" do
-      user = create(:user)
-      queue = new_queue(user)
-      notice_one = notice_in_review(user)
-      notice_two = notice_in_review(user)
-      notice_three = notice_in_review(user)
+  context "bulk actions" do
+    context "#release" do
+      it "updates reviewer_id to nil for the passed notice ids" do
+        user = create(:user)
+        queue = new_queue(user)
+        notice_one = notice_in_review(user)
+        notice_two = notice_in_review(user)
+        notice_three = notice_in_review(user)
 
-      queue.release([notice_one.id, notice_three.id])
+        queue.release([notice_one.id, notice_three.id])
 
-      expect(notice_one.reload.reviewer).to be_nil
-      expect(notice_three.reload.reviewer).to be_nil
-      expect(notice_two.reload.reviewer).to eq user
+        expect(notice_one.reload.reviewer).to be_nil
+        expect(notice_three.reload.reviewer).to be_nil
+        expect(notice_two.reload.reviewer).to eq user
+      end
+
+      it "ignores notices not in my queue" do
+        user = create(:user)
+        other_user = create(:user)
+        queue = new_queue(user)
+        notice_one = notice_in_review(user)
+        notice_two = notice_in_review(other_user)
+
+        queue.release([notice_one.id, notice_two.id])
+
+        expect(notice_one.reload.reviewer).to be_nil
+        expect(notice_two.reload.reviewer).to eq other_user
+      end
+
+      it "handles a nil parameter" do
+        expect { new_queue.release(nil) }.not_to raise_error
+      end
     end
 
-    it "ignores notices not in my queue" do
-      user = create(:user)
-      other_user = create(:user)
-      queue = new_queue(user)
-      notice_one = notice_in_review(user)
-      notice_two = notice_in_review(other_user)
+    context "#mark_as_spam" do
+      it "updates spam to true and releases the passed notice ids" do
+        user = create(:user)
+        queue = new_queue(user)
+        notice_one = notice_in_review(user)
+        notice_two = notice_in_review(user)
+        notice_three = notice_in_review(user)
 
-      queue.release([notice_one.id, notice_two.id])
+        queue.mark_as_spam([notice_one.id, notice_three.id])
 
-      expect(notice_one.reload.reviewer).to be_nil
-      expect(notice_two.reload.reviewer).to eq other_user
-    end
+        expect(notice_one.reload).to be_spam
+        expect(notice_three.reload).to be_spam
+        expect(notice_two.reload).not_to be_spam
+        expect(notice_one.reviewer).to be_nil
+        expect(notice_three.reviewer).to be_nil
+        expect(notice_two.reviewer).to eq user
+      end
 
-    it "handles a nil parameter" do
-      expect { new_queue.release(nil) }.not_to raise_error
+      it "ignores notices not in my queue" do
+        user = create(:user)
+        other_user = create(:user)
+        queue = new_queue(user)
+        notice_one = notice_in_review(user)
+        notice_two = notice_in_review(other_user)
+
+        queue.mark_as_spam([notice_one.id, notice_two.id])
+
+        expect(notice_one.reload).to be_spam
+        expect(notice_two.reload).not_to be_spam
+        expect(notice_one.reviewer).to be_nil
+        expect(notice_two.reviewer).to eq other_user
+      end
+
+      it "handles a nil parameter" do
+        expect { new_queue.mark_as_spam(nil) }.not_to raise_error
+      end
     end
 
     private

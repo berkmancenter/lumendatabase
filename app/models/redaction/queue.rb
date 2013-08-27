@@ -19,6 +19,11 @@ module Redaction
       Notice.in_review(user).where(id: notice_ids).update_all(reviewer_id: nil)
     end
 
+    def mark_as_spam(notice_ids)
+      Notice.in_review(user).where(id: notice_ids).
+        update_all(spam: true, reviewer_id: nil)
+    end
+
     def available_space
       self.class.queue_max - notices.count
     end
