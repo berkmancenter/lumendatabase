@@ -271,6 +271,7 @@ header.app .container.advanced-search {
       font-weight: 600;
       display: block;
       padding: 0.65em 1.8em;
+      border-radius: 2px;
       width: $select-width + $input-width;
 
       @include media($mobile) {

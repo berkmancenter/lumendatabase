@@ -1,7 +1,23 @@
 <% title 'Report Notice' %>
 
-<ul>
-  <% Notice::TYPES.each do |notice_type, type_label| %>
-    <li><%= link_to(type_label, new_notice_path(type: notice_type)) %></li>
-  <% end %>
-</ul>
+<div class="inner-padding">
+  <h1>Which type of notice would you like to report?</h1>
+  <section class="notices-list">
+    <ul>
+      <% Notice::TYPES.each do |notice_type, type_label| %>
+        <li data-id="<%= notice_type %>"><%= type_label %></li>
+      <% end %>
+    </ul>
+  </section>
+
+  <section class="info-panel wip">
+    <% Notice::TYPES.each do |notice_type, type_label| %>
+      <div data-id="<%= notice_type %>">
+        <article><b><%= type_label %>:</b> Has someone asked your ISP, or the host of an online discussion you participate in, to give them your identity or other information about you?</article>
+        <div class="button-wrapper">
+          <a class="button" href="<%= new_notice_path(type: notice_type) %>">Report <%= type_label %> notice</a>
+        </div>
+      </div>
+    <% end %>
+  </section>
+</div>

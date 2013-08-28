@@ -27,7 +27,15 @@ body {
   background: #fff;
   border-radius: 0 0 4px 4px;
   margin-bottom: 40px;
+}
 
+.inner-padding {
+  @include clearfix;
+  padding: $base-padding;
+
+  @include media($mobile) {
+    padding: $base-padding-mobile;
+  }
 }
 
 // Add inner padding to certain pages
