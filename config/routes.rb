@@ -26,5 +26,9 @@ Chill::Application.routes.draw do
 
   match :faceted_search, controller: 'notices/search', action: 'index'
 
+  # N.B. no constraints on categories, that would require a db call
+  match '/:recipient_name(/:categories)' => 'notices/search#index',
+    constraints: { recipient_name: /Twitter|Google/i }
+
   root to: 'home#index'
 end
