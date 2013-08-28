@@ -45,6 +45,13 @@ section.notice-new {
       color: darken($base-title-color, 5%);
       font-weight: 800;
     }
+
+    p.disclaimer {
+      color: darken($light-gray, 20%);
+      font-size: $base-font-size-small-2;
+      font-style: italic;
+      margin: 20px 0 0;
+    }
   }
 
   h4 {
