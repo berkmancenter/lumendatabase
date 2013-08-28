@@ -2,55 +2,56 @@ require 'spec_helper'
 
 feature "Redaction queue" do
   scenario "A user processes their queue" do
-    Redaction::Queue.stub(:queue_max).and_return(3)
-
-    user = create(:user, :admin)
     notices = [
       create(:dmca, :redactable),
       create(:dmca, :redactable),
-      notice_three = create(:dmca, :redactable)
+      notice = create(:dmca, :redactable)
     ]
 
-    queue = RedactionQueueOnPage.new
-    queue.visit_as(user)
-    queue.fill
+    with_queue do |queue|
+      expect(queue).to have_notices(notices)
 
-    expect(queue).to have_notices(notices)
+      # defaults all checked
+      queue.unselect_notice(notice)
+      queue.process_selected
 
-    # defaults all checked
-    queue.unselect_notice(notice_three)
-    queue.process_selected
+      queue.publish_and_next
 
-    queue.publish_and_next
+      expect(queue).not_to have_next
 
-    expect(queue).not_to have_next
+      queue.publish
 
-    queue.publish
-
-    expect(queue).to have_notices([notice_three])
+      expect(queue).to have_notices([notice])
+    end
   end
 
   scenario "A user releases some of the notices in their queue" do
-    Redaction::Queue.stub(:queue_max).and_return(3)
+    create_list(:dmca, 2, :redactable)
+    notice = create(:dmca, :redactable)
 
-    user = create(:user, :admin)
-    notices = [
-      create(:dmca, :redactable),
-      create(:dmca, :redactable),
-      notice_three = create(:dmca, :redactable)
-    ]
+    with_queue do |queue|
+      queue.unselect_notice(notice)
+      queue.release_selected
 
-    queue = RedactionQueueOnPage.new
-    queue.visit_as(user)
-    queue.fill
+      expect(queue).to have_notices([notice])
+    end
+  end
 
-    expect(queue).to have_notices(notices)
+  scenario "A user marks some notices as spam" do
+    notice_one = create(:dmca, :redactable)
+    notice_two = create(:dmca, :redactable)
+    notice_three = create(:dmca, :redactable)
 
-    # defaults all checked
-    queue.unselect_notice(notice_three)
-    queue.release_selected
+    with_queue do |queue|
+      queue.unselect_notice(notice_three)
+      queue.mark_selected_as_spam
 
-    expect(queue).to have_notices([notice_three])
+      expect(queue).to have_notices([notice_three])
+
+      expect(notice_one.reload).to be_spam
+      expect(notice_two.reload).to be_spam
+      expect(notice_three.reload).not_to be_spam
+    end
   end
 
   scenario "A user refills their queue by category and submitter" do
@@ -90,33 +91,45 @@ feature "Redaction queue" do
   end
 
   scenario "A user redacts a pattern everywhere", js: true do
-    user = create(:user, :admin)
     affected_notices = create_list(:dmca, 3, :redactable, body: "Some text")
     unaffected_notices = create_list(:dmca, 3, :redactable, body: "Some text")
+
+    with_queue do |queue|
+      unaffected_notices.each { |notice| queue.unselect_notice(notice) }
+
+      queue.process_selected
+
+      body_field = RedactableFieldOnPage.new(:body)
+      body_field.select
+
+      queue.redact_everywhere
+
+      expect(body_field).to have_content('[REDACTED]')
+
+      affected_notices.each do |notice|
+        notice.reload
+        expect(notice.body).to eq '[REDACTED]'
+      end
+
+      unaffected_notices.each do |notice|
+        notice.reload
+        expect(notice.body).to eq "Some text"
+      end
+    end
+  end
+
+  private
+
+  def with_queue
+    user = create(:user, :admin)
 
     queue = RedactionQueueOnPage.new
     queue.visit_as(user)
     queue.fill
 
-    unaffected_notices.each { |notice| queue.unselect_notice(notice) }
+    yield(queue) if block_given?
 
-    queue.process_selected
-
-    body_field = RedactableFieldOnPage.new(:body)
-    body_field.select
-
-    queue.redact_everywhere
-
-    expect(body_field).to have_content('[REDACTED]')
-
-    affected_notices.each do |notice|
-      notice.reload
-      expect(notice.body).to eq '[REDACTED]'
-    end
-
-    unaffected_notices.each do |notice|
-      notice.reload
-      expect(notice.body).to eq "Some text"
-    end
+    queue
   end
+
 end

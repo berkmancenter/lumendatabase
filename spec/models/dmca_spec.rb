@@ -320,4 +320,17 @@ describe Dmca do
       expect(notice.supporting_documents).to be_all { |d| d.kind == 'supporting' }
     end
   end
+
+  context ".find_visible" do
+    it "finds notices which are not spam" do
+      notice = create(:dmca, spam: false)
+      spam_notice = create(:dmca, spam: true)
+
+      expect(Notice.find_visible(notice.id)).to eq notice
+      expect { Notice.find_visible(spam_notice.id) }.to raise_error(
+        ActiveRecord::RecordNotFound
+      )
+    end
+  end
+
 end

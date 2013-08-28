@@ -40,7 +40,7 @@ class NoticesController < ApplicationController
   end
 
   def show
-    @notice = Notice.find(params[:id])
+    @notice = Notice.find_visible(params[:id])
 
     respond_to do |format|
       format.html do

@@ -56,9 +56,7 @@ describe RedactQueueProc do
       queue = stub_new(Redaction::Queue, current_user)
       refill = stub_new(Redaction::RefillQueue, params)
       refill.should_receive(:fill).with(queue)
-      should_receive(:redact_queue_path).with(@abstract_model).and_return(:path)
-      should_receive(:redirect_to).with(:path)
-      should_not_receive(:respond_to)
+      should_redirect_back
 
       instance_eval(&RedactQueueProc)
     end
@@ -68,9 +66,17 @@ describe RedactQueueProc do
       params[:release_selected] = true
       queue = stub_new(Redaction::Queue, current_user)
       queue.should_receive(:release).with(%w( 1 3 5 9 ))
-      should_receive(:redact_queue_path).with(@abstract_model).and_return(:path)
-      should_receive(:redirect_to).with(:path)
-      should_not_receive(:respond_to)
+      should_redirect_back
+
+      instance_eval(&RedactQueueProc)
+    end
+
+    it "marks notices as spam and redirects if required" do
+      params[:selected] = %w( 1 3 5 9 )
+      params[:mark_selected_as_spam] = true
+      queue = stub_new(Redaction::Queue, current_user)
+      queue.should_receive(:mark_as_spam).with(%w( 1 3 5 9 ))
+      should_redirect_back
 
       instance_eval(&RedactQueueProc)
     end
@@ -91,5 +97,11 @@ describe RedactQueueProc do
     klass.new(*args).tap do |instance|
       klass.stub(:new).and_return(instance)
     end
+  end
+
+  def should_redirect_back
+    should_receive(:redact_queue_path).with(@abstract_model).and_return(:path)
+    should_receive(:redirect_to).with(:path)
+    should_not_receive(:respond_to)
   end
 end
