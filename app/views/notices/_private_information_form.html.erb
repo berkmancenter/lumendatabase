@@ -22,7 +22,7 @@
           collection: available_categories,
           input_html: { multiple: true }
         %>
-      <%= form.input :language, collection: Language.codes %>
+      <%= form.input :language, collection: Language.all, label_method: :label, value_method: :code %>
       <%= form.input :jurisdiction_list, label: "Jurisdiction", placeholder: 'a list of countries - US, CA, etc.' %>
       <%= form.input :action_taken, collection: Notice::VALID_ACTIONS %>
     </div>
