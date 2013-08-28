@@ -209,4 +209,24 @@ feature "User authorization" do
 
     expect(role.reload.name).to eq "another_name"
   end
+
+  scenario "Visibility of notice administation links" do
+    notice = create(:dmca)
+    admin_path = rails_admin.show_path(model_name: 'dmca', id: notice.id)
+
+    visit notice_path(notice)
+
+    expect(page).not_to contain_link(admin_path)
+
+    user = AdminOnPage.new(create(:user, :admin))
+    user.sign_in
+
+    visit notice_path(notice)
+
+    expect(page).to contain_link(admin_path)
+
+    click_on "Admin View"
+
+    expect(user).to be_in_admin
+  end
 end
