@@ -10,5 +10,31 @@ describe "Notices" do
     )
     end
   end
-
 end
+
+describe "Submitters" do
+  %w( Twitter Google twitter google ).each do |submitter|
+    it "routes /#{submitter} to a search on that recipient name" do
+      expect(get: "/#{submitter}").to route_to(
+        controller: "notices/search",
+        action: "index",
+        recipient_name: submitter
+      )
+    end
+
+    it "routes /#{submitter}/Category to a search on that recipient/category" do
+      expect(get: "/#{submitter}/Defamation").to route_to(
+        controller: "notices/search",
+        action: "index",
+        recipient_name: submitter,
+        categories: "Defamation"
+      )
+    end
+  end
+
+  it "only supports Twitter and Google" do
+    expect(get: "/Other").not_to be_routable
+    expect(get: "/Other/Whatever").not_to be_routable
+  end
+end
+
