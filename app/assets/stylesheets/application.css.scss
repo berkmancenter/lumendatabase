@@ -20,21 +20,27 @@
 
 // Vendor
 @import 'select2';
+@import 'tipsy';
 @import 'bootstrap-datepicker';
 
+// Shared
 @import 'shared/fontello';
 @import 'shared/header';
 @import 'shared/pagination';
 @import 'shared/navigation';
 @import 'shared/footer';
+@import 'shared/tooltip';
 
+// Layouts
 @import 'layouts/application';
 @import 'layouts/home';
 @import 'layouts/sessions';
 
+// Views
 @import 'home/index';
 @import 'notices/show';
 @import 'notices/new';
+@import 'notices/forms';
 @import 'categories/show';
 @import 'search/index';
 @import 'search/filters';

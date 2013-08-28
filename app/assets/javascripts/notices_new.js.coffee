@@ -31,3 +31,19 @@ $('.attach #add-another').click ->
 
   addFileUploadInput 'kind', parent, (newContainer, nextId, nextName) ->
     newContainer.find('input').attr('id', nextId).attr('name', nextName).attr('value', 'supporting')
+
+
+toggleReportNoticePanels = ->
+  $list = $('.notices-list ul')
+  $info = $('.info-panel')
+
+  el.children().first().addClass("active") for el in [$list, $info]
+  $list.find('li').on "click", ->
+    unless $(this).hasClass('active')
+      id = $(this).attr('data-id')
+      $(this).addClass('active').siblings().removeClass('active')
+      $info.find("[data-id='#{id}']").addClass('active').siblings().removeClass('active')
+
+toggleReportNoticePanels()
+
+

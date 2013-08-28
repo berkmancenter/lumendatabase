@@ -1,0 +1,208 @@
+@import "multi-select";
+@import "datepicker";
+
+section.notice-new {
+  padding: $base-padding 0;
+
+  section, header {
+    padding: 45px $base-padding;
+
+    @include media($mobile) {
+      padding: 45px $base-padding-mobile;
+    }
+  }
+
+  section {
+    @include clearfix;
+
+    &:nth-of-type(2n) {
+      border: 1px solid $light-gray;
+      border-left: 0;
+      border-right: 0;
+      background: hsla(0, 0%, 0%, 0.02);
+    }
+
+    div.body-wrapper {
+      float: left;
+      width: 50%;
+
+      @include media($mobile) {
+        float: none;
+        width: 100%;
+      }
+
+      &.left {
+        padding-right: 5%;
+      }
+    }
+  }
+
+  header {
+    padding-top: 0;
+
+    h3 {
+      margin: 10px 0;
+      color: darken($base-title-color, 5%);
+      font-weight: 800;
+    }
+  }
+
+  h4 {
+    color: $base-title-color;
+    font-weight: 800;
+    margin: 0 0 .4em;
+
+    & + p {
+      margin-bottom: 2em;
+    }
+  }
+}
+
+//************************************************************************//
+// Form
+//************************************************************************//
+$long-label-width: $form-label-width + 30px;
+form.new_notice {
+  div {
+    @include clearfix;
+  }
+
+  div.input {
+    position: relative;
+    margin-bottom: 10px;
+    clear: left;
+  }
+
+  label {
+    @include linear-gradient(#eee, #eaeaea);
+    box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, 0.5);
+    border-radius: $form-border-radius 0 0 $form-border-radius;
+    border-right: 1px solid $form-border-color;
+    font-family: $helvetica;
+    height: calc(100% - 2px);
+    left: 1px;
+    margin-bottom: 2px;
+    padding: 6px 10px;
+    position: absolute;
+    text-shadow: 0 1px 0 hsla(0, 0%, 100%, 0.8);
+    top: 1px;
+    width: $form-label-width;
+    z-index: 1;
+
+    &.text {
+      border-bottom: 1px solid $form-border-color;
+      border-right: 0;
+      height: auto;
+      left: 1px;
+      right: 1px;
+      width: auto;
+      border-radius: $form-border-radius $form-border-radius 0 0;
+    }
+  }
+
+  select {
+    padding: 10px 10px 5px 10px;
+    margin-left: $form-label-width + $form-label-margin;
+    width: 270px;
+    margin-top: 5px;
+  }
+
+  input {
+    padding: 6px;
+    width: 100%;
+    margin-bottom: 0;
+  }
+
+  #{$all-text-inputs} {
+    padding-left: $form-label-width + $form-label-margin;
+  }
+
+  textarea {
+    height: 150px;
+    width: 100%;
+    resize: vertical;
+    margin-bottom: 0;
+    padding-top: 32px + $form-label-margin;
+  }
+
+  label.file {
+    width: $long-label-width;
+  }
+
+  input.file {
+    border: 1px solid $form-border-color;
+    border-radius: $form-border-radius;
+    font-size: $base-font-size-small-1 - 1;
+    line-height: 0;
+    padding-left: $long-label-width + $form-label-margin;
+  }
+
+  a.add {
+    font-size: $base-font-size-small-1;
+  }
+
+  .hidden {
+    display: none;
+  }
+
+  div.buttons-wrapper {
+    @include clearfix;
+    padding: 45px 0 15px;
+
+    input {
+      float: right;
+      font-size: $base-font-size;
+      font-weight: 800;
+      margin-right: $base-padding;
+      padding: 1em;
+      width: 46%; //fallback
+      width: calc(50% - #{$base-padding});
+    }
+  }
+}
+
+// Float some fields left
+//************************************************************************//
+form.new_notice {
+  div.notice_entity_notice_roles_entity_state,
+  div.notice_entity_notice_roles_entity_zip {
+    float: left;
+    width: 50%;
+    clear: none;
+
+    input {
+      width: 100%;
+    }
+  }
+
+  .notice_entity_notice_roles_entity_state {
+    padding-right: 30px;
+  }
+}
+
+
+// Works Section
+//************************************************************************//
+form.new_notice {
+  section.notice-body {
+    border-top: 1px solid $light-gray;
+
+    h4 {
+      margin-top: 0;
+    }
+  }
+}
+
+// Works Section
+//************************************************************************//
+form.new_notice {
+  section.works {
+    label.url, label.string {
+      width: $long-label-width;
+    }
+
+    #{$all-text-inputs} {
+      padding-left: $long-label-width + $form-label-margin;
+    }
+  }
+}
