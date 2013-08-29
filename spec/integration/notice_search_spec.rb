@@ -198,11 +198,49 @@ feature "Searching Notices" do
     expect(page).not_to have_content("Dan & Jon's")
   end
 
+  context "sorting" do
+    scenario "by date_received", search: true do
+      notice = create(:dmca, title: 'Foobar First', date_received: Time.now)
+      older_notice = create(
+        :dmca, title: 'Foobar Last', date_received: Time.now - 10.days
+      )
+
+      search_for(title: "Foobar", sort_by: "date_received asc")
+      expect(page).to have_first_notice_of(older_notice)
+      expect(page).to have_last_notice_of(notice)
+
+      search_for(title: "Foobar", sort_by: "date_received desc")
+      expect(page).to have_first_notice_of(notice)
+      expect(page).to have_last_notice_of(older_notice)
+    end
+
+    scenario "by relevancy", search: true do
+      notice = create(:dmca, title: 'Foobar Foobar First')
+      less_relevant_notice = create( :dmca, title: 'Foobar Last')
+
+      search_for(title: "Foobar", sort_by: "relevancy asc")
+      expect(page).to have_first_notice_of(less_relevant_notice)
+      expect(page).to have_last_notice_of(notice)
+
+      search_for(title: "Foobar", sort_by: "relevancy desc")
+      expect(page).to have_first_notice_of(notice)
+      expect(page).to have_last_notice_of(less_relevant_notice)
+    end
+  end
+
   scenario "searching with a blank parameter", search: true do
     expect { submit_search('') }.not_to raise_error
   end
 
   private
+
+  def have_first_notice_of(notice)
+    have_css("ol.results-list li:first-child[id='notice_#{notice.id}']")
+  end
+
+  def have_last_notice_of(notice)
+    have_css("ol.results-list li:last-child[id='notice_#{notice.id}']")
+  end
 
   def expect_search_to_not_find(term, notice)
     submit_search(term)

@@ -33,7 +33,16 @@ class Notices::SearchController < ApplicationController
       Notice::FILTERABLE_FIELDS.each do |filtered_field|
         searcher.register filtered_field
       end
+
+      if params[:sort_by]
+        searcher.sort_by = sort_by(params[:sort_by])
+      end
     end
+  end
+
+  def sort_by(sort_by_param)
+    sortings = Notice::SORTINGS
+    sortings[sort_by_param] || sortings['relevancy desc']
   end
 
 end
