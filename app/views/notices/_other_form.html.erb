@@ -73,7 +73,7 @@
           <%= entity_form.input :city, label: "City" %>
           <%= entity_form.input :state, label: "State", maxlength: "2" %>
           <%= entity_form.input :zip, label: "Zip Code" %>
-          <%= entity_form.input :country_code, label: "Country" %>
+          <%= entity_form.input :country_code, collection: iso_countries, label: "Country" %>
           <%= entity_form.input :phone, label: "Phone" %>
           <%= entity_form.input :email, label: "Email" %>
           <%= entity_form.input :url, label: "#{role} URL" %>
