@@ -13,7 +13,17 @@
         </ol>
       <% end %>
     <% end %>
-    <div class="result-stats">Found <%= @results.total_entries %> results</div>
+    <div class="result-stats">
+      <span class="total-entries">Found <%= @results.total_entries %> results</span>
+      <div class="dropdown sort-order">
+        Sort by: <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)">Relevance</a>
+        <ol class="dropdown-menu" role="menu">
+          <li class="facet"><a href="javascript:void(0)">Relevance</a></li>
+          <li class="facet"><a href="javascript:void(0)">Ascending</a></li>
+          <li class="facet"><a href="javascript:void(0)">Descending</a></li>
+        </ol>
+      </div>
+    </div>
   </header>
   <ol class="results-list">
     <%= render partial: 'result', collection: @results %>
