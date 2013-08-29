@@ -24,6 +24,11 @@ module Redaction
         update_all(spam: true, reviewer_id: nil)
     end
 
+    def hide(notice_ids)
+      Notice.in_review(user).where(id: notice_ids).
+        update_all(hidden: true, reviewer_id: nil)
+    end
+
     def available_space
       self.class.queue_max - notices.count
     end
