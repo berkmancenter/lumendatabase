@@ -102,7 +102,6 @@ FactoryGirl.define do
 
     factory :trademark, class: 'Trademark'
     factory :defamation, class: 'Defamation'
-    factory :international, class: 'International'
     factory :court_order, class: 'CourtOrder'
     factory :law_enforcement_request, class: 'LawEnforcementRequest'
     factory :private_information, class: 'PrivateInformation'
