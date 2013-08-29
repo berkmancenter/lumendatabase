@@ -266,6 +266,17 @@ describe Dmca do
 
       expect(notices).to match_array(expected_notices)
     end
+
+    it "omits spam and hidden notices" do
+      expected_notices = create_list(:dmca, 2, review_required: true)
+      create_list(:dmca, 2, review_required: true, spam: true)
+      create_list(:dmca, 2, review_required: true, hidden: true)
+
+      notices = Dmca.available_for_review
+
+      expect(notices).to match_array(expected_notices)
+
+    end
   end
 
   context ".in_review" do
