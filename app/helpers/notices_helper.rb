@@ -41,4 +41,8 @@ module NoticesHelper
       'Unknown'
     end
   end
+
+  def iso_countries
+    CountrySelect::ISO_COUNTRIES_FOR_SELECT
+  end
 end

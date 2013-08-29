@@ -9,6 +9,27 @@ describe 'notices/new.html.erb' do
     expect(rendered).to have_css 'form'
   end
 
+  Notice::TYPES.each do |notice_class, notice_title|
+    context "country selectors in \"#{notice_title}\" notices" do
+      it "use ISO country codes" do
+        factory_name = notice_class.tableize.singularize
+        assign(
+          :notice, build(factory_name, role_names: %w( sender recipient ))
+        )
+
+        render
+
+        within(".recipient") do
+          expect(page).to have_css("select option[value='us']")
+        end
+
+        within(".sender") do
+          expect(page).to have_css("select option[value='us']")
+        end
+      end
+    end
+  end
+
   context "category drop down" do
     it "shows the categories alphabetically" do
       second_category = create(:category, name: "B Category")

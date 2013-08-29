@@ -150,7 +150,7 @@ feature "notice submission" do
       expect(page).to have_content "[Private]"
       expect(page).to have_content "Recipient City"
       expect(page).to have_content "MA"
-      expect(page).to have_content "United States"
+      expect(page).to have_content "US"
 
       expect(page).to have_content "Sender the first"
     end
