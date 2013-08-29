@@ -9,6 +9,10 @@ RailsAdmin.config do |config|
 
   config.authorize_with :cancan
 
+  config.audit_with :history, 'User'
+  config.audit_with :history, 'Role'
+  config.audit_with :history, 'Notice'
+
   config.actions do
     init_actions!
 
@@ -54,6 +58,7 @@ RailsAdmin.config do |config|
   end
 
   Notice::TYPES.each do |notice_type, type_label|
+    config.audit_with :history, notice_type
     config.model notice_type do
       label type_label
     end
