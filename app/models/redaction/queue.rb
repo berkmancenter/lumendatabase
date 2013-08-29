@@ -8,25 +8,23 @@ module Redaction
 
     def initialize(user)
       @user = user
-      @notices = Notice.in_review(@user)
+      @notices = scoped_notices
     end
 
     def reload
-      @notices = Notice.in_review(user)
+      @notices = scoped_notices
     end
 
     def release(notice_ids)
-      Notice.in_review(user).where(id: notice_ids).update_all(reviewer_id: nil)
+      update_all(notice_ids, reviewer_id: nil)
     end
 
     def mark_as_spam(notice_ids)
-      Notice.in_review(user).where(id: notice_ids).
-        update_all(spam: true, reviewer_id: nil)
+      update_all(notice_ids, reviewer_id: nil, spam: true)
     end
 
     def hide(notice_ids)
-      Notice.in_review(user).where(id: notice_ids).
-        update_all(hidden: true, reviewer_id: nil)
+      update_all(notice_ids, reviewer_id: nil, hidden: true)
     end
 
     def available_space
@@ -39,6 +37,16 @@ module Redaction
 
     def empty?
       available_space == self.class.queue_max
+    end
+
+    private
+
+    def update_all(notice_ids, updates)
+      scoped_notices.where(id: notice_ids).update_all(updates)
+    end
+
+    def scoped_notices
+      Notice.in_review(user)
     end
   end
 end
