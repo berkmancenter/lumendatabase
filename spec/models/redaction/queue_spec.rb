@@ -30,112 +30,92 @@ describe Redaction::Queue do
   end
 
   context "bulk actions" do
+    %i( release mark_as_spam hide ).each do |action|
+      it "accepts nil parameters to ##{action}" do
+        expect { new_queue.send(action, nil) }.not_to raise_error
+      end
+    end
+
     context "#release" do
       it "updates reviewer_id to nil for the passed notice ids" do
-        user = create(:user)
-        queue = new_queue(user)
-        notice_one = notice_in_review(user)
-        notice_two = notice_in_review(user)
-        notice_three = notice_in_review(user)
+        queue = new_queue(create(:user))
+        notice = notice_in_review(queue.user)
+        notices = notices_in_review(queue.user, 2)
 
-        queue.release([notice_one.id, notice_three.id])
+        act_and_reload(queue, :release, notices)
 
-        expect(notice_one.reload.reviewer).to be_nil
-        expect(notice_three.reload.reviewer).to be_nil
-        expect(notice_two.reload.reviewer).to eq user
+        expect(notices).to be_all { |n| n.reviewer.nil? }
+        expect(notice.reviewer).to eq queue.user
       end
 
       it "ignores notices not in my queue" do
-        user = create(:user)
+        queue = new_queue(create(:user))
+        notice = notice_in_review(queue.user)
         other_user = create(:user)
-        queue = new_queue(user)
-        notice_one = notice_in_review(user)
-        notice_two = notice_in_review(other_user)
+        other_notice = notice_in_review(other_user)
 
-        queue.release([notice_one.id, notice_two.id])
+        act_and_reload(queue, :release, [notice, other_notice])
 
-        expect(notice_one.reload.reviewer).to be_nil
-        expect(notice_two.reload.reviewer).to eq other_user
-      end
-
-      it "handles a nil parameter" do
-        expect { new_queue.release(nil) }.not_to raise_error
+        expect(notice.reviewer).to be_nil
+        expect(other_notice.reviewer).to eq other_user
       end
     end
 
     context "#mark_as_spam" do
       it "updates spam to true and releases the passed notice ids" do
-        user = create(:user)
-        queue = new_queue(user)
-        notice_one = notice_in_review(user)
-        notice_two = notice_in_review(user)
-        notice_three = notice_in_review(user)
+        queue = new_queue(create(:user))
+        notice = notice_in_review(queue.user)
+        notices = notices_in_review(queue.user, 2)
 
-        queue.mark_as_spam([notice_one.id, notice_three.id])
+        act_and_reload(queue, :mark_as_spam, notices)
 
-        expect(notice_one.reload).to be_spam
-        expect(notice_three.reload).to be_spam
-        expect(notice_two.reload).not_to be_spam
-        expect(notice_one.reviewer).to be_nil
-        expect(notice_three.reviewer).to be_nil
-        expect(notice_two.reviewer).to eq user
+        expect(notices).to be_all(&:spam)
+        expect(notice).not_to be_spam
+        expect(notices).to be_all { |n| n.reviewer.nil? }
+        expect(notice.reviewer).to eq queue.user
       end
 
       it "ignores notices not in my queue" do
-        user = create(:user)
+        queue = new_queue(create(:user))
+        notice = notice_in_review(queue.user)
         other_user = create(:user)
-        queue = new_queue(user)
-        notice_one = notice_in_review(user)
-        notice_two = notice_in_review(other_user)
+        other_notice = notice_in_review(other_user)
 
-        queue.mark_as_spam([notice_one.id, notice_two.id])
+        act_and_reload(queue, :mark_as_spam, [notice, other_notice])
 
-        expect(notice_one.reload).to be_spam
-        expect(notice_two.reload).not_to be_spam
-        expect(notice_one.reviewer).to be_nil
-        expect(notice_two.reviewer).to eq other_user
-      end
-
-      it "handles a nil parameter" do
-        expect { new_queue.mark_as_spam(nil) }.not_to raise_error
+        expect(notice).to be_spam
+        expect(other_notice).not_to be_spam
+        expect(notice.reviewer).to be_nil
+        expect(other_notice.reviewer).to eq other_user
       end
     end
 
     context "#hide" do
       it "updates hidden to true and releases the passed notice ids" do
-        user = create(:user)
-        queue = new_queue(user)
-        notice_one = notice_in_review(user)
-        notice_two = notice_in_review(user)
-        notice_three = notice_in_review(user)
+        queue = new_queue(create(:user))
+        notice = notice_in_review(queue.user)
+        notices = notices_in_review(queue.user, 2)
 
-        queue.hide([notice_one.id, notice_three.id])
+        act_and_reload(queue, :hide, notices)
 
-        expect(notice_one.reload).to be_hidden
-        expect(notice_three.reload).to be_hidden
-        expect(notice_two.reload).not_to be_hidden
-        expect(notice_one.reviewer).to be_nil
-        expect(notice_three.reviewer).to be_nil
-        expect(notice_two.reviewer).to eq user
+        expect(notices).to be_all(&:hidden)
+        expect(notice).not_to be_hidden
+        expect(notices).to be_all { |n| n.reviewer.nil? }
+        expect(notice.reviewer).to eq queue.user
       end
 
       it "ignores notices not in my queue" do
-        user = create(:user)
+        queue = new_queue(create(:user))
+        notice = notice_in_review(queue.user)
         other_user = create(:user)
-        queue = new_queue(user)
-        notice_one = notice_in_review(user)
-        notice_two = notice_in_review(other_user)
+        other_notice = notice_in_review(other_user)
 
-        queue.hide([notice_one.id, notice_two.id])
+        act_and_reload(queue, :hide, [notice, other_notice])
 
-        expect(notice_one.reload).to be_hidden
-        expect(notice_two.reload).not_to be_hidden
-        expect(notice_one.reviewer).to be_nil
-        expect(notice_two.reviewer).to eq other_user
-      end
-
-      it "handles a nil parameter" do
-        expect { new_queue.hide(nil) }.not_to raise_error
+        expect(notice).to be_hidden
+        expect(other_notice).not_to be_hidden
+        expect(notice.reviewer).to be_nil
+        expect(other_notice.reviewer).to eq other_user
       end
     end
 
@@ -143,6 +123,15 @@ describe Redaction::Queue do
 
     def notice_in_review(user)
       create(:dmca, review_required: true, reviewer: user)
+    end
+
+    def notices_in_review(user, n)
+      n.times.map { notice_in_review(user) }
+    end
+
+    def act_and_reload(queue, action, notices)
+      queue.send(action, notices)
+      notices.each(&:reload)
     end
   end
 

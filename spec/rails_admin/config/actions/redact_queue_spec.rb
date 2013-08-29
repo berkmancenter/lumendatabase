@@ -61,36 +61,6 @@ describe RedactQueueProc do
       instance_eval(&RedactQueueProc)
     end
 
-    it "releases notices and redirects if required" do
-      params[:selected] = %w( 1 3 5 9 )
-      params[:release_selected] = true
-      queue = stub_new(Redaction::Queue, current_user)
-      queue.should_receive(:release).with(%w( 1 3 5 9 ))
-      should_redirect_back
-
-      instance_eval(&RedactQueueProc)
-    end
-
-    it "marks notices as spam and redirects if required" do
-      params[:selected] = %w( 1 3 5 9 )
-      params[:mark_selected_as_spam] = true
-      queue = stub_new(Redaction::Queue, current_user)
-      queue.should_receive(:mark_as_spam).with(%w( 1 3 5 9 ))
-      should_redirect_back
-
-      instance_eval(&RedactQueueProc)
-    end
-
-    it "hides notices and redirects if required" do
-      params[:selected] = %w( 1 3 5 9 )
-      params[:hide_selected] = true
-      queue = stub_new(Redaction::Queue, current_user)
-      queue.should_receive(:hide).with(%w( 1 3 5 9 ))
-      should_redirect_back
-
-      instance_eval(&RedactQueueProc)
-    end
-
     it "redirects to redact notice with the proper parameters" do
       params[:selected] = %w( 1 3 5 9 )
       should_receive(:redact_notice_path).
@@ -100,6 +70,26 @@ describe RedactQueueProc do
       should_not_receive(:respond_to)
 
       instance_eval(&RedactQueueProc)
+    end
+
+    context "pass-through actions to Queue" do
+      actions = {
+        release_selected: :release,
+        mark_selected_as_spam: :mark_as_spam,
+        hide_selected: :hide
+      }
+
+      actions.each do |parameter, method|
+        it "calls ##{method} on Queue when :#{parameter} is present" do
+          params[:selected] = %w( 1 3 5 9 )
+          params[parameter] = true
+          queue = stub_new(Redaction::Queue, current_user)
+          queue.should_receive(method).with(%w( 1 3 5 9 ))
+          should_redirect_back
+
+          instance_eval(&RedactQueueProc)
+        end
+      end
     end
   end
 
