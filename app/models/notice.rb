@@ -102,7 +102,12 @@ class Notice < ActiveRecord::Base
   end
 
   def self.available_for_review
-    where(review_required: true, reviewer_id: nil)
+    where(
+      review_required: true,
+      reviewer_id: nil,
+      hidden: false,
+      spam: false
+    )
   end
 
   def self.in_review(user)
