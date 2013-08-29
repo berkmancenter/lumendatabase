@@ -65,6 +65,12 @@ feature "Searching Notices" do
     expect_search_to_not_find("arbitrary", notice)
   end
 
+  scenario "it does not include hidden notices", search: true do
+    notice = create(:dmca, title: "arbitrary", hidden: true)
+
+    expect_search_to_not_find("arbitrary", notice)
+  end
+
   context "within associated models" do
     scenario "for category names", search: true do
       category = create(:category, name: "Lion King")

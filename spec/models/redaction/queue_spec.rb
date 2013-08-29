@@ -101,6 +101,44 @@ describe Redaction::Queue do
       end
     end
 
+    context "#hide" do
+      it "updates hidden to true and releases the passed notice ids" do
+        user = create(:user)
+        queue = new_queue(user)
+        notice_one = notice_in_review(user)
+        notice_two = notice_in_review(user)
+        notice_three = notice_in_review(user)
+
+        queue.hide([notice_one.id, notice_three.id])
+
+        expect(notice_one.reload).to be_hidden
+        expect(notice_three.reload).to be_hidden
+        expect(notice_two.reload).not_to be_hidden
+        expect(notice_one.reviewer).to be_nil
+        expect(notice_three.reviewer).to be_nil
+        expect(notice_two.reviewer).to eq user
+      end
+
+      it "ignores notices not in my queue" do
+        user = create(:user)
+        other_user = create(:user)
+        queue = new_queue(user)
+        notice_one = notice_in_review(user)
+        notice_two = notice_in_review(other_user)
+
+        queue.hide([notice_one.id, notice_two.id])
+
+        expect(notice_one.reload).to be_hidden
+        expect(notice_two.reload).not_to be_hidden
+        expect(notice_one.reviewer).to be_nil
+        expect(notice_two.reviewer).to eq other_user
+      end
+
+      it "handles a nil parameter" do
+        expect { new_queue.hide(nil) }.not_to raise_error
+      end
+    end
+
     private
 
     def notice_in_review(user)

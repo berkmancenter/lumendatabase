@@ -81,6 +81,16 @@ describe RedactQueueProc do
       instance_eval(&RedactQueueProc)
     end
 
+    it "hides notices and redirects if required" do
+      params[:selected] = %w( 1 3 5 9 )
+      params[:hide_selected] = true
+      queue = stub_new(Redaction::Queue, current_user)
+      queue.should_receive(:hide).with(%w( 1 3 5 9 ))
+      should_redirect_back
+
+      instance_eval(&RedactQueueProc)
+    end
+
     it "redirects to redact notice with the proper parameters" do
       params[:selected] = %w( 1 3 5 9 )
       should_receive(:redact_notice_path).

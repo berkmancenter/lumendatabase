@@ -15,6 +15,9 @@ RedactQueueProc = Proc.new do
     elsif params[:mark_selected_as_spam].present?
       queue.mark_as_spam(params[:selected])
       redirect_to redact_queue_path(@abstract_model)
+    elsif params[:hide_selected].present?
+      queue.hide(params[:selected])
+      redirect_to redact_queue_path(@abstract_model)
     elsif params[:selected].present?
       notice_id, *next_notices = params[:selected]
       redact_path = redact_notice_path(

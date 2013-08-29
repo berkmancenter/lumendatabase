@@ -14,6 +14,7 @@ module Searchability
         indexes :date_received, type: 'date', include_in_all: false
         indexes :rescinded, type: 'boolean', include_in_all: false
         indexes :spam, type: 'boolean', include_in_all: false
+        indexes :hidden, type: 'boolean', include_in_all: false
         indexes :tag_list, as: 'tag_list'
         indexes :jurisdiction_list, as: 'jurisdiction_list'
         indexes :action_taken, analyzer: 'keyword'

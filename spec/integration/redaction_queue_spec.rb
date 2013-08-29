@@ -54,6 +54,23 @@ feature "Redaction queue" do
     end
   end
 
+  scenario "A user hides some notices" do
+    notice_one = create(:dmca, :redactable)
+    notice_two = create(:dmca, :redactable)
+    notice_three = create(:dmca, :redactable)
+
+    with_queue do |queue|
+      queue.unselect_notice(notice_three)
+      queue.hide_selected
+
+      expect(queue).to have_notices([notice_three])
+
+      expect(notice_one.reload).to be_hidden
+      expect(notice_two.reload).to be_hidden
+      expect(notice_three.reload).not_to be_hidden
+    end
+  end
+
   scenario "A user refills their queue by category and submitter" do
     user = create(:user, :admin)
     category_one = create(:category, name: "Cat 1")

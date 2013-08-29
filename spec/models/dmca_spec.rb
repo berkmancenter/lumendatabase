@@ -322,12 +322,16 @@ describe Dmca do
   end
 
   context ".find_visible" do
-    it "finds notices which are not spam" do
+    it "finds notices which are not spam or hidden" do
       notice = create(:dmca, spam: false)
       spam_notice = create(:dmca, spam: true)
+      hidden_notice = create(:dmca, hidden: true)
 
       expect(Notice.find_visible(notice.id)).to eq notice
       expect { Notice.find_visible(spam_notice.id) }.to raise_error(
+        ActiveRecord::RecordNotFound
+      )
+      expect { Notice.find_visible(hidden_notice.id) }.to raise_error(
         ActiveRecord::RecordNotFound
       )
     end

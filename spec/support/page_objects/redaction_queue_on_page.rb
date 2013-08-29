@@ -45,6 +45,10 @@ class RedactionQueueOnPage < PageObject
     click_on 'Mark selected as spam'
   end
 
+  def hide_selected
+    click_on 'Hide selected'
+  end
+
   def redact_everywhere
     page.execute_script 'window.original_confirm = window.confirm'
     page.execute_script 'window.confirm = function(msg) { return true; }'
