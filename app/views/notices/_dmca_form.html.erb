@@ -66,7 +66,7 @@
         <div class="body-wrapper left required">
           <%= entity_form.input :name, label: "Name" %>
           <%= entity_form.input :kind,
-            label: "#{role} Kind", prompt: nil, collection: Entity::KINDS %>
+            label: "#{role} Type", prompt: nil, collection: Entity::KINDS %>
         </div>
         <div class="body-wrapper right optional">
           <%= entity_form.input :address_line_1, label: "Address Line 1" %>

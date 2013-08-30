@@ -162,7 +162,7 @@ feature "notice submission" do
         fill_in "Name", with: "Recipient the first"
         fill_in "Address Line 1", with: "Recipient Line 1"
         fill_in "Address Line 2", with: "Recipient Line 2"
-        select "organization", from: "Recipient Kind"
+        select "organization", from: "Recipient Type"
       end
 
       within('section.sender') do
