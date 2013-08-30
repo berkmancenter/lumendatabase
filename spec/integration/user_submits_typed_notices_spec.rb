@@ -70,51 +70,6 @@ feature "typed notice submissions" do
     end
   end
 
-  scenario "User submits and views an International notice" do
-    submission = NoticeSubmissionOnPage.new(International)
-    submission.open_submission_form
-
-    submission.fill_in_form_with({
-      "Title" => "A title",
-
-      "Subject of Complaint" => "I am English", # works.description
-      "URL of original work" => "http://example.com/original_object1", # copyrighted_urls
-      "Offending URL" => "http://example.com/offending_url1", # infringing_urls
-
-      "Explanation of Complaint" => "I am wicked unhappy with the French", #notice.body
-      "Relevant laws or regulations" => "USC foo bar 21"
-    })
-
-    submission.fill_in_entity_form_with(:recipient, {
-      'Name' => 'Recipient',
-    })
-    submission.fill_in_entity_form_with(:sender, {
-      'Name' => 'Sender',
-    })
-    submission.fill_in_entity_form_with(:principal, {
-      'Name' => 'Principal Issuing Authority',
-    })
-
-    submission.submit
-
-    open_recent_notice
-
-    expect(page).to have_content("International - A title")
-
-    within("#works") do
-      expect(page).to have_content('Offending URLs')
-      expect(page).to have_content('http://example.com/offending_url1')
-      expect(page).to have_content('URLs of original work')
-      expect(page).to have_content('http://example.com/original_object1')
-    end
-
-    within('.notice-body') do
-      expect(page).to have_content('Explanation of complaint')
-      expect(page).to have_content('I am wicked unhappy with the French')
-      expect(page).to have_content('USC foo bar 21')
-    end
-  end
-
   scenario "User submits and views a CourtOrder notice" do
     submission = NoticeSubmissionOnPage.new(CourtOrder)
     submission.open_submission_form

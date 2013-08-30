@@ -32,10 +32,7 @@ describe NoticesController do
     end
 
     context "as JSON" do
-      [
-        Dmca, Trademark, Defamation, International, CourtOrder,
-        LawEnforcementRequest, PrivateInformation, Other
-      ].each do |model_class|
+      Notice.type_models.each do |model_class|
         it "returns a serialized notice for #{model_class}" do
           notice = stub_find_notice(model_class.new)
           serializer_class = model_class.active_model_serializer || NoticeSerializer

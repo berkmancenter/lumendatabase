@@ -22,14 +22,14 @@ below, which defines what attributes are remapped for each Notice Type.
 | Field                              | Type               | Description
 | ---                                | ---                | ---
 | `title`                            | string             | Required
-| `type`                             | string             | Required: one of 'CourtOrder', 'Dmca', 'International', 'LawEnforcementRequest', 'Other', 'PrivateInformation', or 'Trademark'
+| `type`                             | string             | Required: one of 'CourtOrder', 'Dmca', 'LawEnforcementRequest', 'Other', 'PrivateInformation', or 'Trademark'
 | `subject`                          | string             |
 | `date_sent`                        | string             | Any parseable time value, e.g. "2013-05-21", "2013-05-21 10:01:01 -04:00"
 | `date_received`                    | string             | Any parseable time value, e.g. "2013-05-21", "2013-05-21 10:01:01 -04:00"
 | `source`                           | string             | How did you receive this notice - mail? online form?
 | `category_ids`                     | [int]              | An array of integers representing `category_ids` - See **Request a list of Categories** below.
 | `tag_list`                         | string             | Comma separated tags, spaces are OK. Automatically lowercased.
-| `regulation_list`                  | string             | Comma separated regulations / laws relevant to this notice, spaces are OK. Automatically lowercased. Only available for CourtOrder, LawEnforcementRequest, and International notice types.
+| `regulation_list`                  | string             | Comma separated regulations / laws relevant to this notice, spaces are OK. Automatically lowercased. Only available for CourtOrder, and LawEnforcementRequest notice types.
 | `jurisidiction_list`               | string             | Comma separated list of jurisdictions, spaces are OK.
 | `action_taken`                     | string             | One of 'Yes', 'No', or 'Partial'. Defaults to 'No' if unspecified.
 | `works_attributes`                 | [Work]             | A list of Works
@@ -217,16 +217,6 @@ or when requested individually.
 #### Dmca
 
 Attributes remain unchanged from ingestion.
-
-#### International
-
-| Ingestion Field Name       | Mapped Field Name              | Removed?
-| ---                        | ---                            | ---
-| `body`                     | `explanation`                  |
-| `works.description`        | `works.subject_of_complaint`   |
-| `works.infringing_urls`    | `works.offending_urls`         |
-| `works.copyrighted_urls`   | `works.original_work_urls`     |
-| `regulation_list`          | `regulations`                  |
 
 #### LawEnforcementRequest
 

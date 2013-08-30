@@ -52,7 +52,6 @@ class Notice < ActiveRecord::Base
     'Dmca' => 'DMCA',
     'Trademark' => 'Trademark',
     'Defamation' => 'Defamation',
-    'International' => 'International',
     'CourtOrder' => 'Court Order',
     'LawEnforcementRequest' => 'Law Enforcement Request',
     'PrivateInformation' => 'Private Information',
@@ -95,6 +94,12 @@ class Notice < ActiveRecord::Base
   delegate :name, to: :submitter, prefix: true, allow_nil: true
 
   define_elasticsearch_mapping
+
+  def self.type_models
+    TYPES.keys.collect do |model_name|
+      model_name.constantize
+    end
+  end
 
   def self.available_for_review
     where(review_required: true, reviewer_id: nil)
