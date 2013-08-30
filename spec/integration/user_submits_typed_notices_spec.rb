@@ -280,4 +280,18 @@ feature "typed notice submissions" do
       expect(page).to have_content('I am complaining')
     end
   end
+
+  scenario "Entities can have different default types depending on role" do
+    submission = NoticeSubmissionOnPage.new(CourtOrder)
+    submission.open_submission_form
+
+    submission.within_entity_with_role('issuing_court') do
+      expect(page).to have_select('Issuing Court Type', selected: 'organization')
+    end
+
+    submission.within_entity_with_role('sender') do
+      expect(page).to have_select('Sender Type', selected: 'individual')
+    end
+  end
+
 end

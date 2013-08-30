@@ -11,7 +11,9 @@ class NoticesController < ApplicationController
     @notice = model_class.new
     @notice.file_uploads.build(kind: 'original')
     model_class::DEFAULT_ENTITY_NOTICE_ROLES.each do |role|
-      @notice.entity_notice_roles.build(name: role).build_entity
+      @notice.entity_notice_roles.build(name: role).build_entity(
+        kind: default_kind_based_on_role(role)
+      )
     end
     @notice.works.build do |notice|
       notice.copyrighted_urls.build
@@ -122,6 +124,14 @@ class NoticesController < ApplicationController
     Dmca
   ensure
     params.delete(:type)
+  end
+
+  def default_kind_based_on_role(role)
+    if role == 'issuing_court'
+      'organization'
+    else
+      'individual'
+    end
   end
 
 end

@@ -37,4 +37,10 @@ class NoticeSubmissionOnPage < PageObject
     click_on 'Submit'
   end
 
+  def within_entity_with_role(role)
+    within("section.#{role}") do
+      yield
+    end
+  end
+
 end
