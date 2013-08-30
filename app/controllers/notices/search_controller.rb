@@ -41,8 +41,8 @@ class Notices::SearchController < ApplicationController
   end
 
   def sort_by(sort_by_param)
-    sortings = Notice::SORTINGS
-    sortings[sort_by_param] || sortings['relevancy desc']
+    sorting = Sortings.find(sort_by_param)
+    sorting.sort_by
   end
 
 end

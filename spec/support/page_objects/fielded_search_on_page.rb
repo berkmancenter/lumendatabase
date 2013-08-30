@@ -26,6 +26,17 @@ class FieldedSearchOnPage < PageObject
     find('#duplicate-field').click
   end
 
+  def set_sort_order(sort_order)
+    open_sort_order_menu
+    find("a[data-value='#{sort_order}']").click
+  end
+
+  def open_sort_order_menu
+    unless sort_order_visible?
+      find(".sort-order a.dropdown-toggle").click
+    end
+  end
+
   def change_field(from, to)
     within(".field-group.#{from}") do
       select(to, from: 'search-field')
@@ -65,4 +76,7 @@ class FieldedSearchOnPage < PageObject
     first('.container.advanced-search')
   end
 
+  def sort_order_visible?
+    first('.sort-order ol.dropdown-menu')
+  end
 end

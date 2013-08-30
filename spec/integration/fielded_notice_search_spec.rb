@@ -40,6 +40,45 @@ feature "Fielded searches of Notices" do
     end
   end
 
+  context "sorting" do
+    before do
+      search_on_page.visit_search_page
+      search_on_page.add_fielded_search_for('Title', 'Foobar')
+    end
+
+    scenario "sort_order selection changes", search: true, js: true do
+      search_on_page.set_sort_order('date_received desc')
+      expect(page).to have_sort_order_selection_of('Newest')
+    end
+
+    scenario "by newest date_received", search: true, js: true do
+      notice, older_notice = create_dated_notices
+      search_on_page.set_sort_order('date_received desc')
+
+      search_on_page.run_search
+
+      expect(page).to have_sort_order_selection_of('Newest')
+
+      search_on_page.within_results do
+        expect(page).to have_first_notice_of(notice)
+        expect(page).to have_last_notice_of(older_notice)
+      end
+    end
+
+    scenario "by oldest date_received", search: true, js: true do
+      notice, older_notice = create_dated_notices
+      search_on_page.set_sort_order('date_received asc')
+
+      search_on_page.run_search
+
+      expect(page).to have_sort_order_selection_of('Oldest')
+      search_on_page.within_results do
+        expect(page).to have_first_notice_of(older_notice)
+        expect(page).to have_last_notice_of(notice)
+      end
+    end
+  end
+
   context "advanced search" do
     scenario "copies search parameters to the facet form.", search: true, js: true do
       notice = create(:dmca, :with_facet_data, title: "Lion King two")
@@ -201,6 +240,8 @@ feature "Fielded searches of Notices" do
     end
   end
 
+  private
+
   def have_visible_advanced_search_controls
     have_css('.container.advanced-search', visible: true)
   end
@@ -211,6 +252,27 @@ feature "Fielded searches of Notices" do
 
   def search_on_page
     @search_on_page ||= FieldedSearchOnPage.new
+  end
+
+  def have_first_notice_of(notice)
+    have_css("ol.results-list li:first-child[id='notice_#{notice.id}']")
+  end
+
+  def have_last_notice_of(notice)
+    have_css("ol.results-list li:last-child[id='notice_#{notice.id}']")
+  end
+
+  def create_dated_notices
+    [
+      create(:dmca, title: 'Foobar First', date_received: Time.now),
+      create(
+        :dmca, title: 'Foobar Last', date_received: Time.now - 10.days
+      )
+    ]
+  end
+
+  def have_sort_order_selection_of(sort_by)
+    have_css('.sort-order a.dropdown-toggle', text: sort_by)
   end
 
 end
