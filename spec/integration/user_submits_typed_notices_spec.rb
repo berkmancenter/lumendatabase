@@ -60,7 +60,7 @@ feature "typed notice submissions" do
     expect(page).to have_content("Defamation - A title")
 
     within("#works") do
-      expect(page).to have_content('Defamatory URLs')
+      expect(page).to have_content('Locations of Defamatory Material')
       expect(page).to have_content('http://example.com/defamatory_url1')
     end
 
