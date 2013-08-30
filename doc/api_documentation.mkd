@@ -61,7 +61,7 @@ below, which defines what attributes are remapped for each Notice Type.
 
 | Field                | Type    | Description
 | ---                  | ---     | ---
-| `name`               | string  | The name of the role, one of "principal", "agent", "recipient", "sender", "target", "court", "plaintiff", or "defendant". "recipient" and "sender" are displayed for all Notice Types on the ChillingEffects website after automatic redaction.
+| `name`               | string  | The name of the role, one of "principal", "agent", "recipient", "sender", "target", "issuing_court", "plaintiff", or "defendant". "recipient" and "sender" are displayed for all Notice Types on the ChillingEffects website after automatic redaction.
 | `entity_id`          | integer | (Optional) The ID of an existing entity. You should not specify the `entity_attributes` values below if you include `entity_id` here.
 | `entity_attributes`  | Entity  | A new entity that has this role on this notice. If you specify `entity_attributes`, you should not specify an `entity_id`
 

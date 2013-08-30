@@ -129,7 +129,7 @@ feature "typed notice submissions" do
       "Relevant laws or regulations" => "USC foo bar 21"
     })
 
-    %i|recipient sender principal court plaintiff defendant|.each do |role|
+    %i|recipient sender principal issuing_court plaintiff defendant|.each do |role|
       submission.fill_in_entity_form_with(role, {
         'Name' => "#{role} entity",
       })

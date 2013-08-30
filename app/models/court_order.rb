@@ -1,6 +1,6 @@
 class CourtOrder < Notice
 
-  DEFAULT_ENTITY_NOTICE_ROLES = %w|recipient sender principal court plaintiff defendant|
+  DEFAULT_ENTITY_NOTICE_ROLES = %w|recipient sender principal issuing_court plaintiff defendant|
   acts_as_taggable_on :regulations
 
   define_elasticsearch_mapping

@@ -12,7 +12,7 @@ class EntityNoticeRole < ActiveRecord::Base
     sender
     submitter
     target
-    court
+    issuing_court
     plaintiff
     defendant
   )
