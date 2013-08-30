@@ -7,23 +7,32 @@ class FieldedSearchOnPage < PageObject
     end
   end
 
-  def within_template_row(&block)
-    open_advanced_search
-    within('.template-row', &block)
+  def add_more
+    find('#duplicate-field').click
   end
 
   def within_fielded_searches(&block)
     open_advanced_search
+
     within('.advanced-search', &block)
+  end
+
+  def within_last_field(&block)
+    # note: :last-of-type in the selector does not work.
+    field_group = all('.field-group').last
+
+    within(field_group, &block)
   end
 
   def add_fielded_search_for(field, term)
     open_advanced_search
-    within('.template-row') do
-      fill_in("search-term", with: term)
-      select(field, from: 'search-field')
+
+    add_more
+
+    within_last_field do
+      select(field.title, from: 'search-field')
+      fill_in(field.parameter, with: term)
     end
-    find('#duplicate-field').click
   end
 
   def set_sort_order(sort_order)
@@ -45,7 +54,10 @@ class FieldedSearchOnPage < PageObject
 
   def remove_fielded_search_for(field)
     open_advanced_search
-    find(".remove-group.#{field}").click
+
+    within(".field-group.#{field}") do
+      find(".remove-group").click
+    end
   end
 
   def run_search(wait_for_index = true)
