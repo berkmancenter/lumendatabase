@@ -225,7 +225,7 @@ feature "User authorization" do
 
     expect(page).to contain_link(admin_path)
 
-    click_on "Admin View"
+    click_on "Edit in Admin"
 
     expect(user).to be_in_admin
   end

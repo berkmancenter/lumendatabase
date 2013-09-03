@@ -36,6 +36,11 @@ During seeding, you can customize behavior with a couple environment variables:
   instead of the default 500
 * `SKIP_FAKE_DATA=1` will skip generating fake seed data entirely.
 
+Admin login:
+
+    Username: admin@chillingeffects.org
+    Password: password
+
 License
 =======
 

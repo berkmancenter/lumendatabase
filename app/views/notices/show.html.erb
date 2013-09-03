@@ -13,15 +13,13 @@
       <p class="wip">TODO: Display other entities here</p>
     </header>
 
-    <div class="main">
-      <% if can?(:access, :rails_admin) %>
-        <div class="admin wip">
-          <%= link_to(admin_show_path(@notice)) do %>
-            <h2>Admin View</h2>
-          <% end %>
-        </div>
-      <% end %>
+    <% if can?(:access, :rails_admin) %>
+      <div class="admin-edit">
+        <%= link_to "Edit in Admin", admin_show_path(@notice) %>
+      </div>
+    <% end %>
 
+    <div class="main">
       <h2>Re: <%= subject(@notice) %></h2>
       <p class="source">Sent via: <%= sent_via(@notice) %></p>
       <p class="action-taken">Action taken: <%= @notice.action_taken %></p>

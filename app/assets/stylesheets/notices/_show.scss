@@ -236,6 +236,14 @@ article.notice-show {
   }
 }
 
+article.notice-show {
+  div.admin-edit {
+    background: $notice-color;
+    font-size: $base-font-size;
+    padding: 10px $base-padding;
+  }
+}
+
 // Attachments
 //************************************************************************//
 section.attachments {
