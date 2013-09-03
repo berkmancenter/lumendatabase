@@ -50,3 +50,10 @@ $('form#facets-form').on 'submit', ->
     cloneAdvancedSearch(this)
   else
     cloneGlobalSearch(this)
+
+$('.sort-order ol.dropdown-menu a').click (event)->
+  event.preventDefault()
+  $('.sort-order a.dropdown-toggle').text($(this).attr('data-label'))
+  $('.sort_by_field').val(
+    $(this).attr('data-value')
+  )

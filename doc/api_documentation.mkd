@@ -377,6 +377,8 @@ search results contain the same data as an individually-requested Notice, with
 an additional "score" field. "score" articulates how "relevant" this result is
 to the query term. Higher numbers are more relevant.
 
+Terms are joined with an 'AND' by default.
+
 **Method**: `GET`
 
 **Endpoint**: `http://flutie.law.harvard.edu:8000/notices/search?term=url_escaped_query&sender_name=Joe%20Smith&page=1`
@@ -386,6 +388,14 @@ to the query term. Higher numbers are more relevant.
 | Parameters              | Description
 | ---                     | ---
 | `term`                  | The full-text query term
+| `title`                 | Search in the `title` field
+| `categories`            | Search within a notice's categories
+| `tags`                  | Search within a notice's tags
+| `jurisdictions`         | Search within a notice's jurisdictions
+| `sender_name`           | Search in the sender's name
+| `recipient_name`        | Search in the recipient's name
+| `works`                 | Search within a work's description
+| `action_taken`          | Search based on the action taken on a notice.
 | `sender_name_facet`     | Filter on `sender_name` facet
 | `recipient_name_facet`  | Filter on `recipient_name` facet
 | `category_facet`        | Filter on categories facet
@@ -395,6 +405,7 @@ to the query term. Higher numbers are more relevant.
 | `language_facet`        | Filter on the notice language code
 | `page`                  | The page you're requesting - defaults to the first page of results.
 | `per_page`              | The number of results per page. Defaults to 10.
+| `sort_by`               | One of `date_received asc`, `date_received desc`, `relevancy asc`, or `relevancy desc`. Defaults to `relevancy asc`.
 
 See below for more information about available facets. You can get an idea of
 how facets are formatted by submitting facet-less fulltext queries and then

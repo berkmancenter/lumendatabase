@@ -40,6 +40,40 @@ feature "Searching for Notices via the API" do
     end
   end
 
+  context 'sorting' do
+    scenario "by date_received", js: true, search: true do
+      notice = create(:dmca, title: 'Foobar First', date_received: Time.now)
+      older_notice = create(
+        :dmca, title: 'Foobar Last', date_received: Time.now - 10.days
+      )
+
+      expect_api_search_to_find("Foobar", sort_by: "date_received asc") do |json|
+        expect(first_notice_id(json)).to be(older_notice.id)
+        expect(last_notice_id(json)).to be(notice.id)
+      end
+
+      expect_api_search_to_find("Foobar", sort_by: "date_received desc") do |json|
+        expect(first_notice_id(json)).to be(notice.id)
+        expect(last_notice_id(json)).to be(older_notice.id)
+      end
+    end
+
+    scenario "by relevancy", js: true, search: true do
+      notice = create(:dmca, title: 'Foobar Foobar First')
+      less_relevant_notice = create(:dmca, title: 'Foobar Last')
+
+      expect_api_search_to_find("Foobar", sort_by: "relevancy asc") do |json|
+        expect(first_notice_id(json)).to be(less_relevant_notice.id)
+        expect(last_notice_id(json)).to be(notice.id)
+      end
+
+      expect_api_search_to_find("Foobar", sort_by: "relevancy desc") do |json|
+        expect(first_notice_id(json)).to be(notice.id)
+        expect(last_notice_id(json)).to be(less_relevant_notice.id)
+      end
+    end
+  end
+
   Notice.type_models.each do |klass|
     class_factory = klass.to_s.tableize.singularize.to_sym
     scenario "a #{klass} notice has basic notice metadata", js: true, search: true do
@@ -235,6 +269,14 @@ feature "Searching for Notices via the API" do
       json = JSON.parse(curb.body_str)
       yield(json) if block_given?
     end
+  end
+
+  def first_notice_id(json)
+    json['notices'].first['id']
+  end
+
+  def last_notice_id(json)
+    json['notices'].last['id']
   end
 
 end
