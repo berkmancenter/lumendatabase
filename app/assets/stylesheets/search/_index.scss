@@ -51,6 +51,7 @@ ol.results-list {
 
   div.metadata {
     color: lighten($base-font-color, 7%);
+    margin-top: 5px;
 
     div {
       font-size: $base-font-size-small-1;
@@ -69,7 +70,8 @@ ol.results-list {
     }
 
     div.date-received {
-        display: inline-block;
+      display: inline-block;
+      vertical-align: top;
     }
 
     div.sender-receiver {
@@ -96,7 +98,7 @@ ol.results-list {
     ol.excerpt {
       font-size: $base-font-size-small-1;
       font-weight: normal;
-      margin: 3px 0 0;
+      margin: 0;
       padding: 0;
 
       li {
@@ -147,9 +149,15 @@ ol.results-list {
     }
 
     span.arrow {
+      display: inline-block;
+      vertical-align: top;
       margin: 0 10px;
       position: relative;
-      top: 2px;
+      top: 5px;
+
+      img {
+        display: block;
+      }
     }
   }
 }
