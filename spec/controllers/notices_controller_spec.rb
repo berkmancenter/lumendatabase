@@ -69,54 +69,45 @@ describe NoticesController do
   end
 
   context "#create" do
-    it "initializes a Dmca by default from params" do
-      notice = Dmca.new
-      notice_params = HashWithIndifferentAccess.new(title: "A title")
-      Dmca.should_receive(:new).with(notice_params).and_return(notice)
-
-      post :create, notice: notice_params
-
-      expect(assigns(:notice)).to eq notice
-    end
-
-    it "uses the type param to instantiate the correct class" do
-      notice = Trademark.new
-      Trademark.should_receive(:new).and_return(notice)
-
-      post :create, notice: { type: 'trademark', title: "A title"}
-
-      expect(assigns(:notice)).to eq notice
-    end
-
-    it "defaults to Dmca if the type is missing or invalid" do
-      invalid_types = ['', 'FlimFlam', 'Object', 'User', 'Hash']
-      notice = Dmca.new
-      Dmca.should_receive(:new).exactly(5).times.and_return(notice)
-
-      invalid_types.each do |invalid_type|
-        post :create, notice: { type: invalid_type, title: "A title" }
-
-        expect(assigns(:notice)).to eq notice
+    context "format-independant logic" do
+      before do
+        @submit_notice = double("SubmitNotice").as_null_object
+        @notice_params = HashWithIndifferentAccess.new(title: "A title")
       end
-    end
 
-    it "auto-redacts the notice" do
-      notice = stub_new_notice
-      notice.should_receive(:auto_redact)
+      it "initializes a Dmca by default from params" do
+        SubmitNotice.should_receive(:new).
+          with(Dmca, @notice_params).
+          and_return(@submit_notice)
 
-      post_create
-    end
+        post :create, notice: @notice_params
+      end
 
-    it "marks the notice for review" do
-      notice = stub_new_notice
-      notice.should_receive(:mark_for_review)
+      it "uses the type param to instantiate the correct class" do
+        SubmitNotice.should_receive(:new).
+          with(Trademark, @notice_params).
+          and_return(@submit_notice)
 
-      post_create
+        post :create, notice: @notice_params.merge(type: 'trademark')
+      end
+
+      it "defaults to Dmca if the type is missing or invalid" do
+        invalid_types = ['', 'FlimFlam', 'Object', 'User', 'Hash']
+
+        SubmitNotice.should_receive(:new).
+          exactly(5).times.
+          with(Dmca, @notice_params).
+          and_return(@submit_notice)
+
+        invalid_types.each do |invalid_type|
+          post :create, notice: @notice_params.merge(type: invalid_type)
+        end
+      end
     end
 
     context "as HTML" do
       it "redirects when saved successfully" do
-        stub_new_notice
+        stub_submit_notice
 
         post_create
 
@@ -124,18 +115,37 @@ describe NoticesController do
       end
 
       it "renders the new template when unsuccessful" do
-        notice = stub_new_notice
-        notice.stub(:save).and_return(false)
+        submit_notice = stub_submit_notice
+        submit_notice.stub(:submit).and_return(false)
 
         post_create
 
+        expect(assigns(:notice)).to eq submit_notice.notice
         expect(response).to render_template(:new)
       end
     end
 
     context "as JSON" do
+      before do
+        @ability = Object.new
+        @ability.extend(CanCan::Ability)
+        @ability.can(:submit, Notice)
+        controller.stub(:current_ability) { @ability }
+      end
+
+      it "returns unauthorized if one cannot submit" do
+        stub_submit_notice
+        @ability.cannot(:submit, Notice)
+
+        post_create :json
+
+        expect(response.status).to eq 401
+      end
+
       it "returns a proper Location header when saved successfully" do
-        notice = stub_new_notice
+        notice = build_stubbed(:dmca)
+        submit_notice = stub_submit_notice
+        submit_notice.stub(:notice).and_return(notice)
 
         post_create :json
 
@@ -144,8 +154,8 @@ describe NoticesController do
       end
 
       it "returns a useful status code when there are errors" do
-        notice = stub_new_notice
-        notice.stub(:save).and_return(false)
+        submit_notice = stub_submit_notice
+        submit_notice.stub(:submit).and_return(false)
 
         post_create :json
 
@@ -153,10 +163,11 @@ describe NoticesController do
       end
 
       it "includes any errors in the response" do
-        notice = stub_new_notice
-        notice.stub(:save).and_return(false)
-        notice.stub(:errors).
-          and_return(mock_errors(notice, works: "can't be blank"))
+        submit_notice = stub_submit_notice
+        submit_notice.stub(:submit).and_return(false)
+        submit_notice.stub(:errors).and_return(
+          mock_errors(submit_notice.notice, works: "can't be blank")
+        )
 
         post_create :json
 
@@ -165,12 +176,12 @@ describe NoticesController do
       end
     end
 
-    def stub_new_notice
-      build_stubbed(:dmca).tap do |notice|
-        notice.stub(:save).and_return(true)
-        notice.stub(:auto_redact)
-        notice.stub(:mark_for_review)
-        Dmca.stub(:new).and_return(notice)
+    private
+
+    def stub_submit_notice
+      SubmitNotice.new(Dmca, {}).tap do |submit_notice|
+        submit_notice.stub(:submit).and_return(true)
+        SubmitNotice.stub(:new).and_return(submit_notice)
       end
     end
 

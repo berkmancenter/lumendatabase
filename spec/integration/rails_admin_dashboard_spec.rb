@@ -2,7 +2,7 @@ require 'spec_helper'
 
 feature "Rails admin dashboard" do
   before do
-    AdminOnPage.new(create(:user)).tap do |user|
+    AdminOnPage.new(create(:user, :redactor)).tap do |user|
       user.sign_in
       user.visit_admin
     end

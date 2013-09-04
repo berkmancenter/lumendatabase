@@ -1,6 +1,8 @@
 class NoticesController < ApplicationController
   layout :resolve_layout
 
+  before_filter :authenticate_via_token, only: :create
+
   def new
     if params[:type].blank?
       render :select_type and return
@@ -22,20 +24,30 @@ class NoticesController < ApplicationController
   end
 
   def create
-    model_class = get_notice_type(params[:notice])
-
-    @notice = model_class.new(notice_params)
-    @notice.auto_redact
+    submission = SubmitNotice.new(
+      get_notice_type(params[:notice]),
+      notice_params
+    )
 
     respond_to do |format|
-      if @notice.save
-        @notice.mark_for_review
-        format.html { redirect_to :root, notice: "Notice created!" }
-        format.json { head :created, location: @notice }
-      else
-        format.html { render :new }
-        format.json do
-          render json: @notice.errors, status: :unprocessable_entity
+      format.json do
+        if cannot?(:submit, Notice)
+          head :unauthorized and return
+        end
+
+        if submission.submit
+          head :created, location: submission.notice
+        else
+          render json: submission.errors, status: :unprocessable_entity
+        end
+      end
+
+      format.html do
+        if submission.submit
+          redirect_to :root, notice: "Notice created!"
+        else
+          @notice = submission.notice
+          render :new
         end
       end
     end
@@ -133,5 +145,4 @@ class NoticesController < ApplicationController
       'individual'
     end
   end
-
 end

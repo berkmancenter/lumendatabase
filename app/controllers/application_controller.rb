@@ -45,4 +45,13 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def authenticate_via_token
+    @current_user ||= User.find_by_authentication_token(authentication_token)
+  end
+
+  def authentication_token
+    key = 'authentication_token'
+
+    params[key] || request.env["HTTP_#{key.upcase}"]
+  end
 end
