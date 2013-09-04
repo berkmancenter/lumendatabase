@@ -149,6 +149,24 @@ article.notice-show {
         margin-bottom: 0;
       }
     }
+
+    dl {
+       @include clearfix;
+      margin-bottom: 10px;
+
+      dl, dt {
+        margin: 0;
+      }
+    }
+
+    .label {
+      @extend %notices-label;
+    }
+
+    .field {
+      margin-left: 0;
+      @include span-columns(9.5);
+    }
   }
 
   ol.copyright-claims {
@@ -170,31 +188,16 @@ article.notice-show {
       }
 
       div.row {
-       @include row;
+        @include row;
       }
 
-      $label-width: 160px;
-      $margin: 15px;
       span.label {
-        clear: left;
         color: $medium-gray;
-        font-size: $base-font-size-small-1 - 1;
-        font-weight: bold;
         @include pad(0 0 0 20px);
-        @include span-columns(2.5);
-        text-transform: uppercase;
 
         @include media($mobile) {
-          display: block;
-          float: none;
-          @include omega;
           padding: 0;
-          width: 100%;
         }
-      }
-
-      span.field {
-        @include span-columns(9.5);
       }
 
       ol.list {

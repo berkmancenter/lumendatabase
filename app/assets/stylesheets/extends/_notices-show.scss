@@ -1,0 +1,15 @@
+%notices-label {
+  clear: left;
+  font-size: $base-font-size-small-1 - 1;
+  font-weight: bold;
+  margin-top: 2px;
+  @include span-columns(2.5);
+  text-transform: uppercase;
+
+  @include media($mobile) {
+    display: block;
+    float: none;
+    @include omega;
+    width: 100%;
+  }
+}

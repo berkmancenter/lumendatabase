@@ -5,10 +5,10 @@
   <% end %>
 
   <% if notice.regulations.present? %>
-    <section id="tags">
-      <h6>Laws or Regulations</h6>
-      <%= render 'shared/regulation_list', regulations: notice.regulations %>
-    </section>
+    <dl id="tags">
+      <dt class="label">Laws or Regulations:</dt>
+      <dd class="field"><%= render 'shared/regulation_list', regulations: notice.regulations %></dd>
+    </dl>
   <% end %>
 </section>
 
