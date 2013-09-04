@@ -4,8 +4,30 @@ section.search-results {
 
   div.result-stats {
     margin: 15px 0 0 $base-padding;
-    font-size: $base-font-size-small-1;
-    color: $base-font-color-2;
+
+    &, a {
+      font-size: $base-font-size-small-1;
+      color: $base-font-color-2;
+    }
+  }
+
+  div.dropdown.sort-order {
+    display: inline-block;
+    margin-left: 20px;
+    position: relative;
+
+    &.open .dropdown-menu {
+      display: block;
+    }
+
+    .dropdown-menu {
+      @extend %dropdown-menu;
+      margin-left: 32px;
+
+      a {
+        color: lighten($base-font-color, 5%);
+      }
+    }
   }
 
   div.pagination {

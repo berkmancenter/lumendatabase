@@ -1,7 +1,7 @@
 // Search form
 //************************************************************************//
 section.home-search-form {
-  margin: 25vh 0;
+  margin: 25vh 0 18vh;
   @extend %search-form;
 
   @include media($tablet) {
@@ -51,6 +51,25 @@ section.home-search-form {
       div.input input {
         width: 100%;
       }
+    }
+  }
+
+  div.more-info {
+    color: #AEB4B9;
+    margin-top: 35px;
+    padding: 0 100px;
+    text-align: center;
+
+    @include media($tablet) {
+      padding: 0 10%;
+    }
+
+    @include media($mobile) {
+      padding: 0 20px;
+    }
+
+    p {
+      font-size: $base-font-size-small-2;
     }
   }
 }

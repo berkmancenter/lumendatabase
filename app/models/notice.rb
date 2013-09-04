@@ -38,6 +38,13 @@ class Notice < ActiveRecord::Base
     DateRangeFilter.new(:date_received_facet, :date_received, 'Date')
   ]
 
+  SORTINGS = [
+    Sorting.new('relevancy desc', [:_score, :desc], 'Most Relevant'),
+    Sorting.new('relevancy asc', [:_score, :asc], 'Least Relevant'),
+    Sorting.new('date_received desc', [:date_received, :desc],  'Newest'),
+    Sorting.new('date_received asc', [:date_received, :asc],  'Oldest'),
+  ]
+
   REDACTABLE_FIELDS = %i( body )
   PER_PAGE = 10
 
