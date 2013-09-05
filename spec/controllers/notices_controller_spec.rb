@@ -69,7 +69,7 @@ describe NoticesController do
   end
 
   context "#create" do
-    context "format-independant logic" do
+    context "format-independent logic" do
       before do
         @submit_notice = double("SubmitNotice").as_null_object
         @notice_params = HashWithIndifferentAccess.new(title: "A title")

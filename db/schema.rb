@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130829133423) do
+ActiveRecord::Schema.define(:version => 20130905134743) do
 
   create_table "blog_entries", :force => true do |t|
     t.integer  "user_id"
@@ -101,22 +101,24 @@ ActiveRecord::Schema.define(:version => 20130829133423) do
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
 
   create_table "entities", :force => true do |t|
-    t.string "name",                                     :null => false
-    t.string "kind",           :default => "individual", :null => false
-    t.string "address_line_1"
-    t.string "address_line_2"
-    t.string "state"
-    t.string "country_code"
-    t.string "phone"
-    t.string "email"
-    t.string "url"
-    t.string "ancestry"
-    t.string "city"
-    t.string "zip"
+    t.string  "name",                                     :null => false
+    t.string  "kind",           :default => "individual", :null => false
+    t.string  "address_line_1"
+    t.string  "address_line_2"
+    t.string  "state"
+    t.string  "country_code"
+    t.string  "phone"
+    t.string  "email"
+    t.string  "url"
+    t.string  "ancestry"
+    t.string  "city"
+    t.string  "zip"
+    t.integer "user_id"
   end
 
   add_index "entities", ["ancestry"], :name => "index_entities_on_ancestry"
   add_index "entities", ["name"], :name => "index_entities_on_name", :unique => true
+  add_index "entities", ["user_id"], :name => "index_entities_on_user_id"
 
   create_table "entity_notice_roles", :force => true do |t|
     t.integer  "entity_id",  :null => false

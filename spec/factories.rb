@@ -181,6 +181,10 @@ FactoryGirl.define do
     trait :super_admin do
       roles { [Role.super_admin] }
     end
+
+    trait :with_entity do
+      entity
+    end
   end
 
   factory :relevant_question do

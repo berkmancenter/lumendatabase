@@ -32,6 +32,7 @@ feature "notice submission" do
     parameters = request_hash(
       default_notice_hash(title: 'A superduper title')
     )
+
     curb = post_api('/notices', parameters)
 
     expect(curb.response_code).to eq 201
@@ -65,6 +66,21 @@ feature "notice submission" do
     expect(curb.response_code).to eq 201
     expect(Notice.last.recipient).to eq entity
     expect(Notice.last.title).to eq 'A notice with an entity created by id'
+  end
+
+  scenario "submitting as a user with a linked entity", js: true do
+    user = create(:user, :submitter)
+    entity = create(:entity, user: user, name: "Twitter")
+    notice_parameters = default_notice_hash(title: 'A superduper title')
+    notice_parameters.delete(:entity_notice_roles_attributes)
+    parameters = request_hash(notice_parameters, user)
+
+    curb = post_api('/notices', parameters)
+
+    notice = Notice.last
+    expect(curb.response_code).to eq 201
+    expect(notice.submitter).to eq entity
+    expect(notice.recipient).to eq entity
   end
 
   scenario "submitting a notice with text file attachments", js: true do

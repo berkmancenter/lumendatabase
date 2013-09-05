@@ -35,7 +35,7 @@ class NoticesController < ApplicationController
           head :unauthorized and return
         end
 
-        if submission.submit
+        if submission.submit(current_user)
           head :created, location: submission.notice
         else
           render json: submission.errors, status: :unprocessable_entity

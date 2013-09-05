@@ -9,9 +9,8 @@ module CurbHelpers
     end
   end
 
-  # TODO: legacy method, replace with #get_api directly
   def with_curb_get_for_json(url, options)
-    curb = Curl.get("http://#{host}:#{port}/#{url}",options) do |curl|
+    curb = Curl.get("http://#{host}:#{port}/#{url}", options) do |curl|
       set_default_headers(curl)
     end
 

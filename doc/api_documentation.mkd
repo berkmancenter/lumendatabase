@@ -13,9 +13,10 @@ below, which defines what attributes are remapped for each Notice Type.
 
 ### Request
 
-| Field      | Type       | Description
-| ---        | ---        | ---
-| notice     | Notice     | Required
+| Field                  | Type   | Description
+| ---                    | ---    | ---
+| `notice`               | Notice | Required
+| `authentication_token` | string | See Authentication Section
 
 **Notice**
 
@@ -65,6 +66,10 @@ below, which defines what attributes are remapped for each Notice Type.
 | `entity_id`          | integer | (Optional) The ID of an existing entity. You should not specify the `entity_attributes` values below if you include `entity_id` here.
 | `entity_attributes`  | Entity  | A new entity that has this role on this notice. If you specify `entity_attributes`, you should not specify an `entity_id`
 
+*Note*: If not explicitly provided, Submitter and Recipient entities 
+will be assigned based on the user performing the submission (as 
+identified by the authentication token used).
+
 **Entity**
 
 | Field             | Type   | Description
@@ -88,10 +93,41 @@ below, which defines what attributes are remapped for each Notice Type.
 | `file`            | string | A base64 encoded [data-uri](http://en.wikipedia.org/wiki/Data_URI_scheme) representing the file attachment
 | `file_name`       | string | A name for this file. data-uris have no concept of a file name, so you must supply one yourself. If not supplied, the filename will be "base64.txt"
 
+### Authentication
+
+Submissions through the API **must** be authenticated by including an 
+Authentication Token. Tokens will be provided by Chilling Effects upon 
+request.
+
+The Token may be included as a parameter or header.
+
+* Parameter: `authentication_token`
+
+```
+curl -H "Accept: application/json" \
+     -H "Content-type: application/json" \
+     -d '{ "authentication_token": "abc123", "notice": {...} }' \
+     'http://flutie.law.harvard.edu:8000/notices/'
+```
+
+* Request Header: `AUTHENTICATION_TOKEN`
+
+```
+curl -H "Accept: application/json" \
+     -H "Content-type: application/json" \
+     -H "AUTHENTICATION_TOKEN: abc123" \
+     -d '{ "notice": {...} }' \
+     'http://flutie.law.harvard.edu:8000/notices/'
+```
+
+If the Authentication Token is missing or invalid, an empty response 
+will be returned with HTTP status 401 (Unauthorized).
+
 ### Example Request
 
 ```
 curl -H "Accept: application/json" -H "Content-type: application/json" 'http://flutie.law.harvard.edu:8000/notices/' -d '{
+  "authentication_token": "abc123",
   "notice": {
     "title": "DMCA (Copyright) Complaint to Google",
     "type": "Dmca",
@@ -186,6 +222,7 @@ Unsuccessful responses will have HTTP status 422 (Unprocessable Entity) and
 include a JSON response enumerating the validation failures.
 
 #### Example:
+
 ```
 {
   "works":["can't be blank"],
@@ -495,6 +532,7 @@ documentation for more information. We only return the 10 most populous facets.
 curl -H "Accept: application/json" -H "Content-type: application/json" 'http://flutie.law.harvard.edu:8000/notices/search?term=star'
 ```
 
+
 ```
 {
   "notices": [
@@ -587,6 +625,7 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'http://f
 
 ### Example Unsuccessful Response
 
+
 ```
 {
   "notices": [ ],
@@ -659,6 +698,7 @@ Return a JSON-encoded representation of selected entity attributes.
 ```
 curl -H "Accept: application/json" -H "Content-type: application/json" 'http://flutie.law.harvard.edu:8000/entities/search?term=joe&page=1'
 ```
+
 
 ```
 {

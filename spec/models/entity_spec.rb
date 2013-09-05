@@ -8,6 +8,7 @@ describe Entity do
     it { should validate_uniqueness_of(:name) }
   end
 
+  it { should belong_to(:user) }
   it { should have_many(:entity_notice_roles).dependent(:destroy) }
   it { should have_many(:notices).through(:entity_notice_roles)  }
   it { should ensure_inclusion_of(:kind).in_array(Entity::KINDS) }
