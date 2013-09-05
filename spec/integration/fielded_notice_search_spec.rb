@@ -28,7 +28,7 @@ feature "Fielded searches of Notices" do
         generator = FieldedSearchNoticeGenerator.for(field)
         search_on_page = FieldedSearchOnPage.new
         search_on_page.visit_search_page
-        search_on_page.add_fielded_search_for(field.title, generator.query)
+        search_on_page.add_fielded_search_for(field, generator.query)
 
         search_on_page.run_search
 
@@ -43,7 +43,7 @@ feature "Fielded searches of Notices" do
   context "sorting" do
     before do
       search_on_page.visit_search_page
-      search_on_page.add_fielded_search_for('Title', 'Foobar')
+      search_on_page.add_fielded_search_for(title_field, 'Foobar')
     end
 
     scenario "sort_order selection changes", search: true, js: true do
@@ -86,7 +86,7 @@ feature "Fielded searches of Notices" do
       search_on_page.visit_search_page(true)
       search_on_page.open_advanced_search
 
-      search_on_page.add_fielded_search_for('Title', 'lion')
+      search_on_page.add_fielded_search_for(title_field, 'lion')
 
       open_and_select_facet(:sender_name_facet, notice.sender_name)
       click_faceted_search_button
@@ -122,19 +122,30 @@ feature "Fielded searches of Notices" do
       end
 
       scenario "retains query parameters", search: true, js: true do
-        search_on_page.add_fielded_search_for('Title', 'lion')
+        search_on_page.add_fielded_search_for(title_field, 'lion')
 
         search_on_page.run_search(false)
         search_on_page.open_advanced_search
 
         search_on_page.within_fielded_searches do
-          expect(page).to have_css('.field-group.title', visible: true)
-          expect(page).to have_css('.field-group.sender_name', visible: false)
+          expect(page).to have_css('.field-group.title')
+          expect(page).not_to have_css('.field-group.sender_name')
+        end
+      end
+
+      scenario "attempted injection via query parameters", search: true, js: true do
+        # <input value='                                          '/>
+        attack =       "'/><div id='inserted'></div><input value='"
+
+        search_on_page.parameterized_search_for(:title, attack)
+
+        search_on_page.within_fielded_searches do
+          expect(page).not_to have_css('div#inserted')
         end
       end
 
       scenario "allows you to remove a fielded search", search: true, js: true do
-        search_on_page.add_fielded_search_for('Title', 'lion')
+        search_on_page.add_fielded_search_for(title_field, 'lion')
 
         search_on_page.remove_fielded_search_for(:title)
 
@@ -143,49 +154,46 @@ feature "Fielded searches of Notices" do
         end
       end
 
-      scenario "allows you to change a fielded search", search: true, js: true do
-        search_on_page.add_fielded_search_for('Title', 'lion')
-        search_on_page.change_field(:title, 'Tags')
+      scenario "does not allow changing a field after adding another", search: true, js: true do
+        search_on_page.add_fielded_search_for(title_field, 'lion')
+        search_on_page.add_more
 
-        search_on_page.within_fielded_searches do
-          expect(page).to have_css("input[name='tags']")
-          expect(page).to have_select(
-            'search-field', with_options: ['Tags'], count: 1
-          )
-        end
-        search_on_page.within_template_row do
-          expect(page).to have_select(
-            'search-field', with_options: ['Title'], count: 1
-          )
+        within('.field-group.title') do
+          expect(page).not_to have_select('search-field')
         end
       end
 
       scenario "removes the option from other drop-downs for a search that's been added", search: true, js: true do
-        search_on_page.add_fielded_search_for('Title', 'lion')
+        search_on_page.add_fielded_search_for(title_field, 'lion')
+        search_on_page.add_more
 
         search_on_page.within_fielded_searches do
-          expect(page).to have_select(
-            'search-field', with_options: ['Title'], count: 1
+          # existing field is made disabled, and the new select should
+          # not have Title as an option
+          expect(page).not_to have_select(
+            'search-field', with_options: ['Title']
           )
         end
       end
 
       scenario "removes the options for a search from a previous page", search: true, js: true do
-        search_on_page.add_fielded_search_for('Title', 'lion')
+        search_on_page.add_fielded_search_for(title_field, 'lion')
         search_on_page.run_search(false)
 
         search_on_page.within_fielded_searches do
-          expect(page).to have_select(
-            'search-field', with_options: ['Title'], count: 1
+          # existing field is made disabled, and the new select should
+          # not have Title as an option
+          expect(page).not_to have_select(
+            'search-field', with_options: ['Title']
           )
         end
       end
 
       scenario "allows you to select a search after you delete it", search: true, js: true do
-        search_on_page.add_fielded_search_for('Title', 'lion')
+        search_on_page.add_fielded_search_for(title_field, 'lion')
         search_on_page.remove_fielded_search_for(:title)
 
-        search_on_page.add_fielded_search_for('Title', 'lion')
+        search_on_page.add_fielded_search_for(title_field, 'lion')
 
         search_on_page.within_fielded_searches do
           expect(page).to have_select(
@@ -195,13 +203,8 @@ feature "Fielded searches of Notices" do
       end
 
       scenario "does not allow you to select the same search twice", search: true, js: true do
-        search_on_page.add_fielded_search_for('Title', 'lion')
+        search_on_page.add_fielded_search_for(title_field, 'lion')
 
-        search_on_page.within_template_row do
-          expect(page).to have_select(
-            'search-field', with_options: ['Title'], count: 0
-          )
-        end
         search_on_page.within_fielded_searches do
           expect(page).to have_select(
             'search-field', with_options: ['Title'], count: 1
@@ -211,29 +214,23 @@ feature "Fielded searches of Notices" do
 
       scenario "removes the add query link after all searches have been added", search: true, js: true do
         Notice::SEARCHABLE_FIELDS.each do |field|
-          search_on_page.add_fielded_search_for(field.title, 'test')
+          search_on_page.add_fielded_search_for(field, 'test')
         end
 
         search_on_page.within_fielded_searches do
           expect(page).to_not have_css('#duplicate-field')
-          expect(page).to_not have_css('.template-row')
         end
       end
 
       scenario "activates the add query link when they are available", search: true, js: true do
         Notice::SEARCHABLE_FIELDS.each do |field|
-          search_on_page.add_fielded_search_for(field.title, 'test')
+          search_on_page.add_fielded_search_for(field, 'test')
         end
 
         search_on_page.remove_fielded_search_for(:title)
 
         search_on_page.within_fielded_searches do
           expect(page).to have_css('#duplicate-field')
-        end
-        search_on_page.within_template_row do
-          expect(page).to have_select(
-            'search-field', with_options: ['Title'], count: 1
-          )
         end
       end
 
@@ -273,6 +270,10 @@ feature "Fielded searches of Notices" do
 
   def have_sort_order_selection_of(sort_by)
     have_css('.sort-order a.dropdown-toggle', text: sort_by)
+  end
+
+  def title_field
+    Notice::SEARCHABLE_FIELDS.detect { |field| field.parameter == :title }
   end
 
 end

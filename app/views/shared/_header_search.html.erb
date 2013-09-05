@@ -16,17 +16,6 @@
           <% Notice::SEARCHABLE_FIELDS.each do |field| %>
             <%= render field %>
           <% end %>
-          <div class="field-group template-row">
-            <div class="input select">
-              <%= select_tag(
-                'search-field',
-                options_for_select(
-                  Notice::SEARCHABLE_FIELDS.collect{|f| [f.title, f.parameter]}
-              )
-              ) %>
-            </div>
-            <input type="text" name="search-term">
-          </div>
           <a id="duplicate-field" href="#" class="add-group">Add more</a>
           <div class="resubmit">
             <button class="button">Advanced Search</button>

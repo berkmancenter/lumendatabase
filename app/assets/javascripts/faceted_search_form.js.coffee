@@ -21,7 +21,7 @@ $('li.facet').on 'click', 'a', ->
         $(this).removeClass('active')
 
 clearEmptyParameters = ->
-  $('form#facets-form').find('input[type="hidden"]').each (index, element) ->
+  $('form#facets-form').find('input[type="hidden"]').each (_, element) ->
     if $(element).val() == ''
       $(element).remove()
 
@@ -35,13 +35,11 @@ cloneGlobalSearch = (context) ->
   $(context).append(term_input)
 
 cloneAdvancedSearch = (context) ->
-  $rows = new AdvancedSearchRows
-  $rows.activeRows().find('input:not([name="search-term"])')
-    .each (index, element) ->
-      name = $(element).attr('name')
-      value = $(element).val()
-      term_input = createHiddenTermInput(name, value)
-      $(context).append(term_input)
+  $('.field-group input').each (_, element) ->
+    name = $(element).attr('name')
+    value = $(element).val()
+    term_input = createHiddenTermInput(name, value)
+    $(context).append(term_input)
 
 $('form#facets-form').on 'submit', ->
   clearEmptyParameters()

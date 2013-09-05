@@ -23,8 +23,6 @@ class Notices::SearchController < ApplicationController
   private
 
   def notice_searcher
-    now = Time.now.beginning_of_day
-
     SearchesModels.new(params).tap do |searcher|
       Notice::SEARCHABLE_FIELDS.each do |searched_field|
         searcher.register searched_field
