@@ -1,5 +1,23 @@
 require 'spec_helper'
 
+# non-admin in the sense that they cannot access /admin at all
+shared_examples 'a non-admin' do
+  it "cannot access admin" do
+    expect(subject.can? :read, notice).to be_false
+    expect(subject.can? :access, :rails_admin).to be_false
+    expect(subject.can? :dashboard, nil).to be_false
+  end
+end
+
+# admin in the sense that they can access /admin at all
+shared_examples 'an admin' do
+  it "can access admin" do
+    expect(subject.can? :read, notice).to be_true
+    expect(subject.can? :access, :rails_admin).to be_true
+    expect(subject.can? :dashboard, nil).to be_true
+  end
+end
+
 shared_examples 'a notice editor' do
   it "can edit notices" do
     expect(subject.can? :edit, notice).to be_true
@@ -19,9 +37,30 @@ shared_examples 'a notice editor' do
 end
 
 describe Ability do
+  context "a role-less user" do
+    subject { Ability.new(build(:user)) }
+
+    it_behaves_like 'a non-admin'
+
+    it "cannot submit to the API" do
+      expect(subject.can? :submit, Notice).to be_false
+    end
+  end
+
+  context "a submitter" do
+    subject { Ability.new(build(:user, :submitter)) }
+
+    it_behaves_like 'a non-admin'
+
+    it "can submit to the API" do
+      expect(subject.can? :submit, Notice).to be_true
+    end
+  end
+
   context "a redactor" do
     subject { Ability.new(build(:user, :redactor)) }
 
+    it_behaves_like 'an admin'
     it_behaves_like 'a notice editor'
 
     it "cannot publish" do
@@ -36,6 +75,7 @@ describe Ability do
   context "a publisher" do
     subject { Ability.new(build(:user, :publisher)) }
 
+    it_behaves_like 'an admin'
     it_behaves_like 'a notice editor'
 
     it "can publish" do
@@ -49,6 +89,8 @@ describe Ability do
 
   context "an admin" do
     subject { Ability.new(build(:user, :admin)) }
+
+    it_behaves_like 'an admin'
 
     it "can redact and publish" do
       expect(subject.can? :redact_notice, notice).to be_true
@@ -74,6 +116,8 @@ describe Ability do
 
   context "a super admin" do
     subject { Ability.new(build(:user, :super_admin)) }
+
+    it_behaves_like 'an admin'
 
     it "can do everything" do
       expect(subject.can? :manage, notice).to be_true

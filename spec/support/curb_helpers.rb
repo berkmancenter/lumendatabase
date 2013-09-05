@@ -1,22 +1,34 @@
 module CurbHelpers
+  def post_api(path, parameters)
+    json = parameters.to_json
+
+    Curl.post("http://#{host}:#{port}#{path}", json) do |curl|
+      set_default_headers(curl)
+
+      yield curl if block_given?
+    end
+  end
+
   def with_curb_get_for_json(url, options)
-    host = Capybara.current_session.server.host
-    port = Capybara.current_session.server.port
-    curb = Curl.get("http://#{host}:#{port}/#{url}",options) do |curl|
-      curl.headers['Accept'] = 'application/json'
-    curl.headers['Content-Type'] = 'application/json'
+    curb = Curl.get("http://#{host}:#{port}/#{url}", options) do |curl|
+      set_default_headers(curl)
     end
+
     yield curb
   end
 
-  def with_curb_post_for_json(url, json)
-    host = Capybara.current_session.server.host
-    port = Capybara.current_session.server.port
-    curb = Curl.post("http://#{host}:#{port}/#{url}", json) do |curl|
-      curl.headers['Accept'] = 'application/json'
-    curl.headers['Content-Type'] = 'application/json'
-    end
-    yield curb
+  private
+
+  def host
+    Capybara.current_session.server.host
   end
 
+  def port
+    Capybara.current_session.server.port
+  end
+
+  def set_default_headers(curl)
+    curl.headers['Accept'] = 'application/json'
+    curl.headers['Content-Type'] = 'application/json'
+  end
 end

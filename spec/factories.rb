@@ -162,6 +162,10 @@ FactoryGirl.define do
     password "secretsauce"
     password_confirmation "secretsauce"
 
+    trait :submitter do
+      roles { [Role.submitter] }
+    end
+
     trait :redactor do
       roles { [Role.redactor] }
     end
@@ -176,6 +180,10 @@ FactoryGirl.define do
 
     trait :super_admin do
       roles { [Role.super_admin] }
+    end
+
+    trait :with_entity do
+      entity
     end
   end
 

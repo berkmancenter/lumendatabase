@@ -1,5 +1,6 @@
 class Role < ActiveRecord::Base
   NAMES = %w(
+    submitter
     redactor
     publisher
     admin

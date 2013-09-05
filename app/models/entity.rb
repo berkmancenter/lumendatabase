@@ -8,6 +8,7 @@ class Entity < ActiveRecord::Base
   PER_PAGE = 10
   HIGHLIGHTS = %i(name)
 
+  belongs_to :user
   has_ancestry orphan_strategy: :restrict
   has_many :entity_notice_roles, dependent: :destroy
   has_many :notices, through: :entity_notice_roles

@@ -9,13 +9,34 @@ feature "User authorization" do
     expect(user).to be_redirected_to_sign_in
   end
 
-  scenario "A logged-in user is able to access admin" do
-    user = AdminOnPage.new(create(:user))
+  scenario "Submitters- cannot access admin" do
+    users = [
+      AdminOnPage.new(create(:user)),
+      AdminOnPage.new(create(:user, :submitter))
+    ]
 
-    user.sign_in
-    user.visit_admin
+    users.each do |user|
+      user.sign_in
+      user.visit_admin
 
-    expect(user).to be_in_admin
+      expect(user).to be_denied_access
+    end
+  end
+
+  scenario "Redactors+ are able to access admin" do
+    users = [
+      AdminOnPage.new(create(:user, :redactor)),
+      AdminOnPage.new(create(:user, :publisher)),
+      AdminOnPage.new(create(:user, :admin)),
+      AdminOnPage.new(create(:user, :super_admin))
+    ]
+
+    users.each do |user|
+      user.sign_in
+      user.visit_admin
+
+      expect(user).to be_in_admin
+    end
   end
 
   scenario "All levels can edit notices" do

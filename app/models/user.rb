@@ -5,6 +5,7 @@ class User < ActiveRecord::Base
     :recoverable,           # New users are given a temp password to reset
     :validatable            # Ensures confirmation of Password on reset
 
+  has_one :entity
   has_and_belongs_to_many :roles
 
   before_save :ensure_authentication_token
