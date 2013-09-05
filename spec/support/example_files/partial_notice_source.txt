@@ -1,0 +1,16 @@
+field_form_version:1
+field_location_or_region:US
+field_submitter_first_name:Joe
+field_submitter_last_name:Schmoe
+field_submitter_company:FooCorp
+field_copyright_owner:Copyright Owner LLC
+field_group_0_work_description:Video and Image series produced by Copyright Owner LLC.
+
+field_group_0_infringement_url_0:http://infringing.example.com/url_0
+field_group_0_infringement_url_1:http://infringing.example.com/url_1
+field_group_1_work_description:Video and Image series produced by Copyright Owner LLC.
+
+field_group_1_copyright_work_url_0:http://example.com/original_work_url
+field_group_1_copyright_work_url_1:http://example.com/original_work_url_dos
+field_signature: Trusted user submission
+field_form_submission_time:05/26/2013 PDT

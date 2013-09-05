@@ -13,8 +13,18 @@ class Work < ActiveRecord::Base
     relation_class = relation_type.classify.constantize
 
     define_method("validate_associated_records_for_#{relation_type}") do
+      # Similar to the hack in EntityNoticeRole, because all validations are
+      # run before all inserts, we have to save to ensure we don't have the
+      # same new InfringingUrl or CopyrightedUrl cause a unique key constraint.
+      # This means we have to save when validating, and that we could accumulate
+      # orphaned *Url model instances.
       self.send(relation_type.to_sym).map! do |instance|
-        relation_class.find_or_initialize_by_url(instance.url)
+        if existing_url_relation = relation_class.find_by_url(instance.url)
+          existing_url_relation
+        else
+          instance.save
+          instance
+        end
       end
     end
   end
