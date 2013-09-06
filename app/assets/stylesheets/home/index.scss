@@ -15,6 +15,14 @@ section.home-search-form {
   h1 {
     margin: 0 0 32px 0;
     text-align: center;
+
+    img {
+      @include media($mobile) {
+        $size: 88%;
+        width: $size;
+        height: $size;
+      }
+    }
   }
 
   $form-padding: $form-bg-padding - 3px;
@@ -83,14 +91,17 @@ section.home-search-form {
   border-radius: 3px;
 
   section {
-    float: left;
-    width: $home-width / 2;
+    @include span-columns(6);
     padding: 20px 40px 30px;
 
     @include media($mobile) {
       padding: 15px $base-padding-mobile;
       float: none;
       width: auto;
+    }
+
+    &:first-child {
+      margin-right: 1%;
     }
 
     &.news-snippets {

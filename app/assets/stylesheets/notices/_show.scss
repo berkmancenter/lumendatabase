@@ -7,6 +7,10 @@ article.notice-show {
     margin: 0;
     background: #476491;
     padding: 25px 35px 15px;
+
+    @include media($mobile) {
+      padding-left: $base-padding-mobile;
+    }
   }
 }
 

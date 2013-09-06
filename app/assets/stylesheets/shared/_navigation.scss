@@ -2,10 +2,28 @@
 // Main Navigation Shared
 //************************************************************************//
 nav.main-nav {
+  background: $nav-bg;
+
+  ol.nav-list {
+    clear: left;
+    @include clearfix;
+    margin: 0 auto;
+    max-width: $home-width;
+    padding: 0;
+    width: 100%;
+
+    li.open {
+      background: $header-background-1;
+      color: #fff;
+    }
+  }
+
   .nav-item {
     float: left;
     list-style: none;
     position: relative;
+    text-align: center;
+    width: 25%;
 
     @include media($small-screen){
       position: static;
@@ -16,6 +34,11 @@ nav.main-nav {
       color: $nav-color;
       font-size: $base-font-size-small-1;
       font-weight: bold;
+
+      @include media($mobile){
+        font-size: $base-font-size-small-2 - 1;
+        line-height: 1.4em;
+      }
 
       &:focus {
         outline: none;
@@ -55,34 +78,20 @@ nav.main-nav {
   }
 }
 
+
+//************************************************************************//
+// Navigation
+//************************************************************************//
+nav.main-nav {
+}
+
 //************************************************************************//
 // Landing Page / Home
 //************************************************************************//
 body.home-index {
   nav.main-nav {
-    background: $nav-bg;
-
-    ol.nav-list {
-      clear: left;
-      @include clearfix;
-      margin: 0 auto;
-      max-width: $home-width;
-      padding: 0;
-      width: 100%;
-
-      li.nav-item {
-        text-align: center;
-        width: 25%;
-      }
-
-      li.search {
-        display: none;
-      }
-
-      li.open {
-        background: $header-background-1;
-        color: #fff;
-      }
+    li.search {
+      display: none;
     }
   }
 }
@@ -92,39 +101,59 @@ body.home-index {
 //************************************************************************//
 header.app {
   nav.main-nav {
-    float: right;
-    @include clearfix;
-    margin-top: 23px;
-  }
-
-  ol.nav-list {
-    margin: 0;
-    padding: 0;
-    @include clearfix;
-
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    width: 100%;
+    float: none;
 
     li.nav-item {
-      > a {
-        border-radius: 2px;
-        color: $nav-link-color;
-        font-size: $base-font-size;
-        font-weight: 500;
-        margin-right: 5px;
-        padding: 6px 15px;
+      width: (100% / 5);
+    }
+  }
 
-        &:hover {
+  @include media(min-width 769px) {
+    nav.main-nav {
+      float: right;
+      position: static;
+      @include clearfix;
+      margin-top: 23px;
+      background: none;
+      width: auto;
+    }
+
+    ol.nav-list {
+      margin: 0;
+      padding: 0;
+      @include clearfix;
+
+
+      li.nav-item {
+        width: auto;
+
+        > a {
+          border-radius: 2px;
+          color: $nav-link-color;
+          font-size: $base-font-size;
+          font-weight: 500;
+          margin-right: 5px;
+          padding: 6px 15px;
+
+          &:hover {
+            background: $nav-hover;
+            color: #fff;
+          }
+
+          &:focus {
+            outline: none;
+          }
+        }
+
+        &.open > a {
           background: $nav-hover;
           color: #fff;
         }
-
-        &:focus {
-          outline: none;
-        }
-      }
-
-      &.open > a {
-        background: $nav-hover;
-        color: #fff;
       }
     }
   }

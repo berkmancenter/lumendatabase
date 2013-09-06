@@ -2,10 +2,6 @@ body {
   background: $base-background-color;
 }
 
-.main.app {
-  // padding-top: 30px;
-}
-
 .main-inner, .header-inner {
   @include container;
   margin: 0 auto;
@@ -21,6 +17,14 @@ body {
 
 .header-inner {
   padding-top: 20px;
+
+  @include media($tablet) {
+    padding-top: 20px + 35px;
+  }
+
+  @include media($mobile) {
+    padding-top: 20px + 40px;
+  }
 }
 
 .main-inner {
@@ -43,9 +47,6 @@ body.categories-show,
 body.high_voltage-pages {
   .main-inner {
     padding: $base-padding;
-
-    @include media($tablet) {
-    }
 
     @include media($mobile) {
       padding: $base-padding-mobile;

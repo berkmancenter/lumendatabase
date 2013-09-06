@@ -1,6 +1,10 @@
 body.notices-new {
   h1 {
     margin-bottom: 30px;
+
+    @include media($mobile) {
+      line-height: 1.2em;
+    }
   }
 }
 
@@ -9,6 +13,11 @@ section.notices-list {
   @include omega;
   padding-right: $gutter;
   border-right: 1px solid lighten($base-border-color, 8%);
+
+  @include media($mobile) {
+    padding: 0;
+  }
+
 
   ul {
     margin: 0;
@@ -25,6 +34,11 @@ section.notices-list {
       padding: 12px;
       @include transition(background 0.08s $ease-out-quad);
 
+      @include media($mobile) {
+        padding: 6px 10px;
+        font-size: $base-font-size-small-1;
+      }
+
       &.active {
         background: $nav-hover;
         box-shadow: none;
@@ -39,6 +53,10 @@ section.info-panel {
   @include span-columns(8);
   line-height: 1.6em;
 
+  @include media($mobile) {
+    padding: 10px;
+  }
+
   > div {
     display: none;
 
@@ -51,5 +69,23 @@ section.info-panel {
     display: inline-block;
     margin-top: 30px;
     padding: 8px 40px;
+
+    @include media($mobile) {
+      font-weight: 800;
+      padding: 8px 10px;
+      display: block;
+      text-align: center;
+    }
+  }
+}
+
+  @include media($mobile) {
+section.info-panel,
+section.notices-list {
+  // @include media($mobile) {
+    margin: 0;
+    float: none;
+    width: 100%;
+    border: 0;
   }
 }

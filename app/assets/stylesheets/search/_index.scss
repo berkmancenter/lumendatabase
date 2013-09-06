@@ -5,6 +5,10 @@ section.search-results {
   div.result-stats {
     margin: 15px 0 0 $base-padding;
 
+    @include media($mobile) {
+      margin-left: $base-padding-mobile;
+    }
+
     &, a {
       font-size: $base-font-size-small-1;
       color: $base-font-color-2;
@@ -15,6 +19,11 @@ section.search-results {
     display: inline-block;
     margin-left: 20px;
     position: relative;
+
+    @include media($mobile) {
+      display: block;
+      margin-left: 0;
+    }
 
     &.open .dropdown-menu {
       display: block;
