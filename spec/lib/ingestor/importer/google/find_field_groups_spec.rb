@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'ingestor'
 
-describe Ingestor::WorksImporter::Google::FindFieldGroups do
+describe Ingestor::Importer::Google::FindFieldGroups do
   it "finds the correct number of groups" do
     finder = described_class.new(field_group_content)
 

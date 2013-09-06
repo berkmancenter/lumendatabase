@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'ingestor'
 
-describe Ingestor::WorksImporter::Google::FieldGroupParser do
+describe Ingestor::Importer::Google::FieldGroupParser do
 
   it "extracts work descriptions" do
     expect(parser.description).to eq("Artist Name:Rick Astley

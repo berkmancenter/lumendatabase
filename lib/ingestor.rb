@@ -1,10 +1,8 @@
-require 'ingestor/works_importer/dispatcher'
-require 'ingestor/works_importer/google'
-require 'ingestor/works_importer/null_importer'
-require 'ingestor/legacy_csv'
-
-module Ingestor
+Dir['lib/ingestor/**/*.rb'].each do |file_path|
+  require file_path.sub(/lib\/(.*)\.rb/, '\1')
 end
 
-Ingestor::WorksImporter::Dispatcher.register(Ingestor::WorksImporter::Google)
-Ingestor::WorksImporter::Dispatcher.register(Ingestor::WorksImporter::NullImporter)
+module Ingestor
+  ImportDispatcher.register(Importer::Google)
+  ImportDispatcher.register(Importer::NullImporter)
+end

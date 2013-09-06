@@ -1,5 +1,5 @@
 module Ingestor
-  module WorksImporter
+  module Importer
     class Google
       class FieldGroupParser
         def initialize(field_group, content)

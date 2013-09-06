@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'ingestor'
 
-describe Ingestor::WorksImporter::Google do
+describe Ingestor::Importer::Google do
 
   context "complete source files" do
     it "gets works" do
@@ -72,10 +72,10 @@ Track Name: Flipy The Bear',
   private
 
   def works_from_complete_file
-    described_class.works('spec/support/example_files/original_notice_source.txt')
+    described_class.new('spec/support/example_files/original_notice_source.txt').works
   end
 
   def works_from_partial_file
-    described_class.works('spec/support/example_files/partial_notice_source.txt')
+    described_class.new('spec/support/example_files/partial_notice_source.txt').works
   end
 end
