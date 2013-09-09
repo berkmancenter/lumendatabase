@@ -24,11 +24,14 @@ Track Name: Flipy The Bear")
         "http://infringing.example.com/url_1",
       ]
     )
-
   end
 
+  private
+
   def parser
-    described_class.new(0, field_group_content)
+    described_class.new(
+      stub("FieldGroup", key: 0, content: field_group_content)
+    )
   end
 
   def field_group_content
