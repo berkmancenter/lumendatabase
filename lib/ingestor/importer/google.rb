@@ -9,7 +9,7 @@ module Ingestor
       end
 
       def initialize(file_paths)
-        @file_paths = file_paths
+        @file_paths = (file_paths || '').split(',')
       end
 
       def works
@@ -23,7 +23,7 @@ module Ingestor
       end
 
       def file_uploads
-        [] # TODO
+        original_documents + supporting_documents
       end
 
       private
@@ -52,10 +52,33 @@ module Ingestor
       end
 
       def find_original_file
-        file_paths && file_paths.split(',').find do |file|
-          # TODO: logic might change
-          file.match(/.+\.txt\Z/)
+        original_file_paths.first # TEMPORARY
+      end
+
+      def original_documents
+        original_file_paths.map do |file_path|
+          FileUpload.new(
+            kind: 'original',
+            file: File.open(file_path)
+          )
         end
+      end
+
+      def supporting_documents
+        supporting_file_paths.map do |file_path|
+          FileUpload.new(
+            kind: 'supporting',
+            file: File.open(file_path)
+          )
+        end
+      end
+
+      def original_file_paths
+        file_paths.select { |file_path| File.extname(file_path) == '.txt' }
+      end
+
+      def supporting_file_paths
+        file_paths.select { |file_path| File.extname(file_path) != '.txt' }
       end
 
     end
