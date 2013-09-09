@@ -6,6 +6,7 @@ feature "Importing CSV" do
     ingestor = Ingestor::LegacyCsv.open(
       'spec/support/example_files/example_notice_export.csv'
     )
+    ingestor.logger.level = Logger::ERROR
     ingestor.import
 
     notice = Dmca.last
