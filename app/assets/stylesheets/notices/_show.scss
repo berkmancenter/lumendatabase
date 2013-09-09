@@ -155,7 +155,7 @@ article.notice-show {
     }
 
     dl {
-       @include clearfix;
+      @include clearfix;
       margin-bottom: 10px;
 
       dl, dt {

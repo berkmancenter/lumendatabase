@@ -1,12 +1,12 @@
 <li class="dropdown <%= term_filter.parameter %> <%= facet_dropdown_active_indicator(term_filter.parameter) %>">
-<a class="dropdown-toggle title <%= term_filter.parameter %>" data-toggle="dropdown" href="#">
+<a class="dropdown-toggle title <%= term_filter.parameter %>" data-toggle="dropdown" href="javascript:void(0);">
   <%= term_filter.title %>
 </a>
   <ol class="dropdown-menu <%= term_filter.parameter %>" role="menu">
-    <li class="facet"><a href="#" data-facet-name="<%= term_filter.parameter %>" data-value="">All</a></li>
+    <li class="facet"><a href="javascript:void(0);" data-facet-name="<%= term_filter.parameter %>" data-value="">All</a></li>
     <% results.facets[term_filter.parameter.to_s]['terms'].each do |term| %>
       <li class="facet <%= facet_active_indicator(term_filter.parameter, term['term']) %>" name="<%= term_filter.parameter %>">
-      <a href="#" data-facet-name="<%= term_filter.parameter %>" data-value="<%= term['term'] %>">
+      <a href="javascript:void(0);" data-facet-name="<%= term_filter.parameter %>" data-value="<%= term['term'] %>">
         <%= term['term'] %><span class="total-count"><%= term['count'] %> Results</span>
       </a>
       </li>

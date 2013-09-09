@@ -24,8 +24,8 @@
       <p class="source">Sent via: <%= sent_via(@notice) %></p>
 
       <dl class="action-taken">
-        <dt class="label">Action taken:</span>
-        <dd class="field"><%= @notice.action_taken %></span>
+        <dt class="label">Action taken:</dt>
+        <dd class="field"><%= @notice.action_taken %></dd>
       </dl>
 
       <%= render show_partial_for(@notice), notice: @notice %>

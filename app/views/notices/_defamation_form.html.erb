@@ -30,7 +30,7 @@
       <%= form.input :body, label: 'Legal Complaint' %>
       <%= form.simple_fields_for(:file_uploads) do |file_uploads_form| %>
         <%= file_uploads_form.input :file, label: 'Attach Notice' %>
-        <a href="#" id="add-another">Attach another</a>
+        <a href="javascript:void(0);" id="add-another">Attach another</a>
         <%= file_uploads_form.input :kind, as: :hidden %>
       <% end %>
     </div>

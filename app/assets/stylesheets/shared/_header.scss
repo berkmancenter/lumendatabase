@@ -238,6 +238,7 @@ header.app .container.advanced-search {
     margin: 0;
     padding: 5px 10px;
     width: $input-width;
+    float: left;
 
     @include media($mobile) {
       width: 180px;
