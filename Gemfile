@@ -30,6 +30,7 @@ gem 'tire', '~> 0.6.0'
 gem 'select2-rails'
 gem 'bootstrap-datepicker-rails'
 gem 'cancan', '~>1.6.10'
+gem 'jquery-placeholder-rails'
 
 group :assets do
   gem 'coffee-rails'

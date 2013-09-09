@@ -18,4 +18,5 @@
 //= require respond.min
 //= require select2
 //= require bootstrap-datepicker/core
+//= require jquery-placeholder
 //= require_tree .

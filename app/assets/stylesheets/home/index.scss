@@ -1,6 +1,7 @@
 // Search form
 //************************************************************************//
 section.home-search-form {
+  margin: 200px 0 180px; // fallback
   margin: 25vh 0 18vh;
   @extend %search-form;
 
