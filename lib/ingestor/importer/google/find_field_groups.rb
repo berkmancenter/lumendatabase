@@ -2,36 +2,37 @@ module Ingestor
   module Importer
     class Google
       class FindFieldGroups
+
+        FieldGroup = Struct.new(:key, :content)
+
         def initialize(content)
           @content = content
-          find_field_groups
+          @keys = find_keys
         end
 
         def find
-          field_groups = {}
-          @field_groups.collect do |field_group|
-            field_groups[field_group] = extract_field_group_content(field_group)
-          end
-          field_groups
+          keys.map { |key| FieldGroup.new(key, extract_content(key)) }
         end
 
         private
 
-        def find_field_groups
-          field_groups = @content.scan(/field_group_(\d+?)/)
-          @field_groups = field_groups.flatten.compact.uniq.map{|field_group| field_group.to_i}
+        attr_reader :keys, :content
+
+        def find_keys
+          field_groups = content.scan(/field_group_(\d+?)/)
+          field_groups.flatten.compact.uniq.map(&:to_i)
         end
 
-        def extract_field_group_content(field_group)
-          next_field_group = field_group + 1
-          terminator = "field_group_#{next_field_group}"
-
-          if field_group == @field_groups.last
-            terminator  = "field_signature"
+        def extract_content(key)
+          if key == keys.last
+            terminator = "field_signature"
+          else
+            terminator = "field_group_#{key + 1}"
           end
 
-          pattern = /(field_group_#{field_group}_work_description.+?)#{terminator}/m
-          @content.match(pattern)
+          pattern = /(field_group_#{key}_work_description.+?)#{terminator}/m
+          content.match(pattern)
+
           $1.strip
         end
       end

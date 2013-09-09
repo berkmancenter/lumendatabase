@@ -332,6 +332,21 @@ describe Dmca do
     end
   end
 
+  context "#original_documents" do
+    it "returns file uploads of kind 'original'" do
+      file_uploads = [
+        build(:file_upload, kind: 'supporting'),
+        build(:file_upload, kind: 'original'),
+        build(:file_upload, kind: 'original'),
+      ]
+
+      notice = create(:dmca, file_uploads: file_uploads)
+
+      expect(notice).to have(2).original_documents
+      expect(notice.original_documents).to be_all { |d| d.kind == 'original' }
+    end
+  end
+
   context ".find_visible" do
     it "finds notices which are not spam or hidden" do
       notice = create(:dmca, spam: false)

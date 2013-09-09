@@ -204,6 +204,10 @@ class Notice < ActiveRecord::Base
     super(tag_list_value)
   end
 
+  def original_documents
+    file_uploads.where(kind: 'original')
+  end
+
   def supporting_documents
     file_uploads.where(kind: 'supporting')
   end

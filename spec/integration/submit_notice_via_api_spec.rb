@@ -122,7 +122,7 @@ feature "notice submission" do
   private
 
   def original_document_file(notice)
-    notice.file_uploads.where(kind: 'original').first.file
+    notice.original_documents.first.file
   end
 
   def supporting_document_file(notice)

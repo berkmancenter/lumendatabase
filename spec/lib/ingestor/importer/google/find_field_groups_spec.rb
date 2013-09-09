@@ -11,9 +11,10 @@ describe Ingestor::Importer::Google::FindFieldGroups do
   it "splits field groups correctly" do
     finder = described_class.new(field_group_content)
 
-    expect(finder.find).to eq (
-      { 0 => first_group, 1 => second_group}
-    )
+    expect(finder.find).to match_array([
+      described_class::FieldGroup.new(0, first_group),
+      described_class::FieldGroup.new(1, second_group),
+    ])
   end
 
   def first_group
