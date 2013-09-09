@@ -1,5 +1,10 @@
 body {
+  background: $base-background-color-alt;
+}
+
+section.main.app {
   background: $base-background-color;
+  padding-bottom: 30px;
 }
 
 .main-inner, .header-inner {

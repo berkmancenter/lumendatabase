@@ -111,6 +111,10 @@ header.app {
     li.nav-item {
       width: (100% / 5);
     }
+
+    li.open {
+      background: none;
+    }
   }
 
   @include media(min-width 769px) {
