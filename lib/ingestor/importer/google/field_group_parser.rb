@@ -8,8 +8,9 @@ module Ingestor
         end
 
         def description
-          @content.match(/field_group_#{@field_group}_work_description:(.+?)field_group_#{@field_group}/m)
-          $1.strip
+          if @content.match(/field_group_#{@field_group}_work_description:(.+?)field_group_#{@field_group}/m)
+            $1.strip
+          end
         end
 
         def copyrighted_urls
