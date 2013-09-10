@@ -1,6 +1,6 @@
 module Ingestor
   module Importer
-    class Google
+    class Google < Base
       class FindFieldGroups
 
         FieldGroup = Struct.new(:key, :content)

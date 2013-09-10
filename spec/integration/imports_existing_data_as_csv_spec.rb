@@ -9,7 +9,10 @@ feature "Importing CSV" do
     ingestor.logger.level = Logger::ERROR
     ingestor.import
     (
-      @primary_format_notice, @secondary_dmca_notice, @secondary_other_notice
+      @primary_format_notice,
+      @secondary_dmca_notice,
+      @secondary_other_notice,
+      @twitter_notice
     ) = Dmca.order(:id)
   end
 
@@ -23,7 +26,7 @@ feature "Importing CSV" do
           "http://infringing.example.com/url_1",
           "http://infringing.example.com/url_second_0",
           "http://infringing.example.com/url_second_1"
-      ]
+        ]
       )
       expect(@primary_format_notice).to have(1).original_document
       expect(upload_contents(@primary_format_notice.original_documents.first)).to eq File.read(
@@ -72,6 +75,25 @@ http://www.example.com/unstoppable_3.html|
       )
     end
 
+  end
+
+  context "from the twitter format" do
+    scenario "a notice is created" do
+      expect(@twitter_notice.title).to eq 'Twitter Import'
+      expect(@twitter_notice.works.length).to eq 2
+      expect(@twitter_notice.infringing_urls.map(&:url)).to match_array([
+        'https://twitter.com/NoMatter/status/12345',
+        'https://twitter.com/NoMatter/status/4567',
+      ])
+      expect(@twitter_notice).to have(1).original_document
+      expect(upload_contents(@twitter_notice.original_documents.first)).to eq File.read(
+        'spec/support/example_files/original_twitter_notice_source.txt'
+      )
+      expect(@twitter_notice).to have(1).supporting_document
+      expect(upload_contents(@twitter_notice.supporting_documents.first)).to eq File.read(
+        'spec/support/example_files/original_twitter_notice_source.html'
+      )
+    end
   end
 
   private
