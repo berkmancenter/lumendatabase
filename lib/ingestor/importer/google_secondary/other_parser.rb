@@ -2,7 +2,7 @@ require 'uri'
 
 module Ingestor
   module Importer
-    class GoogleSecondary
+    class GoogleSecondary < Base
       class OtherParser
 
         def self.handles?(content)

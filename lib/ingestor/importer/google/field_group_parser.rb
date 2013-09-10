@@ -1,6 +1,6 @@
 module Ingestor
   module Importer
-    class Google
+    class Google < Base
       class FieldGroupParser
         def initialize(field_group)
           @key = field_group.key
