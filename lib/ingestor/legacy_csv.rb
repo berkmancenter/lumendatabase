@@ -36,10 +36,12 @@ module Ingestor
     attr_reader :file_path
 
     def import_row(csv_row)
-      attributes = AttributeMapper.new(csv_row.to_hash).mapped
+      mapper = AttributeMapper.new(csv_row.to_hash)
+
+      attributes = mapper.mapped
       updated_at = attributes.delete(:updated_at)
 
-      dmca = Dmca.create!(attributes)
+      dmca = mapper.notice_type.create!(attributes)
       dmca.update_attributes(updated_at: updated_at)
 
       logger.debug { "Imported: #{attributes[:original_notice_id]} -> #{dmca.id}" }

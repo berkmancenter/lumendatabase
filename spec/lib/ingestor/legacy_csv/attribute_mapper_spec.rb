@@ -2,6 +2,18 @@ require 'spec_helper'
 require 'ingestor'
 
 describe Ingestor::LegacyCsv::AttributeMapper do
+  context "#notice_type" do
+    it "returns the notice_type of its importer" do
+      importer = double("Importer")
+      importer.stub(:notice_type).and_return(Trademark)
+      Ingestor::ImportDispatcher.stub(:for).and_return(importer)
+
+      mapper = described_class.new({})
+
+      expect(mapper.notice_type).to eq Trademark
+    end
+  end
+
   it "maps basic metadata" do
     hash = {
      'NoticeID' => '1',

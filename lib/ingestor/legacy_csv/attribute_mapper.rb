@@ -1,13 +1,15 @@
 module Ingestor
   class LegacyCsv
     class AttributeMapper
+
+      delegate :notice_type, to: :importer
+
       def initialize(hash)
         @hash = hash
+        @importer = ImportDispatcher.for(@hash['OriginalFilePath'])
       end
 
       def mapped
-        importer = ImportDispatcher.for(hash['OriginalFilePath'])
-
         {
           original_notice_id: hash['NoticeID'],
           title: hash['Subject'],
@@ -38,7 +40,7 @@ module Ingestor
 
       private
 
-      attr_reader :hash
+      attr_reader :hash, :importer
 
       def address_hash(role_name)
         {

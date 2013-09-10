@@ -3,6 +3,12 @@ require 'ingestor'
 
 describe Ingestor::Importer::Google do
 
+  context "#notice_type" do
+    it "should be Dmca" do
+      expect(described_class.new('').notice_type).to eq Dmca
+    end
+  end
+
   context "complete source files" do
     it "gets works" do
       expect(works_from_complete_file.length).to eq 2

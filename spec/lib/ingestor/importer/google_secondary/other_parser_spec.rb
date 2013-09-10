@@ -4,21 +4,24 @@ require 'ingestor'
 describe Ingestor::Importer::GoogleSecondary::OtherParser do
 
   it "gets work descriptions" do
-    parser = described_class.new(parseable_content)
-    expect(parser.description).to eq(
+    work = described_class.new(sample_file).works.first
+
+    expect(work.description).to eq(
 'diffamazione e violazione della privacy
 foobar'
     )
   end
 
   it "gets copyrighted_urls" do
-    parser = described_class.new(parseable_content)
-    expect(parser.copyrighted_urls).to be_empty
+    work = described_class.new(sample_file).works.first
+
+    expect(work.copyrighted_urls.map(&:url)).to be_empty
   end
 
   it "gets infringing_urls" do
-    parser = described_class.new(parseable_content)
-    expect(parser.infringing_urls).to match_array(
+    work = described_class.new(sample_file).works.first
+
+    expect(work.infringing_urls.map(&:url)).to match_array(
       %w|http://www.example.com/asdfasdf
 http://www.example.com/infringing|
     )
@@ -26,9 +29,8 @@ http://www.example.com/infringing|
 
   private
 
-  def parseable_content
-    File.read(
-      'spec/support/example_files/secondary_other_notice_source.html'
-    )
+  def sample_file
+    'spec/support/example_files/secondary_other_notice_source.html'
   end
+
 end
