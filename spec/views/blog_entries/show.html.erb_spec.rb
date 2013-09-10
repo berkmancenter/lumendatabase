@@ -26,6 +26,14 @@ describe 'blog_entries/show.html.erb' do
     expect(rendered).to include(blog_entry.content_html)
   end
 
+  it "assigns the correct imagery class" do
+    blog_entry = assign_blog_entry(image: 'rain')
+
+    render
+
+    expect(page).to have_css('.imagery.rain')
+  end
+
   private
 
   def assign_blog_entry(*args)

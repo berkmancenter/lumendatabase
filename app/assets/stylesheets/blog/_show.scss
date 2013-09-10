@@ -67,57 +67,57 @@ article.post {
     height: 200px;
 
     &.lightning {
-      background-image: image_url('blog/lightning.jpg');
+      background-image: image_url('blog/imagery/lightning.jpg');
       background-position: 50% 80%;
     }
 
     &.storm {
-      background-image: image_url('blog/storm.jpg');
+      background-image: image_url('blog/imagery/storm.jpg');
       background-position: 50% 80%;
     }
 
     &.rain {
-      background-image: image_url('blog/rain.jpg');
+      background-image: image_url('blog/imagery/rain.jpg');
       background-position: 50% 45%;
     }
 
     &.overcast {
-      background-image: image_url('blog/overcast.jpg');
+      background-image: image_url('blog/imagery/overcast.jpg');
       background-position: 50% 80%;
     }
 
     &.clouds {
-      background-image: image_url('blog/clouds.jpg');
+      background-image: image_url('blog/imagery/clouds.jpg');
       background-position: 50% 100%;
     }
 
     &.sunny {
-      background-image: image_url('blog/sunny.jpg');
+      background-image: image_url('blog/imagery/sunny.jpg');
       background-position: 50% 50%;
     }
 
     &.sunset {
-      background-image: image_url('blog/sunset.jpg');
+      background-image: image_url('blog/imagery/sunset.jpg');
       background-position: 50% 25%;
     }
 
     &.foliage {
-      background-image: image_url('blog/foliage.jpg');
+      background-image: image_url('blog/imagery/foliage.jpg');
       background-position: 50% 50%;
     }
 
     &.desert {
-      background-image: image_url('blog/desert.jpg');
+      background-image: image_url('blog/imagery/desert.jpg');
       background-position: 50% 42%;
     }
 
     &.tornado {
-      background-image: image_url('blog/tornado.jpg');
+      background-image: image_url('blog/imagery/tornado.jpg');
       background-position: 50% 92%;
     }
 
     &.snow {
-      background-image: image_url('blog/snow.jpg');
+      background-image: image_url('blog/imagery/snow.jpg');
       background-position: 50% 20%;
     }
   }

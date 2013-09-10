@@ -1,11 +1,10 @@
 <% title 'Blog', @blog_entry.title %>
 
 <article class="post">
-  <div class="imagery lightning"></div>
+  <div class="imagery <%= @blog_entry.image %>"></div>
   <div class="content">
     <h3 class="title"><%= @blog_entry.title %></h1>
     <%= render 'metadata', blog_entry: @blog_entry %>
     <%= raw @blog_entry.content_html %>
-    <div class="wip attribution">Photo by <a href="http://www.flickr.com/photos/meteopassione/7451230890">mollyali</a>, available under a <a href="http://creativecommons.org/licenses/by/2.0/">Creative Commons license</a>.</div>
   </div>
 </article>
