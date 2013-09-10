@@ -1,6 +1,9 @@
 module Ingestor
   module Importer
     class Google
+    include Ingestor::Importer::FileUploadHandler
+
+      attr_reader :file_paths
 
       def self.handles?(file_paths)
         file_paths && file_paths.split(',').any? do |file|
@@ -16,13 +19,7 @@ module Ingestor
         original_file_paths.map { |file_path| parse_works(file_path) }.flatten
       end
 
-      def file_uploads
-        original_documents + supporting_documents
-      end
-
       private
-
-      attr_reader :file_paths
 
       def parse_works(file_path)
         contents = File.read(file_path)
@@ -47,30 +44,8 @@ module Ingestor
         end
       end
 
-      def original_documents
-        original_file_paths.map do |file_path|
-          FileUpload.new(
-            kind: 'original',
-            file: File.open(file_path)
-          )
-        end
-      end
-
-      def supporting_documents
-        supporting_file_paths.map do |file_path|
-          FileUpload.new(
-            kind: 'supporting',
-            file: File.open(file_path)
-          )
-        end
-      end
-
-      def original_file_paths
-        file_paths.select { |file_path| File.extname(file_path) == '.txt' }
-      end
-
-      def supporting_file_paths
-        file_paths.select { |file_path| File.extname(file_path) != '.txt' }
+      def original?(file_path)
+        File.extname(file_path) == '.txt'
       end
 
     end

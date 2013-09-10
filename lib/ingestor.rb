@@ -4,5 +4,6 @@ end
 
 module Ingestor
   ImportDispatcher.register(Importer::Google)
+  ImportDispatcher.register(Importer::GoogleSecondary)
   ImportDispatcher.register(Importer::NullImporter)
 end
