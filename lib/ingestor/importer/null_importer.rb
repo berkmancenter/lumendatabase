@@ -5,12 +5,26 @@ module Ingestor
         true
       end
 
-      attr_reader :works, :file_uploads
+      attr_reader :file_paths,
+        :file_upload,
+        :file_uploads,
+        :notice_type,
+        :original_documents,
+        :original_file_paths,
+        :parse_works,
+        :supporting_documents,
+        :supporting_file_paths,
+        :works
 
       def initialize(*)
-        @works = []
-        @file_uploads = []
+        @file_paths = @file_uploads = @original_documents = 
+          @supporting_documents = @works = []
+        @notice_type = Dmca
       end
+
+      def original?
+      end
+
     end
   end
 end

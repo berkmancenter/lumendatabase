@@ -2,10 +2,7 @@ require 'spec_helper'
 require 'ingestor'
 
 describe Ingestor::Importer::NullImporter do
-  context ".handles?" do
-    it "returns true" do
-      expect(described_class.handles?('asdfasdf')).to be
-    end
+  it 'exposes the same public interface as Ingestor::Importer::Google' do
+    expect(described_class).to match_interface_of(Ingestor::Importer::Google)
   end
 end
-
