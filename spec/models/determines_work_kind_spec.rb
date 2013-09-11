@@ -9,7 +9,7 @@ describe DeterminesWorkKind do
 
       determiner = described_class.new(work)
 
-      expect(determiner.kind).to be :unknown
+      expect(determiner.kind).to eq :unknown
     end
 
     %w( mp3 aac album flac MP3 song ).map do |ext|
@@ -85,7 +85,7 @@ describe DeterminesWorkKind do
 
       determiner = described_class.new(work)
 
-      expect(determiner.kind).to be :music
+      expect(determiner.kind).to eq :music
     end
 
     it "classifies as a movie" do
@@ -103,7 +103,7 @@ describe DeterminesWorkKind do
 
       determiner = described_class.new(work)
 
-      expect(determiner.kind).to be :movie
+      expect(determiner.kind).to eq :movie
     end
 
     it "classifies as a book" do
@@ -121,7 +121,7 @@ describe DeterminesWorkKind do
 
       determiner = described_class.new(work)
 
-      expect(determiner.kind).to be :book
+      expect(determiner.kind).to eq :book
     end
   end
 
@@ -132,7 +132,7 @@ describe DeterminesWorkKind do
 
         determiner = described_class.new(work)
 
-        expect(determiner.kind).to be :music
+        expect(determiner.kind).to eq :music
       end
     end
   end
@@ -151,7 +151,7 @@ describe DeterminesWorkKind do
 
       determiner = described_class.new(work)
 
-      expect(determiner.kind).to be :music
+      expect(determiner.kind).to eq :music
     end
 
     it "gives description more weight than infringing urls" do
@@ -165,7 +165,7 @@ describe DeterminesWorkKind do
 
       determiner = described_class.new(work)
 
-      expect(determiner.kind).to be :music
+      expect(determiner.kind).to eq :music
 
     end
   end
