@@ -4,7 +4,8 @@ end
 
 module Ingestor
   ImportDispatcher.register(Importer::Google)
-  ImportDispatcher.register(Importer::GoogleSecondary)
+  ImportDispatcher.register(Importer::GoogleSecondary::DmcaParser)
+  ImportDispatcher.register(Importer::GoogleSecondary::OtherParser)
   ImportDispatcher.register(Importer::Twitter)
   ImportDispatcher.register(Importer::NullImporter)
 end

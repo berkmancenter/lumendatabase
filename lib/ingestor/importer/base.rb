@@ -14,10 +14,11 @@ module Ingestor
         end
       end
 
-      attr_reader :file_paths
+      attr_reader :file_paths, :notice_type
 
       def initialize(file_paths)
         @file_paths = (file_paths || '').split(',')
+        @notice_type = Dmca
       end
 
       def works

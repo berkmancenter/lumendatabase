@@ -1,38 +1,26 @@
-require 'uri'
+require 'ingestor/importer/base'
 
 module Ingestor
   module Importer
-    class GoogleSecondary < Base
-      class OtherParser
+    module GoogleSecondary
+      class OtherParser < Base
 
-        def self.handles?(content)
-          content.match(/IssueType:\s?lr_legalother2/m)
+        handles_content(/IssueType:\s?lr_legalother2/m)
+
+        def parse_works(file_path)
+          content = IssueContent.new(
+            file_path, 'legalother_explain', 'legalother_quote'
+          )
+
+          content.to_work
         end
 
-        def initialize(content)
-          @content = content
+        def original?(file_path)
+          File.open(file_path) { |f| f.grep(/^IssueType:/) }.present?
         end
 
-        def description
-          content.match(/legalother_explain[^:]*:(.+?)\nlegalother_quote[^:]*:/m)
-          $1.strip
-        end
-
-        def copyrighted_urls
-          extract_urls(description)
-        end
-
-        def infringing_urls
-          content.match(/url_box[\d_]+:(.+?)\n\n/m)
-          extract_urls($1)
-        end
-
-        private
-
-        attr_reader :content
-
-        def extract_urls(string)
-          URI::extract(string).find_all { |url| url.match(/\Ahttps?/i) }
+        def notice_type
+          Other
         end
 
       end

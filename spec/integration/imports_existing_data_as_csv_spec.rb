@@ -11,9 +11,10 @@ feature "Importing CSV" do
     (
       @primary_format_notice,
       @secondary_dmca_notice,
-      @secondary_other_notice,
       @twitter_notice
     ) = Dmca.order(:id)
+
+    @secondary_other_notice = Other.last
   end
 
   context "from the primary google reporting format" do

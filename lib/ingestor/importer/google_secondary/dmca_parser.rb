@@ -1,38 +1,22 @@
-require 'uri'
+require 'ingestor/importer/base'
 
 module Ingestor
   module Importer
-    class GoogleSecondary < Base
-      class DmcaParser
+    module GoogleSecondary
+      class DmcaParser < Base
 
-        def self.handles?(content)
-          content.match(/IssueType:\s?lr_dmca/m)
+        handles_content(/IssueType:\s?lr_dmca/m)
+
+        def parse_works(file_path)
+          content = IssueContent.new(
+            file_path, 'description_of_copyrighted_work', 'full_name'
+          )
+
+          content.to_work
         end
 
-        def initialize(content)
-          @content = content
-        end
-
-        def description
-          content.match(/description_of_copyrighted_work:(.+?)\nfull_name:/m)
-          $1.strip
-        end
-
-        def copyrighted_urls
-          extract_urls(description)
-        end
-
-        def infringing_urls
-          content.match(/url_box_\d+:(.+?)\n\n/m)
-          extract_urls($1)
-        end
-
-        private
-
-        attr_reader :content
-
-        def extract_urls(string)
-          URI::extract(string).find_all { |url| url.match(/\Ahttps?/i) }
+        def original?(file_path)
+          File.open(file_path) { |f| f.grep(/^IssueType:/) }.present?
         end
 
       end
