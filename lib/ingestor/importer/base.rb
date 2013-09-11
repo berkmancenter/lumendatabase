@@ -10,7 +10,9 @@ module Ingestor
         return false unless @content_regex
 
         file_paths && file_paths.split(',').any? do |file|
-          File.open(file) { |f| f.grep(@content_regex) }.present?
+          if text?(file)
+            File.open(file) { |f| f.grep(@content_regex) }.present?
+          end
         end
       end
 
@@ -61,6 +63,14 @@ module Ingestor
 
       def original?(file_path)
         File.extname(file_path) == '.txt'
+      end
+
+      private
+
+      def self.text?(file_name)
+        MIME::Types.type_for(file_name).find do |type|
+          type.content_type.match(/\Atext\/.+/)
+        end
       end
 
     end

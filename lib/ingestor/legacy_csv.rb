@@ -2,7 +2,7 @@ require 'ingestor'
 
 module Ingestor
   class LegacyCsv
-    attr_accessor :logger, :succeeded, :failed
+    attr_accessor :logger, :succeeded, :failed, :error_logger
 
     def self.open(file_path)
       new(file_path)
@@ -13,6 +13,8 @@ module Ingestor
 
       @logger = Logger.new(STDOUT)
       @logger.level = Logger::INFO unless ENV['DEBUG']
+
+      @error_logger = Logger.new(STDERR)
 
       @succeeded = 0
       @failed = 0
@@ -48,14 +50,14 @@ module Ingestor
 
       self.succeeded += 1
     rescue => ex
-      attributes ||= {}
-      log_exception(attributes[:original_notice_id], ex)
+      log_exception(csv_row, ex)
       self.failed += 1
     end
 
-    def log_exception(notice_id, ex)
-      logger.error "Error importing Notice #{notice_id}"
-      logger.error "  (#{ex.class}) #{ex.message}: #{ex.backtrace.first}"
+    def log_exception(csv_row, ex)
+      error_logger.error "Error importing Notice #{csv_row['NoticeID']}"
+      error_logger.error "  (#{ex.class}) #{ex.message}: #{ex.backtrace.first}"
+      error_logger.error "Files: #{csv_row['OriginalFilePath']}"
     end
   end
 end
