@@ -9,7 +9,6 @@
             <% Notice::FILTERABLE_FIELDS.each do |filterable_field| %>
               <%= render filterable_field, results: @results %>
             <% end %>
-          <li class="button-wrapper"><button class="">Apply</button></li>
         </ol>
       <% end %>
       <%= hidden_field_tag(:sort_by, params[:sort_by], class: 'sort_by_field') %>

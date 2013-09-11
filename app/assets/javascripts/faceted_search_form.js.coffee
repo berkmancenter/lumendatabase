@@ -1,24 +1,13 @@
-$('li.facet').on 'click', 'a', ->
+$('li.facet').on 'click', 'a', (event) ->
+  event.preventDefault()
 
-  facet_hidden_input = $('input#' + $(this).attr('data-facet-name'))
-  $(facet_hidden_input).val($(this).attr('data-value'))
+  facet_name = $(this).attr('data-facet-name')
+  facet_value = $(this).attr('data-value')
+  facet_hidden_input = $("input##{facet_name}")
 
-  $parent = $(this).parent()
-  $grandparent = $(this).parents('.dropdown')
-
-  if $parent.hasClass('active')
-    $parent.removeClass('active')
-    $grandparent.removeClass('active')
-
-  else
-    $parent.addClass('active')
-    $grandparent.addClass('active')
-
-    ## Only allow one active child
-    ## Remove all other active siblings
-    $parent.siblings().each ->
-      if $(this).hasClass('active')
-        $(this).removeClass('active')
+  if facet_hidden_input.val() != facet_value
+    facet_hidden_input.val(facet_value)
+    $('form#facets-form').submit()
 
 clearEmptyParameters = ->
   $('form#facets-form').find('input[type="hidden"]').each (_, element) ->
@@ -51,7 +40,10 @@ $('form#facets-form').on 'submit', ->
 
 $('.sort-order ol.dropdown-menu a').click (event)->
   event.preventDefault()
-  $('.sort-order a.dropdown-toggle').text($(this).attr('data-label'))
-  $('.sort_by_field').val(
-    $(this).attr('data-value')
-  )
+
+  value = $(this).attr('data-value')
+  sort_by_field = $('.sort_by_field')
+
+  if sort_by_field.val() != value
+    sort_by_field.val(value)
+    $('form#facets-form').submit()

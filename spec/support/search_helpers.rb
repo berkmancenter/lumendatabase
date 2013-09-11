@@ -45,14 +45,6 @@ module SearchHelpers
     click_on 'submit'
 
     open_and_select_facet(facet, facet_value)
-
-    click_faceted_search_button
-  end
-
-  def click_faceted_search_button
-    within('.search-results') do
-      find('button').click
-    end
   end
 
   def within_faceted_search_results_for(term, facet, facet_value)
