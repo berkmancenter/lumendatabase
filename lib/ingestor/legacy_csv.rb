@@ -49,7 +49,7 @@ module Ingestor
       self.succeeded += 1
     rescue => ex
       attributes ||= {}
-      log_exception(attributes[:original_notice_id], ex)
+      log_exception(csv_row['NoticeID'], ex)
       self.failed += 1
     end
 
