@@ -67,6 +67,20 @@ describe DeterminesWorkKind do
 
       expect(determiner.kind).to eq :unknown
     end
+
+    %w( photos images ).each do |phrase|
+      it "sees the phrase '#{phrase}' as images" do
+        work = Work.new(
+          copyrighted_urls_attributes: [
+            { url: "http://www.harard.com/#{phrase}" }
+          ]
+        )
+
+        determiner = described_class.new(work)
+
+        expect(determiner.kind).to eq :image
+      end
+    end
   end
 
   context "infringing urls" do

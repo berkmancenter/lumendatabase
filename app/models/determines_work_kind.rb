@@ -18,7 +18,8 @@ class DeterminesWorkKind
 
   class Classifier
     PATTERNS = {
-      software: /\.rar\s*\Z/i,
+      software: %r{\.rar\s*$}i,
+      image: %r{(photo|image)s?}i,
       music: %r{artist\s+name|music|mp3|aac|album|flac|song}i,
       movie: %r{mp4|mov|movies|dvd|xvid|rip|bluray}i,
       book: %r{page|novel|book|epub|kindle}i
