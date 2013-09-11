@@ -3,6 +3,19 @@ require 'ingestor'
 
 describe Ingestor::Importer::Google do
 
+  context "#handles?" do
+    it "should not inspect binary files" do
+      file_double = double('File handle')
+
+      File.stub(:open) do |&block|
+        block.yield file_double
+      end
+
+      file_double.should_not_receive(:grep)
+      described_class.handles?('spec/support/example_files/original.jpg')
+    end
+  end
+
   context "#notice_type" do
     it "should be Dmca" do
       expect(described_class.new('').notice_type).to eq Dmca
