@@ -6,8 +6,8 @@ class DeterminesWorkKind
   def kind
     classifier = Classifier.new
     classifier.classify(work.description, 3)
-    classifier.classify_all(work.copyrighted_urls.map(&:url), 5)
-    classifier.classify_all(work.infringing_urls.map(&:url), 1)
+    classifier.classify_each(work.copyrighted_urls.map(&:url), 5)
+    classifier.classify_each(work.infringing_urls.map(&:url), 1)
 
     classifier.best
   end
@@ -30,10 +30,8 @@ class DeterminesWorkKind
       @results[:unknown] = 0
     end
 
-    def classify_all(values, weight)
-      values.each do |value|
-        classify(value, weight)
-      end
+    def classify_each(values, weight)
+      values.each { |value| classify(value, weight) }
     end
 
     def classify(value, weight)
@@ -47,6 +45,8 @@ class DeterminesWorkKind
     def best
       results.max_by { |_,weight| weight }.first
     end
+
+    private
 
     attr_reader :results
 
