@@ -1,7 +1,6 @@
 shared_examples 'an object with a url' do
 
   it { should validate_presence_of :url }
-  it { should ensure_length_of(:url).is_at_most(1.kilobyte) }
   ['http://foo.com',
     '//bar.com',
     'https://example.com/asdfasdf',
