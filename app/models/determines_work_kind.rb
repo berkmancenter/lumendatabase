@@ -1,7 +1,7 @@
 class DeterminesWorkKind
-  def initialize(primary_urls, secondary_urls)
-    @primary_urls = primary_urls
-    @secondary_urls = secondary_urls
+  def initialize(work)
+    @primary_urls = work.copyrighted_urls.map(&:url)
+    @secondary_urls = work.infringing_urls.map(&:url)
     @results = { unknown: 0 }
   end
 

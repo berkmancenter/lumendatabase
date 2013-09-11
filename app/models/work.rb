@@ -30,11 +30,8 @@ class Work < ActiveRecord::Base
   end
 
   before_save do
-    if self.kind.blank?
-      determiner = DeterminesWorkKind.new(
-        copyrighted_urls.map(&:url), infringing_urls.map(&:url)
-      )
-      self.kind = determiner.kind
+    if kind.blank?
+      self.kind = DeterminesWorkKind.new(self).kind
     end
   end
 end
