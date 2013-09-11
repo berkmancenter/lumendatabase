@@ -16,9 +16,9 @@ describe BlogEntry do
   context ".valid_images" do
     it "returns the names found in app/assets/images/blog/imagery" do
       expected_images = %w(
-        clouds desert foliage lightning
-        overcast rain snow storm sunny
-        sunset tornado
+        clouds default desert autumn
+        lightning overcast rain snow
+        storm sunny sunset tornado
       )
 
       expect(BlogEntry.valid_images).to match_array(expected_images)

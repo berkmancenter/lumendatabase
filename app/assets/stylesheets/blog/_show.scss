@@ -65,60 +65,62 @@ article.post {
     background-repeat: no-repeat;
     background-size: cover;
     height: 200px;
+    background-image: image_url('blog/imagery/default.jpg');
+    background-position: 50% 85%;
 
     &.lightning {
       background-image: image_url('blog/imagery/lightning.jpg');
-      background-position: 50% 80%;
+      background-position: 50% 38%;
     }
 
     &.storm {
       background-image: image_url('blog/imagery/storm.jpg');
-      background-position: 50% 80%;
+      background-position: 50% 58%;
     }
 
     &.rain {
       background-image: image_url('blog/imagery/rain.jpg');
-      background-position: 50% 45%;
+      background-position: 50% 46%;
     }
 
     &.overcast {
       background-image: image_url('blog/imagery/overcast.jpg');
-      background-position: 50% 80%;
+      background-position: 50% 98%;
     }
 
     &.clouds {
       background-image: image_url('blog/imagery/clouds.jpg');
-      background-position: 50% 100%;
+      background-position: 50% 30%;
     }
 
     &.sunny {
-      background-image: image_url('blog/imagery/sunny.jpg');
+      background-image: image_url('blog/imagery/imagery/sunny.jpg');
       background-position: 50% 50%;
     }
 
     &.sunset {
       background-image: image_url('blog/imagery/sunset.jpg');
-      background-position: 50% 25%;
+      background-position: 50% 48%;
     }
 
-    &.foliage {
-      background-image: image_url('blog/imagery/foliage.jpg');
-      background-position: 50% 50%;
+    &.autumn {
+      background-image: image_url('blog/imagery/autumn.jpg');
+      background-position: 50% 33%;
     }
 
     &.desert {
-      background-image: image_url('blog/imagery/desert.jpg');
+      background-image: image_url('blog/imagery/imagery/desert.jpg');
       background-position: 50% 42%;
     }
 
     &.tornado {
       background-image: image_url('blog/imagery/tornado.jpg');
-      background-position: 50% 92%;
+      background-position: 50% 78%;
     }
 
     &.snow {
       background-image: image_url('blog/imagery/snow.jpg');
-      background-position: 50% 20%;
+      background-position: 50% 40%;
     }
   }
 }
