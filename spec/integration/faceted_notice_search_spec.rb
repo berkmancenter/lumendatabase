@@ -132,6 +132,24 @@ feature "Faceted search of Notices", search: true do
     end
   end
 
+  context "facet auto-submission" do
+    scenario "a user selects a facet", js: true, search: true do
+      create(:dmca, title: "Lion King", date_received: 10.months.ago)
+      notice = create(:dmca, title: "King Leon", date_received: 1.day.ago)
+
+      within_search_results_for('king') do
+        expect(page).to have_n_results 2
+      end
+
+      click_on 'Date'
+      find('ol.date_received_facet li:nth-child(2) a').click
+
+      expect(page).to have_active_facet_dropdown(:date_received_facet)
+      expect(page).to have_n_results 1
+      expect(page).to have_content(notice.title)
+    end
+  end
+
   def with_a_faceted_search(facet_name, facet_attribute_name)
     sleep 1
     results = Notice.search do
