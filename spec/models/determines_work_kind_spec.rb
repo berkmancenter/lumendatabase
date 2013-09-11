@@ -47,6 +47,26 @@ describe DeterminesWorkKind do
         expect(determiner.kind).to eq :book
       end
     end
+
+    it "classifies .rar extensions as software" do
+      work = Work.new(copyrighted_urls_attributes: [
+        { url: "http://www.example.com/foo.rar" }
+      ])
+
+      determiner = described_class.new(work)
+
+      expect(determiner.kind).to eq :software
+    end
+
+    it "does not see sample 'rar' as an extension" do
+      work = Work.new(copyrighted_urls_attributes: [
+        { url: "http://www.harard.com/foo.something" }
+      ])
+
+      determiner = described_class.new(work)
+
+      expect(determiner.kind).to eq :unknown
+    end
   end
 
   context "infringing urls" do
@@ -105,6 +125,18 @@ describe DeterminesWorkKind do
     end
   end
 
+  context "by description" do
+    %w( Artist\ Name music ).each do |description|
+      it "sees #{description} in the description as music" do
+        work = Work.new(description: "Foo #{description} bar")
+
+        determiner = described_class.new(work)
+
+        expect(determiner.kind).to be :music
+      end
+    end
+  end
+
   context "weighting" do
     it "gives more weight to copyrighted_urls" do
       work = Work.new(
@@ -120,6 +152,21 @@ describe DeterminesWorkKind do
       determiner = described_class.new(work)
 
       expect(determiner.kind).to be :music
+    end
+
+    it "gives description more weight than infringing urls" do
+      work = Work.new(
+        description: "Awesome mp3",
+        infringing_urls_attributes: [
+          { url: "http://www.example.com/foo.mp4" },
+          { url: "http://www.example.com/foo.mov" }
+        ]
+      )
+
+      determiner = described_class.new(work)
+
+      expect(determiner.kind).to be :music
+
     end
   end
 end

@@ -5,6 +5,7 @@ class DeterminesWorkKind
 
   def kind
     classifier = Classifier.new
+    classifier.classify(work.description, 3)
     classifier.classify_all(work.copyrighted_urls.map(&:url), 5)
     classifier.classify_all(work.infringing_urls.map(&:url), 1)
 
@@ -17,7 +18,8 @@ class DeterminesWorkKind
 
   class Classifier
     PATTERNS = {
-      music: %r{mp3|aac|album|flac|song}i,
+      software: /\.rar\s*\Z/i,
+      music: %r{artist\s+name|music|mp3|aac|album|flac|song}i,
       movie: %r{mp4|mov|movies|dvd|xvid|rip|bluray}i,
       book: %r{page|novel|book|epub|kindle}i
     }
