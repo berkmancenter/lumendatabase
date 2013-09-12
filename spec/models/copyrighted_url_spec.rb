@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe CopyrightedUrl do
-  it { should validate_uniqueness_of(:url) }
   it { should have_db_index(:url).unique(true) }
 
   context 'automatic validations' do
