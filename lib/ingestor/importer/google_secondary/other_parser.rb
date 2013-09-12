@@ -16,7 +16,7 @@ module Ingestor
         end
 
         def original?(file_path)
-          File.open(file_path) { |f| f.grep(/^IssueType:/) }.present?
+          self.class.contains?(file_path, /^IssueType:/)
         end
 
         def notice_type
