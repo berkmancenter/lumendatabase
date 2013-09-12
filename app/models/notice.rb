@@ -160,15 +160,15 @@ class Notice < ActiveRecord::Base
   end
 
   def submitter
-    entities_that_have_submitted.first
+    @submitter ||= entities_that_have_submitted.first
   end
 
   def sender
-    entities_that_have_sent.first
+    @sender ||= entities_that_have_sent.first
   end
 
   def recipient
-    entities_that_have_received.first
+    @recipient ||= entities_that_have_received.first
   end
 
   def auto_redact
@@ -192,6 +192,14 @@ class Notice < ActiveRecord::Base
       where('id > ? and review_required = ?', id, true).
       order('id asc').
       first
+  end
+
+  def tag_list
+    @tag_list ||= super
+  end
+
+  def jurisdiction_list
+    @jurisdiction_list ||= super
   end
 
   def tag_list=(tag_list_value = '')
