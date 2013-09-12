@@ -9,10 +9,14 @@ module Ingestor
     end
 
     def initialize(file_path)
+      @start_unixtime = Time.now.to_f
+
       @file_path = file_path
 
       @logger = Logger.new(STDOUT)
       @logger.level = Logger::INFO unless ENV['DEBUG']
+
+      @logger.debug { "Started at: #{@start_unixtime}, #{Time.now}" }
 
       @error_logger = Logger.new(STDERR)
 
@@ -49,6 +53,11 @@ module Ingestor
       logger.debug { "Imported: #{attributes[:original_notice_id]} -> #{dmca.id}" }
 
       self.succeeded += 1
+      if self.succeeded % 100 == 0
+        now_unixtime = Time.now.to_f
+        records_per_sec = self.succeeded / (now_unixtime - @start_unixtime)
+        logger.debug { "#{self.succeeded} records at #{now_unixtime} | #{Time.now} |#{records_per_sec} records / sec" }
+      end
     rescue => ex
       log_exception(csv_row, ex)
       self.failed += 1
