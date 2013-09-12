@@ -3,6 +3,11 @@ require 'ingestor'
 
 describe Ingestor::LegacyCsv do
 
+  before do
+    described_class::ErrorHandler.stub(:new).
+      and_return(double.as_null_object)
+  end
+
   it "instantiates the correct notice type based on AttributeMapper" do
     attribute_mapper = double("AttributeMapper")
     attribute_mapper.stub(:notice_type).and_return(Trademark)

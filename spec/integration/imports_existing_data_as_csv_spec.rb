@@ -17,6 +17,10 @@ feature "Importing CSV" do
     @secondary_other_notice = Other.last
   end
 
+  after do
+    FileUtils.rm_rf 'spec/support/example_files-failures/'
+  end
+
   context "from the primary google reporting format" do
     scenario "notices are created" do
       expect(@primary_format_notice.title).to eq ' DMCA (Copyright) Complaint to Google'
