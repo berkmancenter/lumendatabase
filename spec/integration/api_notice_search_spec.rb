@@ -170,7 +170,8 @@ feature "Searching for Notices via the API" do
       create(
         :law_enforcement_request,
         title: "The Lion King on Youtube",
-        regulation_list: 'Foo bar 21, Baz blee 22'
+        regulation_list: 'Foo bar 21, Baz blee 22',
+        request_type: 'Civil Subpoena',
       )
 
       expect_api_search_to_find("king") do |json|
@@ -181,6 +182,9 @@ feature "Searching for Notices via the API" do
           ['Baz blee 22', 'Foo bar 21']
         )
         expect(json_item).to have_key('explanation')
+        expect(json_item).to have_key('request_type').
+          with_value('Civil Subpoena')
+
         expect(work).to have_key('original_work_urls')
         expect(work).to have_key('urls_in_request')
         expect(work).to have_key('subject_of_enforcement_request')

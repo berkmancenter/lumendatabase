@@ -5,6 +5,18 @@ class LawEnforcementRequest < Notice
 
   define_elasticsearch_mapping
 
+  VALID_REQUEST_TYPES = [
+    'Agency',
+    'Civil Subpoena',
+    'Email',
+    'Records Preservation',
+    'Subpoena',
+    'Warrant',
+  ]
+
+  validates_inclusion_of :request_type,
+    in: VALID_REQUEST_TYPES, allow_blank: true
+
   def self.model_name
     Notice.model_name
   end

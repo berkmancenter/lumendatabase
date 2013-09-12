@@ -1,5 +1,5 @@
 class LawEnforcementRequestSerializer < NoticeSerializer
-  attribute :regulations
+  attributes :regulations, :request_type
 
   def regulations
     object.regulation_list
