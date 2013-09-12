@@ -5,7 +5,7 @@ article.notice-show {
     font-weight: 700;
     line-height: 1em;
     margin: 0;
-    background: #476491;
+    background: $header-background-3;
     padding: 25px 35px 15px;
 
     @include media($mobile) {
@@ -32,11 +32,12 @@ article.notice-show {
     color: #fff;
     font-weight: 500;
 
+    div.entities-wrapper {
+      position: relative;
+    }
+
     section.sender, section.recipient {
-      float: left;
-      min-height: 150px;
-      @include pad(20px default 30px $base-padding);
-      width: 50%;
+      @extend %notice-header;
 
       @include media($mobile) {
         @include fill-parent;
@@ -66,11 +67,43 @@ article.notice-show {
         position: absolute;
         top: 50px;
         width: 50%;
-        z-index: 1;
 
         @include media($mobile) {
           display: none;
         }
+      }
+    }
+
+    section.secondary {
+      @extend %notice-header;
+      background-color: $header-background-2;
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      width: 100%;
+      visibility: visible;
+
+      @include media($mobile) {
+        @include pad(15px 20px);
+      }
+
+      * {
+        @include transition(opacity 0.08s $ease-out-quad);
+      }
+
+      &.hide {
+        visibility: hidden;
+
+        * {
+          @include transition(opacity 0.08s $ease-out-quad);
+          opacity: 0;
+        }
+      }
+
+      h5 {
+        color: hsl(26, 96%, 72%);
       }
     }
 
@@ -109,6 +142,43 @@ article.notice-show {
 
     a {
       text-decoration: none;
+    }
+  }
+
+  div.other-entities {
+    background: $header-background-3;
+    clear: both;
+    @include clearfix;
+    color: hsla(0, 0%, 100%, 0.6);
+    font-size: $base-font-size-small-2;
+    padding: 5px $base-padding 5px;
+    text-transform: uppercase;
+
+    @include media($mobile) {
+      padding-left: $base-padding-mobile;
+    }
+
+    span.label {
+      float: left;
+      font-size: $base-font-size-small-2;
+    }
+
+    ul {
+      float: left;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+
+      li {
+        cursor: pointer;
+        float: left;
+        font-weight: 700;
+        padding: 0 0 0 12px;
+
+        &:hover {
+          color: #fff;
+        }
+      }
     }
   }
 }
@@ -234,8 +304,9 @@ article.notice-show {
             left: -8px;
             position: absolute;
             text-align: right;
-            width: 2em;
             top: 1px;
+            white-space: no-wrap;
+            width: 2em;
           }
         }
       }

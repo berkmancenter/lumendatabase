@@ -4,13 +4,36 @@
   <section class="body">
     <header id="entities">
       <h1><%= @notice.type.titleize %> - <%= @notice.title %></h1>
-      <% if @notice.sender %>
-        <%= render @notice.sender, notice: @notice, role: :sender %>
-      <% end %>
-      <% if @notice.recipient %>
-        <%= render @notice.recipient, notice: @notice, role: :recipient %>
-      <% end %>
-      <p class="wip">TODO: Display other entities here</p>
+      <div class="entities-wrapper">
+        <% if @notice.sender %>
+          <%= render @notice.sender, notice: @notice, role: :sender %>
+        <% end %>
+        <% if @notice.recipient %>
+          <%= render @notice.recipient, notice: @notice, role: :recipient %>
+        <% end %>
+
+        <section class="issueing_court secondary hide">
+          <h5>Issueing Court</h5>
+          <h6><a href="/faceted_search?sender_name=Steve+Simpson">Jack Trademark</a></h6>
+          <span>San Francisco, CA, 94044, US</span>
+          <span class="date sent"><time datetime="2013-07-15T19:10:11Z">July 15, 2013</time></span>
+        </section>
+
+        <section class="plaintiff secondary hide">
+          <h5>Plaintiff</h5>
+          <h6><a href="/faceted_search?sender_name=Steve+Simpson">Jill Defamation</a></h6>
+          <span>San Jose, CA, 94045, US</span>
+          <span class="date sent"><time datetime="2013-07-15T19:10:11Z">July 10, 2013</time></span>
+        </section>
+      </div>
+
+      <div class="other-entities wip">
+        <span class="label">Other Entities:</span>
+        <ul>
+          <li data-id="issueing_court">Issueing Court</li>
+          <li data-id="plaintiff">Plaintiff</li>
+        </ul>
+      </div>
     </header>
 
     <% if can?(:access, :rails_admin) %>
