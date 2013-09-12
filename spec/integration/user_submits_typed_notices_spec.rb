@@ -81,7 +81,7 @@ feature "typed notice submissions" do
       "Targetted URL" => "http://example.com/targetted_url", # infringing_urls
 
       "Explanation of Court Order" => "I guess they don't like me", #notice.body
-      "Relevant laws or regulations" => "USC foo bar 21"
+      "Laws Referenced by Court Order" => "USC foo bar 21"
     })
 
     %i|recipient sender principal issuing_court plaintiff defendant|.each do |role|
