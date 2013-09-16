@@ -1,4 +1,5 @@
-<section class="<%= role %>">
+<% additional_css ||= '' %>
+<section class="<%= role %> <%= additional_css %>">
   <h5><%= role %></h5>
   <%= render 'entities/address', entity: entity, role: role %>
   <% if role == :sender %>

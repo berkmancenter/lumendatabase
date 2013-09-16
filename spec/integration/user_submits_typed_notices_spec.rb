@@ -155,6 +155,10 @@ feature "typed notice submissions" do
       expect(page).to have_content('USC foo bar 21')
       expect(page).to have_content('Civil Subpoena')
     end
+
+    within('#entities') do
+      expect(page).to have_content('Principal Issuing Authority')
+    end
   end
 
   scenario "User submits and views a PrivateInformation notice" do

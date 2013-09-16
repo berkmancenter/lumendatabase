@@ -159,6 +159,13 @@ class Notice < ActiveRecord::Base
     related_blog_entries.limit(limit)
   end
 
+  def other_entity_notice_roles
+    other_roles = self.class::DEFAULT_ENTITY_NOTICE_ROLES - Notice::DEFAULT_ENTITY_NOTICE_ROLES
+    entity_notice_roles.find_all do |entity_notice_role|
+      other_roles.include?(entity_notice_role.name)
+    end
+  end
+
   def submitter
     @submitter ||= entities_that_have_submitted.first
   end
