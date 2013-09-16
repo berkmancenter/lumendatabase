@@ -430,6 +430,14 @@ article.notice-show {
         @include span-columns(5);
         margin-left: 5px;
       }
+
+      @include media($mobile) {
+        &:first-child, &:last-child {
+          float: none;
+          padding: 15px $base-padding-mobile 10px;
+          width: 100%;
+        }
+      }
     }
 
     h6 {
@@ -477,13 +485,14 @@ aside.notice {
 //************************************************************************//
 section#relevant-questions {
   @extend %faq-accordion;
-  @include omega;
-  padding-right: $base-padding;
   @include span-columns(7);
+  @include omega;
+  padding-right: 20px;
 
   @include media($mobile) {
     width: 100%;
     float: none;
+    padding-left: $base-padding-mobile;
   }
 
 
@@ -491,31 +500,31 @@ section#relevant-questions {
     font-size: $base-font-size;
 
     a {
-      padding: 7px 20px;
+      padding-bottom: 7px;
+      padding-top: 7px;
     }
   }
 
-  .answer {
-    padding: 20px;
-
-    &, p {
-      font-size: $base-font-size-small-1;
-    }
+  .answer, p {
+    font-size: $base-font-size-small-1;
   }
 }
 
 section#related-blog-entries {
-  @include span-columns(5);
+  @include span-columns(5.2);
+  padding-left: $base-padding;
 
   @include media($mobile) {
     float: none;
     margin-right: 0;
     padding: 0;
+    padding-left: $base-padding-mobile;
+    padding-right: $base-padding-mobile;
     width: 100%;
   }
 
   article {
-    margin: 16px 0 18px 20px;
+    margin: 16px 0 18px;
 
     h3 {
       font-weight: 500;

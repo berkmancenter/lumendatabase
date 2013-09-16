@@ -20,3 +20,10 @@
   @include pad(20px default 30px $base-padding);
   width: 50%;
 }
+
+%header-title {
+  font-size: $base-font-size;
+  font-weight: 800;
+  text-transform: uppercase;
+  margin: 15px 20px 10px 0;
+}

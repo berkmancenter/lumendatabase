@@ -17,10 +17,10 @@
   .question {
     font-size: $base-font-size-1;
     font-weight: 500;
-    @include transition(background 0.25s $ease-out-quad);
 
     a {
-      padding: 10px 20px;
+      @include transition(none);
+      padding: 10px 20px 10px 0;
       display: block;
       text-decoration: none;
     }
@@ -30,15 +30,23 @@
 
       a {
         color: #fff;
+        padding-left: 20px;
       }
     }
   }
 
-  .answer {
+  .question.open + .answer {
     background: #fff;
-    display: none;
-    padding: 25px $base-padding $base-padding;
     box-shadow: inset 0 0 1px 0 rgba(0, 0, 0, 0.54);
+    margin-bottom: 5px;
+    opacity: 1;
+  }
+
+  .answer {
+    display: none;
+    opacity: 0;
+    padding: 20px;
+    @include transition(opacity 0.15s);
 
     &, p {
       line-height: 1.5em;
