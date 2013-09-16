@@ -26,15 +26,27 @@ module Ingestor
         content.split(/\r?\n/).detect { |line| line =~ regex }
       end
 
-      attr_reader :file_paths, :notice_type
+      attr_reader :original_file_paths, :supporting_file_paths, :notice_type
 
-      def initialize(file_paths)
-        @file_paths = (file_paths || '').split(',')
+      def initialize(original_file_paths, supporting_file_paths = nil)
+        @original_file_paths = (original_file_paths || '').split(',')
+        @supporting_file_paths = (supporting_file_paths || '').split(',')
         @notice_type = Dmca
       end
 
       def works
-        original_file_paths.map { |file_path| parse_works(file_path) }.flatten
+        file_paths.each do |file_path|
+          if parsable?(file_path)
+            works = parse_works(file_path)
+            works.any? and return works
+          end
+        end
+
+        []
+      end
+
+      def parsable?(file_path)
+        self.class.text?(file_path)
       end
 
       def parse_works(file_path)
@@ -59,20 +71,12 @@ module Ingestor
         end
       end
 
+      def file_paths
+        original_file_paths + supporting_file_paths
+      end
+
       def file_uploads
         original_documents + supporting_documents
-      end
-
-      def original_file_paths
-        file_paths.select { |file_path| original?(file_path) }
-      end
-
-      def supporting_file_paths
-        file_paths.reject { |file_path| original?(file_path) }
-      end
-
-      def original?(file_path)
-        File.extname(file_path) == '.txt'
       end
 
     end

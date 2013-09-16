@@ -12,11 +12,7 @@ module Ingestor
             file_path, 'description_of_copyrighted_work', 'full_name'
           )
 
-          content.to_work
-        end
-
-        def original?(file_path)
-          self.class.contains?(file_path, /^IssueType:/)
+          [content.to_work]
         end
 
       end

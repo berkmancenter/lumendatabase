@@ -1,8 +1,13 @@
 module Ingestor
   module ImportDispatcher
-    def self.for(file_paths)
-      importer_class = @registry.find { |klass| klass.handles?(file_paths) }
-      importer_class.new(file_paths)
+    def self.for(original_file_paths, supporting_file_paths)
+      file_paths = [
+        original_file_paths,
+        supporting_file_paths
+      ].compact.join(',')
+
+      importer_class = @registry.detect { |klass| klass.handles?(file_paths) }
+      importer_class.new(original_file_paths, supporting_file_paths)
     end
 
     def self.register(klass)
