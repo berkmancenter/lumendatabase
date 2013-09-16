@@ -150,7 +150,7 @@ feature "Searching for Notices via the API" do
         json_item = json['notices'].first
         work = json_item['works'].first
 
-        expect(json_item['regulations']).to match_array(
+        expect(json_item['laws_referenced']).to match_array(
           ['Baz blee 22', 'Foo bar 21']
         )
         expect(json_item).to have_key('explanation')

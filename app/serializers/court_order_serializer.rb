@@ -1,7 +1,7 @@
 class CourtOrderSerializer < NoticeSerializer
-  attribute :regulations
+  attribute :laws_referenced
 
-  def regulations
+  def laws_referenced
     object.regulation_list
   end
 

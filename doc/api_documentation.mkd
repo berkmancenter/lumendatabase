@@ -248,6 +248,7 @@ or when requested individually.
 | Ingestion Field Name       | Mapped Field Name              | Removed?
 | ---                        | ---                            | ---
 | `body`                     | `explanation`                  |
+| `regulations`              | `laws_referenced`              |
 | `works.description`        | `works.subject_of_court_order` |
 | `works.infringing_urls`    | `works.targetted_urls`         |
 | `works.copyrighted_urls`   |                                | Yes
