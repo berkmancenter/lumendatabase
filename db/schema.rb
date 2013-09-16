@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130911174350) do
+ActiveRecord::Schema.define(:version => 20130912194444) do
 
   create_table "blog_entries", :force => true do |t|
     t.integer  "user_id"
@@ -178,6 +178,7 @@ ActiveRecord::Schema.define(:version => 20130911174350) do
     t.integer  "original_notice_id"
     t.boolean  "spam",               :default => false
     t.boolean  "hidden",             :default => false
+    t.string   "request_type"
   end
 
   add_index "notices", ["reviewer_id"], :name => "index_notices_on_reviewer_id"

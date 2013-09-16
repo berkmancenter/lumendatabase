@@ -17,6 +17,10 @@ class NoticeSubmissionOnPage < PageObject
     within('form.new_notice', &block)
   end
 
+  def choose(value, field)
+    select(value, from: "notice_#{field}".to_sym)
+  end
+
   def fill_in_form_with(attributes)
     within_form do
       attributes.each do |key, value|

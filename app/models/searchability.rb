@@ -18,6 +18,7 @@ module Searchability
         indexes :tag_list, as: 'tag_list'
         indexes :jurisdiction_list, as: 'jurisdiction_list'
         indexes :action_taken, analyzer: 'keyword'
+        indexes :request_type, analyzer: 'keyword'
         indexes :sender_name, as: 'sender_name'
         indexes :sender_name_facet,
           analyzer: 'keyword', as: 'sender_name',

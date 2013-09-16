@@ -33,6 +33,7 @@ below, which defines what attributes are remapped for each Notice Type.
 | `regulation_list`                  | string             | Comma separated regulations / laws relevant to this notice, spaces are OK. Automatically lowercased. Only available for CourtOrder, and LawEnforcementRequest notice types.
 | `jurisidiction_list`               | string             | Comma separated list of jurisdictions, spaces are OK.
 | `action_taken`                     | string             | One of 'Yes', 'No', or 'Partial'. Defaults to 'No' if unspecified.
+| `request_type`                     | string             | One of 'Agency', 'Civil Subpoena', 'Email', 'Records Preservation', 'Subpoena', 'Warrant'. Valid only for LawEnforcementRequests
 | `works_attributes`                 | [Work]             | A list of Works
 | `entity_notice_roles_attributes`   | [EntityNoticeRole] | A list of EntityNoticeRoles
 | `file_uploads_attributes`          | [FileUpload]       | A list of FileUploads
@@ -249,7 +250,7 @@ or when requested individually.
 | `body`                     | `explanation`                  |
 | `works.description`        | `works.subject_of_court_order` |
 | `works.infringing_urls`    | `works.targetted_urls`         |
-| `works.copyrighted_urls`   |                                | Yes, not relevant to this type
+| `works.copyrighted_urls`   |                                | Yes
 
 #### Dmca
 

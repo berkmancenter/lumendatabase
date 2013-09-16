@@ -4,6 +4,13 @@
     <p class="body"><%= notice.redacted(:body) %></p>
   <% end %>
 
+  <% if notice.request_type.present? %>
+    <dl id="request_type">
+      <dt class="label">Type of Request:</dt>
+      <dd class="field"><%= notice.request_type %></dd>
+    </dl>
+  <% end %>
+
   <% if notice.regulations.present? %>
     <dl id="tags">
       <dt class="label">Laws or Regulations:</dt>

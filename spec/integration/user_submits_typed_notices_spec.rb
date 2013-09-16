@@ -120,8 +120,10 @@ feature "typed notice submissions" do
       "URL mentioned in request" => "http://example.com/offending_url1", # infringing_urls
 
       "Explanation of Law Enforcement Request" => "I don't get it. He made sick music.", #notice.body
-      "Relevant laws or regulations" => "USC foo bar 21"
+      "Relevant laws or regulations" => "USC foo bar 21",
     })
+
+    submission.choose('Civil Subpoena', :request_type)
 
     submission.fill_in_entity_form_with(:recipient, {
       'Name' => 'Recipient',
@@ -151,6 +153,7 @@ feature "typed notice submissions" do
       expect(page).to have_content('Explanation of Request')
       expect(page).to have_content("I don't get it. He made sick music.")
       expect(page).to have_content('USC foo bar 21')
+      expect(page).to have_content('Civil Subpoena')
     end
   end
 
