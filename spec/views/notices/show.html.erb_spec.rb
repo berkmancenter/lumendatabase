@@ -48,7 +48,7 @@ describe 'notices/show.html.erb' do
     end
   end
 
-  it "displays a notice with entities" do
+  it "displays a notice with default entities" do
     notice = create(:dmca, role_names: ['sender', 'recipient'])
 
     assign(:notice, notice)
@@ -64,6 +64,31 @@ describe 'notices/show.html.erb' do
         expect(page).to have_content("[Private]")
         expect(page).not_to have_content(entity.address_line_1)
         expect(page).not_to have_content(entity.address_line_2)
+      end
+    end
+  end
+
+  it "displays non-default entities" do
+    notice = create(
+      :court_order,
+      role_names: %w|recipient sender principal issuing_court plaintiff defendant|
+    )
+
+    assign(:notice, notice)
+
+    render
+
+    within('#entities') do
+      within('.other-entities') do
+        notice.other_entity_notice_roles.each do |role|
+          expect(page).to have_content(role.name.titleize)
+        end
+      end
+
+      within('.entities-wrapper') do
+        notice.other_entity_notice_roles.each do |role|
+          expect(page).to have_content(role.entity.name)
+        end
       end
     end
   end
