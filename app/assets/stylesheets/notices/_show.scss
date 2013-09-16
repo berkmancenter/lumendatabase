@@ -419,8 +419,17 @@ article.notice-show {
       float: left;
       font-size: $base-font-size-small-1;
       min-height: 20px;
-      @include span-columns(6);
       padding: 25px $base-padding;
+
+      &:first-child {
+        @include span-columns(7);
+        @include omega;
+      }
+
+      &:last-child {
+        @include span-columns(5);
+        margin-left: 5px;
+      }
     }
 
     h6 {

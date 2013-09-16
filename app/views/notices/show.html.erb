@@ -86,14 +86,14 @@
   </aside>
 
   <footer>
-    <section id="tags">
-      <h6>Tags</h6>
-      <%= render 'shared/tag_list', tags: @notice.tags %>
-    </section>
-
     <section id="categories">
       <h6>Categories</h6>
       <%= render 'shared/category_list', categories: @notice.categories %>
+    </section>
+
+    <section id="tags">
+      <h6>Tags</h6>
+      <%= render 'shared/tag_list', tags: @notice.tags %>
     </section>
   </footer>
 </article>
