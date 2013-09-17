@@ -1,5 +1,7 @@
 body.devise-sessions,
 body.devise-passwords {
+  background: $base-background-color;
+
   .main {
     position: relative;
     width: auto;
