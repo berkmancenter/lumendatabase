@@ -17,6 +17,12 @@ describe Ingestor::Importer::Google::FindFieldGroups do
     ])
   end
 
+  it "can find the correct number of field groups" do
+    finder = described_class.new(missing_url_content)
+
+    expect(finder.find.length).to eq 23
+  end
+
   def first_group
     %q|field_group_0_work_description: Description 0
 
@@ -42,5 +48,11 @@ field_group_1_infringement_url_1:http://infringing_1_2|
 field_signature:
 field_form_submission_time:05/26/2013 PDT
 |
+  end
+
+  private
+
+  def missing_url_content
+    File.read('spec/support/example_files/missing_url_notice_source.txt')
   end
 end

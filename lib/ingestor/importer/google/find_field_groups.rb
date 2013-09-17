@@ -19,7 +19,7 @@ module Ingestor
         attr_reader :keys, :content
 
         def find_keys
-          field_groups = content.scan(/field_group_(\d+?)/)
+          field_groups = content.scan(/field_group_(\d+)/)
           field_groups.flatten.compact.uniq.map(&:to_i)
         end
 
