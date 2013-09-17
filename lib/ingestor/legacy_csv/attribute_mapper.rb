@@ -18,6 +18,7 @@ module Ingestor
           title: hash['Subject'],
           subject: hash['Re_Line'],
           source: hash['How_Sent'],
+          action_taken: importer.action_taken,
           created_at: hash['add_date'],
           updated_at: hash['alter_date'],
           date_sent: hash['Date'],

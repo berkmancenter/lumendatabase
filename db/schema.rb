@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130912194444) do
+ActiveRecord::Schema.define(:version => 20130917185749) do
 
   create_table "blog_entries", :force => true do |t|
     t.integer  "user_id"
@@ -173,7 +173,7 @@ ActiveRecord::Schema.define(:version => 20130912194444) do
     t.integer  "reviewer_id"
     t.string   "language"
     t.boolean  "rescinded",          :default => false, :null => false
-    t.string   "action_taken",       :default => "No",  :null => false
+    t.string   "action_taken",       :default => "No"
     t.string   "type"
     t.integer  "original_notice_id"
     t.boolean  "spam",               :default => false

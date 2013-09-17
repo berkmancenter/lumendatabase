@@ -42,7 +42,10 @@ describe Ingestor::LegacyCsv::AttributeMapper do
       'OriginalFilePath' => 'path',
       'SupportingFilePath' => 'other path'
     }
-    import_class = double("ImportClass", works: 'works', file_uploads: 'files')
+    import_class = double(
+      "ImportClass",
+      works: 'works', file_uploads: 'files', action_taken: 'Yes'
+    )
     Ingestor::ImportDispatcher.
       should_receive(:for).with('path', 'other path').and_return(import_class)
 

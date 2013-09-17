@@ -79,6 +79,10 @@ module Ingestor
         original_documents + supporting_documents
       end
 
+      def action_taken
+        'Yes'
+      end
+
     end
   end
 end
