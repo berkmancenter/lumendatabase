@@ -25,6 +25,7 @@ module Ingestor
           date_received: hash['Date'],
           file_uploads: importer.file_uploads,
           works: importer.works,
+          categories: categories(hash['CategoryName']),
           entity_notice_roles: [
             EntityNoticeRole.new(
               name: 'sender',
@@ -45,6 +46,10 @@ module Ingestor
       private
 
       attr_reader :hash, :importer
+
+      def categories(category_name)
+        Category.where(name: category_name)
+      end
 
       def address_hash(role_name)
         {
