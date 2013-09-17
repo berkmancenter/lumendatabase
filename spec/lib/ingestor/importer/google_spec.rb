@@ -95,6 +95,6 @@ Track Name: Flipy The Bear',
   end
 
   def works_from_partial_file
-    described_class.new('spec/support/example_files/partial_notice_source.txt').works
+    described_class.new('spec/support/example_files/partial_url_notice_source.txt').works
   end
 end

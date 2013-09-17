@@ -21,7 +21,7 @@ module Ingestor
         end
 
         def description
-          if content.match(/#{description_start}[^:]*:(.+?)\n#{description_end}[^:]*:/m)
+          if content.match(/#{description_start}[^:]*:(.*)\n#{description_end}[^:]*:/m)
             $1.strip
           end
         end

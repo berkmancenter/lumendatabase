@@ -1,0 +1,110 @@
+field_form_version:1
+field_location_or_region:GB
+field_submitter_first_name:Joe
+field_submitter_last_name:Schmoe
+field_submitter_company:The Foobar Association
+field_copyright_owner:self
+field_group_0_work_description:Copyright Work: Applied Dairy Microbiology,
+Second Edition
+Rights Owner:  FBF Press
+Our Ref: [698024/1023599] 
+
+field_group_1_work_description:Copyright Work: Applied Electrospray Mass
+Spectrometry
+Rights Owner:  FBF Press
+Our Ref: [698025/1023601] 
+
+field_group_2_work_description:Copyright Work: Applied Geography
+Rights Owner:  FBF Press
+Our Ref: [698027/1023604] 
+
+field_group_3_work_description:Copyright Work: Applied Materials Science 
+Rights Owner:  FBF Press
+Our Ref: [698029/1023606] 
+
+field_group_4_work_description:Copyright Work: Applied Missing Data Analysis 
+gights Owner:  Foobar Press
+Our Ref: [698033/1023610] 
+
+field_group_5_work_description:Copyright Work: Applied Multivariate Statistics
+for the Social Sciences, Fifth Edition 
+Rights Owner:  FBF Press
+Our Ref: [698036/1023613] 
+
+field_group_6_work_description:Copyright Work: Applied Optimal Control 
+Rights Owner:  Foobar
+Our Ref: [698038/1023615] 
+
+field_group_7_work_description:Copyright Work: Applied Organizational
+Communication 
+Rights Owner:  FBF Press
+Our Ref: [698041/1023618] 
+
+field_group_8_work_description:Copyright Work: Applied Principles of
+Horticultural Science 
+Rights Owner:  FBF Press
+Our Ref: [698043/1023621] 
+
+field_group_9_work_description:Copyright Work: Applied Signal Processing 
+Rights Owner:  FBF Press
+Our Ref: [698044/1023622] 
+
+field_group_10_work_description:Copyright Work: Aquinas 
+Rights Owner:  FBF Press
+Our Ref: [698048/1023626] 
+
+field_group_11_work_description:Copyright Work: Arabic-English Thematic
+Lexicon 
+Rights Owner:  FBF Press
+Our Ref: [698046/1023624] 
+
+field_group_12_work_description:Copyright Work: Archaeology and Folklore
+Rights Owner:  FBF Press
+Our Ref: [698053/1023631] 
+
+field_group_13_work_description:Copyright Work: Archaeology and Modernity 
+Rights Owner:  FBF Press
+Our Ref: [698055/1023634] 
+
+field_group_14_work_description:Copyright Work: Archaeology, Ritual, Religion 
+Rights Owner:  FBF Press
+Our Ref: [698057/1023636] 
+
+field_group_15_work_description:Copyright Work: Archaeology: The Basics 
+Rights Owner:  FBF Press
+Our Ref: [698062/1023642] 
+
+field_group_16_work_description:Copyright Work: Archaeology: The Key Concepts
+Rights Owner:  FBF Press
+Our Ref: [698064/1023644] 
+
+field_group_17_work_description:Copyright Work: Archispeak 
+Rights Owner:  FBF Press
+Our Ref: [698066/1023646] 
+
+field_group_18_work_description:Copyright Work: Architects and Architecture of
+London 
+Rights Owner:  FBF Press
+Our Ref: [698071/1023651] 
+
+field_group_19_work_description:Copyright Work: Architectural Knowledge 
+Rights Owner:  Foobar
+Our Ref: [698074/1023654] 
+
+field_group_20_work_description:Copyright Work: Architectural Rendering with
+3ds Max and V-Ray 
+Rights Owner:  Foobar Press
+Our Ref: [698078/1023658] 
+
+field_group_21_work_description:Copyright Work: Architectural Tiles:
+Conservation and Restoration 
+Rights Owner:  FBF Press
+Our Ref: [698079/1023659] 
+
+field_group_22_work_description:Copyright Work: Authority and the Individual 
+Rights Owner:  FBF Press
+Our Ref: [698326/1023918] 
+
+field_group_22_infringement_url_0:http://ebooklink.net/g/detail/0415487331/Authority%20and%20the%20Individual%20(FBF Press%20Classics)/
+field_signature: Trusted user submission
+field_form_submission_time:07/01/2013 PDT
