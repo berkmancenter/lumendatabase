@@ -31,6 +31,7 @@ gem 'select2-rails'
 gem 'bootstrap-datepicker-rails'
 gem 'cancan', '~>1.6.10'
 gem 'jquery-placeholder-rails'
+gem 'activerecord-import'
 
 group :assets do
   gem 'coffee-rails'
@@ -50,6 +51,7 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'sham_rack'
   gem 'pry-rails'
+  gem 'ruby-prof'
 end
 
 group :test do

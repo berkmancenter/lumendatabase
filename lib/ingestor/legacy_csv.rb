@@ -41,21 +41,23 @@ module Ingestor
     attr_reader :base_directory, :csv_file, :error_handler
 
     def import_row(csv_row)
-      mapper = AttributeMapper.new(csv_row.to_hash)
+      Dmca.transaction do
+        mapper = AttributeMapper.new(csv_row.to_hash)
 
-      attributes = mapper.mapped
-      updated_at = attributes.delete(:updated_at)
+        attributes = mapper.mapped
+        updated_at = attributes.delete(:updated_at)
 
-      dmca = mapper.notice_type.create!(attributes)
-      dmca.update_attributes(updated_at: updated_at)
+        dmca = mapper.notice_type.create!(attributes)
+        dmca.update_attributes(updated_at: updated_at)
 
-      logger.debug { "Imported: #{attributes[:original_notice_id]} -> #{dmca.id}" }
+        logger.debug { "Imported: #{attributes[:original_notice_id]} -> #{dmca.id}" }
 
-      self.succeeded += 1
-      if self.succeeded % 100 == 0
-        now_unixtime = Time.now.to_f
-        records_per_sec = self.succeeded / (now_unixtime - @start_unixtime)
-        logger.debug { "#{self.succeeded} records at #{now_unixtime} | #{Time.now} |#{records_per_sec} records / sec" }
+        self.succeeded += 1
+        if self.succeeded % 100 == 0
+          now_unixtime = Time.now.to_f
+          records_per_sec = self.succeeded / (now_unixtime - @start_unixtime)
+          logger.debug { "#{self.succeeded} records at #{now_unixtime} | #{Time.now} |#{records_per_sec} records / sec" }
+        end
       end
     rescue => ex
       self.failed += 1

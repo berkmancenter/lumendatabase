@@ -34,6 +34,8 @@ GEM
       activesupport (= 3.2.13)
       arel (~> 3.0.2)
       tzinfo (~> 0.3.29)
+    activerecord-import (0.4.1)
+      activerecord (>= 3.0)
     activeresource (3.2.13)
       activemodel (= 3.2.13)
       activesupport (= 3.2.13)
@@ -255,6 +257,7 @@ GEM
       rspec-core (~> 2.13.0)
       rspec-expectations (~> 2.13.0)
       rspec-mocks (~> 2.13.0)
+    ruby-prof (0.13.0)
     safe_yaml (0.9.3)
     sass (3.2.9)
     sass-rails (3.2.6)
@@ -322,6 +325,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_model_serializers (~> 0.8.0)
+  activerecord-import
   acts-as-taggable-on
   airbrake
   ancestry
@@ -360,6 +364,7 @@ DEPENDENCIES
   recipient_interceptor
   redcarpet (~> 2.3.0)
   rspec-rails
+  ruby-prof
   sass-rails
   select2-rails
   sham_rack
