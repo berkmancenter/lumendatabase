@@ -17,19 +17,20 @@ class Work < ActiveRecord::Base
   %w(infringing_urls copyrighted_urls).each do |relation_type|
     relation_class = relation_type.classify.constantize
     define_method("validate_associated_records_for_#{relation_type}") do
-      urls_to_add = send(relation_type.to_sym).map(&:url).uniq.compact
+      urls_to_associate = send(relation_type.to_sym).map(&:url).uniq.compact
 
-      return if urls_to_add == ['']
+      return if urls_to_associate == ['']
 
-      existing_url_instances = relation_class.where(url: urls_to_add)
+      existing_url_instances = relation_class.where(url: urls_to_associate)
       existing_urls = existing_url_instances.map(&:url)
 
-      new_urls = urls_to_add - existing_urls
-      new_url_instances = new_urls.map { |url| relation_class.create(url: url) }
+      new_urls = urls_to_associate - existing_urls
+      new_url_instances = new_urls.map { |url| relation_class.new(url: url) }
+      relation_class.import new_url_instances
 
       send(
         "#{relation_type}=".to_sym,
-        existing_url_instances.compact + new_url_instances
+        existing_url_instances + relation_class.where(url: new_urls)
       )
     end
   end
