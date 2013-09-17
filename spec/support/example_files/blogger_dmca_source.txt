@@ -1,0 +1,25 @@
+
+
+AutoDetectedBrowser: Firefox 3
+AutoDetectedOS: Windows XP
+IssueType: blogger_dmca_infringment
+Language: fr
+a01_first_name: Sébastien
+a02_last_name: Forte
+a03_company_name: No Time Records / MERCURY
+a04_copyright_holder: No Time Records / MERCURY
+a05_copyrighted_location: Sur le site même!
+a06_copyrighted_work: Malgré les signalements le site est toujours en  
+ligne, nous demandons la suppréssion immédiate du site web ! (sons, albums  
+& clips en téléchargements illégaux)
+a07_infringing_URL: http://www.example.com/infringing_1.html
+http://www.example.com/infringing_2.html
+http://www.example.com/infringing_3.html
+a08_infringing_URL: http://www.example.com/infringing_4.html
+http://www.example.com/infringing_5.html
+http://www.example.com/infringing_6.html
+a09_confirm1_goodfaith_notauthorized: checked
+a10_confirm2_swear_accurate_copyrightowner: checked
+a11_signed_date: 29/01/11
+a12_signature: Forte Sébastien
+country: FR

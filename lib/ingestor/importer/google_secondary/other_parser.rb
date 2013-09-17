@@ -5,7 +5,7 @@ module Ingestor
     module GoogleSecondary
       class OtherParser < Base
 
-        handles_content(/IssueType:\s?lr_legalother2/m)
+        handles_content(/IssueType:\s?lr_legalother/m)
 
         def parse_works(file_path)
           content = IssueContent.new(

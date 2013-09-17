@@ -4,10 +4,7 @@ module Ingestor
       class IssueContent
 
         def initialize(file_path, description_start, description_end)
-          @content = IO.read(file_path).
-            force_encoding("ISO-8859-1").
-            encode("utf-8", replace: nil)
-
+          @content = Base.read_file(file_path)
           @description_start = description_start
           @description_end = description_end
         end
