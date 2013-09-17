@@ -22,7 +22,8 @@ module Ingestor
         @notice_type = Dmca
       end
 
-      def original?
+      def parsable?(*)
+        false
       end
 
     end

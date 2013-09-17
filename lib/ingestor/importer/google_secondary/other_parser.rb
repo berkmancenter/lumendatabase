@@ -12,11 +12,7 @@ module Ingestor
             file_path, 'legalother_explain', 'legalother_quote'
           )
 
-          content.to_work
-        end
-
-        def original?(file_path)
-          self.class.contains?(file_path, /^IssueType:/)
+          [content.to_work]
         end
 
         def notice_type

@@ -6,7 +6,10 @@ module Ingestor
 
       def initialize(hash)
         @hash = hash
-        @importer = ImportDispatcher.for(@hash['OriginalFilePath'])
+        @importer = ImportDispatcher.for(
+          @hash['OriginalFilePath'],
+          @hash['SupportingFilePath']
+        )
       end
 
       def mapped

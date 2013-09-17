@@ -39,11 +39,12 @@ describe Ingestor::LegacyCsv::AttributeMapper do
 
   it "loads works using Ingester::ImportDispatcher" do
     hash = {
-      'OriginalFilePath' => 'path'
+      'OriginalFilePath' => 'path',
+      'SupportingFilePath' => 'other path'
     }
     import_class = double("ImportClass", works: 'works', file_uploads: 'files')
     Ingestor::ImportDispatcher.
-      should_receive(:for).with('path').and_return(import_class)
+      should_receive(:for).with('path', 'other path').and_return(import_class)
 
     attributes = described_class.new(hash).mapped
 

@@ -22,11 +22,6 @@ module Ingestor
         works
       end
 
-      def original?(file_path)
-        super ||
-          File.open(file_path, &:readline).include?('<HTML><HEAD><TITLE>')
-      end
-
       private
 
       def parse_divided_work(file_handle)
