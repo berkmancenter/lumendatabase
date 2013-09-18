@@ -82,7 +82,7 @@ class Notice < ActiveRecord::Base
 
   has_and_belongs_to_many :works
 
-  validates_inclusion_of :action_taken, in: VALID_ACTIONS
+  validates_inclusion_of :action_taken, in: VALID_ACTIONS, allow_nil: true
   validates_inclusion_of :language, in: Language.codes, allow_blank: true
   validates_presence_of :works, :entity_notice_roles
 
@@ -240,6 +240,5 @@ class Notice < ActiveRecord::Base
   def entities_that_have_received
     entity_notice_roles.recipients.map(&:entity)
   end
-
 
 end

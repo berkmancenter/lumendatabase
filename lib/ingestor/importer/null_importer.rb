@@ -14,7 +14,8 @@ module Ingestor
         :parse_works,
         :supporting_documents,
         :supporting_file_paths,
-        :works
+        :works,
+        :action_taken
 
       def initialize(*)
         @file_paths = @file_uploads = @original_documents = 

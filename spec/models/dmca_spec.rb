@@ -4,7 +4,7 @@ describe Dmca do
   it { should validate_presence_of :works }
   it { should validate_presence_of :entity_notice_roles }
   it { should ensure_inclusion_of(:language).in_array(Language.codes) }
-  it { should ensure_inclusion_of(:action_taken).in_array(Dmca::VALID_ACTIONS) }
+  it { should ensure_inclusion_of(:action_taken).in_array(Dmca::VALID_ACTIONS).allow_nil }
 
   context 'automatic validations' do
     it { should validate_presence_of :title }
