@@ -6,7 +6,10 @@ Entity.create_elasticsearch_index
 
 # Execute seeds in a logical order
 seed_files = %w(
-  relevant_questions.rb categories.rb blog_entries.rb risk_triggers.rb
+  categories.rb
+  relevant_questions.rb
+  blog_entries.rb
+  risk_triggers.rb
   users.rb
 )
 

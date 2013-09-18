@@ -151,8 +151,8 @@ class Notice < ActiveRecord::Base
     end
   end
 
-  def all_relevant_questions
-    relevant_questions | category_relevant_questions
+  def all_relevant_questions(limit = 15)
+    (relevant_questions | category_relevant_questions).sample(limit)
   end
 
   def limited_related_blog_entries(limit = 5)
