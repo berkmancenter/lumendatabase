@@ -3,6 +3,7 @@ require 'ingestor'
 
 feature "Importing CSV" do
   before do
+    create(:category, name: 'Foobar')
     ingestor = Ingestor::LegacyCsv.open(
       'spec/support/example_files/example_notice_export.csv'
     )
@@ -34,6 +35,7 @@ feature "Importing CSV" do
         ]
       )
       expect(@primary_format_notice).to have(1).original_document
+      expect(@primary_format_notice.categories.first.name).to eq 'Foobar'
       expect(upload_contents(@primary_format_notice.original_documents.first)).to eq File.read(
         'spec/support/example_files/original_notice_source.txt'
       )
@@ -55,6 +57,7 @@ http://www.example.com/unstoppable_2.html
 http://www.example.com/unstoppable_3.html|
       )
       expect(@secondary_dmca_notice).to have(1).original_document
+      expect(@secondary_dmca_notice.categories.first.name).to eq 'Foobar'
       expect(upload_contents(@secondary_dmca_notice.original_documents.first)).to eq File.read(
         'spec/support/example_files/secondary_dmca_notice_source.html'
       )
@@ -73,6 +76,7 @@ http://www.example.com/unstoppable_3.html|
         http://www.example.com/infringing|
       )
       expect(@secondary_other_notice).to have(1).original_document
+      expect(@secondary_other_notice.categories.first.name).to eq 'Foobar'
       expect(upload_contents(@secondary_other_notice.original_documents.first)).to eq File.read(
         'spec/support/example_files/secondary_other_notice_source.html'
       )
@@ -94,6 +98,7 @@ http://www.example.com/unstoppable_3.html|
         'https://twitter.com/NoMatter/status/4567',
       ])
       expect(@twitter_notice).to have(1).original_document
+      expect(@twitter_notice.categories.first.name).to eq 'Foobar'
       expect(upload_contents(@twitter_notice.original_documents.first)).to eq File.read(
         'spec/support/example_files/original_twitter_notice_source.txt'
       )
