@@ -108,7 +108,7 @@ describe Dmca do
       questions_2 = notice.all_relevant_questions(3)
 
       expect(questions_1.length).to eq 3
-      expect(questions_1.length).to eq 3
+      expect(questions_2.length).to eq 3
       expect(questions_2).not_to match_array(questions_1)
     end
   end

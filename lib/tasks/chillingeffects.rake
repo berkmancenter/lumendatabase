@@ -1,6 +1,7 @@
 require 'rake'
 require 'ingestor'
 require 'blog_importer'
+require 'question_importer'
 
 namespace :chillingeffects do
   desc 'Delete elasticsearch index'
@@ -21,6 +22,14 @@ namespace :chillingeffects do
   task import_blog_entries: :environment do
     with_file_name do |file_name|
       importer = BlogImporter.new(file_name)
+      importer.import
+    end
+  end
+
+  desc "Import questions"
+  task import_questions: :environment do
+    with_file_name do |file_name|
+      importer = QuestionImporter.new(file_name)
       importer.import
     end
   end
