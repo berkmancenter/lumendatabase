@@ -13,6 +13,18 @@ class BlogEntry < ActiveRecord::Base
     end
   end
 
+  def self.with_content
+    where("url IS NULL")
+  end
+
+  def self.we_are_reading
+    where("url IS NOT NULL")
+  end
+
+  def self.newest
+    order('published_at DESC')
+  end
+
   # TODO: is the simple :author attribute enough? Does the Association
   # really give us anything?
   belongs_to :user
@@ -24,6 +36,10 @@ class BlogEntry < ActiveRecord::Base
 
   def content_html
     Markdown.render(content.to_s)
+  end
+
+  def abstract_html
+    Markdown.render(abstract.to_s)
   end
 
   # https://github.com/sferik/rails_admin/wiki/Enumeration

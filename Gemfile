@@ -32,6 +32,7 @@ gem 'bootstrap-datepicker-rails'
 gem 'cancan', '~>1.6.10'
 gem 'jquery-placeholder-rails'
 gem 'activerecord-import'
+gem 'html2md'
 
 group :assets do
   gem 'coffee-rails'
