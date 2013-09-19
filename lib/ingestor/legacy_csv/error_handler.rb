@@ -22,16 +22,17 @@ module Ingestor
       end
 
       def handle(csv_row, ex)
+        file_paths  = (csv_row['OriginalFilePath'] || '').split(',')
+        file_paths += (csv_row['SupportingFilePath'] || '').split(',')
         error_message = "(#{ex.class}) #{ex.message}: #{ex.backtrace.first}"
-        original_files = csv_row.fetch('OriginalFilePath', '').split(',')
 
         logger.error "Error importing Notice #{csv_row['NoticeID']}"
         logger.error "  Error: #{error_message}"
-        logger.error "  Files: #{original_files.join(', ')}"
+        logger.error "  Files: #{file_paths.join(', ')}"
 
         csv << (csv_row.to_hash.values + [error_message])
 
-        original_files.each { |file_path| store_file(file_path) }
+        file_paths.each { |file_path| store_file(file_path) }
 
       rescue => ex
         logger.error "Failure handling failure: #{ex}"

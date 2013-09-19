@@ -10,7 +10,7 @@ module Ingestor
         return false unless @content_regex
 
         file_paths && file_paths.split(',').any? do |file|
-          text?(file) && contains?(file, @content_regex)
+          File.exists?(file) && text?(file) && contains?(file, @content_regex)
         end
       end
 
@@ -21,16 +21,19 @@ module Ingestor
       end
 
       def self.contains?(file, regex)
+        read_file(file).split(/\r?\n/).detect { |line| line =~ regex }
+      end
+
+      def self.read_file(file)
         # http://stackoverflow.com/questions/9607554/ruby-invalid-byte-sequence-in-utf-8
-        content = IO.read(file).force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
-        content.split(/\r?\n/).detect { |line| line =~ regex }
+        IO.read(file).force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
       end
 
       attr_reader :original_file_paths, :supporting_file_paths, :notice_type
 
       def initialize(original_file_paths, supporting_file_paths = nil)
-        @original_file_paths = (original_file_paths || '').split(',')
-        @supporting_file_paths = (supporting_file_paths || '').split(',')
+        @original_file_paths = fix_paths(original_file_paths)
+        @supporting_file_paths = fix_paths(supporting_file_paths)
         @notice_type = Dmca
       end
 
@@ -81,6 +84,12 @@ module Ingestor
 
       def action_taken
         'Yes'
+      end
+
+      private
+
+      def fix_paths(file_paths)
+        "#{file_paths}".split(',').select { |f| File.exists?(f) }
       end
 
     end

@@ -1,0 +1,28 @@
+
+
+AutoDetectedBrowser: Internet Explorer 6
+AutoDetectedOS: Windows XP
+IssueType: eb_dmca
+Language: en
+agree1: yes
+agree: yes
+country: RU
+description_of_copyrighted_work: контрольные, <a  
+href="http://example.com/copyrighted_1">free amateur   
+movies</a>, [url="http://example.com/copyrighted_2"]free  
+amateur  movies[/url], http://example.com/copyrighted_3 sybille  
+some work,  pplei,
+dmca_company_name: Vsjrh32e8v13Mor
+dmca_signature: 234524980nckPDwnrvZwq
+dmca_signature_date: KbAA02934gmVSEuAB
+first_name: first name
+last_name: last name
+location_of_copyrighted_work: контрольные, <a  
+href="http://example.com/location_1">free amateu  
+represented_copyright_holder: MfNRnTmWaLMVu
+url_of_infringing_material: контрольные, <a  
+href="http://example.com/infringing_1">free amateur 
+movies</a>, [url="http://example.com/infringing_2"]free  
+amateur movies[/url],  
+example[/url], http://example.com/infringing_3 sybille  
+rauch example,  pplei,
