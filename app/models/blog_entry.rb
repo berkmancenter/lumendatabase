@@ -5,6 +5,14 @@ class BlogEntry < ActiveRecord::Base
   extend RecentScope
   include ValidatesAutomatically
 
+  # TODO: is the simple :author attribute enough? Does the Association
+  # really give us anything?
+  belongs_to :user
+
+  has_many :blog_entry_categorizations, dependent: :destroy
+  has_many :categories, through: :blog_entry_categorizations
+
+  # must be defined before its use in validates_inclusion_of
   def self.valid_images
     imagery_directory = Rails.root.join('app/assets/images/blog/imagery')
 
@@ -12,6 +20,8 @@ class BlogEntry < ActiveRecord::Base
       File.basename(file, '.jpg')
     end
   end
+
+  validates_inclusion_of :image, in: valid_images, allow_nil: true
 
   def self.with_content
     where("url IS NULL")
@@ -21,18 +31,9 @@ class BlogEntry < ActiveRecord::Base
     where("url IS NOT NULL")
   end
 
-  def self.newest
-    order('published_at DESC')
+  def self.published
+    where('published_at <= ?', Time.now).order('published_at DESC')
   end
-
-  # TODO: is the simple :author attribute enough? Does the Association
-  # really give us anything?
-  belongs_to :user
-
-  has_many :blog_entry_categorizations, dependent: :destroy
-  has_many :categories, through: :blog_entry_categorizations
-
-  validates_inclusion_of :image, in: valid_images, allow_nil: true
 
   def content_html
     Markdown.render(content.to_s)
@@ -46,4 +47,5 @@ class BlogEntry < ActiveRecord::Base
   def image_enum
     self.class.valid_images
   end
+
 end

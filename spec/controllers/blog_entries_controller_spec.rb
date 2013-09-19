@@ -3,12 +3,11 @@ require 'spec_helper'
 describe BlogEntriesController do
 
   context "#index" do
-    it "paginates blog entries" do
+    it "paginates the 'published' scope on BlogEntry" do
       blog_entries = []
-      BlogEntry.stub_chain(:newest,:with_content,:paginate).
+      BlogEntry.stub_chain(:published,:with_content,:paginate).
         with(page: '2', per_page: 5).and_return(blog_entries)
-
-      BlogEntry.stub_chain(:newest,:we_are_reading,:limit).and_return([])
+      BlogEntry.stub_chain(:published,:we_are_reading,:limit).and_return([])
 
       get :index, page: 2
 
@@ -17,10 +16,10 @@ describe BlogEntriesController do
     end
 
     it "includes we_are_reading blog entries" do
-      BlogEntry.stub_chain(:newest,:with_content,:paginate).and_return([])
+      BlogEntry.stub_chain(:published,:with_content,:paginate).and_return([])
 
       blog_entries = 'blog entries'
-      BlogEntry.stub_chain(:newest,:we_are_reading,:limit).and_return(blog_entries)
+      BlogEntry.stub_chain(:published,:we_are_reading,:limit).and_return(blog_entries)
 
       get :index, page: 2
       expect(assigns(:we_are_reading)).to eq blog_entries
