@@ -55,15 +55,15 @@ class Notice < ActiveRecord::Base
 
   VALID_ACTIONS = %w( Yes No Partial )
 
-  TYPES = {
-    'Dmca' => 'DMCA',
-    'Trademark' => 'Trademark',
-    'Defamation' => 'Defamation',
-    'CourtOrder' => 'Court Order',
-    'LawEnforcementRequest' => 'Law Enforcement Request',
-    'PrivateInformation' => 'Private Information',
-    'Other' => 'Other',
-  }
+  TYPES = %w(
+    Dmca
+    Trademark
+    Defamation
+    CourtOrder
+    LawEnforcementRequest
+    PrivateInformation
+    Other
+  )
 
   belongs_to :reviewer, class_name: 'User'
 
@@ -102,10 +102,12 @@ class Notice < ActiveRecord::Base
 
   define_elasticsearch_mapping
 
+  def self.label
+    name.titleize
+  end
+
   def self.type_models
-    TYPES.keys.collect do |model_name|
-      model_name.constantize
-    end
+    TYPES.map(&:constantize)
   end
 
   def self.available_for_review

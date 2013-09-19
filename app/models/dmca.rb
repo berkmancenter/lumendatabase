@@ -6,6 +6,10 @@ class Dmca < Notice
     Notice.model_name
   end
 
+  def self.label
+    'DMCA'
+  end
+
   def to_partial_path
     'notices/notice'
   end

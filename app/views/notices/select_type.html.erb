@@ -4,18 +4,18 @@
   <h1>Which type of notice would you like to report?</h1>
   <section class="notices-list">
     <ul>
-      <% Notice::TYPES.each do |notice_type, type_label| %>
-        <li data-id="<%= notice_type %>"><%= type_label %></li>
+      <% Notice.type_models.each do |model| %>
+        <li data-id="<%= model.name %>"><%= model.label %></li>
       <% end %>
     </ul>
   </section>
 
   <section class="info-panel wip">
-    <% Notice::TYPES.each do |notice_type, type_label| %>
-      <div data-id="<%= notice_type %>">
-        <article><b><%= type_label %>:</b> Has someone asked your ISP, or the host of an online discussion you participate in, to give them your identity or other information about you?</article>
+    <% Notice.type_models.each do |model| %>
+      <div data-id="<%= model.name %>">
+        <article><b><%= model.label %>:</b> Has someone asked your ISP, or the host of an online discussion you participate in, to give them your identity or other information about you?</article>
         <div class="button-wrapper">
-          <a class="button" href="<%= new_notice_path(type: notice_type) %>">Report <%= type_label %> notice</a>
+          <a class="button" href="<%= new_notice_path(type: model.name) %>">Report <%= model.label %> notice</a>
         </div>
       </div>
     <% end %>

@@ -12,8 +12,8 @@ feature "Rails admin dashboard" do
     within('.sidebar-nav') do
       expect(page).to have_css('a:contains(Notice)', 1)
 
-      Notice::TYPES.each do |_, type_label|
-        expect(page).to have_css("a:contains('#{type_label}')")
+      Notice.type_models.each do |model|
+        expect(page).to have_css("a:contains('#{model.label}')")
       end
     end
   end
@@ -22,8 +22,8 @@ feature "Rails admin dashboard" do
     within('.content') do
       expect(page).to have_css('a:contains(Notice)', 1)
 
-      Notice::TYPES.each do |_, type_label|
-        expect(page).to have_css("a:contains('#{type_label}')")
+      Notice.type_models.each do |model|
+        expect(page).to have_css("a:contains('#{model.label}')")
       end
     end
   end
