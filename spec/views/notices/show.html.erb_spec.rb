@@ -187,7 +187,7 @@ describe 'notices/show.html.erb' do
   it "displays limited related blog entries" do
     blog_entries = build_stubbed_list(:blog_entry, 3)
     notice = build(:dmca)
-    notice.stub(:limited_related_blog_entries).and_return(blog_entries)
+    notice.stub(:related_blog_entries).and_return(blog_entries)
     assign(:notice, notice)
 
     render

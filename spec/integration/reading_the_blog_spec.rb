@@ -2,7 +2,7 @@ require 'spec_helper'
 
 feature "The Blog" do
   scenario "A user reads a blog entry" do
-    blog_entry = create(:blog_entry, :with_content)
+    blog_entry = create(:blog_entry, :published, :with_content)
 
     visit '/'
     click_on 'Blog'
@@ -12,7 +12,7 @@ feature "The Blog" do
   end
 
   scenario "A user opens a blog entry from the home page" do
-    blog_entry = create(:blog_entry)
+    blog_entry = create(:blog_entry, :published)
 
     visit '/'
     click_on blog_entry.title

@@ -16,7 +16,7 @@ feature 'Page titles' do
   end
 
   scenario "Blog" do
-    blog_entry = create(:blog_entry)
+    blog_entry = create(:blog_entry, :published)
 
     visit '/'
     click_on 'Blog'
