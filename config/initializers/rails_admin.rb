@@ -57,10 +57,10 @@ RailsAdmin.config do |config|
     end
   end
 
-  Notice::TYPES.each do |notice_type, type_label|
+  Notice::TYPES.each do |notice_type|
     config.audit_with :history, notice_type
     config.model notice_type do
-      label type_label
+      label { abstract_model.model.label }
     end
   end
 

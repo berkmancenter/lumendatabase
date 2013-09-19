@@ -9,10 +9,10 @@ describe 'notices/new.html.erb' do
     expect(rendered).to have_css 'form'
   end
 
-  Notice::TYPES.each do |notice_class, notice_title|
-    context "country selectors in \"#{notice_title}\" notices" do
+  Notice.type_models.each do |model|
+    context "country selectors in \"#{model.label}\" notices" do
       it "use ISO country codes" do
-        factory_name = notice_class.tableize.singularize
+        factory_name = model.name.tableize.singularize
         assign(
           :notice, build(factory_name, role_names: %w( sender recipient ))
         )
