@@ -98,6 +98,19 @@ describe Dmca do
 
       expect(questions).to match_array %w( Q1 Q2 )
     end
+
+    it "can be limited and is random" do
+      notice = create(
+        :dmca, relevant_questions: create_list(:relevant_question, 5)
+      )
+
+      questions_1 = notice.all_relevant_questions(3)
+      questions_2 = notice.all_relevant_questions(3)
+
+      expect(questions_1.length).to eq 3
+      expect(questions_2.length).to eq 3
+      expect(questions_2).not_to match_array(questions_1)
+    end
   end
 
   context "#related_blog_entries" do

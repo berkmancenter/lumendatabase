@@ -24,8 +24,7 @@ counter-notice with the service provider, who must transmit it to the
 person who made the complaint. If the copyright owner does not notify
 the service provider within 14 business days that it has filed a claim
 against you in court, your materials can be restored to the Internet.
-    },
-    relevant_questions: RelevantQuestion.all
+    }
   )
   Category.create!(parent: p, name: 'Copyright and Fair Use')
   Category.create!(parent: p, name: 'Derivative Works')
@@ -69,11 +68,3 @@ Category.create!(name: 'Trademark').tap do |p|
 end
 
 Category.create!(name: 'Uncategorized')
-
-
-unless ENV['SKIP_FAKE_DATA']
-  Category.all.each do|category|
-    category.relevant_questions << RelevantQuestion.all.sample((2..10).to_a.sample)
-    category.save
-  end
-end
