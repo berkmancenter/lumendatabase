@@ -117,9 +117,9 @@ describe Dmca do
     it "returns blog_entries that share categories with itself" do
       notice = create(:dmca, :with_categories)
       expected_blog_entries = [
-        create(:blog_entry, categories: [notice.categories.sample]),
-        create(:blog_entry, categories: [notice.categories.sample]),
-        create(:blog_entry, categories: [notice.categories.sample])
+        create(:blog_entry, :published, categories: [notice.categories.sample]),
+        create(:blog_entry, :published, categories: [notice.categories.sample]),
+        create(:blog_entry, :published, categories: [notice.categories.sample])
       ]
 
       related_blog_entries = notice.related_blog_entries
@@ -129,7 +129,7 @@ describe Dmca do
 
     it "does not return blog entries with different categories" do
       notice = create(:dmca, :with_categories)
-      create(:blog_entry, categories: [create(:category)])
+      create(:blog_entry, :published, categories: [create(:category)])
 
       related_blog_entries = notice.related_blog_entries
 
@@ -138,24 +138,47 @@ describe Dmca do
 
     it "does not duplicate blog entries" do
       notice = create(:dmca, :with_categories)
-      blog_entry = create(:blog_entry, categories: notice.categories)
+      blog_entry = create(
+        :blog_entry, :published, categories: notice.categories
+      )
 
       related_blog_entries = notice.related_blog_entries
 
       expect(related_blog_entries).to eq [blog_entry]
     end
-  end
 
-  context "#limited_related_blog_entries" do
     it "returns a limited set of related blog entries" do
       notice = create(:dmca, :with_categories)
-      create(:blog_entry, categories: [notice.categories.sample])
-      create(:blog_entry, categories: [notice.categories.sample])
-      create(:blog_entry, categories: [notice.categories.sample])
+      create(:blog_entry, :published, categories: [notice.categories.sample])
+      create(:blog_entry, :published, categories: [notice.categories.sample])
+      create(:blog_entry, :published, categories: [notice.categories.sample])
 
-      blog_entries = notice.limited_related_blog_entries(2)
+      blog_entries = notice.related_blog_entries(2)
 
       expect(blog_entries.length).to eq 2
+    end
+
+    it "returns only published blog entries" do
+      notice = create(:dmca, :with_categories)
+      expected_blog_entries = [
+        create(:blog_entry, :published, categories: [notice.categories.first]),
+        create(:blog_entry, :published, categories: [notice.categories.first]),
+      ]
+      create(:blog_entry, categories: [notice.categories.first])
+      create(
+        :blog_entry,
+        categories: [notice.categories.first],
+        published_at: 1.day.from_now
+      )
+      create(
+        :blog_entry,
+        categories: [notice.categories.first],
+        published_at: 1.hour.from_now
+      )
+
+      blog_entries = notice.related_blog_entries
+
+      expect(blog_entries).to match_array(expected_blog_entries)
     end
   end
 

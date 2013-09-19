@@ -155,8 +155,8 @@ class Notice < ActiveRecord::Base
     (relevant_questions | category_relevant_questions).sample(limit)
   end
 
-  def limited_related_blog_entries(limit = 5)
-    related_blog_entries.limit(limit)
+  def related_blog_entries(limit = 5)
+    super.published.limit(limit)
   end
 
   def other_entity_notice_roles
