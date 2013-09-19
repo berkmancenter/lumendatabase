@@ -1,9 +1,13 @@
 <article class="post-item">
   <h3 class="title">
-    <%= link_to(blog_entry.title, blog_entry_path(blog_entry)) %>
+    <% if blog_entry.url.present? %>
+      <%= link_to(blog_entry.title, blog_entry.url) %>
+    <% else %>
+      <%= link_to(blog_entry.title, blog_entry) %>
+    <% end %>
   </h3>
   <%= render 'metadata', blog_entry: blog_entry %>
   <a class="snippet" href="<%= blog_entry_path(blog_entry) %>">
-    <p><%= blog_entry.abstract %></p>
+    <%= raw blog_entry.abstract_html %>
   </a>
 </article>

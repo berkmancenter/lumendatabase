@@ -116,6 +116,15 @@ Keep an eye on this case!
 )
 
 unless ENV['SKIP_FAKE_DATA']
+  10.times do |i|
+    BlogEntry.create!(
+      author: "Adam Holland",
+      title: "What we're reading, numbered ##{i}",
+      url: 'http://www.example.com',
+      published_at: Time.now
+    )
+  end
+
   20.times do |i|
     BlogEntry.create!(
       author: "Adam Holland",
