@@ -41,9 +41,9 @@ class FieldedSearchNoticeGenerator
     unmatched_notice.jurisdiction_list = "N/A"
   end
 
-  def for_categories
-    matched_notice.categories = [build(:category, name: query)]
-    unmatched_notice.categories = [build(:category, name: "N/A")]
+  def for_topics
+    matched_notice.topics = [build(:topic, name: query)]
+    unmatched_notice.topics = [build(:topic, name: "N/A")]
   end
 
   def for_works

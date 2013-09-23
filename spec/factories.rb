@@ -4,11 +4,11 @@ FactoryGirl.define do
 
   sequence(:url) { |n| "http://example.com/url_#{n}" }
 
-  factory :category do
-    sequence(:name) { |n| "Category Name #{n}" }
+  factory :topic do
+    sequence(:name) { |n| "Topic Name #{n}" }
   end
 
-  factory :category_manager do
+  factory :topic_manager do
     name "A name"
   end
 
@@ -44,9 +44,9 @@ FactoryGirl.define do
       end
     end
 
-    trait :with_categories do
+    trait :with_topics do
       before(:create) do |notice|
-        notice.categories = build_list(:category, 3)
+        notice.topics = build_list(:topic, 3)
       end
     end
 
@@ -65,7 +65,7 @@ FactoryGirl.define do
     trait :with_facet_data do
       with_tags
       with_jurisdictions
-      with_categories
+      with_topics
       role_names ['sender', 'recipient']
       date_received Time.now
     end

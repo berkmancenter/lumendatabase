@@ -6,7 +6,7 @@ Entity.create_elasticsearch_index
 
 # Execute seeds in a logical order
 seed_files = %w(
-  categories.rb
+  topics.rb
   relevant_questions.rb
   blog_entries.rb
   risk_triggers.rb
@@ -45,10 +45,10 @@ class FakeNotice
     end
   end
 
-  def categories
+  def topics
     lim = (3..5).to_a.sample
 
-    Category.order('random()').limit(lim)
+    Topic.order('random()').limit(lim)
   end
 
   def tags
@@ -183,7 +183,7 @@ unless ENV['SKIP_FAKE_DATA']
       date_sent: fake.date_sent,
       date_received: fake.date_received,
       source: fake.source,
-      category_ids: fake.categories.map(&:id),
+      topic_ids: fake.topics.map(&:id),
       tag_list: fake.tags,
       jurisdiction_list: fake.jurisdictions,
       body: fake.body,

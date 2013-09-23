@@ -3,8 +3,8 @@ require 'blog_importer'
 
 feature "Importing the blog from CSV" do
   before do
-    ["Chilling Effects", "Fan Fiction", "Domain Names and Trademarks"].each do |cat|
-      create(:category, name: cat)
+    ["Chilling Effects", "Fan Fiction", "Domain Names and Trademarks"].each do |topic|
+      create(:topic, name: topic)
     end
     importer = BlogImporter.new('spec/support/example_files/blog_export.csv')
     importer.import
@@ -25,6 +25,6 @@ feature "Importing the blog from CSV" do
     expect(entry.created_at).to eq DateTime.new(2001, 8, 30, 22, 53, 49, 'EDT')
     expect(entry.updated_at).to eq DateTime.new(2001, 12, 31, 16, 16, 48, 'EST')
     expect(entry.original_news_id).to eq 23
-    expect(entry.categories).to eq Category.where(name: 'Chilling Effects')
+    expect(entry.topics).to eq Topic.where(name: 'Chilling Effects')
   end
 end

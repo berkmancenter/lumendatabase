@@ -29,7 +29,7 @@ shared_examples 'a notice editor' do
   end
 
   it "cannot edit other site data" do
-    expect(subject.can? :edit, category).to be_false
+    expect(subject.can? :edit, topic).to be_false
     expect(subject.can? :edit, blog_entry).to be_false
     expect(subject.can? :edit, user).to be_false
     expect(subject.can? :edit, role).to be_false
@@ -100,7 +100,7 @@ describe Ability do
 
     it "can edit site data" do
       expect(subject.can? :edit, notice).to be_true
-      expect(subject.can? :edit, category).to be_true
+      expect(subject.can? :edit, topic).to be_true
       expect(subject.can? :edit, blog_entry).to be_true
     end
 
@@ -121,7 +121,7 @@ describe Ability do
 
     it "can do everything" do
       expect(subject.can? :manage, notice).to be_true
-      expect(subject.can? :manage, category).to be_true
+      expect(subject.can? :manage, topic).to be_true
       expect(subject.can? :manage, blog_entry).to be_true
       expect(subject.can? :manage, user).to be_true
       expect(subject.can? :manage, role).to be_true
@@ -131,7 +131,7 @@ describe Ability do
   private
 
   def notice;     build(:dmca) end
-  def category;   build(:category) end
+  def topic;   build(:topic) end
   def blog_entry; build(:blog_entry) end
   def user;       build(:user) end
   def role;       build(:role) end

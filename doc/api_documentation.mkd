@@ -28,7 +28,7 @@ below, which defines what attributes are remapped for each Notice Type.
 | `date_sent`                        | string             | Any parseable time value, e.g. "2013-05-21", "2013-05-21 10:01:01 -04:00"
 | `date_received`                    | string             | Any parseable time value, e.g. "2013-05-21", "2013-05-21 10:01:01 -04:00"
 | `source`                           | string             | How did you receive this notice - mail? online form?
-| `category_ids`                     | [int]              | An array of integers representing `category_ids` - See **Request a list of Categories** below.
+| `topic_ids`                        | [int]              | An array of integers representing `topic_ids` - See **Request a list of Topics** below.
 | `tag_list`                         | string             | Comma separated tags, spaces are OK. Automatically lowercased.
 | `regulation_list`                  | string             | Comma separated regulations / laws relevant to this notice, spaces are OK. Automatically lowercased. Only available for CourtOrder, and LawEnforcementRequest notice types.
 | `jurisidiction_list`               | string             | Comma separated list of jurisdictions, spaces are OK.
@@ -136,7 +136,7 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'http://f
     "date_sent": "2013-05-22",
     "date_received": "2013-05-23",
     "source": "Online form",
-    "category_ids": [19, 27],
+    "topic_ids": [19, 27],
     "tag_list": "movies, disney, youtube",
     "jurisidiction_list": "US, CA",
     "action_taken": "Partial",
@@ -322,7 +322,7 @@ articulating their type.
     "body":null,
     "date_sent":"2013-06-04T19:23:12Z",
     "date_received":"2013-06-05T20:31:44Z",
-    "categories":[
+    "topics":[
       "Anticircumvention (DMCA)",
       "Bookmarks",
       "Chilling Effects"
@@ -360,31 +360,31 @@ articulating their type.
 
 Return a 404 HTTP status header.
 
-## Request a list of Categories
+## Request a list of Topics
 
 **Method**: GET
 
-**Endpoint**: `http://flutie.law.harvard.edu:8000/categories.json`
+**Endpoint**: `http://flutie.law.harvard.edu:8000/topics.json`
 
 ```
-curl http://flutie.law.harvard.edu:8000/categories.json
+curl http://flutie.law.harvard.edu:8000/topics.json
 ```
 
 ### Successful Responses
 
-Return a JSON-encoded array of categories, including the following attributes:
+Return a JSON-encoded array of topics, including the following attributes:
 
 | Field      | Type       | Description
 | ---        | ---        | ---
-| `id`       | Integer    | The unique ID used for the `category_ids` array during notice creation.
-| `name`     | String     | The category name
-| `parent_id`| Integer    | The parent `category_id` of this category, or "null" if this is a root category.
+| `id`       | Integer    | The unique ID used for the `topic_ids` array during notice creation.
+| `name`     | String     | The topic name
+| `parent_id`| Integer    | The parent `topic_id` of this topic, or "null" if this is a root topic.
 
 #### Example Successful Response:
 
 ```
 {
-  "categories": [
+  "topics": [
     {
       "id": 1,
       "name": "Chilling Effects",
@@ -428,7 +428,7 @@ Terms are joined with an 'AND' by default.
 | ---                     | ---
 | `term`                  | The full-text query term
 | `title`                 | Search in the `title` field
-| `categories`            | Search within a notice's categories
+| `topics`                | Search within a notice's topics
 | `tags`                  | Search within a notice's tags
 | `jurisdictions`         | Search within a notice's jurisdictions
 | `sender_name`           | Search in the sender's name
@@ -437,7 +437,7 @@ Terms are joined with an 'AND' by default.
 | `action_taken`          | Search based on the action taken on a notice.
 | `sender_name_facet`     | Filter on `sender_name` facet
 | `recipient_name_facet`  | Filter on `recipient_name` facet
-| `category_facet`        | Filter on categories facet
+| `topic_facet`           | Filter on topics facet
 | `date_received_facet`   | The date range (in microseconds since the unix epoc) separated by ".."
 | `tag_list_facet`        | Filter on a tag
 | `country_code_facet`    | Filter on the recipient's country code
@@ -481,7 +481,7 @@ search results.
 | `term`                  | String    | The full-text search term
 | `sender_name_facet`     | String    | The `sender_name` value if this facet was submitted in this search.
 | `recipient_name_facet`  | String    | The `recipient_name` value if this facet was submitted in this search.
-| `category_facet`        | String    | The `category` value if this facet was submitted in this search.
+| `topic_facet`           | String    | The `topic` value if this facet was submitted in this search.
 | `date_received_facet`   | String    | The date range used (in microseconds since the unix epoc) separated by ".."
 | `tag_list_facet`        | String    | The `tag_list` value if this facet was submitted in this search.
 | `country_code_facet`    | String    | The `country_code` value if this facet was submitted in this search.
@@ -499,7 +499,7 @@ Currently we're using [terms](http://www.elasticsearch.org/guide/reference/api/s
 | ---                       | ---        | ---
 | `sender_name_facet`       | Terms      | The top 10 `sender_names` in this result set.
 | `recipient_name_facet`    | Terms      | The top 10 `recipient_names` in this result set.
-| `category_facet`          | Terms      | The top 10 `categories` in this result set.
+| `topic_facet`             | Terms      | The top 10 `topics` in this result set.
 | `tag_list_facet`          | Terms      | The top 10 `tags` in this result set.
 | `country_code_facet`      | Terms      | The top 10 `country_codes` in this result set.
 | `language_facet`          | Terms      | The top 10 `languages` in this result set.
@@ -544,7 +544,7 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'http://f
       "title": "Star Wars",
       "body": null,
       "date_received": null,
-      "categories": [
+      "topics": [
         "Trademark",
         "DMCA Notices",
         "John Doe Anonymity"

@@ -1,10 +1,10 @@
 module ApplicationHelper
-  def available_categories
-    Category.ordered
+  def available_topics
+    Topic.ordered
   end
 
-  def category_roots
-    Category.ordered.roots
+  def topic_roots
+    Topic.ordered.roots
   end
 
   def title(page_header, page_description = nil)

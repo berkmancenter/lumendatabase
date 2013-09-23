@@ -1,12 +1,12 @@
 class NoticeSerializer < ActiveModel::Serializer
   attributes :id, :type, :title, :body, :date_sent, :date_received,
-    :categories, :sender_name, :recipient_name, :works, :tags,
+    :topics, :sender_name, :recipient_name, :works, :tags,
     :jurisdictions, :action_taken
 
   # TODO - serialize additional entities
 
-  def categories
-    object.categories.map(&:name)
+  def topics
+    object.topics.map(&:name)
   end
 
   def works

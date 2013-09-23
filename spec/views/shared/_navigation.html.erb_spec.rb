@@ -13,27 +13,27 @@ describe 'shared/_navigation.html.erb' do
     expect(page).to contain_link(blog_entries_path)
   end
 
-  it 'has links to all categories' do
-    categories = create_list(:category, 3)
+  it 'has links to all topics' do
+    topics = create_list(:topic, 3)
 
     render
 
-    categories.each do |category|
-      expect(page).to contain_link(category_path(category))
+    topics.each do |topic|
+      expect(page).to contain_link(topic_path(topic))
     end
   end
 
-  it 'shows categories in alphabetical order' do
-    first_category = create(:category, name: 'AA category')
-    third_category = create(:category, name: 'CC category')
-    second_category = create(:category, name: 'BB category')
+  it 'shows topics in alphabetical order' do
+    first_topic = create(:topic, name: 'AA topic')
+    third_topic = create(:topic, name: 'CC topic')
+    second_topic = create(:topic, name: 'BB topic')
 
     render
 
-    within('#dropdown-categories ol') do
-      expect(page).to have_css('li:nth-child(1)', text: first_category.name)
-      expect(page).to have_css('li:nth-child(2)', text: second_category.name)
-      expect(page).to have_css('li:nth-child(3)', text: third_category.name)
+    within('#dropdown-topics ol') do
+      expect(page).to have_css('li:nth-child(1)', text: first_topic.name)
+      expect(page).to have_css('li:nth-child(2)', text: second_topic.name)
+      expect(page).to have_css('li:nth-child(3)', text: third_topic.name)
     end
   end
 end

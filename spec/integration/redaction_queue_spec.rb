@@ -71,17 +71,17 @@ feature "Redaction queue" do
     end
   end
 
-  scenario "A user refills their queue by category and submitter" do
+  scenario "A user refills their queue by topic and submitter" do
     user = create(:user, :admin)
-    category_one = create(:category, name: "Cat 1")
-    category_two = create(:category, name: "Cat 2")
+    topic_one = create(:topic, name: "Topic 1")
+    topic_two = create(:topic, name: "Topic 2")
     submitter = create(:entity, name: "Jim Smith")
     create(:dmca) # not to be found
     expected_notices = [
       create(
         :dmca,
         review_required: true,
-        categories: [category_one],
+        topics: [topic_one],
         entity_notice_roles: [
           create(:entity_notice_role, name: 'submitter', entity: submitter)
         ]
@@ -89,7 +89,7 @@ feature "Redaction queue" do
       create(
         :dmca,
         review_required: true,
-        categories: [category_two],
+        topics: [topic_two],
         entity_notice_roles: [
           create(:entity_notice_role, name: 'submitter', entity: submitter)
         ]
@@ -99,8 +99,8 @@ feature "Redaction queue" do
     queue = RedactionQueueOnPage.new
     queue.visit_as(user)
 
-    queue.select_category_profile(category_one)
-    queue.select_category_profile(category_two)
+    queue.select_topic_profile(topic_one)
+    queue.select_topic_profile(topic_two)
     queue.select_submitter_profile(submitter)
     queue.fill
 

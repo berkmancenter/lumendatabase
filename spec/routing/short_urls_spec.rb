@@ -22,12 +22,12 @@ describe "Submitters" do
       )
     end
 
-    it "routes /#{submitter}/Category to a search on that recipient/category" do
+    it "routes /#{submitter}/Topic to a search on that recipient/topic" do
       expect(get: "/#{submitter}/Defamation").to route_to(
         controller: "notices/search",
         action: "index",
         recipient_name: submitter,
-        categories: "Defamation"
+        topics: "Defamation"
       )
     end
   end

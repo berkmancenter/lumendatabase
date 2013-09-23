@@ -33,13 +33,13 @@ feature 'Page titles' do
   end
 
   scenario "Topics", search: true do
-    category = create(:category)
+    topic = create(:topic)
 
     visit '/'
     click_on 'Topics'
-    click_on category.name
+    click_on topic.name
 
-    expect(page).to have_exact_title("#{category.name} :: Topics :: Chilling Effects")
+    expect(page).to have_exact_title("#{topic.name} :: Topics :: Chilling Effects")
     expect(page).to have_heading('Topics')
   end
 

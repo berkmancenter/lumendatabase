@@ -15,8 +15,8 @@ describe Dmca do
   it { should have_and_belong_to_many :works }
   it { should have_many(:infringing_urls).through(:works) }
   it { should have_many(:entities).through(:entity_notice_roles)  }
-  it { should have_many(:categorizations).dependent(:destroy) }
-  it { should have_many(:categories).through(:categorizations) }
+  it { should have_many(:topic_assignments).dependent(:destroy) }
+  it { should have_many(:topics).through(:topic_assignments) }
   it { should have_and_belong_to_many :relevant_questions }
 
   it_behaves_like "an object with a recent scope"
@@ -60,18 +60,18 @@ describe Dmca do
   end
 
   context "#all_relevant_questions" do
-    it "returns questions related to it and its categories" do
-      category1_questions = [create(:relevant_question, question: "Q1")]
-      category2_questions = [
+    it "returns questions related to it and its topics" do
+      topic1_questions = [create(:relevant_question, question: "Q1")]
+      topic2_questions = [
         create(:relevant_question, question: "Q2"),
         create(:relevant_question, question: "Q3")
       ]
       notice_questions = [create(:relevant_question, question: "Q4")]
       notice = create(
         :dmca,
-        categories: [
-          create(:category, relevant_questions: category1_questions),
-          create(:category, relevant_questions: category2_questions)
+        topics: [
+          create(:topic, relevant_questions: topic1_questions),
+          create(:topic, relevant_questions: topic2_questions)
         ],
         relevant_questions: notice_questions
       )
@@ -83,13 +83,13 @@ describe Dmca do
 
     it "does not duplicate questions" do
       shared_question = create(:relevant_question, question: "Q1")
-      category_questions = [
+      topic_questions = [
         shared_question,
         create(:relevant_question, question: "Q2")
       ]
       notice = create(
         :dmca,
-        categories: [create(:category, relevant_questions: category_questions)],
+        topics: [create(:topic, relevant_questions: topic_questions)],
         relevant_questions: [shared_question]
       )
 
@@ -113,12 +113,12 @@ describe Dmca do
   end
 
   context "#related_blog_entries" do
-    it "returns blog_entries that share categories with itself" do
-      notice = create(:dmca, :with_categories)
+    it "returns blog_entries that share topics with itself" do
+      notice = create(:dmca, :with_topics)
       expected_blog_entries = [
-        create(:blog_entry, :published, categories: [notice.categories.sample]),
-        create(:blog_entry, :published, categories: [notice.categories.sample]),
-        create(:blog_entry, :published, categories: [notice.categories.sample])
+        create(:blog_entry, :published, topics: [notice.topics.sample]),
+        create(:blog_entry, :published, topics: [notice.topics.sample]),
+        create(:blog_entry, :published, topics: [notice.topics.sample])
       ]
 
       related_blog_entries = notice.related_blog_entries
@@ -126,9 +126,9 @@ describe Dmca do
       expect(related_blog_entries).to match_array(expected_blog_entries)
     end
 
-    it "does not return blog entries with different categories" do
-      notice = create(:dmca, :with_categories)
-      create(:blog_entry, :published, categories: [create(:category)])
+    it "does not return blog entries with different topics" do
+      notice = create(:dmca, :with_topics)
+      create(:blog_entry, :published, topics: [create(:topic)])
 
       related_blog_entries = notice.related_blog_entries
 
@@ -136,9 +136,9 @@ describe Dmca do
     end
 
     it "does not duplicate blog entries" do
-      notice = create(:dmca, :with_categories)
+      notice = create(:dmca, :with_topics)
       blog_entry = create(
-        :blog_entry, :published, categories: notice.categories
+        :blog_entry, :published, topics: notice.topics
       )
 
       related_blog_entries = notice.related_blog_entries
@@ -147,10 +147,10 @@ describe Dmca do
     end
 
     it "returns a limited set of related blog entries" do
-      notice = create(:dmca, :with_categories)
-      create(:blog_entry, :published, categories: [notice.categories.sample])
-      create(:blog_entry, :published, categories: [notice.categories.sample])
-      create(:blog_entry, :published, categories: [notice.categories.sample])
+      notice = create(:dmca, :with_topics)
+      create(:blog_entry, :published, topics: [notice.topics.sample])
+      create(:blog_entry, :published, topics: [notice.topics.sample])
+      create(:blog_entry, :published, topics: [notice.topics.sample])
 
       blog_entries = notice.related_blog_entries(2)
 
@@ -158,20 +158,20 @@ describe Dmca do
     end
 
     it "returns only published blog entries" do
-      notice = create(:dmca, :with_categories)
+      notice = create(:dmca, :with_topics)
       expected_blog_entries = [
-        create(:blog_entry, :published, categories: [notice.categories.first]),
-        create(:blog_entry, :published, categories: [notice.categories.first]),
+        create(:blog_entry, :published, topics: [notice.topics.first]),
+        create(:blog_entry, :published, topics: [notice.topics.first]),
       ]
-      create(:blog_entry, categories: [notice.categories.first])
+      create(:blog_entry, topics: [notice.topics.first])
       create(
         :blog_entry,
-        categories: [notice.categories.first],
+        topics: [notice.topics.first],
         published_at: 1.day.from_now
       )
       create(
         :blog_entry,
-        categories: [notice.categories.first],
+        topics: [notice.topics.first],
         published_at: 1.hour.from_now
       )
 
@@ -194,13 +194,13 @@ describe Dmca do
       notice.touch
     end
 
-    it "is touched on category changes" do
+    it "is touched on topic changes" do
       notice = create(:dmca)
       notice.tire.should_receive(:update_index).exactly(3).times
 
-      category = notice.categories.create!(name: "name 1")
-      category.update_attributes!(name: "name 2")
-      category.destroy
+      topic = notice.topics.create!(name: "name 1")
+      topic.update_attributes!(name: "name 2")
+      topic.destroy
     end
 
     it "is touched on entity changes" do
@@ -328,13 +328,13 @@ describe Dmca do
     end
   end
 
-  context ".in_categories" do
-    it "returns notices in the given categories" do
+  context ".in_topics" do
+    it "returns notices in the given topics" do
       create(:dmca) # not to be found
-      expected_notices = create_list(:dmca, 3, :with_categories)
-      categories = expected_notices.map(&:categories).flatten
+      expected_notices = create_list(:dmca, 3, :with_topics)
+      topics = expected_notices.map(&:topics).flatten
 
-      notices = Dmca.in_categories(categories)
+      notices = Dmca.in_topics(topics)
 
       expect(notices).to match_array(expected_notices)
     end

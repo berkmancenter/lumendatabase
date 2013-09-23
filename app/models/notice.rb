@@ -11,14 +11,14 @@ class Notice < ActiveRecord::Base
   extend RecentScope
 
   HIGHLIGHTS = %i(
-    title tag_list categories.name sender_name recipient_name
+    title tag_list topics.name sender_name recipient_name
     works.description works.infringing_urls.url works.copyrighted_urls.url
   )
 
   SEARCHABLE_FIELDS = [
     TermSearch.new(:term, :_all, 'All Fields'),
     TermSearch.new(:title, :title, 'Title'),
-    TermSearch.new(:categories, 'categories.name', 'Categories'),
+    TermSearch.new(:topics, 'topics.name', 'Topics'),
     TermSearch.new(:tags, :tag_list, 'Tags'),
     TermSearch.new(:jurisdictions, :jurisdiction_list, 'Jurisdictions'),
     TermSearch.new(:sender_name, :sender_name, 'Sender Name'),
@@ -28,7 +28,7 @@ class Notice < ActiveRecord::Base
   ]
 
   FILTERABLE_FIELDS = [
-    TermFilter.new(:category_facet, 'Category'),
+    TermFilter.new(:topic_facet, 'Topic'),
     TermFilter.new(:sender_name_facet, 'Sender'),
     TermFilter.new(:recipient_name_facet, 'Recipient'),
     TermFilter.new(:tag_list_facet, 'Tags'),
@@ -67,12 +67,12 @@ class Notice < ActiveRecord::Base
 
   belongs_to :reviewer, class_name: 'User'
 
-  has_many :categorizations, dependent: :destroy
-  has_many :categories, through: :categorizations
-  has_many :category_relevant_questions,
-    through: :categories, source: :relevant_questions
+  has_many :topic_assignments, dependent: :destroy
+  has_many :topics, through: :topic_assignments
+  has_many :topic_relevant_questions,
+    through: :topics, source: :relevant_questions
   has_many :related_blog_entries,
-    through: :categories, source: :blog_entries, uniq: true
+    through: :topics, source: :blog_entries, uniq: true
   has_many :entity_notice_roles, dependent: :destroy, inverse_of: :notice
   has_many :entities, through: :entity_notice_roles
   has_many :file_uploads
@@ -123,9 +123,9 @@ class Notice < ActiveRecord::Base
     where(review_required: true, reviewer_id: user).order(:created_at)
   end
 
-  def self.in_categories(categories)
-    joins(categorizations: :category).
-      where('categories.id' => categories).uniq
+  def self.in_topics(topics)
+    joins(topic_assignments: :topic).
+      where('topics.id' => topics).uniq
   end
 
   def self.submitted_by(submitters)
@@ -154,7 +154,7 @@ class Notice < ActiveRecord::Base
   end
 
   def all_relevant_questions(limit = 15)
-    (relevant_questions | category_relevant_questions).sample(limit)
+    (relevant_questions | topic_relevant_questions).sample(limit)
   end
 
   def related_blog_entries(limit = 5)

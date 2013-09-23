@@ -1,7 +1,7 @@
-def categories
+def topics
   lim = (3..5).to_a.sample
 
-  Category.order('random()').limit(lim)
+  Topic.order('random()').limit(lim)
 end
 
 BlogEntry.create!(
@@ -9,7 +9,7 @@ BlogEntry.create!(
   title: 'Possibly The First Serious 512(f) Ruling in D. Mass',
   abstract: 'A Massachusetts court is hearing a case triggered by a DMCA takedown notice in which the sender admitted that they new the recipient had a fair use claim.',
   published_at: Time.local(2013, 5, 13),
-  categories: categories,
+  topics: topics,
   content: %{
 Chilling Effects fans and those who follow takedown notice stories will
 recall the relatively recent brouhaha in which a NASCAR fan filmed a
@@ -131,7 +131,7 @@ unless ENV['SKIP_FAKE_DATA']
       title: "A blog entry, numbered ##{i}",
       abstract: "An abstract of blog entry ##{i}",
       published_at: Time.now,
-      categories: categories,
+      topics: topics,
       content: %{
 A blog entry ##{i}
 

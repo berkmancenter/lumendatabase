@@ -129,7 +129,7 @@ feature "User authorization" do
 
   scenario "Redactors and Publishers cannot edit site data" do
     site_data = [
-      create(:category),
+      create(:topic),
       create(:relevant_question),
       create(:blog_entry),
       create(:user),
@@ -167,7 +167,7 @@ feature "User authorization" do
   end
 
   scenario "Admins and Super admins can edit site data" do
-    category = create(:category)
+    topic = create(:topic)
     users = [
       AdminOnPage.new(create(:user, :admin)),
       AdminOnPage.new(create(:user, :super_admin))
@@ -175,9 +175,9 @@ feature "User authorization" do
 
     users.each_with_index do |user,idx|
       user.sign_in
-      user.edit(category, Name: "New name #{idx}")
+      user.edit(topic, Name: "New name #{idx}")
 
-      expect(category.reload.name).to eq "New name #{idx}"
+      expect(topic.reload.name).to eq "New name #{idx}"
     end
   end
 

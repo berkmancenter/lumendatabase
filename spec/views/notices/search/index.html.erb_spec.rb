@@ -25,7 +25,7 @@ describe 'notices/search/index.html.erb' do
       role_names: ['recipient','sender'],
       title: 'A notice',
       date_received: Time.now,
-      categories: build_list(:category, 2)
+      topics: build_list(:topic, 2)
     )
     mock_results([notice])
 
@@ -40,9 +40,9 @@ describe 'notices/search/index.html.erb' do
       expect(page).to have_css(
         '.date-received', text: notice.date_received.to_s(:simple)
       )
-      within('.category') do
-        notice.categories.each do |category|
-          expect(page).to have_content(category.name)
+      within('.topic') do
+        notice.topics.each do |topic|
+          expect(page).to have_content(topic.name)
         end
       end
       expect(page).to contain_link(notice_path(notice))
@@ -99,7 +99,7 @@ describe 'notices/search/index.html.erb' do
           { "term" => "Twooter", "count" => 10 }
         ]
       },
-      "category_facet" => { "terms" =>
+      "topic_facet" => { "terms" =>
         [
           { "term" => "DMCA", "count" => 10 },
           { "term" => "DMCA Giveup", "count" => 10 }

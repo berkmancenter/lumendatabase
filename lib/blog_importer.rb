@@ -18,7 +18,7 @@ class BlogImporter
 
   def map_attributes(row)
     row['original_news_id'] = row.delete('NewsID')
-    row['categories'] = Category.where(name: row.delete('CategoryName'))
+    row['topics'] = Topic.where(name: row.delete('CategoryName'))
     if row['author'].blank?
       row['author'] = 'Unknown'
     end

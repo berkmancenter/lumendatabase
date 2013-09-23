@@ -16,10 +16,10 @@
       <%= form.input :source, label: "Sent via", placeholder: 'Online form, Email, Postal mail, etc.' %>
       <%= form.input :tag_list, placeholder: 'movie, youtube, video, etc.' %>
       <%=
-        form.input :category_ids,
-          label: "Categories",
+        form.input :topic_ids,
+          label: "Topics",
           prompt: nil,
-          collection: available_categories,
+          collection: available_topics,
           input_html: { multiple: true }
         %>
       <%= form.input :language, collection: Language.all, label_method: :label, value_method: :code %>

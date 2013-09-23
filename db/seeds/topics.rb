@@ -1,6 +1,6 @@
-Category.transaction do
+Topic.transaction do
 
-  Category.create!(
+  Topic.create!(
     name: "Chilling Effects",
     description: ".\r\n
 
@@ -34,7 +34,7 @@ Getting Started:
     original_category_id: 1
   )
 
-  Category.create!(
+  Topic.create!(
     name: "Domain Names and Trademarks",
     description: ".\r\n
 
@@ -58,7 +58,7 @@ Does this sound familiar?\r\n
     original_category_id: 2
   )
 
-  Category.create!(
+  Topic.create!(
     name: "Fan Fiction",
     description: ".\r\n
 
@@ -85,7 +85,7 @@ TRADEMARK
     original_category_id: 3
   )
 
-  Category.create!(
+  Topic.create!(
     name: "References",
     description: "Reference
 
@@ -93,7 +93,7 @@ TRADEMARK
     original_category_id: 4
   )
 
-  Category.create!(
+  Topic.create!(
     name: "Copyright",
     description: "The \"Copyright\" topic area includes discussions of traditional copyright, fair use, reverse engineering, and the new additions to copyright of the Digital Millennium Copyright Act (DMCA). Under DMCA, we discuss the ISP safe harbor and its conditions (notice and takedown), and the anticircumvention provisions of section 1201.\r\n\r\nRelated sub-topics:
 
@@ -112,7 +112,7 @@ TRADEMARK
     original_category_id: 5
   )
 
-  Category.create!(
+  Topic.create!(
     name: "Trademark",
     description: "Trademarks -- the words and logos that identify sources of goods and services -- are ubiquitous in the modern age. As consumers, we use brand names to distinguish among the products we purchase and use. As producers, we search for unique marks to identify the goods and services we sell or give away. As members of the public, we incorporate trademarks in our culture and speech.\r\n\r\nTrademark infringement predates the Internet, of course, but trademark holders often argue that the Internet has increased their challenges in defending their marks; that the global Internet erodes the geographic boundaries that once allowed multiple users of the same mark to co-exist; that the Internet presents more frequent dilution of trademarks. Or, viewed from a different perspective, the Internet allows more people to speak, and many of those speakers want to use the common language of which famous trademarks have become a part. \r\n\r\nTrademarks can be infringed on the Net in many ways.
 
@@ -130,7 +130,7 @@ TRADEMARK
     original_category_id: 6
   )
 
-  Category.create!(
+  Topic.create!(
     name: "Bookmarks",
     description: "This is a non-public topic; a place to stick odds and ends and bookmarks. Send mail to CatID=7 for doc-to-web conversion, too.\r\n\r\n
 
@@ -138,7 +138,7 @@ TRADEMARK
     original_category_id: 7
   )
 
-  Category.create!(
+  Topic.create!(
     name: "Defamation",
     description: "The law of defamation balances two important, and sometimes competing, rights: the right to engage in free speech and the right to be free from untrue attacks on reputation. In practice, the filing or even the threat to file a lawsuit for defamation has sometimes been used as a tool to shut down legitimate comments on the Internet. This topic will explore the rules of and defenses to the tort of defamation. This topic will also examine some of the special issues that arise when it is Internet expression that is challenged by a defamation lawsuit.
 
@@ -146,13 +146,13 @@ TRADEMARK
     original_category_id: 8
   )
 
-  Category.create!(
+  Topic.create!(
     name: "UDRP",
     description: "UNIFORM DOMAIN NAME DISPUTE RESOLUTION POLICY\r\n\r\nWhat is the UDRP?\r\n\r\nThe Uniform Domain Name Dispute Resolution Policy was approved by the Internet Corporation for Assigned Names and Numbers [(ICANN) in 1999. It is an online procedure for resolving complaints made by trademark owners about domain names. It has the power to transfer the domain name from the current domain holder to a new owner.\r\n \r\nThe UDRP [Policy explains what trademark owners have to prove in order to take a domain name away from the holder, as well as what domain name holders can use to show that they should be allowed to keep the domain registration. \r\n \r\nThe UDRP [Rules outline the actual process for filing a complaint (if you are a trademark owner) and for responding to a complaint (if you are the domain name holder). The Policy and the Rules also explain some of the basics of the proceedings, such as how to chose a Provider, how Panels make their decisions, how the parties are notified of the outcome, what language will be used in the proceeding, the availability and effect of court proceedings, and the types of remedies available. \r\n \r\nEach of the Providers also has its own Supplemental Rules to cover all the bases. The UDRP currently applies to .biz, .com, .info, .org, .net, and a few country code top level domains (ccTLDs) including .ac, .mx, and .tv. Other top level domains have different dispute resolution procedures and one must check each domain registry to find out what they are.\r\n\r\nAmy Bender\r\nHarvard Law School \'03",
     original_category_id: 9
   )
 
-  Category.create!(
+  Topic.create!(
     name: "ACPA",
     description: "
 ANTI-CYBERSQUATTING CONSUMER PROTECTION ACT
@@ -162,7 +162,7 @@ ANTI-CYBERSQUATTING CONSUMER PROTECTION ACT
     original_category_id: 10
   )
 
-  Category.create!(
+  Topic.create!(
     name: "Piracy or Copyright Infringement",
     description: "\"Piracy\" is slang for copyright infringement, the unlawful copying of the work of another, usually for the purpose of distribution and profit. In contrast to swashbuckling pirates of yore, modern day \"pirates\" make copies, sometimes perfect digital copies, of the work of another. Copyright holders are concerned with infringement because they believe that if someone can buy a copy of their work for less or obtain it for free or through a trade, he or she will, and profits will be lost.\r\n\r\nIf you are accused of piracy, then someone is claiming that you have unlawfully copied part or all of their work. Computer software, video games, music and DVDs are common objects of copyright infringement actions. If someone can download songs, games or other material that may be copyrighted from your website then you might be accused of piracy. If your site enables users to trade copyrighted material, or if you provide tools that allow others to crack the codes protecting copyrighted material then you might be accused of assisting in piracy, more accurately called \"contributory copyright infringement.\" Regardless of whether the copied materials are offered for sale, distributed for free, or given to relatives, the copyright holder may claim infringement. \r\n\r\nMany web sites that have infringing material add a disclaimer stating that the site does not support copyright infringement. While such disclaimers will not necessarily shield you from liability, following the  may be the best way to protect yourself. \r\n
 
@@ -170,7 +170,7 @@ ANTI-CYBERSQUATTING CONSUMER PROTECTION ACT
     original_category_id: 11
   )
 
-  Category.create!(
+  Topic.create!(
     name: "Anticircumvention (DMCA)",
     description: "In order to control the distribution and use of their works, copyright owners are increasingly embedding access (keep you from accessing the work) and copy (control what you do with the work) protection schemes in their digital works. Under [section 1201 of the Digital Millennium Copyright Act (DMCA), the circumvention of these access mechanisms is illegal, with only a few narrow statutory exemptions. The DMCA also prohibits the distribution of programs that can be used to circumvent both copy control and access control technologies.
 
@@ -189,7 +189,7 @@ ANTI-CYBERSQUATTING CONSUMER PROTECTION ACT
     original_category_id: 12
   )
 
-  Category.create!(
+  Topic.create!(
     name: "John Doe Anonymity",
     description: "Meet John Doe.\r\n\r\nThe Internet has given voice to millions of people who can now share their ideas and thoughts under cover of a pseudonym or screen name. This protection has been critical to opening up discussions among shareholders, political dissidents, victims of domestic abuse, \"whistleblowers,\" and disgruntled employees. But this same anonymity can also shield the stealers of trade secrets and copyrighted material and prevent the unmasking of libel. \r\n
 
@@ -201,7 +201,7 @@ ANTI-CYBERSQUATTING CONSUMER PROTECTION ACT
     original_category_id: 13
   )
 
-  Category.create!(
+  Topic.create!(
     name: "DMCA Safe Harbor",
     description: ".\r\n
 
@@ -219,7 +219,7 @@ In the online world, the potentially infringing activities of individuals are st
     original_category_id: 14
   )
 
-  Category.create!(
+  Topic.create!(
     name: "Reverse Engineering",
     description: "Reverse engineering is the scientific method of taking something apart in order to figure out how it works. Reverse engineering has been used by innovators to determine a product\'s structure in order to develop competing or interoperable products. Reverse engineering is also an invaluable teaching tool used by researchers, academics and students in many disciplines, who reverse engineer technology to discover, and learn from, its structure and design.\r\n\r\nAlthough some reverse engineering techniques require making a copy of the software being investigated, an act that would otherwise be considered a copyright violation, copyright law has allowed these reverse engineering copies as a form of \"fair use.\" Increasingly, however, contract clauses forbidding reverse engineering are included in technology licenses. Sometimes sellers include these clauses in \"shrink-wrap,\" \"click-wrap,\" or \"browse-wrap\" licenses without enabling the user to negotiate the terms of such a license. In many instances, users are not even aware of the terms to which they are binding themselves. The proposed amendment to contract law called the Uniform Computer Information Transactions Act (UCITA), adopted by two state legislatures, would make these kinds of contracts enforceable, and therefore more difficult to challenge their anti- reverse engineering provisions.\r\n\r\nWhen creative expression is protected by a technological protection measure, the situation becomes even more complex. The [Digital Millennium Copyright Act (DMCA) generally prohibits circumvention of technological protection measures. On its face, since circumvention is generally required for reverse engineering, this prohibition would prevent reverse engineering of those measures that control access to a copyrighted work. The DMCA contains a limited exception to the ban on circumvention, which permits reverse engineering of the technology by specific classes of people for limited purposes [[17 USC ?1201(f)]. The exception allows reverse engineering of computer programs if the reverse engineer lawfully obtains the program, seeks permission from the copyright owner, only uses the results of their efforts to create an interoperable computer program and does not publish the results. The resulting program must only interoperate with the reverse engineered software, however, and cannot interoperate with the technologically protected content (movie, book, video game, etc.) itself. Under the DMCA, engineers may also develop programs that facilitate reverse engineering for their own use or the use of others if they meet the above test. Reverse engineers must carefully consider their planned work and whether it fits into the exception, because the exception is far too narrow to be useful for many reverse engineering needs.
 
@@ -227,7 +227,7 @@ In the online world, the potentially infringing activities of individuals are st
     original_category_id: 15
   )
 
-  Category.create!(
+  Topic.create!(
     name: "Derivative Works",
     description: "If you are an author or an artist and you want to use all or part of someone else\'s creation in your work, you may run into problems with claims that your art is a derivative work. \r\n\r\nMany artists thrive on using material from popular culture to create art with a message. From distorting Barbie\'s appearance in order to counter the idea that white, blond, and thin are female ideals, to reworking the classic Gone With the Wind from the perspective of a slave and half-sister of Scarlet O\'Hara, these artists recognize that our culture benefits from a rich public domain. One commentator said it best: \"Cultural works and inventions don\'t spring from an utter vacuum. They are the product of other people\'s ideas and works. Practically every melodic theme in music comes from older works, for example.\" \r\n\r\nIn order to preserve the incentive for artists and authors to produce works, American copyright law grants creators a limited monopoly right to create works based on or derived from the original creation (derivative works). The law strikes an uneasy balance between an author\'s or artist\'s right to profit from their works and other artists\' and authors\' right to build upon previous works to make new works. \r\n\r\nFor example, the trial court halted the publication of the novel The Wind Done Gone because it used elements and characters from Gone With the Wind. But the appellate court let the novel be published, holding that the use of those characters and elements was protected under the law. In other cases, artists have produced paintings or photographs and another artist sells copies of the images pasted to floor tiles or tee-shirts. Whether the first artist has a viable copyrightviolation cause of action against the second artist for violating her right to produce derivative works turns on whether the second artist\'s appropriation of the first artist\'s material constitutes [\">fair use](\"<!--GET). \r\n\r\nWhat\'s a \"derivative work\"?\r\n \r\nCongress revised the federal copyright statute in 1976 to provide copyright owners with statutory protection for derivative works. A derivative work can take the form of \"any . . . work [that] may be recast, transformed, or adapted. A work consisting of editorial revisions, annotations, elaborations, or other modifications which, as a whole, represents an original work of authorship, is a \'derivative work.\'\" (emphasis added) [17 U.S.C. ? 101 (1994). \r\n\r\nIn short, a derivative work is a whole work based on one or more other whole works. \r\n \r\nDerivative works include, but are not limited to, translations, musical arrangements, fictionalizations, motion-picture versions, etc.\r\n\r\nFor example, if a Danielle Steele book gets turned into a movie, that movie is a derivative work. Danielle Steele can stop someone from making the movie without her permission. A more complicated question arises when the second creator uses only part of the original work or substantially transforms it in some way. There are many cases involving art made with Barbie dolls that raise this more difficult legal issue. \r\n\r\nArt which uses found objects, cultural references, preexisting stories may be protected under the fair use doctrine.\r\n\r\nTo decide whether a use is \"fair use\" or not, courts consider:\r\n\r\n 1. the purpose and character of the use, including whether such use is of a commercial nature or is for nonprofit education purposes;\r\n 2. the nature of the copyrighted work;\r\n 3. the amount and substantiality of the portion used in relation to the copyrighted work as a whole; and,\r\n 4. the effect of the use upon the potential market for or value of the copyrighted work. [17 U.S.C. 107(1-4)\r\n\r\nAlso, your work may be using an element from another work that is not copyrightable, like a story line or a stock character.\r\n\r\nIf you received a cease and desist letter claiming your art is an unauthorized derivative work, this information should help you understand the law to which the letter refers. Unfortunately, even the law does not always draw an obvious line between works that are derivative and works that are not. \r\n
 
@@ -235,7 +235,7 @@ In the online world, the potentially infringing activities of individuals are st
     original_category_id: 16
   )
 
-  Category.create!(
+  Topic.create!(
     name: "Protest, Parody and Criticism Sites",
     description: "Have you recently received a letter that sounds something like this?\r\n
 
@@ -243,7 +243,7 @@ Re: Infringement of XXX, Inc.\'s Intellectual Property Rights\r\n This firm repr
     original_category_id: 17
   )
 
-  Category.create!(
+  Topic.create!(
     name: "Linking",
     description: ".\r\nThe World Wide Web works through [hyperlinks, tags that allow web site authors to connect their texts with others and enable web browsers to move quickly from one page to another document to which it refers. These links are what set hypertext apart from static offline texts, and core to Web-founder [Tim Berners-Lee\'s original design.
 
@@ -255,7 +255,7 @@ Re: Infringement of XXX, Inc.\'s Intellectual Property Rights\r\n This firm repr
     original_category_id: 18
   )
 
-  Category.create!(
+  Topic.create!(
     name: "Documenting Your Domain Defense",
     description: "All lawyers know that just because you are right does not mean that you will win in court, or in any other forum that makes legal decisions Cases are decided not by an abstract notion of justice, but by the evidence that is presented by the parties to the decision making body. Although a mandatory administrative proceeding under the UDRP is a quick alternative to the traditional \"legal\" process, your case will still be decided based upon the evidence presented to the UDRP Panel. \r\n\r\n But, gathering evidence is sometimes not easy. It is very often the most important and time consuming task for lawyers in any litigation, and your ability to document your case may prove to be crucial for you in your current UDRP administrative proceeding. This section will list the various defenses that may be available to you, suggest the kind of evidence you will need to support each defense, show you where to find that evidence, and describe how to document it. This section will, also, include practical considerations related to the topic.\r\n
 
@@ -263,7 +263,7 @@ Re: Infringement of XXX, Inc.\'s Intellectual Property Rights\r\n This firm repr
     original_category_id: 19
   )
 
-  Category.create!(
+  Topic.create!(
     name: "Patent",
     description: "Patent law in the United States extends to virtually \"anything under the sun that is made by man.\" Patents create a form of property right in new, unobvious, and useful inventions, including machines, devices, chemical compositions, and manufacturing processes. Software can also be protected by patent law. Indeed, the 1990s saw an explosion in the number of software patents issued by the United States Patent and Trademark Office. \r\n\r\nIn this section, you can find information about what patents are, what rights they confer on the patent owner, the requirements for obtaining a patent, the activities that may constitute patent infringement, and possible defenses to a patent infringement claim. This section also contains specific information about patents on computer technologies and so-called \"business method\" patents. Note that computer software may be protected by [\">copyright](\"<!--GET) as well as patent law.\r\n\r\n
 
@@ -273,7 +273,7 @@ Re: Infringement of XXX, Inc.\'s Intellectual Property Rights\r\n This firm repr
     original_category_id: 20
   )
 
-  Category.create!(
+  Topic.create!(
     name: "Responses",
     description: "This \"topic\" holds letters sent in response to cease-and-desist notices, [\">DMCA](\"<!--GET) counter-notifications, and other correspondence that is not cease-and-desists.\r\n\r\n
 
@@ -281,7 +281,7 @@ Re: Infringement of XXX, Inc.\'s Intellectual Property Rights\r\n This firm repr
     original_category_id: 21
   )
 
-  Category.create!(
+  Topic.create!(
     name: "Copyright and Fair Use",
     description: "When a copyright holder sues a user of the work for infringment, the user may argue in defense that the use was not infringement but \"fair use.\" Under the fair use doctrine, it is not an infringement to use the copyrighted works of another in some circumstances, such as for commentary, criticism, news reporting, or educational use. The defense generally depends on a case-by-case judgment of the facts. \r\n\r\nFair use is codified at Section 107 of the Copyright Act, which gives a non-exclusive set of four factors courts will consider in deciding whether a use is fair or not. These factors are
 
@@ -294,13 +294,13 @@ Re: Infringement of XXX, Inc.\'s Intellectual Property Rights\r\n This firm repr
     original_category_id: 22
   )
 
-  Category.create!(
+  Topic.create!(
     name: "Trade Secret",
     description: "Are you wondering what a trade secret is? Do you have an idea or information that you believe is valuable to your business and would you like to ensure that nobody knows it? Have you received a letter stating that you have \"misappropriated a trade secret\"?  If the answer is \"yes\" to any of these questions, then keep reading for more information about trade secrets!   \r\n\r\nWhat is a trade secret?  A legal trade secret is information (i.e., a formula, pattern, physical device, or process) that has two characteristics: (1) the information must be a \"secret\" (i.e., not generally known or readily ascertainable) that provides your business with a competitive advantage; and (2) the creator of the information must take steps to keep the information secret or confidential.     \r\n\r\nHow do you know if you have a trade secret or violated trade secret laws?  Please visit our <!--GET FAQLink 23--> and the links below for more information.  \r\n\r\n<ul><ul><ul>\r\n<li><!--GET LINK Resource 86--></li>\r\n<li><!--GET LINK Resource 88--></li>\r\n</ul></ul></ul>\r\n\r\n\r\n\r\n<i><font size=2> The following sources provided much of the information you see here.  For more detailed information, please refer to the following:</i> \r\n<li><font size=2>Milgram, Roger M., Milgrim on Trade Secrets, Matthew Bender & Company  (1999).</li><li><font size=2><a href=\"http://www.nolo.com/\">Nolo Press</a></li>",
     original_category_id: 23
   )
 
-  Category.create!(
+  Topic.create!(
     name: "E-Commerce Patents",
     description: "In 1998, The Federal Circuit Court of Appeals recognized a right to patent business methods, provided they produce a useful, concrete and tangible result. State Street Bank & Trust Co. v. Signature Financial Group, 149 F.3d 1368 (Fed. Cir. 1998). Shortly after the State Street Bank decision, the U.S. Patent Office began granting e-commerce patents, which protect methods of buying or selling something over the Internet. For an excellent discussion of e-commerce patents, see [http://www.bannerwitcoff.com/articles/ecommerce.pdf.
 
@@ -411,7 +411,7 @@ Sources:
     original_category_id: 24
   )
 
-  Category.create!(
+  Topic.create!(
     name: "DMCA Subpoenas",
     description: "Report uses and abuses of DMCA section 512(h) subpoenas: [Follow this link to report](\"/subpoena.cgi\").\r\n\r\nIf someone is seeking your name without a reasonable claim of copyright infringement, that\'s an abuse: For example, if someone is using the subpoena to harass or defraud; if they\'ve matched filenames, but not their content; if you weren\'t using the IP address listed (because of a typo or other error, such as because someone else was using a wireless network). Even if you did have copyrighted material on your computer, you might have a lawful right of fair use.\r\n\r\nChilling Effects is collecting these materials to help gather a record of how the DMCA is being used. Since [512(h) subpoenas are issued without prior judicial review (the subject may bring it before a judge with a motion to quash only after the subpoena has issued), we are concerned that subpoenas may be used to obtain identity information in cases where there is no copyright infringement. Chilling Effects seeks to document those cases. \r\n\r\nSee [Subpoena Defense for more information.
 
@@ -419,7 +419,7 @@ Sources:
     original_category_id: 25
   )
 
-  Category.create!(
+  Topic.create!(
     name: "International",
     description: "The \"International\" category contains notices demanding takedowns from sites outside of the United States, invoking non-US law. We post them to give transparency to the \"notice and takedown\" process. Chilling Effects does not currently have the resources to annotate these notices with respect to the varying laws that may apply, but posts data for informational purposes.\r\n\r\nA few general notes: As with the U.S. C&Ds, Chilling Effects posting does not imply a judgment about the notice\'s legal validity, applicability, or indicate whether the notice was acted upon.\r\n\r\nThe varying substantive law of different countries means postings legal in one country might be unlawful in another. For example, French law outlaws public exhibition of Nazi symbols; U.S. law would protect that speech under the First Amendment. Jurisdiction, where and under what laws a person can be sued, matters too. Just because a website is accessible anywhere doesn\'t mean its proprietor can be sued anywhere. A U.S. company with no assets or business contacts abroad doesn\'t generally need to worry about non-U.S. law. Jurisdiction questions get murkier when a company has contacts or assets abroad -- Yahoo! sued a French group who had won an order from a French prohibiting Yahoo! from allowing French citizens access to Nazi memorabilia, ([Yahoo v. LICRA). The 9th Circuit dismissed Yahoo\'s challenge on mootness and procedural grounds.\r\n\r\nIf you too want to contribute to the transparency of notice-and-takedown procedures around the world, please submit your C&Ds to Chilling Effects. If you are a lawyer or legal academic ouside the U.S. who would like to participate in the Clearinghouse project, please [let us know.
 
@@ -427,7 +427,7 @@ Sources:
     original_category_id: 28
   )
 
-  Category.create!(
+  Topic.create!(
     name: "Uncategorized",
     description: "Notices here don\'t fit into any of Chilling Effects\' existing categories.
 
@@ -435,13 +435,13 @@ Sources:
     original_category_id: 29
   )
 
-  Category.create!(
+  Topic.create!(
     name: "Court Orders",
     description: "",
     original_category_id: 30
   )
 
-  Category.create!(
+  Topic.create!(
     name: "DMCA Notices",
     description: ".\r\n
 
@@ -459,7 +459,7 @@ In the online world, the potentially infringing activities of individuals are st
     original_category_id: 31
   )
 
-  Category.create!(
+  Topic.create!(
     name: "No Action",
     description: "The \"no action\" category holds cease-and-desist complaints that were received but not acted upon. Results were not removed in response.
 
@@ -467,7 +467,7 @@ In the online world, the potentially infringing activities of individuals are st
     original_category_id: 32
   )
 
-  Category.create!(
+  Topic.create!(
     name: "Right of Publicity",
     description: "The right of publicity prevents the unauthorized commercial use of an individual\'s name, likeness, or other recognizable aspects of one\'s persona. It gives an individual the exclusive right to license the use of his or her identity for commercial promotion.
 
@@ -475,63 +475,63 @@ In the online world, the potentially infringing activities of individuals are st
     original_category_id: 33
   )
 
-  cat = Category.where(original_category_id: 2).first
-  cat.parent = Category.where(original_category_id: 6).first
+  cat = Topic.where(original_category_id: 2).first
+  cat.parent = Topic.where(original_category_id: 6).first
   cat.save
 
-  cat = Category.where(original_category_id: 9).first
-  cat.parent = Category.where(original_category_id: 2).first
+  cat = Topic.where(original_category_id: 9).first
+  cat.parent = Topic.where(original_category_id: 2).first
   cat.save
 
-  cat = Category.where(original_category_id: 10).first
-  cat.parent = Category.where(original_category_id: 2).first
+  cat = Topic.where(original_category_id: 10).first
+  cat.parent = Topic.where(original_category_id: 2).first
   cat.save
 
-  cat = Category.where(original_category_id: 11).first
-  cat.parent = Category.where(original_category_id: 5).first
+  cat = Topic.where(original_category_id: 11).first
+  cat.parent = Topic.where(original_category_id: 5).first
   cat.save
 
-  cat = Category.where(original_category_id: 12).first
-  cat.parent = Category.where(original_category_id: 5).first
+  cat = Topic.where(original_category_id: 12).first
+  cat.parent = Topic.where(original_category_id: 5).first
   cat.save
 
-  cat = Category.where(original_category_id: 14).first
-  cat.parent = Category.where(original_category_id: 5).first
+  cat = Topic.where(original_category_id: 14).first
+  cat.parent = Topic.where(original_category_id: 5).first
   cat.save
 
-  cat = Category.where(original_category_id: 15).first
-  cat.parent = Category.where(original_category_id: 5).first
+  cat = Topic.where(original_category_id: 15).first
+  cat.parent = Topic.where(original_category_id: 5).first
   cat.save
 
-  cat = Category.where(original_category_id: 16).first
-  cat.parent = Category.where(original_category_id: 5).first
+  cat = Topic.where(original_category_id: 16).first
+  cat.parent = Topic.where(original_category_id: 5).first
   cat.save
 
-  cat = Category.where(original_category_id: 17).first
-  cat.parent = Category.where(original_category_id: 6).first
+  cat = Topic.where(original_category_id: 17).first
+  cat.parent = Topic.where(original_category_id: 6).first
   cat.save
 
-  cat = Category.where(original_category_id: 19).first
-  cat.parent = Category.where(original_category_id: 2).first
+  cat = Topic.where(original_category_id: 19).first
+  cat.parent = Topic.where(original_category_id: 2).first
   cat.save
 
-  cat = Category.where(original_category_id: 22).first
-  cat.parent = Category.where(original_category_id: 5).first
+  cat = Topic.where(original_category_id: 22).first
+  cat.parent = Topic.where(original_category_id: 5).first
   cat.save
 
-  cat = Category.where(original_category_id: 24).first
-  cat.parent = Category.where(original_category_id: 20).first
+  cat = Topic.where(original_category_id: 24).first
+  cat.parent = Topic.where(original_category_id: 20).first
   cat.save
 
-  cat = Category.where(original_category_id: 25).first
-  cat.parent = Category.where(original_category_id: 5).first
+  cat = Topic.where(original_category_id: 25).first
+  cat.parent = Topic.where(original_category_id: 5).first
   cat.save
 
-  cat = Category.where(original_category_id: 30).first
-  cat.parent = Category.where(original_category_id: 28).first
+  cat = Topic.where(original_category_id: 30).first
+  cat.parent = Topic.where(original_category_id: 28).first
   cat.save
 
-  cat = Category.where(original_category_id: 31).first
-  cat.parent = Category.where(original_category_id: 14).first
+  cat = Topic.where(original_category_id: 31).first
+  cat.parent = Topic.where(original_category_id: 14).first
   cat.save
 end

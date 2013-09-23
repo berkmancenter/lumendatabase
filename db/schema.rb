@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130923143531) do
+ActiveRecord::Schema.define(:version => 20130924143422) do
 
   create_table "blog_entries", :force => true do |t|
     t.integer  "user_id"
@@ -27,50 +27,13 @@ ActiveRecord::Schema.define(:version => 20130923143531) do
     t.string   "url",              :limit => 1024
   end
 
-  create_table "blog_entry_categorizations", :force => true do |t|
+  create_table "blog_entry_topic_assignments", :force => true do |t|
     t.integer "blog_entry_id"
-    t.integer "category_id"
+    t.integer "topic_id"
   end
 
-  add_index "blog_entry_categorizations", ["blog_entry_id"], :name => "index_blog_entry_categorizations_on_blog_entry_id"
-  add_index "blog_entry_categorizations", ["category_id"], :name => "index_blog_entry_categorizations_on_category_id"
-
-  create_table "categories", :force => true do |t|
-    t.string  "name",                 :null => false
-    t.text    "description"
-    t.string  "ancestry"
-    t.integer "original_category_id"
-  end
-
-  add_index "categories", ["ancestry"], :name => "index_categories_on_ancestry"
-
-  create_table "categories_category_managers", :force => true do |t|
-    t.integer "category_id"
-    t.integer "category_manager_id"
-  end
-
-  add_index "categories_category_managers", ["category_id"], :name => "index_categories_category_managers_on_category_id"
-  add_index "categories_category_managers", ["category_manager_id"], :name => "index_categories_category_managers_on_category_manager_id"
-
-  create_table "categories_relevant_questions", :force => true do |t|
-    t.integer "category_id"
-    t.integer "relevant_question_id"
-  end
-
-  add_index "categories_relevant_questions", ["category_id"], :name => "index_categories_relevant_questions_on_category_id"
-  add_index "categories_relevant_questions", ["relevant_question_id"], :name => "index_categories_relevant_questions_on_relevant_question_id"
-
-  create_table "categorizations", :force => true do |t|
-    t.integer "category_id"
-    t.integer "notice_id"
-  end
-
-  add_index "categorizations", ["category_id"], :name => "index_categories_notices_on_category_id"
-  add_index "categorizations", ["notice_id"], :name => "index_categories_notices_on_notice_id"
-
-  create_table "category_managers", :force => true do |t|
-    t.string "name", :null => false
-  end
+  add_index "blog_entry_topic_assignments", ["blog_entry_id"], :name => "index_blog_entry_topic_assignments_on_blog_entry_id"
+  add_index "blog_entry_topic_assignments", ["topic_id"], :name => "index_blog_entry_topic_assignments_on_topic_id"
 
   create_table "copyrighted_urls", :force => true do |t|
     t.string   "url",        :limit => 8192, :null => false
@@ -224,6 +187,14 @@ ActiveRecord::Schema.define(:version => 20130923143531) do
     t.text "answer",   :null => false
   end
 
+  create_table "relevant_questions_topics", :force => true do |t|
+    t.integer "topic_id"
+    t.integer "relevant_question_id"
+  end
+
+  add_index "relevant_questions_topics", ["relevant_question_id"], :name => "index_relevant_questions_topics_on_relevant_question_id"
+  add_index "relevant_questions_topics", ["topic_id"], :name => "index_relevant_questions_topics_on_topic_id"
+
   create_table "risk_triggers", :force => true do |t|
     t.string  "field"
     t.string  "condition_field"
@@ -259,6 +230,35 @@ ActiveRecord::Schema.define(:version => 20130923143531) do
   create_table "tags", :force => true do |t|
     t.string "name"
   end
+
+  create_table "topic_assignments", :force => true do |t|
+    t.integer "topic_id"
+    t.integer "notice_id"
+  end
+
+  add_index "topic_assignments", ["notice_id"], :name => "index_topics_notices_on_notice_id"
+  add_index "topic_assignments", ["topic_id"], :name => "index_topics_notices_on_topic_id"
+
+  create_table "topic_managers", :force => true do |t|
+    t.string "name", :null => false
+  end
+
+  create_table "topic_managers_topics", :force => true do |t|
+    t.integer "topic_id"
+    t.integer "topic_manager_id"
+  end
+
+  add_index "topic_managers_topics", ["topic_id"], :name => "index_topic_managers_topics_on_topic_id"
+  add_index "topic_managers_topics", ["topic_manager_id"], :name => "index_topic_managers_topics_on_topic_manager_id"
+
+  create_table "topics", :force => true do |t|
+    t.string  "name",                 :null => false
+    t.text    "description"
+    t.string  "ancestry"
+    t.integer "original_category_id"
+  end
+
+  add_index "topics", ["ancestry"], :name => "index_topics_on_ancestry"
 
   create_table "users", :force => true do |t|
     t.string   "email",                  :default => "", :null => false

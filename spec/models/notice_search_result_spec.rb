@@ -11,14 +11,14 @@ describe NoticeSearchResult do
     expect(result.title).to eq notice.title
   end
 
-  it "includes id, name, and parent_id from categories" do
-    notice = build_stubbed(:dmca, :with_categories)
+  it "includes id, name, and parent_id from topics" do
+    notice = build_stubbed(:dmca, :with_topics)
 
     result = NoticeSearchResult.new(Notice.new, with_metadata(notice))
 
     %i( id name parent_id ).each do |attribute|
-      expect(result.categories.map(&attribute)).to(
-        match_array notice.categories.map(&:attribute)
+      expect(result.topics.map(&attribute)).to(
+        match_array notice.topics.map(&:attribute)
       )
     end
   end

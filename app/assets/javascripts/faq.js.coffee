@@ -5,7 +5,7 @@ $("#relevant-questions").collapse
   close: ->
     @slideUp 200, 'easeOutQuad'
 
-$("#category-faqs").collapse
+$("#topic-faqs").collapse
   query: '.question'
   open: ->
     @slideDown 200, 'easeOutQuad'
