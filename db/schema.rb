@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130918182434) do
+ActiveRecord::Schema.define(:version => 20130920011650) do
 
   create_table "blog_entries", :force => true do |t|
     t.integer  "user_id"
@@ -36,9 +36,10 @@ ActiveRecord::Schema.define(:version => 20130918182434) do
   add_index "blog_entry_categorizations", ["category_id"], :name => "index_blog_entry_categorizations_on_category_id"
 
   create_table "categories", :force => true do |t|
-    t.string "name",        :null => false
-    t.text   "description"
-    t.string "ancestry"
+    t.string  "name",                 :null => false
+    t.text    "description"
+    t.string  "ancestry"
+    t.integer "original_category_id"
   end
 
   add_index "categories", ["ancestry"], :name => "index_categories_on_ancestry"

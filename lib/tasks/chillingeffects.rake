@@ -2,6 +2,7 @@ require 'rake'
 require 'ingestor'
 require 'blog_importer'
 require 'question_importer'
+require 'collapses_categories'
 
 namespace :chillingeffects do
   desc 'Delete elasticsearch index'
@@ -32,6 +33,14 @@ namespace :chillingeffects do
       importer = QuestionImporter.new(file_name)
       importer.import
     end
+  end
+
+  desc "Post-migration cleanup"
+  task post_import_cleanup: :environment do
+    from = 'DMCA Notices'
+    to = 'DMCA Safe Harbor'
+    collapser = CollapsesCategories.new(from, to)
+    collapser.collapse
   end
 
   def with_file_name

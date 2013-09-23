@@ -8,6 +8,10 @@ FactoryGirl.define do
     sequence(:name) { |n| "Category Name #{n}" }
   end
 
+  factory :category_manager do
+    name "A name"
+  end
+
   factory :dmca do
 
     title "A title"
