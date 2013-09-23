@@ -75,4 +75,40 @@ describe Work do
       work.save
     end
   end
+
+  it "validates infringing urls correctly when multiple are used at once" do
+    notice = notice_with_works_attributes([
+      { infringing_urls_attributes: [{ url: "" }] },
+      { infringing_urls_attributes: [{ url: "" }] }
+    ])
+
+    expect(notice).not_to be_valid
+    expect(notice.errors.messages).to eq(
+      { :"works.infringing_urls" => ["is invalid"] }
+    )
+  end
+
+  it "validates infringing urls correctly when multiple are used at once" do
+    notice = notice_with_works_attributes([
+      { copyrighted_urls_attributes: [{ url: "" }] },
+      { copyrighted_urls_attributes: [{ url: "" }] }
+    ])
+
+    expect(notice).not_to be_valid
+    expect(notice.errors.messages).to eq(
+      { :"works.copyrighted_urls" => ["is invalid"] }
+    )
+  end
+
+  private
+
+  def notice_with_works_attributes(attributes)
+    Dmca.new(
+      works_attributes: attributes,
+      entity_notice_roles_attributes: [{
+        name: 'recipient',
+        entity_attributes: { name: 'Recipient' }
+      }]
+    )
+  end
 end

@@ -25,6 +25,69 @@ describe SubmitNotice do
   end
 
   context "#submit" do
+    context "setting a default title" do
+      it "preserves a provided title" do
+        submit_notice = SubmitNotice.new(Dmca, title: "Arbitrary title")
+
+        submit_notice.submit
+
+        notice = submit_notice.notice
+        expect(notice.title).to eq "Arbitrary title"
+      end
+
+      it "defaults based on type" do
+        [Dmca, Trademark, Other].each do |notice_type|
+          submit_notice = SubmitNotice.new(notice_type, {})
+
+          submit_notice.submit
+
+          notice = submit_notice.notice
+          expect(notice.title).to eq "#{notice_type.label} notice"
+        end
+      end
+
+      it "defaults based on type and entity when given entity_attributes" do
+        submit_notice = submit_with_roles_attributes(Dmca, [{
+          name: 'recipient', entity_attributes: { name: 'Google' }
+        }])
+
+        submit_notice.submit
+
+        notice = submit_notice.notice
+        expect(notice.title).to eq "DMCA notice to Google"
+      end
+
+      it "defaults based on type and entity when given entity_id" do
+        entity = create(:entity, name: "Google")
+        submit_notice = submit_with_roles_attributes(Dmca, [{
+          name: 'recipient', entity_id: entity.id
+        }])
+
+        submit_notice.submit
+
+        notice = submit_notice.notice
+        expect(notice.title).to eq "DMCA notice to Google"
+      end
+
+      it "can handle Rails' form-style parameters" do
+        parameters = HashWithIndifferentAccess.new(
+          '0' => { name: 'recipient', entity_attributes: { name: "Google" } }
+        )
+        submit_notice = submit_with_roles_attributes(Dmca, parameters)
+
+        submit_notice.submit
+
+        notice = submit_notice.notice
+        expect(notice.title).to match(/\bGoogle$/)
+      end
+
+    private
+
+      def submit_with_roles_attributes(klass, attributes)
+        SubmitNotice.new(klass, entity_notice_roles_attributes: attributes)
+      end
+    end
+
     it "auto redacts always" do
       notice = stub_new(Dmca)
       notice.should_receive(:auto_redact)
@@ -50,6 +113,7 @@ describe SubmitNotice do
 
       expect(ret).to be_false
     end
+
   end
 
   context "#submit for a user" do

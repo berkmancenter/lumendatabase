@@ -8,6 +8,7 @@ class Work < ActiveRecord::Base
   has_and_belongs_to_many :copyrighted_urls
 
   accepts_nested_attributes_for :infringing_urls, :copyrighted_urls
+  validates_associated :infringing_urls, :copyrighted_urls
 
   # Similar to the hack in EntityNoticeRole, because all validations are
   # run before all inserts, we have to save to ensure we don't have the

@@ -16,8 +16,6 @@ feature "notice submission" do
       select "en - English", from: "Language"
     end
 
-    open_recent_notice
-
     notice = Notice.last
     expect(notice.language).to eq 'en'
   end
@@ -36,8 +34,6 @@ feature "notice submission" do
     submit_recent_notice do
       fill_in "Jurisdiction", with: 'US, foobar'
     end
-
-    open_recent_notice
 
     notice = Notice.last
     expect(notice.jurisdiction_list).to match_array ['US', 'foobar']
@@ -63,9 +59,8 @@ feature "notice submission" do
   scenario "submitting a notice with an original attached" do
     submit_recent_notice { attach_notice }
 
-    open_recent_notice
-
-    pending "We don't display originals yet"
+    notice = Notice.last
+    expect(notice).to have(1).original_document
   end
 
   scenario "submitting a notice with a supporting document", js: true do
@@ -236,7 +231,7 @@ feature "notice submission" do
     visit "/notices/new?type=Dmca"
 
     within('form#new_notice') do
-      expect(page).to have_css('input#notice_title.required')
+      expect(page).to have_css("input##{works_copyrighted_url_id}.required")
       expect(page).to have_css('input#notice_date_received:not(.required)')
     end
   end
@@ -246,9 +241,19 @@ feature "notice submission" do
 
     click_on "Submit"
 
-    within('form .notice_title') do
-      expect(page).to have_css('.error')
+    all("form .#{entity_name_class}").each do |elem|
+      within(elem) { expect(page).to have_css('.error') }
     end
+  end
+
+  private
+
+  def works_copyrighted_url_id
+    'notice_works_attributes_0_copyrighted_urls_attributes_0_url'
+  end
+
+  def entity_name_class
+    'notice_entity_notice_roles_entity_name'
   end
 
 end

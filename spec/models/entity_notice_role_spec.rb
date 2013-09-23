@@ -45,9 +45,28 @@ describe EntityNoticeRole do
 
       expect(entity_notice_role.entity).to eq existing_entity
     end
+
+    it "validates entities corrently when multiple are used at once" do
+      notice = notice_with_roles_attributes([
+        { name: 'recipient', entity_attributes: { name: "" } },
+        { name: 'submitter', entity_attributes: { name: "" } }
+      ])
+
+      expect(notice).not_to be_valid
+      expect(notice.errors.messages).to eq(
+        { :"entity_notice_roles.entity" => ["is invalid"] }
+      )
+    end
   end
 
   private
+
+  def notice_with_roles_attributes(attributes)
+    Dmca.new(
+      entity_notice_roles_attributes: attributes,
+      works: build_list(:work, 2) # to make it valid otherwise
+    )
+  end
 
   def entity_attributes
     {

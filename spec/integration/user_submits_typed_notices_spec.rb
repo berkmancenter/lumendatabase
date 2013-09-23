@@ -6,7 +6,6 @@ feature "typed notice submissions" do
     submission.open_submission_form
 
     submission.fill_in_form_with({
-      "Title" => "A title",
       "Mark" => "My trademark (TM)",
       "Infringing URL" => "http://example.com/infringing_url1",
       "Alleged Infringment" => "They used my thing",
@@ -23,7 +22,7 @@ feature "typed notice submissions" do
 
     open_recent_notice
 
-    expect(page).to have_content("Trademark - A title")
+    expect(page).to have_content("Trademark notice to Recipient")
 
     within("#works") do
       expect(page).to have_content('Mark')
@@ -41,7 +40,6 @@ feature "typed notice submissions" do
     submission.open_submission_form
 
     submission.fill_in_form_with({
-      "Title" => "A title",
       "Legal Complaint" => "They impuned upon my good character",
       "Defamatory URL" => "http://example.com/defamatory_url1",
     })
@@ -57,7 +55,7 @@ feature "typed notice submissions" do
 
     open_recent_notice
 
-    expect(page).to have_content("Defamation - A title")
+    expect(page).to have_content("Defamation notice to Recipient")
 
     within("#works") do
       expect(page).to have_content('Locations of Defamatory Material')
@@ -75,8 +73,6 @@ feature "typed notice submissions" do
     submission.open_submission_form
 
     submission.fill_in_form_with({
-      "Title" => "A title",
-
       "Subject of Court Order" => "My sweet website", # works.description
       "Targetted URL" => "http://example.com/targetted_url", # infringing_urls
 
@@ -86,7 +82,7 @@ feature "typed notice submissions" do
 
     %i|recipient sender principal issuing_court plaintiff defendant|.each do |role|
       submission.fill_in_entity_form_with(role, {
-        'Name' => "#{role} entity",
+        'Name' => role.capitalize
       })
     end
 
@@ -94,7 +90,7 @@ feature "typed notice submissions" do
 
     open_recent_notice
 
-    expect(page).to have_content("Court Order - A title")
+    expect(page).to have_content("Court Order notice to Recipient")
 
     within("#works") do
       expect(page).to have_content('Targetted URLs')
@@ -113,8 +109,6 @@ feature "typed notice submissions" do
     submission.open_submission_form
 
     submission.fill_in_form_with({
-      "Title" => "A title",
-
       "Subject of Enforcement Request" => "My Tiny Tim fansite", # works.description
       "URL of original work" => "http://example.com/original_object1", # copyrighted_urls
       "URL mentioned in request" => "http://example.com/offending_url1", # infringing_urls
@@ -139,7 +133,7 @@ feature "typed notice submissions" do
 
     open_recent_notice
 
-    expect(page).to have_content("Law Enforcement Request - A title")
+    expect(page).to have_content("Law Enforcement Request notice to Recipient")
 
     within("#works") do
       expect(page).to have_content('URLs mentioned in request')
@@ -166,8 +160,6 @@ feature "typed notice submissions" do
     submission.open_submission_form
 
     submission.fill_in_form_with({
-      "Title" => "A title",
-
       "Complaint" => "These URLs disclose my existence", # works.description
       "Original Work URL" => "http://example.com/original_object1", # copyrighted_urls
       "URL with private information" => "http://example.com/offending_url1", # infringing_urls
@@ -186,7 +178,7 @@ feature "typed notice submissions" do
 
     open_recent_notice
 
-    expect(page).to have_content("Private Information - A title")
+    expect(page).to have_content("Private Information notice to Recipient")
 
     within("#works") do
       expect(page).to have_content('URLs with private information')
@@ -207,8 +199,6 @@ feature "typed notice submissions" do
     submission.open_submission_form
 
     submission.fill_in_form_with({
-      "Title" => "A title",
-
       "Complaint" => "These URLs are a serious problem", # works.description
       "Original Work URL" => "http://example.com/original_object1", # copyrighted_urls
       "Problematic URL" => "http://example.com/offending_url1", # infringing_urls
@@ -227,7 +217,7 @@ feature "typed notice submissions" do
 
     open_recent_notice
 
-    expect(page).to have_content("Other - A title")
+    expect(page).to have_content("Other notice to Recipient")
 
     within("#works") do
       expect(page).to have_content('Problematic URLs')
