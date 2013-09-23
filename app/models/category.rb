@@ -10,6 +10,7 @@ class Category < ActiveRecord::Base
   has_many :blog_entries, through: :blog_entry_categorizations
 
   has_and_belongs_to_many :relevant_questions
+  has_and_belongs_to_many :category_managers
 
   has_ancestry
 
