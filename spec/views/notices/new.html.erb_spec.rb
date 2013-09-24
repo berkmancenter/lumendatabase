@@ -71,4 +71,38 @@ describe 'notices/new.html.erb' do
       have_css(".#{section_class} h4:contains('Step #{step_number}.')")
     end
   end
+
+  context "tooltips" do
+    factories = Notice::TYPES.map { |type| type.underscore.to_sym }
+
+    factories.each do |factory|
+      it "has the correct title tooltip for notice type #{factory}" do
+        notice = build(factory)
+        assign(:notice, notice)
+
+        render
+
+        within('.input.notice_title') do
+          expect(page).to have_tooltip t('tooltips.title')
+        end
+      end
+
+      it "has the correct action taken tooltip for notice type #{factory}" do
+        notice = build(factory)
+        assign(:notice, notice)
+
+        render
+
+        within('.input.notice_action_taken') do
+          expect(page).to have_tooltip t('tooltips.action_taken')
+        end
+      end
+    end
+
+    private
+
+    def have_tooltip(tooltip)
+      have_css("label[data-tooltip='#{tooltip}']")
+    end
+  end
 end
