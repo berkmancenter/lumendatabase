@@ -107,16 +107,16 @@ describe 'notices/show.html.erb' do
   end
 
   it "displays a notice with all relevant questions" do
-    category_question = create(:relevant_question, question: "Q 1", answer: "A 1")
+    topic_question = create(:relevant_question, question: "Q 1", answer: "A 1")
     notice_question = create(:relevant_question, question: "Q 2", answer: "A 2")
     assign(:notice, create(:dmca,
-      categories: [create(:category, relevant_questions: [category_question])],
+      topics: [create(:topic, relevant_questions: [topic_question])],
       relevant_questions: [notice_question]
     ))
 
     render
 
-    [category_question, notice_question].each do |question|
+    [topic_question, notice_question].each do |question|
       within("#relevant_question_#{question.id}") do
         expect(page).to have_content(question.question)
         expect(page).to have_content(question.answer)

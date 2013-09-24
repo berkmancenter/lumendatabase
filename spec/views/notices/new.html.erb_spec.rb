@@ -30,19 +30,19 @@ describe 'notices/new.html.erb' do
     end
   end
 
-  context "category drop down" do
-    it "shows the categories alphabetically" do
-      second_category = create(:category, name: "B Category")
-      third_category = create(:category, name: "C Category")
-      first_category = create(:category, name: "A Category")
+  context "topic drop down" do
+    it "shows the topics alphabetically" do
+      second_topic = create(:topic, name: "B Topic")
+      third_topic = create(:topic, name: "C Topic")
+      first_topic = create(:topic, name: "A Topic")
       assign(:notice, Dmca.new)
 
       render
 
-      within('select#notice_category_ids') do
-        expect(page).to have_nth_option(1, first_category.name)
-        expect(page).to have_nth_option(2, second_category.name)
-        expect(page).to have_nth_option(3, third_category.name)
+      within('select#notice_topic_ids') do
+        expect(page).to have_nth_option(1, first_topic.name)
+        expect(page).to have_nth_option(2, second_topic.name)
+        expect(page).to have_nth_option(3, third_topic.name)
       end
     end
 

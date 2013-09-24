@@ -10,9 +10,9 @@ shared_examples 'a serialized notice with base metadata' do |factory_name|
     end
   end
 
-  it 'includes categories' do
+  it 'includes topics' do
     with_a_serialized_notice(factory_name) do |notice, json|
-      expect(json[:categories]).to eq notice.categories.map(&:name)
+      expect(json[:topics]).to eq notice.topics.map(&:name)
     end
   end
 
@@ -42,8 +42,8 @@ def build_notice(factory_name = :dmca)
     notice.stub(:sender_name).and_return('sender name')
     notice.stub(:tag_list).and_return(['foo', 'bar'])
     notice.stub(:jurisdiction_list).and_return(['US', 'CA'])
-    notice.stub(:categories).and_return(
-      build_list(:category, 2)
+    notice.stub(:topics).and_return(
+      build_list(:topic, 2)
     )
     notice.stub(:works).and_return(
       build_list(:work, 3, :with_infringing_urls, :with_copyrighted_urls)

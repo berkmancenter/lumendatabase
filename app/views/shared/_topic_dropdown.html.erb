@@ -1,0 +1,13 @@
+<% has_children = topic.children.any? %>
+<li class="<%= "dropdown-submenu" if has_children %>">
+  <%= link_to(topic.name, topic_path(topic)) %>
+
+  <% if has_children %>
+    <ol class="dropdown-menu">
+      <li class="title">Subtopics</li>
+      <% topic.children.ordered.each do |child| %>
+        <%= render "shared/topic_dropdown", topic: child %>
+      <% end %>
+    </ol>
+  <% end %>
+</li>

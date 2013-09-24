@@ -31,13 +31,13 @@ RailsAdmin.config do |config|
       field :review_required
       field :body
       field :entities
-      field :categories
+      field :topics
       field :works
     end
     edit do
-      configure(:categorizations) { hide }
-      configure(:blog_categorizations) { hide }
-      configure(:category_relevant_questions) { hide }
+      configure(:topic_assignments) { hide }
+      configure(:blog_topic_assignments) { hide }
+      configure(:topic_relevant_questions) { hide }
       configure(:entities) { hide }
       configure(:infringing_urls) { hide }
 
@@ -64,7 +64,7 @@ RailsAdmin.config do |config|
     end
   end
 
-  config.model 'Category' do
+  config.model 'Topic' do
     edit do
       configure(:ancestry) { hide }
     end

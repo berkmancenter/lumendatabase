@@ -21,7 +21,7 @@ feature "Searching for Notices via the API" do
       expect_api_search_to_find("king") do |json|
         facets = json['meta']['facets']
         expect(facets.keys).to include(
-          'sender_name_facet', 'recipient_name_facet', 'category_facet', 'date_received_facet'
+          'sender_name_facet', 'recipient_name_facet', 'topic_facet', 'date_received_facet'
         )
       end
     end
@@ -78,10 +78,10 @@ feature "Searching for Notices via the API" do
     class_factory = klass.to_s.tableize.singularize.to_sym
     scenario "a #{klass} notice has basic notice metadata", js: true, search: true do
 
-      category = create(:category, name: "Lion King")
+      topic = create(:topic, name: "Lion King")
       notice = create(
         class_factory,
-        categories: [category],
+        topics: [topic],
         title: "The Lion King on Youtube"
       )
 
@@ -89,7 +89,7 @@ feature "Searching for Notices via the API" do
         json_item = json['notices'].first
         expect(json_item).to have_key('title').with_value(notice.title)
         expect(json_item).to have_key('id').with_value(notice.id)
-        expect(json_item).to have_key('categories').with_value([category.name])
+        expect(json_item).to have_key('topics').with_value([topic.name])
         expect(json_item).to have_key('score')
         expect(json_item).to have_key('tags')
       end

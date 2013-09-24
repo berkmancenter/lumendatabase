@@ -8,9 +8,9 @@ describe Redaction::RefillQueue do
 
       refill.each_input { |input| inputs << input }
 
-      category_input, submitter_input = inputs
-      expect(category_input.key).to eq :in_categories
-      expect(category_input.label_text).to eq "In categories"
+      topic_input, submitter_input = inputs
+      expect(topic_input.key).to eq :in_topics
+      expect(topic_input.label_text).to eq "In topics"
       expect(submitter_input.key).to eq :submitted_by
       expect(submitter_input.label_text).to eq "Submitted by"
     end
@@ -28,12 +28,12 @@ describe Redaction::RefillQueue do
       expect(queue.notices).to eq [notice]
     end
 
-    it "can be scoped by category" do
-      create(:dmca, :with_categories, review_required: true) # not to be found
-      notice = create(:dmca, :with_categories, review_required: true)
+    it "can be scoped by topic" do
+      create(:dmca, :with_topics, review_required: true) # not to be found
+      notice = create(:dmca, :with_topics, review_required: true)
       queue = new_queue
       refill = Redaction::RefillQueue.new(notice_scopes: {
-        in_categories: [notice.categories.first.id]
+        in_topics: [notice.topics.first.id]
       })
 
       refill.fill(queue)

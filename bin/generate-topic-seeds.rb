@@ -36,7 +36,7 @@ end
 def create_categories
   get_categories.each do |row|
     puts %Q|
-  Category.create!(
+  Topic.create!(
     name: "#{escape(row['CatName'])}",
     description: "#{markdownify(row['Body'], row['CatID'])}",
     original_category_id: #{row['CatID']}
@@ -51,15 +51,15 @@ def establish_hierarchy
       next
     end
     puts %Q|
-  cat = Category.where(original_category_id: #{row['CatID']}).first
-  cat.parent = Category.where(original_category_id: #{row['ParentID']}).first
+  cat = Topic.where(original_category_id: #{row['CatID']}).first
+  cat.parent = Topic.where(original_category_id: #{row['ParentID']}).first
   cat.save
 |
   end
 end
 
 
-puts "Category.transaction do"
+puts "Topic.transaction do"
   create_categories
   establish_hierarchy
 puts "end"

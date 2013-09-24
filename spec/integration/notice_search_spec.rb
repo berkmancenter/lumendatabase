@@ -72,15 +72,15 @@ feature "Searching Notices" do
   end
 
   context "within associated models" do
-    scenario "for category names", search: true do
-      category = create(:category, name: "Lion King")
-      notice = create(:dmca, categories: [category])
+    scenario "for topic names", search: true do
+      topic = create(:topic, name: "Lion King")
+      notice = create(:dmca, topics: [topic])
 
       within_search_results_for("king") do
         expect(page).to have_n_results(1)
         expect(page).to have_content(notice.title)
-        expect(page).to have_content(category.name)
-        expect(page).to contain_link(category_path(category))
+        expect(page).to have_content(topic.name)
+        expect(page).to contain_link(topic_path(topic))
         expect(page.html).to have_excerpt('King', 'Lion')
       end
     end
@@ -156,9 +156,9 @@ feature "Searching Notices" do
   end
 
   context "changes to associated models" do
-    scenario "a category is created", search: true do
+    scenario "a topic is created", search: true do
       notice = create(:dmca)
-      notice.categories.create!(name: "arbitrary")
+      notice.topics.create!(name: "arbitrary")
 
       within_search_results_for("arbitrary") do
         expect(page).to have_n_results(1)
@@ -166,18 +166,18 @@ feature "Searching Notices" do
       end
     end
 
-    scenario "a category is destroyed", search: true do
-      category = create(:category, name: "arbitrary")
-      notice = create(:dmca, categories: [category])
-      category.destroy
+    scenario "a topic is destroyed", search: true do
+      topic = create(:topic, name: "arbitrary")
+      notice = create(:dmca, topics: [topic])
+      topic.destroy
 
       expect_search_to_not_find("arbitrary", notice)
     end
 
-    scenario "a category updates its name", search: true do
-      category = create(:category, name: "something")
-      notice = create(:dmca, categories: [category])
-      category.update_attributes!(name: "arbitrary")
+    scenario "a topic updates its name", search: true do
+      topic = create(:topic, name: "something")
+      notice = create(:dmca, topics: [topic])
+      topic.update_attributes!(name: "arbitrary")
 
       within_search_results_for("arbitrary") do
         expect(page).to have_n_results(1)

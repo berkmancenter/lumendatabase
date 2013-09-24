@@ -1,6 +1,6 @@
 #
 # Produces a file suitable for db:seed which creates RelevantQuestion
-# records and associates them with Categories based on what's currently
+# records and associates them with Topics based on what's currently
 # present in the MySQL instance you connect it to.
 #
 ###
@@ -49,10 +49,10 @@ results.each do |result|
 end
 
 puts
-puts "mapping.each do |category_name,question_ids|"
-puts "  if category = Category.find_by_name(category_name)"
-puts "    category.relevant_questions = RelevantQuestion.where(id: question_ids)"
-puts "    category.save!"
+puts "mapping.each do |topic_name,question_ids|"
+puts "  if topic = Topic.find_by_name(topic_name)"
+puts "    topic.relevant_questions = RelevantQuestion.where(id: question_ids)"
+puts "    topic.save!"
 puts "  end"
 puts "end"
 puts

@@ -14,8 +14,8 @@ class RedactionQueueOnPage < PageObject
     within_profiles { click_on 'Fill Queue' }
   end
 
-  def select_category_profile(category)
-    select category.name, from: "In categories"
+  def select_topic_profile(topic)
+    select topic.name, from: "In topic"
   end
 
   def select_submitter_profile(entity)

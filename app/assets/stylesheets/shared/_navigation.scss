@@ -50,7 +50,7 @@ nav.main-nav {
     }
   }
 
-  #dropdown-categories {
+  #dropdown-topics {
     @include media($small-screen){
       background: darken($nav-bg, 4%);
       left: 5%;

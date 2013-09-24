@@ -6424,9 +6424,9 @@ q = RelevantQuestion.create!(
 
 mapping[%{Chilling Effects}] << q.id
 
-mapping.each do |category_name,question_ids|
-  if category = Category.find_by_name(category_name)
-    category.relevant_questions = RelevantQuestion.where(id: question_ids)
-    category.save!
+mapping.each do |topic_name,question_ids|
+  if topic = Topic.find_by_name(topic_name)
+    topic.relevant_questions = RelevantQuestion.where(id: question_ids)
+    topic.save!
   end
 end

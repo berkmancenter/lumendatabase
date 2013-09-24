@@ -49,12 +49,12 @@ feature "Faceted search of Notices", search: true do
       end
     end
 
-    it 'on categories', search: true do
+    it 'on topics', search: true do
       notice = create(:dmca, :with_facet_data)
       with_a_faceted_search(
-        :categories, :category_facet) do |results|
-        expect(results).to have_facets('categories').
-          with_terms(notice.categories.map(&:name))
+        :topics, :topic_facet) do |results|
+        expect(results).to have_facets('topics').
+          with_terms(notice.topics.map(&:name))
       end
     end
 
@@ -79,7 +79,7 @@ feature "Faceted search of Notices", search: true do
   context "filtering" do
     context "with a full-text search term" do
       [
-        :category_facet, :sender_name_facet, :recipient_name_facet, :tag_list_facet, :country_code_facet
+        :topic_facet, :sender_name_facet, :recipient_name_facet, :tag_list_facet, :country_code_facet
       ].each do |facet_type|
         it "on #{facet_type}", js: true, search: true do
           outside_facet = create(:dmca, title: "King of New York")
@@ -90,8 +90,8 @@ feature "Faceted search of Notices", search: true do
           end
 
           facet = ''
-          if facet_type == :category_facet
-            facet = inside_facet.categories.first.name
+          if facet_type == :topic_facet
+            facet = inside_facet.topics.first.name
           elsif facet_type == :tag_list_facet
             facet = inside_facet.tags.first
           else

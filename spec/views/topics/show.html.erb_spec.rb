@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe 'categories/show.html.erb' do
-  it "shows the category's name" do
-    assign(:category, build(:category, name: "The Name"))
+describe 'topics/show.html.erb' do
+  it "shows the topic's name" do
+    assign(:topic, build(:topic, name: "The Name"))
     assign(:notices, [])
 
     render
@@ -10,19 +10,19 @@ describe 'categories/show.html.erb' do
     expect(rendered).to include("The Name")
   end
 
-  it "shows the category's html description" do
-    category = build(:category, description: "Some *markdown*")
-    assign(:category, category)
+  it "shows the topic's html description" do
+    topic = build(:topic, description: "Some *markdown*")
+    assign(:topic, topic)
     assign(:notices, [])
 
     render
 
-    expect(rendered).to include(category.description_html)
+    expect(rendered).to include(topic.description_html)
   end
 
-  it "shows the category's relevant questions" do
+  it "shows the topic's relevant questions" do
     questions = build_list(:relevant_question, 3)
-    assign(:category, build(:category, relevant_questions: questions))
+    assign(:topic, build(:topic, relevant_questions: questions))
     assign(:notices, [])
 
     render
@@ -35,23 +35,23 @@ describe 'categories/show.html.erb' do
 
   context "notices" do
     it "shows a list of notices" do
-      assign(:category, build(:category))
+      assign(:topic, build(:topic))
       assign(:notices, build_stubbed_list(:dmca, 2))
 
       render
 
-      within('.category-notices') do
+      within('.topic-notices') do
         expect(page).to have_css('li.notice', count: 2)
       end
     end
 
     it "does not show notices when they aren't there" do
-      assign(:category, build(:category))
+      assign(:topic, build(:topic))
       assign(:notices, [])
 
       render
 
-      expect(rendered).to_not have_css('.category-notices')
+      expect(rendered).to_not have_css('.topic-notices')
     end
   end
 end

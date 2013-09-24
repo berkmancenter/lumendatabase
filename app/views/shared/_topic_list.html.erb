@@ -1,0 +1,5 @@
+<% *init, last = topics %>
+<% init.each do |topic| %>
+  <%= link_to(topic.name, topic_path(topic)) %>, 
+<% end %>
+<%= link_to(last.name, topic_path(last)) if last %>

@@ -12,7 +12,7 @@ module Redaction
     end
 
     def each_input
-      yield SelectInput.new("In categories", Category.all)
+      yield SelectInput.new("In topics", Topic.all)
       yield SelectInput.new("Submitted by", Entity.submitters)
     end
 

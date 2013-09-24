@@ -1,4 +1,4 @@
-section.category-description {
+section.topic-description {
   @include span-columns(9);
   @include pad(0 25px 0 0);
   margin-bottom: 40px;
@@ -19,7 +19,7 @@ section.category-description {
   }
 }
 
-section.category-notices {
+section.topic-notices {
   @include span-columns(3);
   @include omega;
   padding-left: 20px;
@@ -67,7 +67,7 @@ section.category-notices {
   }
 }
 
-section.category-faqs {
+section.topic-faqs {
   @extend %faq-accordion;
   clear: left;
   margin-top: 2em;

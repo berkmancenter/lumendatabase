@@ -38,9 +38,9 @@ module Searchability
           analyzer: 'keyword', as: 'language', include_in_all: false
         indexes :action_taken_facet,
           analyzer: 'keyword', as: 'action_taken', include_in_all: false
-        indexes :categories, type: 'object', as: 'categories'
-        indexes :category_facet,
-          analyzer: 'keyword', as: ->(notice) { notice.categories.map(&:name) },
+        indexes :topics, type: 'object', as: 'topics'
+        indexes :topic_facet,
+          analyzer: 'keyword', as: ->(notice) { notice.topics.map(&:name) },
           include_in_all: false
         indexes :works,
           type: 'object',

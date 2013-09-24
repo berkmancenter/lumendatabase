@@ -104,21 +104,21 @@ feature "notice submission" do
     end
   end
 
-  scenario "submitting a notice with categories" do
-    create(:category, name: "Category 1")
-    create(:category, name: "Category 2")
-    create(:category, name: "Category 3")
+  scenario "submitting a notice with topics" do
+    create(:topic, name: "Topic 1")
+    create(:topic, name: "Topic 2")
+    create(:topic, name: "Topic 3")
 
     submit_recent_notice do
-      select "Category 1", from: "Categories"
-      select "Category 3", from: "Categories"
+      select "Topic 1", from: "Topics"
+      select "Topic 3", from: "Topics"
     end
 
     open_recent_notice
 
-    within('#categories') do
-      expect(page).to have_content "Category 1"
-      expect(page).to have_content "Category 3"
+    within('#topics') do
+      expect(page).to have_content "Topic 1"
+      expect(page).to have_content "Topic 3"
     end
   end
 
