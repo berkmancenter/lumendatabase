@@ -36,7 +36,4 @@ ligne, nous demandons la suppréssion immédiate du site web ! (sons, albums  \r
     'spec/support/example_files/blogger_dmca_source.txt'
   end
 
-  def handle(file)
-    be_handles(file)
-  end
 end

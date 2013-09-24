@@ -3,6 +3,8 @@ require 'validates_automatically'
 class Work < ActiveRecord::Base
   include ValidatesAutomatically
 
+  UNKNOWN_WORK_DESCRIPTION = "Unknown work"
+
   has_and_belongs_to_many :notices
   has_and_belongs_to_many :infringing_urls
   has_and_belongs_to_many :copyrighted_urls
@@ -34,6 +36,16 @@ class Work < ActiveRecord::Base
         existing_url_instances + relation_class.where(url: new_urls)
       )
     end
+  end
+
+  def self.unknown
+    @unknown ||= find_or_create!(
+      kind: :unknown, description: UNKNOWN_WORK_DESCRIPTION
+    )
+  end
+
+  def self.find_or_create!(attributes)
+    where(attributes).first || create!(attributes)
   end
 
   before_save do
