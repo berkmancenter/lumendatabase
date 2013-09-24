@@ -22,3 +22,7 @@ en:
         breadcrumb: 'Redact queue'
         menu: 'Redact queue'
         title: 'Redact queue'
+
+  tooltips:
+    title: 'If the notice you sent/received had a subject line, enter it here'
+    action_taken: 'Did the recipient of the notice take action in response?'
