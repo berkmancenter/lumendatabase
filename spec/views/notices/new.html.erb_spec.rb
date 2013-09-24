@@ -77,8 +77,7 @@ describe 'notices/new.html.erb' do
 
     factories.each do |factory|
       it "has the correct title tooltip for notice type #{factory}" do
-        notice = build(factory)
-        assign(:notice, notice)
+        assign(:notice, build(factory))
 
         render
 
@@ -90,8 +89,7 @@ describe 'notices/new.html.erb' do
       end
 
       it "has the correct action taken tooltip for notice type #{factory}" do
-        notice = build(factory)
-        assign(:notice, notice)
+        assign(:notice, build(factory))
 
         render
 
@@ -100,6 +98,18 @@ describe 'notices/new.html.erb' do
             "Did the recipient of the notice take action in response?"
           )
         end
+      end
+    end
+
+    it "has the correct description tooltip for Trademark" do
+      assign(:notice, build(:trademark))
+
+      render
+
+      within('.input.notice_works_description') do
+        expect(page).to have_tooltip(
+          "Description of allegedly infringed mark"
+        )
       end
     end
 

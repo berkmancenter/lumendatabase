@@ -56,7 +56,13 @@
         <% end %>
       </div>
       <div class="body-wrapper right">
-        <%= works_form.input :description, label: 'Mark' %>
+        <%=
+          works_form.input :description,
+            label: 'Mark',
+            label_html: { data: {
+              tooltip: "Description of allegedly infringed mark"
+            }}
+          %>
       </div>
     <% end %>
   </section>
