@@ -4,7 +4,7 @@ describe Dmca do
   it { should validate_presence_of :works }
   it { should validate_presence_of :entity_notice_roles }
   it { should ensure_inclusion_of(:language).in_array(Language.codes) }
-  it { should ensure_inclusion_of(:action_taken).in_array(Dmca::VALID_ACTIONS).allow_nil }
+  it { should ensure_inclusion_of(:action_taken).in_array(Dmca::VALID_ACTIONS).allow_blank }
 
   context 'automatic validations' do
     it { should ensure_length_of(:title).is_at_most(255) }
@@ -23,10 +23,10 @@ describe Dmca do
   it_behaves_like "an object tagged in the context of", "tag", case_insensitive: true
   it_behaves_like "an object tagged in the context of", "jurisdiction"
 
-  it "defaults to no action taken" do
+  it "leaves no action taken as unspecified" do
     notice = Dmca.new
 
-    expect(notice.action_taken).to eq 'No'
+    expect(notice.action_taken).to be_nil
   end
 
   context "entity notice roles" do
