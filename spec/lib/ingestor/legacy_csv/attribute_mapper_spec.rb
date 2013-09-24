@@ -22,10 +22,11 @@ describe Ingestor::LegacyCsv::AttributeMapper do
      'How_Sent' => 'online form: Form',
      'add_date' => '2013-07-01 00:06:00 -0400',
      'alter_date' => '2013-07-02 00:07:00 -0400',
-     'Date' => '2013-07-01'
+     'Date' => '2013-07-01',
+     'Readlevel' => '0'
     }
 
-    attributes = Ingestor::LegacyCsv::AttributeMapper.new(hash).mapped
+    attributes = described_class.new(hash).mapped
 
     expect(attributes[:original_notice_id]).to eq hash['NoticeID']
     expect(attributes[:title]).to eq hash['Subject']
@@ -35,6 +36,8 @@ describe Ingestor::LegacyCsv::AttributeMapper do
     expect(attributes[:updated_at]).to eq hash['alter_date']
     expect(attributes[:date_sent]).to eq hash['Date']
     expect(attributes[:date_received]).to eq hash['Date']
+    expect(attributes[:rescinded]).to be_false
+    expect(attributes[:hidden]).to be_false
   end
 
   it "loads works and files using Ingester::ImportDispatcher" do
@@ -87,7 +90,7 @@ describe Ingestor::LegacyCsv::AttributeMapper do
        "#{role_name}_Country" => 'US',
       }
 
-      attributes = Ingestor::LegacyCsv::AttributeMapper.new(hash).mapped
+      attributes = described_class.new(hash).mapped
 
       entity = find_entity_notice_role(attributes, role_name.downcase).entity
       expect(entity.address_line_1).to eq hash["#{role_name}_Address1"]
@@ -104,7 +107,7 @@ describe Ingestor::LegacyCsv::AttributeMapper do
      'Sender_Principal' => 'the entity',
     }
 
-    attributes = Ingestor::LegacyCsv::AttributeMapper.new(hash).mapped
+    attributes = described_class.new(hash).mapped
 
     entity = find_entity_notice_role(attributes, 'sender').entity
     expect(entity.name).to eq hash['Sender_Principal']
@@ -115,7 +118,7 @@ describe Ingestor::LegacyCsv::AttributeMapper do
      'Recipient_Entity' => 'the entity',
     }
 
-    attributes = Ingestor::LegacyCsv::AttributeMapper.new(hash).mapped
+    attributes = described_class.new(hash).mapped
 
     entity = find_entity_notice_role(attributes, 'recipient').entity
     expect(entity.name).to eq hash['Recipient_Entity']
@@ -127,10 +130,36 @@ describe Ingestor::LegacyCsv::AttributeMapper do
        "Sender_Country" => country_code,
       }
 
-      attributes = Ingestor::LegacyCsv::AttributeMapper.new(hash).mapped
+      attributes = described_class.new(hash).mapped
 
       entity = find_entity_notice_role(attributes, 'sender').entity
       expect(entity.country_code.downcase).to eq 'us'
+    end
+  end
+
+  context "using Readlevel" do
+    it "marks a notice as rescinded if Readlevel is 10" do
+      attributes = described_class.new("Readlevel" => "10").mapped
+
+      expect(attributes[:rescinded]).to be_true
+    end
+
+    it "marks a notice as hidden if Readlevel is 8" do
+      attributes = described_class.new("Readlevel" => "8").mapped
+
+      expect(attributes[:hidden]).to be_true
+    end
+
+    it "marks a notice as hidden if Readlevel is 3" do
+      attributes = described_class.new("Readlevel" => "3").mapped
+
+      expect(attributes[:hidden]).to be_true
+    end
+
+    it "also handles integer Readlevels" do
+      attributes = described_class.new("Readlevel" => 3).mapped
+
+      expect(attributes[:hidden]).to be_true
     end
   end
 

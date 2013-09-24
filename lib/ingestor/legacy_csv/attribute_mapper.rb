@@ -2,6 +2,12 @@ module Ingestor
   class LegacyCsv
     class AttributeMapper
 
+      READLEVELS = {
+        '3' => :hidden,
+        '8' => :hidden,
+        '10' => :rescinded
+      }
+
       delegate :notice_type, to: :importer
 
       def initialize(hash)
@@ -36,6 +42,8 @@ module Ingestor
           works: works,
           review_required: review_required,
           topics: topics(hash['CategoryName']),
+          rescinded: rescinded?,
+          hidden: hidden?,
           entity_notice_roles: [
             EntityNoticeRole.new(
               name: 'sender',
@@ -90,6 +98,19 @@ module Ingestor
           'USA' => 'US',
         }
       end
+
+      def rescinded?
+        READLEVELS[readlevel] == :rescinded
+      end
+
+      def hidden?
+        READLEVELS[readlevel] == :hidden
+      end
+
+      def readlevel
+        hash['Readlevel'].to_s
+      end
+
     end
   end
 end
