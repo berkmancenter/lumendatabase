@@ -83,7 +83,9 @@ describe 'notices/new.html.erb' do
         render
 
         within('.input.notice_title') do
-          expect(page).to have_tooltip t('tooltips.title')
+          expect(page).to have_tooltip(
+            "If the notice you sent/received had a subject line, enter it here"
+          )
         end
       end
 
@@ -94,7 +96,9 @@ describe 'notices/new.html.erb' do
         render
 
         within('.input.notice_action_taken') do
-          expect(page).to have_tooltip t('tooltips.action_taken')
+          expect(page).to have_tooltip(
+            "Did the recipient of the notice take action in response?"
+          )
         end
       end
     end

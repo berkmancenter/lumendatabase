@@ -9,7 +9,11 @@
     <p>Provide us with information about the Private Information notice you <em>sent</em> or <em>received</em>.</p>
     <div class="body-wrapper left main">
       <%= form.input :type, as: :hidden %>
-      <%= form.input :title, label_html: { data: { tooltip: t('tooltips.title') }} %>
+      <%=
+        form.input :title, label_html: { data: {
+          tooltip: "If the notice you sent/received had a subject line, enter it here"
+        }}
+      %>
       <%= form.input :subject %>
       <%= form.input :date_sent, as: :string, placeholder: "YYYY-MM-DD" %>
       <%= form.input :date_received, as: :string, placeholder: "YYYY-MM-DD" %>
@@ -27,7 +31,9 @@
       <%=
         form.input :action_taken,
           collection: Notice::VALID_ACTIONS,
-          label_html: { data: { tooltip: t('tooltips.action_taken') }}
+          label_html: { data: {
+            tooltip: "Did the recipient of the notice take action in response?"
+          }}
         %>
     </div>
     <div class="body-wrapper right attach">
