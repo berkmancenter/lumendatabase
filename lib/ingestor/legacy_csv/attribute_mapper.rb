@@ -13,6 +13,15 @@ module Ingestor
       end
 
       def mapped
+        works = importer.works
+
+        if works.empty?
+          works = [Work.unknown]
+          review_required = true
+        else
+          review_required = false
+        end
+
         {
           original_notice_id: hash['NoticeID'],
           title: hash['Subject'],
@@ -24,7 +33,8 @@ module Ingestor
           date_sent: hash['Date'],
           date_received: hash['Date'],
           file_uploads: importer.file_uploads,
-          works: importer.works,
+          works: works,
+          review_required: review_required,
           topics: topics(hash['CategoryName']),
           entity_notice_roles: [
             EntityNoticeRole.new(

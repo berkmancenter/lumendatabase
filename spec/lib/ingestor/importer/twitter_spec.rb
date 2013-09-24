@@ -14,10 +14,6 @@ describe Ingestor::Importer::Twitter do
         "spec/support/example_files/original_notice_source.txt"
       )
     end
-
-    def handle(file)
-      be_handles(file)
-    end
   end
 
   context "#parse_works" do

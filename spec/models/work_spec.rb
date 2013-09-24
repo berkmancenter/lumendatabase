@@ -9,6 +9,22 @@ describe Work do
     it { should ensure_length_of(:kind).is_at_most(255) }
   end
 
+  context '.unknown' do
+    it "provides an unknown work" do
+      work = Work.unknown
+
+      expect(work.kind).to eq :unknown
+      expect(work.description).to eq Work::UNKNOWN_WORK_DESCRIPTION
+    end
+
+    it "caches the unknown work" do
+      work_1 = Work.unknown
+      work_2 = Work.unknown
+
+      expect(work_1).to eq work_2
+    end
+  end
+
   context '#infringing_urls' do
     it "does not create duplicate infringing_urls" do
       existing_infringing_url = create(

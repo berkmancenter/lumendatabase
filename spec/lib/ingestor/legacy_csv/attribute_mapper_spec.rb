@@ -37,7 +37,7 @@ describe Ingestor::LegacyCsv::AttributeMapper do
     expect(attributes[:date_received]).to eq hash['Date']
   end
 
-  it "loads works using Ingester::ImportDispatcher" do
+  it "loads works and files using Ingester::ImportDispatcher" do
     hash = {
       'OriginalFilePath' => 'path',
       'SupportingFilePath' => 'other path'
@@ -53,6 +53,27 @@ describe Ingestor::LegacyCsv::AttributeMapper do
 
     expect(attributes[:works]).to eq 'works'
     expect(attributes[:file_uploads]).to eq 'files'
+    expect(attributes[:review_required]).to eq false
+  end
+
+  context "when no works are found" do
+    before do
+      Ingestor::ImportDispatcher.stub(:for).and_return(double(
+        "ImportClass", works: [], file_uploads: [], action_taken: nil
+      ))
+    end
+
+    it "assigns the unknown work" do
+      attributes = described_class.new({}).mapped
+
+      expect(attributes[:works]).to eq [Work.unknown]
+    end
+
+    it "flags the notice for review" do
+      attributes = described_class.new({}).mapped
+
+      expect(attributes[:review_required]).to eq true
+    end
   end
 
   %w( Sender Recipient ).each do |role_name|
