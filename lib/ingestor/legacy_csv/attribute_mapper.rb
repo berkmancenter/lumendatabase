@@ -44,6 +44,7 @@ module Ingestor
           topics: topics(hash['CategoryName']),
           rescinded: rescinded?,
           hidden: hidden?,
+          submission_id: hash['SubmissionID'],
           entity_notice_roles: [
             EntityNoticeRole.new(
               name: 'sender',

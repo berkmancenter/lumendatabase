@@ -145,9 +145,12 @@ ActiveRecord::Schema.define(:version => 20130924145313) do
     t.boolean  "spam",               :default => false
     t.boolean  "hidden",             :default => false
     t.string   "request_type"
+    t.integer  "submission_id"
   end
 
+  add_index "notices", ["original_notice_id"], :name => "index_notices_on_original_notice_id"
   add_index "notices", ["reviewer_id"], :name => "index_notices_on_reviewer_id"
+  add_index "notices", ["submission_id"], :name => "index_notices_on_submission_id"
   add_index "notices", ["type"], :name => "index_notices_on_type"
 
   create_table "notices_relevant_questions", :force => true do |t|
