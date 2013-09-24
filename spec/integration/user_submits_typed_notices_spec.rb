@@ -25,7 +25,7 @@ feature "typed notice submissions" do
     expect(page).to have_content("Trademark notice to Recipient")
 
     within("#works") do
-      expect(page).to have_content('Mark')
+      expect(page).to have_content('Description of allegedly infringed mark')
       expect(page).to have_content('My trademark (TM)')
     end
 
