@@ -22,8 +22,8 @@ module NoticeActions
     click_on "Submit"
   end
 
-  def open_recent_notice(title = "A title")
-    within('#recent-notices') { click_on title }
+  def open_recent_notice
+    within('#recent-notices li:nth-child(1)') { find('a').click }
   end
 
   def attach_notice(content = "Some content")

@@ -3,7 +3,7 @@
 <article class="notice-show">
   <section class="body">
     <header id="entities">
-      <h1><%= @notice.type.titleize %> - <%= @notice.title %></h1>
+      <h1><%= @notice.title %></h1>
       <div class="entities-wrapper">
         <% if @notice.sender %>
           <%= render @notice.sender, notice: @notice, role: :sender %>

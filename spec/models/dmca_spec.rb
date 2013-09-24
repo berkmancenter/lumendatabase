@@ -7,7 +7,6 @@ describe Dmca do
   it { should ensure_inclusion_of(:action_taken).in_array(Dmca::VALID_ACTIONS).allow_nil }
 
   context 'automatic validations' do
-    it { should validate_presence_of :title }
     it { should ensure_length_of(:title).is_at_most(255) }
   end
 
