@@ -137,6 +137,60 @@ describe Ingestor::LegacyCsv::AttributeMapper do
     end
   end
 
+  context "ExcludedNoticeError" do
+    it "can be raised with an informative message" do
+      begin
+        raise described_class::ExcludedNoticeError, "I said so"
+      rescue => ex
+        expect(ex.message).to eq "Notice was excluded because I said so"
+      end
+    end
+
+    spam_senders = [
+      "http://lindasomething",
+      "http://lindaanything",
+      "www.lindasomething.com",
+      "www.lindaanything.com",
+      "Stephen Darori"
+    ]
+
+    spam_senders.each do |sender_name|
+      it "is raised for Sender #{sender_name} when to Google" do
+        hash = {
+          "Sender_Principal" => sender_name,
+          "Recipient_Entity" => "Google Something"
+        }
+
+        expect {
+
+          described_class.new(hash)
+
+        }.to raise_error(described_class::ExcludedNoticeError)
+      end
+
+      it "is not raised for Sender #{sender_name} when not to Google" do
+        hash = {
+          "Sender_Principal" => sender_name,
+          "Recipient_Entity" => "Not Google"
+        }
+
+        expect {
+
+          described_class.new(hash)
+
+        }.not_to raise_error
+      end
+    end
+
+    it "is raised for for Readlevel 9" do
+      expect {
+
+        described_class.new("Readlevel" => "9")
+
+      }.to raise_error(described_class::ExcludedNoticeError)
+    end
+  end
+
   context "using Readlevel" do
     it "marks a notice as rescinded if Readlevel is 10" do
       attributes = described_class.new("Readlevel" => "10").mapped
