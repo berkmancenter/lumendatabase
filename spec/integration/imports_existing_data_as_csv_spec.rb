@@ -40,6 +40,7 @@ feature "Importing CSV" do
         'spec/support/example_files/original_notice_source.txt'
       )
       expect(@primary_format_notice.action_taken).to eq 'Yes'
+      expect(@primary_format_notice.submission_id).to eq 1000
       expect(@primary_format_notice).to have(1).supporting_document
       expect(upload_contents(@primary_format_notice.supporting_documents.first)).to eq File.read(
         'spec/support/example_files/original.jpg'
@@ -61,7 +62,8 @@ http://www.example.com/unstoppable_3.html|
       expect(upload_contents(@secondary_dmca_notice.original_documents.first)).to eq File.read(
         'spec/support/example_files/secondary_dmca_notice_source.html'
       )
-      expect(@primary_format_notice.action_taken).to eq 'Yes'
+      expect(@secondary_dmca_notice.action_taken).to eq 'Yes'
+      expect(@secondary_dmca_notice.submission_id).to eq 1001
       expect(@secondary_dmca_notice).to have(1).supporting_document
       expect(upload_contents(@secondary_dmca_notice.supporting_documents.first)).to eq File.read(
         'spec/support/example_files/secondary_dmca_notice_source-2.html'
@@ -80,7 +82,8 @@ http://www.example.com/unstoppable_3.html|
       expect(upload_contents(@secondary_other_notice.original_documents.first)).to eq File.read(
         'spec/support/example_files/secondary_other_notice_source.html'
       )
-      expect(@primary_format_notice.action_taken).to eq 'Yes'
+      expect(@secondary_other_notice.action_taken).to eq 'Yes'
+      expect(@secondary_other_notice.submission_id).to eq 1002
       expect(@secondary_other_notice).to have(1).supporting_document
       expect(upload_contents(@secondary_other_notice.supporting_documents.first)).to eq File.read(
         'spec/support/example_files/secondary_other_notice_source-2.html'
@@ -102,7 +105,8 @@ http://www.example.com/unstoppable_3.html|
       expect(upload_contents(@twitter_notice.original_documents.first)).to eq File.read(
         'spec/support/example_files/original_twitter_notice_source.txt'
       )
-      expect(@primary_format_notice.action_taken).to eq 'Yes'
+      expect(@twitter_notice.action_taken).to eq 'Yes'
+      expect(@twitter_notice.submission_id).to be_nil
       expect(@twitter_notice).to have(1).supporting_document
       expect(upload_contents(@twitter_notice.supporting_documents.first)).to eq File.read(
         'spec/support/example_files/original_twitter_notice_source.html'
