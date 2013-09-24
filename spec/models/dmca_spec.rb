@@ -100,7 +100,7 @@ describe Dmca do
 
     it "can be limited and is random" do
       notice = create(
-        :dmca, relevant_questions: create_list(:relevant_question, 5)
+        :dmca, relevant_questions: create_list(:relevant_question, 10)
       )
 
       questions_1 = notice.all_relevant_questions(3)
@@ -108,7 +108,7 @@ describe Dmca do
 
       expect(questions_1.length).to eq 3
       expect(questions_2.length).to eq 3
-      expect(questions_2).not_to match_array(questions_1)
+      expect(questions_2.sort).not_to eq questions_1.sort
     end
   end
 
