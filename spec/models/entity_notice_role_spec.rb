@@ -46,7 +46,7 @@ describe EntityNoticeRole do
       expect(entity_notice_role.entity).to eq existing_entity
     end
 
-    it "validates entities corrently when multiple are used at once" do
+    it "validates entities correctly when multiple are used at once" do
       notice = notice_with_roles_attributes([
         { name: 'recipient', entity_attributes: { name: "" } },
         { name: 'submitter', entity_attributes: { name: "" } }
