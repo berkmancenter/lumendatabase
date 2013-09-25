@@ -59,6 +59,23 @@ describe 'blog_entries/index.html.erb' do
     expect(page).to contain_link(url)
   end
 
+  it "does not embed the custom search engine when not configured" do
+    blog_entries = mock_blog_entries
+
+    render
+
+    expect(page).not_to have_custom_search_engine_embed
+  end
+
+  it "has a custom search engine" do
+    Chill::Application.config.stub(:google_custom_blog_search_id).and_return('yep')
+    blog_entries = mock_blog_entries
+
+    render
+
+    expect(page).to have_custom_search_engine_embed
+  end
+
   def mock_blog_entries
     blog_entries = create_list(:blog_entry, 3, :with_abstract, :published)
     yield blog_entries if block_given?
@@ -67,5 +84,9 @@ describe 'blog_entries/index.html.erb' do
     assign(:blog_entries, blog_entries)
     assign(:we_are_reading, [])
     blog_entries
+  end
+
+  def have_custom_search_engine_embed
+    have_css('.blog-search')
   end
 end

@@ -13,4 +13,23 @@
   </ol>
 </aside>
 
+<% if blog_search_engine_configured? %>
+  <aside class="sidebar blog-search">
+    <h4>Search the Blog</h4>
+    <script>
+      (function() {
+        var cx = '<%= Chill::Application.config.google_custom_blog_search_id %>';
+        var gcse = document.createElement('script');
+        gcse.type = 'text/javascript';
+        gcse.async = true;
+        gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+            '//www.google.com/cse/cse.js?cx=' + cx;
+        var s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(gcse, s);
+      })();
+    </script>
+    <gcse:search></gcse:search>
+  </aside>
+<% end %>
+
 <%= will_paginate @blog_entries %>
