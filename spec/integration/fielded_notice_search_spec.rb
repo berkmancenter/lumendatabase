@@ -104,9 +104,10 @@ feature "Fielded searches of Notices" do
       end
 
       scenario "dropdown retains visibility between page views", search: true, js: true do
-        pending 'Javascript set cookies do not appear to work in capybara-webkit'
-
+        search_on_page.open_advanced_search
         expect(page).to have_visible_advanced_search_controls
+
+        sleep 0.2
 
         search_on_page.visit_search_page
         expect(page).to have_visible_advanced_search_controls

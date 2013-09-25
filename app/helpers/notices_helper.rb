@@ -45,4 +45,8 @@ module NoticesHelper
   def iso_countries
     CountrySelect::ISO_COUNTRIES_FOR_SELECT
   end
+
+  def first_time_visitor_content
+    Markdown.render( t('first_time_visitor') )
+  end
 end

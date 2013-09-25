@@ -145,6 +145,28 @@ article.notice-show {
     }
   }
 
+  section.first-time-visitor {
+    background-color: $header-background-2;
+    color: hsl(26, 96%, 72%);
+    padding: 20px;
+
+    #hide-first-time-visitor-content {
+      text-align: right;
+      font-size: $base-font-size-small-1 - 1;
+      margin: 0px;
+
+      a {
+        text-align: right;
+        color: white;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+
+    }
+  }
+
   div.other-entities {
     background: $header-background-3;
     clear: both;
