@@ -96,6 +96,27 @@ aside.sidebar {
   }
 }
 
+aside.sidebar.blog-search {
+  table {
+    margin: 0px;
+  }
+
+  td {
+    padding: 0px;
+    margin: 0px;
+    border: none;
+  }
+
+  .cse .gsc-search-button input.gsc-search-button-v2, input.gsc-search-button-v2 {
+    height: auto;
+    width: auto;
+  }
+
+  .gsc-control-cse {
+    padding: 0px;
+  }
+}
+
 body.blog_entries {
   div.pagination {
     clear: left;
