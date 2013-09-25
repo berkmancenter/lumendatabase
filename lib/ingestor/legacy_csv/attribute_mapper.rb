@@ -2,9 +2,16 @@ module Ingestor
   class LegacyCsv
     class AttributeMapper
 
+      class ExcludedNoticeError < StandardError
+        def initialize(reason)
+          super("Notice was excluded because #{reason}")
+        end
+      end
+
       READLEVELS = {
         '3' => :hidden,
         '8' => :hidden,
+        '9' => :spam,
         '10' => :rescinded
       }
 
@@ -16,6 +23,8 @@ module Ingestor
           @hash['OriginalFilePath'],
           @hash['SupportingFilePath']
         )
+
+        check_exclusions!
       end
 
       def mapped
@@ -106,6 +115,30 @@ module Ingestor
 
       def hidden?
         READLEVELS[readlevel] == :hidden
+      end
+
+      def check_exclusions!
+        if spam_readlevel?
+          raise ExcludedNoticeError, "Readlevel indicated spam"
+        end
+
+        if spam_sender?
+          raise ExcludedNoticeError, "Sender is blacklisted"
+        end
+      end
+
+      def spam_readlevel?
+        READLEVELS[readlevel] == :spam
+      end
+
+      def spam_sender?
+        sender = hash['Sender_Principal'] or return false
+        recipient = hash['Recipient_Entity'] or return false
+
+        recipient =~ /^Google\b/ && (
+          sender == "Stephen Darori" ||
+          sender =~ /^(http:\/\/|www\.)linda/
+        )
       end
 
       def readlevel
