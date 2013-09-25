@@ -1,7 +1,11 @@
 <section class="notice-body">
-  <% if notice.body.present? %>
+  <% if notice.body? %>
     <h5 class="title">Alleged Infringment</h5>
     <p class="body"><%= notice.redacted(:body) %></p>
+  <% end %>
+  <% if notice.mark_registration_number? %>
+    <h5 class="title">Mark Registration Number</h5>
+    <p class="mark_registration_number"><%= notice.mark_registration_number %></p>
   <% end %>
 </section>
 

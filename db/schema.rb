@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130924172644) do
+ActiveRecord::Schema.define(:version => 20130925154608) do
 
   create_table "blog_entries", :force => true do |t|
     t.integer  "user_id"
@@ -129,8 +129,8 @@ ActiveRecord::Schema.define(:version => 20130924172644) do
     t.string   "title"
     t.text     "body"
     t.datetime "date_received"
-    t.datetime "created_at",                            :null => false
-    t.datetime "updated_at",                            :null => false
+    t.datetime "created_at",                                  :null => false
+    t.datetime "updated_at",                                  :null => false
     t.string   "source"
     t.string   "subject"
     t.boolean  "review_required"
@@ -138,14 +138,15 @@ ActiveRecord::Schema.define(:version => 20130924172644) do
     t.datetime "date_sent"
     t.integer  "reviewer_id"
     t.string   "language"
-    t.boolean  "rescinded",          :default => false, :null => false
+    t.boolean  "rescinded",                :default => false, :null => false
     t.string   "action_taken"
     t.string   "type"
     t.integer  "original_notice_id"
-    t.boolean  "spam",               :default => false
-    t.boolean  "hidden",             :default => false
+    t.boolean  "spam",                     :default => false
+    t.boolean  "hidden",                   :default => false
     t.string   "request_type"
     t.integer  "submission_id"
+    t.string   "mark_registration_number"
   end
 
   add_index "notices", ["original_notice_id"], :name => "index_notices_on_original_notice_id"

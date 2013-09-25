@@ -33,7 +33,8 @@ below, which defines what attributes are remapped for each Notice Type.
 | `regulation_list`                  | string             | Comma separated regulations / laws relevant to this notice, spaces are OK. Automatically lowercased. Only available for CourtOrder, and LawEnforcementRequest notice types.
 | `jurisidiction_list`               | string             | Comma separated list of jurisdictions, spaces are OK.
 | `action_taken`                     | string             | One of 'Yes', 'No', or 'Partial'. Defaults to 'No' if unspecified.
-| `request_type`                     | string             | One of 'Agency', 'Civil Subpoena', 'Email', 'Records Preservation', 'Subpoena', 'Warrant'. Valid only for LawEnforcementRequests
+| `request_type`                     | string             | One of 'Agency', 'Civil Subpoena', 'Email', 'Records Preservation', 'Subpoena', 'Warrant'. Valid only for LawEnforcementRequest notices.
+| `mark_registration_number`         | string             | A mark registration number. Valid only for Trademark notices.
 | `works_attributes`                 | [Work]             | A list of Works
 | `entity_notice_roles_attributes`   | [EntityNoticeRole] | A list of EntityNoticeRoles
 | `file_uploads_attributes`          | [FileUpload]       | A list of FileUploads
@@ -289,6 +290,7 @@ Attributes remain unchanged from ingestion.
 
 | Ingestion Field Name       | Mapped Field Name   | Removed?
 | ---                        | ---                 | ---
+| `mark_registration_number` |
 | `works.description`        | `marks`             |
 | `works.infringing_urls`    |                     | Yes
 | `works.copyrighted_urls`   |                     | Yes

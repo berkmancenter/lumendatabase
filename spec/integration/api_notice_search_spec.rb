@@ -101,7 +101,8 @@ feature "Searching for Notices via the API" do
       notice = create(
         :trademark,
         :with_facet_data,
-        title: "The Lion King on Youtube"
+        title: "The Lion King on Youtube",
+        mark_registration_number: '1337'
       )
 
       marks = notice.works.collect{|work| work.description}
@@ -110,6 +111,7 @@ feature "Searching for Notices via the API" do
         json_item = json['notices'].first
         expect(json_item).to have_key('marks').with_value(marks)
         expect(json_item).not_to have_key('works')
+        expect(json_item).to have_key('mark_registration_number').with_value('1337')
       end
     end
   end
