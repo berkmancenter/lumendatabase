@@ -160,7 +160,7 @@ feature "typed notice submissions" do
     submission.open_submission_form
 
     submission.fill_in_form_with({
-      "Complaint" => "These URLs disclose my existence", # works.description
+      "Type of information" => "These URLs disclose my existence", # works.description
       "Original Work URL" => "http://example.com/original_object1", # copyrighted_urls
       "URL with private information" => "http://example.com/offending_url1", # infringing_urls
 
