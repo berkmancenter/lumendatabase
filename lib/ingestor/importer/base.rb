@@ -25,8 +25,12 @@ module Ingestor
       end
 
       def self.read_file(file)
-        # http://stackoverflow.com/questions/9607554/ruby-invalid-byte-sequence-in-utf-8
-        IO.read(file).force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
+        content = IO.read(file)
+        if ! content.valid_encoding?
+          content.unpack("C*").pack("U*")
+        else
+          content
+        end
       end
 
       attr_reader :original_file_paths, :supporting_file_paths, :notice_type
