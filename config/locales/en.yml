@@ -22,3 +22,41 @@ en:
         breadcrumb: 'Redact queue'
         menu: 'Redact queue'
         title: 'Redact queue'
+
+  type_descriptions:
+    Dmca:
+      'Is someone complaining that images, text, video, or other content
+      that you have posted online infringe their copyrights'
+
+    Trademark:
+      'Is someone complaining that images, text, video, or other content
+      that you have posted online, or online activity in which you have
+      engaged, infringe their trademark(s)'
+
+    Defamation:
+      'Is someone complaining that images, text, video, or other content
+      that you have posted online, or online activity in which you have
+      engaged, defame, libel or slander them, or otherwise harm their
+      reputation'
+
+    CourtOrder:
+      'Has a judge or court issued an order or injunction ordering you
+      to remove images, text, video, or other content that you have
+      posted online, or to disable access to materials you have posted
+      or provide online?'
+
+    LawEnforcementRequest:
+      'Has a law enforcement agency or an agent of a law enforcement
+      agency requested that you remove images, text, video, or other
+      content that you have posted online, or that you, or your ISP
+      provide them with your or someone else’s identity, private
+      information or data that would normally not be available to the
+      public?'
+
+    PrivateInformation:
+      'Is someone complaining that images, text, video, or other content
+      that you have posted online reveal their private information?'
+
+    Other:
+      'Does the cease and desist letter you have received not meet any
+      of the descriptions above?'

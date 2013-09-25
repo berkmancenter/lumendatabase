@@ -10,12 +10,21 @@
     </ul>
   </section>
 
-  <section class="info-panel wip">
+  <section class="info-panel">
     <% Notice.type_models.each do |model| %>
       <div data-id="<%= model.name %>">
-        <article><b><%= model.label %>:</b> Has someone asked your ISP, or the host of an online discussion you participate in, to give them your identity or other information about you?</article>
+        <article>
+          <b><%= model.label %>:</b>
+          <%= t("type_descriptions.#{model.name}") %>
+        </article>
         <div class="button-wrapper">
-          <a class="button" href="<%= new_notice_path(type: model.name) %>">Report <%= model.label %> notice</a>
+          <%=
+            link_to(
+              "Report #{model.label}",
+              new_notice_path(type: model.name),
+              class: "button"
+            )
+          %>
         </div>
       </div>
     <% end %>
