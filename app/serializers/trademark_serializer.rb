@@ -1,5 +1,5 @@
 class TrademarkSerializer < NoticeSerializer
-  attribute :marks
+  attributes :marks, :mark_registration_number
 
   def marks
     object.works.map(&:description)

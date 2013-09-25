@@ -9,6 +9,7 @@ feature "typed notice submissions" do
       "Mark" => "My trademark (TM)",
       "Infringing URL" => "http://example.com/infringing_url1",
       "Alleged Infringment" => "They used my thing",
+      "Registration Number" => '1337'
     })
 
     submission.fill_in_entity_form_with(:recipient, {
@@ -32,6 +33,7 @@ feature "typed notice submissions" do
     within('.notice-body') do
       expect(page).to have_content('Alleged Infringment')
       expect(page).to have_content('They used my thing')
+      expect(page).to have_content('1337')
     end
   end
 

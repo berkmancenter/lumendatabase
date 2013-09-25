@@ -38,6 +38,7 @@
     </div>
     <div class="body-wrapper right attach">
       <%= form.input :body, label: 'Alleged Infringment' %>
+      <%= form.input :mark_registration_number, label: "Registration Number" %>
       <%= form.simple_fields_for(:file_uploads) do |file_uploads_form| %>
         <%= file_uploads_form.input :file, label: 'Attach Notice' %>
         <a href="javascript:void(0);" id="add-another">Attach another</a>
