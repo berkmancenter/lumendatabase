@@ -46,6 +46,14 @@ feature "Importing CSV" do
         'spec/support/example_files/original.jpg'
       )
     end
+
+    scenario "the correct entities are created" do
+      expect(@primary_format_notice).to have(4).entity_notice_roles
+      expect(@primary_format_notice.sender_name).to eq "JG Wentworth Associates"
+      expect(@primary_format_notice.attorney_name).to eq "John Wentworth"
+      expect(@primary_format_notice.principal_name).to eq "Kundan Singh"
+      expect(@primary_format_notice.recipient_name).to eq "Google, Inc. [Blogger]"
+    end
   end
 
   context "from the secondary google reporting format" do

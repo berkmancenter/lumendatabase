@@ -54,20 +54,7 @@ module Ingestor
           rescinded: rescinded?,
           hidden: hidden?,
           submission_id: hash['SubmissionID'],
-          entity_notice_roles: [
-            EntityNoticeRole.new(
-              name: 'sender',
-              entity: Entity.new({name: hash['Sender_Principal']}.merge(
-                address_hash('Sender')
-              ))
-            ),
-            EntityNoticeRole.new(
-              name: 'recipient',
-              entity: Entity.new({name: hash['Recipient_Entity']}.merge(
-                address_hash('Recipient')
-              ))
-            ),
-          ]
+          entity_notice_roles: entity_notice_roles,
         }
       end
 
@@ -79,14 +66,35 @@ module Ingestor
         Topic.where(name: topic_name)
       end
 
-      def address_hash(role_name)
+      def entity_notice_roles
+        [
+          build_role('sender', 'Sender_LawFirm', 'Sender'),
+          build_role('recipient', 'Recipient_Entity', 'Recipient'),
+          build_role('principal', 'Sender_Principal', nil),
+          build_role('attorney', 'Sender_Attorney', nil),
+        ].compact
+      end
+
+      def build_role(role_name, name_key, address_key)
+        return unless hash[name_key].present?
+
+        attributes = { name: hash[name_key] }
+
+        if address_key
+          attributes.merge!(address_hash(address_key))
+        end
+
+        EntityNoticeRole.new(name: role_name, entity_attributes: attributes)
+      end
+
+      def address_hash(prefix)
         {
-          address_line_1: hash["#{role_name}_Address1"],
-          address_line_2: hash["#{role_name}_Address2"],
-          city: hash["#{role_name}_City"],
-          state: hash["#{role_name}_State"],
-          zip: hash["#{role_name}_Zip"],
-          country_code: parse_country_code(hash["#{role_name}_Country"]),
+          address_line_1: hash["#{prefix}_Address1"],
+          address_line_2: hash["#{prefix}_Address2"],
+          city: hash["#{prefix}_City"],
+          state: hash["#{prefix}_State"],
+          zip: hash["#{prefix}_Zip"],
+          country_code: parse_country_code(hash["#{prefix}_Country"]),
         }
       end
 
