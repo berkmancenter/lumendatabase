@@ -27,6 +27,10 @@ class FieldedSearchNoticeGenerator
     for_role_name('sender')
   end
 
+  def for_principal_name
+    for_role_name('principal')
+  end
+
   def for_recipient_name
     for_role_name('recipient')
   end
@@ -63,10 +67,12 @@ class FieldedSearchNoticeGenerator
   def for_role_name(role_name)
     matched_notice.entity_notice_roles = [build(
       :entity_notice_role, name: role_name,
+      notice: matched_notice,
       entity: build(:entity, name: query)
     )]
     unmatched_notice.entity_notice_roles = [build(
       :entity_notice_role, name: role_name,
+      notice: unmatched_notice,
       entity: build(:entity, name: "N/A")
     )]
   end

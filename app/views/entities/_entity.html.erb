@@ -12,7 +12,15 @@
 
   <% if role == :sender %>
     <% if notice.on_behalf_of_principal? %>
-      <h6>on behalf of <%= link_to(notice.principal_name, '#') %></h6>
+      <h6>
+        on behalf of
+        <%=
+          link_to(
+            notice.principal_name,
+            faceted_search_path('principal_name' => notice.principal_name)
+          )
+        %>
+      </h6>
     <% end %>
     <%= render 'entities/address', entity: entity, role: role %>
     <span class="date sent">Sent on <%= date_sent(notice) %></span>

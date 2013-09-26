@@ -24,6 +24,10 @@ module Searchability
         indexes :sender_name_facet,
           analyzer: 'keyword', as: 'sender_name',
           include_in_all: false
+        indexes :principal_name, as: 'principal_name'
+        indexes :principal_name_facet,
+          analyzer: 'keyword', as: 'principal_name',
+          include_in_all: false
         indexes :tag_list_facet,
           analyzer: 'keyword', as: 'tag_list',
           include_in_all: false

@@ -13,6 +13,15 @@ feature "Faceted search of Notices", search: true do
       end
     end
 
+    it 'on principal names', search: true do
+      notice = create(:dmca, :with_facet_data)
+      with_a_faceted_search(
+        :principal_name, :principal_name_facet) do |results|
+        expect(results).to have_facets('principal_name').
+          with_terms([notice.principal_name])
+      end
+    end
+
     it 'on tags', search: true do
       notice = create(:dmca, :with_facet_data)
       with_a_faceted_search(
@@ -79,7 +88,12 @@ feature "Faceted search of Notices", search: true do
   context "filtering" do
     context "with a full-text search term" do
       [
-        :topic_facet, :sender_name_facet, :recipient_name_facet, :tag_list_facet, :country_code_facet
+        :topic_facet,
+        :sender_name_facet,
+        :principal_name_facet,
+        :recipient_name_facet,
+        :tag_list_facet,
+        :country_code_facet
       ].each do |facet_type|
         it "on #{facet_type}", js: true, search: true do
           outside_facet = create(:dmca, title: "King of New York")

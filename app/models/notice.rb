@@ -22,6 +22,7 @@ class Notice < ActiveRecord::Base
     TermSearch.new(:tags, :tag_list, 'Tags'),
     TermSearch.new(:jurisdictions, :jurisdiction_list, 'Jurisdictions'),
     TermSearch.new(:sender_name, :sender_name, 'Sender Name'),
+    TermSearch.new(:principal_name, :principal_name, 'Principal Name'),
     TermSearch.new(:recipient_name, :recipient_name, 'Recipient Name'),
     TermSearch.new(:works, 'works.description', 'Works Descriptions'),
     TermSearch.new(:action_taken, :action_taken, 'Action taken'),
@@ -30,6 +31,7 @@ class Notice < ActiveRecord::Base
   FILTERABLE_FIELDS = [
     TermFilter.new(:topic_facet, 'Topic'),
     TermFilter.new(:sender_name_facet, 'Sender'),
+    TermFilter.new(:principal_name_facet, 'Principal'),
     TermFilter.new(:recipient_name_facet, 'Recipient'),
     TermFilter.new(:tag_list_facet, 'Tags'),
     TermFilter.new(:country_code_facet, 'Country'),
