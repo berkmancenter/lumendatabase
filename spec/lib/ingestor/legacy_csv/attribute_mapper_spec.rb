@@ -16,14 +16,14 @@ describe Ingestor::LegacyCsv::AttributeMapper do
 
   it "maps basic metadata" do
     hash = {
-     'NoticeID' => '1',
-     'Subject' => 'The Title',
-     'Re_Line' => 'The Subject',
-     'How_Sent' => 'online form: Form',
-     'add_date' => '2013-07-01 00:06:00 -0400',
-     'alter_date' => '2013-07-02 00:07:00 -0400',
-     'Date' => '2013-07-01',
-     'Readlevel' => '0'
+      'NoticeID' => '1',
+      'Subject' => 'The Title',
+      'Re_Line' => 'The Subject',
+      'How_Sent' => 'online form: Form',
+      'add_date' => '2013-07-01 00:06:00 -0400',
+      'alter_date' => '2013-07-02 00:07:00 -0400',
+      'Date' => '2013-07-01',
+      'Readlevel' => '0'
     }
 
     attributes = described_class.new(hash).mapped
@@ -82,12 +82,14 @@ describe Ingestor::LegacyCsv::AttributeMapper do
   %w( Sender Recipient ).each do |role_name|
     it "creates a valid address for #{role_name}" do
       hash = {
-       "#{role_name}_Address1" => 'address 1',
-       "#{role_name}_Address2" => 'address 2',
-       "#{role_name}_City" => 'city',
-       "#{role_name}_State" => 'state',
-       "#{role_name}_Zip" => 'zip',
-       "#{role_name}_Country" => 'US',
+        "Sender_LawFirm" => "Not nil",
+        "Recipient_Entity" => "Not nil",
+        "#{role_name}_Address1" => 'address 1',
+        "#{role_name}_Address2" => 'address 2',
+        "#{role_name}_City" => 'city',
+        "#{role_name}_State" => 'state',
+        "#{role_name}_Zip" => 'zip',
+        "#{role_name}_Country" => 'US',
       }
 
       attributes = described_class.new(hash).mapped
@@ -102,20 +104,31 @@ describe Ingestor::LegacyCsv::AttributeMapper do
     end
   end
 
-  it "creates a sender entity from Sender_Principal" do
+  it "creates a sender entity from Sender_LawFirm" do
     hash = {
-     'Sender_Principal' => 'the entity',
+      'Sender_LawFirm' => 'the entity',
     }
 
     attributes = described_class.new(hash).mapped
 
     entity = find_entity_notice_role(attributes, 'sender').entity
+    expect(entity.name).to eq hash['Sender_LawFirm']
+  end
+
+  it "creates a principal entity from Sender_Principal" do
+    hash = {
+      'Sender_Principal' => 'the entity',
+    }
+
+    attributes = described_class.new(hash).mapped
+
+    entity = find_entity_notice_role(attributes, 'principal').entity
     expect(entity.name).to eq hash['Sender_Principal']
   end
 
   it "creates a recipient entity from the Recipient_Entity" do
     hash = {
-     'Recipient_Entity' => 'the entity',
+      'Recipient_Entity' => 'the entity',
     }
 
     attributes = described_class.new(hash).mapped
@@ -124,10 +137,22 @@ describe Ingestor::LegacyCsv::AttributeMapper do
     expect(entity.name).to eq hash['Recipient_Entity']
   end
 
+  it "creates an attorney entity from Sender_Attorney" do
+    hash = {
+      'Sender_Attorney' => 'the entity',
+    }
+
+    attributes = described_class.new(hash).mapped
+
+    entity = find_entity_notice_role(attributes, 'attorney').entity
+    expect(entity.name).to eq hash['Sender_Attorney']
+  end
+
   it "correctly interprets different country codes" do
     [' USA', 'US', 'us', 'United States', 'USA'].each do |country_code|
       hash = {
-       "Sender_Country" => country_code,
+        "Sender_LawFirm" => "Not nil",
+        "Sender_Country" => country_code,
       }
 
       attributes = described_class.new(hash).mapped

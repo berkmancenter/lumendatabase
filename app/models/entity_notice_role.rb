@@ -8,6 +8,7 @@ class EntityNoticeRole < ActiveRecord::Base
   ROLES = %w(
     principal
     agent
+    attorney
     recipient
     sender
     submitter

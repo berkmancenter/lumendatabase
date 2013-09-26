@@ -97,7 +97,7 @@ class Notice < ActiveRecord::Base
 
   delegate :country_code, to: :recipient, allow_nil: true
 
-  %i( sender principal recipient submitter ).each do |entity|
+  %i( sender principal recipient submitter attorney ).each do |entity|
     delegate :name, to: entity, prefix: true, allow_nil: true
   end
 
@@ -185,6 +185,10 @@ class Notice < ActiveRecord::Base
     @recipient ||= recipients.first
   end
 
+  def attorney
+    @attorney ||= attorneys.first
+  end
+
   def auto_redact
     RedactsNotices.new.redact(self)
   end
@@ -254,6 +258,10 @@ class Notice < ActiveRecord::Base
 
   def recipients
     entity_notice_roles.recipients.map(&:entity)
+  end
+
+  def attorneys
+    entity_notice_roles.attorneys.map(&:entity)
   end
 
 end
