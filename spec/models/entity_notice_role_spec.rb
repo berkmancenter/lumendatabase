@@ -29,21 +29,23 @@ describe EntityNoticeRole do
 
   context '#entities' do
     it "does not create duplicate entities" do
-      existing_entity = create(
-        :entity, entity_attributes
-      )
-      duplicate_entity = build(
-        :entity, entity_attributes
-      )
+      entity_notice_role_with_entity_attrs do |existing_entity, entity_notice_role|
 
-      entity_notice_role = build(
-        :entity_notice_role, entity: duplicate_entity, notice: build(:dmca)
-      )
-      entity_notice_role.save
+        entity_notice_role.save
+        entity_notice_role.reload
 
-      entity_notice_role.reload
+        expect(entity_notice_role.entity).to eq existing_entity
+      end
+    end
 
-      expect(entity_notice_role.entity).to eq existing_entity
+    it "creates additional entities when fields vary only slightly" do
+      entity_notice_role_with_entity_attrs(state: 'CA') do |existing_entity, entity_notice_role|
+
+        entity_notice_role.save
+        entity_notice_role.reload
+
+        expect(entity_notice_role.entity).not_to eq existing_entity
+      end
     end
 
     it "validates entities correctly when multiple are used at once" do
@@ -60,6 +62,18 @@ describe EntityNoticeRole do
   end
 
   private
+
+  def entity_notice_role_with_entity_attrs(attr_overrides = {})
+    existing_entity = create(
+      :entity, entity_attributes
+    )
+    duplicate_entity = build(
+      :entity, entity_attributes.merge(attr_overrides)
+    )
+
+    entity_notice_role = create(:entity_notice_role, entity: duplicate_entity, notice: build(:dmca))
+    yield existing_entity, entity_notice_role
+  end
 
   def notice_with_roles_attributes(attributes)
     Dmca.new(

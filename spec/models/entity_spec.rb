@@ -5,7 +5,14 @@ describe Entity do
     it { should validate_presence_of :name }
     it { should validate_presence_of :kind }
     it { should ensure_length_of(:address_line_1).is_at_most(255) }
-    it { should validate_uniqueness_of(:name) }
+  end
+
+  context 'de-duplication' do
+    it {
+      should validate_uniqueness_of(:name).scoped_to(
+        Entity::ADDITIONAL_DEDUPLICATION_FIELDS
+      )
+    }
   end
 
   it { should belong_to(:user) }

@@ -21,11 +21,24 @@ class Entity < ActiveRecord::Base
   end
 
   KINDS = %w[organization individual]
+  ADDITIONAL_DEDUPLICATION_FIELDS =
+    %i(address_line_1 city state zip country_code phone email)
 
   validates_inclusion_of :kind, in: KINDS
-  validates_uniqueness_of :name
+  validates_uniqueness_of :name,
+    scope: ADDITIONAL_DEDUPLICATION_FIELDS
 
   after_update { notices.each(&:touch) }
+
+  def attributes_for_deduplication
+    all_deduplication_attributes = [
+      :name, ADDITIONAL_DEDUPLICATION_FIELDS
+    ].flatten
+
+    attributes.select do |key, value|
+      all_deduplication_attributes.include?(key.to_sym)
+    end
+  end
 
   def self.submitters
     submitter_ids = EntityNoticeRole.submitters.map(&:entity_id)

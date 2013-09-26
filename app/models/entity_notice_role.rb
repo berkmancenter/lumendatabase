@@ -22,7 +22,7 @@ class EntityNoticeRole < ActiveRecord::Base
   def validate_associated_records_for_entity
     return unless entity.present?
 
-    if existing_entity = Entity.find_by_name(entity.name)
+    if existing_entity = Entity.where(entity.attributes_for_deduplication).first
       self.entity = existing_entity
     else
       # Since all validations are run before all inserts, the above does

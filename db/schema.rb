@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130925154608) do
+ActiveRecord::Schema.define(:version => 20130926150418) do
 
   create_table "blog_entries", :force => true do |t|
     t.integer  "user_id"
@@ -83,9 +83,16 @@ ActiveRecord::Schema.define(:version => 20130925154608) do
     t.integer "user_id"
   end
 
+  add_index "entities", ["address_line_1"], :name => "index_entities_on_address_line_1"
   add_index "entities", ["ancestry"], :name => "index_entities_on_ancestry"
-  add_index "entities", ["name"], :name => "index_entities_on_name", :unique => true
+  add_index "entities", ["city"], :name => "index_entities_on_city"
+  add_index "entities", ["country_code"], :name => "index_entities_on_country_code"
+  add_index "entities", ["email"], :name => "index_entities_on_email"
+  add_index "entities", ["name"], :name => "index_entities_on_name"
+  add_index "entities", ["phone"], :name => "index_entities_on_phone"
+  add_index "entities", ["state"], :name => "index_entities_on_state"
   add_index "entities", ["user_id"], :name => "index_entities_on_user_id"
+  add_index "entities", ["zip"], :name => "index_entities_on_zip"
 
   create_table "entity_notice_roles", :force => true do |t|
     t.integer  "entity_id",  :null => false
