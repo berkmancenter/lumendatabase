@@ -106,6 +106,34 @@ describe 'notices/show.html.erb' do
     end
   end
 
+  context "showing Principal" do
+    it "displays the name as 'on behalf of principal' when differing" do
+      notice = create(:dmca, role_names: %w( sender principal ))
+      notice.stub(:on_behalf_of_principal?).and_return(true)
+      assign(:notice, notice)
+
+      render
+
+      within('#entities .sender') do
+        expect(page).to have_content(notice.sender_name)
+        expect(page).to have_content("on behalf of #{notice.principal_name}")
+      end
+    end
+
+    it "does not display if not different" do
+      notice = create(:dmca, role_names: %w( sender principal ))
+      notice.stub(:on_behalf_of_principal?).and_return(false)
+      assign(:notice, notice)
+
+      render
+
+      within('#entities .sender') do
+        expect(page).to have_content(notice.sender_name)
+        expect(page).not_to have_content("on behalf of #{notice.principal_name}")
+      end
+    end
+  end
+
   it "displays a notice with all relevant questions" do
     topic_question = create(:relevant_question, question: "Q 1", answer: "A 1")
     notice_question = create(:relevant_question, question: "Q 2", answer: "A 2")

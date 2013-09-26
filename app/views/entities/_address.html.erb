@@ -1,3 +1,7 @@
-<h6><%= link_to(entity.name, faceted_search_path("#{role}_name" => entity.name)) %></h6>
 <span class="private">[Private]</span>
-<span><%= entity.city %>, <%= entity.state %>, <%= entity.zip %>, <%= entity.country_code.upcase %></span>
+<span>
+  <%= entity.city %>,
+  <%= entity.state %>,
+  <%= entity.zip %>,
+  <%= entity.country_code.upcase %>
+</span>

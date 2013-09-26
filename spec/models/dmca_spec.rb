@@ -31,18 +31,20 @@ describe Dmca do
 
   context "entity notice roles" do
     context 'with entities' do
-      %w( sender recipient ).each do |role_name|
+      %w( sender principal recipient ).each do |role_name|
         context "##{role_name}" do
           it "returns entity of type #{role_name}" do
+            # note: must use role names we're not testing in the factory
+            # call, otherwise extra entities can fail the test.
+            notice = create(:dmca, role_names: %w( agent ))
             entity = create(:entity)
-            notice = create(:dmca)
-
             create(
               :entity_notice_role,
               entity: entity,
               notice: notice,
               name: role_name
             )
+
             expect(notice.send(role_name)).to eq entity
           end
 
@@ -395,6 +397,32 @@ describe Dmca do
       expect { Notice.find_visible(hidden_notice.id) }.to raise_error(
         ActiveRecord::RecordNotFound
       )
+    end
+  end
+
+  context "#on_behalf_of_principal?" do
+    it "returns true when principal is present and differs from sender" do
+      notice = create(:dmca, role_names: %w( sender principal ))
+      notice.sender.update_attributes(name: "The Sender")
+      notice.principal.update_attributes(name: "The Principal")
+
+      expect(notice).to be_on_behalf_of_principal
+    end
+
+    it "returns false when principal is not present" do
+      notice = create(:dmca, role_names: %w( sender principal ))
+      notice.sender.update_attributes(name: "The Sender")
+      notice.principal.update_attributes(name: "")
+
+      expect(notice).not_to be_on_behalf_of_principal
+    end
+
+    it "returns false when principal is same as sender" do
+      notice = create(:dmca, role_names: %w( sender principal ))
+      notice.sender.update_attributes(name: "The Sender")
+      notice.principal.update_attributes(name: "The Sender")
+
+      expect(notice).not_to be_on_behalf_of_principal
     end
   end
 
