@@ -96,9 +96,10 @@ class Notice < ActiveRecord::Base
   accepts_nested_attributes_for :works
 
   delegate :country_code, to: :recipient, allow_nil: true
-  delegate :name, to: :sender, prefix: true, allow_nil: true
-  delegate :name, to: :recipient, prefix: true, allow_nil: true
-  delegate :name, to: :submitter, prefix: true, allow_nil: true
+
+  %i( sender principal recipient submitter ).each do |entity|
+    delegate :name, to: entity, prefix: true, allow_nil: true
+  end
 
   define_elasticsearch_mapping
 
@@ -169,15 +170,19 @@ class Notice < ActiveRecord::Base
   end
 
   def submitter
-    @submitter ||= entities_that_have_submitted.first
+    @submitter ||= submitters.first
   end
 
   def sender
-    @sender ||= entities_that_have_sent.first
+    @sender ||= senders.first
+  end
+
+  def principal
+    @principal ||= principals.first
   end
 
   def recipient
-    @recipient ||= entities_that_have_received.first
+    @recipient ||= recipients.first
   end
 
   def auto_redact
@@ -229,17 +234,25 @@ class Notice < ActiveRecord::Base
     file_uploads.where(kind: 'supporting')
   end
 
+  def on_behalf_of_principal?
+    principal_name.present? && principal_name != sender_name
+  end
+
   private
 
-  def entities_that_have_submitted
+  def submitters
     entity_notice_roles.submitters.map(&:entity)
   end
 
-  def entities_that_have_sent
+  def senders
     entity_notice_roles.senders.map(&:entity)
   end
 
-  def entities_that_have_received
+  def principals
+    entity_notice_roles.principals.map(&:entity)
+  end
+
+  def recipients
     entity_notice_roles.recipients.map(&:entity)
   end
 
