@@ -121,7 +121,21 @@ class FakeNotice
   end
 
   def sender
-    @sender ||= [{
+    @sender ||= individuals.sample
+  end
+
+  def principal
+    @principal ||= rand(100) < 30 ? sender : individuals.sample
+  end
+
+  def submitter
+    @submitter ||= rand(100) < 60 ? sender : recipient
+  end
+
+  private
+
+  def individuals
+    [{
       name: 'Joe Lawyer',
       kind: 'individual',
       address_line_1: '1234 Anystreet St.',
@@ -156,11 +170,7 @@ class FakeNotice
       state: 'CA',
       zip: '94044',
       country_code: 'US'
-    }].sample
-  end
-
-  def submitter
-    @submitter ||= rand(100) < 60 ? sender : recipient
+    }]
   end
 end
 
@@ -200,6 +210,8 @@ unless ENV['SKIP_FAKE_DATA']
         name: 'recipient', entity_attributes: fake.recipient
       }, {
         name: 'sender', entity_attributes: fake.sender
+      }, {
+        name: 'principal', entity_attributes: fake.principal
       }, {
         name: 'submitter', entity_attributes: fake.submitter
       }]
