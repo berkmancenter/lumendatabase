@@ -18,7 +18,7 @@ FactoryGirl.define do
     works { build_list(:work, 1) }
 
     ignore do
-      role_names ['principal']
+      role_names ['agent']
     end
 
     after :build do |notice, evaluator|
@@ -66,7 +66,7 @@ FactoryGirl.define do
       with_tags
       with_jurisdictions
       with_topics
-      role_names ['sender', 'recipient']
+      role_names %w( sender principal recipient )
       date_received Time.now
     end
 

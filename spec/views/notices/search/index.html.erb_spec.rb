@@ -22,7 +22,7 @@ describe 'notices/search/index.html.erb' do
   it "includes the notice data" do
     notice = create(
       :dmca,
-      role_names: ['recipient','sender'],
+      role_names: %w( sender principal recipient ),
       title: 'A notice',
       date_received: Time.now,
       topics: build_list(:topic, 2)
@@ -88,6 +88,12 @@ describe 'notices/search/index.html.erb' do
   def facet_data
     {
       "sender_name_facet" => { "terms" =>
+        [
+          { "term" => "Mike's Lawyer", "count" => 27 },
+          { "term" => "Imak's Lawyer", "count" => 27 }
+        ]
+      },
+      "principal_name_facet" => { "terms" =>
         [
           { "term" => "Mike Itten", "count" => 27 },
           { "term" => "Imak Itten", "count" => 27 }

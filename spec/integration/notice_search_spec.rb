@@ -96,7 +96,7 @@ feature "Searching Notices" do
     end
 
     scenario "for entities", search: true do
-      notice = create(:dmca, role_names: ['sender','recipient'])
+      notice = create(:dmca, role_names: %w( sender principal recipient))
 
       within_search_results_for(notice.recipient_name) do
         expect(page).to have_n_results(1)
@@ -109,6 +109,13 @@ feature "Searching Notices" do
         expect(page).to have_n_results(1)
         expect(page).to have_content(notice.title)
         expect(page).to have_content(notice.sender_name)
+        expect(page.html).to have_excerpt('Entity')
+      end
+
+      within_search_results_for(notice.principal_name) do
+        # note: principal name not shown in results
+        expect(page).to have_n_results(1)
+        expect(page).to have_content(notice.title)
         expect(page.html).to have_excerpt('Entity')
       end
     end

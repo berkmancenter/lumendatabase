@@ -94,7 +94,7 @@ describe 'notices/show.html.erb' do
   end
 
   it "displays sender_names such that they are clickable" do
-    notice = create(:dmca, role_names: ['sender', 'recipient'])
+    notice = create(:dmca, role_names: %w( sender principal recipient ))
 
     assign(:notice, notice)
 
@@ -102,6 +102,7 @@ describe 'notices/show.html.erb' do
 
     within('#entities') do
       expect(page).to have_facet_link(:sender_name, notice.sender_name)
+      expect(page).to have_facet_link(:principal_name, notice.principal_name)
       expect(page).to have_facet_link(:recipient_name, notice.recipient_name)
     end
   end

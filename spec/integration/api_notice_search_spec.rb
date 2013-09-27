@@ -21,7 +21,11 @@ feature "Searching for Notices via the API" do
       expect_api_search_to_find("king") do |json|
         facets = json['meta']['facets']
         expect(facets.keys).to include(
-          'sender_name_facet', 'recipient_name_facet', 'topic_facet', 'date_received_facet'
+          'sender_name_facet',
+          'principal_name_facet',
+          'recipient_name_facet',
+          'topic_facet',
+          'date_received_facet'
         )
       end
     end
