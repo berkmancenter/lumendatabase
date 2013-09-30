@@ -67,12 +67,12 @@ module Ingestor
       end
 
       def entity_notice_roles
-        [
+        transform_entity_names([
           build_role('sender', 'Sender_LawFirm', 'Sender'),
           build_role('recipient', 'Recipient_Entity', 'Recipient'),
           build_role('principal', 'Sender_Principal', nil),
           build_role('attorney', 'Sender_Attorney', nil),
-        ].compact
+        ].compact)
       end
 
       def build_role(role_name, name_key, address_key)
@@ -151,6 +151,31 @@ module Ingestor
 
       def readlevel
         hash['Readlevel'].to_s
+      end
+
+      def transform_entity_names(entity_notice_roles)
+        if has_sender_and_principal?(entity_notice_roles)
+          entity_notice_roles.map do |role|
+            if role.name == 'sender'
+              normalize_name(role.entity)
+              role
+            else
+              role
+            end
+          end
+        else
+          entity_notice_roles
+        end
+      end
+
+      def normalize_name(entity)
+        entity.name = entity.name.split(/on behalf of/i)[0].strip
+      end
+
+      def has_sender_and_principal?(entity_notice_roles)
+        role_names = entity_notice_roles.collect { |role| role.name }
+        wanted_role_names = ['sender', 'principal']
+        role_names.each_cons(wanted_role_names.length).include?(wanted_role_names)
       end
 
     end

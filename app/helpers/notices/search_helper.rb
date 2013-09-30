@@ -1,4 +1,9 @@
 module Notices::SearchHelper
+
+  def on_behalf_of(sender_name, principal_name)
+    "#{sender_name} on behalf of #{principal_name}"
+  end
+
   def formatted_facet_range_time(time)
     Time.at(time / 1000).to_datetime.to_s(:simple)
   end

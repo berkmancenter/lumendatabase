@@ -27,6 +27,7 @@ describe 'notices/search/index.html.erb' do
       date_received: Time.now,
       topics: build_list(:topic, 2)
     )
+    on_behalf_of = "#{notice.sender_name} on behalf of #{notice.principal_name}"
     mock_results([notice])
 
     render
@@ -40,6 +41,7 @@ describe 'notices/search/index.html.erb' do
       expect(page).to have_css(
         '.date-received', text: notice.date_received.to_s(:simple)
       )
+      expect(page).to have_content(on_behalf_of)
       within('.topic') do
         notice.topics.each do |topic|
           expect(page).to have_content(topic.name)

@@ -3,7 +3,14 @@
   <div class="metadata">
     <div class="date-received"><%= date_received(result) %></div>
     <div class="sender-receiver">
-      <%= link_to(result.sender_name, faceted_search_path(sender_name: result.sender_name), class: 'sender' )%>
+      <% if result.on_behalf_of_principal? %>
+        <%= link_to(
+            on_behalf_of(result.sender_name, result.principal_name),
+            faceted_search_path(sender_name: result.sender_name), class: 'sender'
+        )%>
+      <% else %>
+        <%= link_to(result.sender_name, faceted_search_path(sender_name: result.sender_name), class: 'sender' )%>
+      <% end %>
       <span class="arrow"><%= image_tag 'arrow-small.svg' %></span>
       <%= link_to(result.recipient_name, faceted_search_path(recipient_name: result.recipient_name), class: 'receiver' )%>
     </div>

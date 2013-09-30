@@ -115,6 +115,38 @@ describe Ingestor::LegacyCsv::AttributeMapper do
     expect(entity.name).to eq hash['Sender_LawFirm']
   end
 
+  context "with sender and principal entities" do
+    it "removes 'on behalf of'" do
+      hash = {
+        'Sender_LawFirm' => 'The sender on behalf of the entity',
+        'Sender_Principal' => 'The entity',
+      }
+
+      attributes = described_class.new(hash).mapped
+
+      sender = find_entity_notice_role(attributes, 'sender').entity
+      expect(sender.name).to eq 'The sender'
+
+      principal = find_entity_notice_role(attributes, 'principal').entity
+      expect(principal.name).to eq 'The entity'
+    end
+
+    it "does not modify sender when there's no 'on behalf of'" do
+      hash = {
+        'Sender_LawFirm' => 'The sender',
+        'Sender_Principal' => 'The entity',
+      }
+
+      attributes = described_class.new(hash).mapped
+
+      sender = find_entity_notice_role(attributes, 'sender').entity
+      expect(sender.name).to eq 'The sender'
+
+      principal = find_entity_notice_role(attributes, 'principal').entity
+      expect(principal.name).to eq 'The entity'
+    end
+  end
+
   it "creates a principal entity from Sender_Principal" do
     hash = {
       'Sender_Principal' => 'the entity',
