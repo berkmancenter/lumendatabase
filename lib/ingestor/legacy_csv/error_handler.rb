@@ -5,13 +5,13 @@ module Ingestor
 
       delegate :close, to: :csv
 
-      def initialize(directory)
+      def initialize(directory, file_name)
         @originals = File.expand_path(directory)
         @failures = "#{originals}-failures"
 
         mkdir_p @failures
 
-        @csv = CSV.open(File.join(@failures, 'tNotice.csv'), 'wb')
+        @csv = CSV.open(File.join(@failures, file_name), 'wb')
         @logger = Logger.new(STDERR)
       end
 

@@ -18,9 +18,18 @@ describe Ingestor::LegacyCsv::ErrorHandler do
     FileUtils.rm_rf 'tmp/example-import-failures'
   end
 
+  context "error report file name" do
+    it "is relative to the import file name" do
+      file_name = 'foobar.csv'
+      handler = described_class.new(directory, file_name)
+
+      expect(File.exists?("#{directory}-failures/foobar.csv")).to be
+    end
+  end
+
   context ".copy_headers" do
     it "copies the headers with another column" do
-      handler = described_class.new(directory)
+      handler = described_class.new(directory, 'tNotice.csv')
 
       handler.copy_headers("#{directory}/tNotice.csv")
 
@@ -45,13 +54,13 @@ describe Ingestor::LegacyCsv::ErrorHandler do
       @logger.should_receive(:error).with('Error importing Notice 1000')
       @logger.should_receive(:error).with('  Error: (RuntimeError) Boom!: first')
       @logger.should_receive(:error).with('  Files: sub/original.txt, sub/original.html')
-      handler = described_class.new(directory)
+      handler = described_class.new(directory, 'tNotice.csv')
 
       Dir.chdir(directory) { handler.handle(csv_row, exception) }
     end
 
     it "records the CSV row and failure" do
-      handler = described_class.new(directory)
+      handler = described_class.new(directory, 'tNotice.csv')
 
       Dir.chdir(directory) { handler.handle(csv_row, exception) }
 
@@ -63,7 +72,7 @@ describe Ingestor::LegacyCsv::ErrorHandler do
     end
 
     it "copies any original files" do
-      handler = described_class.new(directory)
+      handler = described_class.new(directory, 'tNotice.csv')
 
       Dir.chdir(directory) { handler.handle(csv_row, exception) }
 
