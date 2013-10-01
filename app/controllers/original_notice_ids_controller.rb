@@ -1,11 +1,5 @@
-class OriginalNoticeIdsController < ApplicationController
+class OriginalNoticeIdsController < RedirectingController
   def show
-    notice = Notice.find_by_original_notice_id(params[:id])
-
-    if notice
-      redirect_to(notice_path(notice), status: :moved_permanently)
-    else
-      render nothing: true, status: :not_found
-    end
+    super(Notice, :find_by_original_notice_id)
   end
 end

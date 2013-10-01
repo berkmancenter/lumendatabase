@@ -19,6 +19,8 @@ Chill::Application.routes.draw do
   get '/submission_id/:id', to: 'submission_ids#show'
   get '/original_notice_id/:id', to: 'original_notice_ids#show'
 
+  get '/original_news_id/:id', to: 'original_news_ids#show'
+
   resources :topics, only: [:show]
 
   scope format: true, constraints: { format: :json } do
