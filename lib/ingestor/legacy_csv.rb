@@ -18,7 +18,7 @@ module Ingestor
 
       @logger.debug { "Started at: #{@start_unixtime}, #{Time.now}" }
 
-      @error_handler = ErrorHandler.new(base_directory)
+      @error_handler = ErrorHandler.new(base_directory, csv_file)
       @error_handler.copy_headers(file_path)
 
       @succeeded = 0
