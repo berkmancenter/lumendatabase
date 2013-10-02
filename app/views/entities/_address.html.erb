@@ -3,5 +3,5 @@
   <%= entity.city %>,
   <%= entity.state %>,
   <%= entity.zip %>,
-  <%= entity.country_code.upcase %>
+  <%= entity.country_code.try(:upcase) %>
 </span>
