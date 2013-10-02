@@ -76,45 +76,10 @@ module Ingestor
       end
 
       def build_role(role_name, name_key, address_key)
-        return unless hash[name_key].present?
-
-        attributes = { name: hash[name_key] }
-
-        if address_key
-          attributes.merge!(address_hash(address_key))
-        end
-
-        EntityNoticeRole.new(name: role_name, entity_attributes: attributes)
-      end
-
-      def address_hash(prefix)
-        {
-          address_line_1: hash["#{prefix}_Address1"],
-          address_line_2: hash["#{prefix}_Address2"],
-          city: hash["#{prefix}_City"],
-          state: hash["#{prefix}_State"],
-          zip: hash["#{prefix}_Zip"],
-          country_code: parse_country_code(hash["#{prefix}_Country"]),
-        }
-      end
-
-      def parse_country_code(country_code)
-        return country_code if country_code.nil?
-
-        country_code.strip!
-
-        if country_code.length == 2
-          country_code
-        else
-          mapping[country_code] || country_code[0,2]
-        end
-      end
-
-      def mapping
-        {
-          'United States' => 'US',
-          'USA' => 'US',
-        }
+        builder = EntityNoticeRoleBuilder.new(
+          hash, role_name, name_key, address_key
+        )
+        builder.build
       end
 
       def rescinded?
@@ -157,7 +122,7 @@ module Ingestor
         if has_sender_and_principal?(entity_notice_roles)
           entity_notice_roles.map do |role|
             if role.name == 'sender'
-              normalize_name(role.entity)
+              normalize_sender_name(role.entity)
               role
             else
               role
@@ -168,7 +133,7 @@ module Ingestor
         end
       end
 
-      def normalize_name(entity)
+      def normalize_sender_name(entity)
         entity.name = entity.name.split(/on behalf of/i)[0].strip
       end
 

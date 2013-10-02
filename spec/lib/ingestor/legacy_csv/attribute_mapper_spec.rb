@@ -115,6 +115,24 @@ describe Ingestor::LegacyCsv::AttributeMapper do
     expect(entity.name).to eq hash['Sender_LawFirm']
   end
 
+  it "removes extraenous fields from entity names" do
+    [
+      %q|Electronic Arts Inc. ("EA")
+contact_email_noprefill: info.antipiracy@dtecnet.com|,
+%q|Electronic Arts Inc. ("EA")url_box3: http://example.com|
+
+    ].each do |entity_name|
+      hash = {
+        'Sender_LawFirm' => entity_name
+      }
+
+      attributes = described_class.new(hash).mapped
+
+      entity = find_entity_notice_role(attributes, 'sender').entity
+      expect(entity.name).to eq %Q|Electronic Arts Inc. ("EA")|
+    end
+  end
+
   context "with sender and principal entities" do
     it "removes 'on behalf of'" do
       hash = {
