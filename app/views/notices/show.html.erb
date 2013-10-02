@@ -1,6 +1,9 @@
 <% title 'Notices', @notice.title %>
 
 <article class="notice-show">
+  <%= content_tag('section', class: 'first-time-visitor', style: 'display: none;', 'data-content' => first_time_visitor_content) do %>
+    <p id="hide-first-time-visitor-content"><a href="#">↑↑ Hide ↑↑</a></p>
+  <% end %>
   <section class="body">
     <header id="entities">
       <h1><%= @notice.title %></h1>
