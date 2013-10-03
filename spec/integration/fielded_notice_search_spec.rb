@@ -72,6 +72,15 @@ feature "Fielded searches of Notices" do
   end
 
   context "advanced search" do
+
+    scenario "is open when a faceted search is run", search: true, js: true do
+      notice = create(:dmca, :with_facet_data, title: "Lion King")
+
+      visit "/faceted_search?sender_name=#{CGI.escape(notice.sender_name)}"
+
+      expect(page).to have_visible_advanced_search_controls
+    end
+
     scenario "copies search parameters to the facet form.", search: true, js: true do
       notice = create(:dmca, :with_facet_data, title: "Lion King two")
 

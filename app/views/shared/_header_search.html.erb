@@ -26,3 +26,7 @@
     <% end %>
   </div>
 </header>
+
+<%= javascript_tag do -%>
+  var active_advanced_search_parameters = <%= active_advanced_search_parameters? %>;
+<% end %>

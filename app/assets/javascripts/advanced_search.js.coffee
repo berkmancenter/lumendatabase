@@ -12,5 +12,5 @@ $('#toggle-advanced-search').on 'click', ->
   toggleAdvancedSearch('fast')
 
 $ ->
-  if $.cookie('advanced_search_visibility') == "1"
+  if $.cookie('advanced_search_visibility') == "1" || active_advanced_search_parameters
     toggleAdvancedSearch(0)

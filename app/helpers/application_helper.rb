@@ -23,4 +23,8 @@ module ApplicationHelper
 
     rails_admin.show_path(model_name: model_name, id: object.id)
   end
+
+  def active_advanced_search_parameters?
+    Notice::SEARCHABLE_FIELDS.find { |field| params[field.parameter] }.present?
+  end
 end
