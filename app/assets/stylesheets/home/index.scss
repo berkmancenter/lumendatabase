@@ -64,7 +64,7 @@ section.home-search-form {
   }
 
   div.more-info {
-    color: #AEB4B9;
+    color: lighten($base-font-color, 10%);
     margin-top: 35px;
     padding: 0 100px;
     text-align: center;
