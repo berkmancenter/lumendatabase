@@ -48,6 +48,7 @@ namespace :chillingeffects do
     batch_size = (ENV['BATCH_SIZE'] || 50).to_i
     [Notice, Entity].each do |klass|
       klass.index.delete
+      klass.create_elasticsearch_index
       count = 0
       klass.find_in_batches(conditions: '1 = 1', batch_size: batch_size) do |instances|
         GC.start
