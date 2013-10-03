@@ -69,20 +69,22 @@ class Notice < ActiveRecord::Base
 
   belongs_to :reviewer, class_name: 'User'
 
-  has_many :topic_assignments, dependent: :destroy
+  has_many :topic_assignments, dependent: :destroy, include: [ :topic ]
   has_many :topics, through: :topic_assignments
   has_many :topic_relevant_questions,
     through: :topics, source: :relevant_questions
   has_many :related_blog_entries,
     through: :topics, source: :blog_entries, uniq: true
-  has_many :entity_notice_roles, dependent: :destroy, inverse_of: :notice
+  has_many :entity_notice_roles, dependent: :destroy, inverse_of: :notice,
+    include: [ :entity ]
   has_many :entities, through: :entity_notice_roles
   has_many :file_uploads
   has_many :infringing_urls, through: :works
   has_many :copyrighted_urls, through: :works
   has_and_belongs_to_many :relevant_questions
 
-  has_and_belongs_to_many :works
+  has_and_belongs_to_many :works,
+    include: [ :infringing_urls, :copyrighted_urls ]
 
   validates_inclusion_of :action_taken, in: VALID_ACTIONS, allow_blank: true
   validates_inclusion_of :language, in: Language.codes, allow_blank: true
