@@ -43,7 +43,7 @@ module Ingestor
           subject: hash['Re_Line'],
           source: hash['How_Sent'],
           action_taken: importer.action_taken,
-          created_at: hash['add_date'],
+          created_at: find_created_at,
           updated_at: hash['alter_date'],
           date_sent: hash['Date'],
           date_received: hash['Date'],
@@ -64,6 +64,14 @@ module Ingestor
 
       def topics(topic_name)
         Topic.where(name: topic_name)
+      end
+
+      def find_created_at
+        if [nil, '0000-00-00 00:00:00'].include?(hash['add_date'])
+          hash['alter_date']
+        else
+          hash['add_date']
+        end
       end
 
       def entity_notice_roles
