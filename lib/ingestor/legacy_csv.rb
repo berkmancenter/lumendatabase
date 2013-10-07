@@ -44,6 +44,10 @@ module Ingestor
       Dmca.transaction do
         mapper = AttributeMapper.new(csv_row.to_hash)
 
+        if Notice.where(original_notice_id: csv_row['NoticeID']).present?
+          next
+        end
+
         attributes = mapper.mapped
         updated_at = attributes.delete(:updated_at)
 

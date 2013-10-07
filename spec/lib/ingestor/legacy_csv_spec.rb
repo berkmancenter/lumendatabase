@@ -18,10 +18,22 @@ describe Ingestor::LegacyCsv do
     @attribute_mapper.stub(:notice_type).and_return(Trademark)
     Trademark.should_receive(:create!).at_least(:once).and_return(Trademark.new)
 
-    new_importer.import
+    importer.import
   end
 
-  def new_importer
+  it "attempts to find a notice by original_notice_id before importing" do
+    dmca = Dmca.new
+    # TODO - get rid of these mystery guest values. . .
+    ['1053314', '1053334', '1053432', '1053532'].each do |original_notice_id|
+      Notice.should_receive(:where).with(original_notice_id: original_notice_id).once.and_return(dmca)
+    end
+
+    Dmca.should_not_receive(:create!)
+
+    importer.import
+  end
+
+  def importer
     sample_file = "spec/support/example_files/example_notice_export.csv"
 
     described_class.new(sample_file).tap do |importer|
