@@ -36,6 +36,11 @@ article.notice-show {
       position: relative;
     }
 
+    span.on_behalf_of {
+      display: inline;
+      color: hsla(0, 0%, 100%, 0.6);
+    }
+
     section.sender, section.recipient {
       @extend %notice-header;
 

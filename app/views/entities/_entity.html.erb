@@ -13,7 +13,7 @@
   <% if role == :sender %>
     <% if notice.on_behalf_of_principal? %>
       <h6>
-        on behalf of
+        <span class="on_behalf_of">on behalf of</span>
         <%=
           link_to(
             notice.principal_name,
