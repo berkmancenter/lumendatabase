@@ -26,18 +26,18 @@ en:
   type_descriptions:
     Dmca:
       'Is someone complaining that images, text, video, or other content
-      that you have posted online infringe their copyrights'
+      that you have posted online infringe their copyrights?'
 
     Trademark:
       'Is someone complaining that images, text, video, or other content
       that you have posted online, or online activity in which you have
-      engaged, infringe their trademark(s)'
+      engaged, infringe their trademark(s)?'
 
     Defamation:
       'Is someone complaining that images, text, video, or other content
       that you have posted online, or online activity in which you have
       engaged, defame, libel or slander them, or otherwise harm their
-      reputation'
+      reputation?'
 
     CourtOrder:
       'Has a judge or court issued an order or injunction ordering you
