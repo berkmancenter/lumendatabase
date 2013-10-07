@@ -120,6 +120,13 @@ form.new_notice {
     margin-bottom: 0;
   }
 
+  input {
+    @include placeholder {
+      color: #999;
+      font-weight: 300;
+    }
+  }
+
   #{$all-text-inputs} {
     padding-left: $form-label-width + $form-label-margin;
   }
@@ -132,16 +139,12 @@ form.new_notice {
     padding-top: 32px + $form-label-margin;
   }
 
-  label.file {
-    width: $long-label-width;
-  }
-
   input.file {
     border: 1px solid $form-border-color;
     border-radius: $form-border-radius;
     font-size: $base-font-size-small-1 - 1;
     line-height: 0;
-    padding-left: $long-label-width + $form-label-margin;
+    padding-left: $form-label-width + $form-label-margin;
   }
 
   a.add {
