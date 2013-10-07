@@ -213,30 +213,6 @@ feature "Searching for Notices via the API" do
         work = json_item['works'].first
 
         expect(json_item).to have_key('explanation')
-        expect(work).to have_key('original_work_urls')
-        expect(work).to have_key('urls_with_private_information')
-        expect(work).to have_key('complaint')
-
-        expect(work).not_to have_key('description')
-        expect(work).not_to have_key('body')
-        expect(json_item).not_to have_key('body')
-      end
-    end
-  end
-
-  context PrivateInformation do
-    scenario "has model-specific metadata", js: true, search: true do
-      create(
-        :private_information,
-        title: "The Lion King on Youtube",
-      )
-
-      expect_api_search_to_find("king") do |json|
-        json_item = json['notices'].first
-        work = json_item['works'].first
-
-        expect(json_item).to have_key('explanation')
-        expect(work).to have_key('original_work_urls')
         expect(work).to have_key('urls_with_private_information')
         expect(work).to have_key('complaint')
 
