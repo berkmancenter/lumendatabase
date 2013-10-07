@@ -1,7 +1,11 @@
 module Notices::SearchHelper
 
   def on_behalf_of(sender_name, principal_name)
-    raw "#{sender_name} <span class=\"on_behalf_of\">on behalf of</span> #{principal_name}"
+    raw "#{with_truncation(sender_name)} <span class=\"on_behalf_of\">on behalf of</span> #{with_truncation(principal_name)}"
+  end
+
+  def with_truncation(string)
+    truncate(string, length: 20, omission: '…')
   end
 
   def formatted_facet_range_time(time)

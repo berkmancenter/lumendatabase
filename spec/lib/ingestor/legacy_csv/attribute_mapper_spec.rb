@@ -40,6 +40,21 @@ describe Ingestor::LegacyCsv::AttributeMapper do
     expect(attributes[:hidden]).to be_false
   end
 
+  context "created_at" do
+    [nil, '0000-00-00 00:00:00'].each do |date|
+      it "comes from alter_date if add_date is #{date}" do
+        hash = {
+          'add_date' => date,
+          'alter_date' => '2013-07-02 00:07:00 -0400'
+        }
+
+        attributes = described_class.new(hash).mapped
+
+        expect(attributes[:created_at]).to eq hash['alter_date']
+      end
+    end
+  end
+
   it "loads works and files using Ingester::ImportDispatcher" do
     hash = {
       'OriginalFilePath' => 'path',

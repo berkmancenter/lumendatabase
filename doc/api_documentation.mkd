@@ -284,7 +284,7 @@ Attributes remain unchanged from ingestion.
 | `body`                     | `explanation`                                |
 | `works.description`        | `works.complaint`                            |
 | `works.infringing_urls`    | `works.urls_with_private_information`        |
-| `works.copyrighted_urls`   | `works.original_work_urls`                   |
+| `works.copyrighted_urls`   |                                              | Yes
 
 #### Trademark
 

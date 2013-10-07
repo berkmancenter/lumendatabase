@@ -163,7 +163,6 @@ feature "typed notice submissions" do
 
     submission.fill_in_form_with({
       "Type of information" => "These URLs disclose my existence", # works.description
-      "Original Work URL" => "http://example.com/original_object1", # copyrighted_urls
       "URL with private information" => "http://example.com/offending_url1", # infringing_urls
 
       "Explanation of Complaint" => "I am in witness protection", #notice.body
@@ -186,7 +185,6 @@ feature "typed notice submissions" do
       expect(page).to have_content('URLs with private information')
       expect(page).to have_content('http://example.com/offending_url1')
       expect(page).to have_content('URLs of original work')
-      expect(page).to have_content('http://example.com/original_object1')
       expect(page).to have_content('These URLs disclose my existence')
     end
 
