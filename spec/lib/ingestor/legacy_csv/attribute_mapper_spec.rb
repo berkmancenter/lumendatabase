@@ -148,6 +148,17 @@ contact_email_noprefill: info.antipiracy@dtecnet.com|,
     end
   end
 
+  context "entity name quirks" do
+    it "does not create entities when the name is only whitespace" do
+      hash = {
+        'Sender_LawFirm' => " \n \n    ",
+      }
+
+      attributes = described_class.new(hash).mapped
+      expect(attributes[:entity_notice_roles]).to be_blank
+    end
+  end
+
   context "with sender and principal entities" do
     it "removes 'on behalf of'" do
       hash = {

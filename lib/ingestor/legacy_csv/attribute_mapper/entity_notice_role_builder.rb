@@ -12,7 +12,7 @@ module Ingestor
         end
 
         def build
-          return unless hash_data[name_key].present?
+          return unless hash_data[name_key].to_s.strip.present?
           attributes = { name: clean_entity_name }
 
           if address_key
@@ -27,7 +27,7 @@ module Ingestor
         attr_reader :hash_data, :role_name, :name_key, :address_key
 
         def clean_entity_name
-          name = hash_data[name_key]
+          name = hash_data[name_key].to_s.strip
           name = get_first_line(name)
           name = remove_broken_fields(name)
         end
