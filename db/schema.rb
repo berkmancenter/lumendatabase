@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130926150418) do
+ActiveRecord::Schema.define(:version => 20131008184042) do
 
   create_table "blog_entries", :force => true do |t|
     t.integer  "user_id"
@@ -88,6 +88,7 @@ ActiveRecord::Schema.define(:version => 20130926150418) do
   add_index "entities", ["city"], :name => "index_entities_on_city"
   add_index "entities", ["country_code"], :name => "index_entities_on_country_code"
   add_index "entities", ["email"], :name => "index_entities_on_email"
+  add_index "entities", ["name", "address_line_1", "city", "state", "zip", "country_code", "phone", "email"], :name => "unique_entity_attribute_index", :unique => true
   add_index "entities", ["name"], :name => "index_entities_on_name"
   add_index "entities", ["phone"], :name => "index_entities_on_phone"
   add_index "entities", ["state"], :name => "index_entities_on_state"

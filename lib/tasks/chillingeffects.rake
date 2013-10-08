@@ -45,7 +45,7 @@ namespace :chillingeffects do
 
   desc "Reindex models memory efficiently"
   task reindex_models: :environment do
-    batch_size = (ENV['BATCH_SIZE'] || 50).to_i
+    batch_size = (ENV['BATCH_SIZE'] || 100).to_i
     [Notice, Entity].each do |klass|
       klass.index.delete
       klass.create_elasticsearch_index
