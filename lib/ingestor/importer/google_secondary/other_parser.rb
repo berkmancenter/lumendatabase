@@ -9,7 +9,7 @@ module Ingestor
 
         def parse_works(file_path)
           content = IssueContent.new(
-            file_path, 'legalother_explain', 'legalother_quote'
+            file_path, 'legalother_explain'
           )
 
           [content.to_work]

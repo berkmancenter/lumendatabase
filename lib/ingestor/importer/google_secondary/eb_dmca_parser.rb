@@ -9,7 +9,7 @@ module Ingestor
 
         def parse_works(file_path)
           content = EbIssueContent.new(
-            file_path, 'description_of_copyrighted_work', 'dmca_company_name'
+            file_path, 'description_of_copyrighted_work'
           )
 
           [content.to_work]
