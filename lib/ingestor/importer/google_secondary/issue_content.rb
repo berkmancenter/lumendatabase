@@ -3,10 +3,9 @@ module Ingestor
     module GoogleSecondary
       class IssueContent
 
-        def initialize(file_path, description_start, description_end)
+        def initialize(file_path, description_start)
           @content = Base.read_file(file_path)
           @description_start = description_start
-          @description_end = description_end
         end
 
         def to_work
@@ -18,7 +17,7 @@ module Ingestor
         end
 
         def description
-          if content.match(/#{description_start}[^:]*:(.*)\n#{description_end}[^:]*:/m)
+          if content.match(/#{description_start}[^:]*:(.+?)\n[a-z_]+:/m)
             $1.strip
           end
         end
@@ -34,7 +33,7 @@ module Ingestor
 
         private
 
-        attr_reader :content, :description_start, :description_end
+        attr_reader :content, :description_start
 
         def extract_urls(string)
           URI::extract(string || '').

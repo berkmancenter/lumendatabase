@@ -9,7 +9,7 @@ module Ingestor
 
         def parse_works(file_path)
           content = IssueContent.new(
-            file_path, 'description_of_copyrighted_work', 'full_name'
+            file_path, 'description_of_copyrighted_work'
           )
 
           [content.to_work]
