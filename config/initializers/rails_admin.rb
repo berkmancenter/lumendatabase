@@ -14,6 +14,24 @@ RailsAdmin.config do |config|
   config.audit_with :history, 'Notice'
 
   config.actions do
+    dashboard do
+      statistics false
+    end
+
+    # collection-wide actions
+    index
+    new
+    export
+    history_index
+    bulk_delete
+
+    # member actions
+    show
+    edit
+    delete
+    history_show
+    show_in_app
+
     init_actions!
 
     redact_queue
