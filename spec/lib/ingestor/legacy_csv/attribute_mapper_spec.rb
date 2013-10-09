@@ -55,23 +55,36 @@ describe Ingestor::LegacyCsv::AttributeMapper do
     end
   end
 
-  it "loads works and files using Ingester::ImportDispatcher" do
-    hash = {
-      'OriginalFilePath' => 'path',
-      'SupportingFilePath' => 'other path'
-    }
-    import_class = double(
-      "ImportClass",
-      works: 'works', file_uploads: 'files', action_taken: 'Yes'
-    )
-    Ingestor::ImportDispatcher.
-      should_receive(:for).with('path', 'other path').and_return(import_class)
+  context "when works are found" do
+    before do
+      @import_class = double(
+        "ImportClass",
+        works: 'works', file_uploads: 'files', action_taken: 'Yes'
+      )
+    end
 
-    attributes = described_class.new(hash).mapped
+    it "loads works and files using Ingester::ImportDispatcher" do
+      hash = {
+        'OriginalFilePath' => 'path',
+        'SupportingFilePath' => 'other path'
+      }
+      Ingestor::ImportDispatcher.
+        should_receive(:for).with('path', 'other path').and_return(@import_class)
 
-    expect(attributes[:works]).to eq 'works'
-    expect(attributes[:file_uploads]).to eq 'files'
-    expect(attributes[:review_required]).to eq false
+      attributes = described_class.new(hash).mapped
+
+      expect(attributes[:works]).to eq 'works'
+      expect(attributes[:file_uploads]).to eq 'files'
+      expect(attributes[:review_required]).to eq false
+    end
+
+    it "does not pass through the Body value" do
+      Ingestor::ImportDispatcher.should_receive(:for).and_return(@import_class)
+
+      attributes = described_class.new({ 'Body' => 'foobar' }).mapped
+
+      expect(attributes[:body]).to be_nil
+    end
   end
 
   context "when no works are found" do
@@ -85,6 +98,12 @@ describe Ingestor::LegacyCsv::AttributeMapper do
       attributes = described_class.new({}).mapped
 
       expect(attributes[:works]).to eq [Work.unknown]
+    end
+
+    it "passes through the Body so there is some content" do
+      attributes = described_class.new({ 'Body' => "foobar" }).mapped
+
+      expect(attributes[:body]).to eq 'foobar'
     end
 
     it "flags the notice for review" do
