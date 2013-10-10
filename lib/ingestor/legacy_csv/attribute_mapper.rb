@@ -41,7 +41,7 @@ module Ingestor
 
         {
           original_notice_id: hash['NoticeID'],
-          title: hash['Subject'],
+          title: title,
           subject: hash['Re_Line'],
           source: hash['How_Sent'],
           action_taken: importer.action_taken,
@@ -64,6 +64,21 @@ module Ingestor
       private
 
       attr_reader :hash, :importer
+
+      def title
+        (
+          normalize_title(hash['Subject']) ||
+          normalize_title(hash['Re_Line'])
+        ) || 'Untitled'
+      end
+
+      def normalize_title(string)
+        if string.respond_to?(:strip)
+          string.strip.present? && string.strip
+        else
+          string
+        end
+      end
 
       def topics(topic_name)
         Topic.where(name: topic_name)

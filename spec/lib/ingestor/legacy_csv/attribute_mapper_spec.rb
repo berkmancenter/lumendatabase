@@ -14,6 +14,31 @@ describe Ingestor::LegacyCsv::AttributeMapper do
     end
   end
 
+  context "with empty Subjects" do
+    [nil, '', ' ', "\n "].each do |value|
+      it "sets the Title from Re_Line when Subject is #{value.inspect}" do
+        hash = {
+          'Subject' => value,
+          'Re_Line' => 'The Subject',
+        }
+
+        attributes = described_class.new(hash).mapped
+        expect(attributes[:title]).to eq 'The Subject'
+      end
+
+      it "sets the Title to \"Untitled\" when Re_Line is #{value.inspect}" do
+        hash = {
+          'Subject' => nil,
+          'Re_Line' => value,
+        }
+
+        attributes = described_class.new(hash).mapped
+        expect(attributes[:title]).to eq 'Untitled'
+      end
+    end
+
+  end
+
   it "maps basic metadata" do
     hash = {
       'NoticeID' => '1',
