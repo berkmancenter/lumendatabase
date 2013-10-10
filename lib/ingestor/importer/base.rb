@@ -90,6 +90,10 @@ module Ingestor
         'Yes'
       end
 
+      def require_review_if_works_empty?
+        true
+      end
+
       private
 
       def fix_paths(file_paths)

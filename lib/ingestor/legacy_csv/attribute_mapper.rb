@@ -29,12 +29,14 @@ module Ingestor
 
       def mapped
         works = importer.works
-        body = nil
 
         if works.empty?
           works = [Work.unknown]
-          review_required = true
+
+          review_required = importer.require_review_if_works_empty?
+
           body = hash['Body']
+          body_original = hash['BodyOriginal']
         else
           review_required = false
         end
@@ -58,6 +60,7 @@ module Ingestor
           submission_id: hash['SubmissionID'],
           entity_notice_roles: entity_notice_roles,
           body: body,
+          body_original: body_original,
         }
       end
 

@@ -12,6 +12,10 @@ module Ingestor
         []
       end
 
+      def require_review_if_works_empty?
+        false
+      end
+
     end
   end
 end
