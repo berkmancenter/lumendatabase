@@ -1,7 +1,9 @@
 module Notices::SearchHelper
 
   def on_behalf_of(sender_name, principal_name)
-    raw "#{with_truncation(sender_name)} <span class=\"on_behalf_of\">on behalf of</span> #{with_truncation(principal_name)}"
+    raw %Q|#{ link_to(with_truncation(sender_name), faceted_search_path(sender_name: sender_name), class: 'sender') }
+    <span class="on_behalf_of">on behalf of</span>
+    #{ link_to(with_truncation(principal_name), faceted_search_path(principal_name: principal_name), class: 'principal') }|
   end
 
   def with_truncation(string)

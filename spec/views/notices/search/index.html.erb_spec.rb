@@ -19,35 +19,47 @@ describe 'notices/search/index.html.erb' do
     end
   end
 
-  it "includes the notice data" do
-    notice = create(
-      :dmca,
-      role_names: %w( sender principal recipient ),
-      title: 'A notice',
-      date_received: Time.now,
-      topics: build_list(:topic, 2)
-    )
-    on_behalf_of = "#{notice.sender_name} on behalf of #{notice.principal_name}"
-    mock_results([notice])
-
-    render
-
-    within('.result') do
-      expect(page).to have_css('.title', text: 'A notice')
-      expect(page).to have_css('.sender-receiver', text: notice.recipient_name)
-      expect(page).to have_css('.sender-receiver', text: notice.sender_name)
-      expect(page).to have_faceted_search_role_link(:sender_name, notice)
-      expect(page).to have_faceted_search_role_link(:recipient_name, notice)
-      expect(page).to have_css(
-        '.date-received', text: notice.date_received.to_s(:simple)
+  context "notice is sent on behalf of an entity" do
+    before do
+      @notice = create(
+        :dmca,
+        role_names: %w( sender principal recipient ),
+        title: 'A notice',
+        date_received: Time.now,
+        topics: build_list(:topic, 2)
       )
-      expect(page).to have_content(on_behalf_of)
-      within('.topic') do
-        notice.topics.each do |topic|
-          expect(page).to have_content(topic.name)
-        end
+      @on_behalf_of = "#{@notice.sender_name} on behalf of #{@notice.principal_name}"
+      mock_results([@notice])
+    end
+
+    it "has facet links for all relevant entities" do
+
+      render
+
+      within('.result') do
+        expect(page).to have_faceted_search_role_link(:sender_name, @notice)
+        expect(page).to have_faceted_search_role_link(:recipient_name, @notice)
+        expect(page).to have_faceted_search_role_link(:principal_name, @notice)
       end
-      expect(page).to contain_link(notice_path(notice))
+    end
+
+    it "includes the relevant notice data" do
+
+      render
+
+      within('.result') do
+        expect(page).to have_css('.title', text: 'A notice')
+        expect(page).to have_css(
+          '.date-received', text: @notice.date_received.to_s(:simple)
+        )
+        expect(page).to have_content(@on_behalf_of)
+        within('.topic') do
+          @notice.topics.each do |topic|
+            expect(page).to have_content(topic.name)
+          end
+        end
+        expect(page).to contain_link(notice_path(@notice))
+      end
     end
   end
 

@@ -4,10 +4,7 @@
     <div class="date-received"><%= date_received(result) %></div>
     <div class="sender-receiver">
       <% if result.on_behalf_of_principal? %>
-        <%= link_to(
-            on_behalf_of(result.sender_name, result.principal_name),
-            faceted_search_path(sender_name: result.sender_name), class: 'sender'
-        )%>
+        <%= on_behalf_of(result.sender_name, result.principal_name) %>
       <% else %>
         <%= link_to(result.sender_name, faceted_search_path(sender_name: result.sender_name), class: 'sender' )%>
       <% end %>
