@@ -9,4 +9,12 @@ describe Ingestor::Importer::Base do
       expect(content).to include  '廣記商行」と検索する際の'
     end
   end
+
+  context "#require_review_if_works_empty?" do
+    it "should be true by default" do
+      importer = described_class.new('')
+
+      expect(importer.require_review_if_works_empty?).to be_true
+    end
+  end
 end

@@ -84,7 +84,8 @@ describe Ingestor::LegacyCsv::AttributeMapper do
     before do
       @import_class = double(
         "ImportClass",
-        works: 'works', file_uploads: 'files', action_taken: 'Yes'
+        works: 'works', file_uploads: 'files',
+        action_taken: 'Yes', require_review_if_works_empty?: true
       )
     end
 
@@ -112,29 +113,40 @@ describe Ingestor::LegacyCsv::AttributeMapper do
     end
   end
 
-  context "when no works are found" do
-    before do
-      Ingestor::ImportDispatcher.stub(:for).and_return(double(
-        "ImportClass", works: [], file_uploads: [], action_taken: nil
-      ))
-    end
-
+  context "when works are not found" do
     it "assigns the unknown work" do
+      stub_importer_with_no_works
+
       attributes = described_class.new({}).mapped
 
       expect(attributes[:works]).to eq [Work.unknown]
     end
 
     it "passes through the Body so there is some content" do
-      attributes = described_class.new({ 'Body' => "foobar" }).mapped
+      stub_importer_with_no_works
+
+      attributes = described_class.new(
+        { 'Body' => "foobar", "BodyOriginal" => "barfoo" }
+      ).mapped
 
       expect(attributes[:body]).to eq 'foobar'
+      expect(attributes[:body_original]).to eq 'barfoo'
     end
 
     it "flags the notice for review" do
+      stub_importer_with_no_works
+
       attributes = described_class.new({}).mapped
 
       expect(attributes[:review_required]).to eq true
+    end
+
+    it "does not flag the notice for review if the importer says not to" do
+      stub_importer_with_no_works(false)
+
+      attributes = described_class.new({}).mapped
+
+      expect(attributes[:review_required]).to eq false
     end
   end
 
@@ -366,5 +378,16 @@ contact_email_noprefill: info.antipiracy@dtecnet.com|,
     attributes[:entity_notice_roles].find do |entity_notice_role|
       entity_notice_role.name == role_name
     end
+  end
+
+  def stub_importer_with_no_works(review_required = true)
+    stubbed_methods = {
+      works: [], file_uploads: [],
+      action_taken: nil,
+      require_review_if_works_empty?: review_required
+    }
+    Ingestor::ImportDispatcher.stub(:for).and_return(double(
+      "ImportClass", stubbed_methods
+    ))
   end
 end

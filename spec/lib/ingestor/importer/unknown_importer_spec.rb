@@ -23,6 +23,14 @@ describe Ingestor::Importer::UnknownImporter do
     )
   end
 
+  context "#require_review_if_works_empty?" do
+    it "should be false" do
+      importer = described_class.new('')
+
+      expect(importer.require_review_if_works_empty?).to be_false
+    end
+  end
+
   private
 
   def touch(path)
