@@ -24,7 +24,7 @@ feature "Importing CSV" do
 
   context "from the primary google reporting format" do
     scenario "notices are created" do
-      expect(@primary_format_notice.title).to eq ' DMCA (Copyright) Complaint to Google'
+      expect(@primary_format_notice.title).to eq 'DMCA (Copyright) Complaint to Google'
       expect(@primary_format_notice.works.length).to eq 2
       expect(@primary_format_notice.infringing_urls.map(&:url)).to match_array(
         [
