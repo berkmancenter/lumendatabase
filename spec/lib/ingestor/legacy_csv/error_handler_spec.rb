@@ -51,7 +51,7 @@ describe Ingestor::LegacyCsv::ErrorHandler do
     end
 
     it "outputs the failure via its logger" do
-      @logger.should_receive(:error).with('Error importing Notice 1000')
+      @logger.should_receive(:error).with('Error importing Notice 1000 from tNotice.csv')
       @logger.should_receive(:error).with('  Error: (RuntimeError) Boom!: first')
       @logger.should_receive(:error).with('  Files: sub/original.txt, sub/original.html')
       handler = described_class.new(directory, 'tNotice.csv')

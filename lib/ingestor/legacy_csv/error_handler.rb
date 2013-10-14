@@ -8,10 +8,11 @@ module Ingestor
       def initialize(directory, file_name)
         @originals = File.expand_path(directory)
         @failures = "#{originals}-failures"
+        @file_name = file_name
 
         mkdir_p @failures
 
-        @csv = CSV.open(File.join(@failures, file_name), 'wb')
+        @csv = CSV.open(File.join(@failures, @file_name), 'wb')
         @logger = Logger.new(STDERR)
       end
 
@@ -26,7 +27,7 @@ module Ingestor
         file_paths += (csv_row['SupportingFilePath'] || '').split(',')
         error_message = "(#{ex.class}) #{ex.message}: #{ex.backtrace.first}"
 
-        logger.error "Error importing Notice #{csv_row['NoticeID']}"
+        logger.error "Error importing Notice #{csv_row['NoticeID']} from #{file_name}"
         logger.error "  Error: #{error_message}"
         logger.error "  Files: #{file_paths.join(', ')}"
 
@@ -40,7 +41,7 @@ module Ingestor
 
       private
 
-      attr_reader :originals, :failures, :csv, :logger
+      attr_reader :originals, :failures, :csv, :logger, :file_name
 
       def store_file(file_path)
         directory, _ = File.split(file_path)
