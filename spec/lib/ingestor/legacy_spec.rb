@@ -35,8 +35,9 @@ describe Ingestor::Legacy do
 
   def importer
     sample_file = "spec/support/example_files/example_notice_export.csv"
+    record_source = Ingestor::Legacy::RecordSource::CSV.new(sample_file)
 
-    described_class.new(sample_file).tap do |importer|
+    described_class.new(record_source).tap do |importer|
       importer.logger.level = ::Logger::FATAL
     end
   end

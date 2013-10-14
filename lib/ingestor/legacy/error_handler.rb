@@ -16,9 +16,7 @@ module Ingestor
         @logger = Logger.new(STDERR)
       end
 
-      def copy_headers(file_path)
-        headers = File.open(file_path, &:readline).chomp.split(',')
-
+      def copy_headers(headers)
         csv << (headers + ['FailureMessage'])
       end
 

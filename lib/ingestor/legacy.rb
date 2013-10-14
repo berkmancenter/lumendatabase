@@ -2,34 +2,34 @@ require 'ingestor'
 
 module Ingestor
   class Legacy
-    attr_accessor :logger, :succeeded, :failed
+    attr_accessor :logger, :succeeded, :failed, :record_source
 
-    def self.open(file_path)
-      new(file_path)
+    def self.open(record_location, record_source_class = RecordSource::CSV)
+      record_source = record_source_class.new(record_location)
+      new(record_source)
     end
 
-    def initialize(file_path)
+    def initialize(record_source)
+      @record_source = record_source
       @start_unixtime = Time.now.to_f
-
-      @base_directory, @csv_file = File.split(file_path)
 
       @logger = Logger.new(STDOUT)
       @logger.level = Logger::INFO unless ENV['DEBUG']
 
       @logger.debug { "Started at: #{@start_unixtime}, #{Time.now}" }
 
-      @error_handler = ErrorHandler.new(base_directory, csv_file)
-      @error_handler.copy_headers(file_path)
+      @error_handler = ErrorHandler.new(record_source.base_directory, record_source.name)
+      @error_handler.copy_headers(record_source.headers)
 
       @succeeded = 0
       @failed = 0
     end
 
     def import
-      logger.info "Importing legacy CSV file: #{csv_file} in #{base_directory}"
+      logger.info "Importing legacy CSV file: #{record_source.name} in #{record_source.base_directory}"
 
-      Dir.chdir(base_directory) do
-        CSV.foreach(csv_file, headers: true) do |csv_row|
+      Dir.chdir(record_source.base_directory) do
+        record_source.each do |csv_row|
           if Notice.where(original_notice_id: csv_row['NoticeID']).blank?
             import_row(csv_row)
           end
@@ -42,7 +42,7 @@ module Ingestor
 
     private
 
-    attr_reader :base_directory, :csv_file, :error_handler
+    attr_reader :error_handler, :record_source
 
     def import_row(csv_row)
       mapper = AttributeMapper.new(csv_row.to_hash)

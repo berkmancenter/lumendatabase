@@ -3,12 +3,13 @@ require 'ingestor'
 
 describe Ingestor::Legacy::ErrorHandler do
   let(:directory) { 'tmp/example-import' }
+  let(:headers) { %w|NoticeID OriginalFilePath| }
 
   before do
     FileUtils.mkdir_p directory
 
     File.open("#{directory}/tNotice.csv", 'w') do |fh|
-      fh.puts "NoticeID,OriginalFilePath"
+      fh.puts headers.join(',')
       fh.puts "1000,sub/original.txt,sub/original.html"
     end
   end
@@ -31,7 +32,7 @@ describe Ingestor::Legacy::ErrorHandler do
     it "copies the headers with another column" do
       handler = described_class.new(directory, 'tNotice.csv')
 
-      handler.copy_headers("#{directory}/tNotice.csv")
+      handler.copy_headers(headers)
 
       handler.close
       contents = File.read("#{directory}-failures/tNotice.csv").chomp
