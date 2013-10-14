@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'ingestor'
 
-describe Ingestor::LegacyCsv::ErrorHandler do
+describe Ingestor::Legacy::ErrorHandler do
   let(:directory) { 'tmp/example-import' }
 
   before do

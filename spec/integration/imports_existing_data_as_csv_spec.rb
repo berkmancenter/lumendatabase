@@ -4,7 +4,7 @@ require 'ingestor'
 feature "Importing CSV" do
   before do
     create(:topic, name: 'Foobar')
-    ingestor = Ingestor::LegacyCsv.open(
+    ingestor = Ingestor::Legacy.open(
       'spec/support/example_files/example_notice_export.csv'
     )
     ingestor.logger.level = Logger::ERROR

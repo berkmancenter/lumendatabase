@@ -1,5 +1,5 @@
 module Ingestor
-  class LegacyCsv
+  class Legacy
     class ErrorHandler
       include FileUtils
 

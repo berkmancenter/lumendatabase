@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'ingestor'
 
-describe Ingestor::LegacyCsv do
+describe Ingestor::Legacy do
 
   before do
     @error_handler = double.as_null_object

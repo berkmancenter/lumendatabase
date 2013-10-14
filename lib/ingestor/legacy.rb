@@ -1,7 +1,7 @@
 require 'ingestor'
 
 module Ingestor
-  class LegacyCsv
+  class Legacy
     attr_accessor :logger, :succeeded, :failed
 
     def self.open(file_path)

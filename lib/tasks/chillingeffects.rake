@@ -14,7 +14,7 @@ namespace :chillingeffects do
   desc "Import legacy chillingeffects data"
   task import_legacy_data: :environment do
     with_file_name do |file_name|
-      ingestor = Ingestor::LegacyCsv.open(file_name)
+      ingestor = Ingestor::Legacy.open(file_name)
       ingestor.import
     end
   end
