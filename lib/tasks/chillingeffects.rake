@@ -11,12 +11,27 @@ namespace :chillingeffects do
     sleep 5
   end
 
-  desc "Import legacy chillingeffects data"
-  task import_legacy_data: :environment do
+  desc "Import legacy chillingeffects data from CSV"
+  task import_legacy_csv_data: :environment do
     with_file_name do |file_name|
-      ingestor = Ingestor::Legacy.open(file_name)
+      ingestor = Ingestor::Legacy.open_csv(file_name)
       ingestor.import
     end
+  end
+
+  desc "Import latest legacy chillingeffects data from Mysql"
+  task import_new_notices_via_mysql: :environment do
+    # Configure the record_source
+    latest_original_notice_id = Notice.maximum(:original_notice_id).to_i
+    name = "latest-from-#{latest_original_notice_id}"
+    base_directory = ENV['BASE_DIRECTORY']
+
+    record_source = Ingestor::Legacy::RecordSource::Mysql.new(
+      "tNotice.NoticeID > #{latest_original_notice_id}", 
+      name, base_directory
+    )
+    ingestor = Ingestor::Legacy.new(record_source)
+    ingestor.import
   end
 
   desc "Import blog entries"

@@ -26,6 +26,13 @@ describe Ingestor::Legacy::ErrorHandler do
 
       expect(File.exists?("#{directory}-failures/foobar.csv")).to be
     end
+
+    it "adds csv to the end if it doesn't exist" do
+      file_name = 'foobar'
+      handler = described_class.new(directory, file_name)
+
+      expect(File.exists?("#{directory}-failures/foobar.csv")).to be
+    end
   end
 
   context ".copy_headers" do

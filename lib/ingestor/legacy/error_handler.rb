@@ -8,7 +8,7 @@ module Ingestor
       def initialize(directory, file_name)
         @originals = File.expand_path(directory)
         @failures = "#{originals}-failures"
-        @file_name = file_name
+        @file_name = normalize_file_name(file_name)
 
         mkdir_p @failures
 
@@ -40,6 +40,14 @@ module Ingestor
       private
 
       attr_reader :originals, :failures, :csv, :logger, :file_name
+
+      def normalize_file_name(name)
+        if ! name.match(/\.csv\Z/i)
+          "#{name}.csv"
+        else
+          name
+        end
+      end
 
       def store_file(file_path)
         directory, _ = File.split(file_path)

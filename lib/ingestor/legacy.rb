@@ -4,8 +4,8 @@ module Ingestor
   class Legacy
     attr_accessor :logger, :succeeded, :failed, :record_source
 
-    def self.open(record_location, record_source_class = RecordSource::CSV)
-      record_source = record_source_class.new(record_location)
+    def self.open_csv(record_location)
+      record_source = RecordSource::CSV.new(record_location)
       new(record_source)
     end
 
@@ -18,7 +18,9 @@ module Ingestor
 
       @logger.debug { "Started at: #{@start_unixtime}, #{Time.now}" }
 
-      @error_handler = ErrorHandler.new(record_source.base_directory, record_source.name)
+      @error_handler = ErrorHandler.new(
+        ENV['IMPORT_ERRORS_DIRECTORY'] || record_source.base_directory, record_source.name
+      )
       @error_handler.copy_headers(record_source.headers)
 
       @succeeded = 0

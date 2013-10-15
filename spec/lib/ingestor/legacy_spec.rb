@@ -14,6 +14,20 @@ describe Ingestor::Legacy do
     described_class::AttributeMapper.stub(:new).and_return(@attribute_mapper)
   end
 
+  it "can override the error handler storage location via ENV" do
+    described_class::ErrorHandler.should_receive(:new).with(
+      'foobar', 'example_notice_export.csv')
+
+    import_errors_directory = ENV['IMPORT_ERRORS_DIRECTORY']
+
+    begin
+      ENV['IMPORT_ERRORS_DIRECTORY'] = 'foobar'
+      importer
+    ensure
+      ENV['IMPORT_ERRORS_DIRECTORY'] = import_errors_directory
+    end
+  end
+
   it "instantiates the correct notice type based on AttributeMapper" do
     @attribute_mapper.stub(:notice_type).and_return(Trademark)
     Trademark.should_receive(:create!).at_least(:once).and_return(Trademark.new)
