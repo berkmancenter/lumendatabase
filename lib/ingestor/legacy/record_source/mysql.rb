@@ -25,7 +25,16 @@ module Ingestor
 
         def each
           @results.each do |row|
+            correct_paths(row)
             yield row
+          end
+        end
+
+        def correct_paths(row)
+          ['OriginalFilePath', 'SupportingFilePath'].each do |file_type|
+            if paths = row.delete(file_type)
+              row[file_type] = FilePathCorrector.correct_paths(paths)
+            end
           end
         end
 

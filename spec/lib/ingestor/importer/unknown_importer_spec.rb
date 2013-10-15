@@ -2,6 +2,8 @@ require 'spec_helper'
 require 'ingestor'
 
 describe Ingestor::Importer::UnknownImporter do
+  include ImporterFileHelpers
+
   it "handles everything" do
     expect(described_class).to handle(nil)
     expect(described_class).to handle('')
@@ -13,8 +15,8 @@ describe Ingestor::Importer::UnknownImporter do
   end
 
   it "provides file_uploads" do
-    touch('tmp/original.txt')
-    touch('tmp/supporting.txt')
+    touch_file('tmp/original.txt')
+    touch_file('tmp/supporting.txt')
     importer = described_class.new('tmp/original.txt', 'tmp/supporting.txt')
 
     expect(importer).to have(2).file_uploads
@@ -31,9 +33,4 @@ describe Ingestor::Importer::UnknownImporter do
     end
   end
 
-  private
-
-  def touch(path)
-    File.open(path, 'w') { }
-  end
 end
