@@ -139,7 +139,7 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'http://f
     "source": "Online form",
     "topic_ids": [19, 27],
     "tag_list": "movies, disney, youtube",
-    "jurisidiction_list": "US, CA",
+    "jurisdiction_list": "US, CA",
     "action_taken": "Partial",
     "file_uploads_attributes": [
       {
@@ -151,7 +151,7 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'http://f
         "kind": "supporting",
         "file": "data:text/plain;base64,QmUgc3VyZSB0byBkcmluayB5b3VyIG92YWx0aW5l\n",
         "file_name": "supporting_file.txt"
-      },
+      }
     ],
     "works_attributes": [
       {
