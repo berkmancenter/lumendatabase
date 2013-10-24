@@ -9,7 +9,7 @@ below, which defines what attributes are remapped for each Notice Type.
 
 **Method**: `POST`
 
-**Endpoint**: `http://flutie.law.harvard.edu:8000/notices`
+**Endpoint**: `http://chillingeffectsplaceholder/notices`
 
 ### Request
 
@@ -109,7 +109,7 @@ The Token may be included as a parameter or header.
 curl -H "Accept: application/json" \
      -H "Content-type: application/json" \
      -d '{ "authentication_token": "abc123", "notice": {...} }' \
-     'http://flutie.law.harvard.edu:8000/notices/'
+     'http://chillingeffectsplaceholder/notices'
 ```
 
 * Request Header: `AUTHENTICATION_TOKEN`
@@ -119,7 +119,7 @@ curl -H "Accept: application/json" \
      -H "Content-type: application/json" \
      -H "AUTHENTICATION_TOKEN: abc123" \
      -d '{ "notice": {...} }' \
-     'http://flutie.law.harvard.edu:8000/notices/'
+     'http://chillingeffectsplaceholder/notices'
 ```
 
 If the Authentication Token is missing or invalid, an empty response 
@@ -128,7 +128,7 @@ will be returned with HTTP status 401 (Unauthorized).
 ### Example Request
 
 ```
-curl -H "Accept: application/json" -H "Content-type: application/json" 'http://flutie.law.harvard.edu:8000/notices/' -d '{
+curl -H "Accept: application/json" -H "Content-type: application/json" 'http://chillingeffectsplaceholder/notices/' -d '{
   "authentication_token": "abc123",
   "notice": {
     "title": "DMCA (Copyright) Complaint to Google",
@@ -209,7 +209,7 @@ Successful responses will have HTTP status 201 (Created) and include a
 **Note:** Unimportant headers have been removed.
 
 ```
-> curl -H "Accept: application/json" -H "Content-type: application/json" 'http://flutie.law.harvard.edu:8000/notices/' -d @tmp/curl.json --dump-header - 
+> curl -H "Accept: application/json" -H "Content-type: application/json" 'http://chillingeffectsplaceholder/notices' -d @tmp/curl.json --dump-header - 
 HTTP/1.1 201 Created 
 Location: http://localhost:3000/notices/4
 Content-Type: application/json; charset=utf-8
@@ -299,13 +299,13 @@ Attributes remain unchanged from ingestion.
 
 **Method**: `GET`
 
-**Endpoint**: `http://flutie.law.harvard.edu:8000/notices/<notice id>.json`
+**Endpoint**: `http://chillingeffectsplaceholder/notices/<notice id>.json`
 
 
 #### Example Request:
 
 ```
-curl http://flutie.law.harvard.edu:8000/notices/1.json
+curl http://chillingeffectsplaceholder/notices/1.json
 ```
 
 ### Successful Responses
@@ -366,10 +366,10 @@ Return a 404 HTTP status header.
 
 **Method**: GET
 
-**Endpoint**: `http://flutie.law.harvard.edu:8000/topics.json`
+**Endpoint**: `http://chillingeffectsplaceholder/notices/topics.json`
 
 ```
-curl http://flutie.law.harvard.edu:8000/topics.json
+curl http://chillingeffectsplaceholder/notices/topics.json
 ```
 
 ### Successful Responses
@@ -422,7 +422,7 @@ Terms are joined with an 'AND' by default.
 
 **Method**: `GET`
 
-**Endpoint**: `http://flutie.law.harvard.edu:8000/notices/search?term=url_escaped_query&sender_name=Joe%20Smith&page=1`
+**Endpoint**: `http://chillingeffectsplaceholder/notices/search?term=url_escaped_query&sender_name=Joe%20Smith&page=1`
 
 **Parameters**
 
@@ -533,7 +533,7 @@ documentation for more information. We only return the 10 most populous facets.
 **Note:** Some facet information has been omitted to keep examples brief.
 
 ```
-curl -H "Accept: application/json" -H "Content-type: application/json" 'http://flutie.law.harvard.edu:8000/notices/search?term=star'
+curl -H "Accept: application/json" -H "Content-type: application/json" 'http://chillingeffectsplaceholder/notices/search?term=star'
 ```
 
 
@@ -656,7 +656,7 @@ pagination metadata, please see 'Search notices via fulltext'
 
 **Method**: `GET`
 
-**Endpoint**: `http://flutie.law.harvard.edu:8000/entities/search?term=url_escaped_query&page=1`
+**Endpoint**: `http://chillingeffectsplaceholder/notices/entities/search?term=url_escaped_query&page=1`
 
 **Parameters**
 
@@ -700,7 +700,7 @@ Return a JSON-encoded representation of selected entity attributes.
 #### Example Successful Response:
 
 ```
-curl -H "Accept: application/json" -H "Content-type: application/json" 'http://flutie.law.harvard.edu:8000/entities/search?term=joe&page=1'
+curl -H "Accept: application/json" -H "Content-type: application/json" 'http://chillingeffectsplaceholder/notices/entities/search?term=joe&page=1'
 ```
 
 
