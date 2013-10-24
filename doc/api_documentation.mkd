@@ -1,11 +1,14 @@
 ## Create notice
 
 Submits a new Notice to the chillingeffects system via JSON-encoded parameters.
-Authentication is not required for now. There are several different "Notice
-Types," these are essentially subclasses of the abstract Notice class.  "Notice
-Types" allow us to track notice-specific attributes and create serialized
-representations with logical attribute names. Please see **Notice Type Mapping**
-below, which defines what attributes are remapped for each Notice Type.
+There are several different "Notice Types," these are essentially subclasses of
+the abstract Notice class.  "Notice Types" allow us to track notice-specific
+attributes and create serialized representations with logical attribute names.
+Please see **Notice Type Mapping** below, which defines what attributes are
+remapped for each Notice Type.
+
+An `authentication_token` is required to submit via the API. Please ask
+ChillingEffects staff for your authentication token.
 
 **Method**: `POST`
 
