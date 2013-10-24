@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'ingestor'
 
-describe Ingestor::LegacyCsv::AttributeMapper do
+describe Ingestor::Legacy::AttributeMapper do
   context "#notice_type" do
     it "returns the notice_type of its importer" do
       importer = double("Importer")

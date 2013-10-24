@@ -1,14 +1,15 @@
 require 'spec_helper'
 require 'ingestor'
 
-describe Ingestor::LegacyCsv::ErrorHandler do
+describe Ingestor::Legacy::ErrorHandler do
   let(:directory) { 'tmp/example-import' }
+  let(:headers) { %w|NoticeID OriginalFilePath| }
 
   before do
     FileUtils.mkdir_p directory
 
     File.open("#{directory}/tNotice.csv", 'w') do |fh|
-      fh.puts "NoticeID,OriginalFilePath"
+      fh.puts headers.join(',')
       fh.puts "1000,sub/original.txt,sub/original.html"
     end
   end
@@ -25,13 +26,20 @@ describe Ingestor::LegacyCsv::ErrorHandler do
 
       expect(File.exists?("#{directory}-failures/foobar.csv")).to be
     end
+
+    it "adds csv to the end if it doesn't exist" do
+      file_name = 'foobar'
+      handler = described_class.new(directory, file_name)
+
+      expect(File.exists?("#{directory}-failures/foobar.csv")).to be
+    end
   end
 
   context ".copy_headers" do
     it "copies the headers with another column" do
       handler = described_class.new(directory, 'tNotice.csv')
 
-      handler.copy_headers("#{directory}/tNotice.csv")
+      handler.copy_headers(headers)
 
       handler.close
       contents = File.read("#{directory}-failures/tNotice.csv").chomp

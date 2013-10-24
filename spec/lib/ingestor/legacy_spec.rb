@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'ingestor'
 
-describe Ingestor::LegacyCsv do
+describe Ingestor::Legacy do
 
   before do
     @error_handler = double.as_null_object
@@ -12,6 +12,20 @@ describe Ingestor::LegacyCsv do
     @attribute_mapper.stub(:notice_type).and_return(Dmca)
     @attribute_mapper.stub(:mapped).and_return({})
     described_class::AttributeMapper.stub(:new).and_return(@attribute_mapper)
+  end
+
+  it "can override the error handler storage location via ENV" do
+    described_class::ErrorHandler.should_receive(:new).with(
+      'foobar', 'example_notice_export.csv')
+
+    import_errors_directory = ENV['IMPORT_ERRORS_DIRECTORY']
+
+    begin
+      ENV['IMPORT_ERRORS_DIRECTORY'] = 'foobar'
+      importer
+    ensure
+      ENV['IMPORT_ERRORS_DIRECTORY'] = import_errors_directory
+    end
   end
 
   it "instantiates the correct notice type based on AttributeMapper" do
@@ -35,8 +49,9 @@ describe Ingestor::LegacyCsv do
 
   def importer
     sample_file = "spec/support/example_files/example_notice_export.csv"
+    record_source = Ingestor::Legacy::RecordSource::CSV.new(sample_file)
 
-    described_class.new(sample_file).tap do |importer|
+    described_class.new(record_source).tap do |importer|
       importer.logger.level = ::Logger::FATAL
     end
   end
