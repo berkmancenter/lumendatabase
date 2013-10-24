@@ -112,6 +112,13 @@ ol.results-list {
     div.sender-receiver {
       display: inline-block;
 
+      span {
+        display: inline-block;
+        font-style: italic;
+        overflow: hidden;
+        margin: 0 .25em;
+      }
+
       a {
         display: inline-block;
         font-style: italic;
