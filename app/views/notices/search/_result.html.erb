@@ -6,10 +6,16 @@
       <% if result.on_behalf_of_principal? %>
         <%= on_behalf_of(result.sender_name, result.principal_name) %>
       <% else %>
-        <%= link_to(result.sender_name, faceted_search_path(sender_name: result.sender_name), class: 'sender' )%>
+        <% if result.sender_name.present? %>
+          <%= link_to(result.sender_name, faceted_search_path(sender_name: result.sender_name), class: 'sender' )%>
+        <% elsif result.principal_name.present? %>
+          <%= link_to(result.principal_name, faceted_search_path(principal_name: result.principal_name), class: 'principal' )%>
+        <% end %>
       <% end %>
       <span class="arrow"><%= image_tag 'arrow-small.svg' %></span>
-      <%= link_to(result.recipient_name, faceted_search_path(recipient_name: result.recipient_name), class: 'receiver' )%>
+      <% if result.recipient_name.present? %>
+        <%= link_to(result.recipient_name, faceted_search_path(recipient_name: result.recipient_name), class: 'receiver' )%>
+      <% end %>
     </div>
     <ol class="excerpt">
       <% result.with_excerpts do |excerpt| %>

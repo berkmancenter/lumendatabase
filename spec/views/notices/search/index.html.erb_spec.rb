@@ -19,6 +19,22 @@ describe 'notices/search/index.html.erb' do
     end
   end
 
+  it "displays correct content when a notice only has a principal" do
+    notice = create(
+      :dmca,
+      role_names: %w( principal ),
+      title: 'A notice'
+    )
+    mock_results([notice])
+
+    render
+
+    within('.result') do
+      expect(page).not_to have_content('on behalf of')
+      expect(page).not_to have_content('/faceted_search')
+    end
+  end
+
   context "notice is sent on behalf of an entity" do
     before do
       @notice = create(

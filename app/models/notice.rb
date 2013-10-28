@@ -243,7 +243,9 @@ class Notice < ActiveRecord::Base
   end
 
   def on_behalf_of_principal?
-    principal_name.present? && principal_name != sender_name
+    if sender_name.present?
+      principal_name.present? && principal_name != sender_name
+    end
   end
 
   private
