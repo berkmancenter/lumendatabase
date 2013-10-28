@@ -40,6 +40,28 @@ feature "Fielded searches of Notices" do
     end
   end
 
+  scenario "searches can be limited to all words in a term", search: true, js: true do
+    outside_search = create(:dmca, title: "King of New York")
+    inside_search = create(:dmca, :with_facet_data, title: "Lion King two")
+    field = TermSearch.new(:title, :title, 'Title')
+    search_on_page = FieldedSearchOnPage.new
+    search_on_page.visit_search_page
+
+    search_on_page.add_fielded_search_for(field, 'Lion King')
+    search_on_page.limit_search_to_all_words_for(field)
+
+    search_on_page.run_search
+
+    search_on_page.within_results do
+      expect(page).to have_content(inside_search.title)
+      expect(page).not_to have_content(outside_search.title)
+    end
+
+    within(".field-group.title") do
+      expect(page).to have_css('input[type="checkbox"]:checked')
+    end
+  end
+
   context "sorting" do
     before do
       @notice = create(:dmca, title: "Lion King", date_received: 1.day.ago)
@@ -78,7 +100,7 @@ feature "Fielded searches of Notices" do
 
       visit "/faceted_search?sender_name=#{CGI.escape(notice.sender_name)}"
 
-      expect(page).to have_visible_advanced_search_controls
+        expect(page).to have_visible_advanced_search_controls
     end
 
     scenario "copies search parameters to the facet form.", search: true, js: true do
@@ -235,8 +257,8 @@ feature "Fielded searches of Notices" do
         end
       end
 
+      end
     end
-  end
 
   private
 

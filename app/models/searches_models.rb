@@ -57,11 +57,17 @@ class SearchesModels
       @params.each do |param, value|
         if value.present?
           registry.each do |filter|
-            filter.apply_to_query(query, param, value)
+            filter.apply_to_query(query, param, value, operator_for_param(param))
             filter.apply_to_search(search, param, value)
           end
         end
       end
+    end
+  end
+
+  def operator_for_param(param)
+    if @params["#{param}-require-all"].present?
+      'AND'
     end
   end
 

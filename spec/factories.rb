@@ -63,6 +63,8 @@ FactoryGirl.define do
     end
 
     trait :with_facet_data do
+      language 'en'
+      action_taken 'Yes'
       with_tags
       with_jurisdictions
       with_topics

@@ -426,27 +426,53 @@ Terms are joined with an 'AND' by default.
 
 **Parameters**
 
-| Parameters              | Description
-| ---                     | ---
-| `term`                  | The full-text query term
-| `title`                 | Search in the `title` field
-| `topics`                | Search within a notice's topics
-| `tags`                  | Search within a notice's tags
-| `jurisdictions`         | Search within a notice's jurisdictions
-| `sender_name`           | Search in the sender's name
-| `recipient_name`        | Search in the recipient's name
-| `works`                 | Search within a work's description
-| `action_taken`          | Search based on the action taken on a notice.
-| `sender_name_facet`     | Filter on `sender_name` facet
-| `recipient_name_facet`  | Filter on `recipient_name` facet
-| `topic_facet`           | Filter on topics facet
-| `date_received_facet`   | The date range (in microseconds since the unix epoc) separated by ".."
-| `tag_list_facet`        | Filter on a tag
-| `country_code_facet`    | Filter on the recipient's country code
-| `language_facet`        | Filter on the notice language code
-| `page`                  | The page you're requesting - defaults to the first page of results.
-| `per_page`              | The number of results per page. Defaults to 10.
-| `sort_by`               | One of `date_received asc`, `date_received desc`, `relevancy asc`, or `relevancy desc`. Defaults to `relevancy asc`.
+| Parameters                        | Description
+| ---                               | ---
+| `term`                            | The full-text query term
+| `term-require-all`                | If present, all words in the `term` query are required for a notice to be considered a match.
+| `title`                           | Search in the `title` field
+| `title-require-all`               | If present, all words in the `title` query are required for a notice to be considered a match.
+| `topics`                          | Search within a notice's topics
+| `topics-require-all`              | If present, all words in the `topics` query are required for a notice to be considered a match.
+| `tags`                            | Search within a notice's tags
+| `tags-require-all`                | If present, all words in the `tags` query are required for a notice to be considered a match.
+| `jurisdictions`                   | Search within a notice's jurisdictions
+| `jurisdictions-require-all`       | If present, all words in the `jurisdictions` query are required for a notice to be considered a match.
+| `sender_name`                     | Search in the sender's name
+| `sender_name-require-all`         | If present, all words in the `sender_name` query are required for a notice to be considered a match.
+| `principal_name`                  | Search in the principal's name
+| `principal_name-require-all`      | If present, all words in the `principal_name` query are required for a notice to be considered a match.
+| `recipient_name`                  | Search in the recipient's name
+| `recipient_name-require-all`      | If present, all words in the `recipient_name` query are required for a notice to be considered a match.
+| `works`                           | Search within a work's description
+| `works-require-all`               | If present, all words in the `works` query are required for a notice to be considered a match.
+| `action_taken`                    | Search based on the action taken on a notice.
+| `topic_facet`                     | Filter on topics facet
+| `sender_name_facet`               | Filter on `sender_name` facet
+| `principal_name_facet`            | Filter on `principal_name` facet
+| `recipient_name_facet`            | Filter on `recipient_name` facet
+| `tag_list_facet`                  | Filter on a tag
+| `country_code_facet`              | Filter on the recipient's country code
+| `language_facet`                  | Filter on the notice language code
+| `action_taken_facet`              | Filter on the `action_taken` facet
+| `date_received_facet`             | The date range (in microseconds since the unix epoc) separated by ".."
+| `page`                            | The page you're requesting - defaults to the first page of results.
+| `per_page`                        | The number of results per page. Defaults to 10.
+| `sort_by`                         | One of `date_received asc`, `date_received desc`, `relevancy asc`, or `relevancy desc`. Defaults to `relevancy asc`.
+
+### `*-require-all` parameters
+
+Let's say we're searching for notices with "George Jetsen" in the title.
+By default, the search engine will search for notices with "George OR Jetsen".
+
+If you include 'title-require-all=yes' in your query, then the search engine will
+search for notices with "George AND Jetsen" in the title, narrowing down your
+results considerably.
+
+The various `*-require-all` parameters need a non-null value to be enabled -
+"true" or "yes" are both acceptable.
+
+### Facets
 
 See below for more information about available facets. You can get an idea of
 how facets are formatted by submitting facet-less fulltext queries and then

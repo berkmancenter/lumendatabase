@@ -35,6 +35,12 @@ class FieldedSearchOnPage < PageObject
     end
   end
 
+  def limit_search_to_all_words_for(field)
+    within(".field-group.#{field.field}") do
+      check 'All words required'
+    end
+  end
+
   def set_sort_order(sort_order)
     open_sort_order_menu
     find("a[data-value='#{sort_order}']").click

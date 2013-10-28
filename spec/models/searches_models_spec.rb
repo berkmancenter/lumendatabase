@@ -46,8 +46,18 @@ describe SearchesModels do
       searcher = described_class.new(params_hash)
       searcher.register all_fields
 
-      all_fields.should_receive(:query_for).with(params_hash[:term])
+      all_fields.should_receive(:query_for).with(params_hash[:term], nil)
 
+      searcher.search
+    end
+
+    it "dispatches with an operator" do
+      all_fields = TermSearch.new(:term, :_all)
+      modified_params_hash = params_hash.merge({'term-require-all' => true})
+      searcher = described_class.new(modified_params_hash)
+      searcher.register all_fields
+
+      all_fields.should_receive(:query_for).with(params_hash[:term], 'AND')
       searcher.search
     end
   end

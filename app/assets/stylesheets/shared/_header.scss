@@ -245,7 +245,13 @@ header.app .container.advanced-search {
     }
   }
 
-  a.add-group {
+  input[type='checkbox'] {
+    margin: ($input-height - 16px) / 2 .5em ;
+    height: $input-height - 16px;
+    width: auto;
+  }
+
+  a.add-group, label {
     color: #fff;
     display: inline-block;
     float: left;
@@ -257,6 +263,10 @@ header.app .container.advanced-search {
       clear: left;
       margin: 3px 0 8px 0;
     }
+  }
+
+  label {
+    margin-left: 0;
   }
 
   div.resubmit {

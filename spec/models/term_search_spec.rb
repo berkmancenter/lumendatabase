@@ -9,12 +9,12 @@ describe TermSearch do
 
   it "queries the searcher given a param it handles" do
     @query.should_receive(:boolean)
-    @term_search.apply_to_query(@query, :term, 'foo')
+    @term_search.apply_to_query(@query, :term, 'foo', nil)
   end
 
   it "does not query with a parameter it is not bound to" do
     @query.should_not_receive(:boolean)
-    @term_search.apply_to_query(@query, :unknown_term, 'foo')
+    @term_search.apply_to_query(@query, :unknown_term, 'foo', nil)
   end
 
 end

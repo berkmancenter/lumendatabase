@@ -35,7 +35,10 @@ class @AdvancedSearchRows
 
   fieldChanged: (fieldGroup) ->
     input = fieldGroup.find('input[type="text"]')
+    checkbox = fieldGroup.find('input[type="checkbox"]')
+    label = fieldGroup.find('label')
     select = fieldGroup.find('select')
+
 
     if oldName = input.attr('name')
       fieldGroup.removeClass(oldName)
@@ -43,11 +46,16 @@ class @AdvancedSearchRows
 
     newName = select.val()
 
+    allWordsParameter = newName + "-require-all"
+
     if newName == ''
       input.attr('name', null)
     else
       input.attr('name', newName)
       fieldGroup.addClass(newName)
+      label.attr('for', allWordsParameter)
+      checkbox.attr('id', allWordsParameter)
+        .attr('name', allWordsParameter)
       @_taken.push(newName)
 
   _disableLastFieldGroup: ->
@@ -60,6 +68,8 @@ class @AdvancedSearchRows
       .append($('<div>').addClass('remove-group'))
       .append(@_buildSelect(field.parameter))
       .append(@_buildInput(field))
+      .append(@_buildAllWordsCheckBox(field))
+      .append(@_buildAllWordsLabel(field))
       .insertBefore(@_addMore)
 
   _buildSelect: (selected) ->
@@ -76,6 +86,19 @@ class @AdvancedSearchRows
         select.append(option)
 
     $('<div>').addClass('input select').append(select)
+
+  _buildAllWordsCheckBox: (field) ->
+    parameter = field.parameter + '-require-all'
+    $('<input />')
+      .attr('type', 'checkbox')
+      .attr('id', parameter)
+      .attr('name', parameter)
+      .attr('value', true)
+      .prop('checked', field.allWords)
+
+  _buildAllWordsLabel: (field) ->
+    parameter = field.parameter + '-require-all'
+    $('<label />').attr('for', parameter).text('All words required')
 
   _buildOption: (field) ->
     $('<option>').val(field.parameter).text(field.title)
