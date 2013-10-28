@@ -6,7 +6,8 @@
     data: {
       title: term_search.title,
       parameter: term_search.parameter,
-      value: params[term_search.parameter]
+      value: params[term_search.parameter],
+      all_words: params["#{term_search.parameter}-require-all"]
     }
   )
 %>

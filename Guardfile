@@ -2,6 +2,7 @@
 # More info at https://github.com/guard/guard#readme
 
 guard 'spork', :rspec_env => { 'RAILS_ENV' => 'test' } do
+  ignore /public\/system/
   watch('config/application.rb')
   watch('config/environment.rb')
   watch('config/environments/test.rb')

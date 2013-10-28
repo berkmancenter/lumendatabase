@@ -12,19 +12,19 @@ class TermSearch
     'notices/search/term_search'
   end
 
-  def query_for(value)
+  def query_for(value, operator = 'OR')
     field = @field
     lambda do |query|
-      query.must { match(field, value) }
+      query.must { match(field, value, operator: operator) }
     end
   end
 
   def apply_to_search(*)
   end
 
-  def apply_to_query(query, param, value)
+  def apply_to_query(query, param, value, operator)
     if handles?(param)
-      term_query = query_for(value)
+      term_query = query_for(value, operator)
       query.boolean(&term_query)
     end
   end
