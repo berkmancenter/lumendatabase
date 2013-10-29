@@ -19,6 +19,26 @@ namespace :chillingeffects do
     end
   end
 
+  desc "Import chillingeffects data from Mysql"
+  task import_notices_via_mysql: :environment do
+    name = ENV['IMPORT_NAME']
+    base_directory = ENV['BASE_DIRECTORY']
+    where_fragment = ENV['WHERE']
+    import_errors = ENV['IMPORT_ERRORS_DIRECTORY']
+
+    unless name && base_directory && where_fragment && import_errors
+      puts "You need to give an IMPORT_NAME, BASE_DIRECTORY, WHERE fragment and IMPORT_ERRORS_DIRECTORY"
+      puts "See IMPORTING.md for additional details about environment variables necessary to import via mysql"
+      exit
+    end
+
+    record_source = Ingestor::Legacy::RecordSource::Mysql.new(
+      where_fragment, name, base_directory
+    )
+    ingestor = Ingestor::Legacy.new(record_source)
+    ingestor.import
+  end
+
   desc "Import latest legacy chillingeffects data from Mysql"
   task import_new_notices_via_mysql: :environment do
     # Configure the record_source
