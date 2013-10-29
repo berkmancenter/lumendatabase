@@ -39,6 +39,16 @@ feature "notice submission" do
     expect(Notice.last.title).to eq 'A superduper title'
   end
 
+  scenario "submitting invalid JSON", js: true do
+    invalid_tokens = ', , '
+    broken_json = %Q|{"notice":{"title":"A sweet title",#{invalid_tokens}"works_attributes":[{"description":"A work"}],"entity_notice_roles_attributes":[{"name":"recipient","entity_attributes":{"name":"The Googs"}}]},"authentication_token":"nothinginteresting"}|
+
+    curb = post_broken_json_to_api('/notices', broken_json)
+    expect(curb.response_code).to eq 500
+    expect(curb.content_type).to match(/application\/json/)
+    expect(curb.body_str).to match("There was a problem in the JSON you submitted:")
+  end
+
   scenario "submitting a notice with token in header", js: true do
     parameters = request_hash(default_notice_hash)
     token = parameters.delete(:authentication_token)
