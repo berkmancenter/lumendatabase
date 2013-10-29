@@ -9,6 +9,12 @@ module CurbHelpers
     end
   end
 
+  def post_broken_json_to_api(path, broken_json)
+    Curl.post("http://#{host}:#{port}#{path}", broken_json) do |curl|
+      set_default_headers(curl)
+    end
+  end
+
   def with_curb_get_for_json(url, options)
     curb = Curl.get("http://#{host}:#{port}/#{url}", options) do |curl|
       set_default_headers(curl)
