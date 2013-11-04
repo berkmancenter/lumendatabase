@@ -16,5 +16,10 @@ $('.advanced-search').on 'click', '.remove-group', (event) ->
   fieldGroup = $(this).closest('.field-group')
   $rows.removeField(fieldGroup)
 
+$('.results-context-toggle').click ->
+  $('.results-context').slideToggle
+    duration: 'fast'
+    easing: 'easeOutCirc'
+
 $ ->
   $rows.displayActiveFields()

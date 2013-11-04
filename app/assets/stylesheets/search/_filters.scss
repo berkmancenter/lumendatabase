@@ -70,6 +70,14 @@ ol.results-facets {
     }
   }
 
+  li.title.results-context-toggle{
+    text-transform: none;
+  }
+
+  li.title.results-context-toggle:hover{
+    cursor: pointer;
+  }
+
   li.dropdown {
     position: relative;
     @include transition(padding 0.1s);

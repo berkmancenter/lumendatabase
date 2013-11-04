@@ -2,8 +2,8 @@ section.search-results {
   border-radius: 3px;
   @include clearfix;
 
-  div.result-stats {
-    margin: 15px 0 0 $base-padding;
+  div.result-stats, div.results-context {
+    margin: 15px $base-padding 0 $base-padding;
 
     @include media($mobile) {
       margin-left: $base-padding-mobile;
