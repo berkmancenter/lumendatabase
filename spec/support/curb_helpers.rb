@@ -9,9 +9,10 @@ module CurbHelpers
     end
   end
 
-  def post_broken_json_to_api(path, broken_json)
+  def post_broken_json_to_api_as(path, accepts, broken_json)
     Curl.post("http://#{host}:#{port}#{path}", broken_json) do |curl|
-      set_default_headers(curl)
+      curl.headers['Accept'] = accepts
+      curl.headers['Content-Type'] = 'application/json'
     end
   end
 
