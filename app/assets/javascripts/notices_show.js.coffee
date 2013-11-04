@@ -2,8 +2,8 @@ toggleFirstTimeContent = ->
   # This is to ensure that the contextualizing language does not exist in the 
   # DOM, otherwise google would assume it's extremely important content on 
   # every notice page and mess up relevancy ranking.
-  if $('.first-time-visitor').text().length < 30
-    $('.first-time-visitor').prepend(
+  if $('.first-time-visitor .first-visitor-content').text().length < 30
+    $('.first-time-visitor-content').append(
       $('.first-time-visitor').data('content')
     )
 
@@ -17,7 +17,7 @@ $ ->
   if typeof($.cookie('returning-visitor')) == 'undefined'
     toggleFirstTimeContent()
 
-$('#hide-first-time-visitor-content a').click ->
+$('.first-time-visitor').click ->
   toggleFirstTimeContent()
 
 $('.other-entities li').hover (->

@@ -65,16 +65,13 @@ en:
     'The notice on this page represents a request to remove material from an online site. Chilling Effects maintains an independent database of these notices -- we are not the senders or or targets of the notices.
 
 
-Every notice will show a Sender and Recipient. Where a notice was sent by an agent on behalf of a principal, both parties will be shown.
-
-
 Other information in the notice depends on what details the sender included.
 
 
 The category of request is listed at the top. The “Recipient” of the notice is the person or organization, most often an ISP, that controls access to the material, and is therefore in a position to remove or disable access to it.
 
 
-The “Sender” is the person or entity who is requesting that the material be removed unless an agent or law firm has sent the notice on the principal’s behalf, in which case both the agent’s name and that of the sender are listed, with the agent sending “on behalf of” the original complainant.
+Every notice will show a Sender and Recipient. Where a notice was sent by an agent on behalf of a principal, both parties will be shown.  The “Sender” is the person or entity who is requesting that the material be removed unless an agent or law firm has sent the notice on the principal’s behalf, in which case both the agent’s name and that of the sender are listed, with the agent sending “on behalf of” the original complainant.
 
 
 Other critical fields on each notice include:
