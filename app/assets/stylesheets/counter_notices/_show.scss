@@ -1,0 +1,18 @@
+article.counter-notice-show {
+  width: 80%;
+  margin: 2em auto;
+  border: 2px solid $base-border-color;
+  border-radius: 4px;
+  padding: 2em;
+  box-shadow: 6px 6px 0 #CCC;
+
+  hr.signature-line{
+    border-color: $base-font-color;
+    display: inline-block;
+    width: 40%;
+  }
+
+  p.date {
+    text-align: right;
+  }
+}

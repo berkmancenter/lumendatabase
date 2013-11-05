@@ -69,7 +69,7 @@ section.notice-new {
 // Form
 //************************************************************************//
 $long-label-width: $form-label-width + 30px;
-form.new_notice {
+form.new_notice, form.new_counter_notice {
   div {
     @include clearfix;
   }
@@ -78,6 +78,10 @@ form.new_notice {
     position: relative;
     margin-bottom: 10px;
     clear: left;
+  }
+
+  span.radio{
+    display: block;
   }
 
   label {
@@ -95,6 +99,25 @@ form.new_notice {
     top: 1px;
     width: $form-label-width;
     z-index: 1;
+
+
+    &.boolean, &.collection_radio_buttons {
+      width: auto;
+      left: auto;
+      border: none;
+      position: static;
+      display: inline;
+      background: none;
+    }
+
+    &.radio_buttons {
+      display: block;
+      width: auto;
+      left: auto;
+      border: none;
+      position: static;
+      background: none;
+    }
 
     &.text {
       border-bottom: 1px solid $form-border-color;
@@ -118,6 +141,10 @@ form.new_notice {
     padding: 6px;
     width: 100%;
     margin-bottom: 0;
+
+    &.boolean, &.radio_buttons {
+      width: auto;
+    }
   }
 
   input {
@@ -169,6 +196,14 @@ form.new_notice {
       width: calc(50% - #{$base-padding});
     }
   }
+}
+
+form.new_counter_notice {
+
+  section.important-terms{
+    padding-top: 0;
+  }
+
 }
 
 // Float some fields left

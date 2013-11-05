@@ -3,6 +3,7 @@ en:
     formats:
       default: '%m/%d/%Y'
       with_weekday: '%a %m/%d/%y'
+      friendly_date: '%B %e, %Y'
 
   time:
     formats:
