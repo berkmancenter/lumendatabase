@@ -9,6 +9,8 @@ Chill::Application.routes.draw do
 
   resources :notices, only: [:show, :new, :create]
 
+  resources :counter_notices, only: [:new, :create]
+
   namespace :entities do
     resources :search, only: [:index]
   end
