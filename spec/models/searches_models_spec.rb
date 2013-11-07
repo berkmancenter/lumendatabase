@@ -22,7 +22,6 @@ describe SearchesModels do
   end
 
   context 'filters' do
-
     it "correctly configures facets" do
       subject.register TermFilter.new(:title)
       expect(subject.search.facets[:title]).to be
@@ -37,6 +36,21 @@ describe SearchesModels do
         [ bleep: { foo: ['as'] } ]
       )
       searcher.search
+    end
+  end
+
+  context '.cache_key' do
+    it "uses md5 hashing for uniqueness" do
+      Digest::MD5.should_receive(:hexdigest)
+      searcher = described_class.new
+      searcher.cache_key
+    end
+
+    it "has a consistent length" do
+      [{}, { foo: 1, bar: 2 }, { bleep: 22, beef: 312, brap: 333 }].each do |params|
+        searcher = described_class.new(params)
+        expect(searcher.cache_key.length).to eq 46
+      end
     end
   end
 

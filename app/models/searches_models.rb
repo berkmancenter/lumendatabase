@@ -36,6 +36,10 @@ class SearchesModels
     end
   end
 
+  def cache_key
+    "search-result-#{Digest::MD5.hexdigest(@params.to_param)}"
+  end
+
   private
 
   def this_page

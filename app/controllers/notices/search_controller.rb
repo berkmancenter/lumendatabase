@@ -2,19 +2,19 @@ class Notices::SearchController < ApplicationController
   layout 'search'
 
   def index
-    search = notice_searcher.search
-
-    @results = search.results
 
     respond_to do |format|
-      format.html
+      format.html do
+        @searcher = notice_searcher
+      end
       format.json do
+        results = notice_searcher.search.results
         render(
-          json: @results,
+          json: results,
           each_serializer: NoticeSerializerProxy,
           serializer: ActiveModel::ArraySerializer,
           root: 'notices',
-          meta: meta_hash_for(@results)
+          meta: meta_hash_for(results)
         )
       end
     end
