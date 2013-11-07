@@ -1,6 +1,13 @@
 <% title 'Notices', @notice.title %>
 
 <article class="notice-show">
+  <% if can?(:access, :rails_admin) %>
+    <div class="admin-edit">
+      <%= link_to "Edit in Admin", admin_show_path(@notice) %>
+    </div>
+  <% end %>
+
+<% cache(@notice) do %>
   <%= content_tag('section', class: 'first-time-visitor', style: 'display: none;', 'data-content' => first_time_visitor_content) do %>
     <div class="first-time-visitor-content">
       <p id="hide-first-time-visitor-content"><a href="#">Close</a></p>
@@ -34,12 +41,6 @@
         </div>
       <% end %>
     </header>
-
-    <% if can?(:access, :rails_admin) %>
-      <div class="admin-edit">
-        <%= link_to "Edit in Admin", admin_show_path(@notice) %>
-      </div>
-    <% end %>
 
     <div class="main">
       <h2>Re: <%= subject(@notice) %></h2>
@@ -95,4 +96,5 @@
       <%= render 'shared/tag_list', tags: @notice.tags %>
     </section>
   </footer>
+<% end %>
 </article>

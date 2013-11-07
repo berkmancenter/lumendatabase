@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'notices/search/index.html.erb' do
   it "display the results" do
-    mock_results(build_stubbed_list(:dmca, 5))
+    mock_searcher(build_stubbed_list(:dmca, 5))
 
     render
 
@@ -10,7 +10,7 @@ describe 'notices/search/index.html.erb' do
   end
 
   it "includes facets" do
-    mock_results(build_stubbed_list(:dmca, 1))
+    mock_searcher(build_stubbed_list(:dmca, 1))
 
     render
 
@@ -25,7 +25,7 @@ describe 'notices/search/index.html.erb' do
       role_names: %w( principal ),
       title: 'A notice'
     )
-    mock_results([notice])
+    mock_searcher([notice])
 
     render
 
@@ -45,7 +45,7 @@ describe 'notices/search/index.html.erb' do
         topics: build_list(:topic, 2)
       )
       @on_behalf_of = "#{@notice.sender_name} on behalf of #{@notice.principal_name}"
-      mock_results([@notice])
+      mock_searcher([@notice])
     end
 
     it "has facet links for all relevant entities" do
@@ -81,7 +81,7 @@ describe 'notices/search/index.html.erb' do
 
   context 'excerpts' do
     it "includes excerpts" do
-      mock_results(
+      mock_searcher(
         [build_stubbed(:dmca)],
         'highlight' => { 'title' => ["foo <em>bar</em> baz"] }
       )
@@ -94,7 +94,7 @@ describe 'notices/search/index.html.erb' do
     end
 
     it 'sanatizes excerpts' do
-      mock_results(
+      mock_searcher(
         [build_stubbed(:dmca)],
         'highlight' => { 'title' => ["<strong>foo</strong> and <em>bar</em>"] }
       )
@@ -107,12 +107,19 @@ describe 'notices/search/index.html.erb' do
 
   private
 
-  def mock_results(notices, options = {})
+  def mock_searcher(notices, options = {})
     results = notices.map { |notice| as_tire_result(notice, options) }
     results.stub(:total_entries).and_return(results.length)
     results.stub(:total_pages).and_return(1)
     results.stub(:facets).and_return(facet_data)
-    assign(:results, results)
+
+    search_results = double('results double')
+    search_results.stub(:results).and_return(results)
+
+    searcher = double('searcher double')
+    searcher.stub(:search).and_return(search_results)
+    searcher.stub(:cache_key).and_return('asdfasdf')
+    assign(:searcher, searcher)
   end
 
   def facet_data

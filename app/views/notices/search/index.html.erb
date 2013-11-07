@@ -1,13 +1,15 @@
 <%= title 'Search' %>
+<%= cache(@searcher.cache_key) do %>
+<% results = @searcher.search.results -%>
 
 <section class="search-results">
   <header>
     <%= form_tag(notices_search_index_path, method: :get, id: 'facets-form') do %>
-      <% if @results.facets %>
+      <% if results.facets %>
         <ol class="results-facets">
           <li class="title"><span>Facets<span></li>
             <% Notice::FILTERABLE_FIELDS.each do |filterable_field| %>
-              <%= render filterable_field, results: @results %>
+              <%= render filterable_field, results: results %>
             <% end %>
             <li class="title results-context-toggle">About Facets</li>
         </ol>
@@ -18,7 +20,7 @@
       Choosing to view a particular facet of the results does not filter the results. While the immediate view of the results will change to reflect the choice of facet(s), all of the original search’s totals will remain in the dropdowns.
     </div>
     <div class="result-stats">
-      <span class="total-entries">Found <%= @results.total_entries %> results</span>
+      <span class="total-entries">Found <%= results.total_entries %> results</span>
       <div class="dropdown sort-order">
         Sort by: <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><%= sort_order_label(params[:sort_by]) %></a>
         <ol class="dropdown-menu" role="menu">
@@ -36,7 +38,8 @@
     </div>
   </header>
   <ol class="results-list">
-    <%= render partial: 'result', collection: @results %>
+    <%= render partial: 'result', collection: results %>
   </ol>
-  <%= will_paginate @results %>
+  <%= will_paginate results %>
 </section>
+<% end %>
