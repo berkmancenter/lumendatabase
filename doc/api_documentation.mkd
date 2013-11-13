@@ -128,10 +128,15 @@ curl -H "Accept: application/json" \
 If the Authentication Token is missing or invalid, an empty response 
 will be returned with HTTP status 401 (Unauthorized).
 
+In the Example Request below, we include `-v` as a flag for curl to make the fetching verbose.  
+In order to obtain more information, and for alternatives to `-v`, refer to the curl Unix man page
+by typing `man curl`.
+
 ### Example Request
 
+
 ```
-curl -H "Accept: application/json" -H "Content-type: application/json" 'http://chillingeffectsplaceholder/notices/' -d '{
+curl -v -H "Accept: application/json" -H "Content-type: application/json" 'http://chillingeffectsplaceholder/notices/' -d '{
   "authentication_token": "abc123",
   "notice": {
     "title": "DMCA (Copyright) Complaint to Google",
@@ -199,7 +204,7 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'http://c
       }
     ]
   }
-}'
+}' 
 ```
 
 ### Successful Responses
