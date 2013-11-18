@@ -690,7 +690,7 @@ pagination metadata, please see 'Search notices via fulltext'
 
 **Method**: `GET`
 
-**Endpoint**: `http://chillingeffectsplaceholder/notices/entities/search?term=url_escaped_query&page=1`
+**Endpoint**: `http://chillingeffectsplaceholder/entities/search?term=url_escaped_query&page=1`
 
 **Parameters**
 
@@ -734,7 +734,7 @@ Return a JSON-encoded representation of selected entity attributes.
 #### Example Successful Response:
 
 ```
-curl -H "Accept: application/json" -H "Content-type: application/json" 'http://chillingeffectsplaceholder/notices/entities/search?term=joe&page=1'
+curl -H "Accept: application/json" -H "Content-type: application/json" 'http://chillingeffectsplaceholder/entities/search?term=joe&page=1'
 ```
 
 
