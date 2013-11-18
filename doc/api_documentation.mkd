@@ -374,10 +374,10 @@ Return a 404 HTTP status header.
 
 **Method**: GET
 
-**Endpoint**: `http://chillingeffectsplaceholder/notices/topics.json`
+**Endpoint**: `http://chillingeffectsplaceholder/topics.json`
 
 ```
-curl http://chillingeffectsplaceholder/notices/topics.json
+curl http://chillingeffectsplaceholder/topics.json
 ```
 
 ### Successful Responses
