@@ -83,8 +83,7 @@ class Notice < ActiveRecord::Base
   has_many :copyrighted_urls, through: :works
   has_and_belongs_to_many :relevant_questions
 
-  has_and_belongs_to_many :works,
-    include: [ :infringing_urls, :copyrighted_urls ]
+  has_and_belongs_to_many :works
 
   validates_inclusion_of :action_taken, in: VALID_ACTIONS, allow_blank: true
   validates_inclusion_of :language, in: Language.codes, allow_blank: true
