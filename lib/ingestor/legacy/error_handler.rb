@@ -1,62 +1,40 @@
 module Ingestor
   class Legacy
     class ErrorHandler
-      include FileUtils
 
-      delegate :close, to: :csv
-
-      def initialize(directory, file_name)
-        @originals = File.expand_path(directory)
-        @failures = "#{originals}-failures"
-        @file_name = normalize_file_name(file_name)
-
-        mkdir_p @failures
-
-        @csv = CSV.open(File.join(@failures, @file_name), 'wb')
+      def initialize(source_name)
+        @source_name = source_name
         @logger = Logger.new(STDERR)
       end
 
-      def copy_headers(headers)
-        csv << (headers + ['FailureMessage'])
-      end
-
       def handle(csv_row, ex)
-        file_paths  = (csv_row['OriginalFilePath'] || '').split(',')
-        file_paths += (csv_row['SupportingFilePath'] || '').split(',')
         error_message = "(#{ex.class}) #{ex.message}: #{ex.backtrace.first}"
 
-        logger.error "Error importing Notice #{csv_row['NoticeID']} from #{file_name}"
+        logger.error "Error importing Notice #{csv_row['NoticeID']} from #{source_name}"
         logger.error "  Error: #{error_message}"
-        logger.error "  Files: #{file_paths.join(', ')}"
+        logger.error "  Files: #{file_paths(csv_row)}"
 
-        csv << (csv_row.to_hash.values + [error_message])
-
-        file_paths.each { |file_path| store_file(file_path) }
-
+        NoticeImportError.create!(
+          original_notice_id: csv_row['NoticeID'].to_i,
+          file_list: file_paths(csv_row),
+          message: ex.message,
+          stacktrace: ex.backtrace.first,
+          import_set_name: source_name
+        )
       rescue => ex
         logger.error "Failure handling failure: #{ex}"
       end
 
       private
 
-      attr_reader :originals, :failures, :csv, :logger, :file_name
+      attr_reader :logger, :source_name
 
-      def normalize_file_name(name)
-        if ! name.match(/\.csv\Z/i)
-          "#{name}.csv"
-        else
-          name
-        end
+      def file_paths(csv_row)
+        paths  = (csv_row['OriginalFilePath'] || '').split(',')
+        paths += (csv_row['SupportingFilePath'] || '').split(',')
+        paths.join(',')
       end
 
-      def store_file(file_path)
-        directory, _ = File.split(file_path)
-        new_directory = File.join(failures, directory)
-
-        mkdir_p new_directory
-
-        cp file_path, new_directory
-      end
     end
   end
 end

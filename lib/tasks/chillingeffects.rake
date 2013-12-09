@@ -11,23 +11,14 @@ namespace :chillingeffects do
     sleep 5
   end
 
-  desc "Import legacy chillingeffects data from CSV"
-  task import_legacy_csv_data: :environment do
-    with_file_name do |file_name|
-      ingestor = Ingestor::Legacy.open_csv(file_name)
-      ingestor.import
-    end
-  end
-
   desc "Import chillingeffects data from Mysql"
   task import_notices_via_mysql: :environment do
     name = ENV['IMPORT_NAME']
     base_directory = ENV['BASE_DIRECTORY']
     where_fragment = ENV['WHERE']
-    import_errors = ENV['IMPORT_ERRORS_DIRECTORY']
 
-    unless name && base_directory && where_fragment && import_errors
-      puts "You need to give an IMPORT_NAME, BASE_DIRECTORY, WHERE fragment and IMPORT_ERRORS_DIRECTORY"
+    unless name && base_directory && where_fragment
+      puts "You need to give an IMPORT_NAME, BASE_DIRECTORY and WHERE fragment"
       puts "See IMPORTING.md for additional details about environment variables necessary to import via mysql"
       exit
     end

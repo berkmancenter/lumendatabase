@@ -16,35 +16,6 @@ describe Ingestor::Legacy::ErrorHandler do
 
   after do
     FileUtils.rm_rf 'tmp/example-import'
-    FileUtils.rm_rf 'tmp/example-import-failures'
-  end
-
-  context "error report file name" do
-    it "is relative to the import file name" do
-      file_name = 'foobar.csv'
-      handler = described_class.new(directory, file_name)
-
-      expect(File.exists?("#{directory}-failures/foobar.csv")).to be
-    end
-
-    it "adds csv to the end if it doesn't exist" do
-      file_name = 'foobar'
-      handler = described_class.new(directory, file_name)
-
-      expect(File.exists?("#{directory}-failures/foobar.csv")).to be
-    end
-  end
-
-  context ".copy_headers" do
-    it "copies the headers with another column" do
-      handler = described_class.new(directory, 'tNotice.csv')
-
-      handler.copy_headers(headers)
-
-      handler.close
-      contents = File.read("#{directory}-failures/tNotice.csv").chomp
-      expect(contents).to eq "NoticeID,OriginalFilePath,FailureMessage"
-    end
   end
 
   context "#handle" do
@@ -61,31 +32,23 @@ describe Ingestor::Legacy::ErrorHandler do
     it "outputs the failure via its logger" do
       @logger.should_receive(:error).with('Error importing Notice 1000 from tNotice.csv')
       @logger.should_receive(:error).with('  Error: (RuntimeError) Boom!: first')
-      @logger.should_receive(:error).with('  Files: sub/original.txt, sub/original.html')
-      handler = described_class.new(directory, 'tNotice.csv')
+      @logger.should_receive(:error).with('  Files: sub/original.txt,sub/original.html')
+      handler = described_class.new('tNotice.csv')
 
-      Dir.chdir(directory) { handler.handle(csv_row, exception) }
+      handler.handle(csv_row, exception)
     end
 
-    it "records the CSV row and failure" do
-      handler = described_class.new(directory, 'tNotice.csv')
-
-      Dir.chdir(directory) { handler.handle(csv_row, exception) }
-
-      handler.close
-      contents = File.read("#{directory}-failures/tNotice.csv").chomp
-      expect(contents).to eq(
-        '1000,"sub/original.txt,sub/original.html",(RuntimeError) Boom!: first'
+    it "creates a relevant ImportError model instance" do
+      NoticeImportError.should_receive(:create!).with(
+        original_notice_id: 1000,
+        file_list: 'sub/original.txt,sub/original.html',
+        message: 'Boom!',
+        stacktrace: 'first',
+        import_set_name: 'tNotice.csv'
       )
-    end
+      handler = described_class.new('tNotice.csv')
 
-    it "copies any original files" do
-      handler = described_class.new(directory, 'tNotice.csv')
-
-      Dir.chdir(directory) { handler.handle(csv_row, exception) }
-
-      expect(File.exists?("#{directory}-failures/sub/original.txt")).to be
-      expect(File.exists?("#{directory}-failures/sub/original.html")).to be
+      handler.handle(csv_row, exception)
     end
 
     private

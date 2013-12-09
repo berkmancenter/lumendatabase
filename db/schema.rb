@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131008184042) do
+ActiveRecord::Schema.define(:version => 20131209154641) do
 
   create_table "blog_entries", :force => true do |t|
     t.integer  "user_id"
@@ -132,6 +132,16 @@ ActiveRecord::Schema.define(:version => 20131008184042) do
 
   add_index "infringing_urls_works", ["infringing_url_id"], :name => "index_infringing_urls_works_on_infringing_url_id"
   add_index "infringing_urls_works", ["work_id"], :name => "index_infringing_urls_works_on_work_id"
+
+  create_table "notice_import_errors", :force => true do |t|
+    t.integer  "original_notice_id"
+    t.string   "file_list",          :limit => 2048
+    t.string   "message",            :limit => 16384
+    t.string   "stacktrace",         :limit => 2048
+    t.string   "import_set_name",    :limit => 1024
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
+  end
 
   create_table "notices", :force => true do |t|
     t.string   "title"

@@ -18,10 +18,7 @@ module Ingestor
 
       @logger.debug { "Started at: #{@start_unixtime}, #{Time.now}" }
 
-      @error_handler = ErrorHandler.new(
-        ENV['IMPORT_ERRORS_DIRECTORY'] || record_source.base_directory, record_source.name
-      )
-      @error_handler.copy_headers(record_source.headers)
+      @error_handler = ErrorHandler.new(record_source.name)
 
       @succeeded = 0
       @failed = 0
