@@ -41,6 +41,17 @@ module Ingestor
         @notice_type = Dmca
       end
 
+      def entities
+        file_paths.each do |file_path|
+          if parsable?(file_path)
+            entities = parse_entities(file_path)
+            entities.any? and return entities
+          end
+        end
+
+        {}
+      end
+
       def works
         file_paths.each do |file_path|
           if parsable?(file_path)
@@ -58,6 +69,20 @@ module Ingestor
 
       def parse_works(file_path)
         raise NotImplementedError, "#{self.class} must implement #{__method__}"
+      end
+
+      def parse_entities(file_path)
+        content = self.class.read_file(file_path)
+        entities = {}
+        sender(content).present? && entities[:sender] = sender(content)
+        principal(content).present? && entities[:principal] = principal(content)
+        entities
+      end
+
+      def sender(*)
+      end
+
+      def principal(*)
       end
 
       def original_documents
@@ -90,6 +115,9 @@ module Ingestor
         'Yes'
       end
 
+      def default_recipient
+      end
+
       def require_review_if_works_empty?
         true
       end
@@ -98,6 +126,12 @@ module Ingestor
 
       def fix_paths(file_paths)
         "#{file_paths}".split(',').select { |f| File.exists?(f) }
+      end
+
+      def get_single_line_field(content, field_name)
+        if content.match(/^#{field_name}:(.+?)\n/m)
+          $1.strip
+        end
       end
 
     end

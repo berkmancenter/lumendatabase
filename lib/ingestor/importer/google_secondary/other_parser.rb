@@ -19,6 +19,20 @@ module Ingestor
           Other
         end
 
+        def default_recipient
+          'Google, Inc.'
+        end
+
+        private
+
+        def sender(content)
+          get_single_line_field(content, 'full_name')
+        end
+
+        def principal(content)
+          get_single_line_field(content, 'representedrightsholder')
+        end
+
       end
     end
   end

@@ -2,6 +2,8 @@ module Ingestor
   class Legacy
     class AttributeMapper
 
+      attr_reader :hash
+
       class ExcludedNoticeError < StandardError
         def initialize(reason)
           super("Notice was excluded because #{reason}")
@@ -15,7 +17,7 @@ module Ingestor
         '10' => :rescinded
       }
 
-      delegate :notice_type, to: :importer
+      delegate :default_recipient, :notice_type, :entities, to: :importer
 
       def initialize(hash)
         @hash = hash
@@ -66,7 +68,7 @@ module Ingestor
 
       private
 
-      attr_reader :hash, :importer
+      attr_reader :importer
 
       def title
         (
@@ -106,7 +108,7 @@ module Ingestor
 
       def build_role(role_name, name_key, address_key)
         builder = EntityNoticeRoleBuilder.new(
-          hash, role_name, name_key, address_key
+          self, role_name, name_key, address_key
         )
         builder.build
       end

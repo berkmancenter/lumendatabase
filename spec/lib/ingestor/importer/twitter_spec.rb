@@ -2,6 +2,11 @@ require 'spec_helper'
 require 'ingestor'
 
 describe Ingestor::Importer::Twitter do
+
+  it "has a default_recipient" do
+    expect(described_class.new('').default_recipient).to eq 'Twitter'
+  end
+
   context ".handles?" do
     it "returns true for twitter files" do
       expect(described_class).to handle(
@@ -16,8 +21,20 @@ describe Ingestor::Importer::Twitter do
     end
   end
 
+  context "#parse_entities" do
+    it "parses entities" do
+      importer = described_class.new(
+        "spec/support/example_files/original_twitter_notice_source.txt," \
+        "spec/support/example_files/original_twitter_notice_source.html"
+      )
+
+      expect(importer.entities[:sender]).to eq 'Jim Smith'
+      expect(importer.entities[:principal]).to eq 'Some Copyright Owner'
+    end
+  end
+
   context "#parse_works" do
-    it "parses the correct work discriptions" do
+    it "parses the correct work descriptions" do
       importer = described_class.new(
         "spec/support/example_files/original_twitter_notice_source.txt," \
         "spec/support/example_files/original_twitter_notice_source.html"

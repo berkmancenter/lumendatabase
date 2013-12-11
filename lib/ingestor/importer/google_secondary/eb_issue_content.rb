@@ -6,7 +6,7 @@ module Ingestor
       class EbIssueContent < IssueContent
 
         def infringing_urls
-          content.match(/url_of_infringing_material:\s*(.*)/m)
+          content.match(/url_of_infringing_material:\s*(.*?)(\n\n|\r\n\r\n|\Z)/m)
           extract_urls($1)
         end
 

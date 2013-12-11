@@ -23,11 +23,14 @@ module Ingestor
         end
 
         def copyrighted_urls
-          extract_urls(description)
+          description_urls = extract_urls(description)
+          content.match(/location_of_copyrighted_work:(.+?)\n[a-z_]+:/m)
+          location_urls = extract_urls($1)
+          description_urls + location_urls
         end
 
         def infringing_urls
-          content.match(/url_box[\d_]+:(.+?)\n\n/m)
+          content.match(/url_box.+?:(.+?)(\n\n|\r\n\r\n|\Z)/m)
           extract_urls($1)
         end
 

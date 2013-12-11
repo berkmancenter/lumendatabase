@@ -15,6 +15,20 @@ module Ingestor
           [content.to_work]
         end
 
+        def default_recipient
+          'Google, Inc.'
+        end
+
+        private
+
+        def sender(content)
+          get_single_line_field(content, 'full_name')
+        end
+
+        def principal(content)
+          get_single_line_field(content, 'represented_copyright_holder')
+        end
+
       end
     end
   end

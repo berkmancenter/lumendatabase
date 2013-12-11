@@ -85,7 +85,8 @@ describe Ingestor::Legacy::AttributeMapper do
       @import_class = double(
         "ImportClass",
         works: 'works', file_uploads: 'files',
-        action_taken: 'Yes', require_review_if_works_empty?: true
+        action_taken: 'Yes', require_review_if_works_empty?: true,
+        entities: {}, default_recipient: nil
       )
     end
 
@@ -280,6 +281,23 @@ contact_email_noprefill: info.antipiracy@dtecnet.com|,
     expect(entity.name).to eq hash['Sender_Attorney']
   end
 
+  it "uses entities from the importer when none are in the hash" do
+    import_class = double(
+      "ImportClass",
+      entities: { sender: 'Sender' }, default_recipient: nil,
+      works: [],
+      require_review_if_works_empty?: true,
+      action_taken: 'yes',
+      file_uploads: []
+    )
+    Ingestor::ImportDispatcher.stub(:for).and_return(import_class)
+    import_class.should_receive(:entities).exactly(4).times
+
+    attributes = described_class.new({}).mapped
+    entity = find_entity_notice_role(attributes, 'sender').entity
+    expect(entity.name).to eq 'Sender'
+  end
+
   it "correctly interprets different country codes" do
     [' USA', 'US', 'us', 'United States', 'USA'].each do |country_code|
       hash = {
@@ -384,7 +402,8 @@ contact_email_noprefill: info.antipiracy@dtecnet.com|,
     stubbed_methods = {
       works: [], file_uploads: [],
       action_taken: nil,
-      require_review_if_works_empty?: review_required
+      require_review_if_works_empty?: review_required,
+      entities: {}, default_recipient: nil
     }
     Ingestor::ImportDispatcher.stub(:for).and_return(double(
       "ImportClass", stubbed_methods

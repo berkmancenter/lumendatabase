@@ -24,7 +24,7 @@ describe Ingestor::Legacy do
   it "attempts to find a notice by original_notice_id before importing" do
     dmca = Dmca.new
     # TODO - get rid of these mystery guest values. . .
-    ['1053314', '1053334', '1053432', '1053532'].each do |original_notice_id|
+    ['1053314', '1053334', '1053432', '1053532', '1000000'].each do |original_notice_id|
       Notice.should_receive(:where).with(original_notice_id: original_notice_id).once.and_return(dmca)
     end
 
