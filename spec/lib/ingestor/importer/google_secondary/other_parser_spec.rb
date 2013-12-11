@@ -3,6 +3,17 @@ require 'ingestor'
 
 describe Ingestor::Importer::GoogleSecondary::OtherParser do
 
+  it "has a default_recipient" do
+    expect(described_class.new('').default_recipient).to eq 'Google, Inc.'
+  end
+
+  it "gets entities" do
+    expect(described_class.new(sample_file).entities).to eq({
+      sender: 'dan smith',
+      principal: 'FooCorp'
+    })
+  end
+
   it "gets work descriptions" do
     work = described_class.new(sample_file).works.first
 

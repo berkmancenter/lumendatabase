@@ -4,16 +4,30 @@ module Ingestor
 
       class EntityNoticeRoleBuilder
 
-        def initialize(hash_data, role_name, name_key, address_key)
-          @hash_data = hash_data
+        def initialize(attribute_mapper, role_name, name_key, address_key)
+          @attribute_mapper = attribute_mapper
+          @hash_data = attribute_mapper.hash
           @role_name = role_name
           @name_key = name_key
           @address_key = address_key
         end
 
         def build
-          return unless hash_data[name_key].to_s.strip.present?
-          attributes = { name: clean_entity_name }
+          if hash_data[name_key].to_s.strip.present?
+            name = hash_data[name_key].to_s.strip
+          else
+            name = attribute_mapper.entities[role_name.to_sym]
+          end
+
+          if role_name == 'recipient' &&
+            name.blank? &&
+              attribute_mapper.default_recipient.present?
+            name = attribute_mapper.default_recipient
+          end
+
+          return unless name.present?
+
+          attributes = { name: clean_entity_name(name) }
 
           if address_key
             attributes.merge!(address_hash(address_key))
@@ -24,12 +38,13 @@ module Ingestor
 
         private
 
-        attr_reader :hash_data, :role_name, :name_key, :address_key
+        attr_reader :attribute_mapper, :hash_data, :role_name, :name_key, :address_key
 
-        def clean_entity_name
-          name = hash_data[name_key].to_s.strip
+        def clean_entity_name(name)
+          name = name.to_s.strip
           name = get_first_line(name)
           name = remove_broken_fields(name)
+          name
         end
 
         def get_first_line(name)

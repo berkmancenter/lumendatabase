@@ -12,7 +12,8 @@ feature "Importing CSV" do
     (
       @primary_format_notice,
       @secondary_dmca_notice,
-      @twitter_notice
+      @twitter_notice,
+      @primary_notice_without_data
     ) = Dmca.order(:id)
 
     @secondary_other_notice = Other.last
@@ -119,6 +120,21 @@ http://www.example.com/unstoppable_3.html|
       expect(upload_contents(@twitter_notice.supporting_documents.first)).to eq File.read(
         'spec/support/example_files/original_twitter_notice_source.html'
       )
+    end
+  end
+
+  context "from a google notice without data" do
+    scenario "a notice is created and entity info is recovered from the file" do
+      expect(@primary_notice_without_data.title).to eq 'Untitled'
+      expect(@primary_notice_without_data.works.length).to eq 2
+      expect(@primary_notice_without_data).to have(1).original_document
+      expect(@primary_notice_without_data.entities.map(&:name)).to match_array(
+        ["Copyright Owner LLC", "Google, Inc.", "Joe Schmoe"]
+      )
+      expect(upload_contents(@primary_notice_without_data.original_documents.first)).to eq File.read(
+        'spec/support/example_files/original_notice_source_2.txt'
+      )
+      expect(@primary_notice_without_data.action_taken).to eq 'Yes'
     end
   end
 

@@ -22,6 +22,10 @@ module Ingestor
         works
       end
 
+      def default_recipient
+        "Twitter"
+      end
+
       private
 
       def parse_divided_work(file_handle)
@@ -46,6 +50,16 @@ module Ingestor
           yield(line) if block_given?
         end
       rescue EOFError
+      end
+
+      private
+
+      def sender(content)
+        get_single_line_field(content, '== Name')
+      end
+
+      def principal(content)
+        get_single_line_field(content, '== Copyright owner')
       end
     end
 

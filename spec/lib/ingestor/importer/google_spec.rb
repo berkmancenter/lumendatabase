@@ -3,6 +3,10 @@ require 'ingestor'
 
 describe Ingestor::Importer::Google do
 
+  it "has a default recipient" do
+    expect(described_class.new('').default_recipient).to eq 'Google, Inc.'
+  end
+
   context "#handles?" do
     it "should not inspect binary files" do
       file_double = double('File handle')
@@ -52,6 +56,13 @@ Track Name: Flipy The Bear',
       )
     end
 
+    it "can get entity information" do
+      importer = importer_with_complete_file
+
+      expect(importer.entities[:sender]).to eq 'Joe Schmoe'
+      expect(importer.entities[:principal]).to eq 'Copyright Owner LLC'
+    end
+
     it "can get infringing urls" do
       works = works_from_complete_file
 
@@ -90,8 +101,12 @@ Track Name: Flipy The Bear',
 
   private
 
+  def importer_with_complete_file
+    described_class.new('spec/support/example_files/original_notice_source.txt')
+  end
+
   def works_from_complete_file
-    described_class.new('spec/support/example_files/original_notice_source.txt').works
+    importer_with_complete_file.works
   end
 
   def works_from_partial_file

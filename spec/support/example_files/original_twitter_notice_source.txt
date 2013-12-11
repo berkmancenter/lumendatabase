@@ -18,9 +18,9 @@ Infringement, Sep 04 11:14 pm (PDT)
 DMCA Takedown Notice
 
 == Reporter: I am an authorized representative of the copyright owner.
-== Copyright owner: ...
+== Copyright owner: Some Copyright Owner
 == Name: Jim Smith
-== Company: ...
+== Company: Some Company
 == Job title: Authorized agent
 == Email: someone@example.com
 

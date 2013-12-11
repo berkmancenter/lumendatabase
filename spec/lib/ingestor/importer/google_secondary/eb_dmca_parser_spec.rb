@@ -3,6 +3,17 @@ require 'ingestor'
 
 describe Ingestor::Importer::GoogleSecondary::EbDmcaParser do
 
+  it "has a default_recipient" do
+    expect(described_class.new('').default_recipient).to eq 'Google, Inc.'
+  end
+
+  it "gets entity information" do
+    expect(described_class.new(sample_file).entities).to eq({
+      sender: 'first name last name',
+      principal: 'Vsjrh32e8v13Mor'
+    })
+  end
+
   it "gets work descriptions" do
     work = described_class.new(sample_file).works.first
 
@@ -21,7 +32,8 @@ some work,  pplei,"
     expect(work.copyrighted_urls.map(&:url)).to match_array([
       'http://example.com/copyrighted_1',
       'http://example.com/copyrighted_2',
-      'http://example.com/copyrighted_3'
+      'http://example.com/copyrighted_3',
+      'http://example.com/copyrighted_4'
     ])
   end
 

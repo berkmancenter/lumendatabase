@@ -7,6 +7,20 @@ describe Ingestor::Importer::GoogleSecondary::BloggerParser do
     expect(described_class).to handle(sample_file)
   end
 
+  it "has a default recipient" do
+    expect(described_class.new('').default_recipient).to eq 'Google, Inc. [Blogger]'
+  end
+
+  it "gets entity information" do
+    entities = described_class.new(sample_file).entities
+    expect(entities).to eq(
+      {
+        sender: 'Sébastien Forte',
+        principal: 'No Time Records / MERCURY'
+      }
+    )
+  end
+
   it "gets work descriptions" do
     work = described_class.new(sample_file).works.first
 
