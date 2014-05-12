@@ -6,4 +6,4 @@ Tire.configure do
   wrapper SearchResultsProxy
 end
 
-Tire::Model::Search.index_prefix "#{Rails.env.to_s.downcase}_"
+Tire::Model::Search.index_prefix "chill_#{Rails.env.to_s.downcase}"
