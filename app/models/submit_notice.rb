@@ -21,6 +21,7 @@ class SubmitNotice
 
     if notice.save
       notice.mark_for_review
+      notice.copy_id_to_submission_id
       true
     end
   end

@@ -98,11 +98,21 @@ describe SubmitNotice do
     it "returns true and marks for review success" do
       notice = stub_new(Dmca)
       notice.stub(:save).and_return(true)
+      notice.stub(:copy_id_to_submission_id)
       notice.should_receive(:mark_for_review)
 
       ret = SubmitNotice.new(Dmca, {}).submit
 
       expect(ret).to be_true
+    end
+
+    it 'copies id to submission_id' do
+      notice = stub_new(Dmca)
+      notice.stub(:save).and_return(true)
+      notice.stub(:mark_for_review)
+      notice.should_receive(:copy_id_to_submission_id)
+
+      SubmitNotice.new(Dmca, {}).submit
     end
 
     it "returns false on failure" do
