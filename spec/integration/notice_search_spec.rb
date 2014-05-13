@@ -47,9 +47,9 @@ feature "Searching Notices" do
     search_for(term: 'lion', page: 2, per_page: 1)
 
     within('.pagination') do
-      expect(page).to have_css('em.current', text: 2)
+      expect(page).to have_css('.current', text: 2)
       expect(page).to have_css('a[rel="next"]')
-      expect(page).to have_css('a[rel="prev start"]')
+      expect(page).to have_css('a[rel="prev"]')
     end
   end
 

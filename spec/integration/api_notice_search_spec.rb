@@ -247,8 +247,6 @@ feature "Searching for Notices via the API" do
   end
 
   def expect_api_search_to_find(term, options = {})
-    sleep 1
-
     with_curb_get_for_json(
       "notices/search.json",
       options.merge(term: term)) do |curb|
@@ -264,5 +262,4 @@ feature "Searching for Notices via the API" do
   def last_notice_id(json)
     json['notices'].last['id']
   end
-
 end

@@ -5,8 +5,9 @@ describe BlogEntriesController do
   context "#index" do
     it "paginates the 'published' scope on BlogEntry" do
       blog_entries = []
-      BlogEntry.stub_chain(:published,:with_content,:paginate).
-        with(page: '2', per_page: 5).and_return(blog_entries)
+      per_double = double('per', per: blog_entries)
+      BlogEntry.stub_chain(:published,:with_content,:page).
+        with('2').and_return(per_double)
       BlogEntry.stub_chain(:published,:we_are_reading,:limit).and_return([])
 
       get :index, page: 2
@@ -16,7 +17,7 @@ describe BlogEntriesController do
     end
 
     it "includes we_are_reading blog entries" do
-      BlogEntry.stub_chain(:published,:with_content,:paginate).and_return([])
+      BlogEntry.stub_chain(:published,:with_content,:page, :per).and_return([])
 
       blog_entries = 'blog entries'
       BlogEntry.stub_chain(:published,:we_are_reading,:limit).and_return(blog_entries)

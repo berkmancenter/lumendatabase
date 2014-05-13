@@ -109,9 +109,11 @@ describe 'notices/search/index.html.erb' do
 
   def mock_searcher(notices, options = {})
     results = notices.map { |notice| as_tire_result(notice, options) }
-    results.stub(:total_entries).and_return(results.length)
+    results.stub(:total_entries, results.length)
     results.stub(:total_pages).and_return(1)
     results.stub(:facets).and_return(facet_data)
+    results.stub(:current_page).and_return(1)
+    results.stub(:limit_value).and_return(1)
 
     search_results = double('results double')
     search_results.stub(:results).and_return(results)

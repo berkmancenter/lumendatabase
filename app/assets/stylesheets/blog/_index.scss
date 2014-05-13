@@ -117,8 +117,6 @@ aside.sidebar.blog-search {
   }
 }
 
-body.blog_entries {
-  div.pagination {
-    clear: left;
-  }
+section.pagination-container {
+  @include span-columns(12);
 }

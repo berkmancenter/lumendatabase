@@ -32,4 +32,6 @@
   </aside>
 <% end %>
 
-<%= will_paginate @blog_entries %>
+<section class="pagination-container">
+  <%= paginate @blog_entries, outer_window: 0 %>
+</section>
