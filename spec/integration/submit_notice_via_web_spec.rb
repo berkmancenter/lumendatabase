@@ -170,11 +170,11 @@ feature "notice submission" do
     open_recent_notice
 
     within('#entities') do
-      expect(page).not_to have_content "Recipient Line 1"
-      expect(page).not_to have_content "Recipient Line 2"
-      expect(page).not_to have_content "Sender Line 1"
-      expect(page).not_to have_content "Sender Line 2"
-      expect(page).not_to have_content "organization"
+      expect(page).to have_no_content "Recipient Line 1"
+      expect(page).to have_no_content "Recipient Line 2"
+      expect(page).to have_no_content "Sender Line 1"
+      expect(page).to have_no_content "Sender Line 2"
+      expect(page).to have_no_content "organization"
     end
   end
 

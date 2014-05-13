@@ -20,9 +20,9 @@ feature "Rails admin dashboard" do
 
   scenario "it does not display the model counts" do
     within('.content') do
-      expect(page).not_to have_css('.bar')
-      expect(page).not_to have_content('Notice')
-      expect(page).not_to have_content('Infringing url')
+      expect(page).to have_no_css('.bar')
+      expect(page).to have_no_content('Notice')
+      expect(page).to have_no_content('Infringing url')
     end
   end
 end

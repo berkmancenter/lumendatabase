@@ -17,7 +17,7 @@ feature "Redaction queue" do
 
       queue.publish_and_next
 
-      expect(queue).not_to have_next
+      expect(queue).to have_no_next
 
       queue.publish
 
