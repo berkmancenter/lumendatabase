@@ -23,7 +23,7 @@ feature "Redactable fields" do
 
       open_recent_notice
       expect(page).to have_content(redacted_text)
-      expect(page).to_not have_content(original_text)
+      expect(page).to have_no_content(original_text)
     end
 
     context "Manual redaction" do
@@ -54,7 +54,7 @@ feature "Redactable fields" do
         click_on 'Save'
 
         visit "/notices/#{notice.id}"
-        expect(page).not_to have_content(Notice::UNDER_REVIEW_VALUE)
+        expect(page).to have_no_content(Notice::UNDER_REVIEW_VALUE)
       end
 
       private

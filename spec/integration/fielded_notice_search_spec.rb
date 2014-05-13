@@ -16,7 +16,7 @@ feature "Fielded searches of Notices" do
 
         search_on_page.within_results do
           expect(page).to have_content(generator.matched_notice.title)
-          expect(page).not_to have_content(generator.unmatched_notice.title)
+          expect(page).to have_no_content(generator.unmatched_notice.title)
         end
       end
     end
@@ -34,7 +34,7 @@ feature "Fielded searches of Notices" do
 
         search_on_page.within_results do
           expect(page).to have_content(generator.matched_notice.title)
-          expect(page).not_to have_content(generator.unmatched_notice.title)
+          expect(page).to have_no_content(generator.unmatched_notice.title)
         end
       end
     end
@@ -54,7 +54,7 @@ feature "Fielded searches of Notices" do
 
     search_on_page.within_results do
       expect(page).to have_content(inside_search.title)
-      expect(page).not_to have_content(outside_search.title)
+      expect(page).to have_no_content(outside_search.title)
     end
 
     within(".field-group.title") do
@@ -124,7 +124,7 @@ feature "Fielded searches of Notices" do
       scenario "dropdown not displayed by default", search: true, js: true do
         search_on_page.visit_search_page
 
-        expect(page).not_to have_visible_advanced_search_controls
+        expect(page).to have_no_visible_advanced_search_controls
       end
     end
 
@@ -152,7 +152,7 @@ feature "Fielded searches of Notices" do
 
         search_on_page.within_fielded_searches do
           expect(page).to have_css('.field-group.title')
-          expect(page).not_to have_css('.field-group.sender_name')
+          expect(page).to have_no_css('.field-group.sender_name')
         end
       end
 
@@ -163,7 +163,7 @@ feature "Fielded searches of Notices" do
         search_on_page.parameterized_search_for(:title, attack)
 
         search_on_page.within_fielded_searches do
-          expect(page).not_to have_css('div#inserted')
+          expect(page).to have_no_css('div#inserted')
         end
       end
 
@@ -173,7 +173,7 @@ feature "Fielded searches of Notices" do
         search_on_page.remove_fielded_search_for(:title)
 
         search_on_page.within_fielded_searches do
-          expect(page).to_not have_fielded_search_for(:title)
+          expect(page).to have_no_fielded_search_for(:title)
         end
       end
 
@@ -182,7 +182,7 @@ feature "Fielded searches of Notices" do
         search_on_page.add_more
 
         within('.field-group.title') do
-          expect(page).not_to have_select('search-field')
+          expect(page).to have_no_select('search-field')
         end
       end
 
@@ -193,7 +193,7 @@ feature "Fielded searches of Notices" do
         search_on_page.within_fielded_searches do
           # existing field is made disabled, and the new select should
           # not have Title as an option
-          expect(page).not_to have_select(
+          expect(page).to have_no_select(
             'search-field', with_options: ['Title']
           )
         end
@@ -206,7 +206,7 @@ feature "Fielded searches of Notices" do
         search_on_page.within_fielded_searches do
           # existing field is made disabled, and the new select should
           # not have Title as an option
-          expect(page).not_to have_select(
+          expect(page).to have_no_select(
             'search-field', with_options: ['Title']
           )
         end
@@ -241,7 +241,7 @@ feature "Fielded searches of Notices" do
         end
 
         search_on_page.within_fielded_searches do
-          expect(page).to_not have_css('#duplicate-field')
+          expect(page).to have_no_css('#duplicate-field')
         end
       end
 
@@ -266,8 +266,16 @@ feature "Fielded searches of Notices" do
     have_css('.container.advanced-search', visible: true)
   end
 
+  def have_no_visible_advanced_search_controls
+    have_css('.container.advanced-search', visible: false)
+  end
+
   def have_fielded_search_for(parameter)
     have_css(".field-group.#{parameter}", visible: true)
+  end
+
+  def have_no_fielded_search_for(parameter)
+    have_no_css(".field-group.#{parameter}", visible: true)
   end
 
   def search_on_page

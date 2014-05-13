@@ -63,7 +63,7 @@ feature "User authorization" do
     user.sign_in
     user.edit(notice)
 
-    expect(page).not_to have_css('input#notice_review_required')
+    expect(page).to have_no_css('input#notice_review_required')
   end
 
   scenario "Publishers+ can publish (admin)" do
@@ -89,7 +89,7 @@ feature "User authorization" do
     user.sign_in
     user.redact(notice)
 
-    expect(page).not_to have_css('input#notice_review_required')
+    expect(page).to have_no_css('input#notice_review_required')
   end
 
   scenario "Publishers+ can publish (redact tool)" do
@@ -162,7 +162,7 @@ feature "User authorization" do
       user.sign_in
       user.edit(notice)
 
-      expect(page).not_to have_css('input#notice_rescinded')
+      expect(page).to have_no_css('input#notice_rescinded')
     end
   end
 

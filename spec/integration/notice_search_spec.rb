@@ -201,8 +201,8 @@ feature "Searching Notices" do
     search_for(sender_name: "Jim", recipient_name: "Jon")
 
     expect(page).to have_content("Jim & Jon's")
-    expect(page).not_to have_content("Jim & Dan's")
-    expect(page).not_to have_content("Dan & Jon's")
+    expect(page).to have_no_content("Jim & Dan's")
+    expect(page).to have_no_content("Dan & Jon's")
   end
 
   scenario "searching with a blank parameter", search: true do
@@ -214,7 +214,7 @@ feature "Searching Notices" do
   def expect_search_to_not_find(term, notice)
     submit_search(term)
 
-    expect(page).not_to have_content(notice.title)
+    expect(page).to have_no_content(notice.title)
 
     yield if block_given?
   end
