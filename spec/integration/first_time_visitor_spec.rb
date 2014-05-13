@@ -27,7 +27,7 @@ feature "Explanatory content on notice pages" do
       visit "/notices/#{notice.id}"
       sleep 0.2
       visit "/notices/#{notice.id}"
-      expect(page).not_to have_css('.first-time-visitor')
+      expect(page).to have_no_css('.first-time-visitor')
     end
   end
 end

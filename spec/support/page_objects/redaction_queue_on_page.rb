@@ -72,6 +72,10 @@ class RedactionQueueOnPage < PageObject
     has_css?("input[value='Save and next']")
   end
 
+  def has_no_next?
+    has_no_css?("input[value='Save and next']")
+  end
+
   private
 
   def within_profiles(&block)
