@@ -28,15 +28,13 @@ feature "Searching Entities" do
     end
   end
 
+  def expect_entity_api_search_to_find(term, options = {})
+    with_curb_get_for_json(
+      "entities/search.json",
+      options.merge(term: term)) do |curb|
+        json = JSON.parse(curb.body_str)
+        yield(json) if block_given?
+      end
+  end
 end
 
-def expect_entity_api_search_to_find(term, options = {})
-  sleep 1
-
-  with_curb_get_for_json(
-    "entities/search.json",
-    options.merge(term: term)) do |curb|
-    json = JSON.parse(curb.body_str)
-    yield(json) if block_given?
-    end
-end

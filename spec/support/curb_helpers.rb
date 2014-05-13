@@ -17,6 +17,8 @@ module CurbHelpers
   end
 
   def with_curb_get_for_json(url, options)
+    sleep 1
+
     curb = Curl.get("http://#{host}:#{port}/#{url}", options) do |curl|
       set_default_headers(curl)
     end

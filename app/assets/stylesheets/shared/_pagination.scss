@@ -7,13 +7,26 @@
   @include clearfix;
   overflow: hidden;
   position: relative;
+  font-style: normal;
 
-  span, em, a {
+  .current {
+    color: hsla(0, 0%, 100%, 0.4);
+    font-weight: 700;
+  }
+
+  span, a {
     color: #fff;
-    border-right: 1px solid hsla(0, 0%, 0%, 0.1);
     font-size: $base-font-size - 1;
     float: left;
-    padding: 0.6em 1em
+  }
+
+  span a, span.gap, span.current{
+    border-right: 1px solid hsla(0, 0%, 0%, 0.1);
+    padding: 0.6em 1em;
+  }
+
+  span.first, span.last {
+    display: none;
   }
 
   a {
@@ -27,31 +40,11 @@
     }
   }
 
-  em {
-    font-style: normal;
-    font-weight: 700;
-
-    &.current {
-      color: hsla(0, 0%, 100%, 0.4);
-    }
-  }
-
-  span.disabled.previous_page,
-  span.disabled.next_page {
-    display: none;
-  }
-
-  span.gap {
-    border: 0;
-  }
-
-  .previous_page,
-  .next_page {
-    font-weight: 600;
+  .prev, .next{
     background: $header-background-2;
   }
 
-  .next_page {
+  .next{
     border-left: 1px solid hsla(0, 0%, 0%, 0.1);
     border-right: 0;
     float: right;

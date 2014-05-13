@@ -40,6 +40,6 @@
   <ol class="results-list">
     <%= render partial: 'result', collection: results %>
   </ol>
-  <%= will_paginate results %>
+  <%= paginate results, left: 9, right: 2 %>
 </section>
 <% end %>
