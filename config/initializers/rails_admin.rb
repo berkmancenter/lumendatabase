@@ -49,6 +49,7 @@ RailsAdmin.config do |config|
         field(:date_sent)     { label 'Sent' }
         field(:date_received) { label 'Received' }
         field(:created_at)    { label 'Submitted' }
+        field(:original_notice_id) { label 'Legacy NoticeID' }
         field :source
         field :review_required
         field :body
