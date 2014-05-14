@@ -70,7 +70,3 @@ group :test do
   gem 'fakeweb'
   gem 'curb'
 end
-
-group :staging, :production do
-  gem 'newrelic_rpm'
-end
