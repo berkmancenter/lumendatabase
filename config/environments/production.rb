@@ -32,7 +32,7 @@ Chill::Application.configure do
   # config.force_ssl = true
 
   # See everything in the log (default is :info)
-  # config.log_level = :debug
+  config.log_level = (ENV['RAILS_LOG_LEVEL'] || :info).to_sym
 
   # Prepend all log lines with the following tags
   # config.log_tags = [ :subdomain, :uuid ]
@@ -53,7 +53,6 @@ Chill::Application.configure do
   # config.action_mailer.raise_delivery_errors = false
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = SMTP_SETTINGS
-
 
   # Enable threaded mode
   # config.threadsafe!

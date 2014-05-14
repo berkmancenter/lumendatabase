@@ -20,4 +20,4 @@ production:
   encoding: utf8
   min_messages: warning
   pool: 5
-  timeout: 5000
+  timeout: <%= (ENV['DATABASE_TIMEOUT'] || 5000).to_i %>

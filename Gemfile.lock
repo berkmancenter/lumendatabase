@@ -45,10 +45,6 @@ GEM
     acts-as-taggable-on (2.4.1)
       rails (>= 3, < 5)
     addressable (2.3.4)
-    airbrake (3.1.12)
-      activesupport
-      builder
-      json
     ancestry (2.0.0)
       activerecord (>= 3.0.0)
     ansi (1.4.3)
@@ -97,11 +93,6 @@ GEM
     curb (0.8.4)
     database_cleaner (1.0.1)
     debug_inspector (0.0.2)
-    delayed_job (3.0.5)
-      activesupport (~> 3.0)
-    delayed_job_active_record (4.0.0.beta3)
-      activerecord (>= 3.0, < 4.1)
-      delayed_job (>= 3.0, < 4.1)
     devise (2.2.4)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.1)
@@ -179,7 +170,6 @@ GEM
       bourbon (>= 2.1)
       sass (>= 3.2)
     nested_form (0.3.2)
-    newrelic_rpm (3.6.4.122)
     nokogiri (1.6.0)
       mini_portile (~> 0.5.0)
     orm_adapter (0.4.0)
@@ -201,7 +191,6 @@ GEM
       rack
     rack-test (0.6.2)
       rack (>= 1.0)
-    rack-timeout (0.0.4)
     rails (3.2.18)
       actionmailer (= 3.2.18)
       actionpack (= 3.2.18)
@@ -328,7 +317,6 @@ DEPENDENCIES
   active_model_serializers (~> 0.8.0)
   activerecord-import
   acts-as-taggable-on
-  airbrake
   ancestry
   better_errors
   binding_of_caller
@@ -341,7 +329,6 @@ DEPENDENCIES
   country_select
   curb
   database_cleaner
-  delayed_job_active_record (>= 4.0.0.beta2)
   devise
   factory_girl_rails
   fakeweb
@@ -357,11 +344,9 @@ DEPENDENCIES
   launchy
   mysql2
   neat
-  newrelic_rpm
   paperclip!
   pg
   pry-rails
-  rack-timeout
   rails (~> 3.2.11)
   rails_admin (~> 0.4.8)
   rb-inotify

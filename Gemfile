@@ -2,21 +2,17 @@ source 'https://rubygems.org'
 
 ruby '2.0.0'
 
-gem 'airbrake'
 gem 'bourbon'
 gem 'neat'
-gem 'delayed_job_active_record', '>= 4.0.0.beta2'
 gem 'flutie'
 gem 'high_voltage'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'pg'
-gem 'rack-timeout'
 gem 'rails', '~> 3.2.11'
 gem 'recipient_interceptor'
 gem 'simple_form'
 gem 'strong_parameters'
-gem 'unicorn'
 gem 'paperclip', git: 'http://github.com/thoughtbot/paperclip.git'
 gem 'active_model_serializers', '~> 0.8.0'
 gem 'acts-as-taggable-on'
@@ -56,6 +52,7 @@ group :development, :test do
   gem 'sham_rack'
   gem 'pry-rails'
   gem 'ruby-prof'
+  gem 'unicorn'
 end
 
 group :test do
@@ -70,8 +67,4 @@ group :test do
   gem 'rb-inotify', require: false
   gem 'fakeweb'
   gem 'curb'
-end
-
-group :staging, :production do
-  gem 'newrelic_rpm'
 end
