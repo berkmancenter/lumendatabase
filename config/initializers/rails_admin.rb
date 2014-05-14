@@ -38,53 +38,65 @@ RailsAdmin.config do |config|
     redact_notice
   end
 
-  config.model 'Notice' do
-    list do
-      field :id
-      field :title
-      field(:date_sent)     { label 'Sent' }
-      field(:date_received) { label 'Received' }
-      field(:created_at)    { label 'Submitted' }
-      field :source
-      field :review_required
-      field :body
-      field :entities
-      field :topics
-      field :works
-    end
-    edit do
-      configure(:topic_assignments) { hide }
-      configure(:blog_topic_assignments) { hide }
-      configure(:topic_relevant_questions) { hide }
-      configure(:entities) { hide }
-      configure(:infringing_urls) { hide }
-
-      configure :review_required do
-        visible do
-          ability = Ability.new(bindings[:view]._current_user)
-          ability.can? :publish, Notice
-        end
-      end
-
-      configure :rescinded do
-        visible do
-          ability = Ability.new(bindings[:view]._current_user)
-          ability.can? :rescind, Notice
-        end
-      end
-    end
-  end
-
-  Notice::TYPES.each do |notice_type|
+  ['Notice', Notice::TYPES].flatten.each do |notice_type|
     config.audit_with :history, notice_type
+
     config.model notice_type do
       label { abstract_model.model.label }
+      list do
+        field :id
+        field :title
+        field(:date_sent)     { label 'Sent' }
+        field(:date_received) { label 'Received' }
+        field(:created_at)    { label 'Submitted' }
+        field :source
+        field :review_required
+        field :body
+        field :entities
+        field :topics
+        field :works
+      end
+      edit do
+        configure(:topic_assignments) { hide }
+        configure(:topic_relevant_questions) { hide }
+
+        configure(:related_blog_entries) { hide }
+
+        configure(:blog_topic_assignments) { hide }
+        configure(:entities) { hide }
+        configure(:infringing_urls) { hide }
+        configure(:copyrighted_urls) { hide }
+
+        configure :review_required do
+          visible do
+            ability = Ability.new(bindings[:view]._current_user)
+            ability.can? :publish, Notice
+          end
+        end
+
+        configure :rescinded do
+          visible do
+            ability = Ability.new(bindings[:view]._current_user)
+            ability.can? :rescind, Notice
+          end
+        end
+      end
     end
   end
 
   config.model 'Topic' do
+    list do
+      field :id
+      field :name
+    end
     edit do
       configure(:ancestry) { hide }
+
+      configure(:notices) { hide }
+      configure(:topic_assignments) { hide }
+
+      configure(:blog_entries) { hide }
+      configure(:blog_entry_topic_assignments) { hide }
     end
   end
 
