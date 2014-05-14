@@ -93,11 +93,6 @@ GEM
     curb (0.8.4)
     database_cleaner (1.0.1)
     debug_inspector (0.0.2)
-    delayed_job (3.0.5)
-      activesupport (~> 3.0)
-    delayed_job_active_record (4.0.0.beta3)
-      activerecord (>= 3.0, < 4.1)
-      delayed_job (>= 3.0, < 4.1)
     devise (2.2.4)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.1)
@@ -334,7 +329,6 @@ DEPENDENCIES
   country_select
   curb
   database_cleaner
-  delayed_job_active_record (>= 4.0.0.beta2)
   devise
   factory_girl_rails
   fakeweb
