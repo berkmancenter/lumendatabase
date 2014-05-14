@@ -89,6 +89,10 @@ class Notice < ActiveRecord::Base
   validates_inclusion_of :language, in: Language.codes, allow_blank: true
   validates_presence_of :works, :entity_notice_roles
 
+  def language_enum
+    Language.all.inject( {} ) { |memo, l| memo[l.label] = l.code; memo }
+  end
+
   acts_as_taggable_on :tags, :jurisdictions
 
   accepts_nested_attributes_for :file_uploads,
