@@ -15,7 +15,6 @@ gem 'rails', '~> 3.2.11'
 gem 'recipient_interceptor'
 gem 'simple_form'
 gem 'strong_parameters'
-gem 'unicorn'
 gem 'paperclip', git: 'http://github.com/thoughtbot/paperclip.git'
 gem 'active_model_serializers', '~> 0.8.0'
 gem 'acts-as-taggable-on'
@@ -55,6 +54,7 @@ group :development, :test do
   gem 'sham_rack'
   gem 'pry-rails'
   gem 'ruby-prof'
+  gem 'unicorn'
 end
 
 group :test do
