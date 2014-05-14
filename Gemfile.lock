@@ -45,10 +45,6 @@ GEM
     acts-as-taggable-on (2.4.1)
       rails (>= 3, < 5)
     addressable (2.3.4)
-    airbrake (3.1.12)
-      activesupport
-      builder
-      json
     ancestry (2.0.0)
       activerecord (>= 3.0.0)
     ansi (1.4.3)
@@ -326,7 +322,6 @@ DEPENDENCIES
   active_model_serializers (~> 0.8.0)
   activerecord-import
   acts-as-taggable-on
-  airbrake
   ancestry
   better_errors
   binding_of_caller
