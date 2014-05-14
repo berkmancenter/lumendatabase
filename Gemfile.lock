@@ -201,7 +201,6 @@ GEM
       rack
     rack-test (0.6.2)
       rack (>= 1.0)
-    rack-timeout (0.0.4)
     rails (3.2.18)
       actionmailer (= 3.2.18)
       actionpack (= 3.2.18)
@@ -361,7 +360,6 @@ DEPENDENCIES
   paperclip!
   pg
   pry-rails
-  rack-timeout
   rails (~> 3.2.11)
   rails_admin (~> 0.4.8)
   rb-inotify
