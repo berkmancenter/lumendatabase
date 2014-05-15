@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140514143714) do
+ActiveRecord::Schema.define(:version => 20140515171422) do
 
   create_table "blog_entries", :force => true do |t|
     t.integer  "user_id"
@@ -54,16 +54,16 @@ ActiveRecord::Schema.define(:version => 20140514143714) do
   create_table "entities", :force => true do |t|
     t.string  "name",                                     :null => false
     t.string  "kind",           :default => "individual", :null => false
-    t.string  "address_line_1"
-    t.string  "address_line_2"
-    t.string  "state"
-    t.string  "country_code"
-    t.string  "phone"
-    t.string  "email"
-    t.string  "url"
+    t.string  "address_line_1", :default => ""
+    t.string  "address_line_2", :default => ""
+    t.string  "state",          :default => ""
+    t.string  "country_code",   :default => ""
+    t.string  "phone",          :default => ""
+    t.string  "email",          :default => ""
+    t.string  "url",            :default => ""
     t.string  "ancestry"
-    t.string  "city"
-    t.string  "zip"
+    t.string  "city",           :default => ""
+    t.string  "zip",            :default => ""
     t.integer "user_id"
   end
 
@@ -258,8 +258,8 @@ ActiveRecord::Schema.define(:version => 20140514143714) do
   add_index "topic_managers_topics", ["topic_manager_id"], :name => "index_topic_managers_topics_on_topic_manager_id"
 
   create_table "topics", :force => true do |t|
-    t.string  "name",                 :null => false
-    t.text    "description"
+    t.string  "name",                                 :null => false
+    t.text    "description",          :default => ""
     t.string  "ancestry"
     t.integer "original_category_id"
   end
