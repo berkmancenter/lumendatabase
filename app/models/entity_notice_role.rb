@@ -36,6 +36,10 @@ class EntityNoticeRole < ActiveRecord::Base
     end
   end
 
+  def name_enum
+    ROLES
+  end
+
   class << self
     ROLES.each do |role|
       define_method(role.pluralize.to_sym) do

@@ -58,6 +58,9 @@ RailsAdmin.config do |config|
         field :works
       end
       edit do
+        configure(:type) do
+          read_only true
+        end
         configure(:topic_assignments) { hide }
         configure(:topic_relevant_questions) { hide }
 
@@ -108,9 +111,14 @@ RailsAdmin.config do |config|
   end
 
   config.model 'Entity' do
+    list do
+      configure(:notices) { hide }
+      configure(:entity_notice_roles) { hide }
+    end
     edit do
       configure(:notices) { hide }
       configure(:entity_notice_roles) { hide }
+      configure(:ancestry) { hide }
     end
   end
 
@@ -120,9 +128,9 @@ RailsAdmin.config do |config|
 
   config.model 'Work' do
     object_label_method { :description }
-
-    edit do
-      configure(:notices) { hide }
+    list do
+      configure(:copyrighted_urls) { hide }
+      configure(:infringing_urls) { hide }
     end
   end
 
