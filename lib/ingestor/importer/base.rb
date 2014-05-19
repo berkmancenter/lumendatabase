@@ -134,6 +134,12 @@ module Ingestor
         end
       end
 
+      def get_naive_multiline_field(content, start_token, end_token)
+        if content.match(/#{start_token}(.+?)#{end_token}/m)
+          $1.strip
+        end
+      end
+
     end
   end
 end
