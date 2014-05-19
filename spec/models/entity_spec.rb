@@ -20,18 +20,6 @@ describe Entity do
   it { should have_many(:notices).through(:entity_notice_roles)  }
   it { should ensure_inclusion_of(:kind).in_array(Entity::KINDS) }
 
-  context "hierarchical relationships" do
-    it "can have child entities" do
-      entity = create(:entity, :with_children)
-      expect(entity.children).to be
-    end
-
-    it "does not allow a node with children to be destroyed" do
-      entity = create(:entity, :with_children)
-      expect { entity.destroy }.to raise_error(Ancestry::AncestryException)
-    end
-  end
-
   context ".submitters" do
     it "returns only submitter types" do
       create(:entity, entity_notice_roles: [
@@ -45,7 +33,6 @@ describe Entity do
 
       expect(entities).to eq [entity]
     end
-
   end
 
   context 'search index' do
@@ -57,6 +44,7 @@ describe Entity do
       entity.tire.should_receive(:update_index)
       entity.save
     end
-
   end
+
+  it_behaves_like 'an object with hierarchical relationships'
 end

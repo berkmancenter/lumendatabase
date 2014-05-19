@@ -92,15 +92,24 @@ RailsAdmin.config do |config|
     list do
       field :id
       field :name
+      field :parent do
+        formatted_value do
+          parent = bindings[:object].parent
+          parent && "#{parent.name} - ##{parent.id}"
+        end
+      end
     end
     edit do
-      configure(:ancestry) { hide }
-
       configure(:notices) { hide }
       configure(:topic_assignments) { hide }
 
       configure(:blog_entries) { hide }
       configure(:blog_entry_topic_assignments) { hide }
+      configure :parent_id, :enum do
+        enum_method do
+          :parent_enum
+        end
+      end
     end
   end
 
@@ -114,11 +123,24 @@ RailsAdmin.config do |config|
     list do
       configure(:notices) { hide }
       configure(:entity_notice_roles) { hide }
+      configure :parent do
+        formatted_value do
+          parent = bindings[:object].parent
+          parent && "#{parent.name} - ##{parent.id}"
+        end
+      end
     end
     edit do
       configure(:notices) { hide }
       configure(:entity_notice_roles) { hide }
       configure(:ancestry) { hide }
+      # Unfortunately, there are too many entities to make parents editable
+      # via default rails_admin functionality.
+      # configure :parent_id, :enum do
+      #   enum_method do
+      #     :parent_enum
+      #   end
+      # end
     end
   end
 
