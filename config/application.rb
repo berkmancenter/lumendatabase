@@ -18,6 +18,7 @@ end
 module Chill
   class Application < Rails::Application
     config.active_record.default_timezone = :utc
+    I18n.config.enforce_available_locales = true
 
     config.generators do |generate|
       generate.test_framework :rspec

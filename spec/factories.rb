@@ -6,6 +6,13 @@ FactoryGirl.define do
 
   factory :topic do
     sequence(:name) { |n| "Topic Name #{n}" }
+
+    trait :with_children do
+      after(:create) do |instance|
+        create(:topic, parent: instance)
+        create(:topic, parent: instance)
+      end
+    end
   end
 
   factory :topic_manager do

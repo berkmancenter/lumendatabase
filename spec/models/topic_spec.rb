@@ -21,4 +21,6 @@ describe Topic do
       expect(html).to eq "<p>Some <em>sweet</em> markdown</p>\n"
     end
   end
+
+  it_behaves_like 'an object with hierarchical relationships'
 end

@@ -1,7 +1,9 @@
 require 'validates_automatically'
+require 'hierarchical_relationships'
 
 class Topic < ActiveRecord::Base
   include ValidatesAutomatically
+  include HierarchicalRelationships
 
   has_many :topic_assignments, dependent: :destroy
   has_many :notices, through: :topic_assignments
@@ -11,8 +13,6 @@ class Topic < ActiveRecord::Base
 
   has_and_belongs_to_many :relevant_questions
   has_and_belongs_to_many :topic_managers
-
-  has_ancestry
 
   def self.ordered
     order(:name)
