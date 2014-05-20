@@ -129,7 +129,7 @@ module Ingestor
       end
 
       def get_single_line_field(content, field_name)
-        if content.match(/^#{field_name}:(.+?)\n/m)
+        if content.match(/^#{field_name}:(.+?)\r?\n/)
           $1.strip
         end
       end
