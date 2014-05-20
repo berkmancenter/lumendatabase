@@ -2,7 +2,12 @@ class TrademarkSerializer < NoticeSerializer
   attributes :marks, :mark_registration_number
 
   def marks
-    object.works.map(&:description)
+    object.works.map do |work|
+      {
+        description: work.description,
+        infringing_urls: work.infringing_urls.map(&:url)
+      }
+    end
   end
 
   private
@@ -13,5 +18,4 @@ class TrademarkSerializer < NoticeSerializer
 
     hsh
   end
-
 end

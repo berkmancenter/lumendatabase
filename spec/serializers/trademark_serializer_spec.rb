@@ -9,12 +9,25 @@ describe TrademarkSerializer do
     serialized = TrademarkSerializer.new(trademark)
     serialized_trademark = serialized.as_json[:trademark]
 
-    mark = serialized_trademark[:marks].first
+    first_mark = serialized_trademark[:marks].first
 
-    expect(mark).to eq trademark.works.first.description
+    expect(first_mark[:description]).to eq trademark.works.first.description
     expect(serialized_trademark).not_to have_key(:works)
     expect(serialized_trademark).to have_key(:mark_registration_number).
       with_value('1337')
+  end
+
+  it "includes infringing_urls" do
+    work = build(:work, :with_infringing_urls)
+    trademark = build(:trademark, works: [work])
+
+    serialized = TrademarkSerializer.new(trademark)
+    serialized_trademark = serialized.as_json[:trademark]
+    mark = serialized_trademark[:marks].first
+
+    expect(mark[:infringing_urls]).to match_array(
+      work.infringing_urls.map(&:url)
+    )
   end
 
 end

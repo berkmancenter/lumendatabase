@@ -305,12 +305,12 @@ Attributes remain unchanged from ingestion.
 
 #### Trademark
 
-| Ingestion Field Name       | Mapped Field Name   | Removed?
-| ---                        | ---                 | ---
-| `mark_registration_number` |
-| `works.description`        | `marks`             |
-| `works.infringing_urls`    |                     | Yes
-| `works.copyrighted_urls`   |                     | Yes
+| Ingestion Field Name       | Mapped Field Name       | Removed?
+| ---                        | ---                     | ---
+| `mark_registration_number` |                         |
+| `works.description`        | `marks.description`     |
+| `works.infringing_urls`    | `marks.infringing_urls` |
+| `works.copyrighted_urls`   |                         | Yes
 
 ## Request a notice
 
