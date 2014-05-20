@@ -39,6 +39,7 @@ feature "Importing CSV" do
       expect(notice).to have(1).original_document
       expect(notice.action_taken).to eq 'Yes'
       expect(notice.submission_id).to eq 1005
+      expect(notice.mark_registration_number).to eq '28950000'
     end
 
     scenario "the correct entities are created" do

@@ -35,6 +35,10 @@ describe Ingestor::Importer::Youtube::TrademarkD do
     expect(importer.entities[:sender]).to eq "Jonathan Clucker Rebar, Attorney for Best Example Pest Defense, Inc."
   end
 
+  it 'gets mark_registration_number info' do
+    expect(importer.mark_registration_number).to eq '28950000'
+  end
+
   private
 
   def trademark_d_notice_path

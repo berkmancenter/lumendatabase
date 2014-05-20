@@ -15,6 +15,11 @@ module Ingestor
           Trademark
         end
 
+        def parse_mark_registration_number(file_path)
+          contents = self.class.read_file(file_path)
+          get_single_line_field(contents, 'registrationno')
+        end
+
         def parse_works(file_path)
           contents = self.class.read_file(file_path)
           infringing_urls = parsed_infringing_urls(contents).map do |url|

@@ -63,6 +63,7 @@ module Ingestor
           entity_notice_roles: entity_notice_roles,
           body: body,
           body_original: body_original,
+          mark_registration_number: importer.mark_registration_number
         }
       end
 

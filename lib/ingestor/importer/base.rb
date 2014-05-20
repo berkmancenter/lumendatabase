@@ -52,6 +52,17 @@ module Ingestor
         {}
       end
 
+      def mark_registration_number
+        file_paths.each do |file_path|
+          if parsable?(file_path)
+            mark_registration_number = parse_mark_registration_number(file_path)
+            mark_registration_number.present? and return mark_registration_number
+          end
+        end
+
+        ''
+      end
+
       def works
         file_paths.each do |file_path|
           if parsable?(file_path)
@@ -77,6 +88,9 @@ module Ingestor
         sender(content).present? && entities[:sender] = sender(content)
         principal(content).present? && entities[:principal] = principal(content)
         entities
+      end
+
+      def parse_mark_registration_number(*)
       end
 
       def sender(*)
