@@ -18,11 +18,37 @@ feature "Importing CSV" do
 
     @secondary_other_notice = Other.last
     @youtube_defamation_notice = Defamation.last
-    @youtube_trademark_d_notice = Trademark.last
+    (
+     @youtube_trademark_d_notice,
+     @youtube_trademark_b_notice
+    ) = Trademark.order(:id)
   end
 
   after do
     FileUtils.rm_rf 'spec/support/example_files-failures/'
+  end
+
+  context "from the Youtube Trademark-b format" do
+    subject(:notice) { @youtube_trademark_b_notice }
+
+    scenario "notices are created" do
+      expect(notice.title).to eq 'Takedown Request via Trademark Complaint to YouTube'
+      expect(notice.works.length).to eq 1
+      expect(notice.infringing_urls.map(&:url)).to match_array(
+        %w|https://www.youtube.com/user/ThisChipmunks|
+      )
+      expect(notice).to have(1).original_document
+      expect(notice.action_taken).to eq 'Yes'
+      expect(notice.submission_id).to eq 1006
+      expect(notice.mark_registration_number).to eq '29350000'
+    end
+
+    scenario "the correct entities are created" do
+      expect(notice).to have(3).entity_notice_roles
+      expect(notice.sender_name).to eq "Tracy Papagallo, outside counsel"
+      expect(notice.principal_name).to eq "Bagdad Productions, LLC"
+      expect(notice.recipient_name).to eq "YouTube (Google, Inc.)"
+    end
   end
 
   context "from the Youtube Trademark-d format" do
