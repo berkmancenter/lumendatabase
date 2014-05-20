@@ -9,5 +9,6 @@ module Ingestor
   ImportDispatcher.register(Importer::GoogleSecondary::BloggerParser)
   ImportDispatcher.register(Importer::GoogleSecondary::OtherParser)
   ImportDispatcher.register(Importer::Twitter)
+  ImportDispatcher.register(Importer::Youtube::Defamation)
   ImportDispatcher.register(Importer::UnknownImporter)
 end
