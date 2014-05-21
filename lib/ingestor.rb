@@ -12,5 +12,6 @@ module Ingestor
   ImportDispatcher.register(Importer::Youtube::Defamation)
   ImportDispatcher.register(Importer::Youtube::TrademarkD)
   ImportDispatcher.register(Importer::Youtube::TrademarkB)
+  ImportDispatcher.register(Importer::Youtube::Counterfeit)
   ImportDispatcher.register(Importer::UnknownImporter)
 end

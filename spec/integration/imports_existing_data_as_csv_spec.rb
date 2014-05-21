@@ -17,15 +17,40 @@ feature "Importing CSV" do
     ) = Dmca.order(:id)
 
     @secondary_other_notice = Other.last
+
     @youtube_defamation_notice = Defamation.last
     (
      @youtube_trademark_d_notice,
-     @youtube_trademark_b_notice
+     @youtube_trademark_b_notice,
+     @youtube_counterfeit_notice,
     ) = Trademark.order(:id)
   end
 
   after do
     FileUtils.rm_rf 'spec/support/example_files-failures/'
+  end
+
+  context "from the Youtube counterfeit format" do
+    subject(:notice) { @youtube_counterfeit_notice }
+
+    scenario "notices are created" do
+      expect(notice.title).to eq 'Takedown Request via Counterfeit Complaint to YouTube'
+      expect(notice.works.length).to eq 1
+      expect(notice.infringing_urls.map(&:url)).to match_array(
+        %w|http://www.youtube.com/watch?v=H0r8U-|
+      )
+      expect(notice).to have(1).original_document
+      expect(notice.action_taken).to eq 'Yes'
+      expect(notice.submission_id).to eq 1007
+      expect(notice.mark_registration_number).to eq '12200000'
+    end
+
+    scenario "the correct entities are created" do
+      expect(notice).to have(3).entity_notice_roles
+      expect(notice.sender_name).to eq "Adelaid Bourbou, Internet Unit, The Federation"
+      expect(notice.principal_name).to eq "Humboldt SA, Genève"
+      expect(notice.recipient_name).to eq "YouTube (Google, Inc.)"
+    end
   end
 
   context "from the Youtube Trademark-b format" do

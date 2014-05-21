@@ -35,7 +35,7 @@ module Ingestor
           [
             get_naive_multiline_field(content, 'fulllegalname:', 'yourusername:'),
             get_naive_multiline_field(content, 'yourusername:', 'defamatoryvids:'),
-          ].join(' ').strip
+          ].reject { |val| val.blank? }.join(' ').strip
         end
 
         def sender(content)

@@ -53,7 +53,7 @@ module Ingestor
           [
             get_naive_multiline_field(content, 'fulllegalname:', 'trademark2_title:'),
             get_naive_multiline_field(content, 'trademark2_relation:', 'trademark2_email:'),
-          ].join(', ').strip
+          ].reject { |val| val.blank? }.join(', ').strip
         end
 
       end
