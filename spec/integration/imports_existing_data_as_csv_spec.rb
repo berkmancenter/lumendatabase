@@ -16,7 +16,10 @@ feature "Importing CSV" do
       @primary_notice_without_data
     ) = Dmca.order(:id)
 
-    @secondary_other_notice = Other.last
+    (
+      @secondary_other_notice,
+      @youtube_otherlegal_notice,
+    ) = Other.order(:id)
 
     @youtube_defamation_notice = Defamation.last
     (
@@ -28,6 +31,30 @@ feature "Importing CSV" do
 
   after do
     FileUtils.rm_rf 'spec/support/example_files-failures/'
+  end
+
+  context "from the Youtube otherlegal format" do
+    subject(:notice) { @youtube_otherlegal_notice }
+
+    scenario "notices are created" do
+      expect(notice.title).to eq 'Takedown Request via Other Legal Complaint to YouTube'
+      expect(notice.works.length).to eq 1
+      expect(notice.infringing_urls.map(&:url)).to match_array(
+        %w|https://www.youtube.com/watch?v=xszr9lUlPE8
+https://www.youtube.com/watch?v=w2-DjJ
+https://www.youtube.com/watch?v=PlsCEe|
+      )
+      expect(notice).to have(1).original_document
+      expect(notice.action_taken).to eq 'Yes'
+      expect(notice.submission_id).to eq 10078
+    end
+
+    scenario "the correct entities are created" do
+      expect(notice).to have(3).entity_notice_roles
+      expect(notice.sender_name).to eq "PeterDancer"
+      expect(notice.principal_name).to eq "Peter Dancer"
+      expect(notice.recipient_name).to eq "YouTube (Google, Inc.)"
+    end
   end
 
   context "from the Youtube counterfeit format" do

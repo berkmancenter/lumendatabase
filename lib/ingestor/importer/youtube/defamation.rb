@@ -53,7 +53,7 @@ module Ingestor
         def defamatoryvids
           get_naive_multiline_field(
             @contents, 'defamatoryvids:', 'defamatoryusernames:'
-          ).split(/\s/)
+          ).split(/\s/).reject { |url| url.blank? }
         end
       end
     end
