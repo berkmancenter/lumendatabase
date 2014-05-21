@@ -63,6 +63,7 @@ describe Ingestor::Legacy::AttributeMapper do
     expect(attributes[:date_received]).to eq hash['Date']
     expect(attributes[:rescinded]).to be_false
     expect(attributes[:hidden]).to be_false
+    expect(attributes[:mark_registration_number]).to be_empty
   end
 
   context "created_at" do
@@ -86,7 +87,7 @@ describe Ingestor::Legacy::AttributeMapper do
         "ImportClass",
         works: 'works', file_uploads: 'files',
         action_taken: 'Yes', require_review_if_works_empty?: true,
-        entities: {}, default_recipient: nil
+        entities: {}, default_recipient: nil, mark_registration_number: nil
       )
     end
 
@@ -114,13 +115,23 @@ describe Ingestor::Legacy::AttributeMapper do
     end
   end
 
+  context "mark_registration_numbers" do
+    it "valid mark_registration_numbers are passed through" do
+      stub_importer_with_no_works
+
+      attributes = described_class.new({}).mapped
+
+      expect(attributes[:works]).to eq [Work.unknown]
+    end
+  end
+
   context "when works are not found" do
     it "assigns the unknown work" do
       stub_importer_with_no_works
 
       attributes = described_class.new({}).mapped
 
-      expect(attributes[:works]).to eq [Work.unknown]
+      expect(attributes[:mark_registration_number]).to eq 10000
     end
 
     it "passes through the Body so there is some content" do
@@ -288,7 +299,8 @@ contact_email_noprefill: info.antipiracy@dtecnet.com|,
       works: [],
       require_review_if_works_empty?: true,
       action_taken: 'yes',
-      file_uploads: []
+      file_uploads: [],
+      mark_registration_number: nil
     )
     Ingestor::ImportDispatcher.stub(:for).and_return(import_class)
     import_class.should_receive(:entities).exactly(4).times
@@ -403,7 +415,7 @@ contact_email_noprefill: info.antipiracy@dtecnet.com|,
       works: [], file_uploads: [],
       action_taken: nil,
       require_review_if_works_empty?: review_required,
-      entities: {}, default_recipient: nil
+      entities: {}, default_recipient: nil, mark_registration_number: 10000
     }
     Ingestor::ImportDispatcher.stub(:for).and_return(double(
       "ImportClass", stubbed_methods

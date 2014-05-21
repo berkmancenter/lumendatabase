@@ -105,11 +105,17 @@ feature "Searching for Notices via the API" do
       notice = create(
         :trademark,
         :with_facet_data,
+        :with_infringing_urls,
         title: "The Lion King on Youtube",
         mark_registration_number: '1337'
       )
 
-      marks = notice.works.collect{|work| work.description}
+      marks = notice.works.map do |work|
+        {
+          'description'=> work.description,
+          'infringing_urls' => work.infringing_urls.map(&:url)
+        }
+      end
 
       expect_api_search_to_find("king") do |json|
         json_item = json['notices'].first
