@@ -149,15 +149,27 @@ RailsAdmin.config do |config|
   end
 
   config.model 'Work' do
-    object_label_method { :description }
+    object_label_method { :custom_work_label }
     list do
       configure(:copyrighted_urls) { hide }
       configure(:infringing_urls) { hide }
     end
+    nested do
+      configure(:infringing_urls) { hide }
+      configure(:copyrighted_urls) { hide }
+    end
+
   end
 
   config.model 'InfringingUrl' do
     object_label_method { :url }
   end
 
+  def custom_work_label
+    %Q|#{self.id}: #{self.description && self.description[0,30]}...|
+  end
+
+  config.model 'User' do
+    object_label_method { :email }
+  end
 end
