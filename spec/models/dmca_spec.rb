@@ -195,30 +195,6 @@ describe Dmca do
 
       notice.touch
     end
-
-    it "is touched on topic changes" do
-      notice = create(:dmca)
-      notice.tire.should_receive(:update_index).exactly(3).times
-
-      topic = notice.topics.create!(name: "name 1")
-      topic.update_attributes!(name: "name 2")
-      topic.destroy
-    end
-
-    it "is touched on entity changes" do
-      notice = create(:dmca)
-      entity = create(:entity)
-      notice.tire.should_receive(:update_index).exactly(3).times
-
-      create(
-        :entity_notice_role,
-        name: 'sender',
-        notice: notice,
-        entity: entity
-      )
-      entity.update_attributes!(name: "name 2")
-      entity.destroy
-    end
   end
 
   context "#redacted" do

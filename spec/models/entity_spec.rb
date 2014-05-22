@@ -35,13 +35,11 @@ describe Entity do
     end
   end
 
-  context 'search index' do
-    it "updates the index when created" do
-      tire = double("Tire proxy")
-      entity = build(:entity)
-      entity.stub(:tire).and_return(tire)
+  context 'post update reindexing' do
+    it "uses the TopicIndexQueuer to schedule notices for indexing" do
+      entity = create(:entity)
+      EntityIndexQueuer.should_receive(:for).with(entity.id)
 
-      entity.tire.should_receive(:update_index)
       entity.save
     end
   end

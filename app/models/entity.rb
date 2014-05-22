@@ -1,9 +1,9 @@
 require 'validates_automatically'
 require 'hierarchical_relationships'
+require 'entity_index_queuer'
 
 class Entity < ActiveRecord::Base
   include Tire::Model::Search
-  include Tire::Model::Callbacks
   include ValidatesAutomatically
   include HierarchicalRelationships
 
@@ -29,7 +29,7 @@ class Entity < ActiveRecord::Base
   validates_uniqueness_of :name,
     scope: ADDITIONAL_DEDUPLICATION_FIELDS
 
-  after_update { notices.each(&:touch) }
+  after_update { EntityIndexQueuer.for(self.id) }
 
   def attributes_for_deduplication
     all_deduplication_attributes = [
