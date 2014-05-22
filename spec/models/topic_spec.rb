@@ -22,5 +22,14 @@ describe Topic do
     end
   end
 
+  context 'post update reindexing' do
+    it "uses the TopicIndexQueuer to schedule notices for indexing" do
+      topic = create(:topic)
+      TopicIndexQueuer.should_receive(:for).with(topic.id)
+
+      topic.save
+    end
+  end
+
   it_behaves_like 'an object with hierarchical relationships'
 end

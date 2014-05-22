@@ -1,5 +1,6 @@
 require 'validates_automatically'
 require 'hierarchical_relationships'
+require 'topic_index_queuer'
 
 class Topic < ActiveRecord::Base
   include ValidatesAutomatically
@@ -18,7 +19,7 @@ class Topic < ActiveRecord::Base
     order(:name)
   end
 
-  after_update { notices.each(&:touch) }
+  after_update { TopicIndexQueuer.for(self.id) }
 
   def description_html
     Markdown.render(description.to_s)
