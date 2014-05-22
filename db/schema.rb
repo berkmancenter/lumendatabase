@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140515171422) do
+ActiveRecord::Schema.define(:version => 20140522144621) do
 
   create_table "blog_entries", :force => true do |t|
     t.integer  "user_id"
@@ -52,19 +52,21 @@ ActiveRecord::Schema.define(:version => 20140515171422) do
   add_index "copyrighted_urls_works", ["work_id"], :name => "index_copyrighted_urls_works_on_work_id"
 
   create_table "entities", :force => true do |t|
-    t.string  "name",                                     :null => false
-    t.string  "kind",           :default => "individual", :null => false
-    t.string  "address_line_1", :default => ""
-    t.string  "address_line_2", :default => ""
-    t.string  "state",          :default => ""
-    t.string  "country_code",   :default => ""
-    t.string  "phone",          :default => ""
-    t.string  "email",          :default => ""
-    t.string  "url",            :default => ""
-    t.string  "ancestry"
-    t.string  "city",           :default => ""
-    t.string  "zip",            :default => ""
-    t.integer "user_id"
+    t.string   "name",                                     :null => false
+    t.string   "kind",           :default => "individual", :null => false
+    t.string   "address_line_1", :default => ""
+    t.string   "address_line_2", :default => ""
+    t.string   "state",          :default => ""
+    t.string   "country_code",   :default => ""
+    t.string   "phone",          :default => ""
+    t.string   "email",          :default => ""
+    t.string   "url",            :default => ""
+    t.string   "ancestry"
+    t.string   "city",           :default => ""
+    t.string   "zip",            :default => ""
+    t.integer  "user_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "entities", ["address_line_1"], :name => "index_entities_on_address_line_1"
@@ -76,6 +78,7 @@ ActiveRecord::Schema.define(:version => 20140515171422) do
   add_index "entities", ["name"], :name => "index_entities_on_name"
   add_index "entities", ["phone"], :name => "index_entities_on_phone"
   add_index "entities", ["state"], :name => "index_entities_on_state"
+  add_index "entities", ["updated_at"], :name => "index_entities_on_updated_at"
   add_index "entities", ["user_id"], :name => "index_entities_on_user_id"
   add_index "entities", ["zip"], :name => "index_entities_on_zip"
 
