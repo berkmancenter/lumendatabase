@@ -4,7 +4,7 @@ shared_examples 'a serialized notice with base metadata' do |factory_name|
 
   it 'includes base notice metadata' do
     with_a_serialized_notice(factory_name) do |notice, json|
-      %i(title type body date_sent date_received sender_name recipient_name action_taken).each do |att|
+      %i(title type body date_sent date_received sender_name recipient_name action_taken language).each do |att|
         expect(json[att]).to eq notice.send(att)
       end
     end
@@ -42,6 +42,7 @@ def build_notice(factory_name = :dmca)
     notice.stub(:sender_name).and_return('sender name')
     notice.stub(:tag_list).and_return(['foo', 'bar'])
     notice.stub(:jurisdiction_list).and_return(['US', 'CA'])
+    notice.stub(:language).and_return('en')
     notice.stub(:topics).and_return(
       build_list(:topic, 2)
     )
