@@ -4,7 +4,6 @@ require 'validates_automatically'
 
 class Notice < ActiveRecord::Base
   include Tire::Model::Search
-  include Tire::Model::Callbacks
   include Searchability
   include ValidatesAutomatically
 

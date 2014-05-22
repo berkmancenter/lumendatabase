@@ -1,7 +1,6 @@
 module Searchability
   def self.included(base)
     base.extend ClassMethods
-    base.after_touch { tire.update_index }
   end
 
   module ClassMethods

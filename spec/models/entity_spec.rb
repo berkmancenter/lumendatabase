@@ -8,11 +8,23 @@ describe Entity do
   end
 
   context 'de-duplication' do
-    it {
-      should validate_uniqueness_of(:name).scoped_to(
-        Entity::ADDITIONAL_DEDUPLICATION_FIELDS
-      )
-    }
+    Entity::ADDITIONAL_DEDUPLICATION_FIELDS.each do |field|
+      it "de-duplicates across name and #{field}" do
+        entity = create(:entity, name: 'Foobar', field => 'Something')
+
+        other_entity = build(:entity, name: 'Foobar', field => 'Something')
+
+        expect(other_entity).not_to be_valid
+      end
+
+      it "allows duplicate names with non-duplicate #{field}" do
+        entity = create(:entity, name: 'Foobar', field => 'Something')
+
+        other_entity = build(:entity, name: 'Foobar', field => 'Something else')
+
+        expect(other_entity).to be_valid
+      end
+    end
   end
 
   it { should belong_to(:user) }

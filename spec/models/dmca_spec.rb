@@ -183,20 +183,6 @@ describe Dmca do
     end
   end
 
-  context "search index" do
-    before do
-      tire = double("Tire proxy").as_null_object
-      Dmca.any_instance.stub(:tire).and_return(tire)
-    end
-
-    it "updates the index after touch" do
-      notice = create(:dmca)
-      notice.tire.should_receive(:update_index)
-
-      notice.touch
-    end
-  end
-
   context "#redacted" do
     it "returns '#{Dmca::UNDER_REVIEW_VALUE}' when review is required" do
       notice = Dmca.new(review_required: true, body: "A value")
