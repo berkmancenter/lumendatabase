@@ -69,8 +69,13 @@ namespace :chillingeffects do
     collapser.collapse
   end
 
-  desc "Reindex models memory efficiently"
-  task reindex_models: :environment do
+  desc "Incrementally index changed model instances"
+  task index_changed_model_instances: :environment do
+    ReindexRun.index_changed_model_instances
+  end
+
+  desc "Recreate elasticsearch index memory efficiently"
+  task recreate_elasticsearch_index: :environment do
     batch_size = (ENV['BATCH_SIZE'] || 100).to_i
     [Notice, Entity].each do |klass|
       klass.index.delete

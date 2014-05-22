@@ -2,9 +2,11 @@ require 'spec_helper'
 
 feature "Searching Entities" do
   include CurbHelpers
+  include SearchHelpers
 
   scenario 'entities are found by name', js: true, search: true do
     entity = create(:entity, :with_parent, name: 'Foo bar')
+    index_changed_models
 
     expect_entity_api_search_to_find('bar') do|json|
       json_item = json['entities'].first
@@ -20,6 +22,7 @@ feature "Searching Entities" do
 
   scenario 'the results have relevant metadata', js: true, search: true do
     entity = create(:entity, name: 'Foo bar')
+    index_changed_models
 
     expect_entity_api_search_to_find('bar') do|json|
       metadata = json['meta']
@@ -29,6 +32,7 @@ feature "Searching Entities" do
   end
 
   def expect_entity_api_search_to_find(term, options = {})
+    sleep 1
     with_curb_get_for_json(
       "entities/search.json",
       options.merge(term: term)) do |curb|

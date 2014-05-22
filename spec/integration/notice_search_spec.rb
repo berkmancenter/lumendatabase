@@ -6,6 +6,7 @@ feature "Searching Notices" do
 
   scenario "displays search terms", search: true do
     create(:dmca, title: "The Lion King on Youtube")
+    index_changed_models
 
     submit_search 'awesome blossom'
 
@@ -15,6 +16,7 @@ feature "Searching Notices" do
   scenario "for full-text on a single model", search: true do
     notice = create(:dmca, title: "The Lion King on Youtube")
     trademark = create(:trademark, title: "Coke - it's the King thing")
+    index_changed_models
 
     within_search_results_for("king") do
       expect(page).to have_n_results(2)
@@ -30,6 +32,7 @@ feature "Searching Notices" do
       create(:dmca, action_taken: 'Yes'),
       create(:dmca, action_taken: 'Partial'),
     ]
+    index_changed_models
 
     notices.each do |notice|
       search_for(action_taken: notice.action_taken)
@@ -43,6 +46,7 @@ feature "Searching Notices" do
     3.times do
       create(:dmca, title: "The Lion King on Youtube")
     end
+    index_changed_models
 
     search_for(term: 'lion', page: 2, per_page: 1)
 
@@ -55,18 +59,21 @@ feature "Searching Notices" do
 
   scenario "it does not include rescinded notices", search: true do
     notice = create(:dmca, title: "arbitrary", rescinded: true)
+    index_changed_models
 
     expect_search_to_not_find("arbitrary", notice)
   end
 
   scenario "it does not include spam notices", search: true do
     notice = create(:dmca, title: "arbitrary", spam: true)
+    index_changed_models
 
     expect_search_to_not_find("arbitrary", notice)
   end
 
   scenario "it does not include hidden notices", search: true do
     notice = create(:dmca, title: "arbitrary", hidden: true)
+    index_changed_models
 
     expect_search_to_not_find("arbitrary", notice)
   end
@@ -75,6 +82,7 @@ feature "Searching Notices" do
     scenario "for topic names", search: true do
       topic = create(:topic, name: "Lion King")
       notice = create(:dmca, topics: [topic])
+      index_changed_models
 
       within_search_results_for("king") do
         expect(page).to have_n_results(1)
@@ -87,6 +95,7 @@ feature "Searching Notices" do
 
     scenario "for tags", search: true do
       notice = create(:dmca, tag_list: 'foo, bar')
+      index_changed_models
 
       within_search_results_for("bar") do
         expect(page).to have_n_results(1)
@@ -97,6 +106,7 @@ feature "Searching Notices" do
 
     scenario "for entities", search: true do
       notice = create(:dmca, role_names: %w( sender principal recipient))
+      index_changed_models
 
       within_search_results_for(notice.recipient_name) do
         expect(page).to have_n_results(1)
@@ -126,6 +136,7 @@ feature "Searching Notices" do
       )
 
       notice = create(:dmca, works: [work])
+      index_changed_models
 
       within_search_results_for("arbitrary") do
         expect(page).to have_n_results(1)
@@ -147,6 +158,7 @@ feature "Searching Notices" do
       )
 
       notice = create(:dmca, works: [work])
+      index_changed_models
 
       within_search_results_for('infringing_url') do
         expect(page).to have_n_results(1)
@@ -166,6 +178,7 @@ feature "Searching Notices" do
     scenario "a topic is created", search: true do
       notice = create(:dmca)
       notice.topics.create!(name: "arbitrary")
+      index_changed_models
 
       within_search_results_for("arbitrary") do
         expect(page).to have_n_results(1)
@@ -177,6 +190,7 @@ feature "Searching Notices" do
       topic = create(:topic, name: "arbitrary")
       notice = create(:dmca, topics: [topic])
       topic.destroy
+      index_changed_models
 
       expect_search_to_not_find("arbitrary", notice)
     end
@@ -185,6 +199,7 @@ feature "Searching Notices" do
       topic = create(:topic, name: "something")
       notice = create(:dmca, topics: [topic])
       topic.update_attributes!(name: "arbitrary")
+      index_changed_models
 
       within_search_results_for("arbitrary") do
         expect(page).to have_n_results(1)
@@ -197,6 +212,7 @@ feature "Searching Notices" do
     create_notice_with_entities("Jim & Jon's", "Jim", "Jon")
     create_notice_with_entities("Jim & Dan's", "Jim", "Dan")
     create_notice_with_entities("Dan & Jon's", "Dan", "Jon")
+    index_changed_models
 
     search_for(sender_name: "Jim", recipient_name: "Jon")
 

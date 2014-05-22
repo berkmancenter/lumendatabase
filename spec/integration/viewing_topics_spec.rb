@@ -1,9 +1,11 @@
 require 'spec_helper'
 
 feature "Topics" do
+  include SearchHelpers
   scenario "user views a topic", search: true do
     topic = create(:topic, name: 'An awesome name')
     notice = create(:dmca, topics: [topic])
+    index_changed_models
 
     sleep 2
 

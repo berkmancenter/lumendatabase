@@ -4,6 +4,9 @@ FactoryGirl.define do
 
   sequence(:url) { |n| "http://example.com/url_#{n}" }
 
+  factory :reindex_run do
+  end
+
   factory :topic do
     sequence(:name) { |n| "Topic Name #{n}" }
 

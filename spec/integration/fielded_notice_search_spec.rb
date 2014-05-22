@@ -11,6 +11,8 @@ feature "Fielded searches of Notices" do
     ADVANCED_SEARCH_FIELDS.each do |field|
       scenario "within #{field.title}", search: true do
         generator = FieldedSearchNoticeGenerator.for(field)
+        index_changed_models
+
         search_on_page = FieldedSearchOnPage.new
         search_on_page.parameterized_search_for(field.parameter, generator.query)
 
@@ -26,6 +28,8 @@ feature "Fielded searches of Notices" do
     ADVANCED_SEARCH_FIELDS.each do |field|
       scenario "within #{field.title}", search: true, js: true do
         generator = FieldedSearchNoticeGenerator.for(field)
+        index_changed_models
+
         search_on_page = FieldedSearchOnPage.new
         search_on_page.visit_search_page
         search_on_page.add_fielded_search_for(field, generator.query)
@@ -43,6 +47,8 @@ feature "Fielded searches of Notices" do
   scenario "searches can be limited to all words in a term", search: true, js: true do
     outside_search = create(:dmca, title: "King of New York")
     inside_search = create(:dmca, :with_facet_data, title: "Lion King two")
+    index_changed_models
+
     field = TermSearch.new(:title, :title, 'Title')
     search_on_page = FieldedSearchOnPage.new
     search_on_page.visit_search_page
@@ -68,6 +74,7 @@ feature "Fielded searches of Notices" do
       @old_notice = create(
         :dmca, title: "King Leon", date_received: 10.days.ago
       )
+      index_changed_models
 
       submit_search('king')
     end
@@ -97,6 +104,7 @@ feature "Fielded searches of Notices" do
 
     scenario "is open when a faceted search is run", search: true, js: true do
       notice = create(:dmca, :with_facet_data, title: "Lion King")
+      index_changed_models
 
       visit "/faceted_search?sender_name=#{CGI.escape(notice.sender_name)}"
 
@@ -105,6 +113,7 @@ feature "Fielded searches of Notices" do
 
     scenario "copies search parameters to the facet form.", search: true, js: true do
       notice = create(:dmca, :with_facet_data, title: "Lion King two")
+      index_changed_models
 
       search_on_page.visit_search_page(true)
       search_on_page.open_advanced_search

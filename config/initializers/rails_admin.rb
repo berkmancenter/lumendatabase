@@ -165,6 +165,10 @@ RailsAdmin.config do |config|
     object_label_method { :url }
   end
 
+  config.model 'ReindexRun' do
+
+  end
+
   def custom_work_label
     %Q|#{self.id}: #{self.description && self.description[0,30]}...|
   end

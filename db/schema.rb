@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140522144621) do
+ActiveRecord::Schema.define(:version => 20140522152728) do
 
   create_table "blog_entries", :force => true do |t|
     t.integer  "user_id"
@@ -190,6 +190,15 @@ ActiveRecord::Schema.define(:version => 20140522144621) do
   add_index "rails_admin_histories", ["month"], :name => "index_rails_admin_histories_on_month"
   add_index "rails_admin_histories", ["table"], :name => "index_rails_admin_histories_on_table"
   add_index "rails_admin_histories", ["year"], :name => "index_rails_admin_histories_on_year"
+
+  create_table "reindex_runs", :force => true do |t|
+    t.integer  "entity_count", :default => 0
+    t.integer  "notice_count", :default => 0
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
+  end
+
+  add_index "reindex_runs", ["created_at"], :name => "index_reindex_runs_on_created_at"
 
   create_table "relevant_questions", :force => true do |t|
     t.text "question", :null => false

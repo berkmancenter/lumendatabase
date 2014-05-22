@@ -1,5 +1,9 @@
 module SearchHelpers
 
+  def index_changed_models
+    ReindexRun.index_changed_model_instances
+  end
+
   def submit_search(term)
     sleep 1 # required for indexing to complete
 
