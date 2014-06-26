@@ -1,0 +1,20 @@
+<section class="works">
+  <ol id="works" class="copyright-claims">
+    <% works.each_with_index do |work, idx| %>
+      <%= content_tag_for(:li, work) do %>
+        <h4>Data Protection claim #<%= idx + 1 %></h4>
+
+        <div class="row">
+          <span class="label infringing-title">Locations of Data Protection Material:</span>
+          <ol class="list infringing-urls">
+            <% work.infringing_urls.each do |url| %>
+              <%= content_tag_for(:li, url) do %>
+                <%= url.url %>
+              <% end %>
+            <% end %>
+          </ol>
+        </div>
+      <% end %>
+    <% end %>
+  </ol>
+</section>

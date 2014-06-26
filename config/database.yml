@@ -3,6 +3,8 @@ development: &default
   database: chill_development
   encoding: utf8
   min_messages: warning
+  username: postgres
+  host: localhost
   pool: 5
   timeout: 5000
 

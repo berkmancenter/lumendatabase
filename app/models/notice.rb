@@ -63,6 +63,7 @@ class Notice < ActiveRecord::Base
     CourtOrder
     LawEnforcementRequest
     PrivateInformation
+    DataProtection
     Other
   )
 
@@ -252,6 +253,24 @@ class Notice < ActiveRecord::Base
     if sender_name.present?
       principal_name.present? && principal_name != sender_name
     end
+  end
+  
+  before_save do
+    notice_type = self.type
+    if notice_type == "Other"
+      topic = Topic.find_by_name("Uncategorized")
+    else  
+      topic = Topic.find_by_name(notice_type.titleize)
+    end  
+    p "notice type and topic"
+    p notice_type.titleize
+    p topic
+    unless self.topics.include?(topic)
+      self.topics << topic
+    end  
+    p self
+    p self.topics
+    
   end
 
   private
