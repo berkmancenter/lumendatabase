@@ -255,22 +255,33 @@ class Notice < ActiveRecord::Base
     end
   end
   
+  def notice_topic_map
+    if self.type == "CourtOrder"
+      topic = Topic.find_by_name("Court Orders")
+    elsif self.type == "Defamation"
+      topic = Topic.find_by_name("Defamations")
+    elsif self.type == "Dmca"
+      topic = Topic.find_by_name("Copyright")
+    elsif self.type == "LawEnforcementRequest"
+      topic = Topic.find_by_name("Law Enforcement Requests")
+    elsif self.type == "Trademark"
+      topic = Topic.find_by_name("Trademark")
+    elsif self.type == "Other"
+      topic = Topic.find_by_name("Uncategorized")
+    elsif self.type == "PrivateInformation"
+      topic = Topic.find_by_name("Right of Publicity")
+    elsif self.type == "DataProtection"
+      topic = Topic.find_by_name("EU - Right to Be Forgotten")
+    end
+  end
+  
   before_save do
     notice_type = self.type
-    if notice_type == "Other"
-      topic = Topic.find_by_name("Uncategorized")
-    else  
-      topic = Topic.find_by_name(notice_type.titleize)
-    end  
-    p "notice type and topic"
-    p notice_type.titleize
-    p topic
+    topic = self.notice_topic_map
+
     unless self.topics.include?(topic)
       self.topics << topic
     end  
-    p self
-    p self.topics
-    
   end
 
   private
