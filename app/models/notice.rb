@@ -273,6 +273,12 @@ class Notice < ActiveRecord::Base
     elsif self.type == "DataProtection"
       topic = Topic.find_by_name("EU - Right to Be Forgotten")
     end
+    if topic.nil?
+      topic = Topic.find_by_name("Uncategorized")
+      if topic.nil?
+        topic = Topic.create(:name => "Uncategorized")
+      end  
+    end  
   end
   
   before_save do
