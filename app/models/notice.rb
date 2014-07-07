@@ -259,7 +259,7 @@ class Notice < ActiveRecord::Base
     if self.type == "CourtOrder"
       topic = Topic.find_by_name("Court Orders")
     elsif self.type == "Defamation"
-      topic = Topic.find_by_name("Defamations")
+      topic = Topic.find_by_name("Defamation")
     elsif self.type == "Dmca"
       topic = Topic.find_by_name("Copyright")
     elsif self.type == "LawEnforcementRequest"
@@ -278,7 +278,8 @@ class Notice < ActiveRecord::Base
       if topic.nil?
         topic = Topic.create(:name => "Uncategorized")
       end  
-    end  
+    end 
+    return topic 
   end
   
   before_save do
