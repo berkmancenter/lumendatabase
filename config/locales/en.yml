@@ -30,44 +30,31 @@ en:
 
   type_descriptions:
     Dmca:
-      'Is someone complaining that images, text, video, or other content
-      that you have posted online infringe their copyrights?'
+      'Is someone complaining that images, text, video, or other content found online infringe their copyrights?'
 
     Trademark:
-      'Is someone complaining that images, text, video, or other content
-      that you have posted online, or online activity in which you have
-      engaged, infringe their trademark(s)?'
+      'Is someone complaining that images, text, video, other content found online, or some other form of online activity, infringe their trademark(s)?'
 
     Defamation:
-      'Is someone complaining that images, text, video, or other content
-      that you have posted online, or online activity in which you have
-      engaged, defame, libel or slander them, or otherwise harm their
-      reputation?'
+      'Is someone complaining that images, text, video, other content posted online, or some other form of online activity, defame, libel or slander them, or otherwise harm their reputation?'
 
     CourtOrder:
-      'Has a judge or court issued an order or injunction ordering you
-      to remove images, text, video, or other content that you have
-      posted online, or to disable access to materials you have posted
-      or provide online?'
+      'Has a judge or court issued an order or injunction ordering the removal of images, text, video, or other content posted online, or the disabling of access to materials available online?'
 
     LawEnforcementRequest:
-      'Has a law enforcement agency or an agent of a law enforcement
-      agency requested that you remove images, text, video, or other
-      content that you have posted online, or that you, or your ISP
-      provide them with your or someone else’s identity, private
-      information or data that would normally not be available to the
-      public?'
+      'Has a law enforcement agency or an agent of a law enforcement agency requested the removal of images, text, video, or other content posted online, or that you or your ISP provide them with your or someone else’s identity, private information or data that would normally not be available to the public?'
 
     PrivateInformation:
-      'Is someone complaining that images, text, video, or other content
-      that you have posted online reveal their private information?'
+      'Is someone complaining that images, text, video, or other content posted online reveal their private information or otherwise violate their privacy?'
+
+    DataProtection:
+      'Has an EU citizen made a request for the removal of a URL or URLs from search engine results under the tenets of the EUCJ’s ruling in Google Spain SL, Google Inc. v Agencia Española de Protección de Datos, Mario Costeja González?'
 
     Other:
-      'Does the cease and desist letter you have received not meet any
-      of the descriptions above?'
+      'Does the cease and desist letter you have received not meet any of the descriptions above?'
 
   first_time_visitor:
-    'The notice on this page represents a request to remove material from an online site. Chilling Effects maintains an independent database of these notices -- we are not the senders or or targets of the notices.
+    'The notice on this page represents a request to remove material from an online site. Chilling Effects maintains an independent database of these notices -- we are not the senders or targets of the notices.
 
 
 Other information in the notice depends on what details the sender included.
