@@ -48,10 +48,10 @@ en:
       'Is someone complaining that images, text, video, or other content posted online reveal their private information or otherwise violate their privacy?'
 
     DataProtection:
-      'Has an EU citizen made a request for the removal of a URL or URLs from search engine results under the tenets of the EUCJ’s ruling in Google Spain SL, Google Inc. v Agencia Española de Protección de Datos, Mario Costeja González?'
+      'Has an EU citizen made a request for the removal of a URL or URLs from search engine results under the tenets of the EUCJ’s ruling in <u>Google Spain SL, Google Inc.</u> v <u>Agencia Española de Protección de Datos, Mario Costeja González</u>?'
 
     Other:
-      'Does the cease and desist letter you have received not meet any of the descriptions above?'
+      'Does the cease and desist letter you are reporting not meet any of the descriptions above?'
 
   first_time_visitor:
     'The notice on this page represents a request to remove material from an online site. Chilling Effects maintains an independent database of these notices -- we are not the senders or targets of the notices.
