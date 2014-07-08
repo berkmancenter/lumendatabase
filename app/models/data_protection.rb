@@ -1,5 +1,6 @@
 class DataProtection < Notice
   
+  DEFAULT_ENTITY_NOTICE_ROLES = %w|recipient|
   define_elasticsearch_mapping
 
   def self.model_name
