@@ -30,10 +30,16 @@
   }
 }
 
-.clinics {
-  .clinic {
+.collaborations {
+  .collaboration#partner {      
     margin: 0;
-    height: 430px;
+    height: 400px;
+  }
+  .collaboration#researcher {
+    margin: 0;
+    height: 150px; 
+  }
+  .collaboration {
     @include span-columns(6);
     @include omega();
 
