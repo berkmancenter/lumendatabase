@@ -26,7 +26,9 @@ RedactQueueProc = Proc.new do
         next_notices: next_notices
       )
 
-      redirect_to(redact_path)
+      redirect_to(redact_path) 
+    else
+      redirect_to(:back)  
     end
   else
     @refill = refill
