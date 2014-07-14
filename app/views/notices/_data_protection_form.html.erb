@@ -33,11 +33,11 @@
   </section>
 
   <section class="works">
-    <h4><span>Step 2.</span> Original Works in Question</h4>
+    <h4><span>Step 2.</span> URLs to be removed from search results.</h4>
     <div class="body-wrapper left">
       <%= form.simple_fields_for(:works) do |works_form| %>
         <%= works_form.simple_fields_for(:infringing_urls) do |urls_form| %>
-          <%= urls_form.input :url, label: "Infringing URL", placeholder: "http://" %>
+          <%= urls_form.input :url, label: "URLs mentioned in request", placeholder: "http://" %>
         <% end %>
       </div>
     <% end %>

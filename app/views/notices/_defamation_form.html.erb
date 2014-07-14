@@ -52,7 +52,7 @@
     <div class="body-wrapper left">
       <%= form.simple_fields_for(:works) do |works_form| %>
         <%= works_form.simple_fields_for(:infringing_urls) do |urls_form| %>
-          <%= urls_form.input :url, label: "Defamatory URL", placeholder: "http://" %>
+          <%= urls_form.input :url, label: "Allegedly Defamatory URL", placeholder: "http://" %>
         <% end %>
       </div>
     <% end %>
