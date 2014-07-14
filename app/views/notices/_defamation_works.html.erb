@@ -5,7 +5,7 @@
         <h4>Defamatory claim #<%= idx + 1 %></h4>
 
         <div class="row">
-          <span class="label infringing-title">Locations of Defamatory Material:</span>
+          <span class="label infringing-title">URLs of Allegedly Defamatory Material:</span>
           <ol class="list infringing-urls">
             <% work.infringing_urls.each do |url| %>
               <%= content_tag_for(:li, url) do %>

@@ -48,11 +48,11 @@
 
   <section class="works">
     <h4><span>Step 2.</span> Original Works in Question</h4>
-    <p>Enter information about the original work(s) and targetted URL(s).</p>
+    <p>Enter information about the original work(s) and targeted URL(s).</p>
     <div class="body-wrapper left">
       <%= form.simple_fields_for(:works) do |works_form| %>
         <%= works_form.simple_fields_for(:infringing_urls) do |urls_form| %>
-          <%= urls_form.input :url, label: "Targetted URL", placeholder: "http://" %>
+          <%= urls_form.input :url, label: "Targeted URL", placeholder: "http://" %>
         <% end %>
       </div>
       <div class="body-wrapper right">
