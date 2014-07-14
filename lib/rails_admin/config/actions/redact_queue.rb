@@ -28,6 +28,7 @@ RedactQueueProc = Proc.new do
 
       redirect_to(redact_path) 
     else
+      flash["error"] = "Please select at least one notice."
       redirect_to(:back)  
     end
   else
