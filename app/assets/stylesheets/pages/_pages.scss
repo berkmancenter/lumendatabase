@@ -179,3 +179,28 @@ ul.bulleted {
     margin: 8px 0px;
   }
 }
+
+ul.contents {
+/*  margin: 20px 25px; */
+  li {
+    list-style-type: disc;
+    margin: 4px 50px;
+  }
+  a {
+    text-decoration:none;
+  }
+}
+
+ul.tools {
+/*  margin: 20px 25px; */
+  li {
+    list-style-type: disc;
+    margin: 4px 25px;
+  }
+}
+
+pre,code,table.codetable {
+  background-color:#eee;
+  font-family: Consolas,Menlo,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New,monospace,serif;
+}
+

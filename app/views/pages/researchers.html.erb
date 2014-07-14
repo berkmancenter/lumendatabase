@@ -1,33 +1,207 @@
 <% title 'Researchers' %>
 
 <header>
-  <h1>FAQ for Researchers</h1>
+  <h1>Chilling Effects Tools for Researchers</h1>
 </header>
 
 <section>
-  <h2>What content can I find in the database?</h2>
-  <p>With over a million notices, the Chilling Effects database offers a snapshot of online speech issues and legal threats that have come up in cyberspace. The Chilling Effects Clearinghouse collects and analyzes legal complaints about online activity, helping Internet users to know their rights and understand the law. Submissions are indexed by topic and stored in our searchable database. The database of complaints includes DMCA takedown notices and cease-and-desist letters submitted by individuals who have sent or received the letters, as well as internet providers and hosts such as Google and Twitter, both of whom submit notices to the database. These submissions enable us to study the prevalence of legal threats and allow Internet users to see the source of content removals.</p>
 
-  <h2>  Are notices redacted? If so, by whom? What information is redacted?</h2>
-  <p>Yes, notices in the database are all reviewed and redacted by Chilling Effects staff. Personal information including, but not limited to, proper names and addresses is redacted in the body of the notice. Additionally, an individual submitting a notice to the database can choose to keep private certain information about the sender or recipient of the notice, including the name of the sender or recipient, attorney and law firm, and the sender or recipient’s address information, with the exception of the country, which is not redacted.</h5></p>
+<h2>AN INTRODUCTION TO THE CHILLING EFFECTS CLEARING HOUSE</h2>
 
-  <h2>Where do the notices come from?</h2>
-  <p>The notices come from two types of sources:<br>
-    <ul class="bulleted">
-      <li>Users can submit cease and desist letters and DMCA take-down notices they have received or sent.</li>
-      <li>Businesses that receive notices in large quantities.</li>
-    </ul>
-  </p>
+<h3>Contents:</h3>
 
-  <p>For example, Google and Twitter have partnered with Chilling Effects to automatically send us all DMCA notices they receive.</p>
+<ul class="contents">
+  <a href="#database"><li>What is in the database?</li></a>
+  <a href="#notices"><li>Where do the notices come from?</li></a>
+  <a href="#missing"><li>What is missing?</li></a>
+  <a href="#clearinghouse"><li>Who is the Clearinghouse for?</li></a>
+  <a href="#documentation"><li>How does it work?</li></a>
+<ul>
+</section>
 
-  <h2>Is there a way to export or download search results?</h2>
-  <p>Not yet. But it’s coming soon.</p>
+<section>
 
-  <h2>What about access to the API?</h2>
-  <p>Not yet. But researchers will have access to the API soon.</p>
+<a id="database"><h2>What content can I find in the database, and where does it come from?</h2></a>
 
-  <h2>Is there a way to search for some period of time other than 30 days, 3 months, 6 months, 1 year, or all time?</h2>
-  <p>Not yet. But it’s coming soon.</p>
+<p>Since its founding in 2001, the Chilling Effects Clearinghouse has collected over a million Cease and Desist notices received by Internet users. Today, this archive is an indispensable resource for understanding speech issues and legal complaints about online activity, helping Internet users to know their rights and understand the law. The complaints, indexed by topic and stored in our searchable database, include DMCA takedown notices submitted to the database by the individuals senders or recipients, and notices received by Internet providers and hosts such as Google and Twitter. These submissions enable us to better study the prevalence of legal threats and allow Internet users to see the source of content removals.</p>
+
+<a id="notices"><h2>Where do the notices come from?</h2></a>
+
+<p>Notice submissions to the database generally come from two types of sources.</p>
+<p>Individual users can submit cease and desist letters and DMCA takedown notices they have received or sent.</p>
+<p>Certain businesses that receive notices in large quantities (like Google and Twitter) have partnered with Chilling Effects to automatically send us all DMCA notices they receive.</p>
+
+
+<a id="missing"><h2>Hey, this notice is redacted – what is missing?</h2></a>
+
+<p>All notices in the database are reviewed and redacted by Chilling Effects staff to remove sensitive or personal information including, but not limited to, the proper name and addresses of the parties involved. An individual submitting a notice to the database can elect to keep private certain information about the sender or recipient of the notice, including the name of the sender or recipient, attorney and law firm, and the sender or recipient’s address information, with the exception of the country, which is not redacted.</p>
+
+<a id="clearinghouse"><h2>Who is the Clearinghouse for?</h2></a>
+
+<p>The Chilling Effects Clearinghouse is designed for use by lay Internet users curious about a notice they may have encountered, as well Internet and legal researchers studying larger trends about free expression and content removal online.  Do you have further ideas about how to use the database, or suggestions about this FAQ?  Email us at team@chillingeffects.org with the subject line "Suggestion for Researcher FAQs."</p>
+
+<a id="documentation"><h2>How does it work?</h2></a>
+
+</p>We're excited that you're interested in conducting research using our database of cease and desist notices, and pleased to be able to offer you a powerful new user interface.  Most users will find that the web interface will suffice for browsing and discovery within the database.  However, for those that need to access larger swaths of data for use or reuse in various applications, we offer our new API.  Read on for further information.<p>
+
 
 </section>
+
+<hr>
+
+<section>
+<h2>BASIC FACTS ABOUT THE DATABASE</h2>
+
+<h3>Contents</h3>
+
+<ul class="contents">
+<a href="#formatting"><li>Formatting</li></a>
+<a href="#timestamps"><li>Understanding dates - Unix Timestamps</li></a>
+<a href="#searching"><li>Searching the database</li></a>
+</ul>
+
+<a id="formatting"><h2>Formatting</h2></a>
+
+<p>When a query or request is submitted to the database, the system will return a response with a list of JSON-encoded attributes.  Learn more about JSON (JavaScript Object/Open Notation) <a href="http://www.json.org/">here</a>. This format is designed to be “machine readable,” and not necessarily useful to a human reader in its raw form. However, there are many tools for rendering JSON output into a friendlier form, and we recommend finding one that works for you.  <b>[Provide an example? like ] </b></p>
+
+Example JSON Request:
+<pre>
+<code>
+curl http://chillingeffects.org/notices/1.json
+</code>
+</pre>
+Example Successful JSON Output: 
+
+<pre>
+<code>
+{
+  "dmca":{
+    "id":1,
+    "title":"Lion King on YouTube",
+    "body":null,
+    "date_sent":"2013-06-04T19:23:12Z",
+    "date_received":"2013-06-05T20:31:44Z",
+    "topics":[
+      "Anticircumvention (DMCA)",
+      "Bookmarks",
+      "Chilling Effects"
+    ],
+    "tags": [
+      "tag_1",
+      "tag_2"
+    ],
+    "jurisdictions": [
+      "US",
+      "CA"
+    ],
+    "action_taken": "Partial",
+    "sender_name": "Joe Lawyer",
+    "recipient_name": "Google, Inc.",
+    "works": [
+      {
+        "description": "Lion King Video",
+        "copyrighted_urls": [
+          { "url": "http://www.example.com/lion_king.mp4" },
+          { "url": "http://www.example.com/lion_king.mov" }
+        ],
+        "infringing_urls": [
+          { "url": "http://www.example.com/infringing1" },
+          { "url": "http://www.example.com/infringing2" },
+          { "url": "http://www.example.com/infringing3" }
+        ]
+      }
+    ]
+  }
+}
+</code>
+</pre>
+
+<a id="timestamps"><h2>Understanding dates - Unix Timestamps</h2></a>
+
+<p>The Chilling Effects database accepts dates in a variety of formats but always outputs dates in Unix Time, which is the number of seconds elapsed since the beginning of the Unix epoch. This can be quite confusing at first, and we recommend using a Unix Timestamp conversion tool (like this one <a href="http://www.unixtimestamp.com/">here</a>) to transform these raw date outputs into something a human can understand.</p>
+
+<a id="searching"<h2>Searching the Database</h2></a>
+
+<p>Most users will find that the web interface will suffice for browsing and discovery within the database.  However, for those that need to access larger swaths of data or create automated processes to digest data trends, we offer our new API.</p>
+
+<p>Searching the database, whether through the web interface or with the API, is done via full-text search.  The default search is to search all possible notice fields and facets.  Searches can also refined based on specific slices of the database or on specific facets of the data. See the <a href="https://github.com/berkmancenter/chillingeffects/blob/master/doc/api_documentation.mkd#request">documentation</a> for the applicable notice parameters and metadata.</p>
+
+<hr>
+
+<h2>QUERYING THE DATABASE WITH THE API</h2>
+
+<h3>Contents</h3>
+
+<ul class="contents">
+  <a href="#key"><li>Getting an API Key</li></a>
+  <a href="#commandline"><li>Basic search from the command line</li></a>
+  <a href="#topics"><li>Requesting a list of topisc</li></a>
+  <a href="#api_notice_search"><li>Searching notices</li></a>
+  <a href="#bulk_download"><li>Downloading results in bulk</li></a>
+</ul>
+
+<h2>Basic search from the command line</h2>
+
+<p>To query the database, use your preferred tools for HTTP "get" requests.  There are a number of options available, so pick one depending on your research needs.<br>Examples include:</p>
+
+<ul class="tools">
+<li>Curl -  a command line program for Mac, iOS and BSD operating system computers, but not for Windows. In order to use curl commands on Windows, a separate tool such as CygWin or Putty is needed.</li>
+<li>wget - dumps the results of the "get" request to a file.</li>
+</ul>
+<p>Example search query for <code>Batman</code> where <code>&#60;parameter&#62;</code> is the database field or facet that is the object of the search.</p>
+<pre>
+<code>
+curl -H "Accept: application/json" -H "Content-type: application/json" 'https://chillingeffects.org/notices/search?<b>&#60;parameter&#62;=batman</b>
+</code>
+</pre>
+
+<p>Here’s a search query for <code>star</code> where <code>term</code> is the parameter.</p>
+
+<pre><code>
+curl -H "Accept: application/json" -H "Content-type: application/json" 'http://chillingeffects.org/notices/search?<b>term=star</b>'
+
+</code></pre>
+
+<p>Searches can also combine multiple parameters when linked with an ampersand.  Below, the query combines a search for <code>star</code> where <code>term</code> is the parameter, where <code>batman</code> is the <code>sender_name</code>, and <code>date_received</code> falls between <code>RANGE1..RANGE2</code></p>
+
+<pre>
+<code>
+curl -H "Accept: application/json" -H "Content-type: application/json" 'http://chillingeffects.org/notices/search?<b>term=star&sender_name=batman&date_received=_facet=RANGE1..RANGE2</b>'
+</code>
+</pre>
+
+<p>Running these search queries through the API will allow you to search for some period of time, as well as download search results for use and reuse in applications.  A complete list of searchable parameters can be found <a href="https://github.com/berkmancenter/chillingeffects/blob/master/doc/api_documentation.mkd#search-notices-via-fulltext">here</a>.</p>
+
+<a id="topics"><h2>Requesting a List of Topics</h2></a>
+
+<p>The database classifies notices into one or more topics, more of which may be added over time.  Certain topics are categorized as subtopics of a larger, comprehensive root topic.  For example,  like “DMCA,” “fair use,” and “anti-circumvention” all fall under “Copyright.”  Each topic has a unique numerical ID in the database.  To request a list of topics, use the following command.</p>
+
+<pre>
+<code>
+ curl https://chillingeffects.org/topics.json 
+</code>
+</pre>
+
+<p>This command will return results with three pieces of information: 1) the topic's unique ID number, 2) the name of the topic, and 3) either the ID number of the parent topic or null if the topic is a root topic.</p>
+
+<table class="codetable">
+<tr>
+<td>id</td>
+<td>integer</td>
+<td>The unique ID used for the topic_ids array during notice creation</td></tr>
+<tr>
+<td>name</td>
+<td>string</td>
+<td>The topic name</td></tr>
+<tr>
+<td>parent_id</td>
+<td>integer</td>
+<td>The parent topic_id of this topic, or "null" if this is a root topic.</td>
+</tr>
+</table>
+
+<a id="api_notice_search"><h2>Searching the notices</h2></a>
+
+<p>On the web interface, above a certain number of hits your search results will be paginated. By default, results are sorted by descending relevance. Full-text search results contain the same data as an individually-requested notices, with the addition of a  score  field that articulates the result relevance to the query term; higher numbers are more relevant.  Terms are joined with an 'AND' by default.</p>
+
+<a id="bulk_download"><h2>Downloading Results in Bulk</h2></a>
