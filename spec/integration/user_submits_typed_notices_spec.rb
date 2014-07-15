@@ -43,7 +43,7 @@ feature "typed notice submissions" do
 
     submission.fill_in_form_with({
       "Legal Complaint" => "They impuned upon my good character",
-      "Defamatory URL" => "http://example.com/defamatory_url1",
+      "Allegedly Defamatory URL" => "http://example.com/defamatory_url1",
     })
 
     submission.fill_in_entity_form_with(:recipient, {
@@ -60,13 +60,46 @@ feature "typed notice submissions" do
     expect(page).to have_content("Defamation notice to Recipient")
 
     within("#works") do
-      expect(page).to have_content('Locations of Defamatory Material')
+      expect(page).to have_content('Locations of Allegedly Defamatory Material')
       expect(page).to have_content('http://example.com/defamatory_url1')
     end
 
     within('.notice-body') do
       expect(page).to have_content('Legal Complaint')
       expect(page).to have_content('They impuned upon my good character')
+    end
+  end
+  
+  scenario "User submits and views a Data Protection notice" do
+    submission = NoticeSubmissionOnPage.new(DataProtection)
+    submission.open_submission_form
+
+    submission.fill_in_form_with({
+      "Legal Complaint" => "I want to be forgotten",
+      "URLs mentioned in request" => "http://example.com/defamatory_url1",
+    })
+
+    submission.fill_in_entity_form_with(:recipient, {
+      'Name' => 'Recipient',
+    })
+    submission.fill_in_entity_form_with(:sender, {
+      'Name' => 'Sender',
+    })
+
+    submission.submit
+
+    open_recent_notice
+
+    expect(page).to have_content("Data Protection notice to Recipient")
+
+    within("#works") do
+      expect(page).to have_content('Location of Material Requested for Removal')
+      expect(page).to have_content('http://example.com/defamatory_url1')
+    end
+
+    within('.notice-body') do
+      expect(page).to have_content('Legal Complaint')
+      expect(page).to have_content('I want to be forgotten')
     end
   end
 
@@ -76,7 +109,7 @@ feature "typed notice submissions" do
 
     submission.fill_in_form_with({
       "Subject of Court Order" => "My sweet website", # works.description
-      "Targetted URL" => "http://example.com/targetted_url", # infringing_urls
+      "Targeted URL" => "http://example.com/targetted_url", # infringing_urls
 
       "Explanation of Court Order" => "I guess they don't like me", #notice.body
       "Laws Referenced by Court Order" => "USC foo bar 21"
