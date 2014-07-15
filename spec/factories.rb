@@ -121,6 +121,7 @@ FactoryGirl.define do
     factory :court_order, class: 'CourtOrder'
     factory :law_enforcement_request, class: 'LawEnforcementRequest'
     factory :private_information, class: 'PrivateInformation'
+    factory :data_protection, class: 'DataProtection'
     factory :other, class: 'Other'
   end
 
