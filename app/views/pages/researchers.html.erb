@@ -32,7 +32,7 @@
 <p>Certain businesses that receive notices in large quantities (like Google and Twitter) have partnered with Chilling Effects to automatically send us all DMCA notices they receive.</p>
 
 
-<a id="missing"><h2>Hey, this notice is redacted – what is missing?</h2></a>
+<a id="missing"><h2>A notice contains "[redacted]" – what is missing?</h2></a>
 
 <p>All notices in the database are reviewed and redacted by Chilling Effects staff to remove sensitive or personal information including, but not limited to, the proper name and addresses of the parties involved. An individual submitting a notice to the database can elect to keep private certain information about the sender or recipient of the notice, including the name of the sender or recipient, attorney and law firm, and the sender or recipient’s address information, with the exception of the country, which is not redacted.</p>
 
@@ -62,7 +62,7 @@
 
 <a id="formatting"><h2>Formatting</h2></a>
 
-<p>When a query or request is submitted to the database, the system will return a response with a list of JSON-encoded attributes.  Learn more about JSON (JavaScript Object/Open Notation) <a href="http://www.json.org/">here</a>. This format is designed to be “machine readable,” and not necessarily useful to a human reader in its raw form. However, there are many tools for rendering JSON output into a friendlier form, and we recommend finding one that works for you.  <b>[Provide an example? like ] </b></p>
+<p>When a query or request is submitted to the database, the system will return a response with a list of JSON-encoded attributes.  Learn more about JSON (JavaScript Object/Open Notation) <a href="http://www.json.org/">here</a>. This format is designed to be “machine readable,” and not necessarily useful to a human reader in its raw form. However, there are many tools for rendering JSON output into a friendlier form, and we recommend finding one that works for you. </p>
 
 Example JSON Request:
 <pre>
@@ -120,7 +120,7 @@ Example Successful JSON Output:
 
 <p>The Chilling Effects database accepts dates in a variety of formats but always outputs dates in Unix Time, which is the number of seconds elapsed since the beginning of the Unix epoch. This can be quite confusing at first, and we recommend using a Unix Timestamp conversion tool (like this one <a href="http://www.unixtimestamp.com/">here</a>) to transform these raw date outputs into something a human can understand.</p>
 
-<a id="searching"<h2>Searching the Database</h2></a>
+<a id="searching"><h2>Searching the Database</h2></a>
 
 <p>Most users will find that the web interface will suffice for browsing and discovery within the database.  However, for those that need to access larger swaths of data or create automated processes to digest data trends, we offer our new API.</p>
 
@@ -135,12 +135,16 @@ Example Successful JSON Output:
 <ul class="contents">
   <a href="#key"><li>Getting an API Key</li></a>
   <a href="#commandline"><li>Basic search from the command line</li></a>
-  <a href="#topics"><li>Requesting a list of topisc</li></a>
+  <a href="#topics"><li>Requesting a list of topics</li></a>
   <a href="#api_notice_search"><li>Searching notices</li></a>
   <a href="#bulk_download"><li>Downloading results in bulk</li></a>
 </ul>
 
-<h2>Basic search from the command line</h2>
+<a id="key"><h2>Getting an API Key</h2></a>
+
+An authentication key is needed in order to query the database at will via the API.  Contact the Chilling Effects staff at team@chillingeffects.org to be provided with one.  API queries to the database submitted without a token will be capped at the first 25 results, and at 5 requests per day.
+
+<a id="commandline"><h2>Basic search from the command line</h2></a>
 
 <p>To query the database, use your preferred tools for HTTP "get" requests.  There are a number of options available, so pick one depending on your research needs.<br>Examples include:</p>
 
@@ -205,3 +209,5 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'http://c
 <p>On the web interface, above a certain number of hits your search results will be paginated. By default, results are sorted by descending relevance. Full-text search results contain the same data as an individually-requested notices, with the addition of a  score  field that articulates the result relevance to the query term; higher numbers are more relevant.  Terms are joined with an 'AND' by default.</p>
 
 <a id="bulk_download"><h2>Downloading Results in Bulk</h2></a>
+
+See  <a href="#key">"Getting an API key."</a>
