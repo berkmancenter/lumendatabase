@@ -33,11 +33,11 @@
 .collaborations {
   .collaboration#partner {      
     margin: 0;
-    height: 400px;
+/*    height: 400px; */
   }
   .collaboration#researcher {
     margin: 0;
-    height: 150px; 
+/*    height: 150px; */
   }
   .collaboration {
     @include span-columns(6);

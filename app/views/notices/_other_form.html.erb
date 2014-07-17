@@ -1,12 +1,12 @@
 <header>
   <h3 class="title">Report a Private Information Notice</h3>
-  <p>If you have sent or received a Private Information notice and want to submit it to our database, fill out the form below.</p>
+  <p>If you have sent or received a notice and want to submit it to our database, fill out the form below.</p>
   <p class="disclaimer">Please do not include phone numbers, email addresses, personal name, or other private information other than those of the complainant.</p>
 </header>
 <%= simple_form_for(notice) do |form| %>
   <section class="notice-body">
     <h4><span>Step 1.</span> Describe the Notice</h4>
-    <p>Provide us with information about the Private Information notice you <em>sent</em> or <em>received</em>.</p>
+    <p>Provide us with information about the notice you <em>sent</em> or <em>received</em>.</p>
     <div class="body-wrapper left main">
       <%= form.input :type, as: :hidden %>
       <%=
@@ -69,7 +69,7 @@
     <% role = roles_form.object.name.titleize %>
     <section class="role <%= role.downcase %>">
       <h4><span>Step <%= step_number %>.</span> <%= role %> of the Notice</h4>
-      <p>Enter information about the <b><%= role %></b> of the Private Information notice.</p>
+      <p>Enter information about the <b><%= role %></b> of the notice.</p>
       <%= roles_form.input :name, as: :hidden %>
       <%= roles_form.simple_fields_for(:entity) do |entity_form| %>
         <div class="body-wrapper left required">
