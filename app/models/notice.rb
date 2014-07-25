@@ -63,6 +63,7 @@ class Notice < ActiveRecord::Base
     CourtOrder
     LawEnforcementRequest
     PrivateInformation
+    DataProtection
     Other
   )
 
@@ -252,6 +253,42 @@ class Notice < ActiveRecord::Base
     if sender_name.present?
       principal_name.present? && principal_name != sender_name
     end
+  end
+  
+  def notice_topic_map
+    if self.type == "CourtOrder"
+      topic = Topic.find_by_name("Court Orders")
+    elsif self.type == "Defamation"
+      topic = Topic.find_by_name("Defamation")
+    elsif self.type == "Dmca"
+      topic = Topic.find_by_name("Copyright")
+    elsif self.type == "LawEnforcementRequest"
+      topic = Topic.find_by_name("Law Enforcement Requests")
+    elsif self.type == "Trademark"
+      topic = Topic.find_by_name("Trademark")
+    elsif self.type == "Other"
+      topic = Topic.find_by_name("Uncategorized")
+    elsif self.type == "PrivateInformation"
+      topic = Topic.find_by_name("Right of Publicity")
+    elsif self.type == "DataProtection"
+      topic = Topic.find_by_name("EU - Right to Be Forgotten")
+    end
+    if topic.nil?
+      topic = Topic.find_by_name("Uncategorized")
+      if topic.nil?
+        topic = Topic.create(:name => "Uncategorized")
+      end  
+    end 
+    return topic 
+  end
+  
+  before_save do
+    notice_type = self.type
+    topic = self.notice_topic_map
+
+    unless self.topics.include?(topic)
+      self.topics << topic
+    end  
   end
 
   private

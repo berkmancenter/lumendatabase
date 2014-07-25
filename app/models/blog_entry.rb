@@ -24,11 +24,11 @@ class BlogEntry < ActiveRecord::Base
   validates_inclusion_of :image, in: valid_images, allow_nil: true
 
   def self.with_content
-    where("url IS NULL")
+    where("url = '' or url IS NULL")
   end
 
   def self.we_are_reading
-    where("url IS NOT NULL")
+    where("url != '' and url IS NOT NULL")
   end
 
   def self.published

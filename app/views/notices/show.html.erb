@@ -45,6 +45,11 @@
     <div class="main">
       <h2>Re: <%= subject(@notice) %></h2>
       <p class="source">Sent via: <%= sent_via(@notice) %></p>
+	  
+      <dl class="notice-type">
+        <dt class="label">Notice Type:</dt>
+        <dd class="field"><%= @notice.type.titleize %></dd>
+      </dl>
 
       <dl class="action-taken">
         <dt class="label">Action taken:</dt>
