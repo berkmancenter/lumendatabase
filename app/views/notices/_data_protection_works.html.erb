@@ -2,16 +2,10 @@
   <ol id="works" class="copyright-claims">
     <% works.each_with_index do |work, idx| %>
       <%= content_tag_for(:li, work) do %>
-        <h4>Complaint #<%= idx + 1 %></h4>
-        <div class="row">
-          <div class="description">
-            <span class="label">Description of allegedly infringed mark</span>
-            <span class="field"><%= work.description %></span>
-          </div>
-        </div>
+        <h4>Requests for Removal from Search Results</h4>
 
         <div class="row">
-          <span class="label infringing-title">Allegedly Infringing URLs:</span>
+          <span class="label infringing-title">Location of Material Requested for Removal:</span>
           <ol class="list infringing-urls">
             <% work.infringing_urls.each do |url| %>
               <%= content_tag_for(:li, url) do %>

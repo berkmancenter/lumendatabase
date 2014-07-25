@@ -158,6 +158,27 @@ feature "Searching for Notices via the API" do
       end
     end
   end
+  
+  context DataProtection do
+    scenario "has model-specific metadata", js: true, search: true do
+      create(
+        :data_protection,
+        title: "The Lion King on Youtube",
+        body: "A test body"
+      )
+      index_changed_models
+
+      expect_api_search_to_find("king") do |json|
+        json_item = json['notices'].first
+        work = json_item['works'].first
+
+        expect(json_item).to have_key('legal_complaint')
+        expect(json_item).not_to have_key('body')
+
+        expect(work).to have_key('urls_mentioned_in_request')
+      end
+    end
+  end
 
   context CourtOrder do
     scenario "has model-specific metadata", js: true, search: true do

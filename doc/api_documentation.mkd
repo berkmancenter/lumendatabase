@@ -26,7 +26,7 @@ ChillingEffects staff for your authentication token.
 | Field                              | Type               | Description
 | ---                                | ---                | ---
 | `title`                            | string             | Required
-| `type`                             | string             | Required: one of 'CourtOrder', 'Defamation', 'Dmca', 'LawEnforcementRequest', 'Other', 'PrivateInformation', or 'Trademark'
+| `type`                             | string             | Required: one of 'CourtOrder', 'DataProtection', 'Defamation', 'Dmca', 'LawEnforcementRequest', 'Other', 'PrivateInformation', or 'Trademark'
 | `subject`                          | string             |
 | `date_sent`                        | string             | Any parseable time value, e.g. "2013-05-21", "2013-05-21 10:01:01 -04:00"
 | `language`                         | string             | A two character language code. See "Language" below for the list.
@@ -324,6 +324,15 @@ or when requested individually.
 | `works.description`        | `works.subject_of_court_order` |
 | `works.infringing_urls`    | `works.targetted_urls`         |
 | `works.copyrighted_urls`   |                                | Yes
+
+#### Data Protection
+
+| Ingestion Field Name       | Mapped Field Name                 | Removed?
+| ---                        | ---                               | ---
+| `body`                     | `legal_complaint`                 |
+| `works.description`        | `works.complaint`    |
+| `works.infringing_urls`    | `works.urls_mentioned_in_request` |
+| `works.copyrighted_urls`   |                                   | Yes
 
 #### Defamation
 

@@ -15,7 +15,7 @@
       <div data-id="<%= model.name %>">
         <article>
           <b><%= model.label %>:</b>
-          <%= t("type_descriptions.#{model.name}") %>
+          <%= raw t("type_descriptions.#{model.name}") %>
         </article>
         <div class="button-wrapper">
           <%=
