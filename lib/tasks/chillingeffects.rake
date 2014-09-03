@@ -44,6 +44,21 @@ namespace :chillingeffects do
     ingestor = Ingestor::Legacy.new(record_source)
     ingestor.import
   end
+  
+  desc "Import notice error legacy chillingeffects data from Mysql"
+  task import_error_notices_via_mysql: :environment do
+    # Configure the record_source
+    error_original_notice_ids = NoticeImportError.pluck(:original_notice_id).join(", ")
+    name = "error_notices"
+    base_directory = ENV['BASE_DIRECTORY']
+
+    record_source = Ingestor::Legacy::RecordSource::Mysql.new(
+      "tNotice.NoticeID IN (#{error_original_notice_ids})", 
+      name, base_directory
+    )
+    ingestor = Ingestor::Legacy.new(record_source)
+    ingestor.import
+  end
 
   desc "Import blog entries"
   task import_blog_entries: :environment do
