@@ -48,7 +48,7 @@ namespace :chillingeffects do
   desc "Import notice error legacy chillingeffects data from Mysql"
   task import_error_notices_via_mysql: :environment do
     # Configure the record_source
-    error_original_notice_ids = NoticeImportError.pluck(:original_notice_id)
+    error_original_notice_ids = NoticeImportError.pluck(:original_notice_id).join(", ")
     name = "error_notices"
     base_directory = ENV['BASE_DIRECTORY']
 
