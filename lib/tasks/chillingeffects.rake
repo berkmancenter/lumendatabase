@@ -76,20 +76,24 @@ namespace :chillingeffects do
 
   desc "Recreate elasticsearch index memory efficiently"
   task recreate_elasticsearch_index: :environment do
-    batch_size = (ENV['BATCH_SIZE'] || 100).to_i
-    [Notice, Entity].each do |klass|
-      klass.index.delete
-      klass.create_elasticsearch_index
-      count = 0
-      klass.find_in_batches(conditions: '1 = 1', batch_size: batch_size) do |instances|
-        GC.start
-        instances.each do |instance|
-          instance.update_index
-          count += 1
-          print '.'
+	begin
+      batch_size = (ENV['BATCH_SIZE'] || 100).to_i
+      [Notice, Entity].each do |klass|
+        klass.index.delete
+        klass.create_elasticsearch_index
+        count = 0
+        klass.find_in_batches(conditions: '1 = 1', batch_size: batch_size) do |instances|
+          GC.start
+          instances.each do |instance|
+            instance.update_index
+            count += 1
+            print '.'
+          end
+          puts "#{count} #{klass} instances indexed at #{Time.now.to_i}"
         end
-        puts "#{count} #{klass} instances indexed at #{Time.now.to_i}"
       end
+	rescue => e
+	  $stderr.puts "Reindexing did not succeed because: #{e.inspect}"
     end
   end
 
