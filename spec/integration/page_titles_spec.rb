@@ -43,19 +43,19 @@ feature 'Page titles' do
     expect(page).to have_heading('Topics')
   end
 
-  scenario "Report Notice" do
+  scenario "Report Demand" do
     visit '/'
-    click_on 'Report Notice'
+    click_on 'Report Demand'
 
     # select type view
-    expect(page).to have_exact_title('Report Notice :: Chilling Effects')
-    expect(page).to have_heading('Report Notice')
+    expect(page).to have_exact_title('Report Demand :: Chilling Effects')
+    expect(page).to have_heading('Report Demand')
 
     click_on 'DMCA'
 
     # submission form itself
-    expect(page).to have_exact_title('Dmca :: Report Notice :: Chilling Effects')
-    expect(page).to have_heading('Report Notice')
+    expect(page).to have_exact_title('Dmca :: Report Demand :: Chilling Effects')
+    expect(page).to have_heading('Report Demand')
   end
 
   scenario "Notice" do
