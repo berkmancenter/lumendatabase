@@ -495,10 +495,6 @@ Return a JSON-encoded array of topics, including the following attributes:
 }
 ```
 
-### Unsuccessful Responses
-
-Undefined.
-
 ## Search notices via fulltext
 
 Chillingeffects allows for paginatable full-text searches of notices and
@@ -507,7 +503,7 @@ search results contain the same data as an individually-requested Notice, with
 an additional "score" field. "score" articulates how "relevant" this result is
 to the query term. Higher numbers are more relevant.
 
-Terms are joined with an 'AND' by default.
+Terms are joined with an 'OR' by default.
 
 **Method**: `GET`
 
@@ -766,7 +762,7 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'http://c
 
 ## Search for Entities via fulltext
 
-Chillingeffects allows for paginatable full-text searches of Entities, useful
+Chilling Effects allows for paginatable full-text searches of Entities, useful
 to select existing entities during notice creation. For information about
 pagination metadata, please see 'Search notices via fulltext'
 
