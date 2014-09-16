@@ -3,6 +3,7 @@ require 'ingestor'
 require 'blog_importer'
 require 'question_importer'
 require 'collapses_topics'
+require 'csv'
 
 namespace :chillingeffects do
   desc 'Delete elasticsearch index'
@@ -54,6 +55,27 @@ namespace :chillingeffects do
 
     record_source = Ingestor::Legacy::RecordSource::Mysql.new(
       "tNotice.NoticeID IN (#{error_original_notice_ids})", 
+      name, base_directory
+    )
+    ingestor = Ingestor::Legacy.new(record_source)
+    ingestor.import
+  end
+  
+  desc "Import failed API submissions from Mysql"
+  task import_failed_api_notices_via_mysql: :environment do
+    # Configure the record_source
+    failed_ids_file = Rails.root.to_s + '/tmp/failed_ids.csv'
+    failed_original_notice_ids = Array.new
+    CSV.foreach(failed_ids_file, :headers => false) do |row|
+      failed_original_notice_ids << row
+    end
+    p failed_original_notice_ids.join(", ")
+    
+    name = "failed_api_submissions"
+    base_directory = ENV['BASE_DIRECTORY']
+
+    record_source = Ingestor::Legacy::RecordSource::Mysql.new(
+      "tNotice.NoticeID IN (#{failed_original_notice_ids})", 
       name, base_directory
     )
     ingestor = Ingestor::Legacy.new(record_source)
