@@ -55,7 +55,12 @@ module Ingestor
       dmca.update_attributes(updated_at: updated_at)
 
       logger.debug { "Imported: #{attributes[:original_notice_id]} -> #{dmca.id}" }
-      NoticeImportError.find_by_original_notice_id(csv_row['NoticeID']).destroy
+      
+      # if importing notices from Notice Import Errors, delete from Notice Import Error table after import
+      notice_import_error = NoticeImportError.find_by_original_notice_id(csv_row['NoticeID'])
+      unless notice_import_error.nil? 
+        notice_import_error = destroy
+      end  
       self.succeeded += 1
 
       if self.succeeded % 100 == 0
