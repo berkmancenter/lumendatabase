@@ -69,7 +69,7 @@ namespace :chillingeffects do
     CSV.foreach(failed_ids_file, :headers => false) do |row|
       failed_original_notice_ids << row
     end
-    p failed_original_notice_ids.join(", ")
+    failed_original_notice_ids = failed_original_notice_ids.join(", ")
     
     name = "failed_api_submissions"
     base_directory = ENV['BASE_DIRECTORY']
