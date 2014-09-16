@@ -30,7 +30,9 @@ module Ingestor
       Dir.chdir(record_source.base_directory) do
         record_source.each do |csv_row|
           if Notice.where(original_notice_id: csv_row['NoticeID']).blank?
-            import_row(csv_row)
+            unless csv_row['Submitted_By'] == 'Google' && csv_row['add_date'] > Date.strptime(ENV['LAUNCH_DATE'], '%m/%d/%Y')
+              import_row(csv_row)
+            end  
           end
         end
       end
