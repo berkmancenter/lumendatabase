@@ -65,6 +65,7 @@ namespace :chillingeffects do
   task import_failed_api_notices_via_mysql: :environment do
     # Configure the record_source
     failed_ids_file = Rails.root.to_s + '/tmp/failed_ids.csv'
+    fail_import = true
     failed_original_notice_ids = Array.new
     CSV.foreach(failed_ids_file, :headers => false) do |row|
       failed_original_notice_ids << row
@@ -79,7 +80,7 @@ namespace :chillingeffects do
       name, base_directory
     )
     ingestor = Ingestor::Legacy.new(record_source)
-    ingestor.import
+    ingestor.import(fail_import)
   end
 
   desc "Import blog entries"

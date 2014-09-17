@@ -24,14 +24,18 @@ module Ingestor
       @failed = 0
     end
 
-    def import
+    def import(fail_import = false)
       logger.info "Importing legacy CSV file: #{record_source.name} in #{record_source.base_directory}"
 
       Dir.chdir(record_source.base_directory) do
         record_source.each do |csv_row|
           if Notice.where(original_notice_id: csv_row['NoticeID']).blank?
-            unless csv_row['Submitted_By'] == 'Google' && csv_row['add_date'] > Time.parse(ENV['LAUNCH_DATE'])
+            if fail_import
               import_row(csv_row)
+            else
+              unless csv_row['Submitted_By'] == 'Google' && csv_row['add_date'] > Time.parse(ENV['LAUNCH_DATE'])
+                import_row(csv_row)
+              end   
             end  
           end
         end
