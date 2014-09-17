@@ -256,30 +256,27 @@ class Notice < ActiveRecord::Base
   end
   
   def notice_topic_map
-    if self.type == "CourtOrder"
-      topic = Topic.find_by_name("Court Orders")
-    elsif self.type == "Defamation"
-      topic = Topic.find_by_name("Defamation")
-    elsif self.type == "Dmca"
-      topic = Topic.find_by_name("Copyright")
-    elsif self.type == "LawEnforcementRequest"
-      topic = Topic.find_by_name("Law Enforcement Requests")
-    elsif self.type == "Trademark"
-      topic = Topic.find_by_name("Trademark")
-    elsif self.type == "Other"
-      topic = Topic.find_by_name("Uncategorized")
-    elsif self.type == "PrivateInformation"
-      topic = Topic.find_by_name("Right of Publicity")
-    elsif self.type == "DataProtection"
-      topic = Topic.find_by_name("EU - Right to Be Forgotten")
+    case self.type
+    when "CourtOrder"
+      topic = "Court Orders"
+    when "Defamation"
+      topic = "Defamation"
+    when "Dmca"
+      topic = "Copyright"
+    when "LawEnforcementRequest"
+      topic = "Law Enforcement Requests"
+    when "Trademark"
+      topic = "Trademark"
+    when "Other"
+      topic = "Uncategorized"
+    when "PrivateInformation"
+      topic = "Right of Publicity"
+    when "DataProtection"
+      topic = "EU - Right to Be Forgotten"
+    else
+      topic = "Uncategorized"
     end
-    if topic.nil?
-      topic = Topic.find_by_name("Uncategorized")
-      if topic.nil?
-        topic = Topic.create(:name => "Uncategorized")
-      end  
-    end 
-    return topic 
+    return Topic.find_or_create_by_name(topic) 
   end
   
   before_save do

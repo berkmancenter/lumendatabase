@@ -1,4 +1,5 @@
 Topic.transaction do
+  Topic.create!(name: 'Uncategorized')
 
   Topic.create!(
     name: "Chilling Effects",

@@ -1,6 +1,10 @@
 require 'spec_helper'
 
 describe Dmca do
+  before do
+    @notice_topics = create_list(:notice_topic, 8)
+  end
+
   it { should validate_presence_of :works }
   it { should validate_presence_of :entity_notice_roles }
   it { should ensure_inclusion_of(:language).in_array(Language.codes) }
@@ -305,9 +309,11 @@ describe Dmca do
 
   context ".in_topics" do
     it "returns notices in the given topics" do
-      create(:dmca) # not to be found
+      single = create(:dmca) # not to be found
       expected_notices = create_list(:dmca, 3, :with_topics)
-      topics = expected_notices.map(&:topics).flatten
+      topics = expected_notices.map(&:topics).flatten.uniq.delete_if do |t|
+        @notice_topics.include? t
+      end
 
       notices = Dmca.in_topics(topics)
 
