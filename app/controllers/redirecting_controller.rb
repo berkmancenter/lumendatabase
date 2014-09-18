@@ -8,8 +8,6 @@ class RedirectingController < ApplicationController
         send("#{singular_model_name(class_model)}_path".to_sym, instance),
         status: :moved_permanently
       )
-    else
-      render nothing: true, status: :not_found
     end
   end
 
