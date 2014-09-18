@@ -8,6 +8,8 @@ class RedirectingController < ApplicationController
         send("#{singular_model_name(class_model)}_path".to_sym, instance),
         status: :moved_permanently
       )
+    else
+      render file: 'public/404.html', status: :not_found, layout: false
     end
   end
 
