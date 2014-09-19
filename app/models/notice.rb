@@ -108,6 +108,8 @@ class Notice < ActiveRecord::Base
     delegate :name, to: entity, prefix: true, allow_nil: true
   end
 
+  after_create :set_published!, if: :submitter
+
   define_elasticsearch_mapping
 
   def self.label
@@ -143,14 +145,14 @@ class Notice < ActiveRecord::Base
   end
 
   def self.add_default_filter(search)
-    { rescinded: false, spam: false, hidden: false }.each do |field, value|
+    { rescinded: false, spam: false, hidden: false, published: true }.each do |field, value|
       filter = TermFilter.new(field)
       filter.apply_to_search(search, field, value)
     end
   end
 
   def self.find_visible(notice_id)
-    where(spam: false, hidden: false).find(notice_id)
+    where(spam: false, hidden: false, published: true).find(notice_id)
   end
 
   def active_model_serializer
@@ -253,6 +255,23 @@ class Notice < ActiveRecord::Base
     if sender_name.present?
       principal_name.present? && principal_name != sender_name
     end
+  end
+
+  def publication_delay
+    submitter && submitter.publication_delay ? submitter.publication_delay : 0
+  end
+
+  def time_to_publish
+    created_at + publication_delay.seconds
+  end
+
+  def should_be_published?
+     time_to_publish <= Time.now
+  end
+
+  def set_published!
+    self.published = should_be_published?
+    save
   end
   
   def notice_topic_map

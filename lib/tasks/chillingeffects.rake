@@ -112,6 +112,13 @@ namespace :chillingeffects do
     end
   end
 
+  desc "Publish notices whose publication delay has expired"
+  task publish_embargoed: :environment do
+    Notice.where(published: false).each do |notice|
+      notice.set_published!
+    end
+  end
+
   def with_file_name
     if file_name = ENV['FILE_NAME']
       yield file_name

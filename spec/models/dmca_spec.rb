@@ -404,5 +404,102 @@ describe Dmca do
       expect(notice).not_to be_on_behalf_of_principal
     end
   end
+  
+  context "#publication_delay" do
+    it "returns 0 if submitter doesn't respond" do
+      notice = create(:dmca)
+
+      expect(notice.publication_delay).to eq(0)
+    end
+    
+    it "returns the submitter's value" do
+      notice = create(:dmca)
+      user = create(:user, :submitter, :with_entity, publication_delay: 60)
+      role = notice.entity_notice_roles.build(name: 'submitter')
+      role.entity = user.entity
+      role.save
+
+      expect(notice.publication_delay).to eq(60)
+    end
+  end
+
+  context "#should_be_published?" do
+    it "returns true if the submitter's publication delay has passed since creation" do
+      notice = create(:dmca, created_at: Time.now - 70.seconds)
+      user = create(:user, :submitter, :with_entity, publication_delay: 60)
+      role = notice.entity_notice_roles.build(name: 'submitter')
+      role.entity = user.entity
+      role.save
+
+      expect(notice.should_be_published?).to be true
+    end
+
+    it "returns false if the submitter's publication delay has not passed" do
+      notice = create(:dmca, created_at: Time.now - 50.seconds)
+      user = create(:user, :submitter, :with_entity, publication_delay: 60)
+      role = notice.entity_notice_roles.build(name: 'submitter')
+      role.entity = user.entity
+      role.save
+
+      expect(notice.should_be_published?).to be false
+    end
+
+    it "returns true if the submitter's publication delay is 0 seconds" do
+      notice = create(:dmca)
+      user = create(:user, :submitter, :with_entity)
+      role = notice.entity_notice_roles.build(name: 'submitter')
+      role.entity = user.entity
+      role.save
+
+      expect(notice.should_be_published?).to be true
+    end
+  end
+
+  context "#time_to_publish" do
+    it "returns the time of notice creation plus the submitter's publication delay" do
+      notice = create(:dmca, created_at: Time.now - 50.seconds)
+      user = create(:user, :submitter, :with_entity, publication_delay: 60)
+      role = notice.entity_notice_roles.build(name: 'submitter')
+      role.entity = user.entity
+      role.save
+
+      expected_time = notice.created_at + user.publication_delay.seconds
+      expect(notice.time_to_publish).to eq expected_time
+
+      notice = create(:dmca)
+      user = create(:user, :submitter, :with_entity)
+      role = notice.entity_notice_roles.build(name: 'submitter')
+      role.entity = user.entity
+      role.save
+
+      expect(notice.time_to_publish).to eq notice.created_at
+    end
+  end
+
+  context "published status" do
+    it "sets the notice to published on creation if it should be published" do
+      notice = build(:dmca)
+      user = create(:user, :submitter, :with_entity)
+      role = notice.entity_notice_roles.build(name: 'submitter')
+      role.entity = user.entity
+      role.save
+      notice.save
+
+      expect(notice.submitter).to be_an(Entity)
+      expect(notice.published).to be true
+    end
+
+    it "sets the notice to unpublished on creation if it should not be published" do
+      notice = build(:dmca)
+      user = create(:user, :submitter, :with_entity, publication_delay: 60)
+      role = notice.entity_notice_roles.build(name: 'submitter')
+      role.entity = user.entity
+      role.save
+      notice.save
+
+      expect(notice.submitter).to be_an(Entity)
+      expect(notice.published).to be false
+    end
+  end
 
 end

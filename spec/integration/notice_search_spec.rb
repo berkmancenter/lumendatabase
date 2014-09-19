@@ -78,6 +78,19 @@ feature "Searching Notices" do
     expect_search_to_not_find("arbitrary", notice)
   end
 
+  scenario "it does not include unpublished notices", search: true do
+    notice = create(:dmca, title: "fancy pants", published: false)
+    found_notice = create(:dmca, title: "fancy pants 2")
+    index_changed_models
+
+    within_search_results_for("fancy") do
+      expect(page).to have_n_results(1)
+      expect(page).to have_content(found_notice.title)
+    end
+
+    expect_search_to_not_find("fancy pants", notice)
+  end
+
   context "within associated models" do
     scenario "for topic names", search: true do
       topic = create(:topic, name: "Lion King")
