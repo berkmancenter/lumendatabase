@@ -266,7 +266,7 @@ class Notice < ActiveRecord::Base
   end
 
   def should_be_published?
-     time_to_publish <= Time.now
+    time_to_publish <= Time.now
   end
 
   def set_published!
