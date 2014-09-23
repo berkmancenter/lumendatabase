@@ -38,13 +38,13 @@ namespace :chillingeffects do
     base_directory = ENV['BASE_DIRECTORY']
 
     record_source = Ingestor::Legacy::RecordSource::Mysql.new(
-      "tNotice.NoticeID > #{latest_original_notice_id}", 
+      "tNotice.NoticeID > #{latest_original_notice_id}",
       name, base_directory
     )
     ingestor = Ingestor::Legacy.new(record_source)
     ingestor.import
   end
-  
+
   desc "Import notice error legacy chillingeffects data from Mysql"
   task import_error_notices_via_mysql: :environment do
     # Configure the record_source
@@ -53,7 +53,7 @@ namespace :chillingeffects do
     base_directory = ENV['BASE_DIRECTORY']
 
     record_source = Ingestor::Legacy::RecordSource::Mysql.new(
-      "tNotice.NoticeID IN (#{error_original_notice_ids})", 
+      "tNotice.NoticeID IN (#{error_original_notice_ids})",
       name, base_directory
     )
     ingestor = Ingestor::Legacy.new(record_source)
@@ -91,7 +91,7 @@ namespace :chillingeffects do
 
   desc "Recreate elasticsearch index memory efficiently"
   task recreate_elasticsearch_index: :environment do
-	begin
+  begin
       batch_size = (ENV['BATCH_SIZE'] || 100).to_i
       [Notice, Entity].each do |klass|
         klass.index.delete
@@ -107,8 +107,8 @@ namespace :chillingeffects do
           puts "#{count} #{klass} instances indexed at #{Time.now.to_i}"
         end
       end
-	rescue => e
-	  $stderr.puts "Reindexing did not succeed because: #{e.inspect}"
+  rescue => e
+    $stderr.puts "Reindexing did not succeed because: #{e.inspect}"
     end
   end
 
@@ -125,7 +125,7 @@ namespace :chillingeffects do
     end
 
 
-	begin
+  begin
     untitled_notices = Notice.where(title: 'Untitled')
     p = ProgressBar.create(
       title: "Renaming",
@@ -139,8 +139,8 @@ namespace :chillingeffects do
       notice.update_attribute(:title, new_title)
       p.increment
     end
-	rescue => e
-	  $stderr.puts "Titling did not succeed because: #{e.inspect}"
+  rescue => e
+    $stderr.puts "Titling did not succeed because: #{e.inspect}"
     end
   end
 
