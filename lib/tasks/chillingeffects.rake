@@ -112,6 +112,38 @@ namespace :chillingeffects do
     end
   end
 
+  desc "Assign titles to untitled notices"
+  task title_untitled_notices: :environment do
+
+    # Similar to SubmitNotice model
+    def generic_title(notice)
+      if notice.recipient_name.present?
+        "#{notice.class.label} notice to #{notice.recipient_name}"
+      else
+        "#{notice.class.label} notice"
+      end
+    end
+
+
+	begin
+    untitled_notices = Notice.where(title: 'Untitled')
+    p = ProgressBar.create(
+      title: "Renaming",
+      total: untitled_notices.count,
+      format: "%t: %B %P%% %E %c/%C %R/s"
+    )
+
+    untitled_notices.each do |notice|
+      new_title = generic_title(notice)
+      #puts %Q|Changing title of Notice #{notice.id} to "#{new_title}"|
+      notice.update_attribute(:title, new_title)
+      p.increment
+    end
+	rescue => e
+	  $stderr.puts "Titling did not succeed because: #{e.inspect}"
+    end
+  end
+
   def with_file_name
     if file_name = ENV['FILE_NAME']
       yield file_name
