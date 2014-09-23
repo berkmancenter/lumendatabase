@@ -1,7 +1,7 @@
 class AddPublishedToNotice < ActiveRecord::Migration
   def up
     add_column :notices, :published, :boolean, default: true, null: false
-    Notice.all.each{ |n| n.published = true; n.save! }
+    Notice.update_all(published: true)
   end
 
   def down
