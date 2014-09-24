@@ -56,7 +56,7 @@ module Ingestor
       updated_at = attributes.delete(:updated_at)
 
       dmca = mapper.notice_type.create!(attributes)
-      dmca.update_attributes(updated_at: updated_at)
+      #dmca.update_attributes(updated_at: updated_at)
 
       logger.debug { "Imported: #{attributes[:original_notice_id]} -> #{dmca.id}" }
       
