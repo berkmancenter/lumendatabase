@@ -53,6 +53,7 @@ RailsAdmin.config do |config|
         field :source
         field :review_required
         field :published
+        field :time_to_publish
         field :body
         field :entities
         field :topics
