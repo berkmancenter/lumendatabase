@@ -53,10 +53,7 @@ module Ingestor
       mapper = AttributeMapper.new(csv_row.to_hash)
 
       attributes = mapper.mapped
-      updated_at = attributes.delete(:updated_at)
-
       dmca = mapper.notice_type.create!(attributes)
-      dmca.update_attributes(updated_at: updated_at)
 
       logger.debug { "Imported: #{attributes[:original_notice_id]} -> #{dmca.id}" }
       
