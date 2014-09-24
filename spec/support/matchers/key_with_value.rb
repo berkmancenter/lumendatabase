@@ -1,6 +1,6 @@
 RSpec::Matchers.define :have_key do |key|
   match do |json|
-    @actual_value = json[key]
+    @actual_value = json[key].is_a?(Array) ? json[key].sort : json[key]
 
     return_value = json.key?(key)
     return_value &&= @actual_value == @expected_value if @check_value
@@ -10,7 +10,8 @@ RSpec::Matchers.define :have_key do |key|
 
   chain :with_value do |value|
     @check_value = true
-    @expected_value = value
+    # Sort will bork hashes, so no respond_to?
+    @expected_value = value.is_a?(Array) ? value.sort : value
   end
 
   failure_message_for_should do |actual|

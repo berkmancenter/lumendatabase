@@ -19,16 +19,7 @@ FactoryGirl.define do
   end
 
   factory :notice_topic, class: 'Topic' do
-    names = [
-      "Court Orders",
-      "Defamation",
-      "Copyright",
-      "Law Enforcement Requests",
-      "Trademark",
-      "Uncategorized",
-      "Right of Publicity",
-      "EU - Right to Be Forgotten"
-    ]
+    names = Notice::TYPES_TO_TOPICS.values
     sequence(:name) { |n| names[n % names.size - 1] }
   end
 

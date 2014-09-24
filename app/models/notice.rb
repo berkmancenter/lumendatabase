@@ -67,6 +67,19 @@ class Notice < ActiveRecord::Base
     Other
   )
 
+  OTHER_TOPIC = "Uncategorized"
+
+  TYPES_TO_TOPICS = {
+    'Dmca'                  => "Copyright",
+    'Trademark'             => "Trademark",
+    'Defamation'            => "Defamation",
+    'CourtOrder'            => "Court Orders",
+    'LawEnforcementRequest' => "Law Enforcement Requests",
+    'PrivateInformation'    => "Right of Publicity",
+    'DataProtection'        => "EU - Right to Be Forgotten",
+    'Other'                 => OTHER_TOPIC,
+  }
+
   belongs_to :reviewer, class_name: 'User'
 
   has_many :topic_assignments, dependent: :destroy, include: [ :topic ]
@@ -275,26 +288,7 @@ class Notice < ActiveRecord::Base
   end
   
   def notice_topic_map
-    case self.type
-    when "CourtOrder"
-      topic = "Court Orders"
-    when "Defamation"
-      topic = "Defamation"
-    when "Dmca"
-      topic = "Copyright"
-    when "LawEnforcementRequest"
-      topic = "Law Enforcement Requests"
-    when "Trademark"
-      topic = "Trademark"
-    when "Other"
-      topic = "Uncategorized"
-    when "PrivateInformation"
-      topic = "Right of Publicity"
-    when "DataProtection"
-      topic = "EU - Right to Be Forgotten"
-    else
-      topic = "Uncategorized"
-    end
+    topic = TYPES_TO_TOPICS.key?(self.type) ? TYPES_TO_TOPICS[self.type] : OTHER_TOPIC
     return Topic.find_or_create_by_name(topic) 
   end
   

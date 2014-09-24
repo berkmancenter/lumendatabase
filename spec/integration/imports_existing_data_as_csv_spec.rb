@@ -165,7 +165,7 @@ https://www.youtube.com/watch?v=PlsCEe|
         ]
       )
       expect(notice).to have(1).original_document
-      expect(notice.topics.first.name).to eq 'Foobar'
+      expect(notice.topics.pluck(:name)).to include('Foobar')
       expect(upload_contents(notice.original_documents.first)).to eq File.read(
         'spec/support/example_files/original_notice_source.txt'
       )
@@ -198,7 +198,7 @@ http://www.example.com/unstoppable_2.html
 http://www.example.com/unstoppable_3.html|
       )
       expect(notice).to have(1).original_document
-      expect(notice.topics.first.name).to eq 'Foobar'
+      expect(notice.topics.pluck(:name)).to include('Foobar')
       expect(upload_contents(notice.original_documents.first)).to eq File.read(
         'spec/support/example_files/secondary_dmca_notice_source.html'
       )
@@ -222,7 +222,7 @@ http://www.example.com/unstoppable_3.html|
         http://www.example.com/infringing|
       )
       expect(notice).to have(1).original_document
-      expect(notice.topics.first.name).to eq 'Foobar'
+      expect(notice.topics.pluck(:name)).to include('Foobar')
       expect(upload_contents(notice.original_documents.first)).to eq File.read(
         'spec/support/example_files/secondary_other_notice_source.html'
       )
@@ -246,7 +246,7 @@ http://www.example.com/unstoppable_3.html|
         'https://twitter.com/NoMatter/status/4567',
       ])
       expect(notice).to have(1).original_document
-      expect(notice.topics.first.name).to eq 'Foobar'
+      expect(notice.topics.pluck(:name)).to include('Foobar')
       expect(upload_contents(notice.original_documents.first)).to eq File.read(
         'spec/support/example_files/original_twitter_notice_source.txt'
       )

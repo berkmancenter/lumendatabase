@@ -79,16 +79,16 @@ feature "Searching Notices" do
   end
 
   scenario "it does not include unpublished notices", search: true do
-    notice = create(:dmca, title: "fancy pants", published: false)
-    found_notice = create(:dmca, title: "fancy pants 2")
+    notice = create(:dmca, title: "fanciest pants", published: false)
+    found_notice = create(:dmca, title: "fancy pants")
     index_changed_models
 
-    within_search_results_for("fancy") do
+    within_search_results_for("pants") do
       expect(page).to have_n_results(1)
       expect(page).to have_content(found_notice.title)
     end
 
-    expect_search_to_not_find("fancy pants", notice)
+    expect_search_to_not_find("fanciest pants", notice)
   end
 
   context "within associated models" do
