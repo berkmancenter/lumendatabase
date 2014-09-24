@@ -52,6 +52,7 @@ RailsAdmin.config do |config|
         field(:original_notice_id) { label 'Legacy NoticeID' }
         field :source
         field :review_required
+        field :published
         field :body
         field :entities
         field :topics
