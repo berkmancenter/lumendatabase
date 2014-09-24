@@ -20,11 +20,7 @@ class SearchesModels
   def search
     Tire.search(@model_class.index_name).tap do |search|
       register_filters(search)
-
-      if parameters_present?
-        # avoid sending an empty query to elasticsearch
-        apply_filters(search)
-      end
+      apply_filters(search)
 
       search.highlight(*@model_class::HIGHLIGHTS)
       search.size @per_page
