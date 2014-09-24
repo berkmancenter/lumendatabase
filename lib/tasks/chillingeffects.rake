@@ -112,6 +112,31 @@ namespace :chillingeffects do
     end
   end
 
+  desc "Index non-indexed models"
+  task index_non_indexed: :environment do
+  begin
+    require 'tire/http/clients/curb'
+    Tire.configure { client Tire::HTTP::Client::Curb }
+    p = ProgressBar.create(
+      title: "Objects",
+      total: (Notice.count + Entity.count),
+      format: "%t: %B %P%% %E %c/%C %R/s"
+    )
+    [Notice, Entity].each do |klass|
+      ids = klass.pluck(:id)
+      ids.each do |id|
+        unless ReindexRun.is_indexed?(klass, id)
+          puts "Indexing #{klass}, #{id}"
+          klass.find(id).update_index
+        end
+        p.increment
+      end
+    end
+  rescue => e
+    $stderr.puts "Reindexing did not succeed because: #{e.inspect}"
+    end
+  end
+
   def with_file_name
     if file_name = ENV['FILE_NAME']
       yield file_name

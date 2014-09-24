@@ -22,6 +22,10 @@ class ReindexRun < ActiveRecord::Base
     end
   end
 
+  def self.is_indexed?(klass, id)
+    Tire::Search::Count.new(klass.index_name, q: "id:#{id}").value == 1
+  end
+
   private
 
   def self.index_model_for(model, last_run_time)
