@@ -12,7 +12,7 @@ Chilling Effects staff for your authentication token.
 
 **Method**: `POST`
 
-**Endpoint**: `http://chillingeffects.org/notices`
+**Endpoint**: `https://chillingeffects.org/notices`
 
 ### Request
 
@@ -175,7 +175,7 @@ The Token may be included as a parameter or header.
 curl -H "Accept: application/json" \
      -H "Content-type: application/json" \
      -d '{ "authentication_token": "abc123", "notice": {...} }' \
-     'http://chillingeffects.org/notices'
+     'https://chillingeffects.org/notices'
 ```
 
 * Request Header: `AUTHENTICATION_TOKEN`
@@ -185,7 +185,7 @@ curl -H "Accept: application/json" \
      -H "Content-type: application/json" \
      -H "AUTHENTICATION_TOKEN: abc123" \
      -d '{ "notice": {...} }' \
-     'http://chillingeffects.org/notices'
+     'https://chillingeffects.org/notices'
 ```
 
 If the Authentication Token is missing or invalid, an empty response 
@@ -199,7 +199,7 @@ by typing `man curl`.
 
 
 ```
-curl -v -H "Accept: application/json" -H "Content-type: application/json" 'http://chillingeffects.org/notices/' -d '{
+curl -v -H "Accept: application/json" -H "Content-type: application/json" 'https://chillingeffects.org/notices/' -d '{
   "authentication_token": "abc123",
   "notice": {
     "title": "DMCA (Copyright) Complaint to Google",
@@ -280,7 +280,7 @@ Successful responses will have HTTP status 201 (Created) and include a
 **Note:** Unimportant headers have been removed.
 
 ```
-> curl -H "Accept: application/json" -H "Content-type: application/json" 'http://chillingeffects.org/notices' -d @tmp/curl.json --dump-header - 
+> curl -H "Accept: application/json" -H "Content-type: application/json" 'https://chillingeffects.org/notices' -d @tmp/curl.json --dump-header - 
 HTTP/1.1 201 Created 
 Location: http://localhost:3000/notices/4
 Content-Type: application/json; charset=utf-8
@@ -386,13 +386,13 @@ Attributes remain unchanged from ingestion.
 
 **Method**: `GET`
 
-**Endpoint**: `http://chillingeffects.org/notices/<notice id>.json`
+**Endpoint**: `https://chillingeffects.org/notices/<notice id>.json`
 
 
 #### Example Request:
 
 ```
-curl http://chillingeffects.org/notices/1.json
+curl https://chillingeffects.org/notices/1.json
 ```
 
 ### Successful Responses
@@ -453,10 +453,10 @@ Return a 404 HTTP status header.
 
 **Method**: GET
 
-**Endpoint**: `http://chillingeffects.org/topics.json`
+**Endpoint**: `https://chillingeffects.org/topics.json`
 
 ```
-curl http://chillingeffects.org/topics.json
+curl https://chillingeffects.org/topics.json
 ```
 
 ### Successful Responses
@@ -509,7 +509,7 @@ Terms are joined with an 'AND' by default.
 
 **Method**: `GET`
 
-**Endpoint**: `http://chillingeffects.org/notices/search?term=url_escaped_query&sender_name=Joe%20Smith&page=1`
+**Endpoint**: `https://chillingeffects.org/notices/search?term=url_escaped_query&sender_name=Joe%20Smith&page=1`
 
 **Parameters**
 
@@ -646,7 +646,7 @@ documentation for more information. We only return the 10 most populous facets.
 **Note:** Some facet information has been omitted to keep examples brief.
 
 ```
-curl -H "Accept: application/json" -H "Content-type: application/json" 'http://chillingeffects.org/notices/search?term=star'
+curl -H "Accept: application/json" -H "Content-type: application/json" 'https://chillingeffects.org/notices/search?term=star'
 ```
 
 
@@ -770,7 +770,7 @@ pagination metadata, please see 'Search notices via fulltext'
 
 **Method**: `GET`
 
-**Endpoint**: `http://chillingeffects.org/entities/search?term=url_escaped_query&page=1`
+**Endpoint**: `https://chillingeffects.org/entities/search?term=url_escaped_query&page=1`
 
 **Parameters**
 
@@ -814,7 +814,7 @@ Return a JSON-encoded representation of selected entity attributes.
 #### Example Successful Response:
 
 ```
-curl -H "Accept: application/json" -H "Content-type: application/json" 'http://chillingeffects.org/entities/search?term=joe&page=1'
+curl -H "Accept: application/json" -H "Content-type: application/json" 'https://chillingeffects.org/entities/search?term=joe&page=1'
 ```
 
 
