@@ -54,6 +54,8 @@ class SearchesModels
     end
 
     search.query do |query|
+      # Don't pass empty queries to elasticsearch
+      query.boolean{ must { string 'id:*' }} unless parameters_present?
       @params.each do |param, value|
         if value.present?
           registry.each do |filter|

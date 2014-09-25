@@ -18,7 +18,7 @@ class ReindexRun < ActiveRecord::Base
         updated_at: Time.now
       )
     rescue => e
-      $stderr.puts "Indexing did not succeed because: #{e.inspect}"
+      Rails.logger.error "Indexing did not succeed because: #{e.inspect}"
     end
   end
 

@@ -150,7 +150,11 @@ class Notice < ActiveRecord::Base
   end
 
   def self.find_visible(notice_id)
-    where(spam: false, hidden: false).find(notice_id)
+    self.visible.find(notice_id)
+  end
+
+  def self.visible
+    where(spam: false, hidden: false)
   end
 
   def active_model_serializer
