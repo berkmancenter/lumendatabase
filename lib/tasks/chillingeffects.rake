@@ -107,6 +107,7 @@ namespace :chillingeffects do
           puts "#{count} #{klass} instances indexed at #{Time.now.to_i}"
         end
       end
+      ReindexRun.sweep_search_result_caches
   rescue => e
     $stderr.puts "Reindexing did not succeed because: #{e.inspect}"
     end

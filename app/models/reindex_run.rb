@@ -17,11 +17,17 @@ class ReindexRun < ActiveRecord::Base
         notice_count: notice_count, entity_count: entity_count,
         updated_at: Time.now
       )
+
+      sweep_search_result_caches
     rescue => e
       $stderr.puts "Indexing did not succeed because: #{e.inspect}"
     end
   end
 
+  def self.sweep_search_result_caches
+    ApplicationController.new.expire_fragment(/search-result-[a-f0-9]{32}/)
+  end
+  
   def self.is_indexed?(klass, id)
     Tire::Search::Count.new(klass.index_name, q: "id:#{id}").value == 1
   end
