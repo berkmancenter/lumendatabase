@@ -9,7 +9,7 @@ class RedirectingController < ApplicationController
         status: :moved_permanently
       )
     else
-      render file: 'public/404.html', status: :not_found, layout: false
+      raise ActiveRecord::RecordNotFound
     end
   end
 
