@@ -110,6 +110,7 @@ namespace :chillingeffects do
       ReindexRun.sweep_search_result_caches
   rescue => e
     $stderr.puts "Reindexing did not succeed because: #{e.inspect}"
+    end
   end
 
   desc "Assign titles to untitled notices"
@@ -141,6 +142,7 @@ namespace :chillingeffects do
     end
   rescue => e
     $stderr.puts "Titling did not succeed because: #{e.inspect}"
+    end
   end
 
   desc "Index non-indexed models"
@@ -165,6 +167,7 @@ namespace :chillingeffects do
     end
   rescue => e
     $stderr.puts "Reindexing did not succeed because: #{e.inspect}"
+    end
   end
 
   def with_file_name
