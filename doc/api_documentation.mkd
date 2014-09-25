@@ -8,11 +8,11 @@ Please see **Notice Type Mapping** below, which defines what attributes are
 remapped for each Notice Type.
 
 An `authentication_token` is required to submit via the API. Please ask
-ChillingEffects staff for your authentication token.
+Chilling Effects staff for your authentication token.
 
 **Method**: `POST`
 
-**Endpoint**: `http://chillingeffectsplaceholder/notices`
+**Endpoint**: `https://chillingeffects.org/notices`
 
 ### Request
 
@@ -27,7 +27,7 @@ ChillingEffects staff for your authentication token.
 | ---                                | ---                | ---
 | `title`                            | string             | Required
 | `type`                             | string             | Required: one of 'CourtOrder', 'DataProtection', 'Defamation', 'Dmca', 'LawEnforcementRequest', 'Other', 'PrivateInformation', or 'Trademark'
-| `subject`                          | string             |
+| `subject`                          | string             | Optional. A short description of the notice and its contents. E.g. "DMCA Notice Regarding Photographs" or "Court Order From Paris Court Re: Hate Speech"
 | `date_sent`                        | string             | Any parseable time value, e.g. "2013-05-21", "2013-05-21 10:01:01 -04:00"
 | `language`                         | string             | A two character language code. See "Language" below for the list.
 | `date_received`                    | string             | Any parseable time value, e.g. "2013-05-21", "2013-05-21 10:01:01 -04:00"
@@ -36,7 +36,7 @@ ChillingEffects staff for your authentication token.
 | `tag_list`                         | string             | Comma separated tags, spaces are OK. Automatically lowercased.
 | `regulation_list`                  | string             | Comma separated regulations / laws relevant to this notice, spaces are OK. Automatically lowercased. Only available for CourtOrder, and LawEnforcementRequest notice types.
 | `jurisidiction_list`               | string             | Comma separated list of jurisdictions, spaces are OK.
-| `action_taken`                     | string             | One of 'Yes', 'No', or 'Partial'. Defaults to 'No' if unspecified.
+| `action_taken`                     | string             | One of 'Yes', 'No', or 'Partial'.
 | `request_type`                     | string             | One of 'Agency', 'Civil Subpoena', 'Email', 'Records Preservation', 'Subpoena', 'Warrant'. Valid only for LawEnforcementRequest notices.
 | `mark_registration_number`         | string             | A mark registration number. Valid only for Trademark notices.
 | `works_attributes`                 | [Work]             | A list of Works
@@ -175,7 +175,7 @@ The Token may be included as a parameter or header.
 curl -H "Accept: application/json" \
      -H "Content-type: application/json" \
      -d '{ "authentication_token": "abc123", "notice": {...} }' \
-     'http://chillingeffectsplaceholder/notices'
+     'https://chillingeffects.org/notices'
 ```
 
 * Request Header: `AUTHENTICATION_TOKEN`
@@ -185,7 +185,7 @@ curl -H "Accept: application/json" \
      -H "Content-type: application/json" \
      -H "AUTHENTICATION_TOKEN: abc123" \
      -d '{ "notice": {...} }' \
-     'http://chillingeffectsplaceholder/notices'
+     'https://chillingeffects.org/notices'
 ```
 
 If the Authentication Token is missing or invalid, an empty response 
@@ -199,7 +199,7 @@ by typing `man curl`.
 
 
 ```
-curl -v -H "Accept: application/json" -H "Content-type: application/json" 'http://chillingeffectsplaceholder/notices/' -d '{
+curl -v -H "Accept: application/json" -H "Content-type: application/json" 'https://chillingeffects.org/notices/' -d '{
   "authentication_token": "abc123",
   "notice": {
     "title": "DMCA (Copyright) Complaint to Google",
@@ -280,7 +280,7 @@ Successful responses will have HTTP status 201 (Created) and include a
 **Note:** Unimportant headers have been removed.
 
 ```
-> curl -H "Accept: application/json" -H "Content-type: application/json" 'http://chillingeffectsplaceholder/notices' -d @tmp/curl.json --dump-header - 
+> curl -H "Accept: application/json" -H "Content-type: application/json" 'https://chillingeffects.org/notices' -d @tmp/curl.json --dump-header - 
 HTTP/1.1 201 Created 
 Location: http://localhost:3000/notices/4
 Content-Type: application/json; charset=utf-8
@@ -305,8 +305,6 @@ include a JSON response enumerating the validation failures.
 ```
 
 ## Notice Type Mapping
-
-**THIS SECTION IS A WORK IN PROGRESS**
 
 All notices are added to the system through the API using the same named
 parameters (see **Create Notice** above). However, fields are "mapped"
@@ -343,7 +341,7 @@ or when requested individually.
 | `works.infringing_urls`    | `works.defamatory_urls`        |
 | `works.copyrighted_urls`   |                                | Yes
 
-#### Dmca
+#### DMCA
 
 Attributes remain unchanged from ingestion.
 
@@ -388,13 +386,13 @@ Attributes remain unchanged from ingestion.
 
 **Method**: `GET`
 
-**Endpoint**: `http://chillingeffectsplaceholder/notices/<notice id>.json`
+**Endpoint**: `https://chillingeffects.org/notices/<notice id>.json`
 
 
 #### Example Request:
 
 ```
-curl http://chillingeffectsplaceholder/notices/1.json
+curl https://chillingeffects.org/notices/1.json
 ```
 
 ### Successful Responses
@@ -455,10 +453,10 @@ Return a 404 HTTP status header.
 
 **Method**: GET
 
-**Endpoint**: `http://chillingeffectsplaceholder/topics.json`
+**Endpoint**: `https://chillingeffects.org/topics.json`
 
 ```
-curl http://chillingeffectsplaceholder/topics.json
+curl https://chillingeffects.org/topics.json
 ```
 
 ### Successful Responses
@@ -507,7 +505,7 @@ Terms are joined with an 'OR' by default.
 
 **Method**: `GET`
 
-**Endpoint**: `http://chillingeffectsplaceholder/notices/search?term=url_escaped_query&sender_name=Joe%20Smith&page=1`
+**Endpoint**: `https://chillingeffects.org/notices/search?term=url_escaped_query&sender_name=Joe%20Smith&page=1`
 
 **Parameters**
 
@@ -644,7 +642,7 @@ documentation for more information. We only return the 10 most populous facets.
 **Note:** Some facet information has been omitted to keep examples brief.
 
 ```
-curl -H "Accept: application/json" -H "Content-type: application/json" 'http://chillingeffectsplaceholder/notices/search?term=star'
+curl -H "Accept: application/json" -H "Content-type: application/json" 'https://chillingeffects.org/notices/search?term=star'
 ```
 
 
@@ -768,7 +766,7 @@ pagination metadata, please see 'Search notices via fulltext'
 
 **Method**: `GET`
 
-**Endpoint**: `http://chillingeffectsplaceholder/entities/search?term=url_escaped_query&page=1`
+**Endpoint**: `https://chillingeffects.org/entities/search?term=url_escaped_query&page=1`
 
 **Parameters**
 
@@ -812,7 +810,7 @@ Return a JSON-encoded representation of selected entity attributes.
 #### Example Successful Response:
 
 ```
-curl -H "Accept: application/json" -H "Content-type: application/json" 'http://chillingeffectsplaceholder/entities/search?term=joe&page=1'
+curl -H "Accept: application/json" -H "Content-type: application/json" 'https://chillingeffects.org/entities/search?term=joe&page=1'
 ```
 
 
