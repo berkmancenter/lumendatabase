@@ -18,6 +18,11 @@ FactoryGirl.define do
     end
   end
 
+  factory :notice_topic, class: 'Topic' do
+    names = Notice::TYPES_TO_TOPICS.values
+    sequence(:name) { |n| names[n % names.size - 1] }
+  end
+
   factory :topic_manager do
     name "A name"
   end
@@ -56,7 +61,7 @@ FactoryGirl.define do
 
     trait :with_topics do
       before(:create) do |notice|
-        notice.topics = build_list(:topic, 3)
+        notice.topics << build_list(:topic, 3)
       end
     end
 

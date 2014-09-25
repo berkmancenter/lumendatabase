@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140522152728) do
+ActiveRecord::Schema.define(:version => 20140916173421) do
 
   create_table "blog_entries", :force => true do |t|
     t.integer  "user_id"
@@ -152,6 +152,7 @@ ActiveRecord::Schema.define(:version => 20140522152728) do
     t.string   "request_type"
     t.integer  "submission_id"
     t.string   "mark_registration_number"
+    t.boolean  "published",                :default => true,  :null => false
   end
 
   add_index "notices", ["original_notice_id"], :name => "index_notices_on_original_notice_id"
@@ -286,6 +287,7 @@ ActiveRecord::Schema.define(:version => 20140522152728) do
     t.string   "authentication_token"
     t.datetime "created_at",                             :null => false
     t.datetime "updated_at",                             :null => false
+    t.integer  "publication_delay",      :default => 0,  :null => false
   end
 
   add_index "users", ["authentication_token"], :name => "index_users_on_authentication_token", :unique => true
