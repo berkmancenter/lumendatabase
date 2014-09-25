@@ -27,6 +27,10 @@ class ReindexRun < ActiveRecord::Base
   def self.sweep_search_result_caches
     ApplicationController.new.expire_fragment(/search-result-[a-f0-9]{32}/)
   end
+  
+  def self.is_indexed?(klass, id)
+    Tire::Search::Count.new(klass.index_name, q: "id:#{id}").value == 1
+  end
 
   private
 

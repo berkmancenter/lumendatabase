@@ -38,13 +38,13 @@ namespace :chillingeffects do
     base_directory = ENV['BASE_DIRECTORY']
 
     record_source = Ingestor::Legacy::RecordSource::Mysql.new(
-      "tNotice.NoticeID > #{latest_original_notice_id}", 
+      "tNotice.NoticeID > #{latest_original_notice_id}",
       name, base_directory
     )
     ingestor = Ingestor::Legacy.new(record_source)
     ingestor.import
   end
-  
+
   desc "Import notice error legacy chillingeffects data from Mysql"
   task import_error_notices_via_mysql: :environment do
     # Configure the record_source
@@ -53,7 +53,7 @@ namespace :chillingeffects do
     base_directory = ENV['BASE_DIRECTORY']
 
     record_source = Ingestor::Legacy::RecordSource::Mysql.new(
-      "tNotice.NoticeID IN (#{error_original_notice_ids})", 
+      "tNotice.NoticeID IN (#{error_original_notice_ids})",
       name, base_directory
     )
     ingestor = Ingestor::Legacy.new(record_source)
@@ -91,7 +91,7 @@ namespace :chillingeffects do
 
   desc "Recreate elasticsearch index memory efficiently"
   task recreate_elasticsearch_index: :environment do
-	begin
+  begin
       batch_size = (ENV['BATCH_SIZE'] || 100).to_i
       [Notice, Entity].each do |klass|
         klass.index.delete
@@ -108,9 +108,63 @@ namespace :chillingeffects do
         end
       end
       ReindexRun.sweep_search_result_caches
-	rescue => e
-	  $stderr.puts "Reindexing did not succeed because: #{e.inspect}"
+  rescue => e
+    $stderr.puts "Reindexing did not succeed because: #{e.inspect}"
+  end
+
+  desc "Assign titles to untitled notices"
+  task title_untitled_notices: :environment do
+
+    # Similar to SubmitNotice model
+    def generic_title(notice)
+      if notice.recipient_name.present?
+        "#{notice.class.label} notice to #{notice.recipient_name}"
+      else
+        "#{notice.class.label} notice"
+      end
     end
+
+
+  begin
+    untitled_notices = Notice.where(title: 'Untitled')
+    p = ProgressBar.create(
+      title: "Renaming",
+      total: untitled_notices.count,
+      format: "%t: %B %P%% %E %c/%C %R/s"
+    )
+
+    untitled_notices.each do |notice|
+      new_title = generic_title(notice)
+      #puts %Q|Changing title of Notice #{notice.id} to "#{new_title}"|
+      notice.update_attribute(:title, new_title)
+      p.increment
+    end
+  rescue => e
+    $stderr.puts "Titling did not succeed because: #{e.inspect}"
+  end
+
+  desc "Index non-indexed models"
+  task index_non_indexed: :environment do
+  begin
+    require 'tire/http/clients/curb'
+    Tire.configure { client Tire::HTTP::Client::Curb }
+    p = ProgressBar.create(
+      title: "Objects",
+      total: (Notice.count + Entity.count),
+      format: "%t: %B %P%% %E %c/%C %R/s"
+    )
+    [Notice, Entity].each do |klass|
+      ids = klass.pluck(:id)
+      ids.each do |id|
+        unless ReindexRun.is_indexed?(klass, id)
+          puts "Indexing #{klass}, #{id}"
+          klass.find(id).update_index
+        end
+        p.increment
+      end
+    end
+  rescue => e
+    $stderr.puts "Reindexing did not succeed because: #{e.inspect}"
   end
 
   def with_file_name
