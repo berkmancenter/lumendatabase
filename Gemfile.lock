@@ -249,6 +249,7 @@ GEM
       rspec-expectations (~> 2.13.0)
       rspec-mocks (~> 2.13.0)
     ruby-prof (0.13.0)
+    ruby-progressbar (1.5.1)
     safe_yaml (0.9.3)
     sass (3.2.9)
     sass-rails (3.2.6)
@@ -354,6 +355,7 @@ DEPENDENCIES
   redcarpet (~> 2.3.0)
   rspec-rails
   ruby-prof
+  ruby-progressbar
   sass-rails
   select2-rails
   sham_rack
