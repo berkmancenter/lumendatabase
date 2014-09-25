@@ -14,6 +14,8 @@ class Entity < ActiveRecord::Base
   has_many :entity_notice_roles, dependent: :destroy
   has_many :notices, through: :entity_notice_roles
 
+  delegate :publication_delay, to: :user, allow_nil: true
+
   mapping do
     columns.map(&:name).reject{|name| name == 'id'}.each do|column_name|
       indexes column_name

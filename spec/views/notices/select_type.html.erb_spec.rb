@@ -12,7 +12,8 @@ describe 'notices/select_type.html.erb' do
       render
 
       within("div[data-id=#{model.name}]") do
-        expect(page).to have_content t("type_descriptions.#{model.name}")
+        expect(page).to have_content
+        ActionController::Base.helpers.strip_tags(t("type_descriptions.#{model.name}"))
       end
     end
   end

@@ -32,6 +32,7 @@ gem 'jquery-placeholder-rails'
 gem 'activerecord-import'
 gem 'html2md'
 gem 'mysql2'
+gem 'ruby-progressbar'
 
 group :assets do
   gem 'coffee-rails'

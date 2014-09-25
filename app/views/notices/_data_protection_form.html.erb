@@ -9,6 +9,11 @@
     <p>Provide us with information about the Data Protection takedown notice you <em>sent</em> or <em>received</em>.</p>
     <div class="body-wrapper left main">
       <%= form.input :type, as: :hidden %>
+      <%=
+        form.input :title, label_html: { data: {
+          tooltip: "If the notice you sent/received had a subject line, enter it here"
+        }}
+      %>
       <%= form.input :date_sent, as: :string, placeholder: "YYYY-MM-DD" %>
       <%= form.input :date_received, as: :string, placeholder: "YYYY-MM-DD" %>
       <%= form.input :source, label: "Sent via", placeholder: 'Online form, Email, Postal mail, etc.' %>

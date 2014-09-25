@@ -97,12 +97,13 @@ feature "Searching for Notices via the API" do
         title: "The Lion King on Youtube"
       )
       index_changed_models
+      expected_topics = [topic.name, Notice::TYPES_TO_TOPICS[notice.type]].sort
 
       expect_api_search_to_find("king") do |json|
         json_item = json['notices'].first
         expect(json_item).to have_key('title').with_value(notice.title)
         expect(json_item).to have_key('id').with_value(notice.id)
-        expect(json_item).to have_key('topics').with_value([topic.name])
+        expect(json_item).to have_key('topics').with_value(expected_topics)
         expect(json_item).to have_key('score')
         expect(json_item).to have_key('tags')
       end

@@ -67,6 +67,19 @@ class Notice < ActiveRecord::Base
     Other
   )
 
+  OTHER_TOPIC = "Uncategorized"
+
+  TYPES_TO_TOPICS = {
+    'Dmca'                  => "Copyright",
+    'Trademark'             => "Trademark",
+    'Defamation'            => "Defamation",
+    'CourtOrder'            => "Court Orders",
+    'LawEnforcementRequest' => "Law Enforcement Requests",
+    'PrivateInformation'    => "Right of Publicity",
+    'DataProtection'        => "EU - Right to Be Forgotten",
+    'Other'                 => OTHER_TOPIC,
+  }
+
   belongs_to :reviewer, class_name: 'User'
 
   has_many :topic_assignments, dependent: :destroy, include: [ :topic ]
@@ -108,6 +121,8 @@ class Notice < ActiveRecord::Base
     delegate :name, to: entity, prefix: true, allow_nil: true
   end
 
+  after_create :set_published!, if: :submitter
+
   define_elasticsearch_mapping
 
   def self.label
@@ -143,7 +158,7 @@ class Notice < ActiveRecord::Base
   end
 
   def self.add_default_filter(search)
-    { rescinded: false, spam: false, hidden: false }.each do |field, value|
+    { rescinded: false, spam: false, hidden: false, published: true }.each do |field, value|
       filter = TermFilter.new(field)
       filter.apply_to_search(search, field, value)
     end
@@ -154,7 +169,7 @@ class Notice < ActiveRecord::Base
   end
 
   def self.visible
-    where(spam: false, hidden: false)
+    where(spam: false, hidden: false, published: true)
   end
 
   def active_model_serializer
@@ -258,32 +273,27 @@ class Notice < ActiveRecord::Base
       principal_name.present? && principal_name != sender_name
     end
   end
+
+  def publication_delay
+    submitter && submitter.publication_delay ? submitter.publication_delay : 0
+  end
+
+  def time_to_publish
+    created_at + publication_delay.seconds
+  end
+
+  def should_be_published?
+    time_to_publish <= Time.now
+  end
+
+  def set_published!
+    self.published = should_be_published?
+    save
+  end
   
   def notice_topic_map
-    if self.type == "CourtOrder"
-      topic = Topic.find_by_name("Court Orders")
-    elsif self.type == "Defamation"
-      topic = Topic.find_by_name("Defamation")
-    elsif self.type == "Dmca"
-      topic = Topic.find_by_name("Copyright")
-    elsif self.type == "LawEnforcementRequest"
-      topic = Topic.find_by_name("Law Enforcement Requests")
-    elsif self.type == "Trademark"
-      topic = Topic.find_by_name("Trademark")
-    elsif self.type == "Other"
-      topic = Topic.find_by_name("Uncategorized")
-    elsif self.type == "PrivateInformation"
-      topic = Topic.find_by_name("Right of Publicity")
-    elsif self.type == "DataProtection"
-      topic = Topic.find_by_name("EU - Right to Be Forgotten")
-    end
-    if topic.nil?
-      topic = Topic.find_by_name("Uncategorized")
-      if topic.nil?
-        topic = Topic.create(:name => "Uncategorized")
-      end  
-    end 
-    return topic 
+    topic = TYPES_TO_TOPICS.key?(self.type) ? TYPES_TO_TOPICS[self.type] : OTHER_TOPIC
+    return Topic.find_or_create_by_name(topic) 
   end
   
   before_save do
