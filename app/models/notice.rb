@@ -122,6 +122,7 @@ class Notice < ActiveRecord::Base
   end
 
   after_create :set_published!, if: :submitter
+  after_destroy :remove_from_index
 
   define_elasticsearch_mapping
 
@@ -327,4 +328,7 @@ class Notice < ActiveRecord::Base
     entity_notice_roles.attorneys.map(&:entity)
   end
 
+  def remove_from_index
+    self.index.remove self
+  end
 end
