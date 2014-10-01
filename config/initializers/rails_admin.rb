@@ -80,6 +80,8 @@ RailsAdmin.config do |config|
           end
         end
 
+        configure(:works) { nested_form false }
+
         configure :rescinded do
           visible do
             ability = Ability.new(bindings[:view]._current_user)
@@ -152,6 +154,11 @@ RailsAdmin.config do |config|
 
   config.model 'Work' do
     object_label_method { :custom_work_label }
+    configure :notices do
+      visible do
+        bindings[:object].notices.count < 100
+      end
+    end
     list do
       configure(:copyrighted_urls) { hide }
       configure(:infringing_urls) { hide }
