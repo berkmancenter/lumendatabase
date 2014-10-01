@@ -11,6 +11,9 @@ shared_examples 'a redirecting controller for' do |model_class, factory_name, id
 
   it "gives a 404 when a mapping isn't found" do
     model_class.should_receive(id_method).and_return(nil)
-    expect{get :show, id: 2000 }.to raise_error(ActiveRecord::RecordNotFound)
+    
+    get :show, id: 2000
+    
+    expect(response.code).to eq "404"
   end
 end
