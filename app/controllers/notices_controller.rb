@@ -60,6 +60,8 @@ class NoticesController < ApplicationController
       format.html do
         if @notice.rescinded?
           render :rescinded
+        elsif !@notice.published?
+          render file: 'public/404_unavailable', formats: [:html], status: :not_found, layout: false  
         else
           render :show
         end
