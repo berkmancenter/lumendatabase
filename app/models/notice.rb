@@ -170,7 +170,16 @@ class Notice < ActiveRecord::Base
   end
 
   def self.visible
-    where(spam: false, hidden: false)
+    where(spam: false, hidden: false, published: true)
+  end
+  
+  def self.find_unpublished(notice_id)
+    begin 
+      self.where(spam: false, hidden: false, published: false).find(notice_id)
+      return true
+    rescue
+      return false
+    end    
   end
 
   def active_model_serializer
