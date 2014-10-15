@@ -58,6 +58,7 @@ RailsAdmin.config do |config|
         field :entities
         field :topics
         field :works
+        field :url_count
       end
       edit do
         configure(:type) do

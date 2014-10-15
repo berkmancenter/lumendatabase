@@ -93,7 +93,7 @@ feature "typed notice submissions" do
     expect(page).to have_content("Data Protection notice to Recipient")
 
     within("#works") do
-      expect(page).to have_content('Location of Material Requested for Removal')
+      expect(page).to have_content('Location of Some of the Material Requested for Removal')
       expect(page).to have_content('http://example.com/defamatory_url1')
     end
 

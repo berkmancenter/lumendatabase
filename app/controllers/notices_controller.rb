@@ -93,6 +93,7 @@ class NoticesController < ApplicationController
       :action_taken,
       :request_type,
       :mark_registration_number,
+      :url_count,
       topic_ids: [],
       file_uploads_attributes: [:kind, :file, :file_name],
       entity_notice_roles_attributes: [

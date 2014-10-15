@@ -44,8 +44,10 @@
         <%= works_form.simple_fields_for(:infringing_urls) do |urls_form| %>
           <%= urls_form.input :url, label: "URLs mentioned in request", placeholder: "http://" %>
         <% end %>
-      </div>
-    <% end %>
+      <% end %> 
+	  <%= form.input :url_count, label: "Number of URLs", label_html: { class: 'url', data: {
+            tooltip: "Please indicate how many unique URLs the complainant requested be removed from search results."} } %>
+	</div>
   </section>
 
   <% step_number = 3 %>
