@@ -16,6 +16,6 @@
         </div>
       <% end %>
     <% end %>
-	This complainant requested removal of <%= @notice.url_count %> URLs.
+	This complainant requested removal of <%= @notice.url_count.nil? ? "unspecified" : @notice.url_count %> URLs.
   </ol>
 </section>
