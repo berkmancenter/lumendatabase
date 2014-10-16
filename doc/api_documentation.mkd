@@ -37,6 +37,7 @@ Chilling Effects staff for your authentication token.
 | `regulation_list`                  | string             | Comma separated regulations / laws relevant to this notice, spaces are OK. Automatically lowercased. Only available for CourtOrder, and LawEnforcementRequest notice types.
 | `jurisidiction_list`               | string             | Comma separated list of jurisdictions, spaces are OK.
 | `action_taken`                     | string             | One of 'Yes', 'No', or 'Partial'.
+| `url_count`                        | string             | This field is used to indicate the total number of URLs contained in a particular Data Protection request. I.e. If the requester asked for the removal of 10 URLs, this should be set to "10". If no value is set, this will display as "unspecified".
 | `request_type`                     | string             | One of 'Agency', 'Civil Subpoena', 'Email', 'Records Preservation', 'Subpoena', 'Warrant'. Valid only for LawEnforcementRequest notices.
 | `mark_registration_number`         | string             | A mark registration number. Valid only for Trademark notices.
 | `works_attributes`                 | [Work]             | A list of Works
