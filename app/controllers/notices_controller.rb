@@ -54,20 +54,28 @@ class NoticesController < ApplicationController
   end
 
   def show
-    @notice = Notice.find_visible(params[:id])
-
-    respond_to do |format|
-      format.html do
-        if @notice.rescinded?
-          render :rescinded
-        else
-          render :show
+    if Notice.find_unpublished(params[:id])
+      respond_to do |format|
+        format.html do
+          render file: 'public/404_unavailable', formats: [:html], status: :not_found, layout: false  
         end
       end
+    else  
+      @notice = Notice.find_visible(params[:id])
 
-      format.json do
-        render json: @notice, serializer: NoticeSerializerProxy,
-          root: json_root_for(@notice.class)
+      respond_to do |format|
+        format.html do
+          if @notice.rescinded?
+            render :rescinded
+          else
+            render :show
+          end
+        end
+
+        format.json do
+          render json: @notice, serializer: NoticeSerializerProxy,
+            root: json_root_for(@notice.class)
+        end
       end
     end
   end
