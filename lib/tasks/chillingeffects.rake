@@ -167,6 +167,37 @@ namespace :chillingeffects do
     $stderr.puts "Titling did not succeed because: #{e.inspect}"
     end
   end
+  
+  desc "Change incorrect notice type"
+  task change_incorrect_notice_type: :environment do
+    incorrect_ids_file = Rails.root.to_s + '/tmp/incorrect_ids.csv'
+    incorrect_notice_ids = Array.new
+    incorrect_notice_id_type = Hash.new
+    CSV.foreach(incorrect_ids_file, :headers => true) do |row|
+      incorrect_notice_ids << row['id']
+      incorrect_notice_id_type[row['id']] = row['type']
+    end
+    
+    incorrect_notices = Notice.where(:id => incorrect_notice_ids)
+    p = ProgressBar.create(
+      type: "Reassigning",
+      total: incorrect_notices.count,
+      format: "%t: %B %P%% %E %c/%C %R/s"
+    )
+    
+    incorrect_notices.each do |notice|
+      old_type = notice.class.name.constantize
+      new_type = incorrect_notice_id_type[notice.id].classify.constantize
+      notice = notice.becomes new_type
+      notice.title = notice.title.sub(/^#{old_type.label} notice/, "#{new_type.label} notice")
+      notice.topic_assignments.delete_all
+      notice.save!
+      p.increment
+    end
+  rescue => e
+    $stderr.puts "Retyping did not succeed because: #{e.inspect}"
+    end
+  end
 
   desc "Index non-indexed models"
   task index_non_indexed: :environment do
