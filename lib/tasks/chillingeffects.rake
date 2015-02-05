@@ -192,6 +192,7 @@ namespace :chillingeffects do
       notice = notice.becomes new_type
       notice.title = notice.title.sub(/^#{old_type.label} notice/, "#{new_type.label} notice")
       notice.topic_assignments.delete_all
+      notice.touch
       notice.save!
       p.increment
     end
