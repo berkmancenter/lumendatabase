@@ -175,7 +175,7 @@ namespace :chillingeffects do
     incorrect_notice_id_type = Hash.new
     CSV.foreach(incorrect_ids_file, :headers => true) do |row|
       incorrect_notice_ids << row['id'].to_i
-      incorrect_notice_id_type[row['id'].to_i] = row['type'].downcase.classify
+      incorrect_notice_id_type[row['id'].to_i] = row['type'].classify
     end
     
     incorrect_notices = Notice.where(:id => incorrect_notice_ids)
