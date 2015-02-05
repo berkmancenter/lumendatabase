@@ -169,13 +169,13 @@ namespace :chillingeffects do
   end
   
   desc "Change incorrect notice type"
-  task change_incorrect_notice_type: :environment do
-    incorrect_ids_file = Rails.root.to_s + '/tmp/incorrect_ids.csv'
+  task :change_incorrect_notice_type, [:input_csv] => :environment do |t, args|
+    incorrect_ids_file = args[:input_csv] || Rails.root.join('tmp', 'incorrect_ids.csv')
     incorrect_notice_ids = Array.new
     incorrect_notice_id_type = Hash.new
     CSV.foreach(incorrect_ids_file, :headers => true) do |row|
-      incorrect_notice_ids << row['id']
-      incorrect_notice_id_type[row['id']] = row['type']
+      incorrect_notice_ids << row['id'].to_i
+      incorrect_notice_id_type[row['id'].to_i] = row['type'].downcase.classify
     end
     
     incorrect_notices = Notice.where(:id => incorrect_notice_ids)
@@ -187,15 +187,13 @@ namespace :chillingeffects do
     
     incorrect_notices.each do |notice|
       old_type = notice.class.name.constantize
-      new_type = incorrect_notice_id_type[notice.id].classify.constantize
+      new_type = incorrect_notice_id_type[notice.id].constantize
+      notice.update_column(:type, new_type.name) 
       notice = notice.becomes new_type
       notice.title = notice.title.sub(/^#{old_type.label} notice/, "#{new_type.label} notice")
       notice.topic_assignments.delete_all
       notice.save!
       p.increment
-    end
-  rescue => e
-    $stderr.puts "Retyping did not succeed because: #{e.inspect}"
     end
   end
 
