@@ -1,16 +1,17 @@
 class CustomLimiter < Rack::Throttle::Minute
   def allowed?(request)
     path_info = Rails.application.routes.recognize_path request.url rescue {}
-    #Rails.logger.info "path info"
-    #Rails.logger.info path_info
-    if (path_info[:controller] == "notices" and path_info[:format] == "json") or request.media_type == "application/json"
-      Rails.logger.info "in if"
-      request.params["size"] = 25
-      #Rails.logger.info path_info
-      #Rails.logger.info request.params
-      super
+    if request.media_type == "application/json"
+      if request.env["HTTP_AUTHENTICATION_TOKEN"].nil?
+        request.params["size"] = 25
+        super
+      elsif User.find_by_authentication_token(request.env["HTTP_AUTHENTICATION_TOKEN"]).has_role?(Role.researcher) 
+        true
+      else
+        request.params["size"] = 25
+        super  
+      end  
     else 
-      Rails.logger.info "in else"
       true
     end
   end
