@@ -2,7 +2,6 @@ class CustomLimiter < Rack::Throttle::Minute
   def allowed?(request)
     #path_info = Rails.application.routes.recognize_path request.url rescue {}
     if request.media_type == "application/json"
-      Rails.logger.info request.env["HTTP_AUTHENTICATION_TOKEN"]
       if request.env["HTTP_AUTHENTICATION_TOKEN"].nil?
         request.GET[:per_page] = 25
         super
