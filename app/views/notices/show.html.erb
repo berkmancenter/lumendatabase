@@ -50,11 +50,13 @@
         <dt class="label">Notice Type:</dt>
         <dd class="field"><%= @notice.type.titleize %></dd>
       </dl>
-
+	  
+	  <% unless @notice.action_taken.nil? || @notice.action_taken.blank? %>
       <dl class="action-taken">
         <dt class="label">Action taken:</dt>
         <dd class="field"><%= @notice.action_taken %></dd>
       </dl>
+	  <% end %>
 
       <%= render show_partial_for(@notice), notice: @notice %>
 
