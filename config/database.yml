@@ -1,12 +1,10 @@
 development: &default
-  adapter: postgresql 
+  adapter: postgresql
   database: chill_development
-  username: anita
-  password: 
+  encoding: utf8
+  min_messages: warning
   pool: 5
   timeout: 5000
-  host: localhost
-  port: 5432
 
 test:
   <<: *default
