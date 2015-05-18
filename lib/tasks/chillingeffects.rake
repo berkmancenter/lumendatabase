@@ -168,6 +168,49 @@ namespace :chillingeffects do
     end
   end
   
+  desc "Hide notices by submission_id"
+  task :hide_notices_by_sid, [:input_csv, :sid_column] => :environment do |t, args|
+    hide_notices_by_sid args[:input_csv], args[:sid_column]
+  end
+
+  def hide_notices_by_sid( input_csv, sid_column )
+    usage = "hide_notices_by_sid['input_csv,sid_column']"
+
+    if input_csv.nil? || sid_column.nil?
+      puts usage
+      return
+    end
+
+    if !File.exists?( input_csv )
+      puts 'Cannot find input_csv'
+      puts usage
+      return
+    end
+
+    total = 0
+    successful = 0
+    failed = 0
+    CSV.foreach( input_csv, :headers => true) do |row|
+      total += 1
+      begin
+        sid = row[sid_column].to_i
+        notice = Notice.find_by_submission_id sid
+        notice.published = false
+        notice.save!
+        successful += 1
+      rescue
+        #puts "Error processing #{row[sid_column]}"
+        failed += 1
+      end
+      
+      if (total % 100) == 0
+        puts total
+      end
+    end
+
+    puts "total: #{total}, successful: #{successful}, failed: #{failed}"
+  end
+
   desc "Change incorrect notice type"
   task :change_incorrect_notice_type, [:input_csv] => :environment do |t, args|
     incorrect_ids_file = args[:input_csv] || Rails.root.join('tmp', 'incorrect_ids.csv')
