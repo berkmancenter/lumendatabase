@@ -196,7 +196,7 @@ namespace :chillingeffects do
         sid = row[sid_column].to_i
         notice = Notice.find_by_submission_id sid
         notice.published = false
-        notice.hidden = false
+        notice.hidden = true
         notice.save!
         successful += 1
       rescue
