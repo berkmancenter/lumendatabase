@@ -203,7 +203,7 @@ namespace :chillingeffects do
         #puts "Error processing #{row[sid_column]}"
         failed += 1
       end
-      
+
       if (total % 100) == 0
         puts total
       end
@@ -281,23 +281,27 @@ namespace :chillingeffects do
       puts "Please specify the file name via the FILE_NAME environment variable"
     end
   end
-  
+
   desc "Assign blank action_taken to Google notices"
   task blank_action_taken: :environment do
 
   begin
-    google_notices = Array.new
-    Notice.all.collect{|n| n.recipient.name.include?("Google") ? google_notices << n : ''}
+    notices = Entity.where(name: 'Google').first.notices.where(
+      entity_notice_roles: { name: 'recipient' }
+    ).where("COALESCE(action_taken, '') != ''")
+
     p = ProgressBar.create(
       title: "Reassigning",
-      total: google_notices.count,
+      total: notices.count,
       format: "%t: %B %P%% %E %c/%C %R/s"
     )
 
-    google_notices.each do |notice|
-      puts %Q|Reassigning action taken of Notice #{notice.id} to blank|
-      notice.update_attribute(:action_taken, '')
-      p.increment
+    notices.find_in_batches do |group|
+      group.each do |notice|
+        puts %Q|Reassigning action taken of Notice #{notice.id} to blank|
+        notice.update_attribute(:action_taken, '')
+        p.increment
+      end
     end
   rescue => e
     $stderr.puts "Reassigning did not succeed because: #{e.inspect}"
