@@ -75,7 +75,7 @@ feature 'Page titles' do
   end
 
   context "Pages" do
-    %w( About Privacy Disclaimer Researchers ).each do |area|
+    %w( About Privacy Legal Researchers ).each do |area|
       scenario area do
         visit '/'
         click_on area
