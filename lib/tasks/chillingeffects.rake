@@ -286,22 +286,25 @@ namespace :chillingeffects do
   task blank_action_taken: :environment do
 
   begin
-    notices = Entity.where(name: 'Google').first.notices.where(
-      entity_notice_roles: { name: 'recipient' }
-    ).where("COALESCE(action_taken, '') != ''")
+    entities = Entity.where("entities.name ilike '%Google%'")
+    total = entities.count
+    entities.each.with_index(1) do |e, i|
+      notices = e.notices.where(
+        entity_notice_roles: { name: 'recipient' }
+      ).where("COALESCE(action_taken, '') != ''")
 
-    p = ProgressBar.create(
-      title: "Reassigning",
-      total: notices.count,
-      format: "%t: %B %P%% %E %c/%C %R/s"
-    )
-
-    notices.find_in_batches do |group|
-      group.each do |notice|
-        puts %Q|Reassigning action taken of Notice #{notice.id} to blank|
-        notice.update_attribute(:action_taken, '')
-        p.increment
+      p = ProgressBar.create(
+        title: "Updating #{e.name} (#{i} of #{total})",
+        total: ([notices.count, 1].max),
+        format: "%t: %B %P%% %E %c/%C %R/s"
+      )
+      notices.select('notices.id').find_in_batches do |group|
+        Notice.where(
+          id: group.map(&:id)
+        ).update_all(action_taken: '', updated_at: Time.now)
+        p.progress += group.size
       end
+      p.finish unless p.finished?
     end
   rescue => e
     $stderr.puts "Reassigning did not succeed because: #{e.inspect}"
