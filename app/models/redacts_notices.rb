@@ -1,5 +1,5 @@
 class RedactsNotices
-  def initialize(redactors = [RedactsPhoneNumbers.new])
+  def initialize(redactors = [RedactsPhoneNumbers.new, RedactsSSNs.new])
     @redactors = redactors
   end
 
@@ -52,6 +52,16 @@ class RedactsNotices
         /(\(?\d{3}\)?.?)? # optional area code
          \d{3}[^\d]?\d{4} # phone number, optional single-char separator
         /x
+      )
+
+      redactor.redact(text)
+    end
+  end
+
+  class RedactsSSNs
+    def redact(text)
+      redactor = RedactsContent.new(
+        /\b(\d{3})\D?(\d{2})\D?(\d{4})\b/x
       )
 
       redactor.redact(text)
