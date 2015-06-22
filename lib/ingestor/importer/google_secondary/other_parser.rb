@@ -8,7 +8,7 @@ module Ingestor
         handles_content(/IssueType:\s?lr_legalother/m)
 
         def parse_works(file_path)
-          content = IssueContent.new(
+          content = RedactedContent.new(
             file_path, 'legalother_explain'
           )
 
@@ -26,7 +26,7 @@ module Ingestor
         private
 
         def sender(content)
-          get_single_line_field(content, 'full_name')
+          'REDACTED'
         end
 
         def principal(content)

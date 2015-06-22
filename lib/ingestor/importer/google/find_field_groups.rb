@@ -1,3 +1,4 @@
+require 'ingestor/importer/base'
 module Ingestor
   module Importer
     class Google < Base
