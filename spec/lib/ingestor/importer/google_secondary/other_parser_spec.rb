@@ -25,8 +25,12 @@ describe Ingestor::Importer::GoogleSecondary::OtherParser do
     work = described_class.new(sample_file).works.first
 
     expect(work.description).to eq(
-'diffamazione e violazione della privacy
-foobar'
+"#{Ingestor::Importer::GoogleSecondary::RedactedContent::QUOTE_PREAMBLE.strip}
+violazione della privacy
+boofar
+#{Ingestor::Importer::GoogleSecondary::RedactedContent::OTHER_PREAMBLE.strip}
+diffamazione e violazione della privacy
+foobar"
     )
   end
 
@@ -49,11 +53,14 @@ http://www.example.com/infringing|
     work = described_class.new(redaction_file).works.first
 
     expect(work.description).to eq(
-'Someone (unknown) has got hold of my personal details  
+"#{Ingestor::Importer::GoogleSecondary::RedactedContent::QUOTE_PREAMBLE.strip}
+[REDACTED] child abuser bristol durham real gay deep  
+ass - Flickr
+#{Ingestor::Importer::GoogleSecondary::RedactedContent::OTHER_PREAMBLE.strip}
+Someone (unknown) has got hold of my personal details  
 and posted images with my name and my cell phone number on flickr. I have  
 contacted flickr but please help me by removing the link if possible. i am  
-very concerned about this as you can imagine. My name and address [REDACTED],  
-[REDACTED] have been posted. http://[REDACTED].[REDACTED]-[REDACTED].com [REDACTED]'
+very concerned about this as you can imagine. My name and address [REDACTED] have been posted. http://[REDACTED].com [REDACTED] and [REDACTED]."
     )
   end
 
@@ -61,7 +68,7 @@ very concerned about this as you can imagine. My name and address [REDACTED],
     work = described_class.new(redaction_file).works.first
 
     expect(work.copyrighted_urls.map(&:url)).to match_array(
-      ['http://[REDACTED].[REDACTED]-[REDACTED].com']
+      ['http://[REDACTED].com']
     )
   end
 
