@@ -207,6 +207,10 @@ FactoryGirl.define do
     trait :with_entity do
       entity
     end
+    
+    trait :researcher do
+      roles { [Role.researcher] }
+    end
   end
 
   factory :relevant_question do
