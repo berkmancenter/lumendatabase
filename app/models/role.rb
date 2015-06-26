@@ -5,6 +5,7 @@ class Role < ActiveRecord::Base
     publisher
     admin
     super_admin
+    researcher
   )
 
   NAMES.each do |name|

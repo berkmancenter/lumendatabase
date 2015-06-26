@@ -34,6 +34,10 @@ class Ability
     if user.has_role?(Role.super_admin)
       can :manage, :all
     end
+    
+    if user.has_role?(Role.researcher)
+      can :read, Notice
+    end
   end
 
   def grant_admin_access
