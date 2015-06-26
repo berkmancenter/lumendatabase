@@ -1,4 +1,4 @@
-Dir['lib/ingestor/**/*.rb'].each do |file_path|
+Dir['lib/ingestor/**/*.rb'].sort_by { |file_path| file_path.split('/').length }.each do |file_path|
   require file_path.sub(/lib\/(.*)\.rb/, '\1')
 end
 

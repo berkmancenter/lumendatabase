@@ -371,3 +371,6 @@ DEPENDENCIES
   tire (~> 0.6.0)
   uglifier
   unicorn
+
+BUNDLED WITH
+   1.10.3
