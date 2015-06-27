@@ -333,4 +333,45 @@ namespace :chillingeffects do
     end
   end
 
+  desc "Redact content in lr_legalother notices from Google"
+  task redact_lr_legalother: :environment do
+
+  begin
+    entities = Entity.where("entities.name ilike '%Google%'")
+    total = entities.count
+    entities.each.with_index(1) do |e, i|
+      notices = e.notices.includes(
+        works: [:infringing_urls, :copyrighted_urls]
+      ).where(
+        entity_notice_roles: { name: 'recipient' }
+      ).where(
+        type: Ingestor::Importer::GoogleSecondary::OtherParser.notice_type
+      )
+
+      p = progressbar.create(
+        title: "updating #{e.name} (#{i} of #{total})",
+        total: ([notices.count, 1].max),
+        format: "%t: %b %p%% %e %c/%c %r/s"
+      )
+      notices.find_in_batches do |group|
+        group.each do |notice|
+          redactor = RedactsNotices::RedactsEntityName.new(notice.sender.name)
+          notice.works.each do |work|
+            work.update_attributes(description: redactor.redact(work.description))
+            work.infringing_urls.each do |iu|
+              iu.update_attributes(url: redactor.redact(iu.url))
+            end
+            work.copyrighted_urls.each do |cu|
+              cu.update_attributes(url: redactor.redact(cu.url))
+            end
+          end
+          p.progress += group.size
+        end
+      end
+      p.finish unless p.finished?
+    end
+  rescue => e
+    $stderr.puts "reassigning did not succeed because: #{e.inspect}"
+    end
+  end
 end

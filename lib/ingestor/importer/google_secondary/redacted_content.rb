@@ -7,6 +7,15 @@ module Ingestor
         OTHER_PREAMBLE = "Please explain in detail why you believe the content on the above URLs is unlawful, citing specific provisions of law wherever possible.\n"
         QUOTE_PREAMBLE = "In order to ensure specificity, please quote the exact text from each URL above that you believe infringes on your rights. If the allegedly infringing content is a picture or video, please provide a detailed description of the picture/video in question so that we may locate it on the URL in question.\n"
 
+        delegate :redact, to: :redactor
+
+        def initialize(file_path, description_start)
+          super
+          @redactor = RedactsNotices::RedactsEntityName.new(
+            content.match(/full_name[^:]*:(.+?)\n[a-z_]+:/m) ? $1.strip : nil
+          )
+        end
+
         def to_work
           super.tap do |work|
             work.description = redact(work.description)
@@ -26,26 +35,10 @@ module Ingestor
 
         private
 
-        attr_reader :name_regex
+        attr_reader :redactor
 
         def extract_urls(string)
           super.map { |k| { url: redact(k[:url]) } }
-        end
-
-        def name_regex
-          @name_regex ||= extract_name_regex
-        end
-
-        def extract_name_regex
-          if content.match(/full_name[^:]*:(.+?)\n[a-z_]+:/m)
-            match = $1.strip.split(/\s/)
-            "(?:#{match.join('|')})(?:[^a-z]*(?:#{match.join('|')}))*"
-          end
-        end
-
-        def redact(string)
-          return string if name_regex.blank?
-          string.gsub(/#{name_regex}/mi, '[REDACTED]')
         end
       end
     end

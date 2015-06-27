@@ -67,4 +67,19 @@ class RedactsNotices
       redactor.redact(text)
     end
   end
+
+  class RedactsEntityName
+    def initialize(name)
+      match = name.strip.split(/\s/)
+      @regex_base = "(?:#{match.join('|')})(?:[^a-z]*(?:#{match.join('|')}))*"
+      @regex = /#{@regex_base}/mi
+    end
+
+    def redact(text)
+      return text if @regex_base.blank?
+      redactor = RedactsContent.new(@regex)
+
+      redactor.redact(text)
+    end
+  end
 end
