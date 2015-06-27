@@ -80,10 +80,5 @@ module Chill
     config.assets.version = '1.0'
 
     config.middleware.insert_before ActionDispatch::ParamsParser, "CatchJsonParsingErrors"
-    
-    #config.middleware.use Rack::Throttle::Minute, :max => 3, :cache => GDBM.new('tmp/throttle.db')
-    #Set up rate limiting
-    config.require "custom_limiter"
-    config.middleware.use CustomLimiter, :max => 3, :cache => GDBM.new('tmp/throttle.db')
   end
 end
