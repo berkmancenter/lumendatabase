@@ -364,8 +364,8 @@ namespace :chillingeffects do
             work.copyrighted_urls.each do |cu|
               cu.update_attributes(url: redactor.redact(cu.url))
             end
+            p.increment
           end
-          p.progress += group.size
         end
       end
       p.finish unless p.finished?

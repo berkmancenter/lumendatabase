@@ -4,8 +4,8 @@ module Ingestor
   module Importer
     module GoogleSecondary
       class RedactedContent < IssueContent
-        OTHER_PREAMBLE = "Please explain in detail why you believe the content on the above URLs is unlawful, citing specific provisions of law wherever possible.\n"
-        QUOTE_PREAMBLE = "In order to ensure specificity, please quote the exact text from each URL above that you believe infringes on your rights. If the allegedly infringing content is a picture or video, please provide a detailed description of the picture/video in question so that we may locate it on the URL in question.\n"
+        EXPLAIN_PREAMBLE = "Please explain in as much detail as possible what factual statements at this URL you contend are false, or otherwise what it is about the page's content that is defamatory according to the laws in force in your country.\n"
+        QUOTE_PREAMBLE = "Please quote the exact text from each URL that you believe is false or otherwise defamatory. If the allegedly infringing content is a picture or video, please provide a detailed description of the picture/video in question so that we may locate it on the URL in question.\n"
 
         delegate :redact, to: :redactor
 
@@ -24,7 +24,7 @@ module Ingestor
 
         def description
           s = super
-          "#{quote}\n#{OTHER_PREAMBLE if s}#{s}".strip
+          "#{quote}\n#{EXPLAIN_PREAMBLE if s}#{s}".strip
         end
 
         def quote
