@@ -28,6 +28,7 @@ Chilling Effects staff for your authentication token.
 | `title`                            | string             | Required
 | `type`                             | string             | Required: one of 'CourtOrder', 'DataProtection', 'Defamation', 'Dmca', 'LawEnforcementRequest', 'Other', 'PrivateInformation', or 'Trademark'
 | `subject`                          | string             | Optional. A short description of the notice and its contents. E.g. "DMCA Notice Regarding Photographs" or "Court Order From Paris Court Re: Hate Speech"
+| `body`                             | string             | Optional. Use this field to submit any additional text provided by the complainant that does not belong properly in any other notice field.  No sensitive information or PII should be included here. E.g., Phone numbers, street addresses, allegedly defamatory language, etc.
 | `date_sent`                        | string             | Any parseable time value, e.g. "2013-05-21", "2013-05-21 10:01:01 -04:00"
 | `language`                         | string             | A two character language code. See "Language" below for the list.
 | `date_received`                    | string             | Any parseable time value, e.g. "2013-05-21", "2013-05-21 10:01:01 -04:00"
@@ -49,7 +50,7 @@ Chilling Effects staff for your authentication token.
 | Field                            | Type              | Description
 | ---                              | ---               | ---
 | `copyrighted_urls_attributes`    | [CopyrightedUrl]  | List of urls that represent the original work.
-| `kind`                           | string            | Book, movie, video, etc.
+| `kind`                           | string            | Required. Book, movie, video, etc.
 | `description`                    | string            | Description of the work, which may include the copyright holder information
 | `infringing_urls_attributes`     | [InfringingUrl]   | List of urls which infringe on the work
 
@@ -69,7 +70,7 @@ Chilling Effects staff for your authentication token.
 
 | Field                | Type    | Description
 | ---                  | ---     | ---
-| `name`               | string  | The name of the role, one of "principal", "agent", "recipient", "sender", "target", "issuing_court", "plaintiff", or "defendant". "recipient" and "sender" are displayed for all Notice Types on the ChillingEffects website after automatic redaction.
+| `name`               | string  | The name of the role, one of "principal", "agent", "recipient", "sender", "target", "issuing_court", "plaintiff", "defendant" or "submitter". "recipient" and "sender" are displayed for all Notice Types on the ChillingEffects website after automatic redaction.
 | `entity_id`          | integer | (Optional) The ID of an existing entity. You should not specify the `entity_attributes` values below if you include `entity_id` here.
 | `entity_attributes`  | Entity  | A new entity that has this role on this notice. If you specify `entity_attributes`, you should not specify an `entity_id`
 
@@ -87,6 +88,7 @@ authentication token used).
 | `address_line_2`  | string |
 | `city`            | string |
 | `state`           | string |
+| `zip`             | string |
 | `country_code`    | string | A two-digit ISO country code
 | `phone`           | string |
 | `email`           | string |
@@ -196,7 +198,7 @@ In the Example Request below, we include `-v` as a flag for curl to make the fet
 In order to obtain more information, and for alternatives to `-v`, refer to the curl Unix man page
 by typing `man curl`.
 
-### Example Request
+### Example Request Using Entity Attributes
 
 
 ```
@@ -267,6 +269,56 @@ curl -v -H "Accept: application/json" -H "Content-type: application/json" 'https
         }
       }
     ]
+  }
+}' 
+```
+
+### Example Request Using Entity ID
+
+
+```
+curl -v -H "Accept: application/json" -H "Content-type: application/json" 'https://chillingeffects.org/notices/' -d '{
+  "authentication_token": "abc123",
+  "notice": {
+    "title": "DMCA (Copyright) Complaint to Google",
+    "type": "Dmca",
+    "subject": "Infringement Notfication via Blogger Complaint",
+    "date_sent": "2013-05-22",
+    "date_received": "2013-05-23",
+    "source": "Online form",
+    "topic_ids": [19, 27],
+    "tag_list": "movies, disney, youtube",
+    "jurisdiction_list": "US, CA",
+    "action_taken": "Partial",
+    "file_uploads_attributes": [
+      {
+        "kind": "original",
+        "file": "data:text/plain;base64,dGVzdA==",
+        "file_name": "original_file.txt"
+      },
+      {
+        "kind": "supporting",
+        "file": "data:text/plain;base64,QmUgc3VyZSB0byBkcmluayB5b3VyIG92YWx0aW5l\n",
+        "file_name": "supporting_file.txt"
+      }
+    ],
+    "works_attributes": [
+      {
+        "description": "Lion King Video",
+        "copyrighted_urls_attributes": [
+          { "url": "http://disney.com/lion_king.mp4" },
+          { "url": "http://disney.com/lion_king.mov" }
+        ],
+        "infringing_urls_attributes": [
+          { "url": "http://youtube.com/bad_url_1" },
+          { "url": "http://youtube.com/bad_url_2" },
+          { "url": "http://youtube.com/bad_url_3" },
+          { "url": "http://youtube.com/bad_url_4" },
+          { "url": "http://youtube.com/bad_url_5" }
+        ]
+      }
+    ],
+    "entity_id": 1
   }
 }' 
 ```
@@ -500,7 +552,9 @@ Chillingeffects allows for paginatable full-text searches of notices and
 relevant metadata. Results are sorted with the most relevant at the top. Notice
 search results contain the same data as an individually-requested Notice, with
 an additional "score" field. "score" articulates how "relevant" this result is
-to the query term. Higher numbers are more relevant.
+to the query term. Higher numbers are more relevant. If you do not have a 
+researcher API token you will limited to 25 results per request and 3 requests 
+per minute. Contact Chilling Effects administrators to request a researcher token.
 
 Terms are joined with an 'OR' by default.
 

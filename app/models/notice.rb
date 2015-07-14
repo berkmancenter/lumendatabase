@@ -56,17 +56,6 @@ class Notice < ActiveRecord::Base
 
   VALID_ACTIONS = %w( Yes No Partial )
 
-  TYPES = %w(
-    Dmca
-    Trademark
-    Defamation
-    CourtOrder
-    LawEnforcementRequest
-    PrivateInformation
-    DataProtection
-    Other
-  )
-
   OTHER_TOPIC = "Uncategorized"
 
   TYPES_TO_TOPICS = {
@@ -77,8 +66,11 @@ class Notice < ActiveRecord::Base
     'LawEnforcementRequest' => "Law Enforcement Requests",
     'PrivateInformation'    => "Right of Publicity",
     'DataProtection'        => "EU - Right to Be Forgotten",
-    'Other'                 => OTHER_TOPIC,
+    'Other'                 => OTHER_TOPIC
   }
+
+  TYPES = TYPES_TO_TOPICS.keys
+  TOPICS = TYPES_TO_TOPICS.values
 
   belongs_to :reviewer, class_name: 'User'
 

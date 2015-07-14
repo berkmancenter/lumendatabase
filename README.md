@@ -41,6 +41,11 @@ Admin login:
     Username: admin@chillingeffects.org
     Password: password
 
+Running Tests:
+
+    A headless webkit is used but it requires X11 to function.
+    If you are connecting remotely (i.e. SSH), ensure that you have X11 Forwarding enabled.
+
 Ephemera
 ========
 

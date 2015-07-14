@@ -2,7 +2,8 @@
 trap '(( $? )) && { echo "setup failed"; exit 1; }' EXIT
 
 install_elasticsearch() {
-  ( cd tmp
+  ( mkdir -p tmp
+    cd tmp
     echo 'Installing elasticsearch...'
     curl -# --output elasticsearch.tgz \
       'https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-0.90.1.tar.gz'

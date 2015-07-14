@@ -33,6 +33,7 @@ gem 'activerecord-import'
 gem 'html2md'
 gem 'mysql2'
 gem 'ruby-progressbar'
+gem 'rack-throttle'
 
 group :assets do
   gem 'coffee-rails'

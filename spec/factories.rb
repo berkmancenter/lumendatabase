@@ -19,8 +19,7 @@ FactoryGirl.define do
   end
 
   factory :notice_topic, class: 'Topic' do
-    names = Notice::TYPES_TO_TOPICS.values
-    sequence(:name) { |n| names[n % names.size - 1] }
+    sequence(:name) { |n| Notice::TOPICS[n % Notice::TOPICS.size - 1] }
   end
 
   factory :topic_manager do
@@ -206,6 +205,10 @@ FactoryGirl.define do
 
     trait :with_entity do
       entity
+    end
+    
+    trait :researcher do
+      roles { [Role.researcher] }
     end
   end
 
