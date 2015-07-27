@@ -7,8 +7,12 @@ module Ingestor
 
         handles_content(/IssueType:\s?lr_legalother/m)
 
+        def self.notice_type
+          Other
+        end
+
         def parse_works(file_path)
-          content = IssueContent.new(
+          content = RedactedContent.new(
             file_path, 'legalother_explain'
           )
 
@@ -16,7 +20,7 @@ module Ingestor
         end
 
         def notice_type
-          Other
+          self.class.notice_type
         end
 
         def default_recipient
