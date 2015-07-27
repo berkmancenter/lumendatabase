@@ -32,6 +32,23 @@ $('.attach #add-another').click ->
   addFileUploadInput 'kind', parent, (newContainer, nextId, nextName) ->
     newContainer.find('input').attr('id', nextId).attr('name', nextName).attr('value', 'supporting')
 
+$(document).on 'click', '.add-another-url', ->
+  anchor = $(this)
+  $.get(anchor.data('target'), (text) ->
+    input = $(text)
+    input.append($('<button class="remove-url">X</button>'))
+    anchor.after(input)
+    if $('#notice_url_count').length > 0
+      $('#notice_url_count').val(anchor.closest('section').find('.input.url').length)
+  ).fail ->
+    alert("We're sorry, an error occurred.")
+
+$(document).on 'click', '.remove-url', ->
+  section = $(this).closest('section')
+  $(this).parent().remove()
+  if $('#notice_url_count').length > 0
+    $('#notice_url_count').val(section.find('.input.url').length)
+
 
 toggleReportNoticePanels = ->
   $list = $('.notices-list ul')

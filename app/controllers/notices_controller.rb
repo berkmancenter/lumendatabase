@@ -80,6 +80,20 @@ class NoticesController < ApplicationController
     end
   end
 
+  def url_input
+    notice = get_notice_type(params).new
+    @options = OpenStruct.new(
+      notice: notice,
+      url_type: params[:url_type].to_sym,
+      main_index: params[:index].to_i,
+      child_index: (Time.now.to_f * 10_000).to_i
+    )
+    notice.works.build do |w|
+      w.copyrighted_urls.build
+      w.infringing_urls.build
+    end
+  end
+
   private
 
   def json_root_for(klass)
@@ -129,6 +143,8 @@ class NoticesController < ApplicationController
     case action_name
     when "show"
       "search"
+    when "url_input"
+      false
     else
       "application"
     end

@@ -50,21 +50,24 @@
   <section class="works">
     <h4><span>Step 2.</span> Original Works in Question</h4>
     <p>Enter information about the original work(s) and allegedly infringing URL(s).</p>
-    <div class="body-wrapper left">
+    <% form.object.works.each_with_index do |work, index| %>
       <%= form.simple_fields_for(:works) do |works_form| %>
-        <%= works_form.simple_fields_for(:infringing_urls) do |urls_form| %>
-          <%= urls_form.input :url, label: "Allegedly Infringing URL", placeholder: "http://" %>
-        <% end %>
-      </div>
-      <div class="body-wrapper right">
-        <%=
-          works_form.input :description,
-            label: 'Mark',
-            label_html: { data: {
-              tooltip: "Description of allegedly infringed mark"
-            }}
-          %>
-      </div>
+        <div class="body-wrapper left">
+          <%= render(
+            partial: 'url_input_group',
+            locals: { notice: notice, assoc: :infringing_urls, works_form: works_form, index: index }
+          ) %>
+        </div>
+        <div class="body-wrapper right">
+          <%=
+            works_form.input :description,
+              label: 'Mark',
+              label_html: { data: {
+                tooltip: "Description of allegedly infringed mark"
+              }}
+            %>
+        </div>
+      <% end %>
     <% end %>
   </section>
 

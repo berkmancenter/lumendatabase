@@ -1,0 +1,14 @@
+<%= simple_fields_for(@options.notice) do |fields| %>
+  <%= fields.simple_fields_for(:works, child_index: @options.main_index) do |works_fields| %>
+    <%= works_fields.simple_fields_for(
+      @options.url_type,
+      child_index: @options.child_index
+    ) do |urls_fields| %>
+      <%= urls_fields.input(
+        :url,
+        label: label_for_url_input(@options.url_type, @options.notice),
+        placeholder: "http://"
+      ) %>
+    <% end %>
+  <% end %>
+<% end %>

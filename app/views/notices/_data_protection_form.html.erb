@@ -39,15 +39,20 @@
 
   <section class="works">
     <h4><span>Step 2.</span> URLs to be removed from search results.</h4>
-    <div class="body-wrapper left">
+    <% form.object.works.each_with_index do |work, index| %>
       <%= form.simple_fields_for(:works) do |works_form| %>
-        <%= works_form.simple_fields_for(:infringing_urls) do |urls_form| %>
-          <%= urls_form.input :url, label: "URLs mentioned in request", placeholder: "http://" %>
-        <% end %>
+        <div class="body-wrapper left">
+          <%= render(
+            partial: 'url_input_group',
+            locals: { notice: notice, assoc: :infringing_urls, works_form: works_form, index: index }
+          ) %>
+        </div>
       <% end %> 
-	  <%= form.input :url_count, label: "Number of URLs", label_html: { class: 'url', data: {
-            tooltip: "Please indicate how many unique URLs the complainant requested be removed from search results."} } %>
-	</div>
+    <% end %>
+    <div class="body-wrapper left">
+      <%= form.input :url_count, label: "Number of URLs", label_html: { class: 'url', data: {
+              tooltip: "Please indicate how many unique URLs the complainant requested be removed from search results."} } %>
+    </div>
   </section>
 
   <% step_number = 3 %>

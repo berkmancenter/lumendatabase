@@ -33,6 +33,15 @@ section.notice-new {
 
       &.left {
         padding-right: 5%;
+
+        &:not(:first-of-type) {
+          clear: left;
+          margin-top: 60px;
+
+          + .body-wrapper.right {
+            margin-top: 60px;
+          }
+        }
       }
     }
   }
@@ -248,6 +257,24 @@ form.new_notice {
 
     #{$all-text-inputs} {
       padding-left: $long-label-width + $form-label-margin;
+    }
+
+    button.add-another-url {
+      margin-left: $long-label-width;
+      margin-bottom: $form-label-margin;
+      width: calc(100% - #{$long-label-width});
+
+      &:not(:first-child) {
+        margin-top: 30px;
+      }
+    }
+
+    button.remove-url {
+      position: absolute;
+      right: -45px;
+      top: 0px;
+      padding: 7px 15px;
+      background: darken($error-color, 30%);
     }
   }
 }
