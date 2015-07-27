@@ -42,6 +42,45 @@ describe RedactsNotices::RedactsPhoneNumbers do
   end
 end
 
+describe RedactsNotices::RedactsSSNs do
+  SSNS = %w(
+    123-45-6789
+    123.45.6789
+  )
+
+  SSNS.each do |ssn|
+    it "redacts content like `#{ssn}'" do
+      original_text = "Something with #{ssn} twice, #{ssn}."
+      redacted_text = "Something with [REDACTED] twice, [REDACTED]."
+      redactor = described_class.new
+
+      redacted = redactor.redact(original_text)
+
+      expect(redacted).to eq redacted_text
+    end
+  end
+end
+
+describe RedactsNotices::RedactsEmail do
+  EMAILS = %w(
+    test@example.com
+    someone@cyber.law.harvard.edu
+    dot.man@gmail.com
+  )
+
+  EMAILS.each do |email|
+    it "redacts content like `#{email}'" do
+      original_text = "Something with #{email} twice, #{email}."
+      redacted_text = "Something with [REDACTED] twice, [REDACTED]."
+      redactor = described_class.new
+
+      redacted = redactor.redact(original_text)
+
+      expect(redacted).to eq redacted_text
+    end
+  end
+end
+
 describe RedactsNotices do
   context "#redact" do
     it "passes the field's text through all redactors" do

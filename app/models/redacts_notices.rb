@@ -1,5 +1,5 @@
 class RedactsNotices
-  def initialize(redactors = [RedactsPhoneNumbers.new, RedactsSSNs.new])
+  def initialize(redactors = [RedactsPhoneNumbers.new, RedactsSSNs.new, RedactsEmail.new])
     @redactors = redactors
   end
 
@@ -62,6 +62,16 @@ class RedactsNotices
     def redact(text)
       redactor = RedactsContent.new(
         /\b(\d{3})\D?(\d{2})\D?(\d{4})\b/x
+      )
+
+      redactor.redact(text)
+    end
+  end
+
+  class RedactsEmail
+    def redact(text)
+      redactor = RedactsContent.new(
+        /^(|(([A-Za-z0-9]+_+)|([A-Za-z0-9]+\-+)|([A-Za-z0-9]+\.+)|([A-Za-z0-9]+\++))*[A-Za-z0-9]+@((\w+\-+)|(\w+\.))*\w{1,63}\.[a-zA-Z]{2,6})$/i
       )
 
       redactor.redact(text)
