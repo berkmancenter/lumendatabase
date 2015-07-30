@@ -66,6 +66,7 @@ class Notice < ActiveRecord::Base
     'LawEnforcementRequest' => "Law Enforcement Requests",
     'PrivateInformation'    => "Right of Publicity",
     'DataProtection'        => "EU - Right to Be Forgotten",
+    'GovernmentRequest'     => "Government Requests",
     'Other'                 => OTHER_TOPIC
   }
 
