@@ -352,4 +352,13 @@ namespace :chillingeffects do
     $stderr.puts "reassigning did not succeed because: #{e.inspect}"
     end
   end
+
+  desc "Print tallies of Notices with 'url_...' incorrectly tacked on to their subjects"
+  task scrub_mangled_subjects: :environment do
+    narrow = Notice.where("subject ~* '\\s*url_[a-z0-9]+:\\s*[a-z]*[:/]*[-?\\%.=&a-z/0-9]*$'").count
+    puts "Narrow query: #{narrow}"
+    broad = Notice.where("subject ~* '\\s*url_.*$'").count
+    puts "Broad query: #{broad}"
+    puts "Difference of: #{broad - narrow}"
+  end
 end
