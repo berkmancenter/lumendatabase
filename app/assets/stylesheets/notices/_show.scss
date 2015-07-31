@@ -265,6 +265,10 @@ article.notice-show {
       &:last-child {
         margin-bottom: 0;
       }
+
+      &.notice-body .body {
+        white-space: pre-line;
+      }
     }
 
     dl {
