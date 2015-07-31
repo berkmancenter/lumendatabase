@@ -76,7 +76,7 @@ feature "typed notice submissions" do
 
     submission.fill_in_form_with({
       "Legal Complaint" => "I want to be forgotten",
-      "URLs mentioned in request" => "http://example.com/defamatory_url1",
+      "URL mentioned in request" => "http://example.com/defamatory_url1",
     })
 
     submission.fill_in_entity_form_with(:recipient, {

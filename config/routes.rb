@@ -7,7 +7,11 @@ Chill::Application.routes.draw do
     resources :search, only: [:index]
   end
 
-  resources :notices, only: [:show, :new, :create]
+  resources :notices, only: [:show, :new, :create] do
+    collection do
+      get :url_input
+    end
+  end
 
   resources :counter_notices, only: [:new, :create]
 
