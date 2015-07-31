@@ -13,6 +13,8 @@ RailsAdmin.config do |config|
   config.audit_with :history, 'Role'
   config.audit_with :history, 'Notice'
 
+  config.attr_accessible_role { :admin }
+
   config.actions do
     dashboard do
       statistics false
@@ -62,7 +64,10 @@ RailsAdmin.config do |config|
       end
       edit do
         configure(:type) do
-          read_only true
+          hide
+        end
+        configure :reset_type, :enum do
+          label "Type"
         end
         configure(:topic_assignments) { hide }
         configure(:topic_relevant_questions) { hide }

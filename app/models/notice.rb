@@ -66,6 +66,7 @@ class Notice < ActiveRecord::Base
     'LawEnforcementRequest' => "Law Enforcement Requests",
     'PrivateInformation'    => "Right of Publicity",
     'DataProtection'        => "EU - Right to Be Forgotten",
+    'GovernmentRequest'     => "Government Requests",
     'Other'                 => OTHER_TOPIC
   }
 
@@ -93,6 +94,25 @@ class Notice < ActiveRecord::Base
   validates_inclusion_of :action_taken, in: VALID_ACTIONS, allow_blank: true
   validates_inclusion_of :language, in: Language.codes, allow_blank: true
   validates_presence_of :works, :entity_notice_roles
+
+  # Using reset_type because type is ALWAYS protected (deep in the Rails code).
+  attr_protected :id, :type, :reset_type
+  attr_protected :id, :type, as: :admin
+
+  def reset_type
+    type
+  end
+
+  def reset_type=(value)
+    unless value.in?(TYPES)
+      fail ActiveModel::MissingAttributeError.new("Cannot reset Notice type to: #{value}")
+    end
+    self[:type] = value
+  end
+
+  def reset_type_enum
+    TYPES
+  end
 
   def language_enum
     Language.all.inject( {} ) { |memo, l| memo[l.label] = l.code; memo }

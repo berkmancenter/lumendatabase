@@ -124,6 +124,7 @@ FactoryGirl.define do
     factory :defamation, class: 'Defamation'
     factory :court_order, class: 'CourtOrder'
     factory :law_enforcement_request, class: 'LawEnforcementRequest'
+    factory :government_request, class: 'GovernmentRequest'
     factory :private_information, class: 'PrivateInformation'
     factory :data_protection, class: 'DataProtection'
     factory :other, class: 'Other'

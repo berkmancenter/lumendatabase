@@ -1,0 +1,22 @@
+<section class="notice-body">
+  <% if notice.body.present? %>
+    <h5 class="title">Explanation of Request</h5>
+    <p class="body"><pre><%= notice.redacted(:body) %></pre></p>
+  <% end %>
+
+  <% if notice.request_type.present? %>
+    <dl id="request_type">
+      <dt class="label">Type of Request:</dt>
+      <dd class="field"><%= notice.request_type %></dd>
+    </dl>
+  <% end %>
+
+  <% if notice.regulations.present? %>
+    <dl id="tags">
+      <dt class="label">Laws or Regulations:</dt>
+      <dd class="field"><%= render 'shared/regulation_list', regulations: notice.regulations %></dd>
+    </dl>
+  <% end %>
+</section>
+
+<%= render works_partial_for(notice), works: notice.works %>
