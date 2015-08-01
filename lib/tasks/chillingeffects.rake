@@ -326,7 +326,7 @@ namespace :chillingeffects do
         type: Ingestor::Importer::GoogleSecondary::OtherParser.notice_type
       )
 
-      p = progressbar.create(
+      p = ProgressBar.create(
         title: "updating #{e.name} (#{i} of #{total})",
         total: ([notices.count, 1].max),
         format: "%t: %b %p%% %e %c/%c %r/s"
