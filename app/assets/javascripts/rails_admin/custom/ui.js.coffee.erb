@@ -57,5 +57,10 @@ addHandlers = ->
     placeholder: "John Doe"
     width: '50%';
 
+requireType = ->
+  $('#edit_notice #notice_reset_type + div > input, #new_notice #notice_reset_type + div > input').attr('required', true)
+
 $(document).ready -> addHandlers()
+$(document).ready -> requireType()
 $(document).on 'pjax:end', -> addHandlers()
+$(document).on 'pjax:end', -> requireType()

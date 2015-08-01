@@ -68,6 +68,7 @@ RailsAdmin.config do |config|
         end
         configure :reset_type, :enum do
           label "Type"
+          required true
         end
         configure(:topic_assignments) { hide }
         configure(:topic_relevant_questions) { hide }
