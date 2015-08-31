@@ -40,6 +40,7 @@ class Ability
     can :read, :all
     can :access, :rails_admin
     can :dashboard
+    can :search, Entity
   end
 
   def grant_redact
