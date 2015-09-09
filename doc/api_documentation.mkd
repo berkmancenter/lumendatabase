@@ -26,7 +26,7 @@ Chilling Effects staff for your authentication token.
 | Field                              | Type               | Description
 | ---                                | ---                | ---
 | `title`                            | string             | Required
-| `type`                             | string             | Required: one of 'CourtOrder', 'DataProtection', 'Defamation', 'Dmca', 'LawEnforcementRequest', 'Other', 'PrivateInformation', or 'Trademark'
+| `type`                             | string             | Required: one of 'CourtOrder', 'DataProtection', 'Defamation', 'Dmca', 'LawEnforcementRequest', 'Other', 'PrivateInformation', 'Trademark', or 'GovernmentRequest'
 | `subject`                          | string             | Optional. A short description of the notice and its contents. E.g. "DMCA Notice Regarding Photographs" or "Court Order From Paris Court Re: Hate Speech"
 | `body`                             | string             | Optional. Use this field to submit any additional text provided by the complainant that does not belong properly in any other notice field.  No sensitive information or PII should be included here. E.g., Phone numbers, street addresses, allegedly defamatory language, etc.
 | `date_sent`                        | string             | Any parseable time value, e.g. "2013-05-21", "2013-05-21 10:01:01 -04:00"
