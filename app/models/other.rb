@@ -9,4 +9,16 @@ class Other < Notice
   def to_partial_path
     'notices/notice'
   end
+
+  def sender_name
+    "REDACTED"
+  end
+
+  def principal_name
+    sender_name
+  end
+
+  def hide_identities?
+    true
+  end
 end

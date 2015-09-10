@@ -18,7 +18,7 @@
       <h1><%= @notice.title %></h1>
       <div class="entities-wrapper">
         <% if @notice.sender %>
-          <%= render @notice.sender, notice: @notice, role: :sender %>
+          <%= render @notice.sender, notice: @notice, role: :sender, hide_identities: @notice.hide_identities? %>
         <% end %>
         <% if @notice.recipient %>
           <%= render @notice.recipient, notice: @notice, role: :recipient %>
