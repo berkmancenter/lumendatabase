@@ -33,7 +33,7 @@ module Ingestor
             if fail_import
               import_row(csv_row)
             else
-              unless csv_row['Submitted_By'] == 'Google' && csv_row['add_date'] > Time.parse(ENV['LAUNCH_DATE'])
+              unless csv_row['Submitted_By'] && csv_row['add_date'] && csv_row['Submitted_By'] == 'Google' && csv_row['add_date'] > Time.parse(ENV['LAUNCH_DATE'])
                 import_row(csv_row)
               end   
             end  
