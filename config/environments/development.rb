@@ -39,8 +39,11 @@ Chill::Application.configure do
 
   config.action_mailer.default_url_options = { host: 'localhost:3000' }
 
-  #config.middleware.use Rack::Throttle::Minute, :max => 3, :cache => GDBM.new('tmp/throttle.db')
-  #Set up rate limiting
-  config.require "custom_limiter"
-  config.middleware.use CustomLimiter, :max => 3, :cache => GDBM.new('tmp/throttle.db')
+  begin
+    # Set up rate limiting
+    config.require "custom_limiter"
+    config.middleware.use CustomLimiter, :max => 3, :cache => GDBM.new('tmp/throttle.db')
+  rescue Errno::EAGAIN => e
+    # throttle cache in use by app, this is likely a rake task
+  end
 end
