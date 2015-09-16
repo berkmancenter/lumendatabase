@@ -87,7 +87,7 @@ feature "Faceted search of Notices", search: true do
   end
 
   def with_a_faceted_search(facet_name, facet_attribute_name)
-    sleep 1
+    sleep (ENV["SEARCH_SLEEP"] && ENV["SEARCH_SLEEP"].to_i) || 1
     results = Notice.search do
       query { match(:_all, 'title') }
       facet facet_name do
