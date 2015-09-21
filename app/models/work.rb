@@ -20,12 +20,12 @@ class Work < ActiveRecord::Base
   %w(infringing_urls copyrighted_urls).each do |relation_type|
     relation_class = relation_type.classify.constantize
     define_method("validate_associated_records_for_#{relation_type}") do
-      urls_to_associate = send(relation_type.to_sym).map(&:url).uniq.compact
+      urls_to_associate = send(relation_type.to_sym).map(&:url_original).uniq.compact
 
       return if urls_to_associate == ['']
 
-      existing_url_instances = relation_class.where(url: urls_to_associate)
-      existing_urls = existing_url_instances.map(&:url)
+      existing_url_instances = relation_class.where(url_original: urls_to_associate)
+      existing_urls = existing_url_instances.map(&:url_original)
 
       new_urls = urls_to_associate - existing_urls
       new_url_instances = new_urls.map { |url| relation_class.new(url: url) }
@@ -33,7 +33,7 @@ class Work < ActiveRecord::Base
 
       send(
         "#{relation_type}=".to_sym,
-        existing_url_instances + relation_class.where(url: new_urls)
+        existing_url_instances + relation_class.where(url_original: new_urls)
       )
     end
   end
@@ -52,5 +52,9 @@ class Work < ActiveRecord::Base
     if kind.blank?
       self.kind = DeterminesWorkKind.new(self).kind
     end
+  end
+
+  before_save on: :create do
+    self.description_original = description if self.description_original.nil?
   end
 end

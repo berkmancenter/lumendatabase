@@ -1,4 +1,6 @@
 class Other < Notice
+  MASK = "REDACTED"
+  REDACTION_REGEX = /google/i
 
   define_elasticsearch_mapping
 
@@ -11,14 +13,22 @@ class Other < Notice
   end
 
   def sender_name
-    "REDACTED"
+    if hide_identities?
+      MASK
+    else
+      super
+    end
   end
 
   def principal_name
-    sender_name
+    if hide_identities?
+      MASK
+    else
+      super
+    end
   end
 
   def hide_identities?
-    true
+    recipient_name =~ REDACTION_REGEX
   end
 end
