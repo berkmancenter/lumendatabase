@@ -3,7 +3,7 @@ require 'ingestor/importer/base'
 module Ingestor
   module Importer
     module GoogleSecondary
-      class EbDmcaParser < Base
+      class EbDMCAParser < Base
 
         handles_content(/IssueType:\s?eb_dmca/m)
 

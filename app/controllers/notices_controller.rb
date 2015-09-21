@@ -156,11 +156,11 @@ class NoticesController < ApplicationController
     if notice_type < Notice
       notice_type
     else
-      Dmca
+      DMCA
     end
 
   rescue NameError
-    Dmca
+    DMCA
   ensure
     params.delete(:type)
   end

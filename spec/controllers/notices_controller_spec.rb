@@ -75,9 +75,9 @@ describe NoticesController do
         @notice_params = HashWithIndifferentAccess.new(title: "A title")
       end
 
-      it "initializes a Dmca by default from params" do
+      it "initializes a DMCA by default from params" do
         SubmitNotice.should_receive(:new).
-          with(Dmca, @notice_params).
+          with(DMCA, @notice_params).
           and_return(@submit_notice)
 
         post :create, notice: @notice_params
@@ -91,12 +91,12 @@ describe NoticesController do
         post :create, notice: @notice_params.merge(type: 'trademark')
       end
 
-      it "defaults to Dmca if the type is missing or invalid" do
+      it "defaults to DMCA if the type is missing or invalid" do
         invalid_types = ['', 'FlimFlam', 'Object', 'User', 'Hash']
 
         SubmitNotice.should_receive(:new).
           exactly(5).times.
-          with(Dmca, @notice_params).
+          with(DMCA, @notice_params).
           and_return(@submit_notice)
 
         invalid_types.each do |invalid_type|
@@ -179,7 +179,7 @@ describe NoticesController do
     private
 
     def stub_submit_notice
-      SubmitNotice.new(Dmca, {}).tap do |submit_notice|
+      SubmitNotice.new(DMCA, {}).tap do |submit_notice|
         submit_notice.stub(:submit).and_return(true)
         SubmitNotice.stub(:new).and_return(submit_notice)
       end

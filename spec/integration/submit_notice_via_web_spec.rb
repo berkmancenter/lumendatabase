@@ -228,7 +228,7 @@ feature "notice submission" do
   end
 
   scenario "a form articulates its required fields correctly" do
-    visit "/notices/new?type=Dmca"
+    visit "/notices/new?type=DMCA"
 
     within('form#new_notice') do
       expect(page).to have_css("input##{works_copyrighted_url_id}.required")
@@ -237,7 +237,7 @@ feature "notice submission" do
   end
 
   scenario "submitting a notice without required fields present" do
-    visit "/notices/new?type=Dmca"
+    visit "/notices/new?type=DMCA"
 
     click_on "Submit"
 

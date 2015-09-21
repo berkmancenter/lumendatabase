@@ -38,7 +38,7 @@ module Ingestor
       def initialize(original_file_paths, supporting_file_paths = nil)
         @original_file_paths = fix_paths(original_file_paths)
         @supporting_file_paths = fix_paths(supporting_file_paths)
-        @notice_type = Dmca
+        @notice_type = DMCA
       end
 
       def entities

@@ -21,8 +21,8 @@ describe Ingestor::Importer::Google do
   end
 
   context "#notice_type" do
-    it "should be Dmca" do
-      expect(described_class.new('').notice_type).to eq Dmca
+    it "should be DMCA" do
+      expect(described_class.new('').notice_type).to eq DMCA
     end
   end
 

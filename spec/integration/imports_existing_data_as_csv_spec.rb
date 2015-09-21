@@ -14,7 +14,7 @@ feature "Importing CSV" do
       @secondary_dmca_notice,
       @twitter_notice,
       @primary_notice_without_data
-    ) = Dmca.order(:id)
+    ) = DMCA.order(:id)
 
     (
       @secondary_other_notice,
