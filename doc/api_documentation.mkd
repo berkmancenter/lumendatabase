@@ -1,6 +1,6 @@
 ## Create notice
 
-Submits a new Notice to the chillingeffects system via JSON-encoded parameters.
+Submits a new Notice to the chillingeffects system.
 There are several different "Notice Types," these are essentially subclasses of
 the abstract Notice class.  "Notice Types" allow us to track notice-specific
 attributes and create serialized representations with logical attribute names.
@@ -163,6 +163,10 @@ Translate supports, and are currently:
 * yi - Yiddish
 * yo - Yoruba
 * zh - Chinese
+
+### Submitting data
+
+When creating a notice through the API, there are two ways to submit notice data. 
 
 ### Authentication
 
