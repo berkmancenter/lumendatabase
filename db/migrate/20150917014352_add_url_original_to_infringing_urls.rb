@@ -1,6 +1,6 @@
 class AddUrlOriginalToInfringingUrls < ActiveRecord::Migration
   def up
-    add_column t, c, :string
+    add_column t, c, :string, limit: 8192
     execute "UPDATE #{t} SET #{c} = #{u}"
     change_column t, c, :string, null: false, limit: 8192
     remove_index t, u
@@ -22,6 +22,6 @@ class AddUrlOriginalToInfringingUrls < ActiveRecord::Migration
   end
 
   def u
-    "url"
+    :url
   end
 end
