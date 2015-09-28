@@ -71,7 +71,7 @@ class RedactsNotices
   class RedactsEmail
     def redact(text)
       redactor = RedactsContent.new(
-        /\S+@\S+\.\S+/i
+        /\S+@\S+\.\S+[^.\s]/i
       )
 
       redactor.redact(text)
