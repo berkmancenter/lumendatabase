@@ -9,7 +9,7 @@ class Work < ActiveRecord::Base
   has_and_belongs_to_many :infringing_urls
   has_and_belongs_to_many :copyrighted_urls
 
-  accepts_nested_attributes_for :infringing_urls, :copyrighted_urls
+  accepts_nested_attributes_for :infringing_urls, :copyrighted_urls, :reject_if => proc { |attributes| attributes['url'].blank? }
   validates_associated :infringing_urls, :copyrighted_urls
 
   # Similar to the hack in EntityNoticeRole, because all validations are

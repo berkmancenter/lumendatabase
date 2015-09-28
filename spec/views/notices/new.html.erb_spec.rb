@@ -9,6 +9,22 @@ describe 'notices/new.html.erb' do
     expect(rendered).to have_css 'form'
   end
 
+  it "should not require copyrighted urls" do
+    assign(:notice, create(:dmca, :with_copyrighted_urls))
+
+    render
+
+    expect(rendered).to have_content("Original Work URL")
+  end
+
+  it "should require infringing urls" do
+    assign(:notice, create(:dmca, :with_infringing_urls))
+
+    render
+
+    expect(rendered).to have_content("Allegedly Infringing URL *")
+  end
+
   Notice.type_models.each do |model|
     context "country selectors in \"#{model.label}\" notices" do
       it "use ISO country codes" do

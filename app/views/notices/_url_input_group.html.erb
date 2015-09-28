@@ -5,9 +5,18 @@
   data: { target: url_input_notices_url(type: notice.class, url_type: assoc, index: index) }
 ) %>
 <%= works_form.simple_fields_for(assoc) do |urls_form| %>
-  <%= urls_form.input(
-    :url,
-    label: label_for_url_input(assoc, notice),
-    placeholder: "http://"
-  ) %>
+  <% if assoc == :copyrighted_urls %>
+	  <%= urls_form.input(
+	    :url,
+	    label: label_for_url_input(assoc, notice),
+	    placeholder: "http://",
+	    required: false 
+	  ) %>
+	<% else %>
+		<%= urls_form.input(
+		  :url,
+		  label: label_for_url_input(assoc, notice),
+		  placeholder: "http://"
+		) %>
+	<% end %>
 <% end %>
