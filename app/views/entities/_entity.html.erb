@@ -1,16 +1,21 @@
 <% additional_css ||= '' %>
+<% hide_identities = local_assigns.has_key?(:hide_identities) ? hide_identities : false %>
 <section class="<%= role %> <%= additional_css %>">
   <h5><%= role %></h5>
   <h6>
-    <%=
-      link_to(
-        entity.name,
-        faceted_search_path("#{role}_name" => entity.name)
-      )
-    %>
+    <% if hide_identities %>
+      REDACTED
+    <% else %>
+      <%=
+        link_to(
+          entity.name,
+          faceted_search_path("#{role}_name" => entity.name)
+        )
+      %>
+    <% end %>
   </h6>
 
-  <% if role == :sender %>
+  <% if role == :sender && !hide_identities %>
     <% if notice.on_behalf_of_principal? %>
       <h6>
         <span class="on_behalf_of">on behalf of</span>

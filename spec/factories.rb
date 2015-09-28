@@ -236,10 +236,12 @@ FactoryGirl.define do
 
   factory :infringing_url do
     url
+    url_original { url }
   end
 
   factory :copyrighted_url do
     url
+    url_original { url }
   end
 
   factory :blog_entry do

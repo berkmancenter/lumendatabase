@@ -317,6 +317,10 @@ class Notice < ActiveRecord::Base
     topic = TYPES_TO_TOPICS.key?(self.type) ? TYPES_TO_TOPICS[self.type] : OTHER_TOPIC
     return Topic.find_or_create_by_name(topic) 
   end
+
+  def hide_identities?
+    false
+  end
   
   before_save do
     notice_type = self.type

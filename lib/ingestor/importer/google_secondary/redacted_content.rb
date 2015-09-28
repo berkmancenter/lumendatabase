@@ -18,6 +18,7 @@ module Ingestor
 
         def to_work
           super.tap do |work|
+            work.description_original = work.description
             work.description = redact(work.description)
           end
         end
@@ -38,7 +39,7 @@ module Ingestor
         attr_reader :redactor
 
         def extract_urls(string)
-          super.map { |k| { url: redact(k[:url]) } }
+          super.map { |k| { url_original: k[:url], url: redact(k[:url]) } }
         end
       end
     end
