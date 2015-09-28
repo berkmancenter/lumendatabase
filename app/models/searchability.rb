@@ -4,7 +4,8 @@ module Searchability
   end
 
   module ClassMethods
-    def define_elasticsearch_mapping
+    def define_elasticsearch_mapping(exclusions = {})
+      exclusions = Hash.new { |h, k| h[k] = [] }.merge(exclusions)
       mapping do
         indexes :id, index: 'not_analyzed', include_in_all: false
         indexes :class_name, index: 'not_analyzed', include_in_all: false,
@@ -51,7 +52,7 @@ module Searchability
           type: 'object',
           as: -> (notice){
             notice.works.as_json({
-              only: [:description],
+              only: [:description] - exclusions[:works],
               include: {
                 infringing_urls: { only: [:url] },
                 copyrighted_urls: { only: [:url]}

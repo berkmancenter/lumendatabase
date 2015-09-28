@@ -2,7 +2,7 @@ class Other < Notice
   MASK = "REDACTED"
   REDACTION_REGEX = /google/i
 
-  define_elasticsearch_mapping
+  define_elasticsearch_mapping(works: [:description])
 
   def self.model_name
     Notice.model_name
