@@ -1,4 +1,4 @@
-class Dmca < Notice
+class DMCA < Notice
 
   define_elasticsearch_mapping
 

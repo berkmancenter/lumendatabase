@@ -9,7 +9,7 @@ describe Ingestor::Legacy do
 
     @attribute_mapper = double("AttributeMapper")
     @attribute_mapper.stub(:exclude?).and_return(false)
-    @attribute_mapper.stub(:notice_type).and_return(Dmca)
+    @attribute_mapper.stub(:notice_type).and_return(DMCA)
     @attribute_mapper.stub(:mapped).and_return({})
     described_class::AttributeMapper.stub(:new).and_return(@attribute_mapper)
   end
@@ -22,13 +22,13 @@ describe Ingestor::Legacy do
   end
 
   it "attempts to find a notice by original_notice_id before importing" do
-    dmca = Dmca.new
+    dmca = DMCA.new
 
     existing_notice_ids.each do |original_notice_id|
       Notice.should_receive(:where).with(original_notice_id: original_notice_id).once.and_return(dmca)
     end
 
-    Dmca.should_not_receive(:create!)
+    DMCA.should_not_receive(:create!)
 
     importer.import
   end

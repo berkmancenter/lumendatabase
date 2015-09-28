@@ -119,7 +119,7 @@ describe Work do
   private
 
   def notice_with_works_attributes(attributes)
-    Dmca.new(
+    DMCA.new(
       works_attributes: attributes,
       entity_notice_roles_attributes: [{
         name: 'recipient',

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'notices/new.html.erb' do
   it "has a form for notices" do
-    assign(:notice, Dmca.new)
+    assign(:notice, DMCA.new)
 
     render
 
@@ -51,7 +51,7 @@ describe 'notices/new.html.erb' do
       second_topic = create(:topic, name: "B Topic")
       third_topic = create(:topic, name: "C Topic")
       first_topic = create(:topic, name: "A Topic")
-      assign(:notice, Dmca.new)
+      assign(:notice, DMCA.new)
 
       render
 

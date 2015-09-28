@@ -361,4 +361,14 @@ namespace :chillingeffects do
     puts "Broad query: #{broad}"
     puts "Difference of: #{broad - narrow}"
   end
+
+  desc "Reassign Dmca Notices to DMCA notices"
+  task up_dmca_migration: :environment do
+    Notice.where(type: 'Dmca').update_all(type: 'DMCA')
+  end
+
+  desc "Reassign DMCA Notices to Dmca notices"
+  task down_dmca_migration: :environment do
+    Notice.where(type: 'DMCA').update_all(type: 'Dmca')
+  end
 end

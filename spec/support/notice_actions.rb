@@ -1,6 +1,6 @@
 module NoticeActions
   def submit_recent_notice(title = "A title")
-    visit "/notices/new?type=Dmca"
+    visit "/notices/new?type=DMCA"
 
     fill_in "Title", with: title
     fill_in "Date received", with: Time.now

@@ -3,11 +3,11 @@ require 'spec_helper'
 describe SubmitNotice do
   context "#notice" do
     it "returns a memoized instance" do
-      notice = Dmca.new
-      Dmca.should_receive(:new).once.
+      notice = DMCA.new
+      DMCA.should_receive(:new).once.
         with(attribute: 'value').and_return(notice)
 
-      submit_notice = SubmitNotice.new(Dmca, attribute: 'value')
+      submit_notice = SubmitNotice.new(DMCA, attribute: 'value')
 
       expect(submit_notice.notice).to eq notice
       expect(submit_notice.notice).to eq notice
@@ -16,9 +16,9 @@ describe SubmitNotice do
 
   context "#errors" do
     it "delegates to #notice" do
-      notice = stub_new(Dmca)
+      notice = stub_new(DMCA)
       notice.stub(:errors).and_return(:arbitrary)
-      submit_notice = SubmitNotice.new(Dmca, {})
+      submit_notice = SubmitNotice.new(DMCA, {})
 
       expect(submit_notice.errors).to eq :arbitrary
     end
@@ -27,7 +27,7 @@ describe SubmitNotice do
   context "#submit" do
     context "setting a default title" do
       it "preserves a provided title" do
-        submit_notice = SubmitNotice.new(Dmca, title: "Arbitrary title")
+        submit_notice = SubmitNotice.new(DMCA, title: "Arbitrary title")
 
         submit_notice.submit
 
@@ -36,7 +36,7 @@ describe SubmitNotice do
       end
 
       it "defaults based on type" do
-        [Dmca, Trademark, Other].each do |notice_type|
+        [DMCA, Trademark, Other].each do |notice_type|
           submit_notice = SubmitNotice.new(notice_type, {})
 
           submit_notice.submit
@@ -47,7 +47,7 @@ describe SubmitNotice do
       end
 
       it "defaults based on type and entity when given entity_attributes" do
-        submit_notice = submit_with_roles_attributes(Dmca, [{
+        submit_notice = submit_with_roles_attributes(DMCA, [{
           name: 'recipient', entity_attributes: { name: 'Google' }
         }])
 
@@ -59,7 +59,7 @@ describe SubmitNotice do
 
       it "defaults based on type and entity when given entity_id" do
         entity = create(:entity, name: "Google")
-        submit_notice = submit_with_roles_attributes(Dmca, [{
+        submit_notice = submit_with_roles_attributes(DMCA, [{
           name: 'recipient', entity_id: entity.id
         }])
 
@@ -73,7 +73,7 @@ describe SubmitNotice do
         parameters = HashWithIndifferentAccess.new(
           '0' => { name: 'recipient', entity_attributes: { name: "Google" } }
         )
-        submit_notice = submit_with_roles_attributes(Dmca, parameters)
+        submit_notice = submit_with_roles_attributes(DMCA, parameters)
 
         submit_notice.submit
 
@@ -89,37 +89,37 @@ describe SubmitNotice do
     end
 
     it "auto redacts always" do
-      notice = stub_new(Dmca)
+      notice = stub_new(DMCA)
       notice.should_receive(:auto_redact)
 
-      SubmitNotice.new(Dmca, {}).submit
+      SubmitNotice.new(DMCA, {}).submit
     end
 
     it "returns true and marks for review success" do
-      notice = stub_new(Dmca)
+      notice = stub_new(DMCA)
       notice.stub(:save).and_return(true)
       notice.stub(:copy_id_to_submission_id)
       notice.should_receive(:mark_for_review)
 
-      ret = SubmitNotice.new(Dmca, {}).submit
+      ret = SubmitNotice.new(DMCA, {}).submit
 
       expect(ret).to be_true
     end
 
     it 'copies id to submission_id' do
-      notice = stub_new(Dmca)
+      notice = stub_new(DMCA)
       notice.stub(:save).and_return(true)
       notice.stub(:mark_for_review)
       notice.should_receive(:copy_id_to_submission_id)
 
-      SubmitNotice.new(Dmca, {}).submit
+      SubmitNotice.new(DMCA, {}).submit
     end
 
     it "returns false on failure" do
-      notice = stub_new(Dmca)
+      notice = stub_new(DMCA)
       notice.stub(:save).and_return(false)
 
-      ret = SubmitNotice.new(Dmca, {}).submit
+      ret = SubmitNotice.new(DMCA, {}).submit
 
       expect(ret).to be_false
     end
@@ -128,14 +128,14 @@ describe SubmitNotice do
 
   context "#submit for a user" do
     it "does nothing if the user has no entity" do
-      Dmca.should_receive(:new).with(title: "A title").and_return(null_object)
+      DMCA.should_receive(:new).with(title: "A title").and_return(null_object)
 
-      SubmitNotice.new(Dmca, title: "A title").submit(User.new)
+      SubmitNotice.new(DMCA, title: "A title").submit(User.new)
     end
 
     it "adds entity attributes when user has an entity" do
       user = build(:user, :with_entity)
-      Dmca.should_receive(:new).with(
+      DMCA.should_receive(:new).with(
         title: "A title",
         entity_notice_roles_attributes: [
           { name: 'submitter', entity_id: user.entity.id },
@@ -143,12 +143,12 @@ describe SubmitNotice do
         ]
       ).and_return(null_object)
 
-      SubmitNotice.new(Dmca, title: "A title").submit(user)
+      SubmitNotice.new(DMCA, title: "A title").submit(user)
     end
 
     it "does not affect other roles" do
       user = build(:user, :with_entity)
-      Dmca.should_receive(:new).with(
+      DMCA.should_receive(:new).with(
         entity_notice_roles_attributes: [
           { name: 'sender', entity_attributes: { name: 'Sender' } },
           { name: 'submitter', entity_id: user.entity.id },
@@ -156,21 +156,21 @@ describe SubmitNotice do
         ]
       ).and_return(null_object)
 
-      SubmitNotice.new(Dmca, entity_notice_roles_attributes: [
+      SubmitNotice.new(DMCA, entity_notice_roles_attributes: [
         { name: 'sender', entity_attributes: { name: 'Sender' } }
       ]).submit(user)
     end
 
     it "does not override an explicitly submitted entity" do
       user = build(:user, :with_entity)
-      Dmca.should_receive(:new).with(
+      DMCA.should_receive(:new).with(
         entity_notice_roles_attributes: [
           { name: 'recipient', entity_attributes: { name: 'Recipient' } },
           { name: 'submitter', entity_id: user.entity.id }
         ]
       ).and_return(null_object)
 
-      SubmitNotice.new(Dmca, entity_notice_roles_attributes: [
+      SubmitNotice.new(DMCA, entity_notice_roles_attributes: [
         { name: 'recipient', entity_attributes: { name: 'Recipient' } }
       ]).submit(user)
     end

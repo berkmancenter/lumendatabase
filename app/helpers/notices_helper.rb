@@ -54,7 +54,7 @@ module NoticesHelper
     case url_type
     when :infringing_urls
       case notice
-      when ::Dmca, ::Trademark
+      when ::DMCA, ::Trademark
         "Allegedly Infringing URL"
       when ::PrivateInformation
         "URL with private information"
@@ -69,7 +69,7 @@ module NoticesHelper
       end
     when :copyrighted_urls
       case notice
-      when ::Dmca, ::Other
+      when ::DMCA, ::Other
         "Original Work URL"
       when ::LawEnforcementRequest
         "URL of original work"

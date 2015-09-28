@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'ingestor'
 
-describe Ingestor::Importer::GoogleSecondary::DmcaParser do
+describe Ingestor::Importer::GoogleSecondary::DMCAParser do
 
   it "has a default_recipient" do
     expect(described_class.new('').default_recipient).to eq 'Google, Inc.'

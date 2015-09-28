@@ -59,7 +59,7 @@ class Notice < ActiveRecord::Base
   OTHER_TOPIC = "Uncategorized"
 
   TYPES_TO_TOPICS = {
-    'Dmca'                  => "Copyright",
+    'DMCA'                  => "Copyright",
     'Trademark'             => "Trademark",
     'Defamation'            => "Defamation",
     'CourtOrder'            => "Court Orders",
