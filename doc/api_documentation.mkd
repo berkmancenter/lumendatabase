@@ -166,7 +166,15 @@ Translate supports, and are currently:
 
 ### Submitting data
 
-When creating a notice through the API, there are two ways to submit notice data. 
+When creating a notice through the API, there are two ways to submit notice data: as form data or as JSON data. Each has advantages and disadvantages described below.
+
+#### As Form Data
+
+Form data is useful for attaching files to the notice as the files can be included by name and location on a local drive.
+
+This is the suggested method as it is more efficient at attaching files, which are transmitted as binary data.
+
+#### As JSON Data
 
 ### Authentication
 
