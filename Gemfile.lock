@@ -92,6 +92,8 @@ GEM
     country_select (1.2.0)
     curb (0.8.4)
     database_cleaner (1.0.1)
+    date_validator (0.8.1)
+      activemodel
     debug_inspector (0.0.2)
     devise (2.2.4)
       bcrypt-ruby (~> 3.0)
@@ -332,6 +334,7 @@ DEPENDENCIES
   country_select
   curb
   database_cleaner
+  date_validator
   devise
   factory_girl_rails
   fakeweb
@@ -373,4 +376,4 @@ DEPENDENCIES
   unicorn
 
 BUNDLED WITH
-   1.10.3
+   1.10.6
