@@ -31,7 +31,6 @@ gem 'cancan', '~>1.6.10'
 gem 'jquery-placeholder-rails'
 gem 'activerecord-import'
 gem 'html2md'
-gem 'mysql2'
 gem 'ruby-progressbar'
 gem 'rack-throttle'
 
