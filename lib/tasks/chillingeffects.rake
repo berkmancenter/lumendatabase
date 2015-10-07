@@ -333,16 +333,18 @@ namespace :chillingeffects do
       )
       notices.find_in_batches do |group|
         group.each do |notice|
-          redactor = RedactsNotices::RedactsEntityName.new(notice.sender.name)
-          notice.works.each do |work|
-            work.update_attributes(description: redactor.redact(work.description))
-            work.infringing_urls.each do |iu|
-              iu.update_attributes(url: redactor.redact(iu.url))
+          if notice.sender.present?
+            redactor = RedactsNotices::RedactsEntityName.new(notice.sender.name)
+            notice.works.each do |work|
+              work.update_attributes(description: redactor.redact(work.description))
+              work.infringing_urls.each do |iu|
+                iu.update_attributes(url: redactor.redact(iu.url))
+              end
+              work.copyrighted_urls.each do |cu|
+                cu.update_attributes(url: redactor.redact(cu.url))
+              end
+              p.increment
             end
-            work.copyrighted_urls.each do |cu|
-              cu.update_attributes(url: redactor.redact(cu.url))
-            end
-            p.increment
           end
         end
       end

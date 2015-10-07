@@ -1,16 +1,9 @@
 class AddUrlOriginalToCopyrightedUrls < ActiveRecord::Migration
-  def up
-    add_column t, c, :string, limit: 8192
-    execute "UPDATE #{t} SET #{c} = #{u}"
-    change_column t, c, :string, null: false, limit: 8192
-    remove_index t, u
-    add_index t, c, unique: true
-  end
-
-  def down
+  def change
+    rename_column t, u, c
+    rename_index t, "index_#{t}_on_#{u}", "index_#{t}_on_#{c}"
+    add_column t, u, :string, limit: 8192
     execute "UPDATE #{t} SET #{u} = #{c}"
-    remove_column t, c
-    add_index t, u, unique: true
   end
 
   def t
