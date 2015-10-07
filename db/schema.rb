@@ -36,10 +36,10 @@ ActiveRecord::Schema.define(:version => 20150918190529) do
   add_index "blog_entry_topic_assignments", ["topic_id"], :name => "index_blog_entry_topic_assignments_on_topic_id"
 
   create_table "copyrighted_urls", :force => true do |t|
-    t.string   "url",          :limit => 8192, :null => false
+    t.string   "url_original", :limit => 8192, :null => false
     t.datetime "created_at",                   :null => false
     t.datetime "updated_at",                   :null => false
-    t.string   "url_original", :limit => 8192, :null => false
+    t.string   "url",          :limit => 8192, :null => false
   end
 
   add_index "copyrighted_urls", ["url_original"], :name => "index_copyrighted_urls_on_url_original", :unique => true
@@ -106,10 +106,10 @@ ActiveRecord::Schema.define(:version => 20150918190529) do
   add_index "file_uploads", ["notice_id"], :name => "index_file_uploads_on_notice_id"
 
   create_table "infringing_urls", :force => true do |t|
-    t.string   "url",          :limit => 8192, :null => false
+    t.string   "url_original", :limit => 8192, :null => false
     t.datetime "created_at",                   :null => false
     t.datetime "updated_at",                   :null => false
-    t.string   "url_original", :limit => 8192, :null => false
+    t.string   "url",          :limit => 8192, :null => false
   end
 
   add_index "infringing_urls", ["url_original"], :name => "index_infringing_urls_on_url_original", :unique => true
