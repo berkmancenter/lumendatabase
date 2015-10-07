@@ -94,6 +94,13 @@ class NoticesController < ApplicationController
     end
   end
 
+  def feed
+    @recent_notices = Notice.visible.recent
+    respond_to do |format|
+      format.rss { render :layout => false }
+    end
+  end
+
   private
 
   def json_root_for(klass)

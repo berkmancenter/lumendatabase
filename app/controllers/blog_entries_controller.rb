@@ -7,4 +7,11 @@ class BlogEntriesController < ApplicationController
   def show
     @blog_entry = BlogEntry.find(params[:id])
   end
+
+  def feed
+  	@blog_articles = BlogEntry.published.with_content.limit(5)
+  	respond_to do |format|
+  		format.rss { render :layout => false }
+  	end
+  end
 end
