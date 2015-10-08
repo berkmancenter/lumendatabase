@@ -20,7 +20,10 @@ class Work < ActiveRecord::Base
   %w(infringing_urls copyrighted_urls).each do |relation_type|
     relation_class = relation_type.classify.constantize
     define_method("validate_associated_records_for_#{relation_type}") do
-      urls_to_associate = send(relation_type.to_sym).map(&:url_original).uniq.compact
+      url_attributes =  send(relation_type.to_sym).inject({}) do |memo, url|
+        memo.merge(url.url_original => url.attributes.slice("url", "url_original"))
+      end
+      urls_to_associate = url_attributes.keys.compact
 
       return if urls_to_associate == ['']
 
@@ -28,8 +31,15 @@ class Work < ActiveRecord::Base
       existing_urls = existing_url_instances.map(&:url_original)
 
       new_urls = urls_to_associate - existing_urls
-      new_url_instances = new_urls.map { |url| relation_class.new(url: url) }
+      new_url_instances = new_urls.map { |url| relation_class.new(url_attributes[url]) }
       relation_class.import new_url_instances
+
+      existing_url_instances.each do |url|
+        atts = url_attributes[url.url_original]
+        if atts["url"].present? && atts["url"] != atts["url_original"]
+          url.update_attributes!(url: atts["url"]) if atts["url"] != url.url
+        end
+      end
 
       send(
         "#{relation_type}=".to_sym,
