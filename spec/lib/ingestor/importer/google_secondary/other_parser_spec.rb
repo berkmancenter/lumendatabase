@@ -96,6 +96,7 @@ Public and johnnypublic.public^publicpublic1johnnyjohnny johnnyjohnny."
 
   it "redacts copyrighted_urls" do
     work = described_class.new(redaction_file).works.first
+    work.save!
 
     expect(work.copyrighted_urls.map(&:url)).to match_array(
       ['http://[REDACTED].com']
@@ -104,6 +105,7 @@ Public and johnnypublic.public^publicpublic1johnnyjohnny johnnyjohnny."
 
   it "preserves url_original for copyrighted_urls" do
     work = described_class.new(redaction_file).works.first
+    work.save!
 
     expect(work.copyrighted_urls.map(&:url_original)).to match_array(
       ['http://johnny.public.public-johnny.com']
@@ -112,6 +114,7 @@ Public and johnnypublic.public^publicpublic1johnnyjohnny johnnyjohnny."
 
   it "redacts infringing_urls" do
     work = described_class.new(redaction_file).works.first
+    work.save!
 
     expect(work.infringing_urls.map(&:url)).to match_array(
       %w|http://www.flickr.com/photos/[REDACTED]/89538824@N03/8152247706/|
@@ -120,9 +123,30 @@ Public and johnnypublic.public^publicpublic1johnnyjohnny johnnyjohnny."
 
   it "preserves url_original for infringing_urls" do
     work = described_class.new(redaction_file).works.first
+    work.save!
 
     expect(work.infringing_urls.map(&:url_original)).to match_array(
       %w|http://www.flickr.com/photos/johnny_public/89538824@N03/8152247706/|
+    )
+  end
+
+  it "redacts copyrighted_urls that already exist" do
+    create(:copyrighted_url, url: 'http://johnny.public.public-johnny.com')
+    work = described_class.new(redaction_file).works.first
+    work.save!
+
+    expect(work.copyrighted_urls.map(&:url)).to match_array(
+      ['http://[REDACTED].com']
+    )
+  end
+
+  it "redacts infringing_urls that already exist" do
+    create(:infringing_url, url: 'http://www.flickr.com/photos/johnny_public/89538824@N03/8152247706/')
+    work = described_class.new(redaction_file).works.first
+    work.save!
+
+    expect(work.infringing_urls.map(&:url)).to match_array(
+      ['http://www.flickr.com/photos/[REDACTED]/89538824@N03/8152247706/']
     )
   end
 end
