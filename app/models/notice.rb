@@ -94,8 +94,8 @@ class Notice < ActiveRecord::Base
   validates_inclusion_of :action_taken, in: VALID_ACTIONS, allow_blank: true
   validates_inclusion_of :language, in: Language.codes, allow_blank: true
   validates_presence_of :works, :entity_notice_roles
-  validates :date_sent, date: { after: Proc.new { Date.new(1998,10,28) }, before: Proc.new { Time.now + 1 } }
-  validates :date_received, date: { after: Proc.new { Date.new(1998,10,28) }, before: Proc.new { Time.now + 1 } }
+  validates :date_sent, date: { after: Proc.new { Date.new(1998,10,28) }, before: Proc.new { Time.now + 1.day } }
+  validates :date_received, date: { after: Proc.new { Date.new(1998,10,28) }, before: Proc.new { Time.now + 1.day } }
 
   # Using reset_type because type is ALWAYS protected (deep in the Rails code).
   attr_protected :id, :type, :reset_type

@@ -29,6 +29,9 @@ FactoryGirl.define do
   factory :dmca do
 
     title "A title"
+    date_received Time.now
+    date_sent Time.now
+    
     works { build_list(:work, 1) }
 
     ignore do
