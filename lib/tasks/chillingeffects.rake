@@ -373,4 +373,10 @@ namespace :chillingeffects do
   task down_dmca_migration: :environment do
     Notice.where(type: 'DMCA').update_all(type: 'Dmca')
   end
+
+  desc "Remove future dates from date_received and date_sent in notices"
+  task remove_future_dates: :environment do
+    Notice.update_all("date_received = NULL", "date_received > CURRENT_DATE")
+    Notice.update_all("date_sent = NULL", "date_sent > CURRENT_DATE")
+  end
 end
