@@ -1,6 +1,6 @@
 ## Create notice
 
-Submits a new Notice to the chillingeffects system.
+Submits a new Notice to the Lumen system.
 There are several different "Notice Types," these are essentially subclasses of
 the abstract Notice class.  "Notice Types" allow us to track notice-specific
 attributes and create serialized representations with logical attribute names.
@@ -8,11 +8,11 @@ Please see **Notice Type Mapping** below, which defines what attributes are
 remapped for each Notice Type.
 
 An `authentication_token` is required to submit via the API. Please ask
-Chilling Effects staff for your authentication token.
+Lumen staff for your authentication token.
 
 **Method**: `POST`
 
-**Endpoint**: `https://chillingeffects.org/notices`
+**Endpoint**: `https://lumendatabase.org/notices`
 
 ### Request
 
@@ -70,7 +70,7 @@ Chilling Effects staff for your authentication token.
 
 | Field                | Type    | Description
 | ---                  | ---     | ---
-| `name`               | string  | The name of the role, one of "principal", "agent", "recipient", "sender", "target", "issuing_court", "plaintiff", "defendant" or "submitter". "recipient" and "sender" are displayed for all Notice Types on the ChillingEffects website after automatic redaction.
+| `name`               | string  | The name of the role, one of "principal", "agent", "recipient", "sender", "target", "issuing_court", "plaintiff", "defendant" or "submitter". "recipient" and "sender" are displayed for all Notice Types on the Lumen website after automatic redaction.
 | `entity_id`          | integer | (Optional) The ID of an existing entity. You should not specify the `entity_attributes` values below if you include `entity_id` here.
 | `entity_attributes`  | Entity  | A new entity that has this role on this notice. If you specify `entity_attributes`, you should not specify an `entity_id`
 
@@ -179,7 +179,7 @@ This is the suggested method as it is more efficient at attaching files, which a
 ### Authentication
 
 Submissions through the API **must** be authenticated by including an 
-Authentication Token. Tokens will be provided by Chilling Effects upon 
+Authentication Token. Tokens will be provided by Lumen upon 
 request.
 
 The Token may be included as a parameter or header.
@@ -190,7 +190,7 @@ The Token may be included as a parameter or header.
 curl -H "Accept: application/json" \
      -H "Content-type: application/json" \
      -d '{ "authentication_token": "abc123", "notice": {...} }' \
-     'https://chillingeffects.org/notices'
+     'https://lumendatabase.org/notices'
 ```
 
 * Request Header: `AUTHENTICATION_TOKEN`
@@ -200,7 +200,7 @@ curl -H "Accept: application/json" \
      -H "Content-type: application/json" \
      -H "AUTHENTICATION_TOKEN: abc123" \
      -d '{ "notice": {...} }' \
-     'https://chillingeffects.org/notices'
+     'https://lumendatabase.org/notices'
 ```
 
 If the Authentication Token is missing or invalid, an empty response 
@@ -214,7 +214,7 @@ by typing `man curl`.
 
 
 ```
-curl -v -H "Accept: application/json" -H "Content-type: application/json" 'https://chillingeffects.org/notices/' -d '{
+curl -v -H "Accept: application/json" -H "Content-type: application/json" 'https://lumendatabase.org/notices/' -d '{
   "authentication_token": "abc123",
   "notice": {
     "title": "DMCA (Copyright) Complaint to Google",
@@ -289,7 +289,7 @@ curl -v -H "Accept: application/json" -H "Content-type: application/json" 'https
 
 
 ```
-curl -v -H "Accept: application/json" -H "Content-type: application/json" 'https://chillingeffects.org/notices/' -d '{
+curl -v -H "Accept: application/json" -H "Content-type: application/json" 'https://lumendatabase.org/notices/' -d '{
   "authentication_token": "abc123",
   "notice": {
     "title": "DMCA (Copyright) Complaint to Google",
@@ -345,7 +345,7 @@ Successful responses will have HTTP status 201 (Created) and include a
 **Note:** Unimportant headers have been removed.
 
 ```
-> curl -H "Accept: application/json" -H "Content-type: application/json" 'https://chillingeffects.org/notices' -d @tmp/curl.json --dump-header - 
+> curl -H "Accept: application/json" -H "Content-type: application/json" 'https://lumendatabase.org/notices' -d @tmp/curl.json --dump-header - 
 HTTP/1.1 201 Created 
 Location: http://localhost:3000/notices/4
 Content-Type: application/json; charset=utf-8
@@ -451,13 +451,13 @@ Attributes remain unchanged from ingestion.
 
 **Method**: `GET`
 
-**Endpoint**: `https://chillingeffects.org/notices/<notice id>.json`
+**Endpoint**: `https://lumendatabase.org/notices/<notice id>.json`
 
 
 #### Example Request:
 
 ```
-curl https://chillingeffects.org/notices/1.json
+curl https://lumendatabase.org/notices/1.json
 ```
 
 ### Successful Responses
@@ -479,7 +479,7 @@ articulating their type.
     "topics":[
       "Anticircumvention (DMCA)",
       "Bookmarks",
-      "Chilling Effects"
+      "Lumen"
     ],
     "tags": [
       "tag_1",
@@ -518,10 +518,10 @@ Return a 404 HTTP status header.
 
 **Method**: GET
 
-**Endpoint**: `https://chillingeffects.org/topics.json`
+**Endpoint**: `https://lumendatabase.org/topics.json`
 
 ```
-curl https://chillingeffects.org/topics.json
+curl https://lumendatabase.org/topics.json
 ```
 
 ### Successful Responses
@@ -541,7 +541,7 @@ Return a JSON-encoded array of topics, including the following attributes:
   "topics": [
     {
       "id": 1,
-      "name": "Chilling Effects",
+      "name": "Lumen",
       "parent_id": null
     },
     {
@@ -560,19 +560,19 @@ Return a JSON-encoded array of topics, including the following attributes:
 
 ## Search notices via fulltext
 
-Chillingeffects allows for paginatable full-text searches of notices and
+The Lumen website allows for paginatable full-text searches of notices and
 relevant metadata. Results are sorted with the most relevant at the top. Notice
 search results contain the same data as an individually-requested Notice, with
 an additional "score" field. "score" articulates how "relevant" this result is
 to the query term. Higher numbers are more relevant. If you do not have a 
 researcher API token you will limited to 25 results per request and 3 requests 
-per minute. Contact Chilling Effects administrators to request a researcher token.
+per minute. Contact Lumen administrators to request a researcher token.
 
 Terms are joined with an 'OR' by default.
 
 **Method**: `GET`
 
-**Endpoint**: `https://chillingeffects.org/notices/search?term=url_escaped_query&sender_name=Joe%20Smith&page=1`
+**Endpoint**: `https://Lumendatabase.org/notices/search?term=url_escaped_query&sender_name=Joe%20Smith&page=1`
 
 **Parameters**
 
@@ -709,7 +709,7 @@ documentation for more information. We only return the 10 most populous facets.
 **Note:** Some facet information has been omitted to keep examples brief.
 
 ```
-curl -H "Accept: application/json" -H "Content-type: application/json" 'https://chillingeffects.org/notices/search?term=star'
+curl -H "Accept: application/json" -H "Content-type: application/json" 'https://lumendatabase.org/notices/search?term=star'
 ```
 
 
@@ -827,13 +827,13 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'https://
 
 ## Search for Entities via fulltext
 
-Chilling Effects allows for paginatable full-text searches of Entities, useful
+The Lumen database allows for paginatable full-text searches of Entities, useful
 to select existing entities during notice creation. For information about
 pagination metadata, please see 'Search notices via fulltext'
 
 **Method**: `GET`
 
-**Endpoint**: `https://chillingeffects.org/entities/search?term=url_escaped_query&page=1`
+**Endpoint**: `https://lumendatabase.org/entities/search?term=url_escaped_query&page=1`
 
 **Parameters**
 
@@ -877,7 +877,7 @@ Return a JSON-encoded representation of selected entity attributes.
 #### Example Successful Response:
 
 ```
-curl -H "Accept: application/json" -H "Content-type: application/json" 'https://chillingeffects.org/entities/search?term=joe&page=1'
+curl -H "Accept: application/json" -H "Content-type: application/json" 'https://lumendatabase.org/entities/search?term=joe&page=1'
 ```
 
 
