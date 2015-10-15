@@ -311,6 +311,40 @@ namespace :chillingeffects do
     end
   end
 
+  desc "Redact content in a single notice by id"
+  task redact_lr_legalother_single[ :notice_id ] => :environment do |t, args|
+    begin
+      notices = Notice.includes(
+        works: [:infringing_urls, :copyrighted_urls]
+      ).where(
+        entity_notice_roles: { name: 'recipient' }
+      ).where(
+        id: args[ :notice_id ]
+      )
+
+      # even though there's only one notice,
+      # we do this like redact_lr_legalother to check for issues in the script
+      notices.find_in_batches do |group|
+        group.each do |notice|
+          if notice.sender.present?
+            redactor = RedactsNotices::RedactsEntityName.new(notice.sender.name)
+            notice.works.each do |work|
+              work.update_attributes(description: redactor.redact(work.description))
+              work.infringing_urls.each do |iu|
+                iu.update_attributes(url: redactor.redact(iu.url))
+              end
+              work.copyrighted_urls.each do |cu|
+                cu.update_attributes(url: redactor.redact(cu.url))
+              end
+            end
+          end
+        end
+      end
+    rescue => e
+      $stderr.puts "reassigning did not succeed because: #{e.inspect}"
+    end
+  end
+
   desc "Redact content in lr_legalother notices from Google"
   task redact_lr_legalother: :environment do
 
