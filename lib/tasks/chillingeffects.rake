@@ -317,8 +317,6 @@ namespace :chillingeffects do
       notices = Notice.includes(
         works: [:infringing_urls, :copyrighted_urls]
       ).where(
-        entity_notice_roles: { name: 'recipient' }
-      ).where(
         id: args[ :notice_id ]
       )
 
