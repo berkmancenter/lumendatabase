@@ -312,7 +312,7 @@ namespace :chillingeffects do
   end
 
   desc "Redact content in a single notice by id"
-  task redact_lr_legalother_single, [ :notice_id ] => :environment do |t, args|
+  task :redact_lr_legalother_single, [ :notice_id ] => :environment do |t, args|
     begin
       notices = Notice.includes(
         works: [:infringing_urls, :copyrighted_urls]
