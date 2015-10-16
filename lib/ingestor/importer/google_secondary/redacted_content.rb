@@ -11,9 +11,8 @@ module Ingestor
 
         def initialize(file_path, description_start)
           super
-          @redactor = RedactsNotices::RedactsEntityName.new(
-            content.match(/full_name[^:]*:(.+?)\n[a-z_]+:/m) ? $1.strip : nil
-          )
+          entity_name = yield content.dup
+          @redactor = RedactsNotices::RedactsEntityName.new(entity_name)
         end
 
         def to_work
