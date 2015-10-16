@@ -69,6 +69,7 @@ http://www.example.com/infringing|
 "#{Ingestor::Importer::GoogleSecondary::RedactedContent::QUOTE_PREAMBLE.strip}
 [REDACTED] child abuser bristol durham real gay deep  
 ass - Flickr
+Also...[REDACTED]
 #{Ingestor::Importer::GoogleSecondary::RedactedContent::EXPLAIN_PREAMBLE.strip}
 Someone (unknown) has got hold of my personal details  
 and posted images with my name and my cell phone number on flickr. I have  
@@ -84,6 +85,7 @@ very concerned about this as you can imagine. My name and address [REDACTED] hav
 "#{Ingestor::Importer::GoogleSecondary::RedactedContent::QUOTE_PREAMBLE.strip}
 Johnny Public child abuser bristol durham real gay deep  
 ass - Flickr
+Also...Rights Holder
 #{Ingestor::Importer::GoogleSecondary::RedactedContent::EXPLAIN_PREAMBLE.strip}
 Someone (unknown) has got hold of my personal details  
 and posted images with my name and my cell phone number on flickr. I have  
