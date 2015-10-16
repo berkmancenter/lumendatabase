@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '2.0.0'
+ruby '2.1.6'
 
 gem 'bourbon'
 gem 'neat'
@@ -10,6 +10,7 @@ gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'pg'
 gem 'rails', '~> 3.2.22'
+gem 'bcrypt'
 gem 'recipient_interceptor'
 gem 'simple_form'
 gem 'strong_parameters'
@@ -38,7 +39,7 @@ group :assets do
   gem 'coffee-rails'
   gem 'sass-rails'
   gem 'uglifier'
-  gem 'therubyracer'
+  #gem 'therubyracer'
 end
 
 group :development do
@@ -53,12 +54,12 @@ group :development, :test do
   gem 'sham_rack'
   gem 'pry-rails'
   gem 'ruby-prof'
-  gem 'unicorn'
+  #gem 'unicorn'
 end
 
 group :test do
   gem 'bourne', require: false
-  gem 'capybara-webkit', '~> 1.0.0'
+  #gem 'capybara-webkit', '~> 1.0.0'
   gem 'database_cleaner'
   gem 'launchy'
   gem 'shoulda-matchers'
