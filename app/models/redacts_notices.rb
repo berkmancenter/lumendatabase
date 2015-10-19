@@ -82,7 +82,7 @@ class RedactsNotices
     def initialize(name)
       match = name.strip.split(/[\s\-]/)
       ops = %w[* + - ?]
-      match = match.reject { |x| ops.include? x }
+      match = match.reject { |x| x.empty? || ops.include?( x ) }
       @regex_base = "(?:#{match.join('|')})(?:[^a-z]*(?:#{match.join('|')}))*"
       @regex = /#{@regex_base}/mi
     end
