@@ -81,7 +81,7 @@ class RedactsNotices
   class RedactsEntityName
     def initialize(name)
       match = name.strip.split(/\s/)
-      ops = %w[* + ?]
+      ops = %w[* + - ?]
       match = match.reject { |x| ops.include? x }
       @regex_base = "(?:#{match.join('|')})(?:[^a-z]*(?:#{match.join('|')}))*"
       @regex = /#{@regex_base}/mi
