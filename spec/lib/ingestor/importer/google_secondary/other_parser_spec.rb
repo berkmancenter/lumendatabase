@@ -70,6 +70,8 @@ http://www.example.com/infringing|
 [REDACTED] child abuser bristol durham real gay deep  
 ass - Flickr
 Also...[REDACTED]
+And [REDACTED]?
+And [REDACTED]?
 #{Ingestor::Importer::GoogleSecondary::RedactedContent::EXPLAIN_PREAMBLE.strip}
 Someone (unknown) has got hold of my personal details  
 and posted images with my name and my cell phone number on flickr. I have  
@@ -86,6 +88,8 @@ very concerned about this as you can imagine. My name and address [REDACTED] hav
 Johnny Public child abuser bristol durham real gay deep  
 ass - Flickr
 Also...Rights Holder
+And Johnny Public * Blacksmith-Fisherman vOn - Helsing +Formula 3451 Racing?
+And Johnny Public Blacksmith*Fisherman vOn-Helsing Formula+ 34 . 51 Racing?
 #{Ingestor::Importer::GoogleSecondary::RedactedContent::EXPLAIN_PREAMBLE.strip}
 Someone (unknown) has got hold of my personal details  
 and posted images with my name and my cell phone number on flickr. I have  
