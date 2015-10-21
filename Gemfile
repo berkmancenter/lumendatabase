@@ -34,6 +34,8 @@ gem 'html2md'
 gem 'mysql2'
 gem 'ruby-progressbar'
 gem 'rack-throttle'
+gem 'twitter'
+gem 'twitter-text'
 
 group :assets do
   gem 'coffee-rails'

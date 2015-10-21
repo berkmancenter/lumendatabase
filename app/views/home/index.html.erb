@@ -13,10 +13,18 @@
       <%= render @notices %>
     </ol>
   </section>
+  <section class="tweets">
+  <h2>@chillingeffects on twitter</h2>
+    <% @tweet_news.each do |tweet| %>
+    <ol>
+        <li><%= auto_link(tweet.text).html_safe %></li>
+    </ol>
+    <% end %>
+  </section>
   <section class="news-snippets">
     <h2>From the Blog</h2>
     <ol id="recent-blog-entries">
       <%= render partial: 'blog_entry', collection: @blog_entries %>
     </ol>
-  </section >
+  </section>
 </div>
