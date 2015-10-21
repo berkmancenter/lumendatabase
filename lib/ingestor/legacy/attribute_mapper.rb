@@ -46,7 +46,7 @@ module Ingestor
         {
           original_notice_id: hash['NoticeID'],
           title: title,
-          subject: hash['Re_Line'],
+          subject: hash_text( 'Re_Line' ),
           source: hash['How_Sent'],
           action_taken: importer.action_taken,
           created_at: find_created_at,
@@ -71,10 +71,14 @@ module Ingestor
 
       attr_reader :importer
 
+      def hash_text( key )
+        hash[ key ].split( "\r\n" ).first unless hash[ key ].nil?
+      end
+
       def title
         (
-          normalize_title(hash['Subject']) ||
-          normalize_title(hash['Re_Line'])
+          normalize_title( hash_text( 'Subject' ) ) ||
+          normalize_title( hash_text( 'Re_Line' ) )
         ) || 'Untitled'
       end
 
