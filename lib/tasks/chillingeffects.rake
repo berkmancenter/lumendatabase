@@ -115,11 +115,12 @@ namespace :chillingeffects do
   desc "Recreate elasticsearch index for notices of a given year"
   task :recreate_elasticsearch_index_for_notice_by_year, [ :year ] => :environment do |t, args|
   begin
+    batch_size = (ENV['BATCH_SIZE'] || 256).to_i
     puts 'optionally delete and recreate index before running this the first time'
     #Notice.index.delete
     #Notice.create_elasticsearch_index
     count = 0
-    Notice.where( "created_at >= '#{args[ :year ]}-01-01' and created_at < '#{args[ :year ].to_i + 1}-01-01'" ).find_in_batches do |batch|
+    Notice.where( "created_at >= '#{args[ :year ]}-01-01' and created_at < '#{args[ :year ].to_i + 1}-01-01'" ).find_in_batches( batch_size: batch_size ) do |batch|
       GC.start
       Tire.index( Notice.index_name ).import batch
       count += batch.count
