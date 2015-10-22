@@ -119,8 +119,12 @@ namespace :chillingeffects do
     puts 'optionally delete and recreate index before running this the first time'
     #Notice.index.delete
     #Notice.create_elasticsearch_index
+
+    notices = Notice.where( "extract( year from created_at ) = #{args[ :year ]}" )
+    puts "indexing #{notices.count} from #{args[:year]}"
+    
     count = 0
-    Notice.where( "created_at >= '#{args[ :year ]}-01-01' and created_at < '#{args[ :year ].to_i + 1}-01-01'" ).find_in_batches( batch_size: batch_size ) do |batch|
+    notices.find_in_batches( batch_size: batch_size ) do |batch|
       GC.start
       Tire.index( Notice.index_name ).import batch
       count += batch.count
