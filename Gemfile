@@ -34,6 +34,7 @@ gem 'html2md'
 gem 'mysql2'
 gem 'ruby-progressbar'
 gem 'rack-throttle'
+gem 'piwik_analytics'
 
 group :assets do
   gem 'coffee-rails'
