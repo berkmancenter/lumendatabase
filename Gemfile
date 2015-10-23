@@ -34,6 +34,7 @@ gem 'html2md'
 gem 'mysql2'
 gem 'ruby-progressbar'
 gem 'rack-throttle'
+gem 'date_validator'
 gem 'piwik_analytics'
 
 group :assets do
