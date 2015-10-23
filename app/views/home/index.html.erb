@@ -14,6 +14,14 @@
     </ol>
     <a href="https://www.chillingeffects.org/notices_feed?format=rss"><%= image_tag("feed_icon.png", :size => "14x14") %></a>
   </section>
+  <section class="tweets">
+  <h2>@chillingeffects on twitter</h2>
+    <% @tweet_news.each do |tweet| %>
+    <ol>
+        <li><%= auto_link(tweet.text).html_safe %></li>
+    </ol>
+    <% end %>
+  </section>
   <section class="news-snippets">
     <h2>From the Blog</h2>
     <ol id="recent-blog-entries">

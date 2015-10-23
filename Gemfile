@@ -36,6 +36,8 @@ gem 'ruby-progressbar'
 gem 'rack-throttle'
 gem 'date_validator'
 gem 'piwik_analytics'
+gem 'twitter'
+gem 'twitter-text'
 
 group :assets do
   gem 'coffee-rails'
