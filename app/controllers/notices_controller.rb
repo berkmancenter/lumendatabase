@@ -54,19 +54,13 @@ class NoticesController < ApplicationController
   end
 
   def show
-    if Notice.find_unpublished(params[:id])
-      respond_to do |format|
-        format.html do
-          render file: 'public/404_unavailable', formats: [:html], status: :not_found, layout: false  
-        end
-      end
-    else  
-      @notice = Notice.find_visible(params[:id])
-
+    if @notice = Notice.find(params[:id])
       respond_to do |format|
         format.html do
           if @notice.rescinded?
             render :rescinded
+          elsif @notice.hidden || @notice.spam || !@notice.published
+            render file: 'public/404_unavailable', formats: [:html], status: :not_found, layout: false
           else
             render :show
           end
@@ -74,7 +68,7 @@ class NoticesController < ApplicationController
 
         format.json do
           render json: @notice, serializer: NoticeSerializerProxy,
-            root: json_root_for(@notice.class)
+          root: json_root_for(@notice.class)
         end
       end
     end
@@ -91,6 +85,13 @@ class NoticesController < ApplicationController
     notice.works.build do |w|
       w.copyrighted_urls.build
       w.infringing_urls.build
+    end
+  end
+
+  def feed
+    @recent_notices = Notice.visible.recent
+    respond_to do |format|
+      format.rss { render :layout => false }
     end
   end
 

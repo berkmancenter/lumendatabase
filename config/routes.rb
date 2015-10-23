@@ -34,6 +34,8 @@ Chill::Application.routes.draw do
   end
 
   resources :blog_entries, only: [:index, :show]
+  get 'blog_feed', to: 'blog_entries#feed'
+  get 'notices_feed', to: 'notices#feed'
 
   match :faceted_search, controller: 'notices/search', action: 'index'
 
