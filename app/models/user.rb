@@ -7,6 +7,7 @@ class User < ActiveRecord::Base
 
   has_one :entity
   has_and_belongs_to_many :roles
+  accepts_nested_attributes_for :entity
 
   before_save :ensure_authentication_token
 

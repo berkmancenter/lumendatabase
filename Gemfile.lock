@@ -172,6 +172,10 @@ GEM
     orm_adapter (0.4.0)
     pg (0.18.3)
     pg (0.18.3-x86-mingw32)
+    piwik_analytics (1.0.2)
+      actionpack
+      activesupport
+      rails (>= 3.0.0)
     polyglot (0.3.5)
     pry (0.9.12.2)
       coderay (~> 1.0.5)
@@ -342,6 +346,7 @@ DEPENDENCIES
   neat
   paperclip!
   pg
+  piwik_analytics
   pry-rails
   rack-throttle
   rails (~> 3.2.22)

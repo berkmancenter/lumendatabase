@@ -34,6 +34,7 @@ gem 'activerecord-import'
 gem 'html2md'
 gem 'ruby-progressbar'
 gem 'rack-throttle'
+gem 'piwik_analytics'
 
 group :assets do
   gem 'coffee-rails'
