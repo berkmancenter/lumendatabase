@@ -1,6 +1,8 @@
-## Create notice
+Create notice
+=============
 
-Submits a new Notice to the chillingeffects system.
+Submits a new Notice to the Chilling Effects system.
+
 There are several different "Notice Types," these are essentially subclasses of
 the abstract Notice class.  "Notice Types" allow us to track notice-specific
 attributes and create serialized representations with logical attribute names.
@@ -14,7 +16,8 @@ Chilling Effects staff for your authentication token.
 
 **Endpoint**: `https://chillingeffects.org/notices`
 
-### Request
+Request
+-------
 
 | Field                  | Type   | Description
 | ---                    | ---    | ---
@@ -49,32 +52,32 @@ Chilling Effects staff for your authentication token.
 
 | Field                            | Type              | Description
 | ---                              | ---               | ---
-| `copyrighted_urls_attributes`    | [CopyrightedUrl]  | List of urls that represent the original work.
+| `copyrighted_urls_attributes`    | [CopyrightedUrl]  | List of URLs that represent the original work.
 | `kind`                           | string            | Required. Book, movie, video, etc.
 | `description`                    | string            | Description of the work, which may include the copyright holder information
-| `infringing_urls_attributes`     | [InfringingUrl]   | List of urls which infringe on the work
+| `infringing_urls_attributes`     | [InfringingUrl]   | List of URLs which infringe on the work
 
 **CopyrightedURL**
 
 | Field          | Type     | Description
 | ---            | ---      | ---
-| `url`          | string   | A Url that represents the original work.
+| `url`          | string   | A URL that represents the original work.
 
 **InfringingUrl**
 
 | Field          | Type     | Description
 | ---            | ---      | ---
-| `url`          | string   | A Url that infringes upon the Work
+| `url`          | string   | A URL that infringes upon the Work
 
 **EntityNoticeRole**
 
 | Field                | Type    | Description
 | ---                  | ---     | ---
-| `name`               | string  | The name of the role, one of "principal", "agent", "recipient", "sender", "target", "issuing_court", "plaintiff", "defendant" or "submitter". "recipient" and "sender" are displayed for all Notice Types on the ChillingEffects website after automatic redaction.
+| `name`               | string  | The name of the role, one of "principal", "agent", "recipient", "sender", "target", "issuing_court", "plaintiff", "defendant" or "submitter". "recipient" and "sender" are displayed for all Notice Types on the Chilling Effects website after automatic redaction.
 | `entity_id`          | integer | (Optional) The ID of an existing entity. You should not specify the `entity_attributes` values below if you include `entity_id` here.
 | `entity_attributes`  | Entity  | A new entity that has this role on this notice. If you specify `entity_attributes`, you should not specify an `entity_id`
 
-*Note*: If not explicitly provided, Submitter and Recipient entities will be
+*Note*: If not explicitly provided, submitter and recipient entities will be
 assigned based on the user performing the submission (as identified by the
 authentication token used).
 
@@ -96,122 +99,192 @@ authentication token used).
 
 **FileUpload**
 
+File uploading can only be used when submitting as form data. See the **Submitting Data** section below.
+
 | Field             | Type   | Description
 | ---               | ---    | ---
 | `kind`            | string | One of "original" or "supporting"
-| `file`            | string | A base64 encoded [data-uri](http://en.wikipedia.org/wiki/Data_URI_scheme) representing the file attachment
-| `file_name`       | string | A name for this file. data-uris have no concept of a file name, so you must supply one yourself. If not supplied, the filename will be "base64.txt"
+| `file`            | string | Path to a file on the client's system.
 
 **Language**
 
 The currently supported two-digit language codes are based on what Google
 Translate supports, and are currently:
 
-* af - Afrikaans
-* ar - Arabic
-* be - Belarusian
-* bg - Bulgarian
-* ca - Catalan; Valencian
-* cs - Czech
-* cy - Welsh
-* da - Danish
-* de - German
-* el - Greek, Modern
-* en - English
-* eo - Esperanto
-* es - Spanish; Castilian
-* et - Estonian
-* fa - Persian
-* fi - Finnish
-* fr - French
-* ga - Irish
-* gl - Galician
-* hi - Hindi
-* hr - Croatian
-* ht - Haitian; Haitian Creole
-* hu - Hungarian
-* id - Indonesian
-* is - Icelandic
-* it - Italian
-* iw - Hebrew
-* ja - Japanese
-* ko - Korean
-* lt - Lithuanian
-* lv - Latvian
-* mk - Macedonian
-* ml - Malayalam
-* ms - Malay
-* mt - Maltese
-* nl - Dutch
-* no - Norwegian
-* pl - Polish
-* pt - Portuguese
-* ro - Romanian
-* ru - Russian
-* si - Sinhala
-* sk - Slovak
-* sl - Slovene
-* sq - Albanian
-* sr - Serbian
-* sv - Swedish
-* sw - Swahili
-* th - Thai
-* tl - Tagalog
-* tr - Turkish
-* uk - Ukrainian
-* vi - Vietnamese
-* yi - Yiddish
-* yo - Yoruba
-* zh - Chinese
+|    |     |    |     |       |
+| -- | --- | -- | --- | ----- |
+| af | Afrikaans | ar | Arabic
+| be | Belarusian | bg | Bulgarian |
+| ca | Catalan; Valencian | cs | Czech |
+| cy | Welsh | da | Danish |
+| de | German | el | Greek, Modern |
+| en | English | eo | Esperanto |
+| es | Spanish; Castilian | et | Estonian |
+| fa | Persian | fi | Finnish |
+| fr | French | ga | Irish |
+| gl | Galician | hi | Hindi |
+| hr | Croatian | ht | Haitian; Haitian Creole |
+| hu | Hungarian | id | Indonesian |
+| is | Icelandic | it | Italian |
+| iw | Hebrew | ja | Japanese |
+| ko | Korean | lt | Lithuanian |
+| lv | Latvian | mk | Macedonian |
+| ml | Malayalam | ms | Malay |
+| mt | Maltese | nl | Dutch |
+| no | Norwegian | pl | Polish |
+| pt | Portuguese | ro | Romanian |
+| ru | Russian | si | Sinhala |
+| sk | Slovak | sl | Slovene |
+| sq | Albanian | sr | Serbian |
+| sv | Swedish | sw | Swahili |
+| th | Thai | tl | Tagalog |
+| tr | Turkish | uk | Ukrainian |
+| vi | Vietnamese | yi | Yiddish |
+| yo | Yoruba | zh | Chinese |
+|    |     |    |     |      |
 
-### Submitting data
+Submitting Data
+===============
 
 When creating a notice through the API, there are two ways to submit notice data: as form data or as JSON data. Each has advantages and disadvantages described below.
 
-#### As Form Data
+As Form Data
+------------
 
 Form data is useful for attaching files to the notice as the files can be included by name and location on a local drive.
 
 This is the suggested method as it is more efficient at attaching files, which are transmitted as binary data.
 
-#### As JSON Data
+**Sample using curl**
 
-### Authentication
+In curl, use the @ symbol to specify a local file.
+
+```
+curl -kv \
+     -F "authentication_token=abc123" \
+     -F "notice[type]=Defamation" \
+     -F "notice[title]=Defamation report via form data" \
+     -F "notice[file_uploads_attributes][0][kind]=original" \
+     -F "notice[file_uploads_attributes][0][file]=@Defamation complaint.docx" \
+     -F "notice[works_attributes][0][infringing_urls_attributes][0][url]=http://www.bad.com/people/296" \
+     https://chillingeffects.org/notices
+```
+
+As JSON Data
+------------
+
+JSON data is better if you do not have to submit file attachments as the syntax is simpler.
+
+```
+curl -H "Accept: application/json" \
+     -H "Content-type: application/json" \
+     -d '{ "authentication_token": "abc123", "notice": { "type": "Defamation", "title": "Defamation report via JSON data" } }' \
+     https://chillingeffects.org/notices
+```
+
+Authentication
+==============
 
 Submissions through the API **must** be authenticated by including an 
 Authentication Token. Tokens will be provided by Chilling Effects upon 
 request.
 
-The Token may be included as a parameter or header.
+The Authentication Token may be included as a parameter or header.
 
 * Parameter: `authentication_token`
+
+```
+curl -kv \
+     -F "authentication_token=abc123" \
+     -F "notice[type]=Defamation" \
+     https://chillingeffects.org/notices
+```
 
 ```
 curl -H "Accept: application/json" \
      -H "Content-type: application/json" \
      -d '{ "authentication_token": "abc123", "notice": {...} }' \
-     'https://chillingeffects.org/notices'
+     https://chillingeffects.org/notices
 ```
 
 * Request Header: `AUTHENTICATION_TOKEN`
+
+```
+curl -kv \
+     -H "AUTHENTICATION_TOKEN: abc123" \
+     -F "notice[type]=Defamation" \
+     https://chillingeffects.org/notices
+```
 
 ```
 curl -H "Accept: application/json" \
      -H "Content-type: application/json" \
      -H "AUTHENTICATION_TOKEN: abc123" \
      -d '{ "notice": {...} }' \
-     'https://chillingeffects.org/notices'
+     https://chillingeffects.org/notices
 ```
 
 If the Authentication Token is missing or invalid, an empty response 
 will be returned with HTTP status 401 (Unauthorized).
 
-In the Example Request below, we include `-v` as a flag for curl to make the fetching verbose.  
+In the Example Requests below, we include `-v` as a flag for curl to make the fetching verbose.  
 In order to obtain more information, and for alternatives to `-v`, refer to the curl Unix man page
 by typing `man curl`.
 
-### Example Request Using Entity Attributes
+Example Request Using Entity Attributes
+=======================================
 
+form data
+---------
+
+```
+curl -kv \
+     -F "authentication_token=abc1234" \
+     -F "notice[type]=DMCA" \
+     -F "notice[title]=DMCA (Copyright) Complaint to Google" \
+     -F "notice[subject]=Infringement Notfication via Blogger Complaint" \
+     -F "notice[date_sent]=2014-07-04" \
+     -F "notice[date_received]=2014-07-04" \
+     -F "notice[source]=Online form" \
+     -F "notice[body]=Victim of Infringement requests removal of content on Blogger." \
+     -F "notice[topic_ids][]=19", \
+     -F "notice[topic_ids][]=27", \
+     -F "notice[tag_list]=movies, disney, youtube", \
+     -F "notice[jurisdiction_list]=US, CA", \
+     -F "notice[action_taken]=Partial", \
+     -F "notice[file_uploads_attributes][0][kind]=original" \
+     -F "notice[file_uploads_attributes][0][file]=@original_file.txt" \
+     -F "notice[file_uploads_attributes][1][kind]=supporting" \
+     -F "notice[file_uploads_attributes][1][file]=@supporting_file.txt" \
+     -F "notice[works_attributes][0][description]=Lion King Video" \
+     -F "notice[works_attributes][0][copyrighted_urls_attributes][0][url]=http://disney.com/lion_king.mp4" \
+     -F "notice[works_attributes][0][copyrighted_urls_attributes][0][url]=http://disney.com/lion_king.mov" \
+     -F "notice[works_attributes][0][infringing_urls_attributes][0][url]=http://youtube.com/bad_url_1" \
+     -F "notice[works_attributes][0][infringing_urls_attributes][0][url]=http://youtube.com/bad_url_2" \
+     -F "notice[works_attributes][0][infringing_urls_attributes][0][url]=http://youtube.com/bad_url_3" \
+     -F "notice[works_attributes][0][infringing_urls_attributes][0][url]=http://youtube.com/bad_url_4" \
+     -F "notice[works_attributes][0][infringing_urls_attributes][0][url]=http://youtube.com/bad_url_5" \
+     -F "notice[entity_notice_roles_attributes][0][name]=recipient" \
+     -F "notice[entity_notice_roles_attributes][0][entity_attributes][name]=Google" \
+     -F "notice[entity_notice_roles_attributes][0][entity_attributes][kind]=organization" \
+     -F "notice[entity_notice_roles_attributes][0][entity_attributes][address_line_1]=1600 Amphitheatre Parkway" \
+     -F "notice[entity_notice_roles_attributes][0][entity_attributes][city]=Mountain View" \
+     -F "notice[entity_notice_roles_attributes][0][entity_attributes][state]=CA" \
+     -F "notice[entity_notice_roles_attributes][0][entity_attributes][zip]=94043" \
+     -F "notice[entity_notice_roles_attributes][0][entity_attributes][country_code]=US" \
+     -F "notice[entity_notice_roles_attributes][1][name]=sender" \
+     -F "notice[entity_notice_roles_attributes][1][entity_attributes][name]=Joe Lawyer" \
+     -F "notice[entity_notice_roles_attributes][1][entity_attributes][kind]=individual" \
+     -F "notice[entity_notice_roles_attributes][1][entity_attributes][address_line_1]=1234 Anystreet St." \
+     -F "notice[entity_notice_roles_attributes][1][entity_attributes][city]=Anytown" \
+     -F "notice[entity_notice_roles_attributes][1][entity_attributes][state]=CA" \
+     -F "notice[entity_notice_roles_attributes][1][entity_attributes][zip]=94044" \
+     -F "notice[entity_notice_roles_attributes][1][entity_attributes][country_code]=US" \
+     https://chillingeffects.org/notices
+```
+
+JSON data
+---------
 
 ```
 curl -v -H "Accept: application/json" -H "Content-type: application/json" 'https://chillingeffects.org/notices/' -d '{
@@ -227,18 +300,6 @@ curl -v -H "Accept: application/json" -H "Content-type: application/json" 'https
     "tag_list": "movies, disney, youtube",
     "jurisdiction_list": "US, CA",
     "action_taken": "Partial",
-    "file_uploads_attributes": [
-      {
-        "kind": "original",
-        "file": "data:text/plain;base64,dGVzdA==",
-        "file_name": "original_file.txt"
-      },
-      {
-        "kind": "supporting",
-        "file": "data:text/plain;base64,QmUgc3VyZSB0byBkcmluayB5b3VyIG92YWx0aW5l\n",
-        "file_name": "supporting_file.txt"
-      }
-    ],
     "works_attributes": [
       {
         "description": "Lion King Video",
@@ -285,8 +346,45 @@ curl -v -H "Accept: application/json" -H "Content-type: application/json" 'https
 }' 
 ```
 
-### Example Request Using Entity ID
+Example Request Using Entity ID
+===============================
 
+form data
+---------
+
+```
+curl -kv \
+     -F "authentication_token=abc1234" \
+     -F "notice[type]=DMCA" \
+     -F "notice[title]=DMCA (Copyright) Complaint to Google" \
+     -F "notice[subject]=Infringement Notfication via Blogger Complaint" \
+     -F "notice[date_sent]=2014-07-04" \
+     -F "notice[date_received]=2014-07-04" \
+     -F "notice[source]=Online form" \
+     -F "notice[body]=Victim of Infringement requests removal of content on Blogger." \
+     -F "notice[topic_ids][]=19", \
+     -F "notice[topic_ids][]=27", \
+     -F "notice[tag_list]=movies, disney, youtube", \
+     -F "notice[jurisdiction_list]=US, CA", \
+     -F "notice[action_taken]=Partial", \
+     -F "notice[file_uploads_attributes][0][kind]=original" \
+     -F "notice[file_uploads_attributes][0][file]=@original_file.txt" \
+     -F "notice[file_uploads_attributes][1][kind]=supporting" \
+     -F "notice[file_uploads_attributes][1][file]=@supporting_file.txt" \
+     -F "notice[works_attributes][0][description]=Lion King Video" \
+     -F "notice[works_attributes][0][copyrighted_urls_attributes][0][url]=http://disney.com/lion_king.mp4" \
+     -F "notice[works_attributes][0][copyrighted_urls_attributes][0][url]=http://disney.com/lion_king.mov" \
+     -F "notice[works_attributes][0][infringing_urls_attributes][0][url]=http://youtube.com/bad_url_1" \
+     -F "notice[works_attributes][0][infringing_urls_attributes][0][url]=http://youtube.com/bad_url_2" \
+     -F "notice[works_attributes][0][infringing_urls_attributes][0][url]=http://youtube.com/bad_url_3" \
+     -F "notice[works_attributes][0][infringing_urls_attributes][0][url]=http://youtube.com/bad_url_4" \
+     -F "notice[works_attributes][0][infringing_urls_attributes][0][url]=http://youtube.com/bad_url_5" \
+     -F "notice[entity_id]=1" \
+     https://chillingeffects.org/notices
+```
+
+JSON data
+=========
 
 ```
 curl -v -H "Accept: application/json" -H "Content-type: application/json" 'https://chillingeffects.org/notices/' -d '{
@@ -302,18 +400,6 @@ curl -v -H "Accept: application/json" -H "Content-type: application/json" 'https
     "tag_list": "movies, disney, youtube",
     "jurisdiction_list": "US, CA",
     "action_taken": "Partial",
-    "file_uploads_attributes": [
-      {
-        "kind": "original",
-        "file": "data:text/plain;base64,dGVzdA==",
-        "file_name": "original_file.txt"
-      },
-      {
-        "kind": "supporting",
-        "file": "data:text/plain;base64,QmUgc3VyZSB0byBkcmluayB5b3VyIG92YWx0aW5l\n",
-        "file_name": "supporting_file.txt"
-      }
-    ],
     "works_attributes": [
       {
         "description": "Lion King Video",
@@ -335,17 +421,18 @@ curl -v -H "Accept: application/json" -H "Content-type: application/json" 'https
 }' 
 ```
 
-### Successful Responses
+Successful Responses
+====================
 
 Successful responses will have HTTP status 201 (Created) and include a
 `Location:` HTTP header with the location of the created object.
 
-#### Example:
+Example
+-------
 
 **Note:** Unimportant headers have been removed.
 
 ```
-> curl -H "Accept: application/json" -H "Content-type: application/json" 'https://chillingeffects.org/notices' -d @tmp/curl.json --dump-header - 
 HTTP/1.1 201 Created 
 Location: http://localhost:3000/notices/4
 Content-Type: application/json; charset=utf-8
@@ -354,12 +441,14 @@ Date: Wed, 05 Jun 2013 20:43:34 GMT
 Content-Length: 1
 ```
 
-### Unsuccessful responses
+Unsuccessful responses
+-----------------------
 
 Unsuccessful responses will have HTTP status 422 (Unprocessable Entity) and
 include a JSON response enumerating the validation failures.
 
-#### Example:
+Example
+-------
 
 ```
 {
@@ -369,16 +458,19 @@ include a JSON response enumerating the validation failures.
 }
 ```
 
-## Notice Type Mapping
+Notice Type Mapping
+===================
 
 All notices are added to the system through the API using the same named
 parameters (see **Create Notice** above). However, fields are "mapped"
 depending on the Notice Type when serialized as JSON through a search request
 or when requested individually.
 
-### Mappings
+Mappings
+========
 
-#### Court Order
+Court Order
+-----------
 
 | Ingestion Field Name       | Mapped Field Name              | Removed?
 | ---                        | ---                            | ---
@@ -388,7 +480,8 @@ or when requested individually.
 | `works.infringing_urls`    | `works.targetted_urls`         |
 | `works.copyrighted_urls`   |                                | Yes
 
-#### Data Protection
+Data Protection
+---------------
 
 | Ingestion Field Name       | Mapped Field Name                 | Removed?
 | ---                        | ---                               | ---
@@ -397,7 +490,8 @@ or when requested individually.
 | `works.infringing_urls`    | `works.urls_mentioned_in_request` |
 | `works.copyrighted_urls`   |                                   | Yes
 
-#### Defamation
+Defamation
+----------
 
 | Ingestion Field Name       | Mapped Field Name              | Removed?
 | ---                        | ---                            | ---
@@ -406,11 +500,13 @@ or when requested individually.
 | `works.infringing_urls`    | `works.defamatory_urls`        |
 | `works.copyrighted_urls`   |                                | Yes
 
-#### DMCA
+DMCA
+----
 
 Attributes remain unchanged from ingestion.
 
-#### LawEnforcementRequest
+LawEnforcementRequest
+---------------------
 
 | Ingestion Field Name       | Mapped Field Name                        | Removed?
 | ---                        | ---                                      | ---
@@ -420,7 +516,8 @@ Attributes remain unchanged from ingestion.
 | `works.copyrighted_urls`   | `works.original_work_urls`               |
 | `regulation_list`          | `regulations`                            |
 
-#### Other
+Other
+-----
 
 | Ingestion Field Name       | Mapped Field Name              | Removed?
 | ---                        | ---                            | ---
@@ -429,7 +526,8 @@ Attributes remain unchanged from ingestion.
 | `works.infringing_urls`    | `works.problematic_urls`       |
 | `works.copyrighted_urls`   | `works.original_work_urls`     |
 
-#### PrivateInformation
+PrivateInformation
+------------------
 
 | Ingestion Field Name       | Mapped Field Name                            | Removed?
 | ---                        | ---                                          | ---
@@ -438,7 +536,8 @@ Attributes remain unchanged from ingestion.
 | `works.infringing_urls`    | `works.urls_with_private_information`        |
 | `works.copyrighted_urls`   |                                              | Yes
 
-#### Trademark
+Trademark
+---------
 
 | Ingestion Field Name       | Mapped Field Name       | Removed?
 | ---                        | ---                     | ---
@@ -447,26 +546,30 @@ Attributes remain unchanged from ingestion.
 | `works.infringing_urls`    | `marks.infringing_urls` |
 | `works.copyrighted_urls`   |                         | Yes
 
-## Request a notice
+Request a notice
+================
 
 **Method**: `GET`
 
 **Endpoint**: `https://chillingeffects.org/notices/<notice id>.json`
 
 
-#### Example Request:
+Example Request
+---------------
 
 ```
 curl https://chillingeffects.org/notices/1.json
 ```
 
-### Successful Responses
+Successful Responses
+--------------------
 
 Return a JSON-encoded representation of selected notice attributes.  **Notice
 Types** will have mapped attributes applied, and be under a root key
 articulating their type.
 
-#### Example Successful Response:
+Example Successful Response
+---------------------------
 
 ```
 {
@@ -510,11 +613,13 @@ articulating their type.
 }
 ```
 
-### Unsuccessful Responses
+Unsuccessful Responses
+----------------------
 
 Return a 404 HTTP status header.
 
-## Request a list of Topics
+Request a list of Topics
+========================
 
 **Method**: GET
 
@@ -524,7 +629,8 @@ Return a 404 HTTP status header.
 curl https://chillingeffects.org/topics.json
 ```
 
-### Successful Responses
+Successful Responses
+--------------------
 
 Return a JSON-encoded array of topics, including the following attributes:
 
@@ -534,7 +640,8 @@ Return a JSON-encoded array of topics, including the following attributes:
 | `name`     | String     | The topic name
 | `parent_id`| Integer    | The parent `topic_id` of this topic, or "null" if this is a root topic.
 
-#### Example Successful Response:
+Example Successful Response
+---------------------------
 
 ```
 {
@@ -558,7 +665,8 @@ Return a JSON-encoded array of topics, including the following attributes:
 }
 ```
 
-## Search notices via fulltext
+Search notices via fulltext
+===========================
 
 Chillingeffects allows for paginatable full-text searches of notices and
 relevant metadata. Results are sorted with the most relevant at the top. Notice
@@ -610,7 +718,8 @@ Terms are joined with an 'OR' by default.
 | `per_page`                        | The number of results per page. Defaults to 10.
 | `sort_by`                         | One of `date_received asc`, `date_received desc`, `relevancy asc`, or `relevancy desc`. Defaults to `relevancy asc`.
 
-### `*-require-all` parameters
+`*-require-all` parameters
+--------------------------
 
 Let's say we're searching for notices with "George Jetsen" in the title.
 By default, the search engine will search for notices with "George OR Jetsen".
@@ -622,13 +731,15 @@ results considerably.
 The various `*-require-all` parameters need a non-null value to be enabled -
 "true" or "yes" are both acceptable.
 
-### Facets
+Facets
+------
 
 See below for more information about available facets. You can get an idea of
 how facets are formatted by submitting facet-less fulltext queries and then
 inspecting the **Facets** metadata returned by the search.
 
-### Successful Responses
+Successful Responses
+--------------------
 
 Return a JSON-encoded hash including an array of notices and metadata about the
 search results.
@@ -704,7 +815,8 @@ documentation for more information. We only return the 10 most populous facets.
 | `to_str`        | String   | A textual representation of the end of this facet.
 | `count`         | Integer  | The number of documents that fall in this facet.
 
-### Example Successful Response
+Example Successful Response
+---------------------------
 
 **Note:** Some facet information has been omitted to keep examples brief.
 
@@ -804,7 +916,8 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'https://
 }
 ```
 
-### Example Unsuccessful Response
+Example Unsuccessful Response
+-----------------------------
 
 
 ```
@@ -825,7 +938,8 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'https://
 }
 ```
 
-## Search for Entities via fulltext
+Search for Entities via fulltext
+================================
 
 Chilling Effects allows for paginatable full-text searches of Entities, useful
 to select existing entities during notice creation. For information about
@@ -844,7 +958,8 @@ pagination metadata, please see 'Search notices via fulltext'
 | `per_page`        | The number of results per page. Defaults to 10.
 
 
-### Successful Responses
+Successful Responses
+--------------------
 
 Return a JSON-encoded hash including an array of entities and metadata about
 the search results.
@@ -870,11 +985,13 @@ the search results.
 | `url`             | string             |
 | `city`            | string             |
 
-### Successful Responses
+Successful Responses
+--------------------
 
 Return a JSON-encoded representation of selected entity attributes.
 
-#### Example Successful Response:
+Example Successful Response
+---------------------------
 
 ```
 curl -H "Accept: application/json" -H "Content-type: application/json" 'https://chillingeffects.org/entities/search?term=joe&page=1'
@@ -914,7 +1031,8 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'https://
 }
 ```
 
-### Example Unsuccessful Response
+Example Unsuccessful Response
+-----------------------------
 
 ```
 {
@@ -934,3 +1052,4 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'https://
   }
 }
 ```
+
