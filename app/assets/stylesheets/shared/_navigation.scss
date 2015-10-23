@@ -23,7 +23,7 @@ nav.main-nav {
     list-style: none;
     position: relative;
     text-align: center;
-    width: 25%;
+    width: 20%;
 
     @include media($small-screen){
       position: static;

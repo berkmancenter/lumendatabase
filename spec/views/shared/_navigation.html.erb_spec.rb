@@ -13,6 +13,12 @@ describe 'shared/_navigation.html.erb' do
     expect(page).to contain_link(blog_entries_path)
   end
 
+  it 'shows a link to research' do
+    render
+
+    expect(page).to contain_link(page_path("research"))
+  end
+
   it 'has links to all topics' do
     topics = create_list(:topic, 3)
 

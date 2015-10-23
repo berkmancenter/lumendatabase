@@ -3,6 +3,6 @@ class HomeController < ApplicationController
 
   def index
     @notices = Notice.visible.recent
-    @blog_entries = BlogEntry.recent
+    @blog_entries = BlogEntry.published.with_content.first(5)
   end
 end
