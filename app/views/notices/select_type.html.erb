@@ -25,6 +25,15 @@
               class: "button"
             )
           %>
+          <% if model.name == "DMCA" %>
+          <%= 
+            link_to(
+              "Create DMCA Counter Notice", 
+              new_counter_notice_path, 
+              class: "button"
+            ) 
+          %>
+          <% end %>
         </div>
       </div>
     <% end %>
