@@ -11,9 +11,8 @@ module Ingestor
 
         def initialize(file_path, description_start)
           super
-          @redactor = RedactsNotices::RedactsEntityName.new(
-            content.match(/full_name[^:]*:(.+?)\n[a-z_]+:/m) ? $1.strip : nil
-          )
+          entity_name = yield content.dup
+          @redactor = RedactsNotices::RedactsEntityName.new(entity_name)
         end
 
         def to_work
@@ -39,7 +38,7 @@ module Ingestor
         attr_reader :redactor
 
         def extract_urls(string)
-          super.map { |k| { url_original: k[:url], url: redact(k[:url]) } }
+          super.map { |k| { url_original: k[:url], url: redact(URI.decode(k[:url])) } }
         end
       end
     end

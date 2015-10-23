@@ -79,6 +79,19 @@
   </section>
 
   <aside class="notice">
+
+    <section id="counter-notice">
+      <% if @notice.type == "DMCA" %>
+        <%= 
+          link_to(
+            "Create DMCA Counter Notice", 
+            new_counter_notice_path, 
+            class: "button"
+          ) 
+        %>
+      <% end %>
+    </section>
+
     <section id="relevant-questions">
       <h4 class="title"><span>Related FAQs</span></h3>
       <div class="wrapper">

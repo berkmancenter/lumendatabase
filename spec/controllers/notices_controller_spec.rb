@@ -4,7 +4,7 @@ describe NoticesController do
   context "#show" do
     it "finds the notice by ID" do
       notice = Notice.new
-      Notice.should_receive(:find_visible).with('42').and_return(notice)
+      Notice.should_receive(:find).with('42').and_return(notice)
 
       get :show, id: 42
 
@@ -64,7 +64,7 @@ describe NoticesController do
 
     def stub_find_notice(notice = nil)
       notice ||= Notice.new
-      notice.tap { |n| Notice.stub(:find_visible).and_return(n) }
+      notice.tap { |n| Notice.stub(:find).and_return(n) }
     end
   end
 
@@ -173,6 +173,14 @@ describe NoticesController do
 
         json = JSON.parse(response.body)
         expect(json).to have_key('works').with_value(["can't be blank"])
+      end
+    end
+
+    context "#feed" do
+      it "returns an RSS feed" do
+        get :notices_feed, :format => "rss"
+        expect(response).to be_successful
+        expect(response).to render_template("notices/feed")
       end
     end
 

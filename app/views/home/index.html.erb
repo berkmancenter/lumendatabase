@@ -12,11 +12,13 @@
     <ol id="recent-notices">
       <%= render @notices %>
     </ol>
+    <a href="https://www.chillingeffects.org/notices_feed?format=rss"><%= image_tag("feed_icon.png", :size => "14x14") %></a>
   </section>
   <section class="news-snippets">
     <h2>From the Blog</h2>
     <ol id="recent-blog-entries">
       <%= render partial: 'blog_entry', collection: @blog_entries %>
     </ol>
-  </section >
+    <a href="https://www.chillingeffects.org/blog_feed?format=rss"><%= image_tag("feed_icon.png", :size => "14x14") %></a>
+  </section>
 </div>

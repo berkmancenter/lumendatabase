@@ -28,6 +28,14 @@ describe BlogEntriesController do
     end
   end
 
+  context "#feed" do
+    it "returns an RSS feed" do
+      get :blog_feed, :format => "rss"
+      expect(response).to be_successful
+      expect(response).to render_template("blog_entries/feed")
+    end
+  end
+
   context "#show" do
     it "loads a blog entry by ID" do
       blog_entry = double("Blog entry")
@@ -39,4 +47,6 @@ describe BlogEntriesController do
       expect(response).to be_successful
     end
   end
+
+
 end
