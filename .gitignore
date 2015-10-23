@@ -19,7 +19,7 @@ tmp/
 .env
 bin/stubs
 coverage/*
-public/system
+paperclip/*
 public/assets
 rerun.txt
 tags
