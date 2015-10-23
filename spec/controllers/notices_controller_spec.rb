@@ -176,6 +176,14 @@ describe NoticesController do
       end
     end
 
+    context "#feed" do
+      it "returns an RSS feed" do
+        get :notices_feed, :format => "rss"
+        expect(response).to be_successful
+        expect(response).to render_template("notices/feed")
+      end
+    end
+
     private
 
     def stub_submit_notice
