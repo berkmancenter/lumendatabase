@@ -8,7 +8,7 @@ feature "typed notice submissions" do
     submission.fill_in_form_with({
       "Mark" => "My trademark (TM)",
       "Infringing URL" => "http://example.com/infringing_url1",
-      "Describe the alleged Infringment" => "They used my thing",
+      "Describe the alleged Infringement" => "They used my thing",
       "Registration Number" => '1337'
     })
 
@@ -31,7 +31,7 @@ feature "typed notice submissions" do
     end
 
     within('.notice-body') do
-      expect(page).to have_content('Alleged Infringment')
+      expect(page).to have_content('Alleged Infringement')
       expect(page).to have_content('They used my thing')
       expect(page).to have_content('1337')
     end

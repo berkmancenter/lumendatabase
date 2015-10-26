@@ -11,7 +11,11 @@ class HomeController < ApplicationController
      config.oauth_token_secret = ENV['TWITTER_OAUTH_TOKEN_SECRET']
     end
     
-    @twitter_user = "chillingeffects"
-    @tweet_news = client.user_timeline(@twitter_user, {count: 4})
+    begin
+      @twitter_user = "chillingeffects"
+      @tweet_news = client.user_timeline(@twitter_user, {count: 4})
+    rescue Twitter::Error => e
+      @tweet_news = []
+    end
   end
 end

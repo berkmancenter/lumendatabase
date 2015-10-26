@@ -5,7 +5,7 @@ module Ingestor
     module GoogleSecondary
       class BloggerParser < Base
 
-        handles_content(/IssueType:\s?blogger_dmca_infringment/m)
+        handles_content(/IssueType:\s?blogger_dmca_infringement/m)
 
         def parse_works(file_path)
           content = self.class.read_file(file_path)
