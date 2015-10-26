@@ -284,7 +284,7 @@ Re: Infringement of XXX, Inc.\'s Intellectual Property Rights\r\n This firm repr
 
   Topic.create!(
     name: "Copyright and Fair Use",
-    description: "When a copyright holder sues a user of the work for infringment, the user may argue in defense that the use was not infringement but \"fair use.\" Under the fair use doctrine, it is not an infringement to use the copyrighted works of another in some circumstances, such as for commentary, criticism, news reporting, or educational use. The defense generally depends on a case-by-case judgment of the facts. \r\n\r\nFair use is codified at Section 107 of the Copyright Act, which gives a non-exclusive set of four factors courts will consider in deciding whether a use is fair or not. These factors are
+    description: "When a copyright holder sues a user of the work for infringement, the user may argue in defense that the use was not infringement but \"fair use.\" Under the fair use doctrine, it is not an infringement to use the copyrighted works of another in some circumstances, such as for commentary, criticism, news reporting, or educational use. The defense generally depends on a case-by-case judgment of the facts. \r\n\r\nFair use is codified at Section 107 of the Copyright Act, which gives a non-exclusive set of four factors courts will consider in deciding whether a use is fair or not. These factors are
 
   1. the purpose and character of the use, \r\n
   2. the nature of the copyrighted work, \r\n
