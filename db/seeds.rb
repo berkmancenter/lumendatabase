@@ -26,7 +26,7 @@ class FakeNotice
     ].sample
 
     @source = ["Online form", "Email", "Phone"].sample
-    @subject = "Websearch Infringment Notification via #{@source}"
+    @subject = "Websearch Infringement Notification via #{@source}"
     @date_sent = (0..100).to_a.sample.days.ago
     @date_received = (0..100).to_a.sample.days.ago
 

@@ -13,7 +13,7 @@ module ApplicationHelper
     full_title = [
       page_description,
       page_header,
-      'Chilling Effects'
+      'Lumen'
     ].compact.join(' :: ')
 
     content_for(:title) { full_title }
