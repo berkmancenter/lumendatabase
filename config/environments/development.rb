@@ -41,8 +41,8 @@ Chill::Application.configure do
 
   begin
     # Set up rate limiting
-    config.require "custom_limiter"
-    config.middleware.use CustomLimiter, :max => 3, :cache => GDBM.new('tmp/throttle.db')
+    #config.require "custom_limiter"
+    #config.middleware.use CustomLimiter, :max => 3, :cache => GDBM.new('tmp/throttle.db')
   rescue Errno::EAGAIN => e
     # throttle cache in use by app, this is likely a rake task
   end
