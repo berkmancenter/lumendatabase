@@ -116,22 +116,16 @@ namespace :chillingeffects do
   task :index_notices_by_date, [ :date ] => :environment do |t, args|
   begin
     batch_size = (ENV['BATCH_SIZE'] || 192).to_i
-    puts 'optionally delete and recreate index before running this the first time'
-    #Notice.index.delete
-    #Notice.create_elasticsearch_index
 
     notices = Notice.where( "created_at::date = '#{args[ :date ]}'" )
     puts "indexing #{notices.count} from #{args[:date]}"
     
     count = 0
     notices.find_in_batches( batch_size: batch_size ) do |batch|
-      GC.start
       Tire.index( Notice.index_name ).import batch
       count += batch.count
       puts "#{count} Notices indexed at #{Time.now.to_i}"
     end
-
-    puts 'optionally ReindexRun.sweep_search_result_caches after running this the last time'
   rescue => e
     $stderr.puts "Reindexing did not succeed because: #{e.inspect}"
     end
@@ -141,22 +135,16 @@ namespace :chillingeffects do
   task :index_notices_by_month, [ :month, :year ] => :environment do |t, args|
   begin
     batch_size = (ENV['BATCH_SIZE'] || 192).to_i
-    puts 'optionally delete and recreate index before running this the first time'
-    #Notice.index.delete
-    #Notice.create_elasticsearch_index
 
     notices = Notice.where( "extract( year from created_at ) = #{args[ :year ]} and extract( month from created_at ) = #{args[ :month ]}" )
     puts "indexing #{notices.count} from #{args[:year]}-#{args[:month]}"
     
     count = 0
     notices.find_in_batches( batch_size: batch_size ) do |batch|
-      GC.start
       Tire.index( Notice.index_name ).import batch
       count += batch.count
       puts "#{count} Notices indexed at #{Time.now.to_i}"
     end
-
-    puts 'optionally ReindexRun.sweep_search_result_caches after running this the last time'
   rescue => e
     $stderr.puts "Reindexing did not succeed because: #{e.inspect}"
     end
