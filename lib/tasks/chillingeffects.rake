@@ -118,16 +118,16 @@ namespace :chillingeffects do
     batch_size = (ENV['BATCH_SIZE'] || 192).to_i
 
     notices = Notice.where( "created_at::date = '#{args[ :date ]}'" )
-    puts "indexing #{notices.count} from #{args[:date]}"
+    Rails.logger.info "indexing #{notices.count} from #{args[:date]}"
     
     count = 0
     notices.find_in_batches( batch_size: batch_size ) do |batch|
       Tire.index( Notice.index_name ).import batch
       count += batch.count
-      puts "#{count} Notices indexed at #{Time.now.to_i}"
+      Rails.logger.info "#{count} Notices indexed at #{Time.now.to_i}"
     end
   rescue => e
-    $stderr.puts "Reindexing did not succeed because: #{e.inspect}"
+    Rails.logger.error "Reindexing did not succeed because: #{e.inspect}"
     end
   end
 
@@ -137,16 +137,16 @@ namespace :chillingeffects do
     batch_size = (ENV['BATCH_SIZE'] || 192).to_i
 
     notices = Notice.where( "extract( year from created_at ) = #{args[ :year ]} and extract( month from created_at ) = #{args[ :month ]}" )
-    puts "indexing #{notices.count} from #{args[:year]}-#{args[:month]}"
+    Rails.logger.info "indexing #{notices.count} from #{args[:year]}-#{args[:month]}"
     
     count = 0
     notices.find_in_batches( batch_size: batch_size ) do |batch|
       Tire.index( Notice.index_name ).import batch
       count += batch.count
-      puts "#{count} Notices indexed at #{Time.now.to_i}"
+      Rails.logger.info "#{count} Notices indexed at #{Time.now.to_i}"
     end
   rescue => e
-    $stderr.puts "Reindexing did not succeed because: #{e.inspect}"
+    Rails.logger.error "Reindexing did not succeed because: #{e.inspect}"
     end
   end
 
@@ -165,12 +165,12 @@ namespace :chillingeffects do
             count += 1
             print '.'
           end
-          puts "#{count} #{klass} instances indexed at #{Time.now.to_i}"
+          Rails.logger.info "#{count} #{klass} instances indexed at #{Time.now.to_i}"
         end
       end
       ReindexRun.sweep_search_result_caches
   rescue => e
-    $stderr.puts "Reindexing did not succeed because: #{e.inspect}"
+    Rails.logger.error "Reindexing did not succeed because: #{e.inspect}"
     end
   end
 
