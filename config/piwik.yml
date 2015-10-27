@@ -18,15 +18,14 @@ production:
 
 development:
   piwik:
-    id_site: 3
+    id_site: 4
     url: stats.berkman.harvard.edu
-    disabled: true
+    disabled: false
     use_async: false
-    hostname: localhost
 
 test:
   piwik:
-    id_site: 3
+    id_site: 4
     url: stats.berkman.harvard.edu
     disabled: true
     use_async: false
