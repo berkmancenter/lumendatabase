@@ -1,4 +1,6 @@
 Chill::Application.routes.draw do
+  get "file_uploads/files/:id/*file_path", to: 'original_files#show'
+
   devise_for :users
 
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
