@@ -114,39 +114,64 @@ namespace :chillingeffects do
 
   desc "Recreate elasticsearch index for notices of a given date"
   task :index_notices_by_date, [ :date ] => :environment do |t, args|
-  begin
-    batch_size = (ENV['BATCH_SIZE'] || 192).to_i
+    begin
+      batch_size = (ENV['BATCH_SIZE'] || 192).to_i
 
-    notices = Notice.where( "created_at::date = '#{args[ :date ]}'" )
-    Rails.logger.info "indexing #{notices.count} from #{args[:date]}"
-    
-    count = 0
-    notices.find_in_batches( batch_size: batch_size ) do |batch|
-      Tire.index( Notice.index_name ).import batch
-      count += batch.count
-      Rails.logger.info "#{count} Notices indexed at #{Time.now.to_i}"
-    end
-  rescue => e
-    Rails.logger.error "Reindexing did not succeed because: #{e.inspect}"
+      notices = Notice.where( "created_at::date = '#{args[ :date ]}'" )
+      Rails.logger.info "index_notices date: #{args[:date]}, total: #{notices.count}"
+      
+      count = 0
+      notices.find_in_batches( batch_size: batch_size ) do |batch|
+        Tire.index( Notice.index_name ).import batch
+        count += batch.count
+        Rails.logger.info "index_notices date: #{args[:date]}, count: #{count}, time: #{Time.now.to_i}"
+      end
+
+      Rails.logger.info "index_notices done date: #{args[:date]}, count: #{count}, time: #{Time.now.to_i}"
+    rescue => e
+      Rails.logger.error "index_notices date: #{args[:date]}, error: #{e.inspect}"
     end
   end
 
   desc "Recreate elasticsearch index for notices of a given month"
   task :index_notices_by_month, [ :month, :year ] => :environment do |t, args|
-  begin
-    batch_size = (ENV['BATCH_SIZE'] || 192).to_i
+    begin
+      batch_size = (ENV['BATCH_SIZE'] || 192).to_i
 
-    notices = Notice.where( "extract( year from created_at ) = #{args[ :year ]} and extract( month from created_at ) = #{args[ :month ]}" )
-    Rails.logger.info "indexing #{notices.count} from #{args[:year]}-#{args[:month]}"
-    
-    count = 0
-    notices.find_in_batches( batch_size: batch_size ) do |batch|
-      Tire.index( Notice.index_name ).import batch
-      count += batch.count
-      Rails.logger.info "#{count} Notices indexed at #{Time.now.to_i}"
+      notices = Notice.where( "extract( year from created_at ) = #{args[ :year ]} and extract( month from created_at ) = #{args[ :month ]}" )
+      Rails.logger.info "index_notices date: #{args[:year]}-#{args[:month]}, total: #{notices.count}"
+      
+      count = 0
+      notices.find_in_batches( batch_size: batch_size ) do |batch|
+        Tire.index( Notice.index_name ).import batch
+        count += batch.count
+        Rails.logger.info "index_notices date: #{args[:year]}-#{args[:month]}, count: #{count}, time: #{Time.now.to_i}"
+      end
+
+      Rails.logger.info "index_notices done date: #{args[:year]}-#{args[:month]}, count: #{count}, time: #{Time.now.to_i}"
+    rescue => e
+      Rails.logger.error "index_notices date: #{args[:year]}-#{args[:month]}, error: #{e.inspect}"
     end
-  rescue => e
-    Rails.logger.error "Reindexing did not succeed because: #{e.inspect}"
+  end
+
+  desc "Recreate elasticsearch index for notices of a given year"
+  task :index_notices_by_year, [ :year ] => :environment do |t, args|
+    begin
+      batch_size = (ENV['BATCH_SIZE'] || 192).to_i
+
+      notices = Notice.where( "extract( year from created_at ) = #{args[ :year ]}" )
+      Rails.logger.info "index_notices date: #{args[:year]}, total: #{notices.count}"
+      
+      count = 0
+      notices.find_in_batches( batch_size: batch_size ) do |batch|
+        Tire.index( Notice.index_name ).import batch
+        count += batch.count
+        Rails.logger.info "index_notices date: #{args[:year]}, count: #{count}, time: #{Time.now.to_i}"
+      end
+
+      Rails.logger.info "index_notices done date: #{args[:year]}, count: #{count}, time: #{Time.now.to_i}"
+    rescue => e
+      Rails.logger.error "index_notices date: #{args[:year]}, error: #{e.inspect}"
     end
   end
 
