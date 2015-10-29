@@ -105,6 +105,8 @@ GEM
     domain_name (0.5.25)
       unf (>= 0.0.5, < 1.0.0)
     dotenv (0.8.0)
+    dotenv-rails (0.8.0)
+      dotenv (= 0.8.0)
     equalizer (0.0.10)
     erubis (2.7.0)
     execjs (1.4.0)
@@ -377,6 +379,7 @@ DEPENDENCIES
   database_cleaner
   date_validator
   devise
+  dotenv-rails
   factory_girl_rails
   fakeweb
   flutie
