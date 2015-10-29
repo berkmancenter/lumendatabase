@@ -24,11 +24,16 @@ namespace :chillingeffects do
       exit
     end
 
+    Rails.logger.info "legacy import start name: #{name}, base_directory: #{base_directory}, where: \"#{where_fragment}\""
+
     record_source = Ingestor::Legacy::RecordSource::Mysql.new(
       where_fragment, name, base_directory
     )
+
     ingestor = Ingestor::Legacy.new(record_source)
     ingestor.import
+
+    Rails.logger.info "legacy import done name: #{name}"
   end
 
   desc "Import latest legacy chillingeffects data from Mysql"
@@ -37,13 +42,17 @@ namespace :chillingeffects do
     latest_original_notice_id = Notice.maximum(:original_notice_id).to_i
     name = "latest-from-#{latest_original_notice_id}"
     base_directory = ENV['BASE_DIRECTORY']
+    where_fragment = "tNotice.NoticeID > #{latest_original_notice_id}"
+
+    Rails.logger.info "legacy import start name: #{name}, base_directory: #{base_directory}, where: \"#{where_fragment}\""
 
     record_source = Ingestor::Legacy::RecordSource::Mysql.new(
-      "tNotice.NoticeID > #{latest_original_notice_id}",
-      name, base_directory
+      where_fragment, name, base_directory
     )
     ingestor = Ingestor::Legacy.new(record_source)
     ingestor.import
+
+    Rails.logger.info "legacy import done name: #{name}"
   end
 
   desc "Import notice error legacy chillingeffects data from Mysql"

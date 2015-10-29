@@ -24,8 +24,6 @@ module Ingestor
     end
 
     def import
-      logger.info "legacy import name: #{record_source.name}, directory: #{record_source.base_directory}"
-
       Dir.chdir(record_source.base_directory) do
         record_source.each do |csv_row|
           if Notice.where(original_notice_id: csv_row['NoticeID']).blank?
