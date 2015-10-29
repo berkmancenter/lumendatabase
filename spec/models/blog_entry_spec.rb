@@ -37,6 +37,18 @@ describe BlogEntry do
     end
   end
 
+  context ".archived" do
+    it "returns only archived blog entries in order" do
+      create_list(:blog_entry, 2)
+      create_list(:blog_entry, 2, archive: true, published_at: 1.day.from_now)
+      create_list(:blog_entry, 2, archive: true, published_at: 1.hour.from_now)
+      newer = create(:blog_entry, archive: true, published_at: 1.day.ago)
+      older = create(:blog_entry, archive: true, published_at: 2.days.ago)
+
+      expect(BlogEntry.archived).to eq [newer, older]
+    end
+  end
+
   context "#content_html" do
     it "returns the post's content as html" do
       blog_entry = BlogEntry.new(content: "Some *markdown* content")
