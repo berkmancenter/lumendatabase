@@ -13,10 +13,9 @@ module Ingestor
       @record_source = record_source
       @start_unixtime = Time.now.to_f
 
-      @logger = Logger.new(STDOUT)
-      @logger.level = Logger::INFO unless ENV['DEBUG']
+      @logger = Rails.logger
 
-      @logger.debug { "Started at: #{@start_unixtime}, #{Time.now}" }
+      @logger.debug { "legacy import started: #{@start_unixtime}, #{Time.now}" }
 
       @error_handler = ErrorHandler.new(record_source.name)
 
@@ -24,25 +23,18 @@ module Ingestor
       @failed = 0
     end
 
-    def import(fail_import = false)
-      logger.info "Importing legacy CSV file: #{record_source.name} in #{record_source.base_directory}"
+    def import
+      logger.info "legacy import name: #{record_source.name}, directory: #{record_source.base_directory}"
 
       Dir.chdir(record_source.base_directory) do
         record_source.each do |csv_row|
           if Notice.where(original_notice_id: csv_row['NoticeID']).blank?
-            if fail_import
-              import_row(csv_row)
-            else
-              unless csv_row['Submitted_By'] && csv_row['add_date'] && csv_row['Submitted_By'] == 'Google' && csv_row['add_date'] > Time.parse(ENV['LAUNCH_DATE'])
-                import_row(csv_row)
-              end   
-            end  
+            import_row(csv_row)
           end
         end
       end
 
-      logger.info "Import complete. #{succeeded} record(s) created."
-      logger.warn "#{failed} failure(s)" unless failed.zero?
+      logger.info "legacy import name: #{record_source.name}, succeded: #{succeeded}, failed: #{failed}"
     end
 
     private
@@ -56,7 +48,7 @@ module Ingestor
 
       dmca = mapper.notice_type.create!(attributes)
 
-      logger.debug { "Imported: #{attributes[:original_notice_id]} -> #{dmca.id}" }
+      logger.debug { "legacy import id: #{attributes[:original_notice_id]} -> #{dmca.id}" }
       if error = NoticeImportError.find_by_original_notice_id(csv_row['NoticeID'])
         error.destroy
       end
