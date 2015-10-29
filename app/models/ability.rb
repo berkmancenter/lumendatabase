@@ -45,6 +45,7 @@ class Ability
     can :access, :rails_admin
     can :dashboard
     can :search, Entity
+    can :access, :original_files
   end
 
   def grant_redact
