@@ -8,7 +8,9 @@ class FileUpload < ActiveRecord::Base
   validates_inclusion_of :kind, in: %w( original supporting )
 
   belongs_to :notice
-  has_attached_file :file
+  has_attached_file :file,
+    path: ":rails_root/paperclip/:class/:attachment/:id_partition/:style/:filename",
+    url: "/:class/:attachment/:id/:id_partition/:style/:filename"
 
   before_save :rename_file, if: ->(instance) { instance.file_name.present? }
   delegate :url, to: :file
