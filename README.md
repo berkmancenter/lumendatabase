@@ -1,7 +1,7 @@
-Chilling Effects
+Lumen Database
 ================
 
-Description here.
+The Lumen Database collects and analyzes legal complaints and requests for removal of online materials, helping Internet users to know their rights and understand the law. These data enable us to study the prevalence of legal threats and let Internet users see the source of content removals.
 
 Development
 ===========
@@ -50,9 +50,9 @@ Ephemera
 ========
 
 The `/blog_entries` page contains a google custom search engine that's supposed
-to search the chillingeffects blog. To enable, create a custom search engine
+to search the Lumen blog. To enable, create a custom search engine
 [here](https://www.google.com/cse/create/new) restricted to the path the blog
-lives at, for instance `http://www.chillingeffects.org/blog_entries/*`. Extract
+lives at, for instance `http://www.lumendatabase.org/blog_entries/*`. Extract
 the "cx" id from the javascript embed code and put it in the
 `GOOGLE_CUSTOM_BLOG_SEARCH_ID` environment variable. The blog search will
 appear after this variable has been configured.
@@ -60,9 +60,9 @@ appear after this variable has been configured.
 License
 =======
 
-Chilling Effects is licensed under GPLv2. See LICENSE.txt for more information.
+Lumen Database is licensed under GPLv2. See LICENSE.txt for more information.
 
 Copyright
 =========
 
-Copyright (c) 2013 President and Fellows of Harvard College
+Copyright (c) 2015 President and Fellows of Harvard College
