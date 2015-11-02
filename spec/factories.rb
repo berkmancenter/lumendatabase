@@ -255,6 +255,10 @@ FactoryGirl.define do
       published_at 5.days.ago
     end
 
+    trait :archive do
+      archive true
+    end
+
     trait :with_abstract do
       abstract "Some summary of the post's content"
     end
