@@ -6,7 +6,7 @@ xml.rss :version => "2.0" do
     xml.title "Recent Notices from Lumen Database"
     xml.author "Lumen Database"
     xml.description "Lumen Database is an independent 3rd party research project studying cease and desist letters concerning online content."
-    xml.link "https://www.chillingeffects.org/"
+    xml.link "https://www.lumendatabase.org/"
     xml.language "en"
 
     for notice in @recent_notices
