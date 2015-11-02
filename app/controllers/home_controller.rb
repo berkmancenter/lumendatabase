@@ -13,7 +13,7 @@ class HomeController < ApplicationController
     
     if !fragment_exist?( 'chillingeffects-tweets' )
       begin
-        @twitter_user = "chillingeffects"
+        @twitter_user = "lumendatabase"
         @tweet_news = client.user_timeline(@twitter_user, {count: 4})
       rescue Twitter::Error => e
         logger.error "Twitter fetch failed: #{e.message}"
