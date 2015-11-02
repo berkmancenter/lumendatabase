@@ -1,5 +1,5 @@
 <section class="home-search-form">
-  <h1><%= image_tag("logo_2x.png", :size=> "340x127") %></h1>
+  <h1><%= image_tag("logo_2x.png", :size=> "340x82") %></h1>
   <%= render 'shared/search' %>
   <div class="more-info">
     <p class="about">The Lumen database collects and analyzes legal complaints and requests for removal of online materials, helping Internet users to know their rights and understand the law. These data enable us to study the prevalence of legal threats and let Internet users see the source of content removals.</p>
@@ -16,7 +16,7 @@
   </section>
   <% cache( 'chillingeffects-tweets', expires_in: 5.minutes ) { %>
   <section class="tweets">
-  <h2>@chillingeffects on twitter</h2>
+  <h2>@lumendatabase on twitter</h2>
     <% @tweet_news.each do |tweet| %>
     <ol>
         <li><%= auto_link(tweet.text).html_safe %></li>
