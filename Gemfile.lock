@@ -211,6 +211,8 @@ GEM
     rack (1.4.7)
     rack-accept (0.4.5)
       rack (>= 0.4)
+    rack-attack (4.3.0)
+      rack
     rack-cache (1.2)
       rack (>= 0.4)
     rack-pjax (0.7.0)
@@ -403,6 +405,7 @@ DEPENDENCIES
   pg
   piwik_analytics
   pry-rails
+  rack-attack
   rack-throttle
   rails (~> 3.2.22)
   rails_admin (~> 0.4.8)

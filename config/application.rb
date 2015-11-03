@@ -80,5 +80,6 @@ module Chill
     config.assets.version = '1.0'
 
     config.middleware.insert_before ActionDispatch::ParamsParser, "CatchJsonParsingErrors"
+    config.middleware.use Rack::Attack
   end
 end
