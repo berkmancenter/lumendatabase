@@ -166,7 +166,7 @@ curl -kv \
      -F "notice[file_uploads_attributes][0][kind]=original" \
      -F "notice[file_uploads_attributes][0][file]=@Defamation complaint.docx" \
      -F "notice[works_attributes][0][infringing_urls_attributes][0][url]=http://www.bad.com/people/296" \
-     https://chillingeffects.org/notices
+     https://lumendatabase.org/notices
 ```
 
 As JSON Data
@@ -178,7 +178,7 @@ JSON data is better if you do not have to submit file attachments as the syntax 
 curl -H "Accept: application/json" \
      -H "Content-type: application/json" \
      -d '{ "authentication_token": "abc123", "notice": { "type": "Defamation", "title": "Defamation report via JSON data" } }' \
-     https://chillingeffects.org/notices
+     https://lumendatabase.org/notices
 ```
 
 Authentication
