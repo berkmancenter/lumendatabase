@@ -14,7 +14,7 @@ describe HomeController do
 
     it "finds recent blog entries" do
       blog_entries = double("Blog entries")
-      BlogEntry.should_receive(:recent).and_return(blog_entries)
+      BlogEntry.should_receive(:recent_posts).and_return(blog_entries)
 
       get :index
 
