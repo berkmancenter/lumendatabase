@@ -3,7 +3,7 @@ class HomeController < ApplicationController
 
   def index
     @notices = Notice.visible.recent
-    @blog_entries = BlogEntry.published.with_content.first(5)
+    @blog_entries = BlogEntry.recent
     client = Twitter::REST::Client.new do |config|
      config.consumer_key = ENV['TWITTER_CONSUMER_KEY']
      config.consumer_secret = ENV['TWITTER_CONSUMER_SECRET']
