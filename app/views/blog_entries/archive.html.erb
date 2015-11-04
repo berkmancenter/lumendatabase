@@ -1,4 +1,4 @@
-<% title 'Blog' %>
+<% title 'Blog Archive' %>
 
 <section class="posts">
   <%= render @blog_entries %>
@@ -11,7 +11,6 @@
       <li><%= link_to(blog_entry.title, blog_entry.url) %></li>
     <% end %>
   </ol>
-  <h4><%= link_to "Blog Archive", '/blog_archive' %></h4>
 </aside>
 
 <% if blog_search_engine_configured? %>

@@ -11,12 +11,14 @@ class HomeController < ApplicationController
      config.access_token_secret = ENV['TWITTER_OAUTH_TOKEN_SECRET']
     end
     
-    begin
-      @twitter_user = "chillingeffects"
-      @tweet_news = client.user_timeline(@twitter_user, {count: 4})
-    rescue Twitter::Error => e
-      logger.error "Twitter fetch failed: #{e.message}"
-      @tweet_news = []
+    if !fragment_exist?( 'chillingeffects-tweets' )
+      begin
+        @twitter_user = "lumendatabase"
+        @tweet_news = client.user_timeline(@twitter_user, {count: 4})
+      rescue Twitter::Error => e
+        logger.error "Twitter fetch failed: #{e.message}"
+        @tweet_news = []
+      end
     end
   end
 end

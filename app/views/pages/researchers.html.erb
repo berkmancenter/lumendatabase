@@ -6,7 +6,7 @@
 
 <section>
 
-<h2>AN INTRODUCTION TO THE Lumen project</h2>
+<h2>An Introduction to the Lumen Project</h2>
 
 <h3>Contents:</h3>
 
@@ -16,6 +16,7 @@
   <a href="#missing"><li>What is missing?</li></a>
   <a href="#clearinghouse"><li>Who is Lumen for?</li></a>
   <a href="#documentation"><li>How does it work?</li></a>
+  <a href="#api_terms"><li>API Terms of Use</li></a>
 <ul>
 </section>
 
@@ -39,7 +40,7 @@
 
 <a id="clearinghouse"><h2>Who is Lumen for?</h2></a>
 
-<p>Lumen is designed for use by lay Internet users curious about a notice they may have encountered, as well Internet and legal researchers studying larger trends about free expression and content removal online.  If you have further ideas about how to use the database, or suggestions about this FAQ, email us at team@lumen.org with the subject line "A Suggestion for Researcher FAQs."</p>
+<p>Lumen is designed for use by lay Internet users curious about a notice they may have encountered, as well Internet and legal researchers studying larger trends about free expression and content removal online.  If you have further ideas about how to use the database, or suggestions about this FAQ, email us at team@lumendatabase.org with the subject line "A Suggestion for Researcher FAQs."</p>
 
 <a id="documentation"><h2>How does it work?</h2></a>
 
@@ -64,7 +65,7 @@
 
 <a id="apidocs"><h2>API Documentation</h2></a>
 
-<p>The documentation for the Lumen API can be found <a href="https://github.com/berkmancenter/chillingeffects/blob/master/doc/api_documentation.mkd">here</a>.</p>
+<p>The documentation for the Lumen API can be found <a href="https://github.com/berkmancenter/lumendatabase/blob/master/doc/api_documentation.mkd">here</a>.</p>
 
 <a id="formatting"><h2>Formatting</h2></a>
 
@@ -73,7 +74,7 @@
 Example JSON Request:
 <pre>
 <code>
-curl http://clumendatabase.org/notices/1.json
+curl http://lumendatabase.org/notices/1.json
 </code>
 </pre>
 Example Successful JSON Output: 
@@ -130,7 +131,7 @@ Example Successful JSON Output:
 
 <p>Most users will find that the web interface will suffice for browsing and discovery within the database.  However, for those that need to access larger swaths of data or create automated processes to digest data trends, we offer our new API.</p>
 
-<p>Searching the database, whether through the web interface or with the API, is done via full-text search.  The default search is to search all possible notice fields and facets.  Searches can also refined based on specific slices of the database or on specific facets of the data. See the <a href="https://github.com/berkmancenter/chillingeffects/blob/master/doc/api_documentation.mkd#request">documentation</a> for the applicable notice parameters and metadata.</p>
+<p>Searching the database, whether through the web interface or with the API, is done via full-text search.  The default search is to search all possible notice fields and facets.  Searches can also refined based on specific slices of the database or on specific facets of the data. See the <a href="https://github.com/berkmancenter/lumendatabase/blob/master/doc/api_documentation.mkd#request">documentation</a> for the applicable notice parameters and metadata.</p>
 
 <hr>
 
@@ -148,7 +149,7 @@ Example Successful JSON Output:
 
 <a id="key"><h2>Getting an API Key</h2></a>
 
-An authentication key is needed in order to query the database at will via the API.  Contact the Lumen staff at team@lumen.org to be provided with one.  API queries to the database submitted without a token will be capped at the first 25 results, and at 5 requests per day.
+An authentication key is needed in order to query the database at will via the API.  Contact the Lumen staff at team@lumendatabase.org to be provided with one.  API queries to the database submitted without a token will be capped at the first 25 results, and at 5 requests per day.
 
 <a id="commandline"><h2>Basic search from the command line</h2></a>
 
@@ -180,7 +181,7 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'https://
 </code>
 </pre>
 
-<p>Running these search queries through the API will allow you to search for some period of time, as well as download search results for use and reuse in applications.  A complete list of searchable parameters can be found <a href="https://github.com/berkmancenter/chillingeffects/blob/master/doc/api_documentation.mkd#search-notices-via-fulltext">here</a>.</p>
+<p>Running these search queries through the API will allow you to search for some period of time, as well as download search results for use and reuse in applications.  A complete list of searchable parameters can be found <a href="https://github.com/berkmancenter/lumendatabase/blob/master/doc/api_documentation.mkd#search-notices-via-fulltext">here</a>.</p>
 
 <a id="topics"><h2>Requesting a List of Topics</h2></a>
 
@@ -216,4 +217,7 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'https://
 
 <a id="bulk_download"><h2>Downloading Results in Bulk</h2></a>
 
-In order to better manage its resources, Lumen limits requests to its API.  For thos einterested in unlimited access to the database through the API, please see  <a href="#key">"Getting an API key."</a>
+In order to better manage its resources, Lumen limits requests to its API. For those interested in unlimited access to the database through the API, please see  <a href="#key">"Getting an API key."</a>
+
+<a id="api_terms"><h2>API Terms of Use</h2></a>
+The terms of use for the API are available by clicking <a href="/pages/api_terms">here</a>.

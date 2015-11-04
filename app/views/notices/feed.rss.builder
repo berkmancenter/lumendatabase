@@ -3,10 +3,10 @@
 xml.instruct! :xml, :version => "1.0"
 xml.rss :version => "2.0" do
   xml.channel do
-    xml.title "Recent Notices from Chilling Effects"
-    xml.author "Chilling Effects"
-    xml.description "Chilling Effects is an independent 3rd party research project studying cease and desist letters concerning online content."
-    xml.link "https://www.chillingeffects.org/"
+    xml.title "Recent Notices from Lumen Database"
+    xml.author "Lumen Database"
+    xml.description "Lumen Database is an independent 3rd party research project studying cease and desist letters concerning online content."
+    xml.link "https://www.lumendatabase.org/"
     xml.language "en"
 
     for notice in @recent_notices
@@ -18,7 +18,7 @@ xml.rss :version => "2.0" do
         end
         xml.author notice.sender_name
         xml.pubDate notice.created_at.to_s(:rfc822)
-        xml.link "https://www.chillingeffects.org/notices/" + notice.id.to_s
+        xml.link "https://www.lumendatabase.org/notices/" + notice.id.to_s
         xml.guid notice.id
         xml.type notice.type
 
