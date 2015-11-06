@@ -12,7 +12,7 @@ feature 'Page titles' do
     fill_in "term", with: "search terms"
     click_on "Go"
 
-    expect(page).to have_exact_title('Search :: 'Lumen')
+    expect(page).to have_exact_title('Search :: Lumen')
   end
 
   scenario "Blog" do
