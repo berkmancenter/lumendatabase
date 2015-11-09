@@ -59,11 +59,11 @@ class Work < ActiveRecord::Base
   end
 
 # Code below is to run a basic classifier for work kinds. Disabled due to confusion caused by mis-classified works.
-#  before_save do
-#    if kind.blank?
-#      self.kind = DeterminesWorkKind.new(self).kind
-#    end
-#  end
+  before_save do
+    if kind.blank?
+      self.kind = 'Unspecified' #DeterminesWorkKind.new(self).kind
+    end
+  end
 
   before_save on: :create do
     self.description_original = description if self.description_original.nil?
