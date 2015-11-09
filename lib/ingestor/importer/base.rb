@@ -126,7 +126,7 @@ module Ingestor
       end
 
       def action_taken
-        'Yes'
+        ''
       end
 
       def default_recipient
