@@ -41,7 +41,7 @@ article.notice-show {
       color: hsla(0, 0%, 100%, 0.6);
     }
 
-    section.sender, section.recipient {
+    section.sender, section.recipient, section.submitter {
       @extend %notice-header;
 
       @include media($mobile) {
@@ -71,7 +71,7 @@ article.notice-show {
         opacity: 0.1;
         position: absolute;
         top: 50px;
-        width: 50%;
+        width: 33%;
 
         @include media($mobile) {
           display: none;
