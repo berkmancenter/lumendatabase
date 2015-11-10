@@ -23,6 +23,9 @@
         <% if @notice.recipient %>
           <%= render @notice.recipient, notice: @notice, role: :recipient %>
         <% end %>
+        <% if @notice.submitter %>
+          <%= render @notice.submitter, notice: @notice, role: :submitter %>
+        <% end %>
 
         <% @notice.other_entity_notice_roles.each do |role| %>
           <%= render role.entity, notice: @notice,
