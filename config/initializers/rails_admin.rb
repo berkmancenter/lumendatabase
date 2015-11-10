@@ -159,11 +159,11 @@ RailsAdmin.config do |config|
 
   config.model 'Work' do
     object_label_method { :custom_work_label }
-    configure :notices do
-      visible do
-        bindings[:object].notices.count < 100
-      end
+    
+    edit do
+      configure(:notice) { hide }
     end
+    
     list do
       configure(:copyrighted_urls) { hide }
       configure(:infringing_urls) { hide }
