@@ -39,6 +39,10 @@ class BlogEntry < ActiveRecord::Base
     where('published_at <= ?', Time.now).where(:archive => true).order('published_at DESC')
   end
 
+  def self.recent_posts
+    where('published_at <= ?', Time.now).where(:archive => false).where("url = '' or url IS NULL").order('published_at DESC').first(5)
+  end
+
   def content_html
     Markdown.render(content.to_s)
   end

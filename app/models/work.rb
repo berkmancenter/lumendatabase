@@ -58,9 +58,10 @@ class Work < ActiveRecord::Base
     where(attributes).first || create!(attributes)
   end
 
+# Code below is to run a basic classifier for work kinds. Disabled due to confusion caused by mis-classified works.
   before_save do
     if kind.blank?
-      self.kind = DeterminesWorkKind.new(self).kind
+      self.kind = 'Unspecified' #DeterminesWorkKind.new(self).kind
     end
   end
 

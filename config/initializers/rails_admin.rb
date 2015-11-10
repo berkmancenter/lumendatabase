@@ -87,8 +87,6 @@ RailsAdmin.config do |config|
           end
         end
 
-        configure(:works) { nested_form false }
-
         configure :rescinded do
           visible do
             ability = Ability.new(bindings[:view]._current_user)

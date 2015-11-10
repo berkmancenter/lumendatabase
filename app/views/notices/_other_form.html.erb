@@ -14,6 +14,7 @@
           tooltip: "If the notice you sent/received had a subject line, enter it here"
         }}
       %>
+      <%= form.hidden_field :webform, :value => true %>
       <%= form.input :subject %>
       <%= form.input :date_sent, as: :string, placeholder: "YYYY-MM-DD" %>
       <%= form.input :date_received, as: :string, placeholder: "YYYY-MM-DD" %>
