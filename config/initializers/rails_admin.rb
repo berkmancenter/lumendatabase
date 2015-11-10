@@ -161,9 +161,9 @@ RailsAdmin.config do |config|
     object_label_method { :custom_work_label }
     
     edit do
-      configure(:notice) { hide }
+      configure(:notices) { hide }
     end
-    
+
     list do
       configure(:copyrighted_urls) { hide }
       configure(:infringing_urls) { hide }
