@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20151104212217) do
+ActiveRecord::Schema.define(:version => 20151109202230) do
 
   create_table "blog_entries", :force => true do |t|
     t.integer  "user_id"
