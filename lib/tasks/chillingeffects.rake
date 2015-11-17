@@ -483,4 +483,28 @@ namespace :chillingeffects do
     Notice.update_all("date_received = NULL", "date_received > CURRENT_DATE")
     Notice.update_all("date_sent = NULL", "date_sent > CURRENT_DATE")
   end
+
+  desc "Remove kinds from Google notices"
+  task remove_google_kinds: :environment do
+    entities = Entity.where("entities.name ilike '%Google%'")
+    total = entities.count
+    entities.each.with_index(1) do |e, i|
+      notices = e.notices.includes(:works).where(entity_notice_roles: { name: 'recipient' })
+
+      p = ProgressBar.create(
+        title: "updating #{e.name} (#{i} of #{total})",
+        total: ([notices.count, 1].max),
+        format: "%t: %b %p%% %e %c/%c %r/s"
+      )
+
+      notices.find_in_batches do |group|
+        group.each do |notice|
+          notice.works.each do |work|
+            work.update_attributes(kind: "Unspecified")
+          end
+          p.increment
+        end
+      end
+    end
+  end
 end
