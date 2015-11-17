@@ -494,12 +494,12 @@ namespace :chillingeffects do
       p = ProgressBar.create(
         title: "updating #{e.name} (#{i} of #{total})",
         total: ([notices.count, 1].max),
-        format: "%t: %b %p%% %e %c/%c %r/s"
+        format: "%t: %b %p%% %e %c %r/s"
       )
 
       notices.find_in_batches do |group|
         group.each do |notice|
-          notice.works.each do |work|
+          notice.works.where( "NOT kind = 'Unspecified'" ).each do |work|
             work.update_attributes(kind: "Unspecified")
           end
           p.increment
