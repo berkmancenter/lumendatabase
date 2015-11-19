@@ -63,6 +63,13 @@ RailsAdmin.config do |config|
         field :url_count
       end
       edit do
+        configure :action_taken, :enum do
+          enum do
+            ['Yes', 'No', 'Partial', 'Unspecified']
+          end
+          default_value 'Unspecified'
+        end
+
         configure(:type) do
           hide
         end
@@ -140,6 +147,12 @@ RailsAdmin.config do |config|
       end
     end
     edit do
+      configure :kind, :enum do
+        enum do
+          ['individual', 'organization']
+        end
+        default_value 'organization'
+      end
       configure(:notices) { hide }
       configure(:entity_notice_roles) { hide }
       configure(:ancestry) { hide }
@@ -177,6 +190,14 @@ RailsAdmin.config do |config|
 
   config.model 'InfringingUrl' do
     object_label_method { :url }
+  end
+
+  config.model 'FileUpload' do
+    edit do
+      configure :kind, :enum do
+        ['original', 'supporting']
+      end
+    end
   end
 
   config.model 'ReindexRun' do
