@@ -195,7 +195,9 @@ RailsAdmin.config do |config|
   config.model 'FileUpload' do
     edit do
       configure :kind, :enum do
-        ['original', 'supporting']
+        enum do
+          ['original', 'supporting']
+        end
       end
     end
   end
