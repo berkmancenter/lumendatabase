@@ -222,8 +222,6 @@ GEM
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
-    rack-throttle (0.4.0)
-      rack (>= 1.0.0)
     rails (3.2.22)
       actionmailer (= 3.2.22)
       actionpack (= 3.2.22)
@@ -406,7 +404,6 @@ DEPENDENCIES
   piwik_analytics
   pry-rails
   rack-attack
-  rack-throttle
   rails (~> 3.2.22)
   rails_admin (~> 0.4.8)
   rb-inotify
