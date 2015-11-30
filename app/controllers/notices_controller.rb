@@ -43,7 +43,7 @@ class NoticesController < ApplicationController
       end
 
       format.html do
-        if submission.submit
+        if submission.submit(current_user)
           redirect_to :root, notice: "Notice created!"
         else
           @notice = submission.notice
