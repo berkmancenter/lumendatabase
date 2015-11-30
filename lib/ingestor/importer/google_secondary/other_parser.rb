@@ -11,12 +11,20 @@ module Ingestor
           Other
         end
 
-        def parse_works(file_path)
+        def body
+          '[REDACTED]'
+        end
+
+        def body_original
           content = RedactedContent.new(file_path, 'legalother_explain') do |c|
             "#{sender(c)} #{principal(c)}"
           end
 
-          [content.to_work]
+          content.desciption
+        end
+
+        def parse_works(file_path)
+          []
         end
 
         def notice_type

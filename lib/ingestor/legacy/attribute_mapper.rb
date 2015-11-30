@@ -30,6 +30,12 @@ module Ingestor
       end
 
       def mapped
+        body = importer.body
+        body_original = importer.body_original
+
+        body = hash['Body'] unless body.present?
+        body_original = hash['BodyOriginal'] unless body_original.present?
+
         works = importer.works
 
         if works.empty?
@@ -37,8 +43,6 @@ module Ingestor
 
           review_required = importer.require_review_if_works_empty?
 
-          body = hash['Body']
-          body_original = hash['BodyOriginal']
         else
           review_required = false
         end

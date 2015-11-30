@@ -63,6 +63,14 @@ module Ingestor
         ''
       end
 
+      def body
+        nil
+      end
+
+      def body_original
+        nil
+      end
+
       def works
         file_paths.each do |file_path|
           if parsable?(file_path)
