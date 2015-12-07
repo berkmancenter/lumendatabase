@@ -12,15 +12,19 @@ module Ingestor
         end
 
         def body
-          '[REDACTED]'
-        end
-
-        def body_original
-          content = RedactedContent.new(file_path, 'legalother_explain') do |c|
+          content = RedactedContent.new(original_file_paths.first, 'legalother_explain') do |c|
             "#{sender(c)} #{principal(c)}"
           end
 
-          content.desciption
+          content.to_work.description
+        end
+
+        def body_original
+          content = RedactedContent.new(original_file_paths.first, 'legalother_explain') do |c|
+            "#{sender(c)} #{principal(c)}"
+          end
+
+          content.to_work.description_original
         end
 
         def parse_works(file_path)
@@ -28,8 +32,9 @@ module Ingestor
             "#{sender(c)} #{principal(c)}"
           end
 
-          content.desciption = ''
-          [content.to_work]
+          work = content.to_work
+		  work.update_attributes description: '', description_original: ''
+          [work]
         end
 
         def notice_type
