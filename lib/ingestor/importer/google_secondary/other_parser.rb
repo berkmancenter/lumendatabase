@@ -27,6 +27,10 @@ module Ingestor
           content.to_work.description_original
         end
 
+        def hidden?
+          true
+        end
+
         def parse_works(file_path)
           content = RedactedContent.new(file_path, 'legalother_explain') do |c|
             "#{sender(c)} #{principal(c)}"

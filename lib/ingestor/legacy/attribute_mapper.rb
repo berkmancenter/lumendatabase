@@ -62,7 +62,7 @@ module Ingestor
           review_required: review_required,
           topics: topics(hash['CategoryName']),
           rescinded: rescinded?,
-          hidden: hidden?,
+          hidden: ( importer.hidden? || hidden? ),
           submission_id: hash['SubmissionID'],
           entity_notice_roles: entity_notice_roles,
           body: body,

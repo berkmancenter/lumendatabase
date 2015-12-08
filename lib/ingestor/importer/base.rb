@@ -71,6 +71,10 @@ module Ingestor
         nil
       end
 
+      def hidden?
+	    false
+      end
+
       def works
         file_paths.each do |file_path|
           if parsable?(file_path)
