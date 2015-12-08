@@ -15,6 +15,10 @@ module Ingestor
           [content.to_work]
         end
 
+        def default_submitter
+          'Google, Inc.'
+        end
+
         def default_recipient
           'Google, Inc.'
         end

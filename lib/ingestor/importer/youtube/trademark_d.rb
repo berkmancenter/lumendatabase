@@ -7,6 +7,10 @@ module Ingestor
 
         handles_content(/^IssueType: trademarkcomplaintd/)
 
+        def default_submitter
+          'Google, Inc.'
+        end
+
         def default_recipient
           'Youtube (Google, Inc.)'
         end

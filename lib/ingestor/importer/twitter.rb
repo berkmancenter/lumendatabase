@@ -22,6 +22,10 @@ module Ingestor
         works
       end
 
+      def default_submitter
+        'Twitter'
+      end
+
       def default_recipient
         "Twitter"
       end

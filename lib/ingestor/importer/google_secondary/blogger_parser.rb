@@ -16,6 +16,10 @@ module Ingestor
           )]
         end
 
+        def default_submitter
+          'Google, Inc.'
+        end
+
         def default_recipient
           'Google, Inc. [Blogger]'
         end
