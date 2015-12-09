@@ -77,11 +77,10 @@ describe Work do
 
   context '#kind' do
     it "auto classifies before saving if kind is not set" do
-      DeterminesWorkKind.any_instance.should_receive(:kind).and_return('foo')
       work = build(:work)
 
       work.save
-      expect(work.kind).to eq 'foo'
+      expect(work.kind).to eq 'Unspecified'
     end
 
     it "does not auto classify if kind is set" do
@@ -92,28 +91,22 @@ describe Work do
     end
   end
 
-  it "validates infringing urls correctly when multiple are used at once" do
+  it "no longer validates infringing urls when multiple are used at once" do
     notice = notice_with_works_attributes([
       { infringing_urls_attributes: [{ url: "" }] },
       { infringing_urls_attributes: [{ url: "" }] }
     ])
 
-    expect(notice).not_to be_valid
-    expect(notice.errors.messages).to eq(
-      { :"works.infringing_urls" => ["is invalid"] }
-    )
+    expect(notice).to be_valid
   end
 
-  it "validates infringing urls correctly when multiple are used at once" do
+  it "no longer validates infringing urls when multiple are used at once" do
     notice = notice_with_works_attributes([
       { copyrighted_urls_attributes: [{ url: "" }] },
       { copyrighted_urls_attributes: [{ url: "" }] }
     ])
 
-    expect(notice).not_to be_valid
-    expect(notice.errors.messages).to eq(
-      { :"works.copyrighted_urls" => ["is invalid"] }
-    )
+    expect(notice).to be_valid
   end
 
   private

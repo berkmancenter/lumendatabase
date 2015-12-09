@@ -8,7 +8,7 @@ feature "typed notice submissions" do
     submission.fill_in_form_with({
       "Mark" => "My trademark (TM)",
       "Infringing URL" => "http://example.com/infringing_url1",
-      "Describe the alleged Infringement" => "They used my thing",
+      "Describe the alleged infringement" => "They used my thing",
       "Registration Number" => '1337'
     })
 

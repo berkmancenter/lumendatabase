@@ -45,7 +45,7 @@ https://www.youtube.com/watch?v=w2-DjJ
 https://www.youtube.com/watch?v=PlsCEe|
       )
       expect(notice).to have(1).original_document
-      expect(notice.action_taken).to eq 'Yes'
+      expect(notice.action_taken).to eq ''
       expect(notice.submission_id).to eq 10078
     end
 
@@ -67,7 +67,7 @@ https://www.youtube.com/watch?v=PlsCEe|
         %w|http://www.youtube.com/watch?v=H0r8U-|
       )
       expect(notice).to have(1).original_document
-      expect(notice.action_taken).to eq 'Yes'
+      expect(notice.action_taken).to eq ''
       expect(notice.submission_id).to eq 1007
       expect(notice.mark_registration_number).to eq '12200000'
     end
@@ -90,7 +90,7 @@ https://www.youtube.com/watch?v=PlsCEe|
         %w|https://www.youtube.com/user/ThisChipmunks|
       )
       expect(notice).to have(1).original_document
-      expect(notice.action_taken).to eq 'Yes'
+      expect(notice.action_taken).to eq ''
       expect(notice.submission_id).to eq 1006
       expect(notice.mark_registration_number).to eq '29350000'
     end
@@ -115,7 +115,7 @@ https://www.youtube.com/watch?v=PlsCEe|
        http://www.youtube.com/watch?v=FzH|
       )
       expect(notice).to have(1).original_document
-      expect(notice.action_taken).to eq 'Yes'
+      expect(notice.action_taken).to eq ''
       expect(notice.submission_id).to eq 1005
       expect(notice.mark_registration_number).to eq '28950000'
     end
@@ -138,7 +138,7 @@ https://www.youtube.com/watch?v=PlsCEe|
         %w|https://www.youtube.com/watch?v=7uC2cJz0 https://www.youtube.com/watch?v=lRu8rSY|
       )
       expect(notice).to have(1).original_document
-      expect(notice.action_taken).to eq 'Yes'
+      expect(notice.action_taken).to eq ''
       expect(notice.submission_id).to eq 2000
     end
 
@@ -169,7 +169,7 @@ https://www.youtube.com/watch?v=PlsCEe|
       expect(upload_contents(notice.original_documents.first)).to eq File.read(
         'spec/support/example_files/original_notice_source.txt'
       )
-      expect(notice.action_taken).to eq 'Yes'
+      expect(notice.action_taken).to eq ''
       expect(notice.submission_id).to eq 1000
       expect(notice).to have(1).supporting_document
       expect(upload_contents(notice.supporting_documents.first)).to eq File.read(
@@ -202,7 +202,7 @@ http://www.example.com/unstoppable_3.html|
       expect(upload_contents(notice.original_documents.first)).to eq File.read(
         'spec/support/example_files/secondary_dmca_notice_source.html'
       )
-      expect(notice.action_taken).to eq 'Yes'
+      expect(notice.action_taken).to eq ''
       expect(notice.submission_id).to eq 1001
       expect(notice).to have(1).supporting_document
       expect(upload_contents(notice.supporting_documents.first)).to eq File.read(
@@ -226,7 +226,7 @@ http://www.example.com/unstoppable_3.html|
       expect(upload_contents(notice.original_documents.first)).to eq File.read(
         'spec/support/example_files/secondary_other_notice_source.html'
       )
-      expect(notice.action_taken).to eq 'Yes'
+      expect(notice.action_taken).to eq ''
       expect(notice.submission_id).to eq 1002
       expect(notice).to have(1).supporting_document
       expect(upload_contents(notice.supporting_documents.first)).to eq File.read(
@@ -250,7 +250,7 @@ http://www.example.com/unstoppable_3.html|
       expect(upload_contents(notice.original_documents.first)).to eq File.read(
         'spec/support/example_files/original_twitter_notice_source.txt'
       )
-      expect(notice.action_taken).to eq 'Yes'
+      expect(notice.action_taken).to eq ''
       expect(notice.submission_id).to be_nil
       expect(notice).to have(1).supporting_document
       expect(upload_contents(notice.supporting_documents.first)).to eq File.read(
@@ -272,7 +272,7 @@ http://www.example.com/unstoppable_3.html|
       expect(upload_contents(notice.original_documents.first)).to eq File.read(
         'spec/support/example_files/original_notice_source_2.txt'
       )
-      expect(notice.action_taken).to eq 'Yes'
+      expect(notice.action_taken).to eq ''
     end
   end
 

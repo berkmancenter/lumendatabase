@@ -4,6 +4,7 @@ describe 'home/index.html.erb' do
   before do
     assign(:notices, [])
     assign(:blog_entries, [])
+    assign(:tweet_news, [])
   end
 
   it 'shows metadata and a link to each of its notices' do
