@@ -184,7 +184,11 @@ class Notice < ActiveRecord::Base
   end
 
   def self.visible
-    where(spam: false, hidden: false, published: true, rescinded: false)
+    where(visible_qualifiers)
+  end
+
+  def self.visible_qualifiers
+    { spam: false, hidden: false, published: true, rescinded: false }
   end
   
   def self.find_unpublished(notice_id)

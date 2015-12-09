@@ -36,6 +36,11 @@ class SearchesModels
     "search-result-#{Digest::MD5.hexdigest(@params.to_param)}"
   end
 
+  def visible_qualifiers
+    return @model_class.visible_qualifiers if @model_class.respond_to?(:visible_qualifiers)
+    {}
+  end
+
   private
 
   def this_page
@@ -55,7 +60,13 @@ class SearchesModels
 
     search.query do |query|
       # Don't pass empty queries to elasticsearch
-      query.boolean{ must { string 'id:*' }} unless parameters_present?
+      if !parameters_present? && visible_qualifiers.blank?
+        query.boolean{ must { string 'id:*' }}
+      else
+        visible_qualifiers.each do |k, v|
+          query.boolean { |q| q.must { match(k, v, operator: 'AND') } }
+        end
+      end
       @params.each do |param, value|
         if value.present?
           registry.each do |filter|
