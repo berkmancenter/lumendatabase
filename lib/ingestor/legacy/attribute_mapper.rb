@@ -42,9 +42,8 @@ module Ingestor
           works = [Work.unknown]
 
           review_required = importer.require_review_if_works_empty?
-
         else
-          review_required = false
+          review_required = importer.review_required?
         end
 
         {

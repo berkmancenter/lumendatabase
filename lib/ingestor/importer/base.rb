@@ -144,6 +144,10 @@ module Ingestor
       def default_recipient
       end
 
+      def review_required?
+        false
+      end
+
       def require_review_if_works_empty?
         true
       end

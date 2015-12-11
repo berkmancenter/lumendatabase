@@ -49,6 +49,10 @@ module Ingestor
           'Google, Inc.'
         end
 
+        def review_required?
+          true
+        end
+
         private
 
         def sender(content)
