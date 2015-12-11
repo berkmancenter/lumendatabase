@@ -141,6 +141,9 @@ module Ingestor
         ''
       end
 
+      def default_submitter
+      end
+
       def default_recipient
       end
 

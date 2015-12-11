@@ -17,7 +17,7 @@ module Ingestor
         '10' => :rescinded
       }
 
-      delegate :default_recipient, :notice_type, :entities, to: :importer
+      delegate :default_submitter, :default_recipient, :notice_type, :entities, to: :importer
 
       def initialize(hash)
         @hash = hash

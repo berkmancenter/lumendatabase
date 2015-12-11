@@ -19,6 +19,12 @@ module Ingestor
             name = attribute_mapper.entities[role_name.to_sym]
           end
 
+          if role_name == 'submitter' &&
+            name.blank? &&
+              attribute_mapper.default_submitter.present?
+            name = attribute_mapper.default_submitter
+          end
+
           if role_name == 'recipient' &&
             name.blank? &&
               attribute_mapper.default_recipient.present?

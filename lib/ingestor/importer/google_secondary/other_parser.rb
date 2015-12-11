@@ -45,6 +45,10 @@ module Ingestor
           self.class.notice_type
         end
 
+        def default_submitter
+          'Google, Inc.'
+        end
+
         def default_recipient
           'Google, Inc.'
         end

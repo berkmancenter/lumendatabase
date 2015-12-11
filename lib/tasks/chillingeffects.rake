@@ -356,31 +356,16 @@ namespace :chillingeffects do
 
   desc "Assign blank action_taken to Google notices"
   task blank_action_taken: :environment do
-
-  begin
-    entities = Entity.where("entities.name ilike '%Google%'")
-    total = entities.count
-    entities.each.with_index(1) do |e, i|
-      notices = e.notices.where(
-        entity_notice_roles: { name: 'recipient' }
-      ).where("COALESCE(action_taken, '') != ''")
-
-      p = ProgressBar.create(
-        title: "Updating #{e.name} (#{i} of #{total})",
-        total: ([notices.count, 1].max),
-        format: "%t: %B %P%% %E %c/%C %R/s"
-      )
-      notices.select('notices.id').find_in_batches do |group|
-        Notice.where(
-          id: group.map(&:id)
-        ).update_all(action_taken: '', updated_at: Time.now)
-        p.progress += group.size
-      end
-      p.finish unless p.finished?
-    end
-  rescue => e
-    $stderr.puts "Reassigning did not succeed because: #{e.inspect}"
-    end
+    ActiveRecord::Base.connection.execute %Q{
+update notices
+set action_taken = '',
+  updated_at = now()
+where notices.id in ( 
+  select notices.id from notices
+  inner join entity_notice_roles on entity_notice_roles.notice_id = notices.id and entity_notice_roles.name = 'recipient'
+  and entity_notice_roles.entity_id in (select id from entities where entities.name ilike '%google%')
+)
+    }
   end
 
   desc "Redact content in a single notice by id"
@@ -486,25 +471,17 @@ namespace :chillingeffects do
 
   desc "Remove kinds from Google notices"
   task remove_google_kinds: :environment do
-    entities = Entity.where("entities.name ilike '%Google%'")
-    total = entities.count
-    entities.each.with_index(1) do |e, i|
-      notices = e.notices.includes(:works).where(entity_notice_roles: { name: 'recipient' })
-
-      p = ProgressBar.create(
-        title: "updating #{e.name} (#{i} of #{total})",
-        total: ([notices.count, 1].max),
-        format: "%t: %b %p%% %e %c %r/s"
-      )
-
-      notices.find_in_batches do |group|
-        group.each do |notice|
-          notice.works.where( "NOT kind = 'Unspecified'" ).each do |work|
-            work.update_attributes(kind: "Unspecified")
-          end
-          p.increment
-        end
-      end
-    end
+    ActiveRecord::Base.connection.execute %Q{
+update works
+set kind = 'Unspecified'
+where works.id in (
+  select works.id from works
+  inner join notices_works on notices_works.work_id = works.id
+  inner join notices on notices.id = notices_works.notice_id
+  inner join entity_notice_roles on entity_notice_roles.notice_id = notices.id and entity_notice_roles.name = 'recipient'
+  where entity_notice_roles.entity_id in (select id from entities where entities.name ilike '%google%')
+  and not works.kind = 'Unspecified'
+)
+    }
   end
 end
