@@ -1,4 +1,4 @@
-class NoticeSerializer < ActiveModel::Serializer
+class LimitedNoticeSerializer < ActiveModel::Serializer
   attributes :id, :type, :title, :body, :date_sent, :date_received,
     :topics, :sender_name, :principal_name, :recipient_name, :works,
     :tags, :jurisdictions, :action_taken, :language
