@@ -1,12 +1,29 @@
+closestDropdown = (el) ->
+  el.closest('.dropdown-menu')
+
+clearUnspecifiedInputs = (el) ->
+  closestDropdown(el).siblings('input.unspecified').val('')
+
+parentActive = (el) ->
+  return el.parent().hasClass('active')
+
+otherActive = (el) ->
+  something_active = closestDropdown(el).find('.active').length > 0
+  return something_active && !parentActive(el)
+
 $('li.facet').on 'click', 'a', (event) ->
   event.preventDefault()
+  clearUnspecifiedInputs($(this))
 
   facet_name = $(this).attr('data-facet-name')
   facet_value = $(this).attr('data-value')
   facet_hidden_input = $("input##{facet_name}")
+  hidden_unspecified_indicator = $("input##{$(this).data('unspecified-name')}")
 
-  if facet_hidden_input.val() != facet_value
+  if (!parentActive($(this)) && facet_hidden_input.val() != facet_value) || otherActive($(this))
     facet_hidden_input.val(facet_value)
+    if facet_value == undefined
+      hidden_unspecified_indicator.val(true)
     $('form#facets-form').submit()
 
 clearEmptyParameters = ->

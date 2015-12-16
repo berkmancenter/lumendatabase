@@ -35,7 +35,7 @@ class Notice < ActiveRecord::Base
     TermFilter.new(:tag_list_facet, 'Tags'),
     TermFilter.new(:country_code_facet, 'Country'),
     TermFilter.new(:language_facet, 'Language'),
-    TermFilter.new(:action_taken_facet, 'Action taken'),
+    UnspecifiedTermFilter.new(:action_taken_facet, 'Action taken'),
     DateRangeFilter.new(:date_received_facet, :date_received, 'Date')
   ]
 
