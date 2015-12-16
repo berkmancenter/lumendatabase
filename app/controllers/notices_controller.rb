@@ -67,8 +67,8 @@ class NoticesController < ApplicationController
         end
 
         format.json do
-          render json: @notice, serializer: NoticeSerializerProxy,
-          root: json_root_for(@notice.class)
+          serializer = researcher? ? NoticeSerializerProxy : LimitedNoticeSerializerProxy
+          render json: @notice, serializer: serializer, root: json_root_for(@notice.class)  
         end
       end
     end
@@ -173,5 +173,12 @@ class NoticesController < ApplicationController
     else
       'individual'
     end
+  end
+
+  def researcher?
+    return false unless request.headers['HTTP_AUTHENTICATION_TOKEN']
+    User.find_by_authentication_token(
+      request.headers['HTTP_AUTHENTICATION_TOKEN']
+    ).has_role?(Role.researcher)
   end
 end

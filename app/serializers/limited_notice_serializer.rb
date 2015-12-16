@@ -1,4 +1,4 @@
-class NoticeSerializer < ActiveModel::Serializer
+class LimitedNoticeSerializer < ActiveModel::Serializer
   attributes :id, :type, :title, :body, :date_sent, :date_received,
     :topics, :sender_name, :principal_name, :recipient_name, :works,
     :tags, :jurisdictions, :action_taken, :language
@@ -13,8 +13,8 @@ class NoticeSerializer < ActiveModel::Serializer
     object.works.as_json({
       only: [:description],
       include: {
-        infringing_urls: { only: [:url, :url_original ] },
-        copyrighted_urls: { only: [:url, :url_original ] }
+        infringing_urls: { only: [:url ] },
+        copyrighted_urls: { only: [:url ] }
       }
     })
   end
