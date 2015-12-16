@@ -2,6 +2,8 @@ class DMCA < Notice
 
   define_elasticsearch_mapping
 
+  DEFAULT_ENTITY_NOTICE_ROLES = %w|recipient sender principal submitter|
+
   def self.model_name
     Notice.model_name
   end
