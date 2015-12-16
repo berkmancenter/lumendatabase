@@ -48,6 +48,26 @@ feature "Searching for Notices via the API" do
         )
       end
     end
+
+    scenario "return nothing for non-visible notices", js: true, search: true do
+      options = Notice.visible_qualifiers.inject(title: "The Lion King") do |m, (k, v)|
+        m.merge(k => !v)
+      end
+      notice = create(:dmca, :with_facet_data, options)
+      index_changed_models
+
+      expect_api_search_to_find(
+        "king", sender_name_facet: notice.sender_name
+      ) do |json|
+        results = {
+          notices: json["notices"],
+          normal_facets: json["meta"]["facets"].except("date_received_facet").collect { |k, v| v["total"] }.uniq,
+          range_facets: json["meta"]["facets"]["date_received_facet"]["ranges"].collect { |h| h["total"] }.uniq
+        }
+
+        expect(results).to eq(notices: [], normal_facets: [0], range_facets: [0])
+      end
+    end
   end
 
   context 'sorting' do
