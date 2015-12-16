@@ -39,6 +39,7 @@ gem 'date_validator'
 gem 'piwik_analytics'
 gem 'twitter'
 gem 'twitter-text'
+gem 'rails_admin_tag_list'
 
 group :assets do
   gem 'coffee-rails'
