@@ -67,15 +67,8 @@ class NoticesController < ApplicationController
         end
 
         format.json do
-          if request.headers['HTTP_AUTHENTICATION_TOKEN'] && User.find_by_authentication_token(request.headers['HTTP_AUTHENTICATION_TOKEN']).has_role?(Role.researcher)
-            render json: @notice, serializer: NoticeSerializerProxy,
-            root: json_root_for(@notice.class)
-            Rails.logger.info "It worked."
-          else
-            render json: @notice, serializer: LimitedNoticeSerializerProxy,
-            root: json_root_for(@notice.class)
-            Rails.logger.info "Go fish!"
-          end
+          serializer = researcher? ? NoticeSerializerProxy : LimitedNoticeSerializerProxy
+          render json: @notice, serializer: serializer, root: json_root_for(@notice.class)  
         end
       end
     end
@@ -180,5 +173,12 @@ class NoticesController < ApplicationController
     else
       'individual'
     end
+  end
+
+  def researcher?
+    return false unless request.headers['HTTP_AUTHENTICATION_TOKEN']
+    User.find_by_authentication_token(
+      request.headers['HTTP_AUTHENTICATION_TOKEN']
+    ).has_role?(Role.researcher)
   end
 end
