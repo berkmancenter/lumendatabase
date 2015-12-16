@@ -61,6 +61,15 @@ RailsAdmin.config do |config|
         field :topics
         field :works
         field :url_count
+        field :action_taken
+        field :reviewer_id
+        field :language
+        field :rescinded
+        field :type
+        field :spam
+        field :hidden
+        field :request_type
+        field :webform
       end
       edit do
         configure :action_taken, :enum do
