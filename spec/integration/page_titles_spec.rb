@@ -51,7 +51,7 @@ feature 'Page titles' do
     expect(page).to have_exact_title('Report a Demand :: Lumen')
     expect(page).to have_heading('Report a Demand')
 
-    click_on 'DMCA'
+    click_on 'Report DMCA'
 
     # submission form itself
     expect(page).to have_exact_title('DMCA :: Report a Demand :: Lumen')

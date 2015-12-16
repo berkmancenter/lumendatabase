@@ -231,7 +231,7 @@ feature "notice submission" do
     visit "/notices/new?type=DMCA"
 
     within('form#new_notice') do
-      expect(page).to have_css("input##{works_copyrighted_url_id}.required")
+      expect(page).to have_css("input##{works_copyrighted_url_id}:not(.required)")
       expect(page).to have_css('input#notice_date_received:not(.required)')
     end
   end

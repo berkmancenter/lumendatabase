@@ -216,7 +216,7 @@ feature "User authorization" do
     other_user = create(:user)
 
     user.sign_in
-    user.edit(other_user, Email: "new-email@example.com")
+    user.edit(other_user, user_email: "new-email@example.com")
 
     expect(other_user.reload.email).to eq "new-email@example.com"
   end

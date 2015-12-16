@@ -75,7 +75,7 @@ module Ingestor
       attr_reader :importer
 
       def hash_text( key )
-        hash[ key ].split( "\n" ).first.strip unless hash[ key ].nil?
+        hash[ key ].split( "\n" ).first.try(:strip) unless hash[ key ].nil?
       end
 
       def title

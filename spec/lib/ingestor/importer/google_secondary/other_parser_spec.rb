@@ -22,9 +22,7 @@ describe Ingestor::Importer::GoogleSecondary::OtherParser do
   end
 
   it "gets work descriptions" do
-    work = described_class.new(sample_file).works.first
-
-    expect(work.description).to eq(
+    expect(described_class.new(sample_file).body).to eq(
 "#{Ingestor::Importer::GoogleSecondary::RedactedContent::QUOTE_PREAMBLE.strip}
 violazione della privacy
 boofar
@@ -35,9 +33,7 @@ foobar"
   end
 
   it "gets work description_originals" do
-    work = described_class.new(sample_file).works.first
-
-    expect(work.description_original).to eq(
+    expect(described_class.new(sample_file).body_original).to eq(
 "#{Ingestor::Importer::GoogleSecondary::RedactedContent::QUOTE_PREAMBLE.strip}
 violazione della privacy
 boofar
@@ -63,9 +59,7 @@ http://www.example.com/infringing|
   end
 
   it "redacts work descriptions" do
-    work = described_class.new(redaction_file).works.first
-
-    expect(work.description).to eq(
+    expect(described_class.new(redaction_file).body).to eq(
 "#{Ingestor::Importer::GoogleSecondary::RedactedContent::QUOTE_PREAMBLE.strip}
 [REDACTED] child abuser bristol durham real gay deep  
 ass - Flickr
@@ -80,10 +74,8 @@ very concerned about this as you can imagine. My name and address [REDACTED] hav
     )
   end
 
-  it "preserves work description_originals" do
-    work = described_class.new(redaction_file).works.first
-
-    expect(work.description_original).to eq(
+  it "preserves body_original" do
+    expect(described_class.new(redaction_file).body_original).to eq(
 "#{Ingestor::Importer::GoogleSecondary::RedactedContent::QUOTE_PREAMBLE.strip}
 Johnny Public child abuser bristol durham real gay deep  
 ass - Flickr

@@ -87,7 +87,10 @@ describe Ingestor::Legacy::AttributeMapper do
         "ImportClass",
         works: 'works', file_uploads: 'files',
         action_taken: 'Yes', require_review_if_works_empty?: true,
-        entities: {}, default_recipient: nil, mark_registration_number: nil
+        entities: {}, default_recipient: nil, mark_registration_number: nil,
+        body: nil,
+        body_original: nil,
+        hidden?: nil
       )
     end
 
@@ -106,12 +109,12 @@ describe Ingestor::Legacy::AttributeMapper do
       expect(attributes[:review_required]).to eq false
     end
 
-    it "does not pass through the Body value" do
+    it "does pass through the Body value" do
       Ingestor::ImportDispatcher.should_receive(:for).and_return(@import_class)
 
       attributes = described_class.new({ 'Body' => 'foobar' }).mapped
 
-      expect(attributes[:body]).to be_nil
+      expect(attributes[:body]).to eq('foobar')
     end
   end
 
@@ -300,7 +303,10 @@ contact_email_noprefill: info.antipiracy@dtecnet.com|,
       require_review_if_works_empty?: true,
       action_taken: 'yes',
       file_uploads: [],
-      mark_registration_number: nil
+      mark_registration_number: nil,
+      body: nil,
+      body_original: nil,
+      hidden?: nil
     )
     Ingestor::ImportDispatcher.stub(:for).and_return(import_class)
     import_class.should_receive(:entities).exactly(4).times
@@ -415,7 +421,10 @@ contact_email_noprefill: info.antipiracy@dtecnet.com|,
       works: [], file_uploads: [],
       action_taken: nil,
       require_review_if_works_empty?: review_required,
-      entities: {}, default_recipient: nil, mark_registration_number: 10000
+      entities: {}, default_recipient: nil, mark_registration_number: 10000,
+      body: nil,
+      body_original: nil,
+      hidden?: nil
     }
     Ingestor::ImportDispatcher.stub(:for).and_return(double(
       "ImportClass", stubbed_methods
