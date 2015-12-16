@@ -67,8 +67,15 @@ class NoticesController < ApplicationController
         end
 
         format.json do
-          render json: @notice, serializer: NoticeSerializerProxy,
-          root: json_root_for(@notice.class)
+          if request.headers['HTTP_AUTHENTICATION_TOKEN'] && User.find_by_authentication_token(request.headers['HTTP_AUTHENTICATION_TOKEN']).has_role?(Role.researcher)
+            render json: @notice, serializer: NoticeSerializerProxy,
+            root: json_root_for(@notice.class)
+            Rails.logger.info "It worked."
+          else
+            render json: @notice, serializer: LimitedNoticeSerializerProxy,
+            root: json_root_for(@notice.class)
+            Rails.logger.info "Go fish!"
+          end
         end
       end
     end
