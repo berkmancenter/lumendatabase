@@ -91,22 +91,28 @@ describe Work do
     end
   end
 
-  it "no longer validates infringing urls when multiple are used at once" do
+  it "validates infringing urls correctly when multiple are used at once" do
     notice = notice_with_works_attributes([
-      { infringing_urls_attributes: [{ url: "" }] },
-      { infringing_urls_attributes: [{ url: "" }] }
+      { infringing_urls_attributes: [{ url: "this is not a url" }] },
+      { infringing_urls_attributes: [{ url: "this is also not a url" }] }
     ])
 
-    expect(notice).to be_valid
+    expect(notice).not_to be_valid
+    expect(notice.errors.messages).to eq(
+      { :"works.infringing_urls" => ["is invalid"] }
+    )
   end
 
-  it "no longer validates infringing urls when multiple are used at once" do
+  it "validates copyrighted urls correctly when multiple are used at once" do
     notice = notice_with_works_attributes([
-      { copyrighted_urls_attributes: [{ url: "" }] },
-      { copyrighted_urls_attributes: [{ url: "" }] }
+      { copyrighted_urls_attributes: [{ url: "this is not a url" }] },
+      { copyrighted_urls_attributes: [{ url: "this is also not a url" }] }
     ])
 
-    expect(notice).to be_valid
+    expect(notice).not_to be_valid
+    expect(notice.errors.messages).to eq(
+      { :"works.copyrighted_urls" => ["is invalid"] }
+    )
   end
 
   private

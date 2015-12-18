@@ -32,6 +32,7 @@ class Work < ActiveRecord::Base
 
       new_urls = urls_to_associate - existing_urls
       new_url_instances = new_urls.map { |url| relation_class.new(url_attributes[url]) }
+      failing = new_url_instances.reject(&:valid?)
       relation_class.import new_url_instances
 
       existing_url_instances.each do |url|
@@ -43,7 +44,7 @@ class Work < ActiveRecord::Base
 
       send(
         "#{relation_type}=".to_sym,
-        existing_url_instances + relation_class.where(url_original: new_urls)
+        existing_url_instances + failing + relation_class.where(url_original: new_urls)
       )
     end
   end

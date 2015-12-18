@@ -90,7 +90,8 @@ describe Ingestor::Legacy::AttributeMapper do
         entities: {}, default_recipient: nil, mark_registration_number: nil,
         body: nil,
         body_original: nil,
-        hidden?: nil
+        hidden?: nil,
+        review_required?: false
       )
     end
 
