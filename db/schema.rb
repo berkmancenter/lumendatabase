@@ -69,7 +69,7 @@ ActiveRecord::Schema.define(:version => 20151217164912) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "original_name"
+    t.string   "name_original"
   end
 
   add_index "entities", ["address_line_1"], :name => "index_entities_on_address_line_1"
