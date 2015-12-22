@@ -96,11 +96,9 @@ class NoticesController < ApplicationController
   end
 
   def request_pdf
-    Rails.logger.info("Doing stuff")
     @pdf = FileUpload.find(params[:id])
-    Rails.logger.info("Found it!")
     @pdf.toggle!(:pdf_requested)
-    render file: 'public/404_unavailable', formats: [:html], status: :not_found, layout: false
+    render nothing: true
   end
 
   private
