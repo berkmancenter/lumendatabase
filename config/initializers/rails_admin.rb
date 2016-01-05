@@ -1,5 +1,6 @@
 require 'rails_admin/config/actions/redact_queue'
 require 'rails_admin/config/actions/redact_notice'
+require 'rails_admin/config/actions/pdf_requests'
 
 RailsAdmin.config do |config|
 
@@ -38,6 +39,8 @@ RailsAdmin.config do |config|
 
     redact_queue
     redact_notice
+
+    pdf_requests
   end
 
   ['Notice', Notice::TYPES].flatten.each do |notice_type|

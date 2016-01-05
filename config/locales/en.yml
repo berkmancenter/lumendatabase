@@ -28,6 +28,12 @@ en:
         menu: 'Redact queue'
         title: 'Redact queue'
 
+      pdf_requests:
+        breadcrumb: 'PDF Requests'
+        menu: 'PDF Requests'
+        title: 'PDF Requests'
+        link: 'http://lumendatabase.org/'
+
   type_descriptions:
     DMCA:
       'Is someone complaining that images, text, video, or other content found online infringe their copyrights?'
