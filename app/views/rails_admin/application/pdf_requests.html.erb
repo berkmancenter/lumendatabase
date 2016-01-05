@@ -1,5 +1,10 @@
 <h3>
-  PDF is Requested. Do shit.
+  Requested PDFs
 </h3>
-
-Hello world!
+<table class="table table-condensed table-striped">
+  <% @requested_pdfs.each do | requested_pdf | %>
+    <tr class="queue_item" id="pdf_<%= requested_pdf.id %>">
+    <td><%= requested_pdf.file_file_name %></td>
+    </tr>
+  <% end %>
+</table>
