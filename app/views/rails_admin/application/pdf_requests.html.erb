@@ -2,6 +2,13 @@
   Requested PDFs
 </h3>
 <table class="table table-condensed table-striped">
+  <thead>
+    <tr>
+      <th>File Name</th>
+      <th>Download</th>
+      <th class="last">Notice</th>
+    </tr>
+  </thead>
   <% @requested_pdfs.each do | requested_pdf | %>
     <tr class="queue_item" id="pdf_<%= requested_pdf.id %>">
     <td><a href="/admin/file_upload/<%= requested_pdf.id %>"><%= requested_pdf.file_file_name %></td>
