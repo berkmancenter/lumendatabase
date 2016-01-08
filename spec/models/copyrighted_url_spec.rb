@@ -5,7 +5,6 @@ describe CopyrightedUrl do
   it { should have_db_index(:url_original).unique(true) }
 
   context 'automatic validations' do
-    it { should validate_presence_of(:url) }
     it { should validate_presence_of(:url_original) }
     it { should ensure_length_of(:url).is_at_most(8.kilobytes) }
     it { should ensure_length_of(:url_original).is_at_most(8.kilobytes) }

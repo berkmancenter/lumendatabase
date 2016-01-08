@@ -1,6 +1,5 @@
 shared_examples 'an object with a url' do
 
-  it { should validate_presence_of :url }
   ['http://foo.com',
     '//bar.com',
     'https://example.com/asdfasdf',
