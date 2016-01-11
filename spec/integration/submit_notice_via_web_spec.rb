@@ -183,7 +183,7 @@ feature "notice submission" do
     submit_recent_notice
 
     expect(Notice.count).to eq 2
-    expect(Entity.count).to eq 2
+    expect(Entity.count).to eq 4
     expect(Work.count).to eq 2
     expect(InfringingUrl.count).to eq 1
   end
