@@ -485,7 +485,7 @@ Data Protection
 | Ingestion Field Name       | Mapped Field Name                 | Removed?
 | ---                        | ---                               | ---
 | `body`                     | `legal_complaint`                 |
-| `works.description`        | `works.complaint`    |
+| `works.description`        | `works.complaint`                 |
 | `works.infringing_urls`    | `works.urls_mentioned_in_request` |
 | `works.copyrighted_urls`   |                                   | Yes
 
@@ -495,7 +495,6 @@ Defamation
 | Ingestion Field Name       | Mapped Field Name              | Removed?
 | ---                        | ---                            | ---
 | `body`                     | `legal_complaint`              |
-| `works.description`        | `works.subject_of_court_order` |
 | `works.infringing_urls`    | `works.defamatory_urls`        |
 | `works.copyrighted_urls`   |                                | Yes
 
