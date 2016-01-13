@@ -6,4 +6,5 @@ class InfringingUrl < ActiveRecord::Base
   include DefaultUrlOriginal
 
   validates_format_of :url, :url_original, with: /^([a-z]{3,5}:)?\/\/.+/i
+  validates_presence_of :url
 end
