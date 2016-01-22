@@ -60,6 +60,18 @@ describe NoticesController do
         expect(json).to have_key('title').with_value(notice.title)
         expect(json).to have_key('body').with_value("Notice Rescinded")
       end
+
+      it "returns original URLs for a Notice if you are a researcher" do
+        user = create(:user, roles: [Role.researcher])
+        notice = create(:dmca, :with_infringing_urls)
+        stub_find_notice(notice)
+
+        request.env['HTTP_AUTHENTICATION_TOKEN'] = user.authentication_token
+        get :show, id: 1, format: :json
+
+        json = JSON.parse(response.body)["dmca"]["works"][0]["infringing_urls"][0]
+        expect(json).to have_key('url_original')
+      end
     end
 
     def stub_find_notice(notice = nil)
