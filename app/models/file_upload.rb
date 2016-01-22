@@ -23,6 +23,10 @@ class FileUpload < ActiveRecord::Base
     end
   end
 
+  def request_pdf
+    self.pdf_requested = true
+  end
+
   private
 
   def rename_file

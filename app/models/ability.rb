@@ -29,6 +29,8 @@ class Ability
 
       can :publish, Notice
       can :rescind, Notice
+
+      can :pdf_requests, :all
     end
 
     if user.has_role?(Role.super_admin)

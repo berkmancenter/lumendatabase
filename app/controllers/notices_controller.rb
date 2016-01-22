@@ -95,6 +95,12 @@ class NoticesController < ApplicationController
     end
   end
 
+  def request_pdf
+    @pdf = FileUpload.find(params[:id])
+    @pdf.toggle!(:pdf_requested)
+    render nothing: true
+  end
+
   private
 
   def json_root_for(klass)

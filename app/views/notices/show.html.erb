@@ -77,6 +77,24 @@
     </dl>
     <% end %>
 
+    <% if @notice.original_documents.present? && !@notice.original_documents.first.pdf_request_fulfilled %>
+      <section class="attachments">
+        <h5 class="title">Original Documents</h5>
+        <ol class="attachments">
+          <% @notice.original_documents.each do |document| %>
+            <% if document.file_type == "PDF" && !document.pdf_requested? && !document.pdf_request_fulfilled %>
+              <li class="<%= document.file_type.downcase %>">
+                <%= link_to request_pdf_notice_path(document), class: "document", method: :put, remote: :true do %>
+                  <span><%= document.file_file_name %></span>
+                  <span class="download">Request Document</span>
+                <% end %>
+              <% end %>
+            </li>
+          <% end %>
+        </ol>
+      </section>
+    <% end %>
+
       <% if @notice.supporting_documents.present? %>
         <section class="attachments">
           <h5 class="title">Supporting Documents</h5>

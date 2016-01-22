@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20151217164912) do
+ActiveRecord::Schema.define(:version => 20160114162401) do
 
   create_table "blog_entries", :force => true do |t|
     t.integer  "user_id"
@@ -103,6 +103,8 @@ ActiveRecord::Schema.define(:version => 20151217164912) do
     t.string   "file_content_type"
     t.integer  "file_file_size"
     t.datetime "file_updated_at"
+    t.boolean  "pdf_requested"
+    t.boolean  "pdf_request_fulfilled"
   end
 
   add_index "file_uploads", ["notice_id"], :name => "index_file_uploads_on_notice_id"

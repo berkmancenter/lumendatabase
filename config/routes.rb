@@ -13,6 +13,9 @@ Chill::Application.routes.draw do
     collection do
       get :url_input
     end
+    member do
+      put :request_pdf
+    end
   end
 
   resources :counter_notices, only: [:new, :create]
