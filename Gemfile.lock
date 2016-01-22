@@ -211,6 +211,8 @@ GEM
     rack (1.4.7)
     rack-accept (0.4.5)
       rack (>= 0.4)
+    rack-attack (4.3.0)
+      rack
     rack-cache (1.2)
       rack (>= 0.4)
     rack-pjax (0.7.0)
@@ -220,8 +222,6 @@ GEM
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
-    rack-throttle (0.4.0)
-      rack (>= 1.0.0)
     rails (3.2.22)
       actionmailer (= 3.2.22)
       actionpack (= 3.2.22)
@@ -406,7 +406,7 @@ DEPENDENCIES
   pg
   piwik_analytics
   pry-rails
-  rack-throttle
+  rack-attack
   rails (~> 3.2.22)
   rails_admin (~> 0.4.8)
   rails_admin_tag_list
