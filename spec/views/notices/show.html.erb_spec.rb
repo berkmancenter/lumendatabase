@@ -237,7 +237,7 @@ describe 'notices/show.html.erb' do
 
     render
 
-    within('ol.attachments') do
+    within('.main') do
       expect(page).not_to contain_link(original.url)
     end
   end
