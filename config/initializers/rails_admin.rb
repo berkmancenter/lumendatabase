@@ -224,5 +224,10 @@ RailsAdmin.config do |config|
 
   config.model 'User' do
     object_label_method { :email }
+    edit do
+      configure :entity do
+        nested_form false
+      end
+    end
   end
 end
