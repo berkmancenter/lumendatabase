@@ -2,7 +2,7 @@
   "Add Another URL",
   type: 'button',
   class: 'add-another-url',
-  data: { target: url_input_notices_url(type: notice.class, url_type: assoc, index: index) }
+  data: { target: url_input_notices_path(type: notice.class, url_type: assoc, index: index) }
 ) %>
 <%= works_form.simple_fields_for(assoc) do |urls_form| %>
   <% if assoc == :copyrighted_urls %>
