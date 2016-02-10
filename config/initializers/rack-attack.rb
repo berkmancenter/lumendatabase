@@ -4,7 +4,7 @@ class Rack::Attack
   # Always allow requests from localhost
   # (blacklist & throttles are skipped)
   whitelist('allow from localhost') do |req|
-     Requests are allowed if the return value is truthy
+     #Requests are allowed if the return value is truthy
     '127.0.0.1' == req.ip
   end
 
