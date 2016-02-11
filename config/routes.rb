@@ -45,6 +45,8 @@ Chill::Application.routes.draw do
 
   match :faceted_search, controller: 'notices/search', action: 'index'
 
+  get '/twitter/international', to: redirect('/notices/search?utf8=%E2%9C%93&topics=international%252C+court+orders%252C+law+enforcement+requests%252C+government+requests&recipient_name=twitter&sort_by=')
+
   # N.B. no constraints on topics, that would require a db call
   match '/:recipient_name(/:topics)' => 'notices/search#index',
     constraints: { recipient_name: /Twitter|Google/i }
