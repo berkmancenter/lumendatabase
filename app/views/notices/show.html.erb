@@ -85,7 +85,7 @@
             <% if document.file_type == "PDF" && !document.pdf_requested? && !document.pdf_request_fulfilled %>
               <li class="<%= document.file_type.downcase %>">
                 <%= link_to request_pdf_notice_path(document), class: "document", method: :put, remote: :true do %>
-                  <span><%= document.file_file_name %></span>
+                  <span>Supporting <%= document.file_type %> #<%= @notice.original_documents.index(document) + 1 %></span>
                   <span class="download">Request Document</span>
                 <% end %>
               <% end %>
