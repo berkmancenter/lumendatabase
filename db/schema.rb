@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160114162401) do
+ActiveRecord::Schema.define(:version => 20160222192409) do
 
   create_table "blog_entries", :force => true do |t|
     t.integer  "user_id"
@@ -161,6 +161,7 @@ ActiveRecord::Schema.define(:version => 20160114162401) do
     t.boolean  "published",                :default => true,  :null => false
     t.integer  "url_count"
     t.boolean  "webform",                  :default => false
+    t.text     "notes"
   end
 
   add_index "notices", ["original_notice_id"], :name => "index_notices_on_original_notice_id"
