@@ -125,7 +125,7 @@ class NoticesController < ApplicationController
       :url_count,
       :webform,
       topic_ids: [],
-      file_uploads_attributes: [:kind, :file, :file_name, :pdf_requested, :pdf_request_fulfilled],
+      file_uploads_attributes: [:kind, :file, :file_name],
       entity_notice_roles_attributes: [
         :entity_id,
         :name,
