@@ -54,8 +54,8 @@ module Searchability
             notice.works.as_json({
               only: [:description] - exclusions[:works],
               include: {
-                infringing_urls: { only: [:url] },
-                copyrighted_urls: { only: [:url]}
+                infringing_urls: { only: [:url, :url_original] },
+                copyrighted_urls: { only: [:url, :url_original]}
               }
             })
           }
