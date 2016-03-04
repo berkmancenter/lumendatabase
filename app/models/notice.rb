@@ -123,7 +123,7 @@ class Notice < ActiveRecord::Base
   acts_as_taggable_on :tags, :jurisdictions
 
   accepts_nested_attributes_for :file_uploads,
-    reject_if: ->(attributes) { attributes['file'].blank? }
+    reject_if: ->(attributes) { [attributes['file'], attributes[:pdf_request_fulfilled]].all?(&:blank?) }
 
   accepts_nested_attributes_for :entity_notice_roles
 
