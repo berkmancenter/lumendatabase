@@ -54,7 +54,7 @@ class Notice < ActiveRecord::Base
 
   DEFAULT_ENTITY_NOTICE_ROLES = %w|recipient sender|
 
-  VALID_ACTIONS = %w( Yes No Partial )
+  VALID_ACTIONS = %w( Yes No Partial Unspecified )
 
   OTHER_TOPIC = "Uncategorized"
 
