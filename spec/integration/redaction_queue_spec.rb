@@ -101,7 +101,6 @@ feature "Redaction queue" do
 
     queue.select_topic_profile(topic_one)
     queue.select_topic_profile(topic_two)
-    queue.select_submitter_profile(submitter)
     queue.fill
 
     expect(queue).to have_notices(expected_notices)
