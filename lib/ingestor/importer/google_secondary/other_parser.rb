@@ -28,7 +28,7 @@ module Ingestor
         end
 
         def hidden?
-          true
+          false
         end
 
         def parse_works(file_path)
@@ -54,7 +54,7 @@ module Ingestor
         end
 
         def review_required?
-          true
+          false
         end
 
         private
