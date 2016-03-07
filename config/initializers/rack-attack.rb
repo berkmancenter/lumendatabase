@@ -10,7 +10,7 @@ class Rack::Attack
 
   whitelist('allow unlimited requests from API users') do |req|
   	#Unlimited requests allowed if user has a valid API key
-  	if req.params['authentication_token'].presence
+  	if req.params['authentication_token'].present?
       User.find_by_authentication_token(req.params['authentication_token']).has_role?(Role.researcher) ||
       User.find_by_authentication_token(req.params['authentication_token']).has_role?(Role.submitter)
     elsif req.env.key?("HTTP_AUTHENTICATION_TOKEN")
