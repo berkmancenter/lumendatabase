@@ -29,7 +29,7 @@ module Ingestor
 
         def quote
           if content.match(/legalother_quote[^:]*:(.+?)\n[a-z_]+:/m)
-            QUOTE_PREAMBLE + $1.strip
+            QUOTE_PREAMBLE + Lumen::REDACTION_MASK
           end
         end
 

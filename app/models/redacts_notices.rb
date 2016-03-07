@@ -42,7 +42,7 @@ class RedactsNotices
     end
 
     def mask
-      '[REDACTED]'
+      Lumen::REDACTION_MASK
     end
   end
 
