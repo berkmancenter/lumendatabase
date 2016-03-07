@@ -10,13 +10,23 @@ class NoticeSerializer < ActiveModel::Serializer
   end
 
   def works
-    object.works.as_json({
-      only: [:description],
-      include: {
-        infringing_urls: { only: [:url, :url_original ] },
-        copyrighted_urls: { only: [:url, :url_original ] }
-      }
-    })
+    if scope.try(:has_role?, Role.researcher)
+      object.works.as_json({
+        only: [:description],
+        include: {
+          infringing_urls: { only: [:url, :url_original ] },
+          copyrighted_urls: { only: [:url, :url_original ] }
+        }
+      })
+    else
+      object.works.as_json({
+        only: [:description],
+        include: {
+          infringing_urls: { only: [:url] },
+          copyrighted_urls: { only: [:url] }
+        }
+      })
+    end
   end
 
   def tags
