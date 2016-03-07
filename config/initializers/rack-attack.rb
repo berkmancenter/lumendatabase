@@ -10,13 +10,13 @@ class Rack::Attack
 
   whitelist('allow unlimited requests from API users') do |req|
   	#Unlimited requests allowed if user has a valid API key
+    u = nil
   	if req.params['authentication_token'].present?
-      User.find_by_authentication_token(req.params['authentication_token']).has_role?(Role.researcher) ||
-      User.find_by_authentication_token(req.params['authentication_token']).has_role?(Role.submitter)
+      u = User.find_by_authentication_token(req.params['authentication_token'])
     elsif req.env.key?("HTTP_AUTHENTICATION_TOKEN")
-      User.find_by_authentication_token(req.env["HTTP_AUTHENTICATION_TOKEN"]).has_role?(Role.researcher) ||
-      User.find_by_authentication_token(req.env["HTTP_AUTHENTICATION_TOKEN"]).has_role?(Role.submitter)
+      u = User.find_by_authentication_token(req.env["HTTP_AUTHENTICATION_TOKEN"])
     end
+    u.present? && (u.has_role?(Role.researcher) || u.has_role?(Role.submitter))
   end
 
   throttle('api limit', :limit => 5, :period => 24.hours ) do |req|
