@@ -182,9 +182,9 @@ class NoticesController < ApplicationController
   end
 
   def researcher?
-    return false unless request.headers['HTTP_AUTHENTICATION_TOKEN']
+    return false unless request.headers['HTTP_X_AUTHENTICATION_TOKEN']
     User.find_by_authentication_token(
-      request.headers['HTTP_AUTHENTICATION_TOKEN']
+      request.headers['HTTP_X_AUTHENTICATION_TOKEN']
     ).has_role?(Role.researcher)
   end
 end
