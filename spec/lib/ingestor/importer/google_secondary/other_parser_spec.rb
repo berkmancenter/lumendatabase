@@ -24,8 +24,7 @@ describe Ingestor::Importer::GoogleSecondary::OtherParser do
   it "gets work descriptions" do
     expect(described_class.new(sample_file).body).to eq(
 "#{Ingestor::Importer::GoogleSecondary::RedactedContent::QUOTE_PREAMBLE.strip}
-violazione della privacy
-boofar
+[REDACTED]
 #{Ingestor::Importer::GoogleSecondary::RedactedContent::EXPLAIN_PREAMBLE.strip}
 diffamazione e violazione della privacy
 foobar"
@@ -61,11 +60,7 @@ http://www.example.com/infringing|
   it "redacts work descriptions" do
     expect(described_class.new(redaction_file).body).to eq(
 "#{Ingestor::Importer::GoogleSecondary::RedactedContent::QUOTE_PREAMBLE.strip}
-[REDACTED] child abuser bristol durham real gay deep  
-ass - Flickr
-Also...[REDACTED]
-And [REDACTED]?
-And [REDACTED]?
+[REDACTED]
 #{Ingestor::Importer::GoogleSecondary::RedactedContent::EXPLAIN_PREAMBLE.strip}
 Someone (unknown) has got hold of my personal details  
 and posted images with my name and my cell phone number on flickr. I have  
