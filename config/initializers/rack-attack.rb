@@ -12,9 +12,10 @@ class Rack::Attack
   	#Unlimited requests allowed if user has a valid API key
     u = nil
   	if req.params['authentication_token'].present?
+      Rails.logger.info "Authentication Token is present"
       u = User.find_by_authentication_token(req.params['authentication_token'])
-    elsif req.env.key?("HTTP_AUTHENTICATION_TOKEN")
-      u = User.find_by_authentication_token(req.env["HTTP_AUTHENTICATION_TOKEN"])
+    elsif req.env.key?("HTTP_X_AUTHENTICATION_TOKEN")
+      u = User.find_by_authentication_token(req.env["HTTP_X_AUTHENTICATION_TOKEN"])
     end
     u.present? && (u.has_role?(Role.researcher) || u.has_role?(Role.submitter))
   end
