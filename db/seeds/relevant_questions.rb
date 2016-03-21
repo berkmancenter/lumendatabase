@@ -4522,11 +4522,7 @@ mapping[%{Copyright}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is trade libel?},
- answer:   %{Trade libel is defamation against the goods or services of a company or business. For example, saying that you found a severed finger in a particular company's chili (if it isn't true).
-
-Along with the ordinary elements of a defamation claim, (see <!--GET LINK Question 408-->) the person suing must prove money damages.
-
-Defenses include 1) that the statement was true; 2) that the statement was opinion, not fact; and 3) that the plaintiff did not suffer monetary damage.}
+ answer:   %{Trade libel is defamation against the goods or services of a company or business. For example, saying that you found a severed finger in a particular company's chili (if it isn't true).}
 )
 
 mapping[%{Defamation}] << q.id
@@ -4641,11 +4637,7 @@ mapping[%{DMCA Safe Harbor}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Can an online service provider (OSP) be held contributorily liable for acts of trademark infringement by one of its users?},
- answer:   %{Under section 512(c) of the DMCA an OSP will not be held liable for instances of <I>copyright</I> infringement so long as the OSP satisfies certain statutory requirements.  (See <!--GET LINK Question 125-->.)   However, there is no equivalent legislation pertaining to trademark infringement, and given the paucity of caselaw concerning liability of OSPs in such instances, it remains an open question as to whether or not an OSP could, or should, be held liable for acts of trademark infringement by its users.
-
-In trademark law contributory liability exists when a manufacturer or distributor intentionally induces another party to infringe a valid trademark, or when it continues to supply products to a party that it knows, or has reason to know, is using the products to engage in trademark infringement.  <I>Inwood Laboratories v. Ives Laboratories</I>, 456 U.S. 844 (1982).  (See <!--GET LINK Question 398-->.)  
-
-Lower courts have since disagreed somewhat over what exactly satisfies the }
+ answer:   %{Under section 512(c) of the DMCA an OSP will not be held liable for instances of <I>copyright</I> infringement so long as the OSP satisfies certain statutory requirements. However, there is no equivalent legislation pertaining to trademark infringement, and given the paucity of caselaw concerning liability of OSPs in such instances, it remains an open question as to whether or not an OSP could, or should, be held liable for acts of trademark infringement by its users. In trademark law, contributory liability exists when a manufacturer or distributor intentionally induces another party to infringe a valid trademark, or when it continues to supply products to a party that it knows, or has reason to know, is using the products to engage in trademark infringement. <I>Inwood Laboratories v. Ives Laboratories</I>, 456 U.S. 844 (1982). Lower courts have since disagreed somewhat over what exactly satisfies the "know, or has reason to know" standard. In one case, <i>Fonovisa v. Cherry Auction</i>, 76 F.3d 259 (9th Cir. 1996), the Ninth Circuit Court of Appeals held that a flea market operator could not ignore, with impunity, the actions of its vendors who were blatantly engaging in trademark infringement. In another case, <i>Gucci America, Inc. v. Hall & Associates</i>, 135 F. Supp. 2d 409 (S.D.N.Y. 2001), the District Court for the Southern District of New York refused to grant an ISP's motion to dismiss in a case involving instances of trademark infringement occurring on a subscriber's website hosted by the ISP. There the plaintiff allegedly had sent two e-mails to the ISP regarding the alleged infringement, but the ISP failed to take any action. Collectively, these few cases suggest that an OSP could be found contributorily liable for acts of trademark infringement. In any such suit, one of the main issues would be to what extent the OSP knew, or should have known, of the infringing acts? That is to say, what did the OSP do to police its service, or what should it have done? And more specifically, if the plaintiff attempted to notify the OSP of the infringing acts, what kind of notice would suffice? Under section 512 of the DMCA, the notice requirements are made quite clear. As the law stands now, however, that issue remains far less clear in the area of trademark infringement.}
 )
 
 mapping[%{DMCA Safe Harbor}] << q.id
@@ -5042,7 +5034,7 @@ mapping[%{Trademark}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Can a mailing list archive really be held liable for allowing a spammer to post?},
- answer:   %{Unlikely.  A mailing list archive, like other online service providers hosting user-supplied content, is protected from non-intellectual property claims by CDA 230 (see <!--GET LINK Question 314-->). For intellectual property claims, the facts are unlikely to make you liable for a spammer's conduct.}
+ answer:   %{Unlikely.  A mailing list archive, like other online service providers hosting user-supplied content, is protected from non-intellectual property claims by CDA 230.  For intellectual property claims, the facts are unlikely to make you liable for a spammer's conduct.}
 )
 
 mapping[%{References}] << q.id
