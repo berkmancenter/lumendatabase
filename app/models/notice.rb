@@ -327,10 +327,6 @@ class Notice < ActiveRecord::Base
   def hide_identities?
     false
   end
-  
-  before_validation do
-    self.language = language[0..1] unless language.nil?
-  end
 
   before_save do
     notice_type = self.type
