@@ -11,12 +11,19 @@ module Ingestor
         def to_work
           Work.new(
             description: description,
+            description_original: description_original,
             infringing_urls_attributes: infringing_urls,
             copyrighted_urls_attributes: copyrighted_urls
           )
         end
 
         def description
+          if content.match(/#{description_start}[^:]*:(.+?)\n[a-z_]+:/m)
+            $1.strip
+          end
+        end
+
+        def description_original
           if content.match(/#{description_start}[^:]*:(.+?)\n[a-z_]+:/m)
             $1.strip
           end

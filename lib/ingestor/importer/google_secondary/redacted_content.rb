@@ -17,7 +17,7 @@ module Ingestor
 
         def to_work
           super.tap do |work|
-            work.description_original = work.description
+            work.description_original = work.description_original
             work.description = redact(work.description)
           end
         end
@@ -27,7 +27,18 @@ module Ingestor
           "#{quote}\n#{EXPLAIN_PREAMBLE if s}#{s}".strip
         end
 
+        def description_original
+          s = super
+          "#{quote_original}\n#{EXPLAIN_PREAMBLE if s}#{s}".strip
+        end
+
         def quote
+          if content.match(/legalother_quote[^:]*:(.+?)\n[a-z_]+:/m)
+            QUOTE_PREAMBLE + Lumen::REDACTION_MASK
+          end
+        end
+
+        def quote_original
           if content.match(/legalother_quote[^:]*:(.+?)\n[a-z_]+:/m)
             QUOTE_PREAMBLE + $1.strip
           end

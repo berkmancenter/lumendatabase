@@ -52,6 +52,6 @@ class ApplicationController < ActionController::Base
   def authentication_token
     key = 'authentication_token'
 
-    params[key] || request.env["HTTP_#{key.upcase}"]
+    params[key] || request.env["HTTP_X_#{key.upcase}"]
   end
 end

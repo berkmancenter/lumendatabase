@@ -328,6 +328,10 @@ class Notice < ActiveRecord::Base
     false
   end
   
+  before_validation do
+    self.language = language[0..1] unless language.nil?
+  end
+
   before_save do
     notice_type = self.type
     topic = self.notice_topic_map

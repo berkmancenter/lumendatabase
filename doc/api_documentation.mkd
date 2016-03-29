@@ -9,7 +9,7 @@ attributes and create serialized representations with logical attribute names.
 Please see **Notice Type Mapping** below, which defines what attributes are
 remapped for each Notice Type.
 
-An `authentication_token` is required to submit via the API. Please ask
+An authentication token is required to submit via the API. Please ask
 Lumen staff for your authentication token.
 
 **Method**: `POST`
@@ -190,7 +190,7 @@ request.
 
 The Authentication Token may be included as a parameter or header.
 
-* Parameter: `authentication_token`
+* Form Data Parameter: `authentication_token`
 
 ```
 curl -kv \
@@ -199,6 +199,8 @@ curl -kv \
      https://lumendatabase.org/notices
 ```
 
+* JSON Data Parameter: `authentication_token`
+
 ```
 curl -H "Accept: application/json" \
      -H "Content-type: application/json" \
@@ -206,11 +208,11 @@ curl -H "Accept: application/json" \
      'https://lumendatabase.org/notices'
 ```
 
-* Request Header: `AUTHENTICATION_TOKEN`
+* Request Header: `X-Authentication-Token`
 
 ```
 curl -kv \
-     -H "AUTHENTICATION_TOKEN: abc123" \
+     -H "X-Authentication-Token: abc123" \
      -F "notice[type]=Defamation" \
      https://lumendatabase.org/notices
 ```
@@ -218,7 +220,7 @@ curl -kv \
 ```
 curl -H "Accept: application/json" \
      -H "Content-type: application/json" \
-     -H "AUTHENTICATION_TOKEN: abc123" \
+     -H "X-Authentication-Token: abc123" \
      -d '{ "notice": {...} }' \
      https://lumendatabase.org/notices
 ```
