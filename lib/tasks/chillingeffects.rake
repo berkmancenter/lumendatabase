@@ -121,6 +121,30 @@ namespace :chillingeffects do
     ReindexRun.index_changed_model_instances
   end
 
+  desc "Update index for all existing hidden notices "
+  task index_hidden_notices do
+    # one-off script for existing hidden notices
+    begin
+      batch_size = (ENV['BATCH_SIZE'] || 192).to_i
+
+      notices = Notice.where( hidden: true )
+      Rails.logger.info "index_notices hidden: true"
+      
+      count = 0
+      notices.find_in_batches( batch_size: batch_size ) do |batch|
+        Tire.index( Notice.index_name ).import batch
+        count += batch.count
+        Rails.logger.info "index_notices hidden: true, count: #{count}, time: #{Time.now.to_i}"
+      end
+
+      ReindexRun.sweep_search_result_caches
+
+      Rails.logger.info "index_notices done hidden: true, count: #{count}, time: #{Time.now.to_i}"
+    rescue => e
+      Rails.logger.error "index_notices hidden: true, error: #{e.inspect}"
+    end
+  end
+
   desc "Recreate elasticsearch index for notices of a given date"
   task :index_notices_by_date, [ :date ] => :environment do |t, args|
     begin
@@ -135,6 +159,8 @@ namespace :chillingeffects do
         count += batch.count
         Rails.logger.info "index_notices date: #{args[:date]}, count: #{count}, time: #{Time.now.to_i}"
       end
+
+      ReindexRun.sweep_search_result_caches
 
       Rails.logger.info "index_notices done date: #{args[:date]}, count: #{count}, time: #{Time.now.to_i}"
     rescue => e
@@ -157,6 +183,8 @@ namespace :chillingeffects do
         Rails.logger.info "index_notices date: #{args[:year]}-#{args[:month]}, count: #{count}, time: #{Time.now.to_i}"
       end
 
+      ReindexRun.sweep_search_result_caches
+
       Rails.logger.info "index_notices done date: #{args[:year]}-#{args[:month]}, count: #{count}, time: #{Time.now.to_i}"
     rescue => e
       Rails.logger.error "index_notices date: #{args[:year]}-#{args[:month]}, error: #{e.inspect}"
@@ -177,6 +205,8 @@ namespace :chillingeffects do
         count += batch.count
         Rails.logger.info "index_notices date: #{args[:year]}, count: #{count}, time: #{Time.now.to_i}"
       end
+
+      ReindexRun.sweep_search_result_caches
 
       Rails.logger.info "index_notices done date: #{args[:year]}, count: #{count}, time: #{Time.now.to_i}"
     rescue => e
