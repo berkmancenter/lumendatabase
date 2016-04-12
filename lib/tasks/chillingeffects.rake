@@ -122,7 +122,7 @@ namespace :chillingeffects do
   end
 
   desc "Update index for all existing hidden notices "
-  task index_hidden_notices do
+  task index_hidden_notices: :environment do
     # one-off script for existing hidden notices
     begin
       batch_size = (ENV['BATCH_SIZE'] || 192).to_i
