@@ -28,6 +28,7 @@ feature "Searching for Notices via the API" do
           'sender_name_facet',
           'principal_name_facet',
           'recipient_name_facet',
+          'submitter_name_facet',
           'topic_facet',
           'date_received_facet'
         )
