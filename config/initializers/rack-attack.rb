@@ -23,7 +23,7 @@ class Rack::Attack
 
   throttle('api limit', :limit => 5, :period => 24.hours ) do |req|
     Rails.logger.info "[rack_attack] api limit ip: #{req.ip}, content_type: #{req.env['CONTENT_TYPE']}"
-    req.ip if req.env["CONTENT_TYPE"] == "application/json"
+    req.ip if req.env["CONTENT_TYPE"] == "application/json" || req.path.include?("json")
   end
 
   throttle('req/ip', :limit => 200, :period => 5.minutes) do |req|
