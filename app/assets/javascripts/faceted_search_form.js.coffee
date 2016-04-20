@@ -44,12 +44,10 @@ cloneAdvancedSearch = (context) ->
   $('.field-group input').each (_, element) ->
     name = $(element).attr('name')
     value = $(element).val()
-    checkbox = $(element).is(":checkbox")
-    checked = $(element).is(":checked")
 
-    if checkbox and checked
+    unless $(element).is(":checkbox")
       term_input = createHiddenTermInput(name, value)
-    else if checkbox is false
+    else if $(element).is(":checked")
       term_input = createHiddenTermInput(name, value)
 
     $(context).append(term_input)
