@@ -25,3 +25,4 @@ rerun.txt
 tags
 vendor/bundler_gems
 config/database.yml
+.idea/*
