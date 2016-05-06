@@ -407,6 +407,7 @@ DEPENDENCIES
   piwik_analytics
   pry-rails
   rack-attack
+  rack-test
   rails (~> 3.2.22)
   rails_admin (~> 0.4.8)
   rails_admin_tag_list
