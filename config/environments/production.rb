@@ -69,12 +69,4 @@ Chill::Application.configure do
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
 
   config.action_mailer.default_url_options = { host: (ENV['EMAIL_DOMAIN'] || 'chillingeffects.org') }
-
-  begin
-    # Set up rate limiting
-    #config.require "custom_limiter"
-    #config.middleware.use CustomLimiter, :max => 3, :cache => GDBM.new('tmp/throttle.db')
-  rescue Errno::EAGAIN => e
-    # throttle cache in use by app, this is likely a rake task
-  end
 end

@@ -40,6 +40,7 @@ gem 'twitter'
 gem 'twitter-text'
 gem 'rails_admin_tag_list'
 gem 'rack-attack'
+gem 'rack-test', require: 'rack/test'
 
 group :assets do
   gem 'coffee-rails'

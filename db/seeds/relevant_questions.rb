@@ -1219,7 +1219,7 @@ mapping[%{DMCA Safe Harbor}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What are the counter-notice and put-back procedures?},
- answer:   %{<p>In order to ensure that copyright owners do not wrongly insist on the removal of materials that actually do not infringe their copyrights, the safe harbor provisions require service providers to notify the subscribers if their materials have been removed and to provide them with an opportunity to send a written notice to the service provider stating that the material has been wrongly removed.  [512(g)] If a subscriber provides a proper "counter-notice" claiming that the material does not infringe copyrights, the service provider must then promptly notify the claiming party of the individual's objection.  [512(g)(2)] If the copyright owner does not bring a lawsuit in district court within 14 days, the service provider is then required to restore the material to its location on its network. [512(g)(2)(C)]</p>
+ answer:   %{<p>In order to ensure that copyright owners do not wrongly insist on the removal of materials that actually do not on infringe their copyrights, the safe harbor provisions require service providers to notify the subscribers if their materials have been removed and to provide them with an opportunity to send a written notice to the service provider stating that the material has been wrongly removed.  [512(g)] If a subscriber provides a proper "counter-notice" claiming that the material does not infringe copyrights, the service provider must then promptly notify the claiming party of the individual's objection.  [512(g)(2)] If the copyright owner does not bring a lawsuit in district court within 14 days, the service provider is then required to restore the material to its location on its network. [512(g)(2)(C)]</p>
 
 <p>A proper counter-notice must contain the following information:
 <ul class="main"><li>The subscriber's name, address, phone number and physical or electronic signature [512(g)(3)(A)]
@@ -1227,9 +1227,7 @@ q = RelevantQuestion.create!(
 <li>A statement under penalty of perjury that the material was removed by mistake or misidentification [512(g)(3)(C)]
 <li>Subscriber consent to local federal court jurisdiction, or if overseas, to an appropriate judicial body. [512(g)(3)(D)]</ul></p>
 
-<p>If it is determined that the copyright holder misrepresented its claim regarding the infringing material, the copyright holder then becomes liable to the person harmed for any damages that resulted from the improper removal of the material. [512(f)]</p>
-
-See also <!--GET LINK Question 870-->, and the <a href="http://www.chillingeffects.org/dmca/counter512.pdf">counter-notification generator</a>.}
+<p>If it is determined that the copyright holder misrepresented its claim regarding the infringing material, the copyright holder then becomes liable to the OSP for any damages that resulted from the improper removal of the material. [512(f)]</p>}
 )
 
 mapping[%{DMCA Notices}] << q.id
@@ -2346,8 +2344,8 @@ q = RelevantQuestion.create!(
 mapping[%{Bookmarks}] << q.id
 
 q = RelevantQuestion.create!(
- question: %{I didn},
- answer:   %{No. Copyright infringement actions do not require that you actually knew that the files were protected by copyright or that your use of the files violated federal law. Claims of ignorance cannot be used as a defense to direct copyright infringement,   Lack of knowledge, is, however, a defense to contributory infringement.  See <!--GET LINK Question 268--> 
+ question: %{I did not know that what I was doing could be illegal. Am I off the hook?},
+ answer:   %{No. Copyright infringement actions do not require that you actually knew that the files were protected by copyright or that your use of the files violated federal law. Claims of ignorance cannot be used as a defense to direct copyright infringement,   Lack of knowledge, is, however, a defense to contributory infringement.
 }
 )
 
@@ -2903,7 +2901,7 @@ mapping[%{Trademark}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is libel?},
- answer:   %{Libel is a defamatory statement expressed in a fixed medium, usually writing but also a picture, sign, or electronic broadcast.  See <!--GET LINK Question 323-->}
+ answer:   %{Libel is a defamatory statement expressed in a fixed medium, usually writing but also a picture, sign, or electronic broadcast.}
 )
 
 mapping[%{Protest, Parody and Criticism Sites}] << q.id
@@ -3572,7 +3570,7 @@ mapping[%{Bookmarks}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is libel?},
- answer:   %{Libel is a false statement of fact expressed in a fixed medium, usually writing but also a picture, sign, or electronic broadcast.  See <!--GET LINK Question 408-->}
+ answer:   %{Libel is a false statement of fact expressed in a fixed medium, usually writing but also a picture, sign, or electronic broadcast.}
 )
 
 mapping[%{Defamation}] << q.id
@@ -4163,13 +4161,13 @@ mapping[%{Copyright and Fair Use}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{If I am engaged in research, educational, or academic pursuits, does the fair use doctrine permit me to copy articles from a journal or periodical?},
- answer:   %{As mentioned in other FAQ answers in this section, it is hard to predict what a court will do when presented with a fair use defense.  However, in this case the answer depends in part on your purposes in copying.  If you intend to archive the copies, the answer is probably no, while if you intend to use the copies in classroom instruction (without charging for the copies), the use may be fair.
+ answer:   %{As mentioned above, it is hard to predict what a court will do when presented with a fair use defense. However, in this case the answer depends in part on your purposes in copying. If you intend to archive the copies, the answer is probably no, while if you intend to use the copies in classroom instruction (without charging for the copies), the use may be fair.  
 
-In 1995 the Second Circuit Court of Appeals held that it was not a fair use for research scientists at Texaco to photocopy articles from various scientific and technical journals.  Texaco argued, on behalf of its scientists, that the use was for the purpose of research, and therefore was fair under Section 107.  But the court was not convinced.  In reaching its decision, the court in Texaco ran through the four factor fair use analysis (see <!--GET LINK Question 492--> and <a href="<!--GET URL Cat 22-->">introduction</a> to this Chilling Effects topic ).  The court found that three of the four factors weighed against Texaco, and focused much of its opinion on the fourth factor, deciding that Texaco's use would have a significant impact on the potential market for the journal articles.  Thus, in order to make copies of the articles, the research scientists at Texaco had to either pay for them or get express permission from the publishers.  
+In 1994 the Second Circuit Court of Appeals held that it was not a fair use for research scientists at Texaco to photocopy articles from various scientific and technical journals. Texaco argued, on behalf of its scientists, that the use was for the purpose of research, and therefore was fair under Section 107. But the court was not convinced. In reaching its decision, the court in Texaco ran through the four factor fair use analysis (see generally, what types of uses does the fair use doctrine protect? and the introduction to this Lumen topic). The court found that three of the four factors weighed against Texaco, and focused much of its opinion on the fourth factor, deciding that Texaco's use would have a significant impact on the potential market for the journal articles. Thus, in order to make copies of the articles, the research scientists at Texaco had to either pay for them or get express permission from the publishers.  See American Geophysical Union v. Texaco Inc., 60 F.3d 913 (2d Cir. 1994).  
 
-Further, use of another's work for classroom instruction purposes may be protected under a separate provision of the Copyright Act.  Section 110 of the Copyright Act contains exemptions that provide nonprofit educational institutions the limited right to use copyrighted materials in face-to-face classroom settings.  This section provides: "Notwithstanding the provisions of section 106, the following are not infringements of copyright: (1) performance or display of a work by instructors or pupils in the course of face-to-face teaching activities of a nonprofit educational institution, in a classroom or similar place devoted to instruction . . . ."
+Further, use of another's work for classroom instruction purposes may be protected under a separate provision of the Copyright Act. Section 110 of the Copyright Act contains exemptions that provide nonprofit educational institutions the limited right to use copyrighted materials in face-to-face classroom settings. This section provides: "Notwithstanding the provisions of section 106, the following are not infringements of copyright: (1) performance or display of a work by instructors or pupils in the course of face-to-face teaching activities of a nonprofit educational institution, in a classroom or similar place devoted to instruction . . . ."  
 
-Furthermore, the recently-enacted "Technology, Education, and Copyright Harmonization Act" -- the TEACH Act -- amends Section 110 to exempt certain uses of copyrighted works in the context of distance education (beyond the context of face-to-face teaching). The TEACH Act sets forth in detail the terms and conditions on which nonprofit educational institutions may use copyrighted works in the context of distance education (such as via websites or other digital means) without permission. <a href="http://www.ala.org/Content/NavigationMenu/Our_Association/Offices/ALA_Washington/Issues2/Copyright1/Distance_Education_and_the_TEACH_Act/TEACHfaq.htm">More information on the TEACH Act</a>.  
+Furthermore, the recently enacted "Technology, Education, and Copyright Harmonization Act" -- the TEACH Act -- amends Section 110 to exempt certain uses of copyrighted works in the context of distance education (beyond the context of face-to-face teaching). The TEACH Act sets forth in detail the terms and conditions on which nonprofit educational institutions may use copyrighted works in the context of distance education (such as via websites or other digital means) without permission. 
 
 }
 )
@@ -4458,11 +4456,7 @@ mapping[%{DMCA Safe Harbor}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Why does a web host, blogging service provider, or search engine get DMCA takedown notices?},
- answer:   %{Many copyright claimants are making complaints under the Digital Millennium Copyright Act, Section 512(c)'s safe-harbor for hosts of "Information Residing on Systems or Networks At Direction of Users" or Section 512(d)'s safe-harbor for providers of "Information Location Tools."  These safe harbors give providers immunity from liability for users' possible copyright infringement -- if they "expeditiously" remove material when they get complaints.  Whether or not the provider would have been liable for infringement by materials it hosts or links to, it can avoid the possibility of money damages by following the DMCA's takedown procedure when it gets a notice. The person whose information was removed can file a <a href="http://www.chillingeffects.org/dmca/counter512.pdf">counter-notification</a> if he or she believes the complaint was erroneous.
-
-<!--GET link Question 129--> <!--GET link Question 440--> <!--GET link Question 588--> <!--GET link Question 870-->
-
-For more information on the DMCA Safe Harbors, see the FAQs on <!--GET FAQLink 14-->.  For more information on Copyright and defenses to copyright infringement, see <!--GET FAQLink 5-->. }
+ answer:   %{ Many copyright claimants are making complaints under the Digital Millennium Copyright Act, Section 512(c)'s safe-harbor for hosts of "Information Residing on Systems or Networks At Direction of Users" or Section 512(d)'s safe-harbor for providers of "Information Location Tools."  These safe harbors give providers immunity from liability for users' possible copyright infringement -- if they "expeditiously" remove material when they get complaints.  Whether or not the provider would have been liable for infringement by materials it hosts or links to, it can avoid the possibility of money damages by following the DMCA's takedown procedure when it gets a notice. The person whose information was removed can file a <a href="https://lumendatabase.org/counter_notices/new">counter-notification</a> if he or she believes the complaint was erroneous. }
 )
 
 mapping[%{DMCA Safe Harbor}] << q.id
@@ -4528,20 +4522,14 @@ mapping[%{Copyright}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is trade libel?},
- answer:   %{Trade libel is defamation against the goods or services of a company or business. For example, saying that you found a severed finger in a particular company's chili (if it isn't true).
-
-Along with the ordinary elements of a defamation claim, (see <!--GET LINK Question 408-->) the person suing must prove money damages.
-
-Defenses include 1) that the statement was true; 2) that the statement was opinion, not fact; and 3) that the plaintiff did not suffer monetary damage.}
+ answer:   %{Trade libel is defamation against the goods or services of a company or business. For example, saying that you found a severed finger in a particular company's chili (if it isn't true).}
 )
 
 mapping[%{Defamation}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Do the safe harbor provisions of section 512(c) apply to instances of alleged trademark infringement?},
- answer:   %{Section 512(c) does not pertain to instances of trademark infringement.  Sub-section (1) states, ?a service provider shall not be liable for . . . infringement of <I>copyright</i> by reason of the storage at the direction of a user of material that resides on a system or network controlled or operated by or for the service provider . . . .? (emphasis added).  On its face, therefore, 512(c) is not applicable to a situation in which a trademark holder gives notice to an on-line service provider (OSP) (see <!--GET LINK Question 127-->) that a user is infringing his or her intellectual property rights.  However, in the absence of any caselaw on the subject, should a trademark holder bring a claim for contributory infringement, an OSP might be able to mount a valid defense by analogy to section 512(c).
-
-See also <!--GET LINK Question 582-->.}
+ answer:   %{SSection 512(c) does not pertain to instances of trademark infringement.  Sub-section (1) states, "a service provider shall not be liable for . . . infringement of <i>copyright</i> by reason of the storage at the direction of a user of material that resides on a system or network controlled or operated by or for the service provider . . ." (emphasis added).  On its face, therefore, 512(c) is not applicable to a situation in which a trademark holder gives notice to an on-line service provider (OSP) that a user is infringing his or her intellectual property rights.  However, in the absence of any caselaw on the subject, should a trademark holder bring a claim for contributory infringement, an OSP might be able to mount a valid defense by analogy to section 512(c).}
 )
 
 mapping[%{DMCA Safe Harbor}] << q.id
@@ -4642,18 +4630,14 @@ q = RelevantQuestion.create!(
  question: %{What is third-party liability, also known as "secondary liability"?},
  answer:   %{The concept of third party liability refers, as the name implies, to situations in which responsibility for harm can be placed on a party in addition to the one that actually caused the injury.  The most common example comes from tort law: a customer in a grocery store drops a bottle of wine and another customer slips on the puddle and injures himself; he may bring an action for negligence against the customer who dropped the bottle and against the owner of the grocery store.  Under the common law doctrine of third-party liability, a plaintiff must show not only that an injury actually occurred, but also (in most cases) that some sort of connection existed between the third party and the person who actually caused the injury.  
 
-As such the concept of third-party liability is often divided into two different types: contributory infringement and vicarious liability.  Typically, contributory infringement exists when the third party either assists in the commission of the act which causes the injury, or simply induces the primary party to do so commit the act which caused the injury.  (See <!--GET LINK Question 268-->.)  Vicarious liability often requires the third party to have exerted some form of control over the primary party}
+As such the concept of third-party liability is often divided into two different types: contributory infringement and vicarious liability.  Typically, contributory infringement exists when the third party either assists in the commission of the act which causes the injury, or simply induces the primary party to do so commit the act which caused the injury.  Vicarious liability often requires the third party to have exerted some form of control over the primary party}
 )
 
 mapping[%{DMCA Safe Harbor}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Can an online service provider (OSP) be held contributorily liable for acts of trademark infringement by one of its users?},
- answer:   %{Under section 512(c) of the DMCA an OSP will not be held liable for instances of <I>copyright</I> infringement so long as the OSP satisfies certain statutory requirements.  (See <!--GET LINK Question 125-->.)   However, there is no equivalent legislation pertaining to trademark infringement, and given the paucity of caselaw concerning liability of OSPs in such instances, it remains an open question as to whether or not an OSP could, or should, be held liable for acts of trademark infringement by its users.
-
-In trademark law contributory liability exists when a manufacturer or distributor intentionally induces another party to infringe a valid trademark, or when it continues to supply products to a party that it knows, or has reason to know, is using the products to engage in trademark infringement.  <I>Inwood Laboratories v. Ives Laboratories</I>, 456 U.S. 844 (1982).  (See <!--GET LINK Question 398-->.)  
-
-Lower courts have since disagreed somewhat over what exactly satisfies the }
+ answer:   %{Under section 512(c) of the DMCA an OSP will not be held liable for instances of <I>copyright</I> infringement so long as the OSP satisfies certain statutory requirements. However, there is no equivalent legislation pertaining to trademark infringement, and given the paucity of caselaw concerning liability of OSPs in such instances, it remains an open question as to whether or not an OSP could, or should, be held liable for acts of trademark infringement by its users. In trademark law, contributory liability exists when a manufacturer or distributor intentionally induces another party to infringe a valid trademark, or when it continues to supply products to a party that it knows, or has reason to know, is using the products to engage in trademark infringement. <I>Inwood Laboratories v. Ives Laboratories</I>, 456 U.S. 844 (1982). Lower courts have since disagreed somewhat over what exactly satisfies the "know, or has reason to know" standard. In one case, <i>Fonovisa v. Cherry Auction</i>, 76 F.3d 259 (9th Cir. 1996), the Ninth Circuit Court of Appeals held that a flea market operator could not ignore, with impunity, the actions of its vendors who were blatantly engaging in trademark infringement. In another case, <i>Gucci America, Inc. v. Hall & Associates</i>, 135 F. Supp. 2d 409 (S.D.N.Y. 2001), the District Court for the Southern District of New York refused to grant an ISP's motion to dismiss in a case involving instances of trademark infringement occurring on a subscriber's website hosted by the ISP. There the plaintiff allegedly had sent two e-mails to the ISP regarding the alleged infringement, but the ISP failed to take any action. Collectively, these few cases suggest that an OSP could be found contributorily liable for acts of trademark infringement. In any such suit, one of the main issues would be to what extent the OSP knew, or should have known, of the infringing acts? That is to say, what did the OSP do to police its service, or what should it have done? And more specifically, if the plaintiff attempted to notify the OSP of the infringing acts, what kind of notice would suffice? Under section 512 of the DMCA, the notice requirements are made quite clear. As the law stands now, however, that issue remains far less clear in the area of trademark infringement.}
 )
 
 mapping[%{DMCA Safe Harbor}] << q.id
@@ -5050,7 +5034,7 @@ mapping[%{Trademark}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Can a mailing list archive really be held liable for allowing a spammer to post?},
- answer:   %{Unlikely.  A mailing list archive, like other online service providers hosting user-supplied content, is protected from non-intellectual property claims by CDA 230 (see <!--GET LINK Question 314-->). For intellectual property claims, the facts are unlikely to make you liable for a spammer's conduct.}
+ answer:   %{Unlikely.  A mailing list archive, like other online service providers hosting user-supplied content, is protected from non-intellectual property claims by CDA 230.  For intellectual property claims, the facts are unlikely to make you liable for a spammer's conduct.}
 )
 
 mapping[%{References}] << q.id
@@ -5171,21 +5155,21 @@ mapping[%{Uncategorized}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Does a DMCA takedown mean the material taken down was infringing?},
- answer:   %{No. ISPs can take down material according to the DMCA anytime they receive a compliant notice alleging copyright infringement (see <!--GET LINK Question 130-->).  The ISP does not have to investigate to determine whether the material was truly infringing before taking it down. The fact that someone has claimed infringement does not prove that infringement occurred -- there might be a fair use defense, or the claim might have been false or even frivolous.
+ answer:   %{No. ISPs can take down material according to the DMCA anytime they receive a compliant notice alleging copyright infringement 
+
+  The ISP does not have to investigate to determine whether the material was truly infringing before taking it down. The fact that someone has claimed infringement does not prove that infringement occurred -- there might be a fair use defense, or the claim might have been false or frivolous.
 
 In order to ensure that copyright owners do not wrongly insist on the removal of materials that actually do not infringe their copyrights, the safe harbor provisions of the DMCA require service providers to notify the subscribers if their materials have been removed and to provide them with an opportunity to send a written notice to the service provider stating that the material has been wrongly removed. [512(g)] If a subscriber provides a proper "counter-notice" claiming that the material does not infringe copyrights, the service provider must then promptly notify the claiming party of the individual's objection. [512(g)(2)] If the copyright owner does not bring a lawsuit in district court within 14 days, the service provider is then required to restore the material to its location on its network. [512(g)(2)(C)]
 
 A proper counter-notice must contain the following information:
-
-The subscriber's name, address, phone number and physical or electronic signature [512(g)(3)(A)]
-
-Identification of the material and its location before removal [512(g)(3)(B)]
-
-A statement under penalty of perjury that the material was removed by mistake or misidentification [512(g)(3)(C)]
-
-Subscriber consent to local federal court jurisdiction, or if overseas, to an appropriate judicial body. [512(g)(3)(D)]
-
-If it is determined that the copyright holder misrepresented its claim regarding the infringing material, the copyright holder then becomes liable to the OSP for any damages that resulted from the improper removal of the material. [512(f)]}
+<ol>
+<li><p>The subscriber's name, address, phone number and physical or electronic signature [512(g)(3)(A)]</p></li>
+<li><p>Identification of the material and its location before removal [512(g)(3)(B)]</p></li>
+<li><p>A statement under penalty of perjury that the material was removed by mistake or misidentification [512(g)(3)(C)]</p></li>
+<li><p>Subscriber consent to local federal court jurisdiction, or if overseas, to an appropriate judicial body. [512(g)(3)(D)]</p></li>
+</ol>
+If it is determined that the copyright holder misrepresented its claim regarding the infringing material, the copyright holder then becomes liable to the OSP for any damages that resulted from the improper removal of the material. [512(f)]
+</ol>}
 )
 
 mapping[%{DMCA Safe Harbor}] << q.id
@@ -6158,14 +6142,14 @@ mapping[%{DMCA Safe Harbor}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Can a hyperlinker be protected by the DMCA safe-harbor?},
- answer:   %{Someone who posts hyperlinks to online material may benefit from the DMCA safe harbor in section 512(d), "information location tools."  If you linked to materials without knowing they were infringing, but then receive <a href="<!--GET URL Question 130-->">a notice of claimed infringement</a>, you can claim the statutory immunity if you remove the link expeditiously (see also <!--GET LINK Question 129-->).  }
+ answer:   %{Someone who posts hyperlinks to online material may benefit from the DMCA safe harbor in section 512(d), "information location tools."  If you linked to materials without knowing they were infringing, but then receive a notice of claimed infringement, you can claim the statutory immunity if you remove the link expeditiously.  }
 )
 
 mapping[%{Linking}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Can a hyperlinker be protected by the DMCA safe-harbor?},
- answer:   %{Someone who posts hyperlinks to online material may benefit from the DMCA safe harbor in section 512(d), "information location tools."  If you linked to materials without knowing they were infringing, but then receive <a href="<!--GET URL Question 130-->">a notice of claimed infringement</a>, you can claim the statutory immunity if you remove the link expeditiously (see also <!--GET LINK Question 129-->).  }
+ answer:   %{Someone who posts hyperlinks to online material may benefit from the DMCA safe harbor in section 512(d), "information location tools."  If you linked to materials without knowing they were infringing, but then receive a notice of claimed infringement, you can claim the statutory immunity if you remove the link expeditiously.  }
 )
 
 mapping[%{DMCA Safe Harbor}] << q.id

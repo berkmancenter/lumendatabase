@@ -127,7 +127,7 @@ class Notice < ActiveRecord::Base
 
   accepts_nested_attributes_for :entity_notice_roles
 
-  accepts_nested_attributes_for :works
+  accepts_nested_attributes_for :works, :allow_destroy => true
 
   delegate :country_code, to: :recipient, allow_nil: true
 
@@ -326,10 +326,6 @@ class Notice < ActiveRecord::Base
 
   def hide_identities?
     false
-  end
-  
-  before_validation do
-    self.language = language[0..1] unless language.nil?
   end
 
   before_save do
