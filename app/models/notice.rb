@@ -23,6 +23,7 @@ class Notice < ActiveRecord::Base
     TermSearch.new(:sender_name, :sender_name, 'Sender Name'),
     TermSearch.new(:principal_name, :principal_name, 'Principal Name'),
     TermSearch.new(:recipient_name, :recipient_name, 'Recipient Name'),
+    TermSearch.new(:submitter_name, :submitter_name, 'Submitter Name'),
     TermSearch.new(:works, 'works.description', 'Works Descriptions'),
     TermSearch.new(:action_taken, :action_taken, 'Action taken'),
   ]
@@ -32,6 +33,7 @@ class Notice < ActiveRecord::Base
     TermFilter.new(:sender_name_facet, 'Sender'),
     TermFilter.new(:principal_name_facet, 'Principal'),
     TermFilter.new(:recipient_name_facet, 'Recipient'),
+    TermFilter.new(:submitter_name_facet, 'Submitter'),
     TermFilter.new(:tag_list_facet, 'Tags'),
     TermFilter.new(:country_code_facet, 'Country'),
     TermFilter.new(:language_facet, 'Language'),
