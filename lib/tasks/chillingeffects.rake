@@ -145,6 +145,57 @@ namespace :chillingeffects do
     end
   end
 
+  desc "Index notices by csv"
+  task :index_notices_by_csv, [:input_csv, :id_column] => :environment do |t, args|
+    index_notices_by_csv args[:input_csv], args[:id_column]
+  end
+
+  def index_notices_by_csv( input_csv, id_column )
+    usage = "index_notices_by_csv['input_csv,id_column']"
+
+    if input_csv.nil? || id_column.nil?
+      puts usage
+      return
+    end
+
+    if !File.exists?( input_csv )
+      puts 'Cannot find input_csv'
+      puts usage
+      return
+    end
+
+    total = 0
+    successful = 0
+    failed = 0
+
+    batch_size = (ENV['BATCH_SIZE'] || 192).to_i
+    Rails.logger.info "index_notices csv: #{input_csv}"
+
+    current_batch = []
+
+    CSV.foreach( input_csv, :headers => true) do |row|
+      total += 1
+      begin
+        sid = row[id_column].to_i
+        notice = Notice.find_by_submission_id sid
+        notice.published = false
+        notice.hidden = true
+        notice.save!
+        successful += 1
+      rescue
+        #puts "Error processing #{row[id_column]}"
+        failed += 1
+      end
+
+      if (total % 100) == 0
+        puts total
+      end
+    end
+
+    puts "total: #{total}, successful: #{successful}, failed: #{failed}"
+  end
+
+
   desc "Recreate elasticsearch index for notices of a given date"
   task :index_notices_by_date, [ :date ] => :environment do |t, args|
     begin
