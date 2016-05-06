@@ -11,7 +11,7 @@ otherActive = (el) ->
   something_active = closestDropdown(el).find('.active').length > 0
   return something_active && !parentActive(el)
 
-$('li.facet').on 'click', 'a', (event) ->
+$('ol.results-facets li.facet').on 'click', 'a', (event) ->
   event.preventDefault()
   clearUnspecifiedInputs($(this))
 
@@ -44,7 +44,12 @@ cloneAdvancedSearch = (context) ->
   $('.field-group input').each (_, element) ->
     name = $(element).attr('name')
     value = $(element).val()
-    term_input = createHiddenTermInput(name, value)
+
+    unless $(element).is(":checkbox")
+      term_input = createHiddenTermInput(name, value)
+    else if $(element).is(":checked")
+      term_input = createHiddenTermInput(name, value)
+
     $(context).append(term_input)
 
 $('form#facets-form').on 'submit', ->
