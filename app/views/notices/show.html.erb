@@ -69,13 +69,15 @@
       <dd class="field"><%= @notice.tag_list %></dd>
     </dl>
     <% end %>
-
-    <% if @notice.jurisdiction_list.present? %>
+    
     <dl class="tag-list">
       <dt class="label">Jurisdictions</dt>
-      <dd class="field"><%= @notice.jurisdiction_list %></dd>
+      <% if @notice.jurisdiction_list.present? %>
+        <dd class="field"><%= @notice.jurisdiction_list %></dd>
+      <% else %>
+        <dd class="field">Unspecified</dd>
+      <% end %>
     </dl>
-    <% end %>
 
     <% if @notice.original_documents.present? && !@notice.original_documents.first.pdf_request_fulfilled %>
       <section class="attachments">
