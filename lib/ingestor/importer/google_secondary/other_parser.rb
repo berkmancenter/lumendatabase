@@ -8,7 +8,7 @@ module Ingestor
         handles_content(/IssueType:\s?lr_legalother/m)
 
         def self.notice_type
-          Other
+          Defamation
         end
 
         def body
