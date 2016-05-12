@@ -31,6 +31,12 @@ module Ingestor
           false
         end
 
+        def date_received
+          content = Base.read_file(original_file_paths.first)
+
+          get_single_line_field(content, 'signature_date')
+        end
+
         def parse_works(file_path)
           content = RedactedContent.new(file_path, 'legalother_explain') do |c|
             "#{sender(c)} #{principal(c)}"

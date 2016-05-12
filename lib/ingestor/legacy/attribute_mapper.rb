@@ -56,7 +56,7 @@ module Ingestor
           created_at: find_created_at,
           updated_at: hash['alter_date'],
           date_sent: hash['Date'],
-          date_received: hash['Date'],
+          date_received: hash['Date'] || importer.date_received,
           file_uploads: importer.file_uploads,
           works: works,
           review_required: review_required,

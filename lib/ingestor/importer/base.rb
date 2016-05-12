@@ -72,7 +72,11 @@ module Ingestor
       end
 
       def hidden?
-	    false
+	      false
+      end
+
+      def date_received
+        nil
       end
 
       def works
