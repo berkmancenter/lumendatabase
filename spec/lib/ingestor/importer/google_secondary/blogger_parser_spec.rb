@@ -8,7 +8,7 @@ describe Ingestor::Importer::GoogleSecondary::BloggerParser do
   end
 
   it "has a default recipient" do
-    expect(described_class.new('').default_recipient).to eq 'Google, Inc. [Blogger]'
+    expect(described_class.new('').default_recipient).to eq 'Google, Inc.'
   end
 
   it "gets entity information" do

@@ -7,12 +7,16 @@ module Ingestor
 
         handles_content(/^defamatoryvids:/)
 
+        def tag_list
+          'youtube'
+        end
+
         def default_submitter
           'Google, Inc.'
         end
 
         def default_recipient
-          'Youtube (Google, Inc.)'
+          'Google, Inc.'
         end
 
         def notice_type

@@ -137,6 +137,10 @@ module Ingestor
         original_documents + supporting_documents
       end
 
+      def tag_list
+        ''
+      end
+
       def action_taken
         ''
       end

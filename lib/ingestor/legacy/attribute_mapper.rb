@@ -48,9 +48,10 @@ module Ingestor
 
         {
           original_notice_id: hash['NoticeID'],
-          title: title,
-          subject: hash_text( 'Re_Line' ),
+          title: title.gsub( /via/, 'regarding' ),
+          subject: hash_text( 'Re_Line' ).gsub( /via/, 'regarding' ),
           source: hash['How_Sent'],
+          tag_list: importer.tag_list,
           action_taken: importer.action_taken,
           created_at: find_created_at,
           updated_at: hash['alter_date'],
