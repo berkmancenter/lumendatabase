@@ -138,6 +138,12 @@ describe 'notices/search/index.html.erb' do
           { "term" => "Imak Itten", "count" => 27 }
         ]
       },
+      "submitter_name_facet" => { "terms" =>
+        [
+          { "term" => "Google", "count" => 27 },
+          { "term" => "Twitter", "count" => 27 }
+        ]
+      },
       "recipient_name_facet" => { "terms" =>
         [
           { "term" => "Twitter", "count" => 10 },
