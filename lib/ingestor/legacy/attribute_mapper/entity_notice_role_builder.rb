@@ -19,7 +19,7 @@ module Ingestor
             name = attribute_mapper.entities[role_name.to_sym]
           end
 
-          if role_name == 'submitter' &&
+          if role_name == 'sender' &&
             name.blank? &&
               attribute_mapper.default_submitter.present?
             name = attribute_mapper.default_submitter
@@ -37,6 +37,7 @@ module Ingestor
           attributes = { name: clean_entity_name(name) }
 
           if address_key
+            Rails.logger.debug "[importer][enrb] address_key: #{address_key}, address_hash: #{address_hash(address_key)}"
             attributes.merge!(address_hash(address_key))
           end
 
