@@ -91,7 +91,8 @@ describe Ingestor::Legacy::AttributeMapper do
         body: nil,
         body_original: nil,
         hidden?: nil,
-        review_required?: false
+        review_required?: false,
+        tag_list: nil
       )
     end
 

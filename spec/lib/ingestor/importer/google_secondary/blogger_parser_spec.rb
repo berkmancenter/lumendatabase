@@ -16,7 +16,8 @@ describe Ingestor::Importer::GoogleSecondary::BloggerParser do
     expect(entities).to eq(
       {
         sender: 'Sébastien Forte',
-        principal: 'No Time Records / MERCURY'
+        principal: 'No Time Records / MERCURY',
+        recipient: 'Google, Inc.'
       }
     )
   end
