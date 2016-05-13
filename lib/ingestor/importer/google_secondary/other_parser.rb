@@ -51,6 +51,12 @@ module Ingestor
           self.class.notice_type
         end
 
+        def tag_list
+          content = Base.read_file(original_file_paths.first)
+
+          get_single_line_field(content, 'hidden_product')
+        end
+
         def default_submitter
           'Google, Inc.'
         end
@@ -66,10 +72,12 @@ module Ingestor
         private
 
         def sender(content)
+          Rails.logger.debug "[importer][other] sender:  #{get_single_line_field(content, 'full_name')}"
           get_single_line_field(content, 'full_name')
         end
 
         def principal(content)
+          Rails.logger.debug "[importer][other] principal:  #{get_single_line_field(content, 'representedrightsholder')}"
           get_single_line_field(content, 'representedrightsholder')
         end
 

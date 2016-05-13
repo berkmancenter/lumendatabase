@@ -33,6 +33,7 @@ module Ingestor
 
           return unless name.present?
 
+          Rails.logger.debug "[importer][enrb] role_name: #{role_name}, name: #{name}"
           attributes = { name: clean_entity_name(name) }
 
           if address_key

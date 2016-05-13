@@ -37,8 +37,6 @@ module Ingestor
         'Google, Inc.'
       end
 
-      private
-
       def sender(content)
         [
           get_field(content, 'submitter_first_name'),
@@ -49,6 +47,8 @@ module Ingestor
       def principal(content)
         get_field(content, 'copyright_owner')
       end
+
+      private
 
       def get_field(content, field_name)
         if content.match(/field_#{field_name}:(.+?)field_/m)

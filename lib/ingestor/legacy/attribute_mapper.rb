@@ -48,8 +48,8 @@ module Ingestor
 
         {
           original_notice_id: hash['NoticeID'],
-          title: title.gsub( /via/, 'regarding' ),
-          subject: hash_text( 'Re_Line' ).gsub( /via/, 'regarding' ),
+          title: title.gsub( /via/, 'regarding' ) unless title.nil?,
+          subject: hash_text( 'Re_Line' ).gsub( /via/, 'regarding' ) unless hash_text( 'Re_Line' ).nil?,
           source: hash['How_Sent'],
           tag_list: importer.tag_list,
           action_taken: importer.action_taken,

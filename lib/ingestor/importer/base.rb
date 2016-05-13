@@ -103,6 +103,7 @@ module Ingestor
         entities = {}
         sender(content).present? && entities[:sender] = sender(content)
         principal(content).present? && entities[:principal] = principal(content)
+        recipient(content).present? && entities[:recipient] = recipient(content)
         entities
       end
 
@@ -113,6 +114,10 @@ module Ingestor
       end
 
       def principal(*)
+      end
+
+      def recipient(*)
+        default_recipient
       end
 
       def original_documents
