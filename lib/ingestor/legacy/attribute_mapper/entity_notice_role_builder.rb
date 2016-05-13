@@ -42,7 +42,7 @@ module Ingestor
           end
 
           if address_prebuilt
-            Rails.logger.debug "[importer][enrb] address_prebuilt: #{address_prebuilt)}"
+            Rails.logger.debug "[importer][enrb] address_prebuilt: #{address_prebuilt}"
             attributes.merge!(address_prebuilt)
           end
 
