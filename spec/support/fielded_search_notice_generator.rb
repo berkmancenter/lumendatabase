@@ -35,6 +35,10 @@ class FieldedSearchNoticeGenerator
     for_role_name('recipient')
   end
 
+  def for_submitter_name
+    for_role_name('submitter')
+  end
+
   def for_tags
     matched_notice.tag_list = query
     unmatched_notice.tag_list = "N/A"
