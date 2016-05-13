@@ -115,9 +115,9 @@ module Ingestor
         ].compact)
       end
 
-      def build_role(role_name, name_key, address_key)
+      def build_role(role_name, name_key, address_key, address_prebuilt)
         builder = EntityNoticeRoleBuilder.new(
-          self, role_name, name_key, address_key
+          self, role_name, name_key, address_key, address_prebuilt
         )
         builder.build
       end
