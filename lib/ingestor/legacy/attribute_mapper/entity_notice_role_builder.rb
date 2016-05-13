@@ -52,7 +52,7 @@ module Ingestor
 
         private
 
-        attr_reader :attribute_mapper, :hash_data, :role_name, :name_key, :address_key
+        attr_reader :attribute_mapper, :hash_data, :role_name, :name_key, :address_key, :address_prebuilt
 
         def clean_entity_name(name)
           name = name.to_s.strip
