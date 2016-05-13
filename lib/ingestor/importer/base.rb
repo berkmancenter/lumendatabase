@@ -113,6 +113,9 @@ module Ingestor
       def sender(*)
       end
 
+      def sender_address(*)
+      end
+
       def principal(*)
       end
 

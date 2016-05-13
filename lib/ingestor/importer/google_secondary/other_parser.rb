@@ -69,11 +69,17 @@ module Ingestor
           false
         end
 
-        private
-
         def sender(content)
           Rails.logger.debug "[importer][other] sender:  #{get_single_line_field(content, 'full_name')}"
           get_single_line_field(content, 'full_name')
+        end
+
+        def sender_address()
+          content = Base.read_file(original_file_paths.first)
+
+          {
+            country_code: get_single_line_field(content, 'geolocation')
+          }
         end
 
         def principal(content)

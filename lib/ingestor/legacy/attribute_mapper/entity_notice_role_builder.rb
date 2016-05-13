@@ -4,7 +4,7 @@ module Ingestor
 
       class EntityNoticeRoleBuilder
 
-        def initialize(attribute_mapper, role_name, name_key, address_key)
+        def initialize(attribute_mapper, role_name, name_key, address_key, address_prebuilt)
           @attribute_mapper = attribute_mapper
           @hash_data = attribute_mapper.hash
           @role_name = role_name
@@ -39,6 +39,11 @@ module Ingestor
           if address_key
             Rails.logger.debug "[importer][enrb] address_key: #{address_key}, address_hash: #{address_hash(address_key)}"
             attributes.merge!(address_hash(address_key))
+          end
+
+          if address_prebuilt
+            Rails.logger.debug "[importer][enrb] address_prebuilt: #{address_prebuilt)}"
+            attributes.merge!(address_prebuilt)
           end
 
           EntityNoticeRole.new(name: role_name, entity_attributes: attributes)
