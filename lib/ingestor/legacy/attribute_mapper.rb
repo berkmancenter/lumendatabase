@@ -109,7 +109,7 @@ module Ingestor
       def entity_notice_roles
         transform_entity_names([
           build_role('sender', 'Sender_LawFirm', 'Sender'),
-          build_role('recipient', 'Recipient_Entity', 'Recipient'),
+          build_role('recipient', ( 'Recipient_Entity' unless importer.recipient.present? ), 'Recipient'),
           build_role('principal', 'Sender_Principal', nil),
           build_role('attorney', 'Sender_Attorney', nil),
         ].compact)
