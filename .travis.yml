@@ -7,12 +7,12 @@ addons:
 
 services:
   - postgresql
-#  - elasticsearch
+  - elasticsearch
 
 before_install:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
-#  - curl -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-0.90.3.deb && sudo dpkg -i --force-confnew elasticsearch-0.90.3.deb && sudo service elasticsearch restart
+  - curl -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-0.90.3.deb && sudo dpkg -i --force-confnew elasticsearch-0.90.3.deb && sudo service elasticsearch restart
 
 before_script:
   - sleep 10
