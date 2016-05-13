@@ -10,6 +10,7 @@ module Ingestor
           @role_name = role_name
           @name_key = name_key
           @address_key = address_key
+          @address_prebuilt = address_prebuilt
         end
 
         def build
