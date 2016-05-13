@@ -6,7 +6,7 @@ feature "notice submission" do
 
   scenario "submitting as an unauthenticated user", js: true do
     parameters = request_hash(default_notice_hash)
-    parameters.delete(:x_authentication_token)
+    parameters.delete(:authentication_token)
 
     curb = post_api('/notices', parameters)
 
@@ -181,7 +181,7 @@ feature "notice submission" do
   def request_hash(notice_hash, user = create(:user, :submitter))
     {
       notice: notice_hash,
-      x_authentication_token: user.authentication_token
+      authentication_token: user.authentication_token
     }
   end
 end
