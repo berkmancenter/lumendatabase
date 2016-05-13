@@ -1,7 +1,7 @@
 class RiskTrigger < ActiveRecord::Base
 
   def risky?(notice)
-    field_present?(notice) && condition_matches?(notice) unless notice..try(:submitter).try(:email, "google@chillingeffects.org") && notice.try(:type, "Defamation")
+    field_present?(notice) && condition_matches?(notice) unless notice.try(:submitter).try(:email, "google@chillingeffects.org") && notice.try(:type, "Defamation")
 
   rescue NoMethodError => ex
     Rails.logger.warn "Invalid risk trigger (#{id}): #{ex}"
