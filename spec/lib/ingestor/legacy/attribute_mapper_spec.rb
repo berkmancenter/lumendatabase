@@ -93,7 +93,8 @@ describe Ingestor::Legacy::AttributeMapper do
         hidden?: nil,
         review_required?: false,
         tag_list: nil,
-        date_received: nil
+        date_received: nil,
+        sender_address: nil
       )
     end
 
@@ -311,7 +312,8 @@ contact_email_noprefill: info.antipiracy@dtecnet.com|,
       body_original: nil,
       hidden?: nil,
       tag_list: nil,
-      date_received: nil
+      date_received: nil,
+      sender_address: nil
     )
     Ingestor::ImportDispatcher.stub(:for).and_return(import_class)
     import_class.should_receive(:entities).exactly(4).times
@@ -431,7 +433,8 @@ contact_email_noprefill: info.antipiracy@dtecnet.com|,
       body_original: nil,
       hidden?: nil,
       tag_list: nil,
-      date_received: nil
+      date_received: nil,
+      sender_address: nil
     }
     Ingestor::ImportDispatcher.stub(:for).and_return(double(
       "ImportClass", stubbed_methods
