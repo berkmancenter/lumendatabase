@@ -85,16 +85,22 @@ describe Ingestor::Legacy::AttributeMapper do
     before do
       @import_class = double(
         "ImportClass",
-        works: 'works', file_uploads: 'files',
-        action_taken: 'Yes', require_review_if_works_empty?: true,
-        entities: {}, default_recipient: nil, mark_registration_number: nil,
+        works: 'works',
+        file_uploads: 'files',
+        action_taken: 'Yes',
+        require_review_if_works_empty?: true,
+        entities: {},
+        default_recipient: nil,
+        default_submitter: nil,
+        mark_registration_number: nil,
         body: nil,
         body_original: nil,
         hidden?: nil,
         review_required?: false,
         tag_list: nil,
         date_received: nil,
-        sender_address: nil
+        sender_address: nil,
+        recipient: nil
       )
     end
 
@@ -302,18 +308,22 @@ contact_email_noprefill: info.antipiracy@dtecnet.com|,
   it "uses entities from the importer when none are in the hash" do
     import_class = double(
       "ImportClass",
-      entities: { sender: 'Sender' }, default_recipient: nil,
       works: [],
-      require_review_if_works_empty?: true,
-      action_taken: 'yes',
       file_uploads: [],
+      action_taken: 'yes',
+      require_review_if_works_empty?: true,
+      entities: { sender: 'Sender' },
+      default_recipient: nil,
+      default_submitter: nil,
       mark_registration_number: nil,
       body: nil,
       body_original: nil,
       hidden?: nil,
+      review_required?: false,
       tag_list: nil,
       date_received: nil,
-      sender_address: nil
+      sender_address: nil,
+      recipient: nil
     )
     Ingestor::ImportDispatcher.stub(:for).and_return(import_class)
     import_class.should_receive(:entities).exactly(4).times
@@ -425,16 +435,22 @@ contact_email_noprefill: info.antipiracy@dtecnet.com|,
 
   def stub_importer_with_no_works(review_required = true)
     stubbed_methods = {
-      works: [], file_uploads: [],
+      works: [],
+      file_uploads: [],
       action_taken: nil,
       require_review_if_works_empty?: review_required,
-      entities: {}, default_recipient: nil, mark_registration_number: 10000,
+      entities: {},
+      default_recipient: nil,
+      default_submitter: nil,
+      mark_registration_number: 10000,
       body: nil,
       body_original: nil,
       hidden?: nil,
+      review_required?: false,
       tag_list: nil,
       date_received: nil,
-      sender_address: nil
+      sender_address: nil,
+      recipient: nil
     }
     Ingestor::ImportDispatcher.stub(:for).and_return(double(
       "ImportClass", stubbed_methods
