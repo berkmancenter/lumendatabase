@@ -308,7 +308,8 @@ contact_email_noprefill: info.antipiracy@dtecnet.com|,
       mark_registration_number: nil,
       body: nil,
       body_original: nil,
-      hidden?: nil
+      hidden?: nil,
+      tag_list: nil
     )
     Ingestor::ImportDispatcher.stub(:for).and_return(import_class)
     import_class.should_receive(:entities).exactly(4).times
@@ -426,7 +427,8 @@ contact_email_noprefill: info.antipiracy@dtecnet.com|,
       entities: {}, default_recipient: nil, mark_registration_number: 10000,
       body: nil,
       body_original: nil,
-      hidden?: nil
+      hidden?: nil,
+      tag_list: nil
     }
     Ingestor::ImportDispatcher.stub(:for).and_return(double(
       "ImportClass", stubbed_methods
