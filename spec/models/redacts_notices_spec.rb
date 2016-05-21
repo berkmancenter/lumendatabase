@@ -27,6 +27,7 @@ describe RedactsNotices::RedactsPhoneNumbers do
     456-7890
     456.7890
     456\ 7890
+    90\ 212\ 326\ 06\ 15
   )
 
   PHONE_NUMBERS.each do |phone_number|

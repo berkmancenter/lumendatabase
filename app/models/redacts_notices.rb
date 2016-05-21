@@ -50,7 +50,8 @@ class RedactsNotices
     def redact(text)
       redactor = RedactsContent.new(
         /(\(?\d{3}\)?.?)? # optional area code
-         \d{3}[^\d]?\d{4} # phone number, optional single-char separator
+         (\d{3}[^\d]?\d{4})| # phone number, optional single-char separator
+         (\d+[\d ]{10,16}\d+) # turkish phone number
         /x
       )
 
