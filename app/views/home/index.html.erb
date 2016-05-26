@@ -27,7 +27,7 @@
   <section class="news-snippets">
     <h2>From the Blog</h2>
     <ol id="recent-blog-entries">
-      <%= render partial: 'blog_entry', collection: @blog_entries %>
+      <%= render partial: 'blog_entry', collection: @blog_entries, cached: true %>
     </ol>
     <a href="blog_feed?format=rss"><%= image_tag("feed_icon.png", :size => "14x14") %></a>
   </section>
