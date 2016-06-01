@@ -122,6 +122,17 @@ describe RedactsNotices do
       expect(notice.body).to eq "Some [REDACTED] text"
       expect(notice.body_original).to eq "Some sensitive text"
     end
+
+    it "ignores stopwords" do
+      notice = build(
+        :dmca,
+        body: "Text with the stopwords")
+      redactor = RedactsNotices.new([RedactsNotices::RedactsContent.new('the')])
+
+      redactor.redact(notice, :body)
+
+      expect(notice.body).to eq "Text with the stopwords"
+    end
   end
 
   context "#redact_all" do
