@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'bourbon'
+# gem 'bourbon'
+gem 'bourbon', '~> 3.0', '>= 3.0.1'
 gem 'neat'
 gem 'flutie'
 gem 'high_voltage'
@@ -53,7 +54,7 @@ end
 group :development do
   gem 'foreman'
   gem 'dotenv-rails'
-  gem 'better_errors'
+  #gem 'better_errors'
   gem 'binding_of_caller'
 end
 
