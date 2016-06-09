@@ -1,16 +1,19 @@
 source 'https://rubygems.org'
 
-gem 'bourbon'
+# gem 'bourbon'
+gem 'bourbon', '~> 3.0', '>= 3.0.1'
 gem 'neat'
 gem 'flutie'
 gem 'high_voltage'
-gem 'jquery-rails'
-gem 'jquery-ui-rails'
+# gem 'jquery-rails'
+gem 'jquery-rails', '~> 4.1', '>= 4.1.1'
+# gem 'jquery-ui-rails'
+gem 'jquery-ui-rails', '~> 5.0', '>= 5.0.5'
 gem 'pg'
 gem 'rails', '~> 4.2.6'
 gem 'recipient_interceptor'
 gem 'simple_form'
-gem 'strong_parameters'
+# gem 'strong_parameters'
 gem 'paperclip', git: 'http://github.com/thoughtbot/paperclip.git'
 gem 'active_model_serializers', '~> 0.8.0'
 gem 'acts-as-taggable-on'
@@ -39,6 +42,7 @@ gem 'twitter-text'
 gem 'rails_admin_tag_list'
 gem 'rack-attack'
 gem 'rack-test', require: 'rack/test'
+gem 'gdbm'
 
 group :assets do
   gem 'coffee-rails'
@@ -50,7 +54,7 @@ end
 group :development do
   gem 'foreman'
   gem 'dotenv-rails'
-  gem 'better_errors'
+  #gem 'better_errors'
   gem 'binding_of_caller'
 end
 

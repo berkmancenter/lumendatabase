@@ -1,7 +1,10 @@
 Devise.setup do |config|
-  config.mailer_sender = "admin@chillingeffects.org"
 
-  require 'devise/orm/active_record'
+	require 'devise/orm/active_record'
+
+	config.secret_key = '5717cc26815444da3e5b8b95154b7472e087f9acf62e15cbfa8cfd85d0409852bd04acf2e7cf6cb1793942219a301c5e4fc53b6b13f206ebe009227cd979c998'
+	
+  config.mailer_sender = "admin@chillingeffects.org"
 
   config.skip_session_storage = [:http_auth]
 
