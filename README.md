@@ -8,7 +8,7 @@ Development
 
 Requirements:
 
-* ruby 2.0
+* ruby 2.1.9
 * modern postgres
 * A jre (openjdk works fine)
 
