@@ -8,11 +8,11 @@ class PostResponder < ActionResponder
     if params[:selected_text].present?
       redactor = RedactsNotices.new([
         RedactsNotices::RedactsContent.new(params[:selected_text])
-      ])
+                                    ])
 
-      next_notice_ids = params.fetch(:next_notices, []).map(&:to_i)
+      review_required_ids = Notice.where(review_required: true).pluck(:id)
 
-      redactor.redact_all([object.id] + next_notice_ids)
+      redactor.redact_all([object.id] + review_required_ids)
     end
 
     redirect_to_current(params)
