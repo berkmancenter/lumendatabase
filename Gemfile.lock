@@ -330,10 +330,6 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    strong_parameters (0.1.4)
-      actionpack (>= 3.2.0)
-      activemodel (>= 3.2.0)
-      railties (>= 3.2.0)
     therubyracer (0.12.2)
       libv8 (~> 3.16.14.0)
       ref
@@ -439,7 +435,6 @@ DEPENDENCIES
   shoulda-matchers
   simple_form
   simplecov
-  strong_parameters
   therubyracer
   timecop
   tire (~> 0.6.0)
