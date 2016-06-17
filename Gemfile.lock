@@ -408,8 +408,8 @@ DEPENDENCIES
   high_voltage
   html2md
   jquery-placeholder-rails
-  jquery-rails
-  jquery-ui-rails
+  jquery-rails (~> 4.1, >= 4.1.1)
+  jquery-ui-rails (~> 5.0, >= 5.0.5)
   kaminari (= 0.14.1)
   launchy
   mysql2
