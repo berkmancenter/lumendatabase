@@ -4,8 +4,8 @@ gem 'bourbon'
 gem 'neat'
 gem 'flutie'
 gem 'high_voltage'
-gem 'jquery-rails', '~> 4.1', '>= 4.1.1'
-gem 'jquery-ui-rails', '~> 5.0', '>= 5.0.5'
+gem 'jquery-rails'
+gem 'jquery-ui-rails'
 gem 'pg'
 gem 'rails', '~> 4.2.6'
 gem 'recipient_interceptor'
@@ -49,7 +49,7 @@ end
 group :development do
   gem 'foreman'
   gem 'dotenv-rails'
-  gem 'better_errors'
+  # gem 'better_errors'
   gem 'binding_of_caller'
 end
 

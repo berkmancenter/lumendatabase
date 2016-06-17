@@ -58,9 +58,6 @@ GEM
     ansi (1.4.3)
     arel (6.0.3)
     bcrypt (3.1.11)
-    better_errors (0.9.0)
-      coderay (>= 1.0.0)
-      erubis (>= 2.6.6)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     bootstrap-datepicker-rails (1.1.0.1)
@@ -192,7 +189,7 @@ GEM
     mime-types (3.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2016.0521)
-    mini_portile2 (2.0.0)
+    mini_portile2 (2.1.0)
     minitest (5.9.0)
     mocha (0.13.3)
       metaclass (~> 0.0.1)
@@ -204,14 +201,16 @@ GEM
       bourbon (>= 2.1)
       sass (>= 3.2)
     nested_form (0.3.2)
-    nokogiri (1.6.7.2)
-      mini_portile2 (~> 2.0.0.rc2)
+    nokogiri (1.6.8)
+      mini_portile2 (~> 2.1.0)
+      pkg-config (~> 1.1.7)
     orm_adapter (0.5.0)
     pg (0.15.1)
     piwik_analytics (1.0.2)
       actionpack
       activesupport
       rails (>= 3.0.0)
+    pkg-config (1.1.7)
     pry (0.9.12.2)
       coderay (~> 1.0.5)
       method_source (~> 0.8)
@@ -270,7 +269,7 @@ GEM
       rake (>= 0.8.7)
       thor (>= 0.18.1, < 2.0)
     raindrops (0.11.0)
-    rake (11.1.2)
+    rake (11.2.2)
     rb-fsevent (0.9.3)
     rb-inotify (0.9.0)
       ffi (>= 0.5.0)
@@ -323,7 +322,7 @@ GEM
     simplecov-html (0.7.1)
     slop (3.4.5)
     spork (0.9.2)
-    sprockets (3.6.0)
+    sprockets (3.6.1)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
     sprockets-rails (3.0.4)
@@ -335,7 +334,7 @@ GEM
       ref
     thor (0.19.1)
     thread_safe (0.3.5)
-    tilt (2.0.4)
+    tilt (2.0.5)
     timecop (0.6.1)
     tire (0.6.0)
       activemodel (>= 3.0)
@@ -386,7 +385,6 @@ DEPENDENCIES
   activerecord-import
   acts-as-taggable-on
   ancestry
-  better_errors
   binding_of_caller
   bootstrap-datepicker-rails
   bourbon
@@ -408,8 +406,8 @@ DEPENDENCIES
   high_voltage
   html2md
   jquery-placeholder-rails
-  jquery-rails (~> 4.1, >= 4.1.1)
-  jquery-ui-rails (~> 5.0, >= 5.0.5)
+  jquery-rails
+  jquery-ui-rails
   kaminari (= 0.14.1)
   launchy
   mysql2
