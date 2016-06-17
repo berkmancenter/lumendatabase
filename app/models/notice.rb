@@ -77,7 +77,7 @@ class Notice < ActiveRecord::Base
 
   belongs_to :reviewer, class_name: 'User'
 
-  has_many :topic_assignments, dependent: :destroy, include: [ :topic ]
+  has_many :topic_assignments, dependent: :destroy
   has_many :topics, through: :topic_assignments
   has_many :topic_relevant_questions,
     through: :topics, source: :relevant_questions
