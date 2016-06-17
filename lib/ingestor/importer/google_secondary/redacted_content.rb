@@ -24,7 +24,7 @@ module Ingestor
 
         def description
           s = super
-          "#{quote}\n#{EXPLAIN_PREAMBLE if s}#{s}".strip
+          "#{quote}\n#{s}".strip
         end
 
         def description_original

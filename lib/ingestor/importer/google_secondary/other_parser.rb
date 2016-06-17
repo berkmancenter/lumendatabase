@@ -78,7 +78,7 @@ module Ingestor
           content = Base.read_file(original_file_paths.first)
 
           {
-            country_code: get_single_line_field(content, 'geolocation')
+            country_code: get_single_line_field(content, 'country_residence')
           }
         end
 
