@@ -100,8 +100,8 @@ class Notice < ActiveRecord::Base
   validates :date_received, date: { after: Proc.new { Date.new(1998,10,28) }, before: Proc.new { Time.now + 1.day }, allow_blank: true }
 
   # Using reset_type because type is ALWAYS protected (deep in the Rails code).
-  attr_protected :id, :type, :reset_type
-  attr_protected :id, :type, as: :admin
+  # attr_protected :id, :type, :reset_type
+  # attr_protected :id, :type, as: :admin
 
   def reset_type
     type
