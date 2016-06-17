@@ -14,7 +14,6 @@
 //= require jquery_ujs
 //= require jquery-ui
 //= require jquery.collapse
-//= require jquery.tipsy
 //= require respond.min
 //= require select2
 //= require bootstrap-datepicker/core
