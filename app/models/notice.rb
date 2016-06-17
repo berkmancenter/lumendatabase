@@ -5,7 +5,7 @@ require 'validates_automatically'
 class Notice < ActiveRecord::Base
   include Tire::Model::Search
   include Searchability
-  include ValidatesAutomatically
+  #include ValidatesAutomatically
 
   extend RecentScope
 
@@ -82,9 +82,8 @@ class Notice < ActiveRecord::Base
   has_many :topic_relevant_questions,
     through: :topics, source: :relevant_questions
   has_many :related_blog_entries,
-    through: :topics, source: :blog_entries, uniq: true
-  has_many :entity_notice_roles, dependent: :destroy, inverse_of: :notice,
-    include: [ :entity ]
+    through: :topics, source: :blog_entries # uniq: true
+  has_many :entity_notice_roles, dependent: :destroy, inverse_of: :notice
   has_many :entities, through: :entity_notice_roles
   has_many :file_uploads
   has_many :infringing_urls, through: :works

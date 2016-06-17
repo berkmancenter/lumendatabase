@@ -5,6 +5,8 @@ class EntityNoticeRole < ActiveRecord::Base
   belongs_to :entity
   belongs_to :notice, touch: true
 
+  default_scope { includes(:entity) }
+
   ROLES = %w(
     principal
     agent
