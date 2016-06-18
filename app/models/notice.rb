@@ -322,7 +322,8 @@ class Notice < ActiveRecord::Base
   
   def notice_topic_map
     topic = TYPES_TO_TOPICS.key?(self.type) ? TYPES_TO_TOPICS[self.type] : OTHER_TOPIC
-    return Topic.find_or_create_by_name(topic) 
+    #return Topic.find_or_create_by_name(topic)
+    return Topic.find_or_create_by(name: topic)
   end
 
   def hide_identities?
