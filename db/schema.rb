@@ -23,8 +23,8 @@ ActiveRecord::Schema.define(version: 20160618163529) do
     t.text     "abstract"
     t.text     "content"
     t.datetime "published_at"
-    t.datetime "created_at",                                    null: false
-    t.datetime "updated_at",                                    null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "image"
     t.integer  "original_news_id"
     t.string   "url",              limit: 1024
@@ -41,8 +41,8 @@ ActiveRecord::Schema.define(version: 20160618163529) do
 
   create_table "copyrighted_urls", force: :cascade do |t|
     t.string   "url_original", limit: 8192, null: false
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "url",          limit: 8192
   end
 
@@ -92,8 +92,8 @@ ActiveRecord::Schema.define(version: 20160618163529) do
     t.integer  "entity_id",  null: false
     t.integer  "notice_id",  null: false
     t.string   "name",       null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "entity_notice_roles", ["entity_id"], name: "index_entity_notice_roles_on_entity_id", using: :btree
@@ -114,8 +114,8 @@ ActiveRecord::Schema.define(version: 20160618163529) do
 
   create_table "infringing_urls", force: :cascade do |t|
     t.string   "url_original", limit: 8192, null: false
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "url",          limit: 8192
   end
 
@@ -135,16 +135,16 @@ ActiveRecord::Schema.define(version: 20160618163529) do
     t.string   "message",            limit: 16384
     t.string   "stacktrace",         limit: 2048
     t.string   "import_set_name",    limit: 1024
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "notices", force: :cascade do |t|
     t.string   "title"
     t.text     "body"
     t.datetime "date_received"
-    t.datetime "created_at",                               null: false
-    t.datetime "updated_at",                               null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "source"
     t.string   "subject"
     t.boolean  "review_required"
@@ -195,8 +195,8 @@ ActiveRecord::Schema.define(version: 20160618163529) do
     t.string   "table"
     t.integer  "month",      limit: 2
     t.integer  "year",       limit: 8
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "rails_admin_histories", ["item"], name: "index_rails_admin_histories_on_item", using: :btree
@@ -207,8 +207,8 @@ ActiveRecord::Schema.define(version: 20160618163529) do
   create_table "reindex_runs", force: :cascade do |t|
     t.integer  "entity_count", default: 0
     t.integer  "notice_count", default: 0
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "reindex_runs", ["created_at"], name: "index_reindex_runs_on_created_at", using: :btree
@@ -300,8 +300,8 @@ ActiveRecord::Schema.define(version: 20160618163529) do
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.string   "authentication_token"
-    t.datetime "created_at",                          null: false
-    t.datetime "updated_at",                          null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.integer  "publication_delay",      default: 0,  null: false
   end
 
@@ -311,8 +311,8 @@ ActiveRecord::Schema.define(version: 20160618163529) do
 
   create_table "works", force: :cascade do |t|
     t.text     "description"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "kind"
     t.text     "description_original"
   end
