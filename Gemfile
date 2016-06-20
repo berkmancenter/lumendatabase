@@ -39,6 +39,7 @@ gem 'rails_admin_tag_list'
 gem 'rack-attack'
 gem 'rack-test', require: 'rack/test'
 gem 'minitest'
+gem 'spork-rails', git: 'https://github.com/sporkrb/spork-rails'
 
 group :assets do
   gem 'coffee-rails'
@@ -72,7 +73,8 @@ group :test do
   gem 'shoulda-matchers', '~> 3.1', '>= 3.1.1'
   gem 'simplecov', require: false
   gem 'timecop'
-  gem 'guard-spork'
+  # gem 'guard-spork'
+  gem 'guard-spork', '~> 2.1'
   gem 'rb-inotify', require: false
   gem 'fakeweb'
   gem 'curb'
