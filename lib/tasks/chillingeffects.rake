@@ -195,6 +195,28 @@ namespace :chillingeffects do
     puts "total: #{total}, successful: #{successful}, failed: #{failed}"
   end
 
+  desc "Recreate elasticsearch index for notices with a given recipient entity_id"
+  task :index_notices_by_entity_id, [ :entity_id ] => :environment do |t, args|
+    begin
+      batch_size = (ENV['BATCH_SIZE'] || 192).to_i
+
+      notices = Notice.where( "id in ( select notice_id from entity_notice_roles where entity id = #{args[:entity_id]} )" )
+      Rails.logger.info "index_notices entity_id: #{args[:entity_id]}, total: #{notices.count}"
+      
+      count = 0
+      notices.find_in_batches( batch_size: batch_size ) do |batch|
+        Tire.index( Notice.index_name ).import batch
+        count += batch.count
+        Rails.logger.info "index_notices entity_id: #{args[:entity_id]}, count: #{count}, time: #{Time.now.to_i}"
+      end
+
+      ReindexRun.sweep_search_result_caches
+
+      Rails.logger.info "index_notices done entity_id: #{args[:entity_id]}, count: #{count}, time: #{Time.now.to_i}"
+    rescue => e
+      Rails.logger.error "index_notices entity_id: #{args[:entity_id]}, error: #{e.inspect}"
+    end
+  end
 
   desc "Recreate elasticsearch index for notices of a given date"
   task :index_notices_by_date, [ :date ] => :environment do |t, args|
