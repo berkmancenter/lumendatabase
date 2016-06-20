@@ -60,6 +60,7 @@ group :development, :test do
   gem 'pry-rails'
   gem 'ruby-prof'
   gem 'unicorn'
+  gem 'minitest'
 end
 
 group :test do
