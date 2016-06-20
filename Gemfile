@@ -38,6 +38,7 @@ gem 'twitter-text'
 gem 'rails_admin_tag_list'
 gem 'rack-attack'
 gem 'rack-test', require: 'rack/test'
+gem 'minitest'
 
 group :assets do
   gem 'coffee-rails'
@@ -60,7 +61,7 @@ group :development, :test do
   gem 'pry-rails'
   gem 'ruby-prof'
   gem 'unicorn'
-  gem 'minitest'
+  
 end
 
 group :test do
@@ -68,7 +69,7 @@ group :test do
   gem 'capybara-webkit', '~> 1.0.0'
   gem 'database_cleaner'
   gem 'launchy'
-  gem 'shoulda-matchers'
+  gem 'shoulda-matchers', '~> 3.1', '>= 3.1.1'
   gem 'simplecov', require: false
   gem 'timecop'
   gem 'guard-spork'
