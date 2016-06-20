@@ -6,8 +6,8 @@ describe InfringingUrl do
 
   context 'automatic validations' do
     it { should validate_presence_of(:url_original) }
-    it { should ensure_length_of(:url).is_at_most(8.kilobytes) }
-    it { should ensure_length_of(:url_original).is_at_most(8.kilobytes) }
+    it { should validate_length_of(:url).is_at_most(8.kilobytes) }
+    it { should validate_length_of(:url_original).is_at_most(8.kilobytes) }
   end
 
   context "#url" do

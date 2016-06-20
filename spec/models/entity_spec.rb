@@ -4,7 +4,7 @@ describe Entity do
   context 'automatic validations' do
     it { should validate_presence_of :name }
     it { should validate_presence_of :kind }
-    it { should ensure_length_of(:address_line_1).is_at_most(255) }
+    it { should validate_length_of(:address_line_1).is_at_most(255) }
   end
 
   context 'de-duplication' do

@@ -6,7 +6,7 @@ describe Work do
   it { should have_and_belong_to_many :copyrighted_urls }
 
   context 'automatic validations' do
-    it { should ensure_length_of(:kind).is_at_most(255) }
+    it { should validate_length_of(:kind).is_at_most(255) }
   end
 
   context '.unknown' do

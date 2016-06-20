@@ -11,7 +11,7 @@ describe DMCA do
   it { should ensure_inclusion_of(:action_taken).in_array(DMCA::VALID_ACTIONS).allow_blank }
 
   context 'automatic validations' do
-    it { should ensure_length_of(:title).is_at_most(255) }
+    it { should validate_length_of(:title).is_at_most(255) }
   end
 
   it { should have_many :file_uploads }

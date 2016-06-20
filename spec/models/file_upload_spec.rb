@@ -7,7 +7,7 @@ describe FileUpload do
   it { should ensure_inclusion_of(:kind).in_array %w( original supporting ) }
 
   context 'automatic validations' do
-    it { should ensure_length_of(:kind).is_at_most(255) }
+    it { should validate_length_of(:kind).is_at_most(255) }
   end
 
   context "file_type" do
