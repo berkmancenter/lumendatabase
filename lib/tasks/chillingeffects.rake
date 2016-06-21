@@ -200,7 +200,7 @@ namespace :chillingeffects do
     begin
       batch_size = (ENV['BATCH_SIZE'] || 192).to_i
 
-      notices = Notice.where( "id in ( select notice_id from entity_notice_roles where entity id = #{args[:entity_id]} )" )
+      notices = Notice.where( "id in ( select notice_id from entity_notice_roles where name = 'recipient' and entity_id = #{args[:entity_id]} )" )
       Rails.logger.info "index_notices entity_id: #{args[:entity_id]}, total: #{notices.count}"
       
       count = 0
