@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe Entity do
+describe Entity, type: :model do
   context 'automatic validations' do
     it { should validate_presence_of :name }
     it { should validate_presence_of :kind }
@@ -30,7 +30,7 @@ describe Entity do
   it { should belong_to(:user) }
   it { should have_many(:entity_notice_roles).dependent(:destroy) }
   it { should have_many(:notices).through(:entity_notice_roles)  }
-  it { should ensure_inclusion_of(:kind).in_array(Entity::KINDS) }
+  it { should validate_inclusion_of(:kind).in_array(Entity::KINDS) }
 
   context ".submitters" do
     it "returns only submitter types" do

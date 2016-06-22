@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe User do
+describe User, type: :model do
   it { should have_and_belong_to_many :roles }
 
   context "#has_role?" do

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RiskTrigger do
+describe RiskTrigger, type: :model do
   it "sees a risky notice as risky" do
     notice = double("Notice", country_code: 'Spain', body: "nonempty", submitter: nil)
 

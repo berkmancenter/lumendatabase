@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe EntityNoticeRole do
+describe EntityNoticeRole, type: :model do
   it { should belong_to :entity }
   it { should belong_to :notice }
 
@@ -14,7 +14,7 @@ describe EntityNoticeRole do
 
   it { should have_db_index :entity_id }
   it { should have_db_index :notice_id }
-  it { should ensure_inclusion_of(:name).in_array(EntityNoticeRole::ROLES) }
+  it { should validate_inclusion_of(:name).in_array(EntityNoticeRole::ROLES) }
 
   EntityNoticeRole::ROLES.each do |role|
     context "getting #{role} instances" do

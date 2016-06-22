@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe NoticeImportError do
+describe NoticeImportError, type: :model do
   it { should validate_length_of(:file_list).is_at_most(2.kilobytes) }
   it { should validate_length_of(:message).is_at_most(16.kilobytes) }
   it { should validate_length_of(:stacktrace).is_at_most(2.kilobytes) }

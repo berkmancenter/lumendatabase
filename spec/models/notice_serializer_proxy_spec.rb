@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe NoticeSerializerProxy do
+describe NoticeSerializerProxy, type: :model do
 
   it "uses the instance's serializer when present" do
     trademark = build_stubbed(:trademark)

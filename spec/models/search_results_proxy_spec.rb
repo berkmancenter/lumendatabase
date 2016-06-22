@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe SearchResultsProxy do
+describe SearchResultsProxy, type: :model do
   it 'proxies notice results to NoticeSearchResult' do
     notice = build_stubbed(:dmca)
     attributes = with_metadata(notice).merge('class_name' => 'notice')

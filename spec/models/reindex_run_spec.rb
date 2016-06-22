@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ReindexRun do
+describe ReindexRun, type: :model do
 
   it "tracks run information when no exceptions are thrown" do
     reindex_run = build(:reindex_run)

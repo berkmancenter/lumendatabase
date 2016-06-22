@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RiskAssessment do
+describe RiskAssessment, type: :model do
   it "returns true if any trigger triggers" do
     triggers = [
       trigger_1 = double("Trigger 1"),

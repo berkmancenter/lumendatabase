@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe SubmitNotice do
+describe SubmitNotice, type: :model do
   context "#notice" do
     it "returns a memoized instance" do
       notice = DMCA.new

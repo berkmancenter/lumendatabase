@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe CounterNotice do
+RSpec.describe CounterNotice, type: :model do
   it { should validate_presence_of :attach_list_of_works }
   it { should validate_presence_of :list_removed_in_error }
   it { should validate_presence_of :perjury_risk_acknowledged }

@@ -1,14 +1,14 @@
 require 'spec_helper'
 
-describe DMCA do
+describe DMCA, type: :model do
   before do
     @notice_topics = create_list(:notice_topic, 8)
   end
 
   it { should validate_presence_of :works }
   it { should validate_presence_of :entity_notice_roles }
-  it { should ensure_inclusion_of(:language).in_array(Language.codes) }
-  it { should ensure_inclusion_of(:action_taken).in_array(DMCA::VALID_ACTIONS).allow_blank }
+  it { should validate_inclusion_of(:language).in_array(Language.codes) }
+  it { should validate_inclusion_of(:action_taken).in_array(DMCA::VALID_ACTIONS).allow_blank }
 
   context 'automatic validations' do
     it { should validate_length_of(:title).is_at_most(255) }

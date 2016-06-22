@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Work do
+describe Work, type: :model do
   it { should have_and_belong_to_many :notices }
   it { should have_and_belong_to_many :infringing_urls }
   it { should have_and_belong_to_many :copyrighted_urls }

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe TermSearch do
+describe TermSearch, type: :model do
 
   before do
     @term_search = described_class.new(:term, :_all)

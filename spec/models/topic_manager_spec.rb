@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe TopicManager do
+describe TopicManager, type: :model do
   context 'automatic validations' do
     it { should validate_presence_of :name }
     it { should validate_length_of(:name).is_at_most(255) }
