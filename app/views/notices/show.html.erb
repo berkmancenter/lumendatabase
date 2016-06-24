@@ -90,8 +90,13 @@
                   <span>Supporting <%= document.file_type %> #<%= @notice.original_documents.index(document) + 1 %></span>
                   <span class="download">Request Document</span>
                 <% end %>
-              <% end %>
-            </li>
+              </li>
+            <% elsif document.pdf_requested? %>
+              <li class="<%= document.file_type.downcase %>">
+                <span>Supporting <%= document.file_type %> #<%= @notice.original_documents.index(document) + 1 %></span>
+                <span class="download">Document Requested. Check back in 7 days.</span>
+              </li>
+            <% end %>
           <% end %>
         </ol>
       </section>
