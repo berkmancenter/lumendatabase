@@ -61,8 +61,8 @@ describe Ingestor::Legacy::AttributeMapper do
     expect(attributes[:updated_at]).to eq hash['alter_date']
     expect(attributes[:date_sent]).to eq hash['Date']
     expect(attributes[:date_received]).to eq hash['Date']
-    expect(attributes[:rescinded]).to be_false
-    expect(attributes[:hidden]).to be_false
+    expect(attributes[:rescinded]).to be false
+    expect(attributes[:hidden]).to be false
     expect(attributes[:mark_registration_number]).to be_empty
   end
 
@@ -405,25 +405,25 @@ contact_email_noprefill: info.antipiracy@dtecnet.com|,
     it "marks a notice as rescinded if Readlevel is 10" do
       attributes = described_class.new("Readlevel" => "10").mapped
 
-      expect(attributes[:rescinded]).to be_true
+      expect(attributes[:rescinded]).to be true
     end
 
     it "marks a notice as hidden if Readlevel is 8" do
       attributes = described_class.new("Readlevel" => "8").mapped
 
-      expect(attributes[:hidden]).to be_true
+      expect(attributes[:hidden]).to be true
     end
 
     it "marks a notice as hidden if Readlevel is 3" do
       attributes = described_class.new("Readlevel" => "3").mapped
 
-      expect(attributes[:hidden]).to be_true
+      expect(attributes[:hidden]).to be true
     end
 
     it "also handles integer Readlevels" do
       attributes = described_class.new("Readlevel" => 3).mapped
 
-      expect(attributes[:hidden]).to be_true
+      expect(attributes[:hidden]).to be true
     end
   end
 
