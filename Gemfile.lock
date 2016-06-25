@@ -298,6 +298,8 @@ GEM
       railties (>= 4.2.0, < 5.1)
     rest-client (1.6.7)
       mime-types (>= 1.16)
+    rspec-collection_matchers (1.1.2)
+      rspec-expectations (>= 2.99.0.beta1)
     rspec-core (3.4.4)
       rspec-support (~> 3.4.0)
     rspec-expectations (3.4.0)
@@ -445,6 +447,7 @@ DEPENDENCIES
   rb-inotify
   recipient_interceptor
   redcarpet (~> 2.3.0)
+  rspec-collection_matchers (~> 1.1, >= 1.1.2)
   rspec-rails
   ruby-prof
   ruby-progressbar

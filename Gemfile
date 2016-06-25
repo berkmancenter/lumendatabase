@@ -62,6 +62,7 @@ group :development, :test do
   gem 'pry-rails'
   gem 'ruby-prof'
   gem 'unicorn'
+  gem 'rspec-collection_matchers', '~> 1.1', '>= 1.1.2'
   
 end
 
