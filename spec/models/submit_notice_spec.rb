@@ -103,7 +103,7 @@ describe SubmitNotice, type: :model do
 
       ret = SubmitNotice.new(DMCA, {}).submit
 
-      expect(ret).to be_true
+      expect(ret).to be_truthy
     end
 
     it 'copies id to submission_id' do
@@ -121,7 +121,7 @@ describe SubmitNotice, type: :model do
 
       ret = SubmitNotice.new(DMCA, {}).submit
 
-      expect(ret).to be_false
+      expect(ret).to be_falsey
     end
 
   end
