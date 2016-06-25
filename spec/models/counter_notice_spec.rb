@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe CounterNotice, type: :model do
   it { should validate_presence_of :attach_list_of_works }
@@ -11,13 +11,13 @@ RSpec.describe CounterNotice, type: :model do
     it "knows when it's in the US" do
       counter_notice = build(:counter_notice, :in_us)
 
-      expect(counter_notice.in_us?).to be_true
+      expect(counter_notice.in_us?).to be_truthy
     end
 
     it "knows when it's outside the US" do
       counter_notice = build(:counter_notice, :outside_us)
 
-      expect(counter_notice.in_us?).to be_false
+      expect(counter_notice.in_us?).to be_falsey
     end
   end
 
