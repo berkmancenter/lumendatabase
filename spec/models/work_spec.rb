@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe Work, type: :model do
+RSpec.describe Work, type: :model do
   it { should have_and_belong_to_many :notices }
   it { should have_and_belong_to_many :infringing_urls }
   it { should have_and_belong_to_many :copyrighted_urls }
@@ -13,7 +13,7 @@ describe Work, type: :model do
     it "provides an unknown work" do
       work = Work.unknown
 
-      expect(work.kind).to eq :unknown
+      expect(work.kind).to eq 'unknown'
       expect(work.description).to eq Work::UNKNOWN_WORK_DESCRIPTION
     end
 

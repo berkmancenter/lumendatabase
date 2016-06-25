@@ -51,7 +51,7 @@ class Work < ActiveRecord::Base
 
   def self.unknown
     @unknown ||= find_or_create!(
-      kind: :unknown, description: UNKNOWN_WORK_DESCRIPTION
+      kind: 'unknown', description: UNKNOWN_WORK_DESCRIPTION
     )
   end
 
