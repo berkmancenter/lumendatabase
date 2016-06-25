@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 feature "Redactable fields" do
   Notice::REDACTABLE_FIELDS.each do |field|
