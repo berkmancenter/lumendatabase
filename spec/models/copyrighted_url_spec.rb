@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe CopyrightedUrl, type: :model do
+RSpec.describe CopyrightedUrl, type: :model do
   it { should_not have_db_index(:url).unique(true) }
   it { should have_db_index(:url_original).unique(true) }
 
