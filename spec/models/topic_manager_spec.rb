@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe TopicManager, type: :model do
   context 'automatic validations' do
