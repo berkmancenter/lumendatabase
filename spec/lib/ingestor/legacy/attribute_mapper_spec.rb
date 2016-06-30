@@ -61,8 +61,8 @@ describe Ingestor::Legacy::AttributeMapper do
     expect(attributes[:updated_at]).to eq hash['alter_date']
     expect(attributes[:date_sent]).to eq hash['Date']
     expect(attributes[:date_received]).to eq hash['Date']
-    expect(attributes[:rescinded]).to be false
-    expect(attributes[:hidden]).to be false
+    expect(attributes[:rescinded]).to be_falsey
+    expect(attributes[:hidden]).to be_falsey
     expect(attributes[:mark_registration_number]).to be_empty
   end
 
