@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe NoticeSerializer do
   it_behaves_like 'a serialized notice with base metadata'

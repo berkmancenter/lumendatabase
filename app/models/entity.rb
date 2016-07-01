@@ -12,6 +12,8 @@ class Entity < ActiveRecord::Base
   PER_PAGE = 10
   HIGHLIGHTS = %i(name)
 
+  validates :address_line_1, length: { maximum: 255 }
+
   belongs_to :user
   has_many :entity_notice_roles, dependent: :destroy
   has_many :notices, through: :entity_notice_roles

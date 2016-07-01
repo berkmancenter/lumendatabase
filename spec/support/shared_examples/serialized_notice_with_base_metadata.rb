@@ -1,3 +1,5 @@
+require 'rails_helper'
+
 shared_examples 'a serialized notice with base metadata' do |factory_name|
 
   factory_name ||= :dmca
