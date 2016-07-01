@@ -63,6 +63,7 @@ group :development, :test do
   gem 'ruby-prof'
   gem 'unicorn'
   gem 'rspec-collection_matchers', '~> 1.1', '>= 1.1.2'
+  gem 'pry-byebug'
 end
 
 group :test do
