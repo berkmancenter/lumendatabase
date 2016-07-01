@@ -46,7 +46,7 @@ fi
 
 start_elasticsearch
 
-bundle exec rake db:schema:load db:seed db:test:prepare
+bundle exec rake db:migrate db:seed db:test:prepare
 
 stop_elasticsearch
 
