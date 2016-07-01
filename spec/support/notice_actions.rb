@@ -58,7 +58,3 @@ module NoticeActions
     end
   end
 end
-
-RSpec.configure do |config|
-  config.include NoticeActions, type: :request
-end

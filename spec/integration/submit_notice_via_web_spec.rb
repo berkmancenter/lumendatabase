@@ -1,4 +1,9 @@
 require 'spec_helper'
+require 'support/notice_actions'
+
+RSpec.configure do |config|
+  config.include NoticeActions
+end
 
 feature "notice submission" do
   scenario "submitting a notice" do
