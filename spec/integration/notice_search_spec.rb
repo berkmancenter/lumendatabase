@@ -1,8 +1,10 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'yaml'
+require 'support/contain_link'
 
 feature "Searching Notices" do
   include SearchHelpers
+  include ContainLink
 
   scenario "displays search terms", search: true do
     create(:dmca, title: "The Lion King on Youtube")
@@ -253,8 +255,8 @@ feature "Searching Notices" do
   end
 
   def create_notice_with_entities(title, sender_name, recipient_name)
-    sender = Entity.find_or_create_by_name(sender_name)
-    recipient = Entity.find_or_create_by_name(recipient_name)
+    sender = Entity.find_or_create_by(name: sender_name)
+    recipient = Entity.find_or_create_by(name: recipient_name)
 
     create(:dmca, title: title).tap do |notice|
       create(
