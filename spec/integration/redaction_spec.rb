@@ -1,6 +1,9 @@
 require 'rails_helper'
+require 'support/notice_actions'
 
 feature "Redactable fields" do
+  include NoticeActions
+  
   Notice::REDACTABLE_FIELDS.each do |field|
 
     scenario "#{field} is automatically redacted of phone numbers" do
