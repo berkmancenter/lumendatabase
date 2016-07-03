@@ -109,7 +109,7 @@ GEM
     concurrent-ruby (1.0.2)
     country_select (1.2.0)
     curb (0.8.4)
-    database_cleaner (1.0.1)
+    database_cleaner (1.5.3)
     date_validator (0.8.1)
       activemodel
     debug_inspector (0.0.2)
@@ -424,7 +424,7 @@ DEPENDENCIES
   coffee-rails
   country_select
   curb
-  database_cleaner
+  database_cleaner (~> 1.5, >= 1.5.3)
   date_validator
   devise
   dotenv-rails

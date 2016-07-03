@@ -69,7 +69,7 @@ end
 group :test do
   gem 'bourne', require: false
   gem 'capybara-webkit', '~> 1.0.0'
-  gem 'database_cleaner'
+  gem 'database_cleaner', '~> 1.5', '>= 1.5.3'
   gem 'launchy'
   gem 'shoulda-matchers', '~> 3.1', '>= 3.1.1'
   gem 'simplecov', require: false
