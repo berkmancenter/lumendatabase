@@ -10,6 +10,7 @@ class FileUpload < ActiveRecord::Base
   # attr_protected :id, as: :admin
 
   validates_inclusion_of :kind, in: %w( original supporting )
+  validates :kind, length: { maximum: 255 }
 
   belongs_to :notice
   has_attached_file :file,
