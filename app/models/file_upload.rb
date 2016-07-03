@@ -1,5 +1,4 @@
 require 'validates_automatically'
-require 'rails_helper'
 
 class FileUpload < ActiveRecord::Base
   include ValidatesAutomatically
