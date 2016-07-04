@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'notices/search/index.html.erb' do
   it "display the results" do
@@ -109,11 +109,11 @@ describe 'notices/search/index.html.erb' do
 
   def mock_searcher(notices, options = {})
     results = notices.map { |notice| as_tire_result(notice, options) }
-    results.stub(:total_entries, results.length)
-    results.stub(:total_pages).and_return(1)
-    results.stub(:facets).and_return(facet_data)
-    results.stub(:current_page).and_return(1)
-    results.stub(:limit_value).and_return(1)
+    allow(results).to receive(:total_entries).and_return(results.length)
+    allow(results).to receive(:total_pages).and_return(1)
+    allow(results).to receive(:facets).and_return(facet_data)
+    allow(results).to receive(:current_page).and_return(1)
+    allow(results).to receive(:limit_value).and_return(1)
 
     search_results = double('results double')
     search_results.stub(:results).and_return(results)
