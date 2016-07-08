@@ -578,4 +578,24 @@ where works.id in (
 )
     }
   end
+
+  desc 'Fix Google Defamation notices in Redact Queue'
+  task fix_google_redact_queue_notices: :environment do
+    notices = Notice.where(title: 'Legal Complaint to Google',
+                           type: 'Other',
+                           hidden: true)
+    notices.each do |notice|
+      notice.body = notice.body_original[/(?:country\.)(.+)/, 1]
+      notice.auto_redact
+      notice.save!
+    end
+    notices.update_all(review_required: false)
+    notices.update_all(hidden: false)
+  end
+
+  desc 'Remove Google API Defamation complaints from Redact Queue'
+  task remove_google_api_redact_queue_notices: :environment do
+    Notice.where(title: 'Defamation Complaint to Google', review_required: true)
+          .update_all(review_required: false)
+  end
 end
