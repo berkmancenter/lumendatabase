@@ -1,6 +1,9 @@
 require 'rails_helper'
+require 'support/contain_link'
 
 feature "User authorization" do
+  include ContainLink
+  
   scenario "A non logged-in user is redirected to sign in" do
     user = AdminOnPage.new(create(:user))
 
