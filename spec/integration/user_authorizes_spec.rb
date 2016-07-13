@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 feature "User authorization" do
   scenario "A non logged-in user is redirected to sign in" do

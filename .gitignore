@@ -26,4 +26,3 @@ tags
 vendor/bundler_gems
 config/database.yml
 .idea/*
-config/secrets.yml
