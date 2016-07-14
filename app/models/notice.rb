@@ -24,6 +24,7 @@ class Notice < ActiveRecord::Base
     TermSearch.new(:principal_name, :principal_name, 'Principal Name'),
     TermSearch.new(:recipient_name, :recipient_name, 'Recipient Name'),
     TermSearch.new(:submitter_name, :submitter_name, 'Submitter Name'),
+    TermSearch.new(:submitter_country_code, :submitter_country_code, 'Submitter Country'),
     TermSearch.new(:works, 'works.description', 'Works Descriptions'),
     TermSearch.new(:action_taken, :action_taken, 'Action taken'),
   ]
