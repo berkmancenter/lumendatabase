@@ -144,6 +144,12 @@ describe 'notices/search/index.html.erb' do
           { "term" => "Twitter", "count" => 27 }
         ]
       },
+      "submitter_country_code_facet" => {"terms" =>
+        [
+          { "term" => "US", "count" => 27 },
+          { "term" => "UK", "count" => 27 }
+        ]
+        },
       "recipient_name_facet" => { "terms" =>
         [
           { "term" => "Twitter", "count" => 10 },

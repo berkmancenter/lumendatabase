@@ -38,6 +38,7 @@ class Notice < ActiveRecord::Base
     TermFilter.new(:tag_list_facet, 'Tags'),
     TermFilter.new(:country_code_facet, 'Country'),
     TermFilter.new(:language_facet, 'Language'),
+    TermFilter.new(:submitter_country_code_facet, 'Submitter Country'),
     UnspecifiedTermFilter.new(:action_taken_facet, 'Action taken'),
     DateRangeFilter.new(:date_received_facet, :date_received, 'Date')
   ]
@@ -135,7 +136,7 @@ class Notice < ActiveRecord::Base
   delegate :country_code, to: :recipient, allow_nil: true
 
   %i( sender principal recipient submitter attorney ).each do |entity|
-    delegate :name, to: entity, prefix: true, allow_nil: true
+    delegate :name, :country_code, to: entity, prefix: true, allow_nil: true
   end
 
   after_create :set_published!, if: :submitter

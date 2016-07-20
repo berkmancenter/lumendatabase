@@ -33,7 +33,10 @@ module Searchability
         indexes :submitter_name_facet,
           analyzer: 'keyword', as: 'submitter_name',
           include_in_all: false
-        indexes :submitter_country_code, :as => Proc.new { submitter.country_code if submitter }
+        indexes :submitter_country_code, as: 'submitter_country_code'
+        indexes :submitter_country_code_facet,
+          analyzer: 'keyword', as: 'submitter_country_code',
+          include_in_all: false
         indexes :tag_list_facet,
           analyzer: 'keyword', as: 'tag_list',
           include_in_all: false
