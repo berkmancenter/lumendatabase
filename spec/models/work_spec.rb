@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe Work, type: :model do
-  it { should have_and_belong_to_many :notices }
-  it { should have_and_belong_to_many :infringing_urls }
-  it { should have_and_belong_to_many :copyrighted_urls }
+  it { is_expected.to have_and_belong_to_many :notices }
+  it { is_expected.to have_and_belong_to_many :infringing_urls }
+  it { is_expected.to have_and_belong_to_many :copyrighted_urls }
 
   context 'automatic validations' do
-    it { should validate_length_of(:kind).is_at_most(255) }
+    it { is_expected.to validate_length_of(:kind).is_at_most(255) }
   end
 
   context '.unknown' do
@@ -84,7 +84,7 @@ RSpec.describe Work, type: :model do
     end
 
     it "does not auto classify if kind is set" do
-      DeterminesWorkKind.any_instance.should_not_receive(:kind)
+      expect_any_instance_of(DeterminesWorkKind).not_to receive(:kind)
       work = build(:work, kind: 'foo')
 
       work.save

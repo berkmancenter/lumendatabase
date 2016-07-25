@@ -1,11 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe CounterNotice, type: :model do
-  it { should validate_presence_of :attach_list_of_works }
-  it { should validate_presence_of :list_removed_in_error }
-  it { should validate_presence_of :perjury_risk_acknowledged }
-  it { should validate_presence_of :consent_to_be_served }
-  it { should validate_presence_of :jurisdiction }
+  it { is_expected.to validate_presence_of :attach_list_of_works }
+  it { is_expected.to validate_presence_of :list_removed_in_error }
+  it { is_expected.to validate_presence_of :perjury_risk_acknowledged }
+  it { is_expected.to validate_presence_of :consent_to_be_served }
+  it { is_expected.to validate_presence_of :jurisdiction }
 
   context "jurisdictions" do
     it "knows when it's in the US" do

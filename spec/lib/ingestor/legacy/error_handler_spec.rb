@@ -26,14 +26,14 @@ describe Ingestor::Legacy::ErrorHandler do
     end
 
     it "outputs the failure via its logger" do
-      Rails.logger.should_receive(:error).with('legacy import error original_notice_id: 1000, name: tNotice.csv, message: "(RuntimeError) Boom!: first"')
+      expect(Rails.logger).to receive(:error).with('legacy import error original_notice_id: 1000, name: tNotice.csv, message: "(RuntimeError) Boom!: first"')
       handler = described_class.new('tNotice.csv')
 
       handler.handle(csv_row, exception)
     end
 
     it "creates a relevant ImportError model instance" do
-      NoticeImportError.should_receive(:create!).with(
+      expect(NoticeImportError).to receive(:create!).with(
         original_notice_id: 1000,
         file_list: 'sub/original.txt,sub/original.html',
         message: 'Boom!',
@@ -56,7 +56,7 @@ describe Ingestor::Legacy::ErrorHandler do
 
     def exception
       RuntimeError.new("Boom!").tap do |ex|
-        ex.stub(:backtrace).and_return(%w( first second third ))
+        allow(ex).to receive(:backtrace).and_return(%w( first second third ))
       end
     end
   end

@@ -23,7 +23,7 @@ describe NoticeSerializer do
 
   it 'includes a score attribute when the model responds to _score' do
     notice = build_notice
-    notice.stub(:_score).and_return(2)
+    allow(notice).to receive(:_score).and_return(2)
     serializer = NoticeSerializer.new(notice)
 
     score = serializer.as_json[:notice][:score]

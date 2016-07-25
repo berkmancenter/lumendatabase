@@ -2,20 +2,20 @@ require 'rails_helper'
 require 'spec_helper'
 
 describe EntityNoticeRole, type: :model do
-  it { should belong_to :entity }
-  it { should belong_to :notice }
+  it { is_expected.to belong_to :entity }
+  it { is_expected.to belong_to :notice }
 
   context 'automatic validations' do
-    it { should validate_presence_of :name }
-    it { should validate_length_of(:name).is_at_most(255) }
+    it { is_expected.to validate_presence_of :name }
+    it { is_expected.to validate_length_of(:name).is_at_most(255) }
   end
 
-  it { should validate_presence_of :entity }
-  it { should validate_presence_of :notice }
+  it { is_expected.to validate_presence_of :entity }
+  it { is_expected.to validate_presence_of :notice }
 
-  it { should have_db_index :entity_id }
-  it { should have_db_index :notice_id }
-  it { should validate_inclusion_of(:name).in_array(EntityNoticeRole::ROLES) }
+  it { is_expected.to have_db_index :entity_id }
+  it { is_expected.to have_db_index :notice_id }
+  it { is_expected.to validate_inclusion_of(:name).in_array(EntityNoticeRole::ROLES) }
 
   EntityNoticeRole::ROLES.each do |role|
     context "getting #{role} instances" do

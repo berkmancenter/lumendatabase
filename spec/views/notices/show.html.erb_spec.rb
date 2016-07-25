@@ -4,7 +4,7 @@ describe 'notices/show.html.erb' do
   before do
     @ability = Object.new
     @ability.extend(CanCan::Ability)
-    view.controller.stub(:current_ability) { @ability }
+    allow(view.controller).to receive(:current_ability) { @ability }
   end
 
   it "displays a metadata from a notice" do
@@ -18,7 +18,7 @@ describe 'notices/show.html.erb' do
 
   it "displays the date sent in the proper format" do
     notice = build(:dmca, date_sent: Time.local(2013, 5, 4))
-    notice.stub(:sender).and_return(build(:entity))
+    allow(notice).to receive(:sender).and_return(build(:entity))
     assign(:notice, notice)
 
     render
@@ -28,7 +28,7 @@ describe 'notices/show.html.erb' do
 
   it "displays the date received in the proper format" do
     notice = build(:dmca, date_received: Time.local(2013, 6, 5))
-    notice.stub(:recipient).and_return(build(:entity))
+    allow(notice).to receive(:recipient).and_return(build(:entity))
     assign(:notice, notice)
 
     render
@@ -110,7 +110,7 @@ describe 'notices/show.html.erb' do
   context "showing Principal" do
     it "displays the name as 'on behalf of principal' when differing" do
       notice = create(:dmca, role_names: %w( sender principal ))
-      notice.stub(:on_behalf_of_principal?).and_return(true)
+      allow(notice).to receive(:on_behalf_of_principal?).and_return(true)
       assign(:notice, notice)
 
       render
@@ -123,7 +123,7 @@ describe 'notices/show.html.erb' do
 
     it "does not display if not different" do
       notice = create(:dmca, role_names: %w( sender principal ))
-      notice.stub(:on_behalf_of_principal?).and_return(false)
+      allow(notice).to receive(:on_behalf_of_principal?).and_return(false)
       assign(:notice, notice)
 
       render
@@ -216,7 +216,7 @@ describe 'notices/show.html.erb' do
   it "displays limited related blog entries" do
     blog_entries = build_stubbed_list(:blog_entry, 3)
     notice = build(:dmca)
-    notice.stub(:related_blog_entries).and_return(blog_entries)
+    allow(notice).to receive(:related_blog_entries).and_return(blog_entries)
     assign(:notice, notice)
 
     render

@@ -5,7 +5,7 @@ describe 'rails_admin/application/redact_queue.html.erb' do
     # in the view spec context, the default url for the form_tag is not
     # a valid route for some reason. there's no testable behavior there
     # anyway, so we'll just stub it out.
-    view.stub(:form_tag).and_yield
+    allow(view).to receive(:form_tag).and_yield
 
     assign(:refill, double(each_input: nil))
     assign(:objects, [])

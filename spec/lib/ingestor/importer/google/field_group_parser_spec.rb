@@ -30,7 +30,7 @@ Track Name: Flipy The Bear")
 
   def parser
     described_class.new(
-      stub("FieldGroup", key: 0, content: field_group_content)
+      double("FieldGroup", key: 0, content: field_group_content)
     )
   end
 

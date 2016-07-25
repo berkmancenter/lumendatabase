@@ -4,7 +4,7 @@ describe NoticesController do
   context "#show" do
     it "finds the notice by ID" do
       notice = Notice.new
-      Notice.should_receive(:find).with('42').and_return(notice)
+      expect(Notice).to receive(:find).with('42').and_return(notice)
 
       get :show, id: 42
 
@@ -37,7 +37,7 @@ describe NoticesController do
           notice = stub_find_notice(model_class.new)
           serializer_class = model_class.active_model_serializer || NoticeSerializer
           serialized = serializer_class.new(notice)
-          serializer_class.should_receive(:new).
+          expect(serializer_class).to receive(:new).
             with(notice, anything).and_return(serialized)
 
           get :show, id: 1, format: :json
@@ -76,7 +76,7 @@ describe NoticesController do
 
     def stub_find_notice(notice = nil)
       notice ||= Notice.new
-      notice.tap { |n| Notice.stub(:find).and_return(n) }
+      notice.tap { |n| allow(Notice).to receive(:find).and_return(n) }
     end
   end
 
@@ -88,7 +88,7 @@ describe NoticesController do
       end
 
       it "initializes a DMCA by default from params" do
-        SubmitNotice.should_receive(:new).
+        expect(SubmitNotice).to receive(:new).
           with(DMCA, @notice_params).
           and_return(@submit_notice)
 
@@ -96,7 +96,7 @@ describe NoticesController do
       end
 
       it "uses the type param to instantiate the correct class" do
-        SubmitNotice.should_receive(:new).
+        expect(SubmitNotice).to receive(:new).
           with(Trademark, @notice_params).
           and_return(@submit_notice)
 
@@ -106,7 +106,7 @@ describe NoticesController do
       it "defaults to DMCA if the type is missing or invalid" do
         invalid_types = ['', 'FlimFlam', 'Object', 'User', 'Hash']
 
-        SubmitNotice.should_receive(:new).
+        expect(SubmitNotice).to receive(:new).
           exactly(5).times.
           with(DMCA, @notice_params).
           and_return(@submit_notice)
@@ -128,7 +128,7 @@ describe NoticesController do
 
       it "renders the new template when unsuccessful" do
         submit_notice = stub_submit_notice
-        submit_notice.stub(:submit).and_return(false)
+        allow(submit_notice).to receive(:submit).and_return(false)
 
         post_create
 
@@ -142,7 +142,7 @@ describe NoticesController do
         @ability = Object.new
         @ability.extend(CanCan::Ability)
         @ability.can(:submit, Notice)
-        controller.stub(:current_ability) { @ability }
+        allow(controller).to receive(:current_ability) { @ability }
       end
 
       it "returns unauthorized if one cannot submit" do
@@ -157,7 +157,7 @@ describe NoticesController do
       it "returns a proper Location header when saved successfully" do
         notice = build_stubbed(:dmca)
         submit_notice = stub_submit_notice
-        submit_notice.stub(:notice).and_return(notice)
+        allow(submit_notice).to receive(:notice).and_return(notice)
 
         post_create :json
 
@@ -167,7 +167,7 @@ describe NoticesController do
 
       it "returns a useful status code when there are errors" do
         submit_notice = stub_submit_notice
-        submit_notice.stub(:submit).and_return(false)
+        allow(submit_notice).to receive(:submit).and_return(false)
 
         post_create :json
 
@@ -176,8 +176,8 @@ describe NoticesController do
 
       it "includes any errors in the response" do
         submit_notice = stub_submit_notice
-        submit_notice.stub(:submit).and_return(false)
-        submit_notice.stub(:errors).and_return(
+        allow(submit_notice).to receive(:submit).and_return(false)
+        allow(submit_notice).to receive(:errors).and_return(
           mock_errors(submit_notice.notice, works: "can't be blank")
         )
 
@@ -192,8 +192,8 @@ describe NoticesController do
 
     def stub_submit_notice
       SubmitNotice.new(DMCA, {}).tap do |submit_notice|
-        submit_notice.stub(:submit).and_return(true)
-        SubmitNotice.stub(:new).and_return(submit_notice)
+        allow(submit_notice).to receive(:submit).and_return(true)
+        allow(SubmitNotice).to receive(:new).and_return(submit_notice)
       end
     end
 

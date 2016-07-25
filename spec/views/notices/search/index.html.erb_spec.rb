@@ -116,11 +116,11 @@ describe 'notices/search/index.html.erb' do
     allow(results).to receive(:limit_value).and_return(1)
 
     search_results = double('results double')
-    search_results.stub(:results).and_return(results)
+    allow(search_results).to receive(:results).and_return(results)
 
     searcher = double('searcher double')
-    searcher.stub(:search).and_return(search_results)
-    searcher.stub(:cache_key).and_return('asdfasdf')
+    allow(searcher).to receive(:search).and_return(search_results)
+    allow(searcher).to receive(:cache_key).and_return('asdfasdf')
     assign(:searcher, searcher)
   end
 
