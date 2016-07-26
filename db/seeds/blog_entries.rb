@@ -8,7 +8,7 @@ BlogEntry.create!(
   author: 'Adam Holland',
   title: 'Possibly The First Serious 512(f) Ruling in D. Mass',
   abstract: 'A Massachusetts court is hearing a case triggered by a DMCA takedown notice in which the sender admitted that they new the recipient had a fair use claim.',
-  published_at: Time.local(2013, 5, 13),
+  published_at: Time.zone.local(2013, 5, 13),
   topics: topics,
   content: %{
 Chilling Effects fans and those who follow takedown notice stories will

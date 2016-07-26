@@ -9,7 +9,7 @@ feature "Importing CSV" do
     )
     ingestor.logger.level = Logger::ERROR
     ingestor.import
-    binding.pry
+    # binding.pry
     (
       @primary_format_notice,
       @secondary_dmca_notice,

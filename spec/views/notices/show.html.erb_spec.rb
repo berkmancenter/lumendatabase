@@ -17,7 +17,7 @@ describe 'notices/show.html.erb' do
   end
 
   it "displays the date sent in the proper format" do
-    notice = build(:dmca, date_sent: Time.local(2013, 5, 4))
+    notice = build(:dmca, date_sent: Time.zone.local(2013, 5, 4))
     allow(notice).to receive(:sender).and_return(build(:entity))
     assign(:notice, notice)
 
@@ -27,7 +27,7 @@ describe 'notices/show.html.erb' do
   end
 
   it "displays the date received in the proper format" do
-    notice = build(:dmca, date_received: Time.local(2013, 6, 5))
+    notice = build(:dmca, date_received: Time.zone.local(2013, 6, 5))
     allow(notice).to receive(:recipient).and_return(build(:entity))
     assign(:notice, notice)
 

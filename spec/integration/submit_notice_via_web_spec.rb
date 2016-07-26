@@ -46,8 +46,8 @@ feature "notice submission" do
 
   scenario "submitting a notice with dates" do
     submit_recent_notice do
-      fill_in "Date sent", with: Time.local(2013, 5, 4)
-      fill_in "Date received", with: Time.local(2013, 5, 5)
+      fill_in "Date sent", with: Time.zone.local(2013, 5, 4)
+      fill_in "Date received", with: Time.zone.local(2013, 5, 5)
     end
 
     open_recent_notice
