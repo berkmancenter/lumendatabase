@@ -64,6 +64,7 @@ group :development, :test do
   gem 'unicorn'
   gem 'rspec-collection_matchers', '~> 1.1', '>= 1.1.2'
   gem 'pry-byebug'
+  gem 'pry', '~> 0.10.4'
 end
 
 group :test do

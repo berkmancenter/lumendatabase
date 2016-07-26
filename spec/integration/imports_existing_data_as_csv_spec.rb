@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'ingestor'
 
 feature "Importing CSV" do
@@ -9,6 +9,7 @@ feature "Importing CSV" do
     )
     ingestor.logger.level = Logger::ERROR
     ingestor.import
+    binding.pry
     (
       @primary_format_notice,
       @secondary_dmca_notice,
@@ -28,6 +29,7 @@ feature "Importing CSV" do
      @youtube_counterfeit_notice,
     ) = Trademark.order(:id)
   end
+
 
   after do
     FileUtils.rm_rf 'spec/support/example_files-failures/'
