@@ -5,15 +5,9 @@ class Entities::SearchController < ApplicationController
     @results = search.results
 
     respond_to do |format|
-      format.json do
-        render(
-          json: @results,
-          each_serializer: EntitySerializer,
-          serializer: ActiveModel::ArraySerializer,
-          root: 'entities',
-          meta: meta_hash_for(@results)
-        )
-      end
+      format.json { render json: @results, each_serializer: EntitySerializer, 
+        serializer: ActiveModel::ArraySerializer, root: 'entities', meta: meta_hash_for(@results) }
+      format.html { redirect_to root_path }
     end
   end
 
