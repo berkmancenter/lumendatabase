@@ -30,17 +30,11 @@ RSpec.describe Work, type: :model do
       existing_infringing_url = create(
         :infringing_url, url: 'http://www.example.com/infringe'
       )
-      duplicate_infringing_url = build(
-        :infringing_url, url: 'http://www.example.com/infringe'
-      )
-      new_infringing_url = build(
-        :infringing_url, url: 'http://example.com/new'
-      )
-
-      work = build(
-        :work,
-        infringing_urls: [duplicate_infringing_url, new_infringing_url]
-      )
+      params = { work: { description: 'Test', infringing_urls_attributes:
+        [{ url: 'http://www.example.com/infringe' },
+         { url: 'http://example.com/new' }] } }
+      work = Work.new(params[:work])
+      work.save
       work.save
 
       work.reload
@@ -55,17 +49,11 @@ RSpec.describe Work, type: :model do
       existing_copyrighted_url = create(
         :copyrighted_url, url: 'http://www.example.com/copyrighted'
       )
-      duplicate_copyrighted_url = build(
-        :copyrighted_url, url: 'http://www.example.com/copyrighted'
-      )
-      new_copyrighted_url = build(
-        :copyrighted_url, url: 'http://example.com/new'
-      )
 
-      work = build(
-        :work,
-        copyrighted_urls: [duplicate_copyrighted_url, new_copyrighted_url]
-      )
+      params = { work: { description: 'Test', copyrighted_urls_attributes:
+        [{ url: 'http://www.example.com/copyrighted' },
+         { url: 'http://example.com/new' }] } }
+      work = Work.new(params[:work])
       work.save
 
       work.reload
