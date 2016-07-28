@@ -9,7 +9,7 @@ feature "User authorization" do
 
     user.visit_admin
 
-    expect(user).to be_redirected_to_sign_in
+    expect(page).to have_text("You are not authorized to access this page.")
   end
 
   scenario "Submitters- cannot access admin" do
