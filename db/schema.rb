@@ -18,14 +18,14 @@ ActiveRecord::Schema.define(version: 20160618163529) do
 
   create_table "blog_entries", force: :cascade do |t|
     t.integer  "user_id"
-    t.string   "author",           limit: 255,                  null: false
-    t.string   "title",            limit: 255,                  null: false
+    t.string   "author",                                        null: false
+    t.string   "title",                                         null: false
     t.text     "abstract"
     t.text     "content"
     t.datetime "published_at"
-    t.datetime "created_at",                                    null: false
-    t.datetime "updated_at",                                    null: false
-    t.string   "image",            limit: 255
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "image"
     t.integer  "original_news_id"
     t.string   "url",              limit: 1024
     t.boolean  "archive",                       default: false
@@ -41,8 +41,8 @@ ActiveRecord::Schema.define(version: 20160618163529) do
 
   create_table "copyrighted_urls", force: :cascade do |t|
     t.string   "url_original", limit: 8192, null: false
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "url",          limit: 8192
   end
 
@@ -57,22 +57,22 @@ ActiveRecord::Schema.define(version: 20160618163529) do
   add_index "copyrighted_urls_works", ["work_id"], name: "index_copyrighted_urls_works_on_work_id", using: :btree
 
   create_table "entities", force: :cascade do |t|
-    t.string   "name",           limit: 255,                        null: false
-    t.string   "kind",           limit: 255, default: "individual", null: false
-    t.string   "address_line_1", limit: 255, default: ""
-    t.string   "address_line_2", limit: 255, default: ""
-    t.string   "state",          limit: 255, default: ""
-    t.string   "country_code",   limit: 255, default: ""
-    t.string   "phone",          limit: 255, default: ""
-    t.string   "email",          limit: 255, default: ""
-    t.string   "url",            limit: 255, default: ""
-    t.string   "ancestry",       limit: 255
-    t.string   "city",           limit: 255, default: ""
-    t.string   "zip",            limit: 255, default: ""
+    t.string   "name",                                  null: false
+    t.string   "kind",           default: "individual", null: false
+    t.string   "address_line_1", default: ""
+    t.string   "address_line_2", default: ""
+    t.string   "state",          default: ""
+    t.string   "country_code",   default: ""
+    t.string   "phone",          default: ""
+    t.string   "email",          default: ""
+    t.string   "url",            default: ""
+    t.string   "ancestry"
+    t.string   "city",           default: ""
+    t.string   "zip",            default: ""
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "name_original",  limit: 255
+    t.string   "name_original"
   end
 
   add_index "entities", ["address_line_1"], name: "index_entities_on_address_line_1", using: :btree
@@ -89,11 +89,11 @@ ActiveRecord::Schema.define(version: 20160618163529) do
   add_index "entities", ["zip"], name: "index_entities_on_zip", using: :btree
 
   create_table "entity_notice_roles", force: :cascade do |t|
-    t.integer  "entity_id",              null: false
-    t.integer  "notice_id",              null: false
-    t.string   "name",       limit: 255, null: false
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.integer  "entity_id",  null: false
+    t.integer  "notice_id",  null: false
+    t.string   "name",       null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "entity_notice_roles", ["entity_id"], name: "index_entity_notice_roles_on_entity_id", using: :btree
@@ -101,9 +101,9 @@ ActiveRecord::Schema.define(version: 20160618163529) do
 
   create_table "file_uploads", force: :cascade do |t|
     t.integer  "notice_id"
-    t.string   "kind",                  limit: 255
-    t.string   "file_file_name",        limit: 255
-    t.string   "file_content_type",     limit: 255
+    t.string   "kind"
+    t.string   "file_file_name"
+    t.string   "file_content_type"
     t.integer  "file_file_size"
     t.datetime "file_updated_at"
     t.boolean  "pdf_requested"
@@ -114,8 +114,8 @@ ActiveRecord::Schema.define(version: 20160618163529) do
 
   create_table "infringing_urls", force: :cascade do |t|
     t.string   "url_original", limit: 8192, null: false
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.string   "url",          limit: 8192
   end
 
@@ -135,35 +135,35 @@ ActiveRecord::Schema.define(version: 20160618163529) do
     t.string   "message",            limit: 16384
     t.string   "stacktrace",         limit: 2048
     t.string   "import_set_name",    limit: 1024
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "notices", force: :cascade do |t|
-    t.string   "title",                    limit: 255
+    t.string   "title"
     t.text     "body"
     t.datetime "date_received"
-    t.datetime "created_at",                                           null: false
-    t.datetime "updated_at",                                           null: false
-    t.string   "source",                   limit: 255
-    t.string   "subject",                  limit: 255
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "source"
+    t.string   "subject"
     t.boolean  "review_required"
     t.text     "body_original"
     t.datetime "date_sent"
     t.integer  "reviewer_id"
-    t.string   "language",                 limit: 255
-    t.boolean  "rescinded",                            default: false, null: false
-    t.string   "action_taken",             limit: 255
-    t.string   "type",                     limit: 255
+    t.string   "language"
+    t.boolean  "rescinded",                default: false, null: false
+    t.string   "action_taken"
+    t.string   "type"
     t.integer  "original_notice_id"
-    t.boolean  "spam",                                 default: false
-    t.boolean  "hidden",                               default: false
-    t.string   "request_type",             limit: 255
+    t.boolean  "spam",                     default: false
+    t.boolean  "hidden",                   default: false
+    t.string   "request_type"
     t.integer  "submission_id"
-    t.string   "mark_registration_number", limit: 255
-    t.boolean  "published",                            default: true,  null: false
+    t.string   "mark_registration_number"
+    t.boolean  "published",                default: true,  null: false
     t.integer  "url_count"
-    t.boolean  "webform",                              default: false
+    t.boolean  "webform",                  default: false
     t.text     "notes"
   end
 
@@ -190,13 +190,13 @@ ActiveRecord::Schema.define(version: 20160618163529) do
 
   create_table "rails_admin_histories", force: :cascade do |t|
     t.text     "message"
-    t.string   "username",   limit: 255
+    t.string   "username"
     t.integer  "item"
-    t.string   "table",      limit: 255
+    t.string   "table"
     t.integer  "month",      limit: 2
     t.integer  "year",       limit: 8
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "rails_admin_histories", ["item"], name: "index_rails_admin_histories_on_item", using: :btree
@@ -207,8 +207,8 @@ ActiveRecord::Schema.define(version: 20160618163529) do
   create_table "reindex_runs", force: :cascade do |t|
     t.integer  "entity_count", default: 0
     t.integer  "notice_count", default: 0
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "reindex_runs", ["created_at"], name: "index_reindex_runs_on_created_at", using: :btree
@@ -227,14 +227,14 @@ ActiveRecord::Schema.define(version: 20160618163529) do
   add_index "relevant_questions_topics", ["topic_id"], name: "index_relevant_questions_topics_on_topic_id", using: :btree
 
   create_table "risk_triggers", force: :cascade do |t|
-    t.string  "field",           limit: 255
-    t.string  "condition_field", limit: 255
-    t.string  "condition_value", limit: 255
+    t.string  "field"
+    t.string  "condition_field"
+    t.string  "condition_value"
     t.boolean "negated"
   end
 
   create_table "roles", force: :cascade do |t|
-    t.string "name", limit: 255, null: false
+    t.string "name", null: false
   end
 
   create_table "roles_users", force: :cascade do |t|
@@ -248,9 +248,9 @@ ActiveRecord::Schema.define(version: 20160618163529) do
   create_table "taggings", force: :cascade do |t|
     t.integer  "tag_id"
     t.integer  "taggable_id"
-    t.string   "taggable_type", limit: 255
+    t.string   "taggable_type"
     t.integer  "tagger_id"
-    t.string   "tagger_type",   limit: 255
+    t.string   "tagger_type"
     t.string   "context",       limit: 128
     t.datetime "created_at"
   end
@@ -259,8 +259,8 @@ ActiveRecord::Schema.define(version: 20160618163529) do
   add_index "taggings", ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context", using: :btree
 
   create_table "tags", force: :cascade do |t|
-    t.string  "name",           limit: 255
-    t.integer "taggings_count",             default: 0
+    t.string  "name"
+    t.integer "taggings_count", default: 0
   end
 
   add_index "tags", ["name"], name: "index_tags_on_name", unique: true, using: :btree
@@ -274,7 +274,7 @@ ActiveRecord::Schema.define(version: 20160618163529) do
   add_index "topic_assignments", ["topic_id"], name: "index_topics_notices_on_topic_id", using: :btree
 
   create_table "topic_managers", force: :cascade do |t|
-    t.string "name", limit: 255, null: false
+    t.string "name", null: false
   end
 
   create_table "topic_managers_topics", force: :cascade do |t|
@@ -286,23 +286,23 @@ ActiveRecord::Schema.define(version: 20160618163529) do
   add_index "topic_managers_topics", ["topic_manager_id"], name: "index_topic_managers_topics_on_topic_manager_id", using: :btree
 
   create_table "topics", force: :cascade do |t|
-    t.string  "name",                 limit: 255,              null: false
-    t.text    "description",                      default: ""
-    t.string  "ancestry",             limit: 255
+    t.string  "name",                              null: false
+    t.text    "description",          default: ""
+    t.string  "ancestry"
     t.integer "original_category_id"
   end
 
   add_index "topics", ["ancestry"], name: "index_topics_on_ancestry", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                  limit: 255, default: "", null: false
-    t.string   "encrypted_password",     limit: 255, default: "", null: false
-    t.string   "reset_password_token",   limit: 255
+    t.string   "email",                  default: "", null: false
+    t.string   "encrypted_password",     default: "", null: false
+    t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
-    t.string   "authentication_token",   limit: 255
-    t.datetime "created_at",                                      null: false
-    t.datetime "updated_at",                                      null: false
-    t.integer  "publication_delay",                  default: 0,  null: false
+    t.string   "authentication_token"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.integer  "publication_delay",      default: 0,  null: false
   end
 
   add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree
@@ -311,9 +311,9 @@ ActiveRecord::Schema.define(version: 20160618163529) do
 
   create_table "works", force: :cascade do |t|
     t.text     "description"
-    t.datetime "created_at",                       null: false
-    t.datetime "updated_at",                       null: false
-    t.string   "kind",                 limit: 255
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "kind"
     t.text     "description_original"
   end
 
