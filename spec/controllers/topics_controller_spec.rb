@@ -30,7 +30,7 @@ describe TopicsController do
     it "cannot be routed" do
       expect do
         get(:index, format: :html)
-      end.to raise_error(ActionController::RoutingError)
+      end.to raise_error(ActionController::UrlGenerationError)
     end
   end
 
