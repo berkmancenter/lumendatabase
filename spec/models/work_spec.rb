@@ -35,7 +35,6 @@ RSpec.describe Work, type: :model do
          { url: 'http://example.com/new' }] } }
       work = Work.new(params[:work])
       work.save
-      work.save
 
       work.reload
 
