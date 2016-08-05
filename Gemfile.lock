@@ -86,7 +86,7 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
-    capybara-webkit (1.0.0)
+    capybara-webkit (1.11.1)
       capybara (~> 2.0, >= 2.0.2)
       json
     childprocess (0.5.9)
@@ -416,7 +416,7 @@ DEPENDENCIES
   bourbon
   bourne
   cancan (~> 1.6.10)
-  capybara-webkit (~> 1.0.0)
+  capybara-webkit (~> 1.11.1)
   coffee-rails
   country_select
   curb
