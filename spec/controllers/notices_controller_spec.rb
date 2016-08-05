@@ -63,7 +63,54 @@ describe NoticesController do
 
       it "returns original URLs for a Notice if you are a researcher" do
         user = create(:user, roles: [Role.researcher])
-        notice = create(:dmca, :with_infringing_urls)
+        params = {
+          notice: {
+            title: "A title",
+            type: "DMCA",
+            subject: "Infringement Notfication via Blogger Complaint",
+            date_sent: "2013-05-22",
+            date_received: "2013-05-23",
+            works_attributes: [
+              {
+                description: "The Avengers",
+                infringing_urls_attributes: [
+                  { url: "http://youtube.com/bad_url_1" },
+                  { url: "http://youtube.com/bad_url_2" },
+                  { url: "http://youtube.com/bad_url_3" }
+                ]
+              }
+            ],
+            entity_notice_roles_attributes: [
+              {
+                name: "recipient",
+                entity_attributes: {
+                  name: "Google",
+                  kind: "organization",
+                  address_line_1: "1600 Amphitheatre Parkway",
+                  city: "Mountain View",
+                  state: "CA", 
+                  zip: "94043",
+                  country_code: "US"
+                }
+              },
+              {
+                name: "sender",
+                entity_attributes: {
+                  name: "Joe Lawyer",
+                  kind: "individual",
+                  address_line_1: "1234 Anystreet St.",
+                  city: "Anytown",
+                  state: "CA",
+                  zip: "94044",
+                  country_code: "US"
+                }
+              }
+            ]
+          }
+        }
+
+        notice = Notice.new(params[:notice])
+        notice.save
         stub_find_notice(notice)
 
         request.env['HTTP_AUTHENTICATION_TOKEN'] = user.authentication_token
