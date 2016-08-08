@@ -33,8 +33,8 @@ OriginalNoticeID,Question
 
     notice_1 = Notice.where(original_notice_id: 1).first
     notice_2 = Notice.where(original_notice_id: 2).first
-    expect(notice_1.size).to eq(1)
-    expect(notice_2.size).to eq(1)
+    expect(notice_1.relevant_questions.size).to eq(1)
+    expect(notice_2.relevant_questions.size).to eq(1)
   end
 
   it "does not clobber existing relevant questions" do
@@ -46,6 +46,6 @@ OriginalNoticeID,Question
 
     QuestionImporter.new(sample_file).import
 
-    expect(notice.reload.size).to eq(3)
+    expect(notice.reload.relevant_questions.size).to eq(3)
   end
 end
