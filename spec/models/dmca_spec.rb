@@ -343,7 +343,8 @@ describe DMCA, type: :model do
 
       notice = create(:dmca, file_uploads: file_uploads)
 
-      expect(notice.size).to eq(2)
+      expect(notice).to have(2).supporting_documents
+
       expect(notice.supporting_documents).to be_all { |d| d.kind == 'supporting' }
     end
   end
@@ -358,7 +359,8 @@ describe DMCA, type: :model do
 
       notice = create(:dmca, file_uploads: file_uploads)
 
-      expect(notice.size).to eq(2)
+      expect(notice).to have(2).original_documents
+      
       expect(notice.original_documents).to be_all { |d| d.kind == 'original' }
     end
   end
