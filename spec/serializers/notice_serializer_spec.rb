@@ -12,7 +12,8 @@ describe NoticeSerializer do
   %i|infringing_urls copyrighted_urls|.each do |url_relation|
     it "includes #{url_relation}" do
       with_a_serialized_notice do |notice, json|
-        relation_json = json[:works].first[url_relation].map{|u| u['url']}
+        binding.pry
+        relation_json = json[:works].first[url_relation.to_s].map{|u| u['url']}
         expect(relation_json).to eq(
           notice.works.first.send(url_relation).map(&:url)
         )
