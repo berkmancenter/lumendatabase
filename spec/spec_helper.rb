@@ -33,4 +33,4 @@ Spork.each_run do
   end
 end
 
-Capybara.javascript_driver = :webkit
+Capybara.javascript_driver = :selenium

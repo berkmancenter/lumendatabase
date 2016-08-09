@@ -75,6 +75,7 @@ group :test do
   gem 'shoulda-matchers', '~> 3.1', '>= 3.1.1'
   gem 'simplecov', require: false
   gem 'timecop'
+  gem 'selenium-webdriver'
   # gem 'guard-spork'
   gem 'guard-spork', '~> 2.1'
   gem 'rb-inotify', require: false

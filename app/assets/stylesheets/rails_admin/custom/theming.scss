@@ -80,3 +80,15 @@ aside#redaction-tools {
     width: 700px;
   }
 }
+
+.span3 {
+  @extend .col-md-3;
+}
+
+.span9 {
+  @extend .col-md-9;
+}
+
+body.rails_admin .sidebase-nav {
+  position: static;
+}
