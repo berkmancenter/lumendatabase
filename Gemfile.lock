@@ -426,7 +426,7 @@ DEPENDENCIES
   coffee-rails
   country_select
   curb
-  database_cleaner (~> 1.5, >= 1.5.3)
+  database_cleaner
   date_validator
   devise
   dotenv-rails
