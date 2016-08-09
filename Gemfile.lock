@@ -78,7 +78,7 @@ GEM
     buftok (0.2.0)
     builder (3.2.2)
     byebug (9.0.5)
-    cancan (1.6.10)
+    cancancan (1.15.0)
     capybara (2.7.1)
       addressable
       mime-types (>= 1.16)
@@ -421,7 +421,7 @@ DEPENDENCIES
   bootstrap-datepicker-rails
   bourbon
   bourne
-  cancan (~> 1.6.10)
+  cancancan
   capybara-webkit (~> 1.11.1)
   coffee-rails
   country_select

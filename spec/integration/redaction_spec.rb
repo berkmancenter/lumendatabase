@@ -64,14 +64,12 @@ feature "Redactable fields" do
 
       def visit_redact_notice
         user = create(:user, :admin)
-        # visit '/users/sign_in'
-        # fill_in "Email", with: user.email
-        # fill_in "Password", with: user.password
-        # click_on "Log in"
+        visit '/users/sign_in'
+        fill_in "Email", with: user.email
+        fill_in "Password", with: user.password
+        click_on "Log in"
 
         notice = create(:dmca, :redactable)
-
-        sign_in user
 
         visit "/admin/notice/#{notice.id}/redact_notice"
 
