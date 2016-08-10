@@ -2,7 +2,6 @@ class ApplicationController < ActionController::Base
   layout :layout_by_resource
 
   before_filter :authenticate_user_from_token!
-  before_filter :authenticate_user!
 
   rescue_from CanCan::AccessDenied do |ex|
     logger.warn "Unauthorized attempt to #{ex.action} #{ex.subject}"
