@@ -1,6 +1,9 @@
 class ApplicationController < ActionController::Base
   layout :layout_by_resource
 
+  before_filter :authenticate_user_from_token!
+  before_filter :authenticate_user!
+
   rescue_from CanCan::AccessDenied do |ex|
     logger.warn "Unauthorized attempt to #{ex.action} #{ex.subject}"
 
@@ -47,6 +50,14 @@ class ApplicationController < ActionController::Base
 
   def authenticate_via_token
     @current_user ||= User.find_by_authentication_token(authentication_token)
+  end
+
+  def authenticate_user_from_token!
+    user = authentication_token && User.find_by_authentication_token(authentication_token.to_s)
+
+    if user
+      sign_in user, store: false
+    end
   end
 
   def authentication_token
