@@ -47,10 +47,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def authenticate_via_token
-    @current_user ||= User.find_by_authentication_token(authentication_token)
-  end
-
   def authenticate_user_from_token!
     user = authentication_token && User.find_by_authentication_token(authentication_token.to_s)
 
