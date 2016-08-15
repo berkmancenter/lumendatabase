@@ -76,10 +76,7 @@ feature "notice submission" do
     open_recent_notice
 
     within('ol.attachments') do
-      click_on "Supporting Document"
-
-      # page.html is actually plain-text in this case
-      expect(page.html).to eq "Some supporting content"
+      expect(page).to have_link("Supporting Document")
     end
   end
 
