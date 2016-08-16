@@ -2,7 +2,7 @@ class LawEnforcementRequestSerializer < NoticeSerializer
   attributes :regulations, :request_type
 
   def regulations
-    object.regulation_list
+    object.regulation_list.map(&:name)
   end
 
   private
