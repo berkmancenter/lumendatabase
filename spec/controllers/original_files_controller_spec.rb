@@ -10,8 +10,8 @@ describe OriginalFilesController do
     end
 
     it "returns http success" do
-      File.stub(:file?).and_return(:true)
-      File.stub(:read).and_return('Content!')
+      allow(File).to receive(:file?).and_return(:true)
+      allow(File).to receive(:read).and_return('Content!')
       expect(response).to be_success
     end
   end

@@ -4,11 +4,11 @@ require 'blog_importer'
 describe BlogImporter do
 
   it "converts HTML to markdown via Html2Md " do
-    BlogEntry.stub(:create!).and_return(BlogEntry.new)
+    allow(BlogEntry).to receive(:create!).and_return(BlogEntry.new)
     blog_entry = attributes_for(:blog_entry, :with_abstract, :with_content)
 
     html2md = Html2Md.new('bupkis')
-    Html2Md.should_receive(:new).twice.and_return(html2md)
+    expect(Html2Md).to receive(:new).twice.and_return(html2md)
 
     with_csv_file_for(blog_entry) do |csv_file|
       importer = described_class.new(csv_file.path)

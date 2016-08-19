@@ -3,12 +3,12 @@ require 'spec_helper'
 describe Redaction::Queue do
   FAKE_QUEUE_MAX = 2
 
-  before { Redaction::Queue.stub(:queue_max).and_return(FAKE_QUEUE_MAX) }
+  before { allow(Redaction::Queue).to receive(:queue_max).and_return(FAKE_QUEUE_MAX) }
 
   context '#notices' do
     it "returns the notices in review with the user" do
       user = User.new
-      Notice.should_receive(:in_review).with(user).and_return(:some_notices)
+      expect(Notice).to receive(:in_review).with(user).and_return(:some_notices)
 
       queue = new_queue(user)
 
@@ -174,7 +174,7 @@ describe Redaction::Queue do
 
   def stub_notices_in_review(n)
     notices = Array.new(n) { Notice.new }
-    Notice.stub(:in_review).and_return(notices)
+    allow(Notice).to receive(:in_review).and_return(notices)
   end
 
   def new_queue(user = User.new)

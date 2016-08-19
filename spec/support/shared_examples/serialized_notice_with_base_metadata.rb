@@ -1,3 +1,5 @@
+require 'rails_helper'
+
 shared_examples 'a serialized notice with base metadata' do |factory_name|
 
   factory_name ||= :dmca
@@ -38,15 +40,15 @@ end
 
 def build_notice(factory_name = :dmca)
   build(factory_name).tap do|notice|
-    notice.stub(:recipient_name).and_return('recipient name')
-    notice.stub(:sender_name).and_return('sender name')
-    notice.stub(:tag_list).and_return(['foo', 'bar'])
-    notice.stub(:jurisdiction_list).and_return(['US', 'CA'])
-    notice.stub(:language).and_return('en')
-    notice.stub(:topics).and_return(
+    allow(notice).to receive(:recipient_name).and_return('recipient name')
+    allow(notice).to receive(:sender_name).and_return('sender name')
+    allow(notice).to receive(:tag_list).and_return(['foo', 'bar'])
+    allow(notice).to receive(:jurisdiction_list).and_return(['US', 'CA'])
+    allow(notice).to receive(:language).and_return('en')
+    allow(notice).to receive(:topics).and_return(
       build_list(:topic, 2)
     )
-    notice.stub(:works).and_return(
+    allow(notice).to receive(:works).and_return(
       build_list(:work, 3, :with_infringing_urls, :with_copyrighted_urls)
     )
   end

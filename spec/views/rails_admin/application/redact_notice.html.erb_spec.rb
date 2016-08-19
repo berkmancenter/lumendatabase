@@ -12,12 +12,12 @@ describe 'rails_admin/application/redact_notice.html.erb' do
 
     @ability = Object.new
     @ability.extend(CanCan::Ability)
-    controller.stub(:current_ability) { @ability }
+    allow(controller).to receive(:current_ability) { @ability }
   end
 
   it 'displays elapsed time in queue' do
     notice = build_stubbed(:dmca)
-    notice.stub(:created_at).and_return(2.hours.ago)
+    allow(notice).to receive(:created_at).and_return(2.hours.ago)
     assign(:object, notice)
 
     render

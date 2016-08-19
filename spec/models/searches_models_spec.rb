@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe SearchesModels do
+describe SearchesModels, type: :model do
   context 'visible_qualifiers' do
     it "delegates to the @model_class" do
       expected = { expected_key: :expected_value }
-      FakeModel.stub(:visible_qualifiers).and_return(expected)
+      allow(FakeModel).to receive(:visible_qualifiers).and_return(expected)
       expect(described_class.new({}, FakeModel).visible_qualifiers).to eq(expected)
     end
 
@@ -23,7 +23,7 @@ describe SearchesModels do
   end
 
   it "finds the index_name from the model_class" do
-    FakeModel.should_receive(:index_name)
+    expect(FakeModel).to receive(:index_name)
 
     searcher = described_class.new({foo: 'bar'}, FakeModel)
     searcher.search
@@ -48,7 +48,7 @@ describe SearchesModels do
       searcher = described_class.new(params_hash)
       searcher.register filter
 
-      filter.should_receive(:filter_for).with(params_hash[:title]).and_return(
+      expect(filter).to receive(:filter_for).with(params_hash[:title]).and_return(
         [ bleep: { foo: ['as'] } ]
       )
       searcher.search
@@ -57,7 +57,7 @@ describe SearchesModels do
 
   context '.cache_key' do
     it "uses md5 hashing for uniqueness" do
-      Digest::MD5.should_receive(:hexdigest)
+      expect(Digest::MD5).to receive(:hexdigest)
       searcher = described_class.new
       searcher.cache_key
     end
@@ -76,7 +76,7 @@ describe SearchesModels do
       searcher = described_class.new(params_hash)
       searcher.register all_fields
 
-      all_fields.should_receive(:query_for).with(params_hash[:term], nil)
+      expect(all_fields).to receive(:query_for).with(params_hash[:term], nil)
 
       searcher.search
     end
@@ -87,7 +87,7 @@ describe SearchesModels do
       searcher = described_class.new(modified_params_hash)
       searcher.register all_fields
 
-      all_fields.should_receive(:query_for).with(params_hash[:term], 'AND')
+      expect(all_fields).to receive(:query_for).with(params_hash[:term], 'AND')
       searcher.search
     end
   end

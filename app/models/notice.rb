@@ -5,7 +5,7 @@ require 'validates_automatically'
 class Notice < ActiveRecord::Base
   include Tire::Model::Search
   include Searchability
-  include ValidatesAutomatically
+  # include ValidatesAutomatically
 
   extend RecentScope
 
@@ -77,14 +77,11 @@ class Notice < ActiveRecord::Base
 
   belongs_to :reviewer, class_name: 'User'
 
-  has_many :topic_assignments, dependent: :destroy, include: [ :topic ]
+  has_many :topic_assignments, dependent: :destroy
   has_many :topics, through: :topic_assignments
-  has_many :topic_relevant_questions,
-    through: :topics, source: :relevant_questions
-  has_many :related_blog_entries,
-    through: :topics, source: :blog_entries, uniq: true
-  has_many :entity_notice_roles, dependent: :destroy, inverse_of: :notice,
-    include: [ :entity ]
+  has_many :topic_relevant_questions, through: :topics, source: :relevant_questions
+  has_many :related_blog_entries, -> { distinct }, through: :topics, source: :blog_entries
+  has_many :entity_notice_roles, dependent: :destroy, inverse_of: :notice
   has_many :entities, through: :entity_notice_roles
   has_many :file_uploads
   has_many :infringing_urls, through: :works
@@ -100,8 +97,8 @@ class Notice < ActiveRecord::Base
   validates :date_received, date: { after: Proc.new { Date.new(1998,10,28) }, before: Proc.new { Time.now + 1.day }, allow_blank: true }
 
   # Using reset_type because type is ALWAYS protected (deep in the Rails code).
-  attr_protected :id, :type, :reset_type
-  attr_protected :id, :type, as: :admin
+  # attr_protected :id, :type, :reset_type
+  # attr_protected :id, :type, as: :admin
 
   def reset_type
     type
@@ -323,7 +320,7 @@ class Notice < ActiveRecord::Base
   
   def notice_topic_map
     topic = TYPES_TO_TOPICS.key?(self.type) ? TYPES_TO_TOPICS[self.type] : OTHER_TOPIC
-    return Topic.find_or_create_by_name(topic) 
+    return Topic.find_or_create_by(name: topic)
   end
 
   def hide_identities?

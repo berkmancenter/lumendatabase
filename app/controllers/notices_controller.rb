@@ -1,8 +1,6 @@
 class NoticesController < ApplicationController
   layout :resolve_layout
 
-  before_filter :authenticate_via_token, only: :create
-
   def new
     if params[:type].blank?
       render :select_type and return

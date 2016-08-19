@@ -11,6 +11,7 @@ class Work < ActiveRecord::Base
 
   accepts_nested_attributes_for :infringing_urls, :copyrighted_urls, :reject_if => proc { |attributes| attributes['url'].blank? }
   validates_associated :infringing_urls, :copyrighted_urls
+  validates :kind, length: { maximum: 255 }
 
   # Similar to the hack in EntityNoticeRole, because all validations are
   # run before all inserts, we have to save to ensure we don't have the
@@ -51,7 +52,7 @@ class Work < ActiveRecord::Base
 
   def self.unknown
     @unknown ||= find_or_create!(
-      kind: :unknown, description: UNKNOWN_WORK_DESCRIPTION
+      kind: 'unknown', description: UNKNOWN_WORK_DESCRIPTION
     )
   end
 

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe BlogEntriesController do
 
@@ -6,9 +6,9 @@ describe BlogEntriesController do
     it "paginates the 'published' scope on BlogEntry" do
       blog_entries = []
       per_double = double('per', per: blog_entries)
-      BlogEntry.stub_chain(:published,:with_content,:page).
+      allow(BlogEntry).to receive_message_chain(:published,:with_content,:page).
         with('2').and_return(per_double)
-      BlogEntry.stub_chain(:published,:we_are_reading,:limit).and_return([])
+      allow(BlogEntry).to receive_message_chain(:published,:we_are_reading,:limit).and_return([])
 
       get :index, page: 2
 
@@ -17,10 +17,10 @@ describe BlogEntriesController do
     end
 
     it "includes we_are_reading blog entries" do
-      BlogEntry.stub_chain(:published,:with_content,:page, :per).and_return([])
+      allow(BlogEntry).to receive_message_chain(:published,:with_content,:page, :per).and_return([])
 
       blog_entries = 'blog entries'
-      BlogEntry.stub_chain(:published,:we_are_reading,:limit).and_return(blog_entries)
+      allow(BlogEntry).to receive_message_chain(:published,:we_are_reading,:limit).and_return(blog_entries)
 
       get :index, page: 2
       expect(assigns(:we_are_reading)).to eq blog_entries
@@ -32,9 +32,9 @@ describe BlogEntriesController do
     it "paginates the 'published' scope on BlogEntry" do
       blog_entries = []
       per_double = double('per', per: blog_entries)
-      BlogEntry.stub_chain(:archived,:with_content,:page).
+      allow(BlogEntry).to receive_message_chain(:archived,:with_content,:page).
         with('2').and_return(per_double)
-      BlogEntry.stub_chain(:published,:we_are_reading,:limit).and_return([])
+      allow(BlogEntry).to receive_message_chain(:published,:we_are_reading,:limit).and_return([])
 
       get :archive, page: 2
 
@@ -43,10 +43,10 @@ describe BlogEntriesController do
     end
 
     it "includes we_are_reading blog entries" do
-      BlogEntry.stub_chain(:published,:with_content,:page, :per).and_return([])
+      allow(BlogEntry).to receive_message_chain(:published,:with_content,:page, :per).and_return([])
 
       blog_entries = 'blog entries'
-      BlogEntry.stub_chain(:published,:we_are_reading,:limit).and_return(blog_entries)
+      allow(BlogEntry).to receive_message_chain(:published,:we_are_reading,:limit).and_return(blog_entries)
 
       get :index, page: 2
       expect(assigns(:we_are_reading)).to eq blog_entries
@@ -57,7 +57,7 @@ describe BlogEntriesController do
   context "#show" do
     it "loads a blog entry by ID" do
       blog_entry = double("Blog entry")
-      BlogEntry.should_receive(:find).with('42').and_return(blog_entry)
+      expect(BlogEntry).to receive(:find).with('42').and_return(blog_entry)
 
       get :show, id: 42
 

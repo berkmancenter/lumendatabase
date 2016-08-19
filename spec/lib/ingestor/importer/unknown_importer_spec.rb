@@ -1,5 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'ingestor'
+require 'rspec/collection_matchers'
 
 describe Ingestor::Importer::UnknownImporter do
   include ImporterFileHelpers
@@ -29,7 +30,7 @@ describe Ingestor::Importer::UnknownImporter do
     it "should be false" do
       importer = described_class.new('')
 
-      expect(importer.require_review_if_works_empty?).to be_false
+      expect(importer.require_review_if_works_empty?).to be false
     end
   end
 
