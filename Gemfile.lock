@@ -105,7 +105,7 @@ GEM
     coffee-script-source (1.10.0)
     concurrent-ruby (1.0.2)
     country_select (1.2.0)
-    curb (0.8.4)
+    curb (0.9.3)
     database_cleaner (1.5.3)
     date_validator (0.8.1)
       activemodel
@@ -184,7 +184,7 @@ GEM
     kaminari (0.14.1)
       actionpack (>= 3.0.0)
       activesupport (>= 3.0.0)
-    kgio (2.8.0)
+    kgio (2.10.0)
     launchy (2.3.0)
       addressable (~> 2.3)
     libv8 (3.16.14.15)
