@@ -24,7 +24,7 @@ describe RiskTrigger do
   end
 
   it "ignores Google defamation notices" do
-    notice = double("Notice", country_code: 'Spain', body: "nonempty", submitter: { email: "google@chillingeffects.org" }, type: "Defamation")
+    notice = double("Notice", country_code: 'Spain', body: "nonempty", submitter: { email: "google@lumendatabase.org" }, type: "Defamation")
 
     expect(example_trigger).not_to be_risky(notice)
   end
