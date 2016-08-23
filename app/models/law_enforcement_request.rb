@@ -24,4 +24,9 @@ class LawEnforcementRequest < Notice
   def to_partial_path
     'notices/notice'
   end
+
+  def regulation_list
+    tag_ids = self.taggings.where(context: 'regulations').pluck(:tag_id)
+    ActsAsTaggableOn::Tag.find(tag_ids)
+  end
 end

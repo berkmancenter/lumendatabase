@@ -5,7 +5,7 @@ describe 'shared/_footer.html.erb' do
 
   context 'signed in' do
     it 'gives a link to the admin' do
-      controller.stub(user_signed_in?: true)
+      allow(controller).to receive_messages(user_signed_in?: true)
 
       render
 

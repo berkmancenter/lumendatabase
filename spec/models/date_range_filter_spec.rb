@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe DateRangeFilter do
+describe DateRangeFilter, type: :model do
 
   it_behaves_like 'a search filter'
 

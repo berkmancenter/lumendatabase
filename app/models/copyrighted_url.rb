@@ -5,5 +5,5 @@ class CopyrightedUrl < ActiveRecord::Base
   include ValidatesAutomatically
   include DefaultUrlOriginal
 
-  validates_format_of :url, :url_original, with: /^([a-z]{3,5}:)?\/\/.+/i
+  validates_format_of :url, :url_original, with: /\A([a-z]{3,5}:)?\/\/.+/i
 end

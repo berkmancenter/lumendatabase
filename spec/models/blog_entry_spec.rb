@@ -1,15 +1,15 @@
 require 'spec_helper'
 
-describe BlogEntry do
+describe BlogEntry, type: :model do
   context "automatic validations" do
-    it { should validate_presence_of(:author) }
-    it { should validate_presence_of(:title) }
+    it { is_expected.to validate_presence_of(:author) }
+    it { is_expected.to validate_presence_of(:title) }
   end
 
-  it { should belong_to(:user) }
-  it { should have_many(:blog_entry_topic_assignments).dependent(:destroy) }
-  it { should have_many(:topics).through(:blog_entry_topic_assignments) }
-  it { should ensure_inclusion_of(:image).in_array BlogEntry.valid_images }
+  it { is_expected.to belong_to(:user) }
+  it { is_expected.to have_many(:blog_entry_topic_assignments).dependent(:destroy) }
+  it { is_expected.to have_many(:topics).through(:blog_entry_topic_assignments) }
+  it { is_expected.to validate_inclusion_of(:image).in_array BlogEntry.valid_images }
 
   it_behaves_like "an object with a recent scope"
 

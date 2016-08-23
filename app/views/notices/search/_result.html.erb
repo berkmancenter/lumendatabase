@@ -20,7 +20,7 @@
     <ol class="excerpt">
       <% result.with_excerpts do |excerpt| %>
         <li class="excerpt">
-          <%= sanitize(excerpt, tags: 'em') %>
+          <%= sanitize(excerpt, tags: ['em']) %>
         </li>
       <% end %>
     </ol>

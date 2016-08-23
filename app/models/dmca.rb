@@ -4,6 +4,8 @@ class DMCA < Notice
 
   DEFAULT_ENTITY_NOTICE_ROLES = %w|recipient sender principal submitter|
 
+  validates :title, length: { maximum: 255 }
+
   def self.model_name
     Notice.model_name
   end

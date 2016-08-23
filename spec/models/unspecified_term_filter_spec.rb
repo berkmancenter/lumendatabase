@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe UnspecifiedTermFilter do
+describe UnspecifiedTermFilter, type: :model do
 
   it_behaves_like 'a search filter'
 

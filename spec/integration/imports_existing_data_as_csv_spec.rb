@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'ingestor'
 
 feature "Importing CSV" do
@@ -9,6 +9,7 @@ feature "Importing CSV" do
     )
     ingestor.logger.level = Logger::ERROR
     ingestor.import
+    # binding.pry
     (
       @primary_format_notice,
       @secondary_dmca_notice,
@@ -29,6 +30,7 @@ feature "Importing CSV" do
     ) = Trademark.order(:id)
   end
 
+
   after do
     FileUtils.rm_rf 'spec/support/example_files-failures/'
   end
@@ -44,7 +46,7 @@ feature "Importing CSV" do
 https://www.youtube.com/watch?v=w2-DjJ
 https://www.youtube.com/watch?v=PlsCEe|
       )
-      expect(notice).to have(1).original_document
+      expect(notice.size).to eq(1)
       expect(notice.action_taken).to eq ''
       expect(notice.submission_id).to eq 10078
     end
@@ -66,7 +68,7 @@ https://www.youtube.com/watch?v=PlsCEe|
       expect(notice.infringing_urls.map(&:url)).to match_array(
         %w|http://www.youtube.com/watch?v=H0r8U-|
       )
-      expect(notice).to have(1).original_document
+      expect(notice.size).to eq(1)
       expect(notice.action_taken).to eq ''
       expect(notice.submission_id).to eq 1007
       expect(notice.mark_registration_number).to eq '12200000'
@@ -89,7 +91,7 @@ https://www.youtube.com/watch?v=PlsCEe|
       expect(notice.infringing_urls.map(&:url)).to match_array(
         %w|https://www.youtube.com/user/ThisChipmunks|
       )
-      expect(notice).to have(1).original_document
+      expect(notice.size).to eq(1)
       expect(notice.action_taken).to eq ''
       expect(notice.submission_id).to eq 1006
       expect(notice.mark_registration_number).to eq '29350000'
@@ -114,7 +116,7 @@ https://www.youtube.com/watch?v=PlsCEe|
        http://www.youtube.com/watch?v=6HG
        http://www.youtube.com/watch?v=FzH|
       )
-      expect(notice).to have(1).original_document
+      expect(notice.size).to eq(1)
       expect(notice.action_taken).to eq ''
       expect(notice.submission_id).to eq 1005
       expect(notice.mark_registration_number).to eq '28950000'
@@ -137,7 +139,7 @@ https://www.youtube.com/watch?v=PlsCEe|
       expect(notice.infringing_urls.map(&:url)).to match_array(
         %w|https://www.youtube.com/watch?v=7uC2cJz0 https://www.youtube.com/watch?v=lRu8rSY|
       )
-      expect(notice).to have(1).original_document
+      expect(notice.size).to eq(1)
       expect(notice.action_taken).to eq ''
       expect(notice.submission_id).to eq 2000
     end
@@ -164,14 +166,14 @@ https://www.youtube.com/watch?v=PlsCEe|
           "http://infringing.example.com/url_second_1"
         ]
       )
-      expect(notice).to have(1).original_document
+      expect(notice.size).to eq(1)
       expect(notice.topics.pluck(:name)).to include('Foobar')
       expect(upload_contents(notice.original_documents.first)).to eq File.read(
         'spec/support/example_files/original_notice_source.txt'
       )
       expect(notice.action_taken).to eq ''
       expect(notice.submission_id).to eq 1000
-      expect(notice).to have(1).supporting_document
+      expect(notice.size).to eq(1)
       expect(upload_contents(notice.supporting_documents.first)).to eq File.read(
         'spec/support/example_files/original.jpg'
       )
@@ -197,14 +199,14 @@ https://www.youtube.com/watch?v=PlsCEe|
 http://www.example.com/unstoppable_2.html
 http://www.example.com/unstoppable_3.html|
       )
-      expect(notice).to have(1).original_document
+      expect(notice.size).to eq(1)
       expect(notice.topics.pluck(:name)).to include('Foobar')
       expect(upload_contents(notice.original_documents.first)).to eq File.read(
         'spec/support/example_files/secondary_dmca_notice_source.html'
       )
       expect(notice.action_taken).to eq ''
       expect(notice.submission_id).to eq 1001
-      expect(notice).to have(1).supporting_document
+      expect(notice.size).to eq(1)
       expect(upload_contents(notice.supporting_documents.first)).to eq File.read(
         'spec/support/example_files/secondary_dmca_notice_source-2.html'
       )
@@ -221,14 +223,14 @@ http://www.example.com/unstoppable_3.html|
         %w|http://www.example.com/asdfasdf
         http://www.example.com/infringing|
       )
-      expect(notice).to have(1).original_document
+      expect(notice.size).to eq(1)
       expect(notice.topics.pluck(:name)).to include('Foobar')
       expect(upload_contents(notice.original_documents.first)).to eq File.read(
         'spec/support/example_files/secondary_other_notice_source.html'
       )
       expect(notice.action_taken).to eq ''
       expect(notice.submission_id).to eq 1002
-      expect(notice).to have(1).supporting_document
+      expect(notice.size).to eq(1)
       expect(upload_contents(notice.supporting_documents.first)).to eq File.read(
         'spec/support/example_files/secondary_other_notice_source-2.html'
       )
@@ -245,14 +247,14 @@ http://www.example.com/unstoppable_3.html|
         'https://twitter.com/NoMatter/status/12345',
         'https://twitter.com/NoMatter/status/4567',
       ])
-      expect(notice).to have(1).original_document
+      expect(notice.size).to eq(1)
       expect(notice.topics.pluck(:name)).to include('Foobar')
       expect(upload_contents(notice.original_documents.first)).to eq File.read(
         'spec/support/example_files/original_twitter_notice_source.txt'
       )
       expect(notice.action_taken).to eq ''
       expect(notice.submission_id).to be_nil
-      expect(notice).to have(1).supporting_document
+      expect(notice.size).to eq(1)
       expect(upload_contents(notice.supporting_documents.first)).to eq File.read(
         'spec/support/example_files/original_twitter_notice_source.html'
       )
@@ -265,7 +267,7 @@ http://www.example.com/unstoppable_3.html|
     scenario "a notice is created and entity info is recovered from the file" do
       expect(notice.title).to eq 'Untitled'
       expect(notice.works.length).to eq 2
-      expect(notice).to have(1).original_document
+      expect(notice.size).to eq(1)
       expect(notice.entities.map(&:name)).to match_array(
         ["Copyright Owner LLC", "Google, Inc.", "Joe Schmoe"]
       )

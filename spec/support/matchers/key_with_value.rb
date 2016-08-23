@@ -14,7 +14,7 @@ RSpec::Matchers.define :have_key do |key|
     @expected_value = value.is_a?(Array) ? value.sort : value
   end
 
-  failure_message_for_should do |actual|
+  failure_message do |actual|
     message  = "expected JSON hash to have key #{key.inspect}"
     message << " with value #{@expected_value.inspect}" if @check_value
     message << ", was #{@actual_value.inspect}"

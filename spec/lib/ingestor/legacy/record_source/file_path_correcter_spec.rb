@@ -14,7 +14,7 @@ describe Ingestor::Legacy::RecordSource::FilePathCorrector do
 
   it "calculates paths properly" do
     Dir.chdir(test_directory) do
-      File.stub(:exists?).and_return(:true)
+      allow(File).to receive(:exists?).and_return(:true)
       corrected_paths = described_class.correct_paths(
         'foo.txt,bar.html,files_by_time/4444/22/22/22/baz.html,sub/bat.html'
       )

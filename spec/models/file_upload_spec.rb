@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-describe FileUpload do
-  it { should have_attached_file(:file) }
-  it { should belong_to :notice }
-  it { should have_db_index :notice_id }
-  it { should ensure_inclusion_of(:kind).in_array %w( original supporting ) }
+describe FileUpload, type: :model do
+  it { is_expected.to have_attached_file(:file) }
+  it { is_expected.to belong_to :notice }
+  it { is_expected.to have_db_index :notice_id }
+  it { is_expected.to validate_inclusion_of(:kind).in_array %w( original supporting ) }
 
   context 'automatic validations' do
-    it { should ensure_length_of(:kind).is_at_most(255) }
+    it { is_expected.to validate_length_of(:kind).is_at_most(255) }
   end
 
   context "file_type" do

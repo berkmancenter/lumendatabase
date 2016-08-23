@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RiskTrigger do
+describe RiskTrigger, type: :model do
   it "sees a risky notice as risky" do
     notice = double("Notice", country_code: 'Spain', body: "nonempty", submitter: nil)
 
@@ -24,7 +24,8 @@ describe RiskTrigger do
   end
 
   it "ignores Google defamation notices" do
-    notice = double("Notice", country_code: 'Spain', body: "nonempty", submitter: { email: "google@lumendatabase.org" }, type: "Defamation")
+    notice = double('Notice', country_code: 'Spain', body: 'nonempty', type: 'Defamation')
+    allow(notice).to receive_message_chain(:submitter, :email => 'google@lumendatabase.org')
 
     expect(example_trigger).not_to be_risky(notice)
   end
