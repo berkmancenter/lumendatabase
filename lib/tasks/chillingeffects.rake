@@ -164,37 +164,50 @@ namespace :chillingeffects do
       return
     end
 
-    total = 0
-    successful = 0
-    failed = 0
-
     batch_size = (ENV['BATCH_SIZE'] || 192).to_i
-    Rails.logger.info "index_notices csv: #{input_csv}"
 
-    current_batch = []
+    csv = CSV.read input_csv, headers: true
+    
+    Rails.logger.info "index_notices csv: #{input_csv}, total: #{csv.count}"
 
-    CSV.foreach( input_csv, :headers => true) do |row|
-      total += 1
-      begin
-        sid = row[id_column].to_i
-        notice = Notice.find_by_submission_id sid
-        notice.published = false
-        notice.hidden = true
-        notice.save!
-        successful += 1
-      rescue
-        #puts "Error processing #{row[id_column]}"
-        failed += 1
-      end
+    count = 0
 
-      if (total % 100) == 0
-        puts total
-      end
-    end
+    csv[id_column].each_slice( batch_size ) { |ids|
+      batch = Notice.where( "id in ( #{ ids.join ',' } )" )
+      
+      Tire.index( Notice.index_name ).import batch
+      count += batch.count
+      Rails.logger.info "index_notices csv: #{input_csv}, count: #{count}, time: #{Time.now.to_i}"
 
-    puts "total: #{total}, successful: #{successful}, failed: #{failed}"
+      ReindexRun.sweep_search_result_caches
+
+      Rails.logger.info "index_notices done csv: #{input_csv}, count: #{count}, time: #{Time.now.to_i}"
+
+    }
   end
 
+  desc "Recreate elasticsearch index for notices with a given recipient entity_id"
+  task :index_notices_by_entity_id, [ :entity_id ] => :environment do |t, args|
+    begin
+      batch_size = (ENV['BATCH_SIZE'] || 192).to_i
+
+      notices = Notice.where( "id in ( select notice_id from entity_notice_roles where name = 'recipient' and entity_id = #{args[:entity_id]} )" )
+      Rails.logger.info "index_notices entity_id: #{args[:entity_id]}, total: #{notices.count}"
+      
+      count = 0
+      notices.find_in_batches( batch_size: batch_size ) do |batch|
+        Tire.index( Notice.index_name ).import batch
+        count += batch.count
+        Rails.logger.info "index_notices entity_id: #{args[:entity_id]}, count: #{count}, time: #{Time.now.to_i}"
+      end
+
+      ReindexRun.sweep_search_result_caches
+
+      Rails.logger.info "index_notices done entity_id: #{args[:entity_id]}, count: #{count}, time: #{Time.now.to_i}"
+    rescue => e
+      Rails.logger.error "index_notices entity_id: #{args[:entity_id]}, error: #{e.inspect}"
+    end
+  end
 
   desc "Recreate elasticsearch index for notices of a given date"
   task :index_notices_by_date, [ :date ] => :environment do |t, args|
@@ -215,7 +228,7 @@ namespace :chillingeffects do
 
       Rails.logger.info "index_notices done date: #{args[:date]}, count: #{count}, time: #{Time.now.to_i}"
     rescue => e
-      Rails.logger.error "index_notices date: #{args[:date]}, error: #{e.inspect}"
+      Rails.logger.error "index_notices error date: #{args[:date]}, error: #{e.inspect}"
     end
   end
 

@@ -32,5 +32,7 @@
   <% elsif role == :recipient %>
     <%= render 'entities/address', entity: entity, role: role %>
     <span class="date received">Received on <%= date_received(notice) %></span>
+  <% elsif role == :sender && entity.country_code.present? %>
+    <span><%= t 'views.entities.entity.country' %>: <%= entity.country_code.upcase %></span>
   <% end %>
 </section>

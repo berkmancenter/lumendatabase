@@ -24,8 +24,7 @@ describe Ingestor::Importer::GoogleSecondary::OtherParser do
 
   it "gets work descriptions" do
     expect(described_class.new(sample_file).body).to eq(
-"#{Ingestor::Importer::GoogleSecondary::RedactedContent::EXPLAIN_PREAMBLE.strip}
-diffamazione e violazione della privacy
+"diffamazione e violazione della privacy
 foobar"
     )
   end
@@ -58,8 +57,7 @@ http://www.example.com/infringing|
 
   it "redacts work descriptions" do
     expect(described_class.new(redaction_file).body).to eq(
-"#{Ingestor::Importer::GoogleSecondary::RedactedContent::EXPLAIN_PREAMBLE.strip}
-Someone (unknown) has got hold of my personal details  
+"Someone (unknown) has got hold of my personal details  
 and posted images with my name and my cell phone number on flickr. I have  
 contacted flickr but please help me by removing the link if possible. i am  
 very concerned about this as you can imagine. My name and address [REDACTED] have been posted. http://[REDACTED].com [REDACTED] and [REDACTED]."

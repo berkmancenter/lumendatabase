@@ -1,6 +1,6 @@
 class RiskTrigger < ActiveRecord::Base
   def risky?(notice)
-    if notice.submitter.try(:email) == 'google@chillingeffects.org' &&
+    if notice.submitter.try(:email) == 'google@lumendatabase.org' &&
        notice.try(:type) == 'Defamation'
       false
     else
