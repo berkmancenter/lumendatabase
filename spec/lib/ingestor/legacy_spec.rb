@@ -85,7 +85,7 @@ describe Ingestor::Legacy do
     context "from the Youtube otherlegal format" do
       subject(:notice) { @youtube_otherlegal_notice }
 
-      scenario "notices are created" do
+      it "notices are created" do
         expect(notice.title).to eq 'Takedown Request via Other Legal Complaint to YouTube'
         expect(notice.works.length).to eq 1
         expect(notice.infringing_urls.map(&:url)).to match_array(
@@ -98,7 +98,7 @@ describe Ingestor::Legacy do
         expect(notice.submission_id).to eq 10078
       end
 
-      scenario "the correct entities are created" do
+      it "the correct entities are created" do
         expect(notice).to have(3).entity_notice_roles
         expect(notice.sender.name).to eq "PeterDancer"
         expect(notice.principal.name).to eq "Peter Dancer"
@@ -109,7 +109,7 @@ describe Ingestor::Legacy do
     context "from the Youtube counterfeit format" do
       subject(:notice) { @youtube_counterfeit_notice }
 
-      scenario "notices are created" do
+      it "notices are created" do
         expect(notice.title).to eq 'Takedown Request via Counterfeit Complaint to YouTube'
         expect(notice.works.length).to eq 1
         expect(notice.infringing_urls.map(&:url)).to match_array(
@@ -121,7 +121,7 @@ describe Ingestor::Legacy do
         expect(notice.mark_registration_number).to eq '12200000'
       end
 
-      scenario "the correct entities are created" do
+      it "the correct entities are created" do
         expect(notice).to have(3).entity_notice_roles
         expect(notice.sender_name).to eq "Adelaid Bourbou, Internet Unit, The Federation"
         expect(notice.principal_name).to eq "Humboldt SA, Genève"
@@ -132,7 +132,7 @@ describe Ingestor::Legacy do
     context "from the Youtube Trademark-b format" do
       subject(:notice) { @youtube_trademark_b_notice }
 
-      scenario "notices are created" do
+      it "notices are created" do
         expect(notice.title).to eq 'Takedown Request via Trademark Complaint to YouTube'
         expect(notice.works.length).to eq 1
         expect(notice.infringing_urls.map(&:url)).to match_array(
@@ -144,7 +144,7 @@ describe Ingestor::Legacy do
         expect(notice.mark_registration_number).to eq '29350000'
       end
 
-      scenario "the correct entities are created" do
+      it "the correct entities are created" do
         expect(notice).to have(3).entity_notice_roles
         expect(notice.sender_name).to eq "Tracy Papagallo, outside counsel"
         expect(notice.principal_name).to eq "Bagdad Productions, LLC"
@@ -155,7 +155,7 @@ describe Ingestor::Legacy do
     context "from the Youtube Trademark-d format" do
       subject(:notice) { @youtube_trademark_d_notice }
 
-      scenario "notices are created" do
+      it "notices are created" do
         expect(notice.title).to eq 'Takedown Request via Trademark Complaint to YouTube'
         expect(notice.works.length).to eq 1
         expect(notice.infringing_urls.map(&:url)).to match_array(
@@ -169,7 +169,7 @@ describe Ingestor::Legacy do
         expect(notice.mark_registration_number).to eq '28950000'
       end
 
-      scenario "the correct entities are created" do
+      it "the correct entities are created" do
         expect(notice).to have(3).entity_notice_roles
         expect(notice.sender_name).to eq "Jonathan Clucker Rebar, Attorney for Best Example Pest Defense, Inc."
         expect(notice.principal_name).to eq "BEST EXAMPLE PEST DEFENSE, INC."
@@ -180,7 +180,7 @@ describe Ingestor::Legacy do
     context "from the Youtube Defamation format" do
       subject(:notice) { @youtube_defamation_notice }
 
-      scenario "notices are created" do
+      it "notices are created" do
         expect(notice.title).to eq 'Takedown Request via Defamation Complaint to YouTube'
         expect(notice.works.length).to eq 1
         expect(notice.infringing_urls.map(&:url)).to match_array(
@@ -191,7 +191,7 @@ describe Ingestor::Legacy do
         expect(notice.submission_id).to eq 2000
       end
 
-      scenario "the correct entities are created" do
+      it "the correct entities are created" do
         expect(notice).to have(3).entity_notice_roles
         expect(notice.sender_name).to eq "Timothy H. Fellpee, Attorney for FlimmComm Wireless"
         expect(notice.principal_name).to eq "FlimmComm Wireless"
@@ -202,7 +202,7 @@ describe Ingestor::Legacy do
     context "from the primary google reporting format" do
       subject(:notice) { @primary_format_notice }
 
-      scenario "notices are created" do
+      it "notices are created" do
         expect(notice.title).to eq 'DMCA (Copyright) Complaint to Google'
         expect(notice.works.length).to eq 2
         expect(notice.infringing_urls.map(&:url)).to match_array(
@@ -226,7 +226,7 @@ describe Ingestor::Legacy do
         )
       end
 
-      scenario "the correct entities are created" do
+      it "the correct entities are created" do
         expect(notice).to have(4).entity_notice_roles
         expect(notice.sender_name).to eq "JG Wentworth Associates"
         expect(notice.attorney_name).to eq "John Wentworth"
@@ -238,7 +238,7 @@ describe Ingestor::Legacy do
     context "from the secondary google reporting format" do
       subject(:notice) { @secondary_dmca_notice }
 
-      scenario "a dmca notice is created" do
+      it "a dmca notice is created" do
         expect(notice.title).to eq 'Secondary Google DMCA Import'
         expect(notice.works.length).to eq 1
         expect(notice.infringing_urls.map(&:url)).to match_array(
@@ -263,7 +263,7 @@ describe Ingestor::Legacy do
     context "from the secondary other format" do
       subject(:notice) { @secondary_other_notice }
 
-      scenario "an other notice is created" do
+      it "an other notice is created" do
         expect(notice.title).to eq 'Secondary Google Other Import'
         expect(notice.works.length).to eq 1
         expect(notice.infringing_urls.map(&:url)).to match_array(
@@ -287,7 +287,7 @@ describe Ingestor::Legacy do
     context "from the twitter format" do
       subject(:notice) { @twitter_notice }
 
-      scenario "a notice is created" do
+      it "a notice is created" do
         expect(notice.title).to eq 'Twitter Import'
         expect(notice.works.length).to eq 2
         expect(notice.infringing_urls.map(&:url)).to match_array([
@@ -311,7 +311,7 @@ describe Ingestor::Legacy do
     context "from a google notice without data" do
       subject(:notice) { @primary_notice_without_data }
 
-      scenario "a notice is created and entity info is recovered from the file" do
+      it "a notice is created and entity info is recovered from the file" do
         expect(notice.title).to eq 'Untitled'
         expect(notice.works.length).to eq 2
         expect(notice).to have(1).original_document
