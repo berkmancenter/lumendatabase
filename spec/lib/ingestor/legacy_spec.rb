@@ -71,6 +71,7 @@ describe Ingestor::Legacy do
       ) = Other.order(:id)
 
       @youtube_defamation_notice = Defamation.last
+
       (
        @youtube_trademark_d_notice,
        @youtube_trademark_b_notice,
@@ -110,7 +111,7 @@ describe Ingestor::Legacy do
       subject(:notice) { @youtube_counterfeit_notice }
 
       it "notices are created" do
-        expect(notice.title).to eq 'Takedown Request via Counterfeit Complaint to YouTube'
+        expect(notice.title).to eq 'Takedown Request regarding Counterfeit Complaint to YouTube'
         expect(notice.works.length).to eq 1
         expect(notice.infringing_urls.map(&:url)).to match_array(
           %w|http://www.youtube.com/watch?v=H0r8U-|
@@ -125,7 +126,8 @@ describe Ingestor::Legacy do
         expect(notice).to have(3).entity_notice_roles
         expect(notice.sender_name).to eq "Adelaid Bourbou, Internet Unit, The Federation"
         expect(notice.principal_name).to eq "Humboldt SA, Genève"
-        expect(notice.recipient_name).to eq "YouTube (Google, Inc.)"
+        expect(notice.recipient_name).to eq "Google, Inc."
+        expect(notice.tag_list).to include( 'youtube' )
       end
     end
 
@@ -133,7 +135,7 @@ describe Ingestor::Legacy do
       subject(:notice) { @youtube_trademark_b_notice }
 
       it "notices are created" do
-        expect(notice.title).to eq 'Takedown Request via Trademark Complaint to YouTube'
+        expect(notice.title).to eq 'Takedown Request regarding Trademark Complaint to YouTube'
         expect(notice.works.length).to eq 1
         expect(notice.infringing_urls.map(&:url)).to match_array(
           %w|https://www.youtube.com/user/ThisChipmunks|
@@ -148,7 +150,8 @@ describe Ingestor::Legacy do
         expect(notice).to have(3).entity_notice_roles
         expect(notice.sender_name).to eq "Tracy Papagallo, outside counsel"
         expect(notice.principal_name).to eq "Bagdad Productions, LLC"
-        expect(notice.recipient_name).to eq "YouTube (Google, Inc.)"
+        expect(notice.recipient_name).to eq "Google, Inc."
+        expect(notice.tag_list).to include( 'youtube' )
       end
     end
 
@@ -156,7 +159,7 @@ describe Ingestor::Legacy do
       subject(:notice) { @youtube_trademark_d_notice }
 
       it "notices are created" do
-        expect(notice.title).to eq 'Takedown Request via Trademark Complaint to YouTube'
+        expect(notice.title).to eq 'Takedown Request regarding Trademark Complaint to YouTube'
         expect(notice.works.length).to eq 1
         expect(notice.infringing_urls.map(&:url)).to match_array(
           %w|http://www.youtube.com/watch?v=iPK
@@ -173,7 +176,8 @@ describe Ingestor::Legacy do
         expect(notice).to have(3).entity_notice_roles
         expect(notice.sender_name).to eq "Jonathan Clucker Rebar, Attorney for Best Example Pest Defense, Inc."
         expect(notice.principal_name).to eq "BEST EXAMPLE PEST DEFENSE, INC."
-        expect(notice.recipient_name).to eq "YouTube (Google, Inc.)"
+        expect(notice.recipient_name).to eq "Google, Inc."
+        expect(notice.tag_list).to include( 'youtube' )
       end
     end
 
@@ -181,7 +185,7 @@ describe Ingestor::Legacy do
       subject(:notice) { @youtube_defamation_notice }
 
       it "notices are created" do
-        expect(notice.title).to eq 'Takedown Request via Defamation Complaint to YouTube'
+        expect(notice.title).to eq 'Takedown Request regarding Defamation Complaint to YouTube'
         expect(notice.works.length).to eq 1
         expect(notice.infringing_urls.map(&:url)).to match_array(
           %w|https://www.youtube.com/watch?v=7uC2cJz0 https://www.youtube.com/watch?v=lRu8rSY|
@@ -193,7 +197,7 @@ describe Ingestor::Legacy do
 
       it "the correct entities are created" do
         expect(notice).to have(3).entity_notice_roles
-        expect(notice.sender_name).to eq "Timothy H. Fellpee, Attorney for FlimmComm Wireless"
+        expect(notice.sender_name).to eq "REDACTED"
         expect(notice.principal_name).to eq "FlimmComm Wireless"
         expect(notice.recipient_name).to eq "Youtube (Google, Inc.)"
       end
@@ -231,7 +235,8 @@ describe Ingestor::Legacy do
         expect(notice.sender_name).to eq "JG Wentworth Associates"
         expect(notice.attorney_name).to eq "John Wentworth"
         expect(notice.principal_name).to eq "Kundan Singh"
-        expect(notice.recipient_name).to eq "Google, Inc. [Blogger]"
+        expect(notice.recipient_name).to eq "Google, Inc."
+        expect(notice.tag_list).to include( 'blogger' )
       end
     end
 
@@ -264,7 +269,7 @@ describe Ingestor::Legacy do
       subject(:notice) { @secondary_other_notice }
 
       it "an other notice is created" do
-        expect(notice.title).to eq 'Secondary Google Other Import'
+        expect(notice.title).to eq 'Takedown Request regarding Other Legal Complaint to YouTube'
         expect(notice.works.length).to eq 1
         expect(notice.infringing_urls.map(&:url)).to match_array(
           %w|http://www.example.com/asdfasdf
