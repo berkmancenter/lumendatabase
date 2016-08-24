@@ -67,10 +67,10 @@ describe Ingestor::Legacy do
 
       (
         @secondary_other_notice,
-        @youtube_defamation_notice ,
+        @youtube_defamation_notice,
       ) = Defamation.order(:id)
 
-      @youtube_otherlegal_notice = Other.order(:id)
+      @youtube_otherlegal_notice = Other.last
 
       (
        @youtube_trademark_d_notice,
@@ -269,7 +269,7 @@ describe Ingestor::Legacy do
       subject(:notice) { @secondary_other_notice }
 
       it "an other notice is created" do
-        expect(notice.title).to eq 'Takedown Request regarding Other Legal Complaint to YouTube'
+        expect(notice.title).to eq 'Secondary Google Other Import'
         expect(notice.works.length).to eq 1
         expect(notice.infringing_urls.map(&:url)).to match_array(
           %w|http://www.example.com/asdfasdf
