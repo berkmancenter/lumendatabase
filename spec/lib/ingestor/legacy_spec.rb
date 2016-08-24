@@ -67,10 +67,10 @@ describe Ingestor::Legacy do
 
       (
         @secondary_other_notice,
-        @youtube_otherlegal_notice,
-      ) = Other.order(:id)
+        @youtube_defamation_notice ,
+      ) = Defamation.order(:id)
 
-      @youtube_defamation_notice = Defamation.last
+      @youtube_otherlegal_notice = Other.order(:id)
 
       (
        @youtube_trademark_d_notice,
@@ -198,8 +198,9 @@ describe Ingestor::Legacy do
       it "the correct entities are created" do
         expect(notice).to have(3).entity_notice_roles
         expect(notice.sender_name).to eq "REDACTED"
-        expect(notice.principal_name).to eq "FlimmComm Wireless"
-        expect(notice.recipient_name).to eq "Youtube (Google, Inc.)"
+        expect(notice.principal_name).to eq "REDACTED"
+        expect(notice.recipient_name).to eq "Google, Inc."
+        expect(notice.tag_list).to include( 'youtube' )
       end
     end
 
@@ -236,7 +237,6 @@ describe Ingestor::Legacy do
         expect(notice.attorney_name).to eq "John Wentworth"
         expect(notice.principal_name).to eq "Kundan Singh"
         expect(notice.recipient_name).to eq "Google, Inc."
-        expect(notice.tag_list).to include( 'blogger' )
       end
     end
 
