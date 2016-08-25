@@ -87,7 +87,7 @@ describe Ingestor::Legacy do
       subject(:notice) { @youtube_otherlegal_notice }
 
       it "notices are created" do
-        expect(notice.title).to eq 'Takedown Request via Other Legal Complaint to YouTube'
+        expect(notice.title).to eq 'Takedown Request regarding Other Legal Complaint to YouTube'
         expect(notice.works.length).to eq 1
         expect(notice.infringing_urls.map(&:url)).to match_array(
           %w|https://www.youtube.com/watch?v=xszr9lUlPE8
@@ -104,6 +104,8 @@ describe Ingestor::Legacy do
         expect(notice.sender.name).to eq "PeterDancer"
         expect(notice.principal.name).to eq "Peter Dancer"
         expect(notice.recipient_name).to eq "YouTube (Google, Inc.)"
+        expect(notice.recipient_name).to eq "Google, Inc."
+        expect(notice.tag_list).to include( 'youtube' )
       end
     end
 
