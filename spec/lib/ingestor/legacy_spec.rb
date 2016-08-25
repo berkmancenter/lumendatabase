@@ -103,7 +103,6 @@ describe Ingestor::Legacy do
         expect(notice).to have(3).entity_notice_roles
         expect(notice.sender.name).to eq "PeterDancer"
         expect(notice.principal.name).to eq "Peter Dancer"
-        expect(notice.recipient_name).to eq "YouTube (Google, Inc.)"
         expect(notice.recipient_name).to eq "Google, Inc."
         expect(notice.tag_list).to include( 'youtube' )
       end
