@@ -26,9 +26,7 @@ module Ingestor
     def import
       Dir.chdir(record_source.base_directory) do
         record_source.each do |csv_row|
-          if Notice.where(original_notice_id: csv_row['NoticeID']).blank?
-            import_row(csv_row)
-          end
+          import_row(csv_row)
         end
       end
 
@@ -44,9 +42,17 @@ module Ingestor
 
       attributes = mapper.mapped
 
-      dmca = mapper.notice_type.create!(attributes)
+      notice = mapper.notice_type.create!(attributes)
+      existing_notice = Notice.where(original_notice_id: csv_row['NoticeID'])
+      logger.info "existing_notice.count: #{existing_notice.count}"
+      if existing_notice.blank?
+        notice = mapper.notice_type.create!(attributes)
+      else
+        notice = existing_notice.first
+        notice.update_attributes(attributes)
+      end
 
-      logger.debug { "legacy import id: #{attributes[:original_notice_id]} -> #{dmca.id}" }
+      logger.debug { "legacy import id: #{attributes[:original_notice_id]} -> #{notice.id}" }
       if error = NoticeImportError.find_by_original_notice_id(csv_row['NoticeID'])
         error.destroy
       end
