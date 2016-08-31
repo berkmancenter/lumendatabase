@@ -42,7 +42,6 @@ module Ingestor
 
       attributes = mapper.mapped
 
-      notice = mapper.notice_type.create!(attributes)
       existing_notice = Notice.where(original_notice_id: csv_row['NoticeID'])
       logger.info "existing_notice.count: #{existing_notice.count}"
       if existing_notice.blank?
