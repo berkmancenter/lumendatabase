@@ -1,6 +1,22 @@
 require 'spec_helper'
 
 describe SearchesModels do
+  context 'visible_qualifiers' do
+    it "delegates to the @model_class" do
+      expected = { expected_key: :expected_value }
+      FakeModel.stub(:visible_qualifiers).and_return(expected)
+      expect(described_class.new({}, FakeModel).visible_qualifiers).to eq(expected)
+    end
+
+    it "fills in if @model_class does not support it" do
+      expect(described_class.new({}, FakeModel).visible_qualifiers).to eq({})
+    end
+
+    it "has a real value calling with all defaults" do
+      expected = { spam: false, hidden: false, published: true, rescinded: false }
+      expect(described_class.new.visible_qualifiers).to eq(expected)
+    end
+  end
 
   it "returns an elasticsearch search instance" do
     expect(subject.search).to be_instance_of(Tire::Search::Search)

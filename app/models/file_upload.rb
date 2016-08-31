@@ -5,10 +5,15 @@ class FileUpload < ActiveRecord::Base
 
   attr_accessor :file_name
 
+  attr_protected :id, :pdf_requested, :pdf_request_fulfilled
+  attr_protected :id, as: :admin
+
   validates_inclusion_of :kind, in: %w( original supporting )
 
   belongs_to :notice
-  has_attached_file :file
+  has_attached_file :file,
+    path: ":rails_root/paperclip/:class/:attachment/:id_partition/:style/:filename",
+    url: "/:class/:attachment/:id/:id_partition/:style/:filename"
 
   before_save :rename_file, if: ->(instance) { instance.file_name.present? }
   delegate :url, to: :file
@@ -19,6 +24,10 @@ class FileUpload < ActiveRecord::Base
     when /\Aimage\// then 'Image'
     else 'Document'
     end
+  end
+
+  def request_pdf
+    self.pdf_requested = true
   end
 
   private

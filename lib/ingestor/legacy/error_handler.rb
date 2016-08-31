@@ -4,15 +4,15 @@ module Ingestor
 
       def initialize(source_name)
         @source_name = source_name
-        @logger = Logger.new(STDERR)
+        @logger = Rails.logger
       end
 
       def handle(csv_row, ex)
         error_message = "(#{ex.class}) #{ex.message}: #{ex.backtrace.first}"
 
-        logger.error "Error importing Notice #{csv_row['NoticeID']} from #{source_name}"
-        logger.error "  Error: #{error_message}"
-        logger.error "  Files: #{file_paths(csv_row)}"
+
+        logger.error "legacy import error original_notice_id: #{csv_row['NoticeID']}, name: #{source_name}, message: \"#{error_message}\""
+        logger.debug "legacy import error data: \"#{csv_row.inspect}\""
 
         NoticeImportError.create!(
           original_notice_id: csv_row['NoticeID'].to_i,

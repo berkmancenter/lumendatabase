@@ -33,11 +33,10 @@
 .collaborations {
   .collaboration#partner {      
     margin: 0;
-    height: 400px;
+    height: 500px;
   }
   .collaboration#researcher {
     margin: 0;
-    height: 150px; 
   }
   .collaboration {
     @include span-columns(6);
@@ -118,11 +117,7 @@
     }
 
     li {
-      @include span-columns(4);
-
-      @include media($tablet) {
-        @include span-columns(8);
-      }
+      @include span-columns(8);
 
       &:nth-child(2) {
         clear: left;

@@ -76,7 +76,7 @@ describe EntityNoticeRole do
   end
 
   def notice_with_roles_attributes(attributes)
-    Dmca.new(
+    DMCA.new(
       entity_notice_roles_attributes: attributes,
       works: build_list(:work, 2) # to make it valid otherwise
     )

@@ -4,7 +4,8 @@ module Searchability
   end
 
   module ClassMethods
-    def define_elasticsearch_mapping
+    def define_elasticsearch_mapping(exclusions = {})
+      exclusions = Hash.new { |h, k| h[k] = [] }.merge(exclusions)
       mapping do
         indexes :id, index: 'not_analyzed', include_in_all: false
         indexes :class_name, index: 'not_analyzed', include_in_all: false,
@@ -13,6 +14,7 @@ module Searchability
         indexes :date_received, type: 'date', include_in_all: false
         indexes :rescinded, type: 'boolean', include_in_all: false
         indexes :spam, type: 'boolean', include_in_all: false
+        indexes :published, type: 'boolean', include_in_all: false
         indexes :hidden, type: 'boolean', include_in_all: false
         indexes :tag_list, as: 'tag_list'
         indexes :jurisdiction_list, as: 'jurisdiction_list'
@@ -26,6 +28,10 @@ module Searchability
         indexes :principal_name, as: 'principal_name'
         indexes :principal_name_facet,
           analyzer: 'keyword', as: 'principal_name',
+          include_in_all: false
+        indexes :submitter_name, as: 'submitter_name'
+        indexes :submitter_name_facet,
+          analyzer: 'keyword', as: 'submitter_name',
           include_in_all: false
         indexes :tag_list_facet,
           analyzer: 'keyword', as: 'tag_list',
@@ -50,7 +56,7 @@ module Searchability
           type: 'object',
           as: -> (notice){
             notice.works.as_json({
-              only: [:description],
+              only: [:description] - exclusions[:works],
               include: {
                 infringing_urls: { only: [:url] },
                 copyrighted_urls: { only: [:url]}

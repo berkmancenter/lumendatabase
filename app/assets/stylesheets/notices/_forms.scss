@@ -33,6 +33,15 @@ section.notice-new {
 
       &.left {
         padding-right: 5%;
+
+        &:not(:first-of-type) {
+          clear: left;
+          margin-top: 60px;
+
+          + .body-wrapper.right {
+            margin-top: 60px;
+          }
+        }
       }
     }
   }
@@ -68,7 +77,7 @@ section.notice-new {
 //************************************************************************//
 // Form
 //************************************************************************//
-$long-label-width: $form-label-width + 30px;
+$long-label-width: $form-label-width + 55px;
 form.new_notice, form.new_counter_notice {
   div {
     @include clearfix;
@@ -90,7 +99,6 @@ form.new_notice, form.new_counter_notice {
     border-radius: $form-border-radius 0 0 $form-border-radius;
     border-right: 1px solid $form-border-color;
     font-family: $helvetica;
-    height: calc(100% - 2px);
     left: 1px;
     margin-bottom: 2px;
     padding: 6px 10px;
@@ -248,6 +256,24 @@ form.new_notice {
 
     #{$all-text-inputs} {
       padding-left: $long-label-width + $form-label-margin;
+    }
+
+    button.add-another-url {
+      margin-left: $long-label-width;
+      margin-bottom: $form-label-margin;
+      width: calc(100% - #{$long-label-width});
+
+      &:not(:first-child) {
+        margin-top: 30px;
+      }
+    }
+
+    button.remove-url {
+      position: absolute;
+      right: -45px;
+      top: 0px;
+      padding: 7px 15px;
+      background: darken($error-color, 30%);
     }
   }
 }

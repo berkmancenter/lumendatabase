@@ -1,0 +1,22 @@
+<%= button_tag(
+  "Add Another URL",
+  type: 'button',
+  class: 'add-another-url',
+  data: { target: url_input_notices_path(type: notice.class, url_type: assoc, index: index) }
+) %>
+<%= works_form.simple_fields_for(assoc) do |urls_form| %>
+  <% if assoc == :copyrighted_urls %>
+	  <%= urls_form.input(
+	    :url,
+	    label: label_for_url_input(assoc, notice),
+	    placeholder: "http://",
+	    required: false 
+	  ) %>
+	<% else %>
+		<%= urls_form.input(
+		  :url,
+		  label: label_for_url_input(assoc, notice),
+		  placeholder: "http://"
+		) %>
+	<% end %>
+<% end %>

@@ -2,11 +2,27 @@ require 'spec_helper'
 
 describe 'notices/new.html.erb' do
   it "has a form for notices" do
-    assign(:notice, Dmca.new)
+    assign(:notice, DMCA.new)
 
     render
 
     expect(rendered).to have_css 'form'
+  end
+
+  it "should not require copyrighted urls" do
+    assign(:notice, create(:dmca, :with_copyrighted_urls))
+
+    render
+
+    expect(rendered).to have_content("Original Work URL")
+  end
+
+  it "should require infringing urls" do
+    assign(:notice, create(:dmca, :with_infringing_urls))
+
+    render
+
+    expect(rendered).to have_content("Allegedly Infringing URL *")
   end
 
   Notice.type_models.each do |model|
@@ -35,7 +51,7 @@ describe 'notices/new.html.erb' do
       second_topic = create(:topic, name: "B Topic")
       third_topic = create(:topic, name: "C Topic")
       first_topic = create(:topic, name: "A Topic")
-      assign(:notice, Dmca.new)
+      assign(:notice, DMCA.new)
 
       render
 

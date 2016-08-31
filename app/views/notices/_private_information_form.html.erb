@@ -14,6 +14,7 @@
           tooltip: "If the notice you sent/received had a subject line, enter it here"
         }}
       %>
+      <%= form.hidden_field :webform, :value => true %>
       <%= form.input :subject %>
       <%= form.input :date_sent, as: :string, placeholder: "YYYY-MM-DD" %>
       <%= form.input :date_received, as: :string, placeholder: "YYYY-MM-DD" %>
@@ -49,15 +50,18 @@
   <section class="works">
     <h4><span>Step 2.</span> URLs With Private Information</h4>
     <p>Enter the URL with private information and a brief description of the information in question.</p>
-    <div class="body-wrapper left">
-      <%= form.simple_fields_for(:works) do |works_form| %>
-        <%= works_form.simple_fields_for(:infringing_urls) do |urls_form| %>
-          <%= urls_form.input :url, label: "URL with private information", placeholder: "http://" %>
-        <% end %>
-      </div>
-      <div class="body-wrapper right">
-        <%= works_form.input :description, label: "Type of information" %>
-      </div>
+    <% form.object.works.each_with_index do |work, index| %>
+      <%= form.simple_fields_for(:works, work, child_index: index) do |works_form| %>
+        <div class="body-wrapper left">
+          <%= render(
+            partial: 'url_input_group',
+            locals: { notice: notice, assoc: :infringing_urls, works_form: works_form, index: index }
+          ) %>
+        </div>
+        <div class="body-wrapper right">
+          <%= works_form.input :description, label: "Type of information" %>
+        </div>
+      <% end %>
     <% end %>
   </section>
 

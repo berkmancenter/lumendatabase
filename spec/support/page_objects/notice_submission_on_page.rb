@@ -9,7 +9,7 @@ class NoticeSubmissionOnPage < PageObject
   def open_submission_form
     visit '/'
 
-    click_on 'Report Notice'
+    click_on 'Report a Demand'
     click_on @notice_class.to_s.titleize
   end
 

@@ -1,10 +1,14 @@
 require 'spec_helper'
 
-describe Dmca do
+describe DMCA do
+  before do
+    @notice_topics = create_list(:notice_topic, 8)
+  end
+
   it { should validate_presence_of :works }
   it { should validate_presence_of :entity_notice_roles }
   it { should ensure_inclusion_of(:language).in_array(Language.codes) }
-  it { should ensure_inclusion_of(:action_taken).in_array(Dmca::VALID_ACTIONS).allow_blank }
+  it { should ensure_inclusion_of(:action_taken).in_array(DMCA::VALID_ACTIONS).allow_blank }
 
   context 'automatic validations' do
     it { should ensure_length_of(:title).is_at_most(255) }
@@ -24,7 +28,7 @@ describe Dmca do
   it_behaves_like "an object tagged in the context of", "jurisdiction"
 
   it "leaves no action taken as unspecified" do
-    notice = Dmca.new
+    notice = DMCA.new
 
     expect(notice.action_taken).to be_nil
   end
@@ -184,14 +188,14 @@ describe Dmca do
   end
 
   context "#redacted" do
-    it "returns '#{Dmca::UNDER_REVIEW_VALUE}' when review is required" do
-      notice = Dmca.new(review_required: true, body: "A value")
+    it "returns '#{DMCA::UNDER_REVIEW_VALUE}' when review is required" do
+      notice = DMCA.new(review_required: true, body: "A value")
 
-      expect(notice.redacted(:body)).to eq Dmca::UNDER_REVIEW_VALUE
+      expect(notice.redacted(:body)).to eq DMCA::UNDER_REVIEW_VALUE
     end
 
     it "returns the actual value when review is not required" do
-      notice = Dmca.new(review_required: false, body: "A value")
+      notice = DMCA.new(review_required: false, body: "A value")
 
       expect(notice.redacted(:body)).to eq "A value"
     end
@@ -199,7 +203,7 @@ describe Dmca do
 
   context "#auto_redact" do
     it "calls RedactsNotices#redact on itself" do
-      notice = Dmca.new
+      notice = DMCA.new
       redactor = RedactsNotices.new
       redactor.should_receive(:redact).with(notice)
       RedactsNotices.should_receive(:new).and_return(redactor)
@@ -272,7 +276,7 @@ describe Dmca do
       create_list(:dmca, 2, review_required: true, reviewer: user)
       create_list(:dmca, 2, review_required: false)
 
-      notices = Dmca.available_for_review
+      notices = DMCA.available_for_review
 
       expect(notices).to match_array(expected_notices)
     end
@@ -282,7 +286,7 @@ describe Dmca do
       create_list(:dmca, 2, review_required: true, spam: true)
       create_list(:dmca, 2, review_required: true, hidden: true)
 
-      notices = Dmca.available_for_review
+      notices = DMCA.available_for_review
 
       expect(notices).to match_array(expected_notices)
 
@@ -297,7 +301,7 @@ describe Dmca do
       )
       create_list(:dmca, 2, review_required: true, reviewer: user_two)
 
-      notices = Dmca.in_review(user_one)
+      notices = DMCA.in_review(user_one)
 
       expect(notices).to match_array(expected_notices)
     end
@@ -305,11 +309,13 @@ describe Dmca do
 
   context ".in_topics" do
     it "returns notices in the given topics" do
-      create(:dmca) # not to be found
+      single = create(:dmca) # not to be found
       expected_notices = create_list(:dmca, 3, :with_topics)
-      topics = expected_notices.map(&:topics).flatten
+      topics = expected_notices.map(&:topics).flatten.uniq.delete_if do |t|
+        @notice_topics.include? t
+      end
 
-      notices = Dmca.in_topics(topics)
+      notices = DMCA.in_topics(topics)
 
       expect(notices).to match_array(expected_notices)
     end
@@ -321,7 +327,7 @@ describe Dmca do
       expected_notices = create_list(:dmca, 3, role_names: %w( submitter ))
       submitters = expected_notices.map(&:submitter)
 
-      notices = Dmca.submitted_by(submitters)
+      notices = DMCA.submitted_by(submitters)
 
       expect(notices).to match_array(expected_notices)
     end
@@ -396,6 +402,103 @@ describe Dmca do
       notice.principal.update_attributes(name: "The Sender")
 
       expect(notice).not_to be_on_behalf_of_principal
+    end
+  end
+  
+  context "#publication_delay" do
+    it "returns 0 if submitter doesn't respond" do
+      notice = create(:dmca)
+
+      expect(notice.publication_delay).to eq(0)
+    end
+    
+    it "returns the submitter's value" do
+      notice = create(:dmca)
+      user = create(:user, :submitter, :with_entity, publication_delay: 60)
+      role = notice.entity_notice_roles.build(name: 'submitter')
+      role.entity = user.entity
+      role.save
+
+      expect(notice.publication_delay).to eq(60)
+    end
+  end
+
+  context "#should_be_published?" do
+    it "returns true if the submitter's publication delay has passed since creation" do
+      notice = create(:dmca, created_at: Time.now - 70.seconds)
+      user = create(:user, :submitter, :with_entity, publication_delay: 60)
+      role = notice.entity_notice_roles.build(name: 'submitter')
+      role.entity = user.entity
+      role.save
+
+      expect(notice.should_be_published?).to be true
+    end
+
+    it "returns false if the submitter's publication delay has not passed" do
+      notice = create(:dmca, created_at: Time.now - 50.seconds)
+      user = create(:user, :submitter, :with_entity, publication_delay: 60)
+      role = notice.entity_notice_roles.build(name: 'submitter')
+      role.entity = user.entity
+      role.save
+
+      expect(notice.should_be_published?).to be false
+    end
+
+    it "returns true if the submitter's publication delay is 0 seconds" do
+      notice = create(:dmca)
+      user = create(:user, :submitter, :with_entity)
+      role = notice.entity_notice_roles.build(name: 'submitter')
+      role.entity = user.entity
+      role.save
+
+      expect(notice.should_be_published?).to be true
+    end
+  end
+
+  context "#time_to_publish" do
+    it "returns the time of notice creation plus the submitter's publication delay" do
+      notice = create(:dmca, created_at: Time.now - 50.seconds)
+      user = create(:user, :submitter, :with_entity, publication_delay: 60)
+      role = notice.entity_notice_roles.build(name: 'submitter')
+      role.entity = user.entity
+      role.save
+
+      expected_time = notice.created_at + user.publication_delay.seconds
+      expect(notice.time_to_publish).to eq expected_time
+
+      notice = create(:dmca)
+      user = create(:user, :submitter, :with_entity)
+      role = notice.entity_notice_roles.build(name: 'submitter')
+      role.entity = user.entity
+      role.save
+
+      expect(notice.time_to_publish).to eq notice.created_at
+    end
+  end
+
+  context "published status" do
+    it "sets the notice to published on creation if it should be published" do
+      notice = build(:dmca)
+      user = create(:user, :submitter, :with_entity)
+      role = notice.entity_notice_roles.build(name: 'submitter')
+      role.entity = user.entity
+      role.save
+      notice.save
+
+      expect(notice.submitter).to be_an(Entity)
+      expect(notice.published).to be true
+    end
+
+    it "sets the notice to unpublished on creation if it should not be published" do
+      notice = build(:dmca)
+      user = create(:user, :submitter, :with_entity, publication_delay: 60)
+      role = notice.entity_notice_roles.build(name: 'submitter')
+      role.entity = user.entity
+      role.save
+      notice.save
+
+      expect(notice.submitter).to be_an(Entity)
+      expect(notice.published).to be false
     end
   end
 

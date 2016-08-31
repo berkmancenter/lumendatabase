@@ -11,8 +11,6 @@ describe Redaction::RefillQueue do
       topic_input, submitter_input = inputs
       expect(topic_input.key).to eq :in_topics
       expect(topic_input.label_text).to eq "In topics"
-      expect(submitter_input.key).to eq :submitted_by
-      expect(submitter_input.label_text).to eq "Submitted by"
     end
   end
 

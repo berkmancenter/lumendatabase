@@ -8,7 +8,7 @@ feature "typed notice submissions" do
     submission.fill_in_form_with({
       "Mark" => "My trademark (TM)",
       "Infringing URL" => "http://example.com/infringing_url1",
-      "Describe the alleged Infringment" => "They used my thing",
+      "Describe the alleged infringement" => "They used my thing",
       "Registration Number" => '1337'
     })
 
@@ -31,7 +31,7 @@ feature "typed notice submissions" do
     end
 
     within('.notice-body') do
-      expect(page).to have_content('Alleged Infringment')
+      expect(page).to have_content('Alleged Infringement')
       expect(page).to have_content('They used my thing')
       expect(page).to have_content('1337')
     end
@@ -60,7 +60,7 @@ feature "typed notice submissions" do
     expect(page).to have_content("Defamation notice to Recipient")
 
     within("#works") do
-      expect(page).to have_content('Locations of Allegedly Defamatory Material')
+      expect(page).to have_content('URLs of Allegedly Defamatory Material')
       expect(page).to have_content('http://example.com/defamatory_url1')
     end
 
@@ -76,15 +76,15 @@ feature "typed notice submissions" do
 
     submission.fill_in_form_with({
       "Legal Complaint" => "I want to be forgotten",
-      "URLs mentioned in request" => "http://example.com/defamatory_url1",
+      "URL mentioned in request" => "http://example.com/defamatory_url1",
     })
 
     submission.fill_in_entity_form_with(:recipient, {
       'Name' => 'Recipient',
     })
-    submission.fill_in_entity_form_with(:sender, {
-      'Name' => 'Sender',
-    })
+    #submission.fill_in_entity_form_with(:sender, {
+    #  'Name' => 'Sender',
+    #})
 
     submission.submit
 
@@ -93,14 +93,14 @@ feature "typed notice submissions" do
     expect(page).to have_content("Data Protection notice to Recipient")
 
     within("#works") do
-      expect(page).to have_content('Location of Material Requested for Removal')
+      expect(page).to have_content('Location of Some of the Material Requested for Removal')
       expect(page).to have_content('http://example.com/defamatory_url1')
     end
 
-    within('.notice-body') do
-      expect(page).to have_content('Legal Complaint')
-      expect(page).to have_content('I want to be forgotten')
-    end
+    #within('.notice-body') do
+    #  expect(page).to have_content('Legal Complaint')
+    #  expect(page).to have_content('I want to be forgotten')
+    #end
   end
 
   scenario "User submits and views a CourtOrder notice" do
@@ -109,7 +109,7 @@ feature "typed notice submissions" do
 
     submission.fill_in_form_with({
       "Subject of Court Order" => "My sweet website", # works.description
-      "Targeted URL" => "http://example.com/targetted_url", # infringing_urls
+      "Targeted URL" => "http://example.com/targeted_url", # infringing_urls
 
       "Explanation of Court Order" => "I guess they don't like me", #notice.body
       "Laws Referenced by Court Order" => "USC foo bar 21"
@@ -128,8 +128,8 @@ feature "typed notice submissions" do
     expect(page).to have_content("Court Order notice to Recipient")
 
     within("#works") do
-      expect(page).to have_content('Targetted URLs')
-      expect(page).to have_content('http://example.com/targetted_url')
+      expect(page).to have_content('Targeted URLs')
+      expect(page).to have_content('http://example.com/targeted_url')
     end
 
     within('.notice-body') do

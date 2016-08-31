@@ -3,7 +3,7 @@ require 'ingestor'
 
 describe Ingestor::Importer::Youtube::OtherLegal do
   it "has a default recipient" do
-    expect(described_class.new('').default_recipient).to eq 'Youtube (Google, Inc.)'
+    expect(described_class.new('').default_recipient).to eq 'Google, Inc.'
   end
 
   context "#notice_type" do

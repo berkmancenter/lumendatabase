@@ -28,6 +28,7 @@ feature "Searching for Notices via the API" do
           'sender_name_facet',
           'principal_name_facet',
           'recipient_name_facet',
+          'submitter_name_facet',
           'topic_facet',
           'date_received_facet'
         )
@@ -46,6 +47,26 @@ feature "Searching for Notices via the API" do
           "term" => "king",
           "sender_name_facet" => notice.sender_name
         )
+      end
+    end
+
+    scenario "return nothing for non-visible notices", js: true, search: true do
+      options = Notice.visible_qualifiers.inject(title: "The Lion King") do |m, (k, v)|
+        m.merge(k => !v)
+      end
+      notice = create(:dmca, :with_facet_data, options)
+      index_changed_models
+
+      expect_api_search_to_find(
+        "king", sender_name_facet: notice.sender_name
+      ) do |json|
+        results = {
+          notices: json["notices"],
+          normal_facets: json["meta"]["facets"].except("date_received_facet").collect { |k, v| v["total"] }.uniq,
+          range_facets: json["meta"]["facets"]["date_received_facet"]["ranges"].collect { |h| h["total"] }.uniq
+        }
+
+        expect(results).to eq(notices: [], normal_facets: [0], range_facets: [0])
       end
     end
   end
@@ -97,12 +118,13 @@ feature "Searching for Notices via the API" do
         title: "The Lion King on Youtube"
       )
       index_changed_models
+      expected_topics = [topic.name, Notice::TYPES_TO_TOPICS[notice.type]].sort
 
       expect_api_search_to_find("king") do |json|
         json_item = json['notices'].first
         expect(json_item).to have_key('title').with_value(notice.title)
         expect(json_item).to have_key('id').with_value(notice.id)
-        expect(json_item).to have_key('topics').with_value([topic.name])
+        expect(json_item).to have_key('topics').with_value(expected_topics)
         expect(json_item).to have_key('score')
         expect(json_item).to have_key('tags')
       end

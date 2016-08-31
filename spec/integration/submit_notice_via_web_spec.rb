@@ -183,7 +183,7 @@ feature "notice submission" do
     submit_recent_notice
 
     expect(Notice.count).to eq 2
-    expect(Entity.count).to eq 2
+    expect(Entity.count).to eq 4
     expect(Work.count).to eq 2
     expect(InfringingUrl.count).to eq 1
   end
@@ -228,16 +228,16 @@ feature "notice submission" do
   end
 
   scenario "a form articulates its required fields correctly" do
-    visit "/notices/new?type=Dmca"
+    visit "/notices/new?type=DMCA"
 
     within('form#new_notice') do
-      expect(page).to have_css("input##{works_copyrighted_url_id}.required")
+      expect(page).to have_css("input##{works_copyrighted_url_id}:not(.required)")
       expect(page).to have_css('input#notice_date_received:not(.required)')
     end
   end
 
   scenario "submitting a notice without required fields present" do
-    visit "/notices/new?type=Dmca"
+    visit "/notices/new?type=DMCA"
 
     click_on "Submit"
 

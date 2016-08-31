@@ -1,11 +1,13 @@
 require 'validates_automatically'
 require 'hierarchical_relationships'
 require 'entity_index_queuer'
+require 'default_name_original'
 
 class Entity < ActiveRecord::Base
   include Tire::Model::Search
   include ValidatesAutomatically
   include HierarchicalRelationships
+  include DefaultNameOriginal
 
   PER_PAGE = 10
   HIGHLIGHTS = %i(name)
@@ -13,6 +15,8 @@ class Entity < ActiveRecord::Base
   belongs_to :user
   has_many :entity_notice_roles, dependent: :destroy
   has_many :notices, through: :entity_notice_roles
+
+  delegate :publication_delay, to: :user, allow_nil: true
 
   mapping do
     columns.map(&:name).reject{|name| name == 'id'}.each do|column_name|

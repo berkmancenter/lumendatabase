@@ -4,7 +4,7 @@ describe NoticesController do
   context "#show" do
     it "finds the notice by ID" do
       notice = Notice.new
-      Notice.should_receive(:find_visible).with('42').and_return(notice)
+      Notice.should_receive(:find).with('42').and_return(notice)
 
       get :show, id: 42
 
@@ -60,11 +60,23 @@ describe NoticesController do
         expect(json).to have_key('title').with_value(notice.title)
         expect(json).to have_key('body').with_value("Notice Rescinded")
       end
+
+      it "returns original URLs for a Notice if you are a researcher" do
+        user = create(:user, roles: [Role.researcher])
+        notice = create(:dmca, :with_infringing_urls)
+        stub_find_notice(notice)
+
+        request.env['HTTP_AUTHENTICATION_TOKEN'] = user.authentication_token
+        get :show, id: 1, format: :json
+
+        json = JSON.parse(response.body)["dmca"]["works"][0]["infringing_urls"][0]
+        expect(json).to have_key('url_original')
+      end
     end
 
     def stub_find_notice(notice = nil)
       notice ||= Notice.new
-      notice.tap { |n| Notice.stub(:find_visible).and_return(n) }
+      notice.tap { |n| Notice.stub(:find).and_return(n) }
     end
   end
 
@@ -75,9 +87,9 @@ describe NoticesController do
         @notice_params = HashWithIndifferentAccess.new(title: "A title")
       end
 
-      it "initializes a Dmca by default from params" do
+      it "initializes a DMCA by default from params" do
         SubmitNotice.should_receive(:new).
-          with(Dmca, @notice_params).
+          with(DMCA, @notice_params).
           and_return(@submit_notice)
 
         post :create, notice: @notice_params
@@ -91,12 +103,12 @@ describe NoticesController do
         post :create, notice: @notice_params.merge(type: 'trademark')
       end
 
-      it "defaults to Dmca if the type is missing or invalid" do
+      it "defaults to DMCA if the type is missing or invalid" do
         invalid_types = ['', 'FlimFlam', 'Object', 'User', 'Hash']
 
         SubmitNotice.should_receive(:new).
           exactly(5).times.
-          with(Dmca, @notice_params).
+          with(DMCA, @notice_params).
           and_return(@submit_notice)
 
         invalid_types.each do |invalid_type|
@@ -179,7 +191,7 @@ describe NoticesController do
     private
 
     def stub_submit_notice
-      SubmitNotice.new(Dmca, {}).tap do |submit_notice|
+      SubmitNotice.new(DMCA, {}).tap do |submit_notice|
         submit_notice.stub(:submit).and_return(true)
         SubmitNotice.stub(:new).and_return(submit_notice)
       end

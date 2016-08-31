@@ -35,6 +35,9 @@ Chill::Application.configure do
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
 
+  # See everything in the log (default is :info)
+  config.log_level = :debug
+
   config.action_controller.action_on_unpermitted_parameters = :raise
 
   config.action_mailer.default_url_options = { host: 'www.example.com' }

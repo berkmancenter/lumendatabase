@@ -29,10 +29,18 @@ class Ability
 
       can :publish, Notice
       can :rescind, Notice
+      can :create, Notice
+      can :create, BlogEntry
+
+      can :pdf_requests, :all
     end
 
     if user.has_role?(Role.super_admin)
       can :manage, :all
+    end
+    
+    if user.has_role?(Role.researcher)
+      can :read, Notice
     end
   end
 
@@ -40,6 +48,8 @@ class Ability
     can :read, :all
     can :access, :rails_admin
     can :dashboard
+    can :search, Entity
+    can :access, :original_files
   end
 
   def grant_redact

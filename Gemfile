@@ -1,7 +1,5 @@
 source 'https://rubygems.org'
 
-ruby '2.0.0'
-
 gem 'bourbon'
 gem 'neat'
 gem 'flutie'
@@ -9,7 +7,7 @@ gem 'high_voltage'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'pg'
-gem 'rails', '~> 3.2.11'
+gem 'rails', '~> 3.2.22'
 gem 'recipient_interceptor'
 gem 'simple_form'
 gem 'strong_parameters'
@@ -32,6 +30,15 @@ gem 'jquery-placeholder-rails'
 gem 'activerecord-import'
 gem 'html2md'
 gem 'mysql2'
+gem 'ruby-progressbar'
+gem 'turnout'
+gem 'date_validator'
+gem 'piwik_analytics'
+gem 'twitter'
+gem 'twitter-text'
+gem 'rails_admin_tag_list'
+gem 'rack-attack'
+gem 'rack-test', require: 'rack/test'
 
 group :assets do
   gem 'coffee-rails'
@@ -42,6 +49,7 @@ end
 
 group :development do
   gem 'foreman'
+  gem 'dotenv-rails'
   gem 'better_errors'
   gem 'binding_of_caller'
 end

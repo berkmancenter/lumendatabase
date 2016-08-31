@@ -1,12 +1,12 @@
 <header>
-  <h3 class="title">Report a Private Information Notice</h3>
-  <p>If you have sent or received a Private Information notice and want to submit it to our database, fill out the form below.</p>
+  <h3 class="title">Report a Notice</h3>
+  <p>If you have sent or received a notice and want to submit it to our database, fill out the form below.</p>
   <p class="disclaimer">Please do not include phone numbers, email addresses, personal name, or other private information other than those of the complainant.</p>
 </header>
 <%= simple_form_for(notice) do |form| %>
   <section class="notice-body">
     <h4><span>Step 1.</span> Describe the Notice</h4>
-    <p>Provide us with information about the Private Information notice you <em>sent</em> or <em>received</em>.</p>
+    <p>Provide us with information about the notice you <em>sent</em> or <em>received</em>.</p>
     <div class="body-wrapper left main">
       <%= form.input :type, as: :hidden %>
       <%=
@@ -14,6 +14,7 @@
           tooltip: "If the notice you sent/received had a subject line, enter it here"
         }}
       %>
+      <%= form.hidden_field :webform, :value => true %>
       <%= form.input :subject %>
       <%= form.input :date_sent, as: :string, placeholder: "YYYY-MM-DD" %>
       <%= form.input :date_received, as: :string, placeholder: "YYYY-MM-DD" %>
@@ -49,18 +50,20 @@
   <section class="works">
     <h4><span>Step 2.</span> Original Works in Question</h4>
     <p>Enter information about the original work(s) and the problematic URL(s).</p>
-    <div class="body-wrapper left">
-      <%= form.simple_fields_for(:works) do |works_form| %>
-        <%= works_form.simple_fields_for(:copyrighted_urls) do |urls_form| %>
-          <%= urls_form.input :url, label: "Original Work URL", placeholder: "http://" %>
-        <% end %>
-        <%= works_form.simple_fields_for(:infringing_urls) do |urls_form| %>
-          <%= urls_form.input :url, label: "Problematic URL", placeholder: "http://" %>
-        <% end %>
-      </div>
-      <div class="body-wrapper right">
-        <%= works_form.input :description, label: "Complaint" %>
-      </div>
+    <% form.object.works.each_with_index do |work, index| %>
+      <%= form.simple_fields_for(:works, work, child_index: index) do |works_form| %>
+        <div class="body-wrapper left">
+          <% [:copyrighted_urls, :infringing_urls].each do |assoc| %>
+            <%= render(
+              partial: 'url_input_group',
+              locals: { notice: notice, assoc: assoc, works_form: works_form, index: index }
+            ) %>
+          <% end %>
+        </div>
+        <div class="body-wrapper right">
+          <%= works_form.input :description, label: "Complaint" %>
+        </div>
+      <% end %>
     <% end %>
   </section>
 
@@ -69,7 +72,7 @@
     <% role = roles_form.object.name.titleize %>
     <section class="role <%= role.downcase %>">
       <h4><span>Step <%= step_number %>.</span> <%= role %> of the Notice</h4>
-      <p>Enter information about the <b><%= role %></b> of the Private Information notice.</p>
+      <p>Enter information about the <b><%= role %></b> of the notice.</p>
       <%= roles_form.input :name, as: :hidden %>
       <%= roles_form.simple_fields_for(:entity) do |entity_form| %>
         <div class="body-wrapper left required">

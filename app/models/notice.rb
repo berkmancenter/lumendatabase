@@ -23,6 +23,7 @@ class Notice < ActiveRecord::Base
     TermSearch.new(:sender_name, :sender_name, 'Sender Name'),
     TermSearch.new(:principal_name, :principal_name, 'Principal Name'),
     TermSearch.new(:recipient_name, :recipient_name, 'Recipient Name'),
+    TermSearch.new(:submitter_name, :submitter_name, 'Submitter Name'),
     TermSearch.new(:works, 'works.description', 'Works Descriptions'),
     TermSearch.new(:action_taken, :action_taken, 'Action taken'),
   ]
@@ -32,10 +33,11 @@ class Notice < ActiveRecord::Base
     TermFilter.new(:sender_name_facet, 'Sender'),
     TermFilter.new(:principal_name_facet, 'Principal'),
     TermFilter.new(:recipient_name_facet, 'Recipient'),
+    TermFilter.new(:submitter_name_facet, 'Submitter'),
     TermFilter.new(:tag_list_facet, 'Tags'),
     TermFilter.new(:country_code_facet, 'Country'),
     TermFilter.new(:language_facet, 'Language'),
-    TermFilter.new(:action_taken_facet, 'Action taken'),
+    UnspecifiedTermFilter.new(:action_taken_facet, 'Action taken'),
     DateRangeFilter.new(:date_received_facet, :date_received, 'Date')
   ]
 
@@ -54,18 +56,24 @@ class Notice < ActiveRecord::Base
 
   DEFAULT_ENTITY_NOTICE_ROLES = %w|recipient sender|
 
-  VALID_ACTIONS = %w( Yes No Partial )
+  VALID_ACTIONS = %w( Yes No Partial Unspecified )
 
-  TYPES = %w(
-    Dmca
-    Trademark
-    Defamation
-    CourtOrder
-    LawEnforcementRequest
-    PrivateInformation
-    DataProtection
-    Other
-  )
+  OTHER_TOPIC = "Uncategorized"
+
+  TYPES_TO_TOPICS = {
+    'DMCA'                  => "Copyright",
+    'Trademark'             => "Trademark",
+    'Defamation'            => "Defamation",
+    'CourtOrder'            => "Court Orders",
+    'LawEnforcementRequest' => "Law Enforcement Requests",
+    'PrivateInformation'    => "Right of Publicity",
+    'DataProtection'        => "EU - Right to Be Forgotten",
+    'GovernmentRequest'     => "Government Requests",
+    'Other'                 => OTHER_TOPIC
+  }
+
+  TYPES = TYPES_TO_TOPICS.keys
+  TOPICS = TYPES_TO_TOPICS.values
 
   belongs_to :reviewer, class_name: 'User'
 
@@ -88,6 +96,27 @@ class Notice < ActiveRecord::Base
   validates_inclusion_of :action_taken, in: VALID_ACTIONS, allow_blank: true
   validates_inclusion_of :language, in: Language.codes, allow_blank: true
   validates_presence_of :works, :entity_notice_roles
+  validates :date_sent, date: { after: Proc.new { Date.new(1998,10,28) }, before: Proc.new { Time.now + 1.day }, allow_blank: true }
+  validates :date_received, date: { after: Proc.new { Date.new(1998,10,28) }, before: Proc.new { Time.now + 1.day }, allow_blank: true }
+
+  # Using reset_type because type is ALWAYS protected (deep in the Rails code).
+  attr_protected :id, :type, :reset_type
+  attr_protected :id, :type, as: :admin
+
+  def reset_type
+    type
+  end
+
+  def reset_type=(value)
+    unless value.in?(TYPES)
+      fail ActiveModel::MissingAttributeError.new("Cannot reset Notice type to: #{value}")
+    end
+    self[:type] = value
+  end
+
+  def reset_type_enum
+    TYPES
+  end
 
   def language_enum
     Language.all.inject( {} ) { |memo, l| memo[l.label] = l.code; memo }
@@ -96,17 +125,20 @@ class Notice < ActiveRecord::Base
   acts_as_taggable_on :tags, :jurisdictions
 
   accepts_nested_attributes_for :file_uploads,
-    reject_if: ->(attributes) { attributes['file'].blank? }
+    reject_if: ->(attributes) { [attributes['file'], attributes[:pdf_request_fulfilled]].all?(&:blank?) }
 
   accepts_nested_attributes_for :entity_notice_roles
 
-  accepts_nested_attributes_for :works
+  accepts_nested_attributes_for :works, :allow_destroy => true
 
   delegate :country_code, to: :recipient, allow_nil: true
 
   %i( sender principal recipient submitter attorney ).each do |entity|
     delegate :name, to: entity, prefix: true, allow_nil: true
   end
+
+  after_create :set_published!, if: :submitter
+  after_destroy :remove_from_index
 
   define_elasticsearch_mapping
 
@@ -143,14 +175,31 @@ class Notice < ActiveRecord::Base
   end
 
   def self.add_default_filter(search)
-    { rescinded: false, spam: false, hidden: false }.each do |field, value|
+    { rescinded: false, spam: false, hidden: false, published: true }.each do |field, value|
       filter = TermFilter.new(field)
       filter.apply_to_search(search, field, value)
     end
   end
 
   def self.find_visible(notice_id)
-    where(spam: false, hidden: false).find(notice_id)
+    self.visible.find(notice_id)
+  end
+
+  def self.visible
+    where(visible_qualifiers)
+  end
+
+  def self.visible_qualifiers
+    { spam: false, hidden: false, published: true, rescinded: false }
+  end
+  
+  def self.find_unpublished(notice_id)
+    begin 
+      self.where(spam: false, hidden: false, published: false).find(notice_id)
+      return true
+    rescue
+      return false
+    end    
   end
 
   def active_model_serializer
@@ -254,34 +303,33 @@ class Notice < ActiveRecord::Base
       principal_name.present? && principal_name != sender_name
     end
   end
-  
-  def notice_topic_map
-    if self.type == "CourtOrder"
-      topic = Topic.find_by_name("Court Orders")
-    elsif self.type == "Defamation"
-      topic = Topic.find_by_name("Defamation")
-    elsif self.type == "Dmca"
-      topic = Topic.find_by_name("Copyright")
-    elsif self.type == "LawEnforcementRequest"
-      topic = Topic.find_by_name("Law Enforcement Requests")
-    elsif self.type == "Trademark"
-      topic = Topic.find_by_name("Trademark")
-    elsif self.type == "Other"
-      topic = Topic.find_by_name("Uncategorized")
-    elsif self.type == "PrivateInformation"
-      topic = Topic.find_by_name("Right of Publicity")
-    elsif self.type == "DataProtection"
-      topic = Topic.find_by_name("EU - Right to Be Forgotten")
-    end
-    if topic.nil?
-      topic = Topic.find_by_name("Uncategorized")
-      if topic.nil?
-        topic = Topic.create(:name => "Uncategorized")
-      end  
-    end 
-    return topic 
+
+  def publication_delay
+    submitter && submitter.publication_delay ? submitter.publication_delay : 0
+  end
+
+  def time_to_publish
+    created_at + publication_delay.seconds
+  end
+
+  def should_be_published?
+    time_to_publish <= Time.now
+  end
+
+  def set_published!
+    self.published = should_be_published?
+    save
   end
   
+  def notice_topic_map
+    topic = TYPES_TO_TOPICS.key?(self.type) ? TYPES_TO_TOPICS[self.type] : OTHER_TOPIC
+    return Topic.find_or_create_by_name(topic) 
+  end
+
+  def hide_identities?
+    false
+  end
+
   before_save do
     notice_type = self.type
     topic = self.notice_topic_map
@@ -313,4 +361,7 @@ class Notice < ActiveRecord::Base
     entity_notice_roles.attorneys.map(&:entity)
   end
 
+  def remove_from_index
+    self.index.remove self
+  end
 end

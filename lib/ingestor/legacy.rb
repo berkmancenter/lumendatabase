@@ -13,10 +13,9 @@ module Ingestor
       @record_source = record_source
       @start_unixtime = Time.now.to_f
 
-      @logger = Logger.new(STDOUT)
-      @logger.level = Logger::INFO unless ENV['DEBUG']
+      @logger = Rails.logger
 
-      @logger.debug { "Started at: #{@start_unixtime}, #{Time.now}" }
+      @logger.debug { "legacy import started: #{@start_unixtime}, #{Time.now}" }
 
       @error_handler = ErrorHandler.new(record_source.name)
 
@@ -25,18 +24,13 @@ module Ingestor
     end
 
     def import
-      logger.info "Importing legacy CSV file: #{record_source.name} in #{record_source.base_directory}"
-
       Dir.chdir(record_source.base_directory) do
         record_source.each do |csv_row|
-          if Notice.where(original_notice_id: csv_row['NoticeID']).blank?
-            import_row(csv_row)
-          end
+          import_row(csv_row)
         end
       end
 
-      logger.info "Import complete. #{succeeded} record(s) created."
-      logger.warn "#{failed} failure(s)" unless failed.zero?
+      logger.info "legacy import name: #{record_source.name}, succeded: #{succeeded}, failed: #{failed}"
     end
 
     private
@@ -47,13 +41,20 @@ module Ingestor
       mapper = AttributeMapper.new(csv_row.to_hash)
 
       attributes = mapper.mapped
-      updated_at = attributes.delete(:updated_at)
 
-      dmca = mapper.notice_type.create!(attributes)
-      dmca.update_attributes(updated_at: updated_at)
+      existing_notice = Notice.where(original_notice_id: csv_row['NoticeID'])
+      logger.info "existing_notice.count: #{existing_notice.count}"
+      if existing_notice.blank?
+        notice = mapper.notice_type.create!(attributes)
+      else
+        notice = existing_notice.first
+        notice.update_attributes(attributes)
+      end
 
-      logger.debug { "Imported: #{attributes[:original_notice_id]} -> #{dmca.id}" }
-
+      logger.debug { "legacy import id: #{attributes[:original_notice_id]} -> #{notice.id}" }
+      if error = NoticeImportError.find_by_original_notice_id(csv_row['NoticeID'])
+        error.destroy
+      end
       self.succeeded += 1
 
       if self.succeeded % 100 == 0

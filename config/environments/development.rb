@@ -19,6 +19,9 @@ Chill::Application.configure do
   # Print deprecation notices to the Rails logger
   config.active_support.deprecation = :log
 
+  # See everything in the log (default is :info)
+  config.log_level = :info
+
   # Only use best-standards-support built into browsers
   config.action_dispatch.best_standards_support = :builtin
 
@@ -38,4 +41,12 @@ Chill::Application.configure do
   config.action_controller.action_on_unpermitted_parameters = :raise
 
   config.action_mailer.default_url_options = { host: 'localhost:3000' }
+
+  #begin
+    # Set up rate limiting
+   # config.require "custom_limiter"
+    #config.middleware.use CustomLimiter, :max => 3, :cache => GDBM.new('tmp/throttle.db')
+  #rescue Errno::EAGAIN => e
+    # throttle cache in use by app, this is likely a rake task
+  #end
 end

@@ -18,6 +18,10 @@ FactoryGirl.define do
     end
   end
 
+  factory :notice_topic, class: 'Topic' do
+    sequence(:name) { |n| Notice::TOPICS[n % Notice::TOPICS.size - 1] }
+  end
+
   factory :topic_manager do
     name "A name"
   end
@@ -25,6 +29,9 @@ FactoryGirl.define do
   factory :dmca do
 
     title "A title"
+    date_received Time.now
+    date_sent Time.now
+    
     works { build_list(:work, 1) }
 
     ignore do
@@ -56,7 +63,7 @@ FactoryGirl.define do
 
     trait :with_topics do
       before(:create) do |notice|
-        notice.topics = build_list(:topic, 3)
+        notice.topics << build_list(:topic, 3)
       end
     end
 
@@ -120,6 +127,7 @@ FactoryGirl.define do
     factory :defamation, class: 'Defamation'
     factory :court_order, class: 'CourtOrder'
     factory :law_enforcement_request, class: 'LawEnforcementRequest'
+    factory :government_request, class: 'GovernmentRequest'
     factory :private_information, class: 'PrivateInformation'
     factory :data_protection, class: 'DataProtection'
     factory :other, class: 'Other'
@@ -202,6 +210,10 @@ FactoryGirl.define do
     trait :with_entity do
       entity
     end
+    
+    trait :researcher do
+      roles { [Role.researcher] }
+    end
   end
 
   factory :relevant_question do
@@ -227,10 +239,12 @@ FactoryGirl.define do
 
   factory :infringing_url do
     url
+    url_original { url }
   end
 
   factory :copyrighted_url do
     url
+    url_original { url }
   end
 
   factory :blog_entry do
@@ -239,6 +253,10 @@ FactoryGirl.define do
 
     trait :published do
       published_at 5.days.ago
+    end
+
+    trait :archive do
+      archive true
     end
 
     trait :with_abstract do

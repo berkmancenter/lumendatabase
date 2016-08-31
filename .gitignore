@@ -11,7 +11,7 @@
 /db/*.sqlite3
 
 # Ignore all logfiles and tempfiles.
-log/*.log
+log/*
 tmp/
 !.keep
 *.DS_Store
@@ -19,7 +19,10 @@ tmp/
 .env
 bin/stubs
 coverage/*
-public/system
+paperclip/*
+public/assets
 rerun.txt
 tags
 vendor/bundler_gems
+config/database.yml
+.idea/*

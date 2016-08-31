@@ -77,11 +77,10 @@ describe Work do
 
   context '#kind' do
     it "auto classifies before saving if kind is not set" do
-      DeterminesWorkKind.any_instance.should_receive(:kind).and_return('foo')
       work = build(:work)
 
       work.save
-      expect(work.kind).to eq 'foo'
+      expect(work.kind).to eq 'Unspecified'
     end
 
     it "does not auto classify if kind is set" do
@@ -94,8 +93,8 @@ describe Work do
 
   it "validates infringing urls correctly when multiple are used at once" do
     notice = notice_with_works_attributes([
-      { infringing_urls_attributes: [{ url: "" }] },
-      { infringing_urls_attributes: [{ url: "" }] }
+      { infringing_urls_attributes: [{ url: "this is not a url" }] },
+      { infringing_urls_attributes: [{ url: "this is also not a url" }] }
     ])
 
     expect(notice).not_to be_valid
@@ -104,10 +103,10 @@ describe Work do
     )
   end
 
-  it "validates infringing urls correctly when multiple are used at once" do
+  it "validates copyrighted urls correctly when multiple are used at once" do
     notice = notice_with_works_attributes([
-      { copyrighted_urls_attributes: [{ url: "" }] },
-      { copyrighted_urls_attributes: [{ url: "" }] }
+      { copyrighted_urls_attributes: [{ url: "this is not a url" }] },
+      { copyrighted_urls_attributes: [{ url: "this is also not a url" }] }
     ])
 
     expect(notice).not_to be_valid
@@ -119,7 +118,7 @@ describe Work do
   private
 
   def notice_with_works_attributes(attributes)
-    Dmca.new(
+    DMCA.new(
       works_attributes: attributes,
       entity_notice_roles_attributes: [{
         name: 'recipient',

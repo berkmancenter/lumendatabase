@@ -18,10 +18,13 @@
       <h1><%= @notice.title %></h1>
       <div class="entities-wrapper">
         <% if @notice.sender %>
-          <%= render @notice.sender, notice: @notice, role: :sender %>
+          <%= render @notice.sender, notice: @notice, role: :sender, hide_identities: @notice.hide_identities? %>
         <% end %>
         <% if @notice.recipient %>
           <%= render @notice.recipient, notice: @notice, role: :recipient %>
+        <% end %>
+        <% if @notice.submitter %>
+          <%= render @notice.submitter, notice: @notice, role: :submitter %>
         <% end %>
 
         <% @notice.other_entity_notice_roles.each do |role| %>
@@ -50,13 +53,49 @@
         <dt class="label">Notice Type:</dt>
         <dd class="field"><%= @notice.type.titleize %></dd>
       </dl>
-
+	  
+	  <% unless @notice.action_taken.nil? || @notice.action_taken.blank? %>
       <dl class="action-taken">
         <dt class="label">Action taken:</dt>
         <dd class="field"><%= @notice.action_taken %></dd>
       </dl>
+	  <% end %>
 
       <%= render show_partial_for(@notice), notice: @notice %>
+
+    <% if @notice.tag_list.present? %>
+    <dl class="tag-list">
+      <dt class="label">Tags</dt>
+      <dd class="field"><%= @notice.tag_list %></dd>
+    </dl>
+    <% end %>
+    
+    <dl class="tag-list">
+      <dt class="label">Jurisdictions</dt>
+      <% if @notice.jurisdiction_list.present? %>
+        <dd class="field"><%= @notice.jurisdiction_list %></dd>
+      <% else %>
+        <dd class="field">Unspecified</dd>
+      <% end %>
+    </dl>
+
+    <% if @notice.original_documents.present? && !@notice.original_documents.first.pdf_request_fulfilled %>
+      <section class="attachments">
+        <h5 class="title">Original Documents</h5>
+        <ol class="attachments">
+          <% @notice.original_documents.each do |document| %>
+            <% if document.file_type == "PDF" && !document.pdf_requested? && !document.pdf_request_fulfilled %>
+              <li class="<%= document.file_type.downcase %>">
+                <%= link_to request_pdf_notice_path(document), class: "document", method: :put, remote: :true do %>
+                  <span>Supporting <%= document.file_type %> #<%= @notice.original_documents.index(document) + 1 %></span>
+                  <span class="download">Request Document</span>
+                <% end %>
+              <% end %>
+            </li>
+          <% end %>
+        </ol>
+      </section>
+    <% end %>
 
       <% if @notice.supporting_documents.present? %>
         <section class="attachments">
@@ -77,6 +116,19 @@
   </section>
 
   <aside class="notice">
+
+    <section id="counter-notice">
+      <% if @notice.type == "DMCA" %>
+        <%= 
+          link_to(
+            "Create DMCA Counter Notice", 
+            new_counter_notice_path, 
+            class: "button"
+          ) 
+        %>
+      <% end %>
+    </section>
+
     <section id="relevant-questions">
       <h4 class="title"><span>Related FAQs</span></h3>
       <div class="wrapper">

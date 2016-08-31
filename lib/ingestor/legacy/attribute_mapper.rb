@@ -17,7 +17,7 @@ module Ingestor
         '10' => :rescinded
       }
 
-      delegate :default_recipient, :notice_type, :entities, to: :importer
+      delegate :default_submitter, :default_recipient, :notice_type, :entities, to: :importer
 
       def initialize(hash)
         @hash = hash
@@ -30,35 +30,39 @@ module Ingestor
       end
 
       def mapped
+        body = importer.body
+        body_original = importer.body_original
+
+        body = hash['Body'] unless body.present?
+        body_original = hash['BodyOriginal'] unless body_original.present?
+
         works = importer.works
 
         if works.empty?
           works = [Work.unknown]
 
           review_required = importer.require_review_if_works_empty?
-
-          body = hash['Body']
-          body_original = hash['BodyOriginal']
         else
-          review_required = false
+          review_required = importer.review_required?
         end
 
         {
           original_notice_id: hash['NoticeID'],
-          title: title,
-          subject: hash['Re_Line'],
+          title: ( title.gsub( /via/, 'regarding' ) unless title.nil? ),
+          subject: ( hash_text( 'Re_Line' ).gsub( /via/, 'regarding' ) unless hash_text( 'Re_Line' ).nil? ),
           source: hash['How_Sent'],
+          tag_list: importer.tag_list,
           action_taken: importer.action_taken,
           created_at: find_created_at,
           updated_at: hash['alter_date'],
           date_sent: hash['Date'],
-          date_received: hash['Date'],
+          date_received: hash['Date'] || importer.date_received,
           file_uploads: importer.file_uploads,
           works: works,
           review_required: review_required,
           topics: topics(hash['CategoryName']),
           rescinded: rescinded?,
-          hidden: hidden?,
+          hidden: ( importer.hidden? || hidden? ),
           submission_id: hash['SubmissionID'],
           entity_notice_roles: entity_notice_roles,
           body: body,
@@ -71,10 +75,14 @@ module Ingestor
 
       attr_reader :importer
 
+      def hash_text( key )
+        hash[ key ].split( "\n" ).first.try(:strip) unless hash[ key ].nil?
+      end
+
       def title
         (
-          normalize_title(hash['Subject']) ||
-          normalize_title(hash['Re_Line'])
+          normalize_title( hash_text( 'Subject' ) ) ||
+          normalize_title( hash_text( 'Re_Line' ) )
         ) || 'Untitled'
       end
 
@@ -100,16 +108,16 @@ module Ingestor
 
       def entity_notice_roles
         transform_entity_names([
-          build_role('sender', 'Sender_LawFirm', 'Sender'),
-          build_role('recipient', 'Recipient_Entity', 'Recipient'),
-          build_role('principal', 'Sender_Principal', nil),
-          build_role('attorney', 'Sender_Attorney', nil),
+          build_role('sender', 'Sender_LawFirm', 'Sender', importer.sender_address),
+          build_role('recipient', ( 'Recipient_Entity' unless importer.recipient.present? ), 'Recipient', nil),
+          build_role('principal', 'Sender_Principal', nil, nil),
+          build_role('attorney', 'Sender_Attorney', nil, nil)
         ].compact)
       end
 
-      def build_role(role_name, name_key, address_key)
+      def build_role(role_name, name_key, address_key, address_prebuilt)
         builder = EntityNoticeRoleBuilder.new(
-          self, role_name, name_key, address_key
+          self, role_name, name_key, address_key, address_prebuilt
         )
         builder.build
       end

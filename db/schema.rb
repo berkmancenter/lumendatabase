@@ -11,20 +11,21 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140522152728) do
+ActiveRecord::Schema.define(:version => 20160222192409) do
 
   create_table "blog_entries", :force => true do |t|
     t.integer  "user_id"
-    t.string   "author",                           :null => false
-    t.string   "title",                            :null => false
+    t.string   "author",                                              :null => false
+    t.string   "title",                                               :null => false
     t.text     "abstract"
     t.text     "content"
     t.datetime "published_at"
-    t.datetime "created_at",                       :null => false
-    t.datetime "updated_at",                       :null => false
+    t.datetime "created_at",                                          :null => false
+    t.datetime "updated_at",                                          :null => false
     t.string   "image"
     t.integer  "original_news_id"
     t.string   "url",              :limit => 1024
+    t.boolean  "archive",                          :default => false
   end
 
   create_table "blog_entry_topic_assignments", :force => true do |t|
@@ -36,12 +37,13 @@ ActiveRecord::Schema.define(:version => 20140522152728) do
   add_index "blog_entry_topic_assignments", ["topic_id"], :name => "index_blog_entry_topic_assignments_on_topic_id"
 
   create_table "copyrighted_urls", :force => true do |t|
-    t.string   "url",        :limit => 8192, :null => false
-    t.datetime "created_at",                 :null => false
-    t.datetime "updated_at",                 :null => false
+    t.string   "url_original", :limit => 8192, :null => false
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
+    t.string   "url",          :limit => 8192
   end
 
-  add_index "copyrighted_urls", ["url"], :name => "index_copyrighted_urls_on_url", :unique => true
+  add_index "copyrighted_urls", ["url_original"], :name => "index_copyrighted_urls_on_url_original", :unique => true
 
   create_table "copyrighted_urls_works", :id => false, :force => true do |t|
     t.integer "copyrighted_url_id", :null => false
@@ -67,6 +69,7 @@ ActiveRecord::Schema.define(:version => 20140522152728) do
     t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "name_original"
   end
 
   add_index "entities", ["address_line_1"], :name => "index_entities_on_address_line_1"
@@ -100,17 +103,20 @@ ActiveRecord::Schema.define(:version => 20140522152728) do
     t.string   "file_content_type"
     t.integer  "file_file_size"
     t.datetime "file_updated_at"
+    t.boolean  "pdf_requested"
+    t.boolean  "pdf_request_fulfilled"
   end
 
   add_index "file_uploads", ["notice_id"], :name => "index_file_uploads_on_notice_id"
 
   create_table "infringing_urls", :force => true do |t|
-    t.string   "url",        :limit => 8192, :null => false
-    t.datetime "created_at",                 :null => false
-    t.datetime "updated_at",                 :null => false
+    t.string   "url_original", :limit => 8192, :null => false
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
+    t.string   "url",          :limit => 8192
   end
 
-  add_index "infringing_urls", ["url"], :name => "index_infringing_urls_on_url", :unique => true
+  add_index "infringing_urls", ["url_original"], :name => "index_infringing_urls_on_url_original", :unique => true
 
   create_table "infringing_urls_works", :id => false, :force => true do |t|
     t.integer "infringing_url_id", :null => false
@@ -152,6 +158,10 @@ ActiveRecord::Schema.define(:version => 20140522152728) do
     t.string   "request_type"
     t.integer  "submission_id"
     t.string   "mark_registration_number"
+    t.boolean  "published",                :default => true,  :null => false
+    t.integer  "url_count"
+    t.boolean  "webform",                  :default => false
+    t.text     "notes"
   end
 
   add_index "notices", ["original_notice_id"], :name => "index_notices_on_original_notice_id"
@@ -286,6 +296,7 @@ ActiveRecord::Schema.define(:version => 20140522152728) do
     t.string   "authentication_token"
     t.datetime "created_at",                             :null => false
     t.datetime "updated_at",                             :null => false
+    t.integer  "publication_delay",      :default => 0,  :null => false
   end
 
   add_index "users", ["authentication_token"], :name => "index_users_on_authentication_token", :unique => true
@@ -294,9 +305,10 @@ ActiveRecord::Schema.define(:version => 20140522152728) do
 
   create_table "works", :force => true do |t|
     t.text     "description"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
     t.string   "kind"
+    t.text     "description_original"
   end
 
 end

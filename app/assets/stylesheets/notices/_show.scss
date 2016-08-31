@@ -41,7 +41,7 @@ article.notice-show {
       color: hsla(0, 0%, 100%, 0.6);
     }
 
-    section.sender, section.recipient {
+    section.sender, section.recipient, section.submitter {
       @extend %notice-header;
 
       @include media($mobile) {
@@ -54,7 +54,7 @@ article.notice-show {
 
     section.recipient {
       h5 {
-        color: #9DEEBE;
+        color: #FFFFFF;
       }
     }
 
@@ -71,7 +71,7 @@ article.notice-show {
         opacity: 0.1;
         position: absolute;
         top: 50px;
-        width: 50%;
+        width: 33%;
 
         @include media($mobile) {
           display: none;
@@ -114,10 +114,10 @@ article.notice-show {
 
     h5 {
       text-transform: uppercase;
-      color: #FC9271;
+      color: #FFFFFF;
       font-weight: 700;
       margin-bottom: 5px;
-      font-size: $base-font-size-small-1 - 1;
+      font-size: $base-font-size-small-1 + 4;
     }
 
     h6 {
@@ -264,6 +264,10 @@ article.notice-show {
 
       &:last-child {
         margin-bottom: 0;
+      }
+
+      &.notice-body .body {
+        white-space: pre-line;
       }
     }
 

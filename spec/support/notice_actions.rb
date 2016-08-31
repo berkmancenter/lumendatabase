@@ -1,6 +1,6 @@
 module NoticeActions
   def submit_recent_notice(title = "A title")
-    visit "/notices/new?type=Dmca"
+    visit "/notices/new?type=DMCA"
 
     fill_in "Title", with: title
     fill_in "Date received", with: Time.now
@@ -10,6 +10,12 @@ module NoticeActions
     end
     within('section.sender') do
       fill_in "Name", with: "Sender the first"
+    end
+    within('section.principal') do
+      fill_in "Name", with: "Principal the first"
+    end
+    within('section.submitter') do
+      fill_in "Name", with: "Submitter the first"
     end
 
     fill_in 'Work URL', with: 'http://www.example.com/original_work.pdf'

@@ -1,5 +1,6 @@
 require 'rails_admin/config/actions/redact_queue'
 require 'rails_admin/config/actions/redact_notice'
+require 'rails_admin/config/actions/pdf_requests'
 
 RailsAdmin.config do |config|
 
@@ -12,6 +13,8 @@ RailsAdmin.config do |config|
   config.audit_with :history, 'User'
   config.audit_with :history, 'Role'
   config.audit_with :history, 'Notice'
+
+  config.attr_accessible_role { :admin }
 
   config.actions do
     dashboard do
@@ -36,6 +39,8 @@ RailsAdmin.config do |config|
 
     redact_queue
     redact_notice
+
+    pdf_requests
   end
 
   ['Notice', Notice::TYPES].flatten.each do |notice_type|
@@ -52,14 +57,37 @@ RailsAdmin.config do |config|
         field(:original_notice_id) { label 'Legacy NoticeID' }
         field :source
         field :review_required
+        field :published
+        field :time_to_publish
         field :body
         field :entities
         field :topics
         field :works
+        field :url_count
+        field :action_taken
+        field :reviewer_id
+        field :language
+        field :rescinded
+        field :type
+        field :spam
+        field :hidden
+        field :request_type
+        field :webform
       end
       edit do
+        configure :action_taken, :enum do
+          enum do
+            ['Yes', 'No', 'Partial', 'Unspecified']
+          end
+          default_value 'Unspecified'
+        end
+
         configure(:type) do
-          read_only true
+          hide
+        end
+        configure :reset_type, :enum do
+          label "Type"
+          required true
         end
         configure(:topic_assignments) { hide }
         configure(:topic_relevant_questions) { hide }
@@ -131,6 +159,12 @@ RailsAdmin.config do |config|
       end
     end
     edit do
+      configure :kind, :enum do
+        enum do
+          ['individual', 'organization']
+        end
+        default_value 'organization'
+      end
       configure(:notices) { hide }
       configure(:entity_notice_roles) { hide }
       configure(:ancestry) { hide }
@@ -150,6 +184,11 @@ RailsAdmin.config do |config|
 
   config.model 'Work' do
     object_label_method { :custom_work_label }
+    
+    edit do
+      configure(:notices) { hide }
+    end
+
     list do
       configure(:copyrighted_urls) { hide }
       configure(:infringing_urls) { hide }
@@ -165,6 +204,16 @@ RailsAdmin.config do |config|
     object_label_method { :url }
   end
 
+  config.model 'FileUpload' do
+    edit do
+      configure :kind, :enum do
+        enum do
+          ['original', 'supporting']
+        end
+      end
+    end
+  end
+
   config.model 'ReindexRun' do
 
   end
@@ -175,5 +224,10 @@ RailsAdmin.config do |config|
 
   config.model 'User' do
     object_label_method { :email }
+    edit do
+      configure :entity do
+        nested_form false
+      end
+    end
   end
 end

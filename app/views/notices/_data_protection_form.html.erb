@@ -9,6 +9,12 @@
     <p>Provide us with information about the Data Protection takedown notice you <em>sent</em> or <em>received</em>.</p>
     <div class="body-wrapper left main">
       <%= form.input :type, as: :hidden %>
+      <%=
+        form.input :title, label_html: { data: {
+          tooltip: "If the notice you sent/received had a subject line, enter it here"
+        }}
+      %>
+      <%= form.hidden_field :webform, :value => true %>
       <%= form.input :date_sent, as: :string, placeholder: "YYYY-MM-DD" %>
       <%= form.input :date_received, as: :string, placeholder: "YYYY-MM-DD" %>
       <%= form.input :source, label: "Sent via", placeholder: 'Online form, Email, Postal mail, etc.' %>
@@ -34,13 +40,20 @@
 
   <section class="works">
     <h4><span>Step 2.</span> URLs to be removed from search results.</h4>
-    <div class="body-wrapper left">
+    <% form.object.works.each_with_index do |work, index| %>
       <%= form.simple_fields_for(:works) do |works_form| %>
-        <%= works_form.simple_fields_for(:infringing_urls) do |urls_form| %>
-          <%= urls_form.input :url, label: "URLs mentioned in request", placeholder: "http://" %>
-        <% end %>
-      </div>
+        <div class="body-wrapper left">
+          <%= render(
+            partial: 'url_input_group',
+            locals: { notice: notice, assoc: :infringing_urls, works_form: works_form, index: index }
+          ) %>
+        </div>
+      <% end %> 
     <% end %>
+    <div class="body-wrapper left">
+      <%= form.input :url_count, label: "Number of URLs", label_html: { class: 'url', data: {
+              tooltip: "Please indicate how many unique URLs the complainant requested be removed from search results."} } %>
+    </div>
   </section>
 
   <% step_number = 3 %>

@@ -12,10 +12,11 @@ feature "Searching Entities" do
       json_item = json['entities'].first
 
       expect(json_item).to have_key('id').with_value(entity.id.to_s)
-      expect(json_item).to have_key('parent_id').with_value(entity.parent_id)
-      %w(parent_id name address_line_1 address_line_2 state
-         country_code phone email url city).each do |key|
+      %w(parent_id name country_code url).each do |key|
         expect(json_item).to have_key(key).with_value(entity.send(key.to_sym))
+      end
+      %w(address_line_1 address_line_2 state phone email city).each do |key|
+        expect(json_item).not_to have_key(key)
       end
     end
   end
@@ -32,7 +33,7 @@ feature "Searching Entities" do
   end
 
   def expect_entity_api_search_to_find(term, options = {})
-    sleep 1
+    sleep (ENV["SEARCH_SLEEP"] && ENV["SEARCH_SLEEP"].to_i) || 1
     with_curb_get_for_json(
       "entities/search.json",
       options.merge(term: term)) do |curb|

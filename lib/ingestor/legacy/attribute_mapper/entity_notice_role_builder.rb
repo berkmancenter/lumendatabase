@@ -4,12 +4,13 @@ module Ingestor
 
       class EntityNoticeRoleBuilder
 
-        def initialize(attribute_mapper, role_name, name_key, address_key)
+        def initialize(attribute_mapper, role_name, name_key, address_key, address_prebuilt)
           @attribute_mapper = attribute_mapper
           @hash_data = attribute_mapper.hash
           @role_name = role_name
           @name_key = name_key
           @address_key = address_key
+          @address_prebuilt = address_prebuilt
         end
 
         def build
@@ -17,6 +18,12 @@ module Ingestor
             name = hash_data[name_key].to_s.strip
           else
             name = attribute_mapper.entities[role_name.to_sym]
+          end
+
+          if role_name == 'sender' &&
+            name.blank? &&
+              attribute_mapper.default_submitter.present?
+            name = attribute_mapper.default_submitter
           end
 
           if role_name == 'recipient' &&
@@ -27,10 +34,17 @@ module Ingestor
 
           return unless name.present?
 
+          Rails.logger.debug "[importer][enrb] role_name: #{role_name}, name: #{name}"
           attributes = { name: clean_entity_name(name) }
 
           if address_key
+            Rails.logger.debug "[importer][enrb] address_key: #{address_key}, address_hash: #{address_hash(address_key)}"
             attributes.merge!(address_hash(address_key))
+          end
+
+          if address_prebuilt
+            Rails.logger.debug "[importer][enrb] address_prebuilt: #{address_prebuilt}"
+            attributes.merge!(address_prebuilt)
           end
 
           EntityNoticeRole.new(name: role_name, entity_attributes: attributes)
@@ -38,7 +52,7 @@ module Ingestor
 
         private
 
-        attr_reader :attribute_mapper, :hash_data, :role_name, :name_key, :address_key
+        attr_reader :attribute_mapper, :hash_data, :role_name, :name_key, :address_key, :address_prebuilt
 
         def clean_entity_name(name)
           name = name.to_s.strip

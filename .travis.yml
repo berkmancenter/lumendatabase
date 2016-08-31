@@ -1,0 +1,30 @@
+language: ruby
+
+rvm: 2.0.0
+
+addons:
+  postgresql: "9.1"
+
+services:
+  - postgresql
+  - elasticsearch
+
+before_install:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - curl -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-0.90.3.deb && sudo dpkg -i --force-confnew elasticsearch-0.90.3.deb && sudo service elasticsearch restart
+
+before_script:
+  - sleep 10
+  - psql -c 'create database chill_test;' -U postgres
+  - cp config/database.yml.travis config/database.yml
+  - bundle exec rake db:schema:load RAILS_ENV=test
+  - mkdir -p tmp/cache
+
+script:
+  - bundle exec rspec spec/controllers
+  - bundle exec rspec spec/lib/ingestor
+  - bundle exec rspec spec/models
+  - bundle exec rspec spec/routing
+  - bundle exec rspec spec/serializers
+  - bundle exec rspec spec/views

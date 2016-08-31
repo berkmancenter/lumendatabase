@@ -21,7 +21,11 @@ class Entities::SearchController < ApplicationController
 
   def entity_searcher
     SearchesModels.new(params, Entity).tap do |searcher|
-      searcher.register TermSearch.new(:term, :_all)
+      if can?(:search, Entity)
+        searcher.register TermSearch.new(:term, :_all)
+      else
+        searcher.register TermSearch.new(:term, [:name, :country_code, :url])
+      end
     end
   end
 

@@ -3,7 +3,7 @@ require 'ingestor/importer/base'
 module Ingestor
   module Importer
     module GoogleSecondary
-      class DmcaParser < Base
+      class DMCAParser < Base
 
         handles_content(/IssueType:\s?lr_dmca/m)
 
@@ -13,6 +13,10 @@ module Ingestor
           )
 
           [content.to_work]
+        end
+
+        def default_submitter
+          'Google, Inc.'
         end
 
         def default_recipient
