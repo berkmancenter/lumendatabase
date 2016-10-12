@@ -21,7 +21,7 @@ feature "typed notice submissions" do
 
     submission.submit
 
-    open_recent_notice
+    within('#recent-notices li:nth-child(1)') { find('a').click }
 
     expect(page).to have_content("Trademark notice to Recipient")
 
@@ -55,7 +55,7 @@ feature "typed notice submissions" do
 
     submission.submit
 
-    open_recent_notice
+    within('#recent-notices li:nth-child(1)') { find('a').click }
 
     expect(page).to have_content("Defamation notice to Recipient")
 
@@ -88,7 +88,7 @@ feature "typed notice submissions" do
 
     submission.submit
 
-    open_recent_notice
+    within('#recent-notices li:nth-child(1)') { find('a').click }
 
     expect(page).to have_content("Data Protection notice to Recipient")
 
@@ -123,7 +123,7 @@ feature "typed notice submissions" do
 
     submission.submit
 
-    open_recent_notice
+    within('#recent-notices li:nth-child(1)') { find('a').click }
 
     expect(page).to have_content("Court Order notice to Recipient")
 
@@ -166,7 +166,7 @@ feature "typed notice submissions" do
 
     submission.submit
 
-    open_recent_notice
+    within('#recent-notices li:nth-child(1)') { find('a').click }
 
     expect(page).to have_content("Law Enforcement Request notice to Recipient")
 
@@ -210,7 +210,7 @@ feature "typed notice submissions" do
 
     submission.submit
 
-    open_recent_notice
+    within('#recent-notices li:nth-child(1)') { find('a').click }
 
     expect(page).to have_content("Private Information notice to Recipient")
 
@@ -248,7 +248,7 @@ feature "typed notice submissions" do
 
     submission.submit
 
-    open_recent_notice
+    within('#recent-notices li:nth-child(1)') { find('a').click }
 
     expect(page).to have_content("Other notice to Recipient")
 

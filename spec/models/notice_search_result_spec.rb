@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe NoticeSearchResult do
+describe NoticeSearchResult, type: :model do
 
   it "delegates id and title attributes to notice" do
     notice = build_stubbed(:dmca)

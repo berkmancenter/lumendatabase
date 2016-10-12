@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe User do
-  it { should have_and_belong_to_many :roles }
+describe User, type: :model do
+  it { is_expected.to have_and_belong_to_many :roles }
 
   context "#has_role?" do
     it "returns true when the user has the given role" do

@@ -1,12 +1,12 @@
 require 'spec_helper'
 
-describe NoticeSerializerProxy do
+describe NoticeSerializerProxy, type: :model do
 
   it "uses the instance's serializer when present" do
     trademark = build_stubbed(:trademark)
     serialized = TrademarkSerializer.new(trademark)
-    serialized.stub(:a_method).and_return(:a_value) # test delegation
-    TrademarkSerializer.should_receive(:new).with(trademark).and_return(serialized)
+    allow(serialized).to receive(:a_method).and_return(:a_value) # test delegation
+    expect(TrademarkSerializer).to receive(:new).with(trademark).and_return(serialized)
 
     delegator = NoticeSerializerProxy.new(trademark)
 
@@ -16,8 +16,8 @@ describe NoticeSerializerProxy do
   it "uses NoticeSerializer when no custom serializer is present" do
     object = double('Instance', active_model_serializer: nil)
     serialized = NoticeSerializer.new(object)
-    serialized.stub(:a_method).and_return(:a_value) # test delegation
-    NoticeSerializer.should_receive(:new).with(object).and_return(serialized)
+    allow(serialized).to receive(:a_method).and_return(:a_value) # test delegation
+    expect(NoticeSerializer).to receive(:new).with(object).and_return(serialized)
 
     delegator = NoticeSerializerProxy.new(object)
 

@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe SubmitNotice do
+describe SubmitNotice, type: :model do
   context "#notice" do
     it "returns a memoized instance" do
       notice = DMCA.new
-      DMCA.should_receive(:new).once.
+      expect(DMCA).to receive(:new).once.
         with(attribute: 'value').and_return(notice)
 
       submit_notice = SubmitNotice.new(DMCA, attribute: 'value')
@@ -17,7 +17,7 @@ describe SubmitNotice do
   context "#errors" do
     it "delegates to #notice" do
       notice = stub_new(DMCA)
-      notice.stub(:errors).and_return(:arbitrary)
+      allow(notice).to receive(:errors).and_return(:arbitrary)
       submit_notice = SubmitNotice.new(DMCA, {})
 
       expect(submit_notice.errors).to eq :arbitrary
@@ -90,52 +90,52 @@ describe SubmitNotice do
 
     it "auto redacts always" do
       notice = stub_new(DMCA)
-      notice.should_receive(:auto_redact)
+      expect(notice).to receive(:auto_redact)
 
       SubmitNotice.new(DMCA, {}).submit
     end
 
     it "returns true and marks for review success" do
       notice = stub_new(DMCA)
-      notice.stub(:save).and_return(true)
-      notice.stub(:copy_id_to_submission_id)
-      notice.should_receive(:mark_for_review)
+      allow(notice).to receive(:save).and_return(true)
+      allow(notice).to receive(:copy_id_to_submission_id)
+      expect(notice).to receive(:mark_for_review)
 
       ret = SubmitNotice.new(DMCA, {}).submit
 
-      expect(ret).to be_true
+      expect(ret).to be_truthy
     end
 
     it 'copies id to submission_id' do
       notice = stub_new(DMCA)
-      notice.stub(:save).and_return(true)
-      notice.stub(:mark_for_review)
-      notice.should_receive(:copy_id_to_submission_id)
+      allow(notice).to receive(:save).and_return(true)
+      allow(notice).to receive(:mark_for_review)
+      expect(notice).to receive(:copy_id_to_submission_id)
 
       SubmitNotice.new(DMCA, {}).submit
     end
 
     it "returns false on failure" do
       notice = stub_new(DMCA)
-      notice.stub(:save).and_return(false)
+      allow(notice).to receive(:save).and_return(false)
 
       ret = SubmitNotice.new(DMCA, {}).submit
 
-      expect(ret).to be_false
+      expect(ret).to be_falsey
     end
 
   end
 
   context "#submit for a user" do
     it "does nothing if the user has no entity" do
-      DMCA.should_receive(:new).with(title: "A title").and_return(null_object)
+      expect(DMCA).to receive(:new).with(title: "A title").and_return(null_object)
 
       SubmitNotice.new(DMCA, title: "A title").submit(User.new)
     end
 
     it "adds entity attributes when user has an entity" do
       user = build(:user, :with_entity)
-      DMCA.should_receive(:new).with(
+      expect(DMCA).to receive(:new).with(
         title: "A title",
         entity_notice_roles_attributes: [
           { name: 'submitter', entity_id: user.entity.id },
@@ -148,7 +148,7 @@ describe SubmitNotice do
 
     it "does not affect other roles" do
       user = build(:user, :with_entity)
-      DMCA.should_receive(:new).with(
+      expect(DMCA).to receive(:new).with(
         entity_notice_roles_attributes: [
           { name: 'sender', entity_attributes: { name: 'Sender' } },
           { name: 'submitter', entity_id: user.entity.id },
@@ -163,7 +163,7 @@ describe SubmitNotice do
 
     it "does not override an explicitly submitted entity" do
       user = build(:user, :with_entity)
-      DMCA.should_receive(:new).with(
+      expect(DMCA).to receive(:new).with(
         entity_notice_roles_attributes: [
           { name: 'recipient', entity_attributes: { name: 'Recipient' } },
           { name: 'submitter', entity_id: user.entity.id }
@@ -180,7 +180,7 @@ describe SubmitNotice do
 
   def stub_new(klass)
     klass.new.tap do |instance|
-      klass.stub(:new).and_return(instance)
+      allow(klass).to receive(:new).and_return(instance)
     end
   end
 

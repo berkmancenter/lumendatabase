@@ -154,7 +154,7 @@ describe RedactsNotices do
 
   def simple_redactor(from, to)
     redactor = RedactsNotices::RedactsContent.new(from)
-    redactor.stub(:mask).and_return(to)
+    allow(redactor).to receive(:mask).and_return(to)
 
     redactor
   end

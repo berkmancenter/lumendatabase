@@ -1,7 +1,7 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'ingestor'
 
-describe Ingestor::Importer::Google::FieldGroupParser do
+RSpec.describe Ingestor::Importer::Google::FieldGroupParser do
 
   it "extracts work descriptions" do
     expect(parser.description).to eq("Artist Name:Rick Astley
@@ -30,7 +30,7 @@ Track Name: Flipy The Bear")
 
   def parser
     described_class.new(
-      stub("FieldGroup", key: 0, content: field_group_content)
+      double("FieldGroup", key: 0, content: field_group_content)
     )
   end
 

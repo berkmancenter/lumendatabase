@@ -12,4 +12,9 @@ class CourtOrder < Notice
   def to_partial_path
     'notices/notice'
   end
+
+  def laws_referenced
+    tag_ids = self.taggings.where(context: 'regulations').pluck(:tag_id)
+    ActsAsTaggableOn::Tag.find(tag_ids)
+  end
 end

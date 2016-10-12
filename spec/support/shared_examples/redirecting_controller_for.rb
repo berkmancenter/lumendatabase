@@ -1,7 +1,7 @@
 shared_examples 'a redirecting controller for' do |model_class, factory_name, id_method|
   it "redirects to a #{model_class} according to #{id_method}" do
     instance = build(factory_name, id: 1000)
-    model_class.should_receive(id_method).with('2000').and_return(instance)
+    expect(model_class).to receive(id_method).with('2000').and_return(instance)
 
     get :show, id: 2000
 
@@ -10,7 +10,7 @@ shared_examples 'a redirecting controller for' do |model_class, factory_name, id
   end
 
   it "gives a 404 when a mapping isn't found" do
-    model_class.should_receive(id_method).and_return(nil)
+    expect(model_class).to receive(id_method).and_return(nil)
     
     get :show, id: 2000
     

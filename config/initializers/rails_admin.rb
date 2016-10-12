@@ -14,7 +14,7 @@ RailsAdmin.config do |config|
   config.audit_with :history, 'Role'
   config.audit_with :history, 'Notice'
 
-  config.attr_accessible_role { :admin }
+  # config.attr_accessible_role { :admin }
 
   config.actions do
     dashboard do

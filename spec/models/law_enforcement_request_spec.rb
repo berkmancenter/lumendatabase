@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe LawEnforcementRequest do
-  it { should ensure_inclusion_of(:request_type).
+describe LawEnforcementRequest, type: :model do
+  it { is_expected.to validate_inclusion_of(:request_type).
     in_array(described_class::VALID_REQUEST_TYPES).allow_blank(true) }
 
   it "has additional entities" do

@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe RelevantQuestion do
+describe RelevantQuestion, type: :model do
   context 'automatic validations' do
-    it { should validate_presence_of(:question) }
-    it { should validate_presence_of(:answer) }
+    it { is_expected.to validate_presence_of(:question) }
+    it { is_expected.to validate_presence_of(:answer) }
   end
 
   context "#answer_html" do

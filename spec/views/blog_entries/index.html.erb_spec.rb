@@ -68,7 +68,7 @@ describe 'blog_entries/index.html.erb' do
   end
 
   it "has a custom search engine" do
-    Chill::Application.config.stub(:google_custom_blog_search_id).and_return('yep')
+    allow(Chill::Application.config).to receive(:google_custom_blog_search_id).and_return('yep')
     blog_entries = mock_blog_entries
 
     render
@@ -79,10 +79,10 @@ describe 'blog_entries/index.html.erb' do
   def mock_blog_entries
     blog_entries = create_list(:blog_entry, 3, :with_abstract, :published)
     yield blog_entries if block_given?
-    blog_entries.stub(:total_entries).and_return(blog_entries.length)
-    blog_entries.stub(:total_pages).and_return(1)
-    blog_entries.stub(:current_page).and_return(1)
-    blog_entries.stub(:limit_value).and_return(1)
+    allow(blog_entries).to receive(:total_entries).and_return(blog_entries.length)
+    allow(blog_entries).to receive(:total_pages).and_return(1)
+    allow(blog_entries).to receive(:current_page).and_return(1)
+    allow(blog_entries).to receive(:limit_value).and_return(1)
     assign(:blog_entries, blog_entries)
     assign(:we_are_reading, [])
     blog_entries

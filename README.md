@@ -8,7 +8,7 @@ Development
 
 Requirements:
 
-* ruby 2.0
+* ruby 2.1.9
 * modern postgres
 * A jre (openjdk works fine)
 
@@ -65,4 +65,4 @@ Lumen Database is licensed under GPLv2. See LICENSE.txt for more information.
 Copyright
 =========
 
-Copyright (c) 2015 President and Fellows of Harvard College
+Copyright (c) 2016 President and Fellows of Harvard College

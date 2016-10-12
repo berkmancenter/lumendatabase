@@ -1,10 +1,10 @@
-require "spec_helper"
+require "rails_helper"
 
-describe Entity do
+describe Entity, type: :model do
   context 'automatic validations' do
-    it { should validate_presence_of :name }
-    it { should validate_presence_of :kind }
-    it { should ensure_length_of(:address_line_1).is_at_most(255) }
+    it { is_expected.to validate_presence_of :name }
+    it { is_expected.to validate_presence_of :kind }
+    it { is_expected.to validate_length_of(:address_line_1).is_at_most(255) }
   end
 
   context 'de-duplication' do
@@ -27,10 +27,10 @@ describe Entity do
     end
   end
 
-  it { should belong_to(:user) }
-  it { should have_many(:entity_notice_roles).dependent(:destroy) }
-  it { should have_many(:notices).through(:entity_notice_roles)  }
-  it { should ensure_inclusion_of(:kind).in_array(Entity::KINDS) }
+  it { is_expected.to belong_to(:user) }
+  it { is_expected.to have_many(:entity_notice_roles).dependent(:destroy) }
+  it { is_expected.to have_many(:notices).through(:entity_notice_roles)  }
+  it { is_expected.to validate_inclusion_of(:kind).in_array(Entity::KINDS) }
 
   context ".submitters" do
     it "returns only submitter types" do
@@ -50,7 +50,7 @@ describe Entity do
   context 'post update reindexing' do
     it "uses the TopicIndexQueuer to schedule notices for indexing" do
       entity = create(:entity)
-      EntityIndexQueuer.should_receive(:for).with(entity.id)
+      expect(EntityIndexQueuer).to receive(:for).with(entity.id)
 
       entity.save
     end
