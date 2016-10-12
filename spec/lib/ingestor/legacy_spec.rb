@@ -6,18 +6,18 @@ describe Ingestor::Legacy do
   describe 'by hand' do
     before do
       @error_handler = double.as_null_object
-      described_class::ErrorHandler.stub(:new).and_return(@error_handler)
+      allow(described_class::ErrorHandler).to receive(:new).and_return(@error_handler)
 
       @attribute_mapper = double("AttributeMapper")
-      @attribute_mapper.stub(:exclude?).and_return(false)
-      @attribute_mapper.stub(:notice_type).and_return(DMCA)
-      @attribute_mapper.stub(:mapped).and_return({})
-      described_class::AttributeMapper.stub(:new).and_return(@attribute_mapper)
+      allow(@attribute_mapper).to receive(:exclude?).and_return(false)
+      allow(@attribute_mapper).to receive(:notice_type).and_return(DMCA)
+      allow(@attribute_mapper).to receive(:mapped).and_return({})
+      allow(described_class::AttributeMapper).to receive(:new).and_return(@attribute_mapper)
     end
 
     it "instantiates the correct notice type based on AttributeMapper" do
-      @attribute_mapper.stub(:notice_type).and_return(Trademark)
-      Trademark.should_receive(:create!).at_least(:once).and_return(Trademark.new)
+      allow(@attribute_mapper).to receive(:notice_type).and_return(Trademark)
+      expect(Trademark).to receive(:create!).at_least(:once).and_return(Trademark.new)
 
       importer.import
     end
@@ -26,10 +26,10 @@ describe Ingestor::Legacy do
       dmca = DMCA.new
 
       existing_notice_ids.each do |original_notice_id|
-        Notice.should_receive(:where).with(original_notice_id: original_notice_id).once.and_return(dmca)
+        expect(Notice).to receive(:where).with(original_notice_id: original_notice_id).once.and_return(dmca)
       end
 
-      DMCA.should_not_receive(:create!)
+      expect(DMCA).not_to receive(:create!)
 
       importer.import
     end
@@ -94,7 +94,7 @@ describe Ingestor::Legacy do
   https://www.youtube.com/watch?v=w2-DjJ
   https://www.youtube.com/watch?v=PlsCEe|
         )
-        expect(notice).to have(1).original_document
+        expect(notice.size).to eq(1)
         expect(notice.action_taken).to eq ''
         expect(notice.submission_id).to eq 10078
       end
@@ -117,7 +117,7 @@ describe Ingestor::Legacy do
         expect(notice.infringing_urls.map(&:url)).to match_array(
           %w|http://www.youtube.com/watch?v=H0r8U-|
         )
-        expect(notice).to have(1).original_document
+        expect(notice.size).to eq(1)
         expect(notice.action_taken).to eq ''
         expect(notice.submission_id).to eq 1007
         expect(notice.mark_registration_number).to eq '12200000'
@@ -141,7 +141,7 @@ describe Ingestor::Legacy do
         expect(notice.infringing_urls.map(&:url)).to match_array(
           %w|https://www.youtube.com/user/ThisChipmunks|
         )
-        expect(notice).to have(1).original_document
+        expect(notice.size).to eq(1)
         expect(notice.action_taken).to eq ''
         expect(notice.submission_id).to eq 1006
         expect(notice.mark_registration_number).to eq '29350000'
@@ -167,7 +167,7 @@ describe Ingestor::Legacy do
          http://www.youtube.com/watch?v=6HG
          http://www.youtube.com/watch?v=FzH|
         )
-        expect(notice).to have(1).original_document
+        expect(notice.size).to eq(1)
         expect(notice.action_taken).to eq ''
         expect(notice.submission_id).to eq 1005
         expect(notice.mark_registration_number).to eq '28950000'
@@ -191,7 +191,7 @@ describe Ingestor::Legacy do
         expect(notice.infringing_urls.map(&:url)).to match_array(
           %w|https://www.youtube.com/watch?v=7uC2cJz0 https://www.youtube.com/watch?v=lRu8rSY|
         )
-        expect(notice).to have(1).original_document
+        expect(notice.size).to eq(1)
         expect(notice.action_taken).to eq ''
         expect(notice.submission_id).to eq 2000
       end
@@ -219,14 +219,14 @@ describe Ingestor::Legacy do
             "http://infringing.example.com/url_second_1"
           ]
         )
-        expect(notice).to have(1).original_document
+        expect(notice.size).to eq(1)
         expect(notice.topics.pluck(:name)).to include('Foobar')
         expect(upload_contents(notice.original_documents.first)).to eq File.read(
           'spec/support/example_files/original_notice_source.txt'
         )
         expect(notice.action_taken).to eq ''
         expect(notice.submission_id).to eq 1000
-        expect(notice).to have(1).supporting_document
+        expect(notice.size).to eq(1)
         expect(upload_contents(notice.supporting_documents.first)).to eq File.read(
           'spec/support/example_files/original.jpg'
         )
@@ -252,14 +252,14 @@ describe Ingestor::Legacy do
   http://www.example.com/unstoppable_2.html
   http://www.example.com/unstoppable_3.html|
         )
-        expect(notice).to have(1).original_document
+        expect(notice.size).to eq(1)
         expect(notice.topics.pluck(:name)).to include('Foobar')
         expect(upload_contents(notice.original_documents.first)).to eq File.read(
           'spec/support/example_files/secondary_dmca_notice_source.html'
         )
         expect(notice.action_taken).to eq ''
         expect(notice.submission_id).to eq 1001
-        expect(notice).to have(1).supporting_document
+        expect(notice.size).to eq(1)
         expect(upload_contents(notice.supporting_documents.first)).to eq File.read(
           'spec/support/example_files/secondary_dmca_notice_source-2.html'
         )
@@ -276,14 +276,14 @@ describe Ingestor::Legacy do
           %w|http://www.example.com/asdfasdf
           http://www.example.com/infringing|
         )
-        expect(notice).to have(1).original_document
+        expect(notice.size).to eq(1)
         expect(notice.topics.pluck(:name)).to include('Foobar')
         expect(upload_contents(notice.original_documents.first)).to eq File.read(
           'spec/support/example_files/secondary_other_notice_source.html'
         )
         expect(notice.action_taken).to eq ''
         expect(notice.submission_id).to eq 1002
-        expect(notice).to have(1).supporting_document
+        expect(notice.size).to eq(1)
         expect(upload_contents(notice.supporting_documents.first)).to eq File.read(
           'spec/support/example_files/secondary_other_notice_source-2.html'
         )
@@ -300,14 +300,14 @@ describe Ingestor::Legacy do
           'https://twitter.com/NoMatter/status/12345',
           'https://twitter.com/NoMatter/status/4567',
         ])
-        expect(notice).to have(1).original_document
+        expect(notice.size).to eq(1)
         expect(notice.topics.pluck(:name)).to include('Foobar')
         expect(upload_contents(notice.original_documents.first)).to eq File.read(
           'spec/support/example_files/original_twitter_notice_source.txt'
         )
         expect(notice.action_taken).to eq ''
         expect(notice.submission_id).to be_nil
-        expect(notice).to have(1).supporting_document
+        expect(notice.size).to eq(1)
         expect(upload_contents(notice.supporting_documents.first)).to eq File.read(
           'spec/support/example_files/original_twitter_notice_source.html'
         )
@@ -320,7 +320,7 @@ describe Ingestor::Legacy do
       it "a notice is created and entity info is recovered from the file" do
         expect(notice.title).to eq 'Untitled'
         expect(notice.works.length).to eq 2
-        expect(notice).to have(1).original_document
+        expect(notice.size).to eq(1)
         expect(notice.entities.map(&:name)).to match_array(
           ["Copyright Owner LLC", "Google, Inc.", "Joe Schmoe"]
         )
