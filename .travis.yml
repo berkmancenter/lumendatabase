@@ -22,9 +22,9 @@ before_script:
   - mkdir -p tmp/cache
 
 script:
-  - bundle exec rspec spec/controllers
-  - bundle exec rspec spec/lib/ingestor
-  - bundle exec rspec spec/models
-  - bundle exec rspec spec/routing
-  - bundle exec rspec spec/serializers
-  - bundle exec rspec spec/views
+  - RUBYOPT="-W0" bundle exec rspec spec/controllers
+  - RUBYOPT="-W0" bundle exec rspec spec/lib/ingestor
+  - RUBYOPT="-W0" bundle exec rspec spec/models
+  - RUBYOPT="-W0" bundle exec rspec spec/routing
+  - RUBYOPT="-W0" bundle exec rspec spec/serializers
+  - RUBYOPT="-W0" bundle exec rspec spec/views
