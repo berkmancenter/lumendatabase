@@ -578,4 +578,31 @@ where works.id in (
 )
     }
   end
+
+  desc "Re-assign Google recipient entities to the canonical Google and add tags"
+  task reassign_and_tag_google_entities: :environment do
+    google_entities = Entity.joins(:entity_notice_roles).where("entities.name ILIKE ? AND entity_notice_roles.name ILIKE ?", "Google [%]", "recipient").select("DISTINCT entities.*").all
+    google_entities.each do |entity|
+      entity.notices.each do |notice|
+        notice.tag_list.add(entity["name"][/(?<=\[).+(?=\])/])
+        notice.save!
+      end
+    end
+    google_entity_ids = Entity.joins(:entity_notice_roles).where("entities.name ILIKE ? AND entity_notice_roles.name ILIKE ?", "Google [%]", "recipient").select("DISTINCT entities.*").pluck(:id)
+    EntityNoticeRole.where(:entity_id => google_entity_ids).update_all(entity_id: 1)
+  end
+
+  desc "Re-assign Google recipients to the canonical Google"
+  task reassign_google_entities: :environment do
+    google_entities = Entity.select("id").where(:name => ["Google", "Google, Inc.", "GOOGLE INC.", "google", "Google Inc", "Google USA", "google.com", "google, inc", "google inc", "google inc."]).pluck(:id)
+    google_entities - [1]
+    EntityNoticeRole.where(:entity_id => google_entities).update_all(entity_id: 1)
+  end
+
+  desc "Re-assign Twitter recipients to the canonical Twitter"
+  task reassign_twitter_entities: :environment do
+    twitter_entities = Entity.select("id").where(:name => ["twitter", "Twitter", "Twitter, Inc.", "Twitter Inc.", "Twitter. Inc.", "Twitter,Inc.", "Twitter, Inc.", "Twitter International Company", "TWITTER, INC.", "twitter.com", "Twitter Trust and Safety"]).pluck(:id)
+    twitter_entities - [447642]
+    EntityNoticeRole.where(:entity_id => twitter_entities).update_all(entity_id: 447642)
+  end
 end
