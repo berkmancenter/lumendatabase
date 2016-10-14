@@ -52,11 +52,6 @@ describe Ingestor::Legacy do
 
   describe 'by csv' do
     before do
-      Notice.delete_all
-      Work.delete_all
-      CopyrightedUrl.delete_all
-      InfringingUrl.delete_all
-
       create(:topic, name: 'Foobar')
       ingestor = Ingestor::Legacy.open_csv(
         'spec/support/example_files/example_notice_export.csv'
