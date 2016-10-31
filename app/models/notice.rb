@@ -5,7 +5,6 @@ require 'validates_automatically'
 class Notice < ActiveRecord::Base
   include Tire::Model::Search
   include Searchability
-  include ValidatesAutomatically
 
   extend RecentScope
 
