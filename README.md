@@ -8,9 +8,9 @@ Development
 
 Requirements:
 
-* ruby 2.1.9
+* ruby 2.2.4
 * modern postgres
-* A jre (openjdk works fine)
+* A JRE (OpenJDK works fine)
 
 Setup:
 
@@ -56,6 +56,12 @@ lives at, for instance `http://www.lumendatabase.org/blog_entries/*`. Extract
 the "cx" id from the javascript embed code and put it in the
 `GOOGLE_CUSTOM_BLOG_SEARCH_ID` environment variable. The blog search will
 appear after this variable has been configured.
+
+Lumen API
+=========
+You can search the database and, if you have a contributer token, add to the database using our API.
+
+The Lumen API is documented in our GitHub Wiki: https://github.com/berkmancenter/lumendatabase/wiki/Lumen-API-Documentation
 
 License
 =======
