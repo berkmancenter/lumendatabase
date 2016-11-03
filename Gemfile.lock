@@ -1,14 +1,4 @@
 GIT
-  remote: http://github.com/thoughtbot/paperclip.git
-  revision: c594c2495cfd1f36611574c3dbf5f4d2cd199aea
-  specs:
-    paperclip (3.5.1)
-      activemodel (>= 3.0.0)
-      activesupport (>= 3.0.0)
-      cocaine (~> 0.5.0)
-      mime-types
-
-GIT
   remote: https://github.com/sporkrb/spork-rails
   revision: 0dd45e59d3237b4c8f9efc215b46d9c07072a95e
   specs:
@@ -93,7 +83,7 @@ GEM
       ffi (~> 1.0, >= 1.0.11)
     climate_control (0.0.3)
       activesupport (>= 3.0)
-    cocaine (0.5.1)
+    cocaine (0.5.8)
       climate_control (>= 0.0.3, < 1.0)
     coderay (1.1.1)
     coffee-rails (4.1.1)
@@ -223,6 +213,11 @@ GEM
       nenv (~> 0.1)
       shellany (~> 0.0)
     orm_adapter (0.5.0)
+    paperclip (3.5.4)
+      activemodel (>= 3.0.0)
+      activesupport (>= 3.0.0)
+      cocaine (~> 0.5.3)
+      mime-types
     pg (0.15.1)
     piwik_analytics (1.0.2)
       actionpack
@@ -444,7 +439,7 @@ DEPENDENCIES
   minitest
   mysql2
   neat
-  paperclip!
+  paperclip (= 3.5.4)
   pg
   piwik_analytics
   pry (~> 0.10.4)
