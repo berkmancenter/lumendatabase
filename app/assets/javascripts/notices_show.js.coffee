@@ -28,7 +28,7 @@ $('.other-entities li').hover (->
   $(".#{id}").addClass('hide')
 
 $(document).ready ->
-  $('.document').click 'ajax:complete', (xhr, status) ->
+  $('.document-original').click 'ajax:complete', (xhr, status) ->
     $(this).find('.download').html 'Document requested. Check back in 7 days.'
     return
   return
