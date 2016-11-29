@@ -108,11 +108,8 @@ feature "Redaction queue" do
 
   scenario "A user redacts a pattern everywhere", js: true do
     affected_notices = create_list(:dmca, 3, :redactable, body: "Some text")
-    unaffected_notices = create_list(:dmca, 3, :redactable, body: "Some text")
 
     with_queue do |queue|
-      unaffected_notices.each { |notice| queue.unselect_notice(notice) }
-
       queue.process_selected
 
       body_field = RedactableFieldOnPage.new(:body)
@@ -125,11 +122,6 @@ feature "Redaction queue" do
       affected_notices.each do |notice|
         notice.reload
         expect(notice.body).to eq '[REDACTED]'
-      end
-
-      unaffected_notices.each do |notice|
-        notice.reload
-        expect(notice.body).to eq "Some text"
       end
     end
   end

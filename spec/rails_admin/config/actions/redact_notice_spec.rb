@@ -146,6 +146,7 @@ describe "RedactNoticeProc" do
 
   context "Handling POST requests" do
     before { allow(request).to receive(:post?).and_return(true) }
+    let!(:redactable_notices) { create_list(:dmca, 3, :redactable) }
 
     it "delegates to the PostResponder" do
       responder = double("Post responder")
@@ -160,26 +161,16 @@ describe "RedactNoticeProc" do
       it "redacts this and all next notices" do
         params[:selected_text] = "Sensitive thing"
         params[:next_notices]  = %w( 2 3 4 )
-        redactor = expect_new(RedactsNotices, [
-          expect_new(RedactsNotices::RedactsContent, "Sensitive thing")
-        ])
-        expect(redactor).to receive(:redact_all).with([@object.id, 2, 3, 4])
-        should_receive(:redact_notice_path).
-          with(@abstract_model, 1, next_notices: %w( 2 3 4 )).
-          and_return(:some_path)
-        should_receive(:redirect_to).with(:some_path)
-
-        post_responder.handle(params)
-      end
-
-      it "redacts only this notice if there are no next notices" do
-        params[:selected_text] = "Sensitive thing"
-        redactor = stub_new(RedactsNotices, [
-          stub_new(RedactsNotices::RedactsContent, "Sensitive thing")
-        ])
-        expect(redactor).to receive(:redact_all).with([@object.id])
-        should_receive(:redact_notice_path).
-          with(@abstract_model, 1, next_notices: nil).and_return(:some_path)
+        redactor = expect_new(RedactsNotices,
+                              [
+                                expect_new(RedactsNotices::RedactsContent,
+                                           'Sensitive thing')
+                              ])
+        review_required_ids = [@object.id] + redactable_notices.map(&:id)
+        expect(redactor).to receive(:redact_all).with(review_required_ids)
+        should_receive(:redact_notice_path)
+          .with(@abstract_model, 1, next_notices: %w( 2 3 4 ))
+          .and_return(:some_path)
         should_receive(:redirect_to).with(:some_path)
 
         post_responder.handle(params)

@@ -27,7 +27,7 @@ FactoryGirl.define do
   end
 
   factory :dmca do
-
+    sequence(:id) { |n| n }
     title "A title"
     date_received Time.now
     date_sent Time.now
