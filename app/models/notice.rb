@@ -123,7 +123,7 @@ class Notice < ActiveRecord::Base
   accepts_nested_attributes_for :file_uploads,
     reject_if: ->(attributes) { [attributes['file'], attributes[:pdf_request_fulfilled]].all?(&:blank?) }
 
-  accepts_nested_attributes_for :entity_notice_roles
+  accepts_nested_attributes_for :entity_notice_roles, :allow_destroy => true
 
   accepts_nested_attributes_for :works, :allow_destroy => true
 
