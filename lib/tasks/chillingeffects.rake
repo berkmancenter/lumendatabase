@@ -605,4 +605,32 @@ where works.id in (
     twitter_entities - [447642]
     EntityNoticeRole.where(:entity_id => twitter_entities).update_all(entity_id: 447642)
   end
+  
+  desc 'Fix Google defamation notices in redact queue'
+  task fix_google_redact_queue_notices: :environment do
+    notices = Notice.where(title: 'Legal Complaint to Google',
+                           type: 'Other',
+                           hidden: true)
+    notices.each do |notice|
+      notice.body = notice.body_original[/(?:country\.)(.+)/, 1]
+      notice.auto_redact
+      notice.save!
+    end
+    notices.update_all(review_required: false)
+  end
+
+  desc 'Unhide hidden Google defamation notices'
+  task unhide_google_defamation_notices: :environment do
+    Notice.where(title: 'Legal Complaint to Google',
+                 type: 'Other',
+                 hidden: true)
+          .update_all(hidden: false)
+  end
+
+  desc 'Remove Google API Defamation complaints from Redact Queue'
+  task remove_google_api_redact_queue_notices: :environment do
+    Notice.where(title: 'Defamation Complaint to Google', review_required: true)
+          .update_all(review_required: false)
+  end
+
 end
