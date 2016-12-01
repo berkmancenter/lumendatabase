@@ -12,7 +12,7 @@ module Ingestor
         def initialize(file_path, description_start)
           super
           entity_name = yield content.dup
-          @redactor = RedactsNotices::RedactsEntityName.new(entity_name)
+          @redactor = RedactsNotices::RedactsEntityName.new( "deadbeef #{entity_name}" )
         end
 
         def to_work
