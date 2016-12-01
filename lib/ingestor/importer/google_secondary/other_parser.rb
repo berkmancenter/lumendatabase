@@ -13,7 +13,9 @@ module Ingestor
 
         def body
           content = RedactedContent.new(original_file_paths.first, 'legalother_explain') do |c|
-            "#{sender(c)} #{principal(c)}"
+            redact_with = "deadbeef #{sender(c)} #{principal(c)}".strip
+            Rails.logger.debug "[importer][other] redact body: '#{redact_with}'"
+            redact_with
           end
 
           content.to_work.description
@@ -21,7 +23,7 @@ module Ingestor
 
         def body_original
           content = RedactedContent.new(original_file_paths.first, 'legalother_explain') do |c|
-            "#{sender(c)} #{principal(c)}"
+            "#{sender(c)} #{principal(c)}".strip
           end
 
           content.to_work.description_original
@@ -58,11 +60,11 @@ module Ingestor
         end
 
         def default_submitter
-          'Google, Inc.'
+          'Google Inc.'
         end
 
         def default_recipient
-          'Google, Inc.'
+          'Google Inc.'
         end
 
         def review_required?

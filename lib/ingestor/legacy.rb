@@ -15,7 +15,7 @@ module Ingestor
 
       @logger = Rails.logger
 
-      @logger.debug { "legacy import started: #{@start_unixtime}, #{Time.now}" }
+      @logger.debug { "[importer][legacy] started: #{@start_unixtime}, #{Time.now}" }
 
       @error_handler = ErrorHandler.new(record_source.name)
 
@@ -30,7 +30,7 @@ module Ingestor
         end
       end
 
-      logger.info "legacy import name: #{record_source.name}, succeded: #{succeeded}, failed: #{failed}"
+      logger.info "[importer][legacy] name: #{record_source.name}, succeded: #{succeeded}, failed: #{failed}"
     end
 
     private
@@ -41,17 +41,21 @@ module Ingestor
       mapper = AttributeMapper.new(csv_row.to_hash)
 
       attributes = mapper.mapped
+      logger.debug "[importer][legacy] body: #{attributes[ :body ]}"
 
       existing_notice = Notice.where(original_notice_id: csv_row['NoticeID'])
-      logger.info "existing_notice.count: #{existing_notice.count}"
+      logger.debug "[importer][legacy] existing_notice.count: #{existing_notice.count}"
       if existing_notice.blank?
         notice = mapper.notice_type.create!(attributes)
       else
         notice = existing_notice.first
+        notice.works.delete_all
+        notice.reset_type =  mapper.notice_type.to_s
         notice.update_attributes(attributes)
+        notice.save
       end
 
-      logger.debug { "legacy import id: #{attributes[:original_notice_id]} -> #{notice.id}" }
+      logger.debug { "[importer][legacy] id: #{attributes[:original_notice_id]} -> #{notice.id}" }
       if error = NoticeImportError.find_by_original_notice_id(csv_row['NoticeID'])
         error.destroy
       end
@@ -60,7 +64,7 @@ module Ingestor
       if self.succeeded % 100 == 0
         now_unixtime = Time.now.to_f
         records_per_sec = self.succeeded / (now_unixtime - @start_unixtime)
-        logger.debug { "#{self.succeeded} records at #{now_unixtime} | #{Time.now} |#{records_per_sec} records / sec" }
+        logger.debug { "[importer][legacy] #{self.succeeded} records at #{now_unixtime} | #{Time.now} |#{records_per_sec} records / sec" }
       end
     rescue => ex
       self.failed += 1

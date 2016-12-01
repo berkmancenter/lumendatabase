@@ -11,8 +11,8 @@ module Ingestor
         error_message = "(#{ex.class}) #{ex.message}: #{ex.backtrace.first}"
 
 
-        logger.error "legacy import error original_notice_id: #{csv_row['NoticeID']}, name: #{source_name}, message: \"#{error_message}\""
-        logger.debug "legacy import error data: \"#{csv_row.inspect}\""
+        logger.error "[importer][legacy] error original_notice_id: #{csv_row['NoticeID']}, name: #{source_name}, message: \"#{error_message}\""
+        logger.debug "[importer][legacy] error data: \"#{csv_row.inspect}\""
 
         NoticeImportError.create!(
           original_notice_id: csv_row['NoticeID'].to_i,
@@ -22,7 +22,7 @@ module Ingestor
           import_set_name: source_name
         )
       rescue => ex
-        logger.error "Failure handling failure: #{ex}"
+        logger.error "[importer][legacy] failure handling failure: #{ex}"
       end
 
       private
