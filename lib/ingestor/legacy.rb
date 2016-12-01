@@ -38,6 +38,8 @@ module Ingestor
     attr_reader :error_handler, :record_source
 
     def import_row(csv_row)
+      logger.debug "[importer][legacy] import_row NoticeID: #{csv_row['NoticeID']}"
+
       mapper = AttributeMapper.new(csv_row.to_hash)
 
       attributes = mapper.mapped
@@ -45,15 +47,24 @@ module Ingestor
 
       existing_notice = Notice.where(original_notice_id: csv_row['NoticeID'])
       logger.debug "[importer][legacy] existing_notice.count: #{existing_notice.count}"
+
+      notice = nil
+
       if existing_notice.blank?
-        notice = mapper.notice_type.create!(attributes)
+        logger.debug "[importer][legacy] import new notice"
+        notice = mapper.notice_type.new(attributes)
       else
+        logger.debug "[importer][legacy] reimport notice"
         notice = existing_notice.first
         notice.works.delete_all
         notice.reset_type =  mapper.notice_type.to_s
         notice.update_attributes(attributes)
-        notice.save
       end
+
+      logger.debug "[importer][legacy] notice.save: #{notice.inspect}"
+      logger.debug "[importer][legacy] notice.save works: #{notice.works.inspect}"
+      logger.debug "[importer][legacy] notice.save works[0].infringing_urls: #{notice.works.first.infringing_urls.inspect}"
+      notice.save!
 
       logger.debug { "[importer][legacy] id: #{attributes[:original_notice_id]} -> #{notice.id}" }
       if error = NoticeImportError.find_by_original_notice_id(csv_row['NoticeID'])
