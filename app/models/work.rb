@@ -25,13 +25,17 @@ class Work < ActiveRecord::Base
         memo.merge(url.url_original => url.attributes.slice("url", "url_original"))
       end
       urls_to_associate = url_attributes.keys.compact
+      Rails.logger.debug "[importer][works] urls_to_associate: #{urls_to_associate}"
 
       return if urls_to_associate == ['']
 
       existing_url_instances = relation_class.where(url_original: urls_to_associate)
       existing_urls = existing_url_instances.map(&:url_original)
+      Rails.logger.debug "[importer][works] existing_urls: #{existing_urls}"
 
       new_urls = urls_to_associate - existing_urls
+      Rails.logger.debug "[importer][works] new_urls: #{new_urls}"
+
       new_url_instances = new_urls.map { |url| relation_class.new(url_attributes[url]) }
       failing = new_url_instances.reject(&:valid?)
       relation_class.import new_url_instances
