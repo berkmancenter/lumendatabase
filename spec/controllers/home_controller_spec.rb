@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe HomeController do
+  before(:each) do
+    Rails.cache.clear
+  end
   context "#index" do
     it "finds recent notices" do
       notices = double("Notices")

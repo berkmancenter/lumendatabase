@@ -23,6 +23,7 @@ class Notice < ActiveRecord::Base
     TermSearch.new(:principal_name, :principal_name, 'Principal Name'),
     TermSearch.new(:recipient_name, :recipient_name, 'Recipient Name'),
     TermSearch.new(:submitter_name, :submitter_name, 'Submitter Name'),
+    TermSearch.new(:submitter_country_code, :submitter_country_code, 'Submitter Country'),
     TermSearch.new(:works, 'works.description', 'Works Descriptions'),
     TermSearch.new(:action_taken, :action_taken, 'Action taken'),
   ]
@@ -36,6 +37,7 @@ class Notice < ActiveRecord::Base
     TermFilter.new(:tag_list_facet, 'Tags'),
     TermFilter.new(:country_code_facet, 'Country'),
     TermFilter.new(:language_facet, 'Language'),
+    TermFilter.new(:submitter_country_code_facet, 'Submitter Country'),
     UnspecifiedTermFilter.new(:action_taken_facet, 'Action taken'),
     DateRangeFilter.new(:date_received_facet, :date_received, 'Date')
   ]
@@ -123,14 +125,14 @@ class Notice < ActiveRecord::Base
   accepts_nested_attributes_for :file_uploads,
     reject_if: ->(attributes) { [attributes['file'], attributes[:pdf_request_fulfilled]].all?(&:blank?) }
 
-  accepts_nested_attributes_for :entity_notice_roles
+  accepts_nested_attributes_for :entity_notice_roles, :allow_destroy => true
 
   accepts_nested_attributes_for :works, :allow_destroy => true
 
   delegate :country_code, to: :recipient, allow_nil: true
 
   %i( sender principal recipient submitter attorney ).each do |entity|
-    delegate :name, to: entity, prefix: true, allow_nil: true
+    delegate :name, :country_code, to: entity, prefix: true, allow_nil: true
   end
 
   after_create :set_published!, if: :submitter
