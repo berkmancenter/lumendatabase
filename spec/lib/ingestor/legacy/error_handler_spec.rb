@@ -26,7 +26,7 @@ describe Ingestor::Legacy::ErrorHandler do
     end
 
     it "outputs the failure via its logger" do
-      expect(Rails.logger).to receive(:error).with('legacy import error original_notice_id: 1000, name: tNotice.csv, message: "(RuntimeError) Boom!: first"')
+      expect(Rails.logger).to receive(:error).with('[importer][legacy] error original_notice_id: 1000, name: tNotice.csv, message: "(RuntimeError) Boom!: first"')
       handler = described_class.new('tNotice.csv')
 
       handler.handle(csv_row, exception)

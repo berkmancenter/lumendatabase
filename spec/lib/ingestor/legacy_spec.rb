@@ -17,7 +17,7 @@ describe Ingestor::Legacy do
 
     it "instantiates the correct notice type based on AttributeMapper" do
       allow(@attribute_mapper).to receive(:notice_type).and_return(Trademark)
-      expect(Trademark).to receive(:create!).at_least(:once).and_return(Trademark.new)
+      expect(Trademark).to receive(:new).at_least(:once).and_return(Trademark.new)
 
       importer.import
     end

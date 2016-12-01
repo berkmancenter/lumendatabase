@@ -11,14 +11,14 @@ describe Ingestor::Importer::GoogleSecondary::OtherParser do
   end
 
   it "has a default_recipient" do
-    expect(described_class.new('').default_recipient).to eq 'Google, Inc.'
+    expect(described_class.new('').default_recipient).to eq 'Google Inc.'
   end
 
   it "gets entities" do
     expect(described_class.new(sample_file).entities).to eq({
       sender: 'dan smith',
       principal: 'FooCorp',
-      recipient: 'Google, Inc.'
+      recipient: 'Google Inc.'
     })
   end
 
