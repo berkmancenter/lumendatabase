@@ -39,6 +39,9 @@ Chill::Application.configure do
   # Expands the lines which load the assets
   config.assets.debug = false
 
+  # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
+  config.assets.precompile += %w( rails_admin/rails_admin.css rails_admin/rails_admin.js )
+
   config.action_controller.action_on_unpermitted_parameters = :raise
 
   config.action_mailer.default_url_options = { host: 'localhost:3000' }
