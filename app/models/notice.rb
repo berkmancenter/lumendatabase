@@ -277,10 +277,12 @@ class Notice < ActiveRecord::Base
   end
 
   def tag_list=(tag_list_value = '')
-    if tag_list_value.respond_to?(:each)
-      tag_list_value = tag_list_value.flatten.map{|tag|tag.downcase}
-    else
-      tag_list_value = tag_list_value.downcase
+    unless tag_list_value.nil?
+      if tag_list_value.respond_to?(:each)
+        tag_list_value = tag_list_value.flatten.map{|tag|tag.downcase}
+      else
+        tag_list_value = tag_list_value.downcase
+      end
     end
 
     super(tag_list_value)
