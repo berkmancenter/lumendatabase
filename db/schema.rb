@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20160222192409) do
+ActiveRecord::Schema.define(:version => 20170123110001) do
 
   create_table "blog_entries", :force => true do |t|
     t.integer  "user_id"
@@ -109,7 +109,7 @@ ActiveRecord::Schema.define(:version => 20160222192409) do
 
   add_index "file_uploads", ["notice_id"], :name => "index_file_uploads_on_notice_id"
 
-  create_table "infringing_urls", :force => true do |t|
+  create_table "infringing_urls", :id => :bigserial, :force => true do |t|
     t.string   "url_original", :limit => 8192, :null => false
     t.datetime "created_at",                   :null => false
     t.datetime "updated_at",                   :null => false
@@ -119,7 +119,7 @@ ActiveRecord::Schema.define(:version => 20160222192409) do
   add_index "infringing_urls", ["url_original"], :name => "index_infringing_urls_on_url_original", :unique => true
 
   create_table "infringing_urls_works", :id => false, :force => true do |t|
-    t.integer "infringing_url_id", :null => false
+    t.integer "infringing_url_id", :limit => 8, :null => false
     t.integer "work_id",           :null => false
   end
 
