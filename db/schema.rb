@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160618163529) do
+ActiveRecord::Schema.define(version: 20170123110001) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -112,7 +112,7 @@ ActiveRecord::Schema.define(version: 20160618163529) do
 
   add_index "file_uploads", ["notice_id"], name: "index_file_uploads_on_notice_id", using: :btree
 
-  create_table "infringing_urls", force: :cascade do |t|
+  create_table "infringing_urls", id: :bigserial, force: :cascade do |t|
     t.string   "url_original", limit: 8192, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -122,7 +122,7 @@ ActiveRecord::Schema.define(version: 20160618163529) do
   add_index "infringing_urls", ["url_original"], name: "index_infringing_urls_on_url_original", unique: true, using: :btree
 
   create_table "infringing_urls_works", id: false, force: :cascade do |t|
-    t.integer "infringing_url_id", null: false
+    t.integer "infringing_url_id", limit: 8, null: false
     t.integer "work_id",           null: false
   end
 
