@@ -37,7 +37,7 @@ Chill::Application.configure do
   config.assets.compress = false
 
   # Expands the lines which load the assets
-  config.assets.debug = false
+  config.assets.debug = true
 
   # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
   config.assets.precompile += %w( rails_admin/rails_admin.css rails_admin/rails_admin.js )
