@@ -11,7 +11,7 @@ addFileUploadInput = (field, parent, updateContainer) ->
 
   newContainer.insertAfter(container)
 
-$('#new_notice select').each ->
+$('.new_notice select').each ->
   $(this).select2
     placeholder: ''
     width: 'off'

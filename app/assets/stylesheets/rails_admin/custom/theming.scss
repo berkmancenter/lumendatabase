@@ -16,14 +16,9 @@
     margin: 20px;
     margin-left: 0;
 
-    input {
-      margin: 0;
-    }
-
     label {
       display: inline;
-      margin-left: 10px;
-      vertical-align: middle;
+      margin-left: 1.5em;
     }
 
     .hint {
@@ -79,6 +74,10 @@ aside#redaction-tools {
     height: 400px;
     width: 700px;
   }
+
+  label {
+    display: block;
+  }
 }
 
 .span3 {
@@ -87,8 +86,4 @@ aside#redaction-tools {
 
 .span9 {
   @extend .col-md-9;
-}
-
-body.rails_admin .sidebar-nav {
-  position: static;
 }
