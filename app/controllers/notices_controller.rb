@@ -157,7 +157,11 @@ class NoticesController < ApplicationController
   end
 
   def get_notice_type(params)
-    notice_type = params.fetch(:type, 'dmca').classify.constantize
+    type_string = params.fetch(:type, 'DMCA')
+    if type_string == 'Dmca'
+      type_string = 'DMCA'
+    end
+    notice_type = type_string.classify.constantize
 
     if notice_type < Notice
       notice_type
