@@ -87,7 +87,7 @@ class NoticesController < ApplicationController
   end
 
   def feed
-    @recent_notices = Notice.visible.recent
+    @recent_notices = Rails.cache.fetch("recent_notices", expires_in: 1.hour) { Notice.visible.recent }
     respond_to do |format|
       format.rss { render :layout => false }
     end
