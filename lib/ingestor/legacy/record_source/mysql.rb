@@ -20,7 +20,7 @@ module Ingestor
             read_timeout: 28800,
             connect_timeout: 28800
           )
-          @results = @connection.query(query, stream: true)
+          @results = @connection.query(query, stream: true, cache_rows: false)
         end
 
         def each
