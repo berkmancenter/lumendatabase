@@ -1,38 +1,45 @@
-# In config/initializers/rack-attack.rb
 class Rack::Attack
   # Always allow requests from localhost
   # (blacklist & throttles are skipped)
-  whitelist('allow from localhost') do |req|
+  whitelist( 'allow from localhost' ) do |req|
      # Requests are allowed if the return value is truthy
     '127.0.0.1' == req.ip
   end
 
-  whitelist('allow unlimited requests from API users') do |req|
-    # Unlimited requests allowed if user has a valid API key
-    u = nil
-    if req.params['authentication_token'].present?
+  whitelist( 'allow unlimited requests from API users' ) do |req|
+    token = ''
+
+    if req.env.key?( 'HTTP_X_AUTHENTICATION_TOKEN' )
+      Rails.logger.info "[rack-attack] Authentication Token in header: #{req.env['HTTP_X_AUTHENTICATION_TOKEN']}"
+      token = req.env[ 'HTTP_X_AUTHENTICATION_TOKEN' ]
+    elsif req.params[ 'authentication_token' ].present?
       Rails.logger.info "[rack-attack] Authentication Token in params: #{req.params['authentication_token']}"
-      u = User.find_by_authentication_token(req.params['authentication_token'])
-    elsif req.env.key?("HTTP_X_AUTHENTICATION_TOKEN")
-      Rails.logger.info "[rack-attack] Authentication Token in header: #{req.env["HTTP_X_AUTHENTICATION_TOKEN"]}"
-      u = User.find_by_authentication_token(req.env["HTTP_X_AUTHENTICATION_TOKEN"])
+      token = req.params[ 'authentication_token' ]
+    elsif req.post? && req.env.key?( 'action_dispatch.request.request_parameters' ) && req.env[ 'action_dispatch.request.request_parameters' ][ 'authentication_token' ].present?
+      Rails.logger.info "[rack-attack] Authentication Token in JSON POST data: #{req.env[ 'action_dispatch.request.request_parameters' ][ 'authentication_token' ]}"
+      token = req.env[ 'action_dispatch.request.request_parameters' ][ 'authentication_token' ]
     end
+    u = User.find_by_authentication_token( token )
+
     Rails.logger.info "[rack-attack] Authentication Token user email: #{u.email}" unless u.nil?
-    u.present? && (u.has_role?(Role.researcher) || u.has_role?(Role.submitter))
+    u.present? && ( u.has_role?( Role.researcher ) || u.has_role?( Role.submitter ) )
   end
 
-  throttle('api limit', :limit => 5, :period => 24.hours ) do |req|
-    Rails.logger.info "[rack_attack] api limit ip: #{req.ip}, content_type: #{req.env['CONTENT_TYPE']}"
-    req.ip if req.env["CONTENT_TYPE"] == "application/json" || req.path.include?("json")
+  throttle( 'api limit', limit: 5, period: 24.hours ) do |req|
+    Rails.logger.debug "[rack-attack] api limit ip: #{req.ip}, req.env['HTTP_ACCEPT']: #{req.env['HTTP_ACCEPT']}, content_type: #{req.content_type}"
+    req.ip if req.env[ 'HTTP_ACCEPT' ] == 'application/json' || req.env[ 'CONTENT_TYPE' ] == 'application/json' || req.path.include?( 'json' )
   end
 
-  throttle('req/ip', :limit => 200, :period => 5.minutes) do |req|
+  throttle('request limit', limit: 200, period: 5.minutes) do |req|
+    Rails.logger.debug "[rack-attack] request limit ip: #{req.ip}, content_type: #{req.content_type}"
     req.ip
   end
 
   self.throttled_response = lambda do |env|
     [ 429,  # status
-      { 'Content-Type' => 'text/html' },   # headers
-      ['Oops, you were browsing a little faster than we can keep up with. Please wait a minute and try your request again. Please <a href="https://lumendatabase.org/pages/researchers#key">request a research account key</a> if you need to make more requests than our limit.']] # body
+      { 'Content-Type' => 'text/plain' },   # headers
+      [ 'Oops, you were browsing a little faster than we can keep up with. Please wait at least five minutes and try your request again. If you need to make more requests than our limit, please wait five minutes and then visit https://lumendatabase.org/pages/researchers#key to request a research account key.' ]
+    ] # body
   end
 end
+
