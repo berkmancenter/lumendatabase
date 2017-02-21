@@ -7,7 +7,7 @@ class Rack::Attack
   end
 
   whitelist( 'allow unlimited requests from API users' ) do |req|
-    token = ''
+    token = nil
 
     if req.env.key?( 'HTTP_X_AUTHENTICATION_TOKEN' )
       Rails.logger.info "[rack-attack] Authentication Token in header: #{req.env['HTTP_X_AUTHENTICATION_TOKEN']}"
@@ -23,7 +23,7 @@ class Rack::Attack
     u = User.find_by_authentication_token( token )
 
     if u.nil?
-      Rails.logger.info "[rack-attack] user: NOT FOUND"
+      Rails.logger.info "[rack-attack] user: NOT FOUND" unless token.nil?
       false
     elsif !u.has_role?( Role.researcher ) && !u.has_role?( Role.submitter )
       Rails.logger.info "[rack-attack] email: #{u.email}, user: MISSING ROLE"
