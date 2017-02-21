@@ -19,10 +19,19 @@ class Rack::Attack
       Rails.logger.info "[rack-attack] Authentication Token in JSON POST data: #{req.env[ 'action_dispatch.request.request_parameters' ][ 'authentication_token' ]}"
       token = req.env[ 'action_dispatch.request.request_parameters' ][ 'authentication_token' ]
     end
+
     u = User.find_by_authentication_token( token )
 
-    Rails.logger.info "[rack-attack] Authentication Token user email: #{u.email}" unless u.nil?
-    u.present? && ( u.has_role?( Role.researcher ) || u.has_role?( Role.submitter ) )
+    if u.nil?
+      Rails.logger.info "[rack-attack] user: NOT FOUND"
+      false
+    elsif !u.has_role?( Role.researcher ) && !u.has_role?( Role.submitter )
+      Rails.logger.info "[rack-attack] email: #{u.email}, user: MISSING ROLE"
+      false
+    else
+      Rails.logger.info "[rack-attack] email: #{u.email}, user: OK"
+      true
+    end
   end
 
   throttle( 'api limit', limit: 5, period: 24.hours ) do |req|
