@@ -23,10 +23,10 @@ class Rack::Attack
     u = User.find_by_authentication_token( token )
 
     if u.nil?
-      Rails.logger.info "[rack-attack] user: NOT FOUND" unless token.nil?
+      Rails.logger.warn "[rack-attack] token: #{token}, user: NOT FOUND" unless token.nil?
       false
     elsif !u.has_role?( Role.researcher ) && !u.has_role?( Role.submitter )
-      Rails.logger.info "[rack-attack] email: #{u.email}, user: MISSING ROLE"
+      Rails.logger.warn "[rack-attack] token: #{token}, email: #{u.email}, user: MISSING ROLE"
       false
     else
       Rails.logger.info "[rack-attack] email: #{u.email}, user: OK"
