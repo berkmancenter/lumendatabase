@@ -16,7 +16,8 @@ class Rack::Attack
       Rails.logger.info "[rack-attack] Authentication Token in params: #{req.params['authentication_token']}"
       token = req.params[ 'authentication_token' ]
     elsif req.post? && req.env.key?( 'action_dispatch.request.request_parameters' ) && req.env[ 'action_dispatch.request.request_parameters' ][ 'authentication_token' ].present?
-      Rails.logger.info "[rack-attack] Authentication Token in JSON POST data: #{req.env[ 'action_dispatch.request.request_parameters' ][ 'authentication_token' ]}"
+      # warn on deprecated token placement
+      Rails.logger.warn "[rack-attack] Authentication Token in JSON POST data: #{req.env[ 'action_dispatch.request.request_parameters' ][ 'authentication_token' ]}"
       token = req.env[ 'action_dispatch.request.request_parameters' ][ 'authentication_token' ]
     end
 
