@@ -5,13 +5,10 @@ class CounterNoticesController < ApplicationController
 
   def create
     @counter_notice = CounterNotice.new(params[:counter_notice])
-    if @counter_notice.valid?
-      render :show
-    end
+    render :show if @counter_notice.valid?
   end
 
   def show
     @counter_notice = CounterNotice.new(params[:counter_notice])
   end
-
 end

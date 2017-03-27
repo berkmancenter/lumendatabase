@@ -6,7 +6,7 @@ class Role < ActiveRecord::Base
     admin
     super_admin
     researcher
-  )
+  ).freeze
 
   NAMES.each do |name|
     # Define a lazy, class-level reader for each role we support. This
@@ -19,5 +19,4 @@ class Role < ActiveRecord::Base
   def self.default
     redactor
   end
-
 end

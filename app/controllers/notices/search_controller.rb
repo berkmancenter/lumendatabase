@@ -2,7 +2,6 @@ class Notices::SearchController < ApplicationController
   layout 'search'
 
   def index
-
     respond_to do |format|
       format.html do
         @searcher = notice_searcher
@@ -32,9 +31,7 @@ class Notices::SearchController < ApplicationController
         searcher.register filtered_field
       end
 
-      if params[:sort_by]
-        searcher.sort_by = sort_by(params[:sort_by])
-      end
+      searcher.sort_by = sort_by(params[:sort_by]) if params[:sort_by]
     end
   end
 
@@ -42,5 +39,4 @@ class Notices::SearchController < ApplicationController
     sorting = Sortings.find(sort_by_param)
     sorting.sort_by
   end
-
 end

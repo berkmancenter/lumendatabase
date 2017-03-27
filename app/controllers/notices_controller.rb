@@ -2,9 +2,7 @@ class NoticesController < ApplicationController
   layout :resolve_layout
 
   def new
-    if params[:type].blank?
-      render :select_type and return
-    end
+    render(:select_type) && return if params[:type].blank?
 
     model_class = get_notice_type(params)
 
@@ -29,9 +27,7 @@ class NoticesController < ApplicationController
 
     respond_to do |format|
       format.json do
-        if cannot?(:submit, Notice)
-          head :unauthorized and return
-        end
+        head(:unauthorized) && return if cannot?(:submit, Notice)
 
         if submission.submit(current_user)
           head :created, location: submission.notice
@@ -42,7 +38,7 @@ class NoticesController < ApplicationController
 
       format.html do
         if submission.submit(current_user)
-          redirect_to :root, notice: "Notice created!"
+          redirect_to :root, notice: 'Notice created!'
         else
           @notice = submission.notice
           render :new
@@ -66,7 +62,7 @@ class NoticesController < ApplicationController
 
         format.json do
           serializer = researcher? ? NoticeSerializerProxy : LimitedNoticeSerializerProxy
-          render json: @notice, serializer: serializer, root: json_root_for(@notice.class)  
+          render json: @notice, serializer: serializer, root: json_root_for(@notice.class)
         end
       end
     end
@@ -87,9 +83,9 @@ class NoticesController < ApplicationController
   end
 
   def feed
-    @recent_notices = Rails.cache.fetch("recent_notices", expires_in: 1.hour) { Notice.visible.recent }
+    @recent_notices = Rails.cache.fetch('recent_notices', expires_in: 1.hour) { Notice.visible.recent }
     respond_to do |format|
-      format.rss { render :layout => false }
+      format.rss { render layout: false }
     end
   end
 
@@ -123,7 +119,7 @@ class NoticesController < ApplicationController
       :url_count,
       :webform,
       topic_ids: [],
-      file_uploads_attributes: [:kind, :file, :file_name],
+      file_uploads_attributes: %i(kind file file_name),
       entity_notice_roles_attributes: [
         :entity_id,
         :name,
@@ -134,33 +130,31 @@ class NoticesController < ApplicationController
   end
 
   def entity_params
-    [:name, :kind, :address_line_1, :address_line_2, :city, :state,
-     :zip, :country_code, :phone, :email, :url]
+    %i(name kind address_line_1 address_line_2 city state
+       zip country_code phone email url)
   end
 
   def work_params
     [
       :description, :kind, infringing_urls_attributes: [:url],
-      copyrighted_urls_attributes: [:url],
+                           copyrighted_urls_attributes: [:url]
     ]
   end
 
   def resolve_layout
     case action_name
-    when "show"
-      "search"
-    when "url_input"
+    when 'show'
+      'search'
+    when 'url_input'
       false
     else
-      "application"
+      'application'
     end
   end
 
   def get_notice_type(params)
     type_string = params.fetch(:type, 'DMCA')
-    if type_string == 'Dmca'
-      type_string = 'DMCA'
-    end
+    type_string = 'DMCA' if type_string == 'Dmca'
     notice_type = type_string.classify.constantize
 
     if notice_type < Notice
@@ -168,7 +162,6 @@ class NoticesController < ApplicationController
     else
       DMCA
     end
-
   rescue NameError
     DMCA
   ensure

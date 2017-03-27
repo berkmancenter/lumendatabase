@@ -1,5 +1,4 @@
 module NoticesHelper
-
   def form_partial_for(instance)
     "#{instance.type.tableize.singularize}_form"
   end
@@ -47,7 +46,7 @@ module NoticesHelper
   end
 
   def first_time_visitor_content
-    Markdown.render( t('first_time_visitor') )
+    Markdown.render(t('first_time_visitor'))
   end
 
   def label_for_url_input(url_type, notice)
@@ -55,27 +54,27 @@ module NoticesHelper
     when :infringing_urls
       case notice
       when ::DMCA, ::Trademark
-        "Allegedly Infringing URL"
+        'Allegedly Infringing URL'
       when ::PrivateInformation
-        "URL with private information"
+        'URL with private information'
       when ::CourtOrder
-        "Targeted URL"
+        'Targeted URL'
       when ::DataProtection, ::LawEnforcementRequest
-        "URL mentioned in request"
+        'URL mentioned in request'
       when ::Defamation
-        "Allegedly Defamatory URL"
+        'Allegedly Defamatory URL'
       when ::Other
-        "Problematic URL"
+        'Problematic URL'
       end
     when :copyrighted_urls
       case notice
       when ::DMCA, ::Other
-        "Original Work URL"
+        'Original Work URL'
       when ::LawEnforcementRequest
-        "URL of original work"
+        'URL of original work'
       end
     else
-      fail "Unknown url_type: #{url_type}"
+      raise "Unknown url_type: #{url_type}"
     end
   end
 end

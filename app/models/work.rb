@@ -3,13 +3,13 @@ require 'validates_automatically'
 class Work < ActiveRecord::Base
   include ValidatesAutomatically
 
-  UNKNOWN_WORK_DESCRIPTION = "Unknown work"
+  UNKNOWN_WORK_DESCRIPTION = 'Unknown work'.freeze
 
   has_and_belongs_to_many :notices
   has_and_belongs_to_many :infringing_urls
   has_and_belongs_to_many :copyrighted_urls
 
-  accepts_nested_attributes_for :infringing_urls, :copyrighted_urls, :reject_if => proc { |attributes| attributes['url'].blank? }
+  accepts_nested_attributes_for :infringing_urls, :copyrighted_urls, reject_if: proc { |attributes| attributes['url'].blank? }
   validates_associated :infringing_urls, :copyrighted_urls
   validates :kind, length: { maximum: 255 }
 
@@ -21,8 +21,8 @@ class Work < ActiveRecord::Base
   %w(infringing_urls copyrighted_urls).each do |relation_type|
     relation_class = relation_type.classify.constantize
     define_method("validate_associated_records_for_#{relation_type}") do
-      url_attributes =  send(relation_type.to_sym).inject({}) do |memo, url|
-        memo.merge(url.url_original => url.attributes.slice("url", "url_original"))
+      url_attributes = send(relation_type.to_sym).inject({}) do |memo, url|
+        memo.merge(url.url_original => url.attributes.slice('url', 'url_original'))
       end
       urls_to_associate = url_attributes.keys.compact
       Rails.logger.debug "[importer][works] urls_to_associate: #{urls_to_associate}"
@@ -42,8 +42,8 @@ class Work < ActiveRecord::Base
 
       existing_url_instances.each do |url|
         atts = url_attributes[url.url_original]
-        if atts["url"].present? && atts["url"] != atts["url_original"]
-          url.update_attributes!(url: atts["url"]) if atts["url"] != url.url
+        if atts['url'].present? && atts['url'] != atts['url_original']
+          url.update_attributes!(url: atts['url']) if atts['url'] != url.url
         end
       end
 
@@ -64,14 +64,14 @@ class Work < ActiveRecord::Base
     where(attributes).first || create!(attributes)
   end
 
-# Code below is to run a basic classifier for work kinds. Disabled due to confusion caused by mis-classified works.
+  # Code below is to run a basic classifier for work kinds. Disabled due to confusion caused by mis-classified works.
   before_save do
     if kind.blank?
-      self.kind = 'Unspecified' #DeterminesWorkKind.new(self).kind
+      self.kind = 'Unspecified' # DeterminesWorkKind.new(self).kind
     end
   end
 
   before_save on: :create do
-    self.description_original = description if self.description_original.nil?
+    self.description_original = description if description_original.nil?
   end
 end

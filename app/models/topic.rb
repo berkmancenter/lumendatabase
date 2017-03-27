@@ -21,10 +21,9 @@ class Topic < ActiveRecord::Base
     order(:name)
   end
 
-  after_update { TopicIndexQueuer.for(self.id) }
+  after_update { TopicIndexQueuer.for(id) }
 
   def description_html
     Markdown.render(description.to_s)
   end
-
 end

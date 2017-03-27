@@ -1,7 +1,6 @@
 class Sortings
-
   def self.find(sort_by_param)
-    instance = self.new
+    instance = new
     instance.find(sort_by_param)
   end
 

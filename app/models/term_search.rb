@@ -1,5 +1,4 @@
 class TermSearch
-
   attr_reader :parameter, :title, :field
 
   def initialize(parameter, field, title = '')
@@ -19,8 +18,7 @@ class TermSearch
     end
   end
 
-  def apply_to_search(*)
-  end
+  def apply_to_search(*); end
 
   def apply_to_query(query, param, value, operator)
     if handles?(param)
@@ -29,8 +27,7 @@ class TermSearch
     end
   end
 
-  def register_filter(*)
-  end
+  def register_filter(*); end
 
   private
 

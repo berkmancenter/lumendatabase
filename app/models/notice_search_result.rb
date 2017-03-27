@@ -50,5 +50,4 @@ class NoticeSearchResult < SimpleDelegator
       value
     end
   end
-
 end

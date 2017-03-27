@@ -1,5 +1,4 @@
 class SubmitNotice
-
   delegate :errors, to: :notice
 
   def initialize(model_class, parameters)
@@ -9,13 +8,11 @@ class SubmitNotice
 
   def submit(user = nil)
     if user && (entity = user.entity)
-      entity_present?('submitter') or set_entity('submitter', entity)
-      entity_present?('recipient') or set_entity('recipient', entity)
+      entity_present?('submitter') || set_entity('submitter', entity)
+      entity_present?('recipient') || set_entity('recipient', entity)
     end
 
-    unless notice.title.present?
-      notice.title = generic_title
-    end
+    notice.title = generic_title unless notice.title.present?
 
     notice.auto_redact
 
@@ -32,7 +29,8 @@ class SubmitNotice
         parameters
       else
         parameters.permit!
-      end)
+      end
+    )
   end
 
   private
@@ -63,9 +61,9 @@ class SubmitNotice
     role = entity_notice_role(role_name)
 
     if role.present?
-      if role.has_key?(:entity_attributes)
+      if role.key?(:entity_attributes)
         role[:entity_attributes][:name]
-      elsif role.has_key?(:entity_id)
+      elsif role.key?(:entity_id)
         Entity.find(role[:entity_id]).name
       end
     end
@@ -97,5 +95,4 @@ class SubmitNotice
     else []
     end
   end
-
 end

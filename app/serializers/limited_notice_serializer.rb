@@ -1,22 +1,20 @@
 class LimitedNoticeSerializer < ActiveModel::Serializer
   attributes :id, :type, :title, :body, :date_sent, :date_received,
-    :topics, :sender_name, :principal_name, :recipient_name, :works,
-    :tags, :jurisdictions, :action_taken, :language
+             :topics, :sender_name, :principal_name, :recipient_name, :works,
+             :tags, :jurisdictions, :action_taken, :language
 
-  # TODO - serialize additional entities
+  # TODO: - serialize additional entities
 
   def topics
     object.topics.map(&:name)
   end
 
   def works
-    object.works.as_json({
-      only: [:description],
-      include: {
-        infringing_urls: { only: [:url ] },
-        copyrighted_urls: { only: [:url ] }
-      }
-    })
+    object.works.as_json(only: [:description],
+                         include: {
+                           infringing_urls: { only: [:url] },
+                           copyrighted_urls: { only: [:url] }
+                         })
   end
 
   def tags
@@ -32,9 +30,7 @@ class LimitedNoticeSerializer < ActiveModel::Serializer
   def attributes
     attributes = super
 
-    if object.respond_to?(:_score)
-      attributes.merge!(score: object._score)
-    end
+    attributes[:score] = object._score if object.respond_to?(:_score)
 
     attributes
   end
@@ -43,5 +39,4 @@ class LimitedNoticeSerializer < ActiveModel::Serializer
     original_value = hash.delete(original_key)
     hash[new_key] = original_value
   end
-
 end

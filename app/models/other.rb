@@ -1,5 +1,5 @@
 class Other < Notice
-  MASK = "REDACTED"
+  MASK = 'REDACTED'.freeze
   REDACTION_REGEX = /google/i
 
   define_elasticsearch_mapping(works: [:description])

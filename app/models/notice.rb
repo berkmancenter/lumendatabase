@@ -11,7 +11,7 @@ class Notice < ActiveRecord::Base
   HIGHLIGHTS = %i(
     title tag_list topics.name sender_name recipient_name
     works.description works.infringing_urls.url works.copyrighted_urls.url
-  )
+  ).freeze
 
   SEARCHABLE_FIELDS = [
     TermSearch.new(:term, :_all, 'All Fields'),
@@ -25,8 +25,8 @@ class Notice < ActiveRecord::Base
     TermSearch.new(:submitter_name, :submitter_name, 'Submitter Name'),
     TermSearch.new(:submitter_country_code, :submitter_country_code, 'Submitter Country'),
     TermSearch.new(:works, 'works.description', 'Works Descriptions'),
-    TermSearch.new(:action_taken, :action_taken, 'Action taken'),
-  ]
+    TermSearch.new(:action_taken, :action_taken, 'Action taken')
+  ].freeze
 
   FILTERABLE_FIELDS = [
     TermFilter.new(:topic_facet, 'Topic'),
@@ -40,38 +40,38 @@ class Notice < ActiveRecord::Base
     TermFilter.new(:submitter_country_code_facet, 'Submitter Country'),
     UnspecifiedTermFilter.new(:action_taken_facet, 'Action taken'),
     DateRangeFilter.new(:date_received_facet, :date_received, 'Date')
-  ]
+  ].freeze
 
   SORTINGS = [
-    Sorting.new('relevancy desc', [:_score, :desc], 'Most Relevant'),
-    Sorting.new('relevancy asc', [:_score, :asc], 'Least Relevant'),
-    Sorting.new('date_received desc', [:date_received, :desc],  'Newest'),
-    Sorting.new('date_received asc', [:date_received, :asc],  'Oldest'),
-  ]
+    Sorting.new('relevancy desc', %i(_score desc), 'Most Relevant'),
+    Sorting.new('relevancy asc', %i(_score asc), 'Least Relevant'),
+    Sorting.new('date_received desc', %i(date_received desc), 'Newest'),
+    Sorting.new('date_received asc', %i(date_received asc), 'Oldest')
+  ].freeze
 
-  REDACTABLE_FIELDS = %i( body )
+  REDACTABLE_FIELDS = %i(body).freeze
   PER_PAGE = 10
 
-  UNDER_REVIEW_VALUE = 'Under review'
-  RANGE_SEPARATOR = '..'
+  UNDER_REVIEW_VALUE = 'Under review'.freeze
+  RANGE_SEPARATOR = '..'.freeze
 
-  DEFAULT_ENTITY_NOTICE_ROLES = %w|recipient sender|
+  DEFAULT_ENTITY_NOTICE_ROLES = %w(recipient sender).freeze
 
-  VALID_ACTIONS = %w( Yes No Partial Unspecified )
+  VALID_ACTIONS = %w(Yes No Partial Unspecified).freeze
 
-  OTHER_TOPIC = "Uncategorized"
+  OTHER_TOPIC = 'Uncategorized'.freeze
 
   TYPES_TO_TOPICS = {
-    'DMCA'                  => "Copyright",
-    'Trademark'             => "Trademark",
-    'Defamation'            => "Defamation",
-    'CourtOrder'            => "Court Orders",
-    'LawEnforcementRequest' => "Law Enforcement Requests",
-    'PrivateInformation'    => "Right of Publicity",
-    'DataProtection'        => "EU - Right to Be Forgotten",
-    'GovernmentRequest'     => "Government Requests",
+    'DMCA'                  => 'Copyright',
+    'Trademark'             => 'Trademark',
+    'Defamation'            => 'Defamation',
+    'CourtOrder'            => 'Court Orders',
+    'LawEnforcementRequest' => 'Law Enforcement Requests',
+    'PrivateInformation'    => 'Right of Publicity',
+    'DataProtection'        => 'EU - Right to Be Forgotten',
+    'GovernmentRequest'     => 'Government Requests',
     'Other'                 => OTHER_TOPIC
-  }
+  }.freeze
 
   TYPES = TYPES_TO_TOPICS.keys
   TOPICS = TYPES_TO_TOPICS.values
@@ -94,8 +94,8 @@ class Notice < ActiveRecord::Base
   validates_inclusion_of :action_taken, in: VALID_ACTIONS, allow_blank: true
   validates_inclusion_of :language, in: Language.codes, allow_blank: true
   validates_presence_of :works, :entity_notice_roles
-  validates :date_sent, date: { after: Proc.new { Date.new(1998,10,28) }, before: Proc.new { Time.now + 1.day }, allow_blank: true }
-  validates :date_received, date: { after: Proc.new { Date.new(1998,10,28) }, before: Proc.new { Time.now + 1.day }, allow_blank: true }
+  validates :date_sent, date: { after: proc { Date.new(1998, 10, 28) }, before: proc { Time.now + 1.day }, allow_blank: true }
+  validates :date_received, date: { after: proc { Date.new(1998, 10, 28) }, before: proc { Time.now + 1.day }, allow_blank: true }
 
   # Using reset_type because type is ALWAYS protected (deep in the Rails code).
   # attr_protected :id, :type, :reset_type
@@ -107,7 +107,7 @@ class Notice < ActiveRecord::Base
 
   def reset_type=(value)
     unless value.in?(TYPES)
-      fail ActiveModel::MissingAttributeError.new("Cannot reset Notice type to: #{value}")
+      raise ActiveModel::MissingAttributeError, "Cannot reset Notice type to: #{value}"
     end
     self[:type] = value
   end
@@ -117,21 +117,21 @@ class Notice < ActiveRecord::Base
   end
 
   def language_enum
-    Language.all.inject( {} ) { |memo, l| memo[l.label] = l.code; memo }
+    Language.all.each_with_object({}) { |l, memo| memo[l.label] = l.code; }
   end
 
   acts_as_taggable_on :tags, :jurisdictions
 
   accepts_nested_attributes_for :file_uploads,
-    reject_if: ->(attributes) { [attributes['file'], attributes[:pdf_request_fulfilled]].all?(&:blank?) }
+                                reject_if: ->(attributes) { [attributes['file'], attributes[:pdf_request_fulfilled]].all?(&:blank?) }
 
-  accepts_nested_attributes_for :entity_notice_roles, :allow_destroy => true
+  accepts_nested_attributes_for :entity_notice_roles, allow_destroy: true
 
-  accepts_nested_attributes_for :works, :allow_destroy => true
+  accepts_nested_attributes_for :works, allow_destroy: true
 
   delegate :country_code, to: :recipient, allow_nil: true
 
-  %i( sender principal recipient submitter attorney ).each do |entity|
+  %i(sender principal recipient submitter attorney).each do |entity|
     delegate :name, :country_code, to: entity, prefix: true, allow_nil: true
   end
 
@@ -162,14 +162,14 @@ class Notice < ActiveRecord::Base
   end
 
   def self.in_topics(topics)
-    joins(topic_assignments: :topic).
-      where('topics.id' => topics).uniq
+    joins(topic_assignments: :topic)
+      .where('topics.id' => topics).uniq
   end
 
   def self.submitted_by(submitters)
-    joins(entity_notice_roles: :entity).
-      where('entity_notice_roles.name' => :submitter).
-      where('entities.id' => submitters)
+    joins(entity_notice_roles: :entity)
+      .where('entity_notice_roles.name' => :submitter)
+      .where('entities.id' => submitters)
   end
 
   def self.add_default_filter(search)
@@ -180,7 +180,7 @@ class Notice < ActiveRecord::Base
   end
 
   def self.find_visible(notice_id)
-    self.visible.find(notice_id)
+    visible.find(notice_id)
   end
 
   def self.visible
@@ -190,14 +190,12 @@ class Notice < ActiveRecord::Base
   def self.visible_qualifiers
     { spam: false, hidden: false, published: true, rescinded: false }
   end
-  
+
   def self.find_unpublished(notice_id)
-    begin 
-      self.where(spam: false, hidden: false, published: false).find(notice_id)
-      return true
-    rescue
-      return false
-    end    
+    where(spam: false, hidden: false, published: false).find(notice_id)
+    return true
+  rescue
+    return false
   end
 
   def active_model_serializer
@@ -264,10 +262,10 @@ class Notice < ActiveRecord::Base
   end
 
   def next_requiring_review
-    self.class.
-      where('id > ? and review_required = ?', id, true).
-      order('id asc').
-      first
+    self.class
+        .where('id > ? and review_required = ?', id, true)
+        .order('id asc')
+        .first
   end
 
   def tag_list
@@ -280,11 +278,11 @@ class Notice < ActiveRecord::Base
 
   def tag_list=(tag_list_value = '')
     unless tag_list_value.nil?
-      if tag_list_value.respond_to?(:each)
-        tag_list_value = tag_list_value.flatten.map{|tag|tag.downcase}
-      else
-        tag_list_value = tag_list_value.downcase
-      end
+      tag_list_value = if tag_list_value.respond_to?(:each)
+                         tag_list_value.flatten.map(&:downcase)
+                       else
+                         tag_list_value.downcase
+                       end
     end
 
     super(tag_list_value)
@@ -320,10 +318,10 @@ class Notice < ActiveRecord::Base
     self.published = should_be_published?
     save
   end
-  
+
   def notice_topic_map
-    topic = TYPES_TO_TOPICS.key?(self.type) ? TYPES_TO_TOPICS[self.type] : OTHER_TOPIC
-    return Topic.find_or_create_by(name: topic)
+    topic = TYPES_TO_TOPICS.key?(type) ? TYPES_TO_TOPICS[type] : OTHER_TOPIC
+    Topic.find_or_create_by(name: topic)
   end
 
   def hide_identities?
@@ -331,12 +329,10 @@ class Notice < ActiveRecord::Base
   end
 
   before_save do
-    notice_type = self.type
-    topic = self.notice_topic_map
+    notice_type = type
+    topic = notice_topic_map
 
-    unless self.topics.include?(topic)
-      self.topics << topic
-    end  
+    topics << topic unless topics.include?(topic)
   end
 
   private
@@ -362,6 +358,6 @@ class Notice < ActiveRecord::Base
   end
 
   def remove_from_index
-    self.index.remove self
+    index.remove self
   end
 end

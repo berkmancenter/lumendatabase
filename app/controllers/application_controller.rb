@@ -33,26 +33,22 @@ class ApplicationController < ActionController::Base
 
   def facet_query_meta(results)
     results.facets && results.facets.keys.each_with_object({}) do |facet, memo|
-      if params[facet.to_sym].present?
-        memo[facet.to_sym] = params[facet.to_sym]
-      end
+      memo[facet.to_sym] = params[facet.to_sym] if params[facet.to_sym].present?
     end
   end
 
   def layout_by_resource
     if devise_controller?
-      "sessions"
+      'sessions'
     else
-      "application"
+      'application'
     end
   end
 
   def authenticate_user_from_token!
     user = authentication_token && User.find_by_authentication_token(authentication_token.to_s)
 
-    if user
-      sign_in user, store: false
-    end
+    sign_in user, store: false if user
   end
 
   def authentication_token

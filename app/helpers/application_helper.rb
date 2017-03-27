@@ -1,6 +1,6 @@
 module ApplicationHelper
   include Twitter::Autolink
-  
+
   def available_topics
     Topic.ordered
   end

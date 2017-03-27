@@ -10,7 +10,7 @@ class Entity < ActiveRecord::Base
   include DefaultNameOriginal
 
   PER_PAGE = 10
-  HIGHLIGHTS = %i(name)
+  HIGHLIGHTS = %i(name).freeze
 
   validates :address_line_1, length: { maximum: 255 }
 
@@ -21,28 +21,28 @@ class Entity < ActiveRecord::Base
   delegate :publication_delay, to: :user, allow_nil: true
 
   mapping do
-    columns.map(&:name).reject{|name| name == 'id'}.each do|column_name|
+    columns.map(&:name).reject { |name| name == 'id' }.each do |column_name|
       indexes column_name
     end
     indexes :parent_id, as: 'parent_id'
   end
 
-  KINDS = %w[organization individual]
+  KINDS = %w(organization individual).freeze
   ADDITIONAL_DEDUPLICATION_FIELDS =
-    %i(address_line_1 city state zip country_code phone email)
+    %i(address_line_1 city state zip country_code phone email).freeze
 
   validates_inclusion_of :kind, in: KINDS
   validates_uniqueness_of :name,
-    scope: ADDITIONAL_DEDUPLICATION_FIELDS
+                          scope: ADDITIONAL_DEDUPLICATION_FIELDS
 
-  after_update { EntityIndexQueuer.for(self.id) }
+  after_update { EntityIndexQueuer.for(id) }
 
   def attributes_for_deduplication
     all_deduplication_attributes = [
       :name, ADDITIONAL_DEDUPLICATION_FIELDS
     ].flatten
 
-    attributes.select do |key, value|
+    attributes.select do |key, _value|
       all_deduplication_attributes.include?(key.to_sym)
     end
   end

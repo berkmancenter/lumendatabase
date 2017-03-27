@@ -8,13 +8,13 @@ class FileUpload < ActiveRecord::Base
   # attr_protected :id, :pdf_requested, :pdf_request_fulfilled
   # attr_protected :id, as: :admin
 
-  validates_inclusion_of :kind, in: %w( original supporting )
+  validates_inclusion_of :kind, in: %w(original supporting)
   validates :kind, length: { maximum: 255 }
 
   belongs_to :notice
   has_attached_file :file,
-    path: ":rails_root/paperclip/:class/:attachment/:id_partition/:style/:filename",
-    url: "/:class/:attachment/:id/:id_partition/:style/:filename"
+                    path: ':rails_root/paperclip/:class/:attachment/:id_partition/:style/:filename',
+                    url: '/:class/:attachment/:id/:id_partition/:style/:filename'
 
   before_save :rename_file, if: ->(instance) { instance.file_name.present? }
   delegate :url, to: :file
@@ -37,5 +37,4 @@ class FileUpload < ActiveRecord::Base
     self.file_file_name = file_name.gsub(/[^a-z\d\.\- ]/i, '_')
     true
   end
-
 end

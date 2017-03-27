@@ -1,5 +1,4 @@
 class RedirectingController < ApplicationController
-
   def show(class_model, finder_method_name)
     instance = class_model.send(finder_method_name, params[:id])
 
