@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'gdbm'
 gem 'bourbon'
 gem 'neat'
 gem 'flutie'

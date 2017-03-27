@@ -123,7 +123,7 @@ ActiveRecord::Schema.define(version: 20170123110001) do
 
   create_table "infringing_urls_works", id: false, force: :cascade do |t|
     t.integer "infringing_url_id", limit: 8, null: false
-    t.integer "work_id",           null: false
+    t.integer "work_id",                     null: false
   end
 
   add_index "infringing_urls_works", ["infringing_url_id"], name: "index_infringing_urls_works_on_infringing_url_id", using: :btree
