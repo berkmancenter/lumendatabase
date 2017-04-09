@@ -46,7 +46,7 @@ group :assets do
   gem 'coffee-rails'
   gem 'sass-rails'
   gem 'uglifier'
-  gem 'therubyracer'
+  # gem 'therubyracer'
 end
 
 group :development do
