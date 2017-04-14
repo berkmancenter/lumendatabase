@@ -247,6 +247,19 @@ class Notice < ActiveRecord::Base
     RedactsNotices.new.redact(self)
   end
 
+
+  def redact_urls
+    # Some notice types require infringing_urls' url to be blank
+    Rails.logger.info "[redact_urls] class: #{self.class.to_s.inspect}, urls: #{self.infringing_urls.count}"
+    case self.class.to_s
+    when 'DataProtection'
+      self.infringing_urls.each { |url|
+        Rails.logger.info "[redact_urls] url: #{url.url_original}"
+        url.update_attributes url: nil
+      }
+    end
+  end
+  
   def mark_for_review
     update_column(:review_required, RiskAssessment.new(self).high_risk?)
   end
