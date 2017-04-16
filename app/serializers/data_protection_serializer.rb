@@ -1,5 +1,4 @@
 class DataProtectionSerializer < NoticeSerializer
-
   def attributes
     attributes = super
     swap_keys(attributes, :body, :legal_complaint)

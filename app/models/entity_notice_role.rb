@@ -4,7 +4,7 @@ class EntityNoticeRole < ActiveRecord::Base
   include ValidatesAutomatically
 
   validates :name, length: { maximum: 255 }
-  
+
   belongs_to :entity
   belongs_to :notice, touch: true
 
@@ -21,7 +21,7 @@ class EntityNoticeRole < ActiveRecord::Base
     issuing_court
     plaintiff
     defendant
-  )
+  ).freeze
 
   accepts_nested_attributes_for :entity
 
@@ -56,5 +56,4 @@ class EntityNoticeRole < ActiveRecord::Base
   validates_inclusion_of :name, in: ROLES
   validates_presence_of :entity, :notice
   validates_associated :entity
-
 end

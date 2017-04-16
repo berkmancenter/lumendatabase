@@ -1,6 +1,5 @@
 class DataProtection < Notice
-  
-  DEFAULT_ENTITY_NOTICE_ROLES = %w|recipient|
+  DEFAULT_ENTITY_NOTICE_ROLES = %w(recipient).freeze
   define_elasticsearch_mapping
 
   def self.model_name
@@ -10,5 +9,4 @@ class DataProtection < Notice
   def to_partial_path
     'notices/notice'
   end
-  
 end

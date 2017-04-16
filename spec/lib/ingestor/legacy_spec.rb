@@ -138,9 +138,7 @@ describe Ingestor::Legacy do
       it "notices are created" do
         expect(notice.title).to eq 'Takedown Request regarding Trademark Complaint to YouTube'
         expect(notice.works.length).to eq 1
-        expect(notice.infringing_urls.map(&:url)).to match_array(
-          %w|https://www.youtube.com/user/ThisChipmunks|
-        )
+        expect(notice.infringing_urls.map(&:url)).to match_array(%w(https://www.youtube.com/user/ThisChipmunks))
         expect(notice.size).to eq(1)
         expect(notice.action_taken).to eq ''
         expect(notice.submission_id).to eq 1006

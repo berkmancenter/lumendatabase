@@ -1,5 +1,4 @@
 class SearchesModels
-
   attr_accessor :sort_by
 
   def initialize(params = {}, model_class = Notice)
@@ -61,27 +60,24 @@ class SearchesModels
     search.query do |query|
       # Don't pass empty queries to elasticsearch
       if !parameters_present? && visible_qualifiers.blank?
-        query.boolean{ must { string 'id:*' }}
+        query.boolean { must { string 'id:*' } }
       else
         visible_qualifiers.each do |k, v|
           query.boolean { |q| q.must { match(k, v, operator: 'AND') } }
         end
       end
       @params.each do |param, value|
-        if value.present?
-          registry.each do |filter|
-            filter.apply_to_query(query, param, value, operator_for_param(param))
-            filter.apply_to_search(search, param, value)
-          end
+        next unless value.present?
+        registry.each do |filter|
+          filter.apply_to_query(query, param, value, operator_for_param(param))
+          filter.apply_to_search(search, param, value)
         end
       end
     end
   end
 
   def operator_for_param(param)
-    if @params["#{param}-require-all"].present?
-      'AND'
-    end
+    'AND' if @params["#{param}-require-all"].present?
   end
 
   def parameters_present?

@@ -1,5 +1,4 @@
 class DateRangeFilter
-
   attr_reader :title, :parameter
 
   def initialize(parameter, indexed_attribute = nil, title = '')
@@ -36,9 +35,7 @@ class DateRangeFilter
     [:range, @indexed_attribute => filter_values.to_attribute]
   end
 
-
-  def apply_to_query(*)
-  end
+  def apply_to_query(*); end
 
   private
 
@@ -48,7 +45,7 @@ class DateRangeFilter
       { from: now - 1.day, to: now },
       { from: now - 1.month, to: now  },
       { from: now - 6.months, to: now },
-      { from: now - 12.months, to: now },
+      { from: now - 12.months, to: now }
     ]
   end
 
@@ -67,5 +64,4 @@ class DateRangeFilter
       { from: @from, to: @to }
     end
   end
-
 end

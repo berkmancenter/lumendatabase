@@ -1,5 +1,4 @@
 class TermFilter
-
   attr_reader :title, :parameter
 
   def initialize(parameter, title = '', indexed_attribute = nil)
@@ -13,7 +12,7 @@ class TermFilter
   end
 
   def filter_for(value)
-    [:terms, @indexed_attribute => [ value ]]
+    [:terms, @indexed_attribute => [value]]
   end
 
   def apply_to_search(searcher, param, value)
@@ -33,13 +32,11 @@ class TermFilter
     end
   end
 
-  def apply_to_query(*)
-  end
+  def apply_to_query(*); end
 
   private
 
   def handles?(parameter_of_concern)
     @parameter == parameter_of_concern.to_sym
   end
-
 end

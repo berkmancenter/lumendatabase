@@ -18,15 +18,15 @@ class DeterminesWorkKind
 
   class Classifier
     PATTERNS = {
-      software: %r{\.rar\s*$}i,
-      image: %r{(photo|image)s?}i,
-      music: %r{artist\s+name|music|mp3|aac|album|flac|song}i,
-      movie: %r{mp4|mov|movies|dvd|xvid|rip|bluray}i,
-      book: %r{page|novel|book|epub|kindle}i
-    }
+      software: /\.rar\s*$/i,
+      image: /(photo|image)s?/i,
+      music: /artist\s+name|music|mp3|aac|album|flac|song/i,
+      movie: /mp4|mov|movies|dvd|xvid|rip|bluray/i,
+      book: /page|novel|book|epub|kindle/i
+    }.freeze
 
     def initialize
-      @results = Hash.new { |hash,key| hash[key] = 0 }
+      @results = Hash.new { |hash, key| hash[key] = 0 }
       @results[:unknown] = 0
     end
 
@@ -35,20 +35,17 @@ class DeterminesWorkKind
     end
 
     def classify(value, weight)
-      PATTERNS.each do |kind,pattern|
-        if value =~ pattern
-          results[kind] += weight
-        end
+      PATTERNS.each do |kind, pattern|
+        results[kind] += weight if value =~ pattern
       end
     end
 
     def best
-      results.max_by { |_,weight| weight }.first
+      results.max_by { |_, weight| weight }.first
     end
 
     private
 
     attr_reader :results
-
   end
 end
