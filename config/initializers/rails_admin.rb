@@ -3,6 +3,7 @@ require 'rails_admin/config/actions/redact_notice'
 require 'rails_admin/config/actions/pdf_requests'
 
 RailsAdmin.config do |config|
+  config.parent_controller = '::ApplicationController'
 
   config.main_app_name = ['Lumen Database', 'Admin']
 
