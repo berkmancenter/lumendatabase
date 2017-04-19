@@ -1,4 +1,16 @@
-<%= redact_notice_form(abstract_model, object, params) do |form| %>
+<%  options = {
+      url: redact_notice_path(
+        abstract_model, object.id, next_notices: params[:next_notices]
+      ),
+      as: abstract_model.param_key,
+      html: {
+        multipart: true,
+        method: :post
+      }
+    }
+%>
+
+<%= simple_form_for(object, options) do |form| %>
   <%= hidden_field_tag(:selected_text) %>
   <%=
     form.submit(
