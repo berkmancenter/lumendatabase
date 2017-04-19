@@ -4,7 +4,7 @@ require 'rails_admin/config/actions/pdf_requests'
 
 RailsAdmin.config do |config|
 
-  config.main_app_name = ['Chilling Effects', 'Admin']
+  config.main_app_name = ['Lumen Database', 'Admin']
 
   config.current_user_method { current_user }
 
