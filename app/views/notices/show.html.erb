@@ -3,7 +3,8 @@
 <article class="notice-show">
   <% if can?(:access, :rails_admin) %>
     <div class="admin-edit">
-      <%= link_to "Edit in Admin", admin_show_path(@notice) %>
+      <%= link_to "Show in Admin", admin_show_path(@notice) %> |
+      <%= link_to "Edit in Admin", admin_edit_path(@notice) %>
     </div>
   <% end %>
 
