@@ -75,6 +75,12 @@ RailsAdmin.config do |config|
         field :request_type
         field :webform
       end
+
+      show do
+        configure(:infringing_urls) { hide }
+        configure(:copyrighted_urls) { hide }
+      end
+
       edit do
         configure :action_taken, :enum do
           enum do
