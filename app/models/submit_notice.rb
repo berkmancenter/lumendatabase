@@ -20,7 +20,6 @@ class SubmitNotice
     notice.auto_redact
 
     if notice.save
-      notice.redact_urls
       notice.mark_for_review
       notice.copy_id_to_submission_id
       true
