@@ -1,6 +1,6 @@
 RSpec.configure do |config|
-  config.before(:each) do
-    if example.options[:search]
+  config.before(:each) do |example|
+    if example.metadata[:search]
       FakeWeb.clean_registry
 
       Notice.index.delete

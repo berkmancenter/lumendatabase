@@ -8,7 +8,7 @@ describe Markdown do
   end
 
   it "reuses the same RedCarpet::Markdown instance" do
-    Redcarpet::Markdown.should_not_receive(:new)
+    expect(Redcarpet::Markdown).not_to receive(:new)
 
     Markdown.render("markdown")
     Markdown.render("markdown")

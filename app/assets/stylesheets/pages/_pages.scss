@@ -117,11 +117,7 @@
     }
 
     li {
-      @include span-columns(4);
-
-      @include media($tablet) {
-        @include span-columns(8);
-      }
+      @include span-columns(8);
 
       &:nth-child(2) {
         clear: left;

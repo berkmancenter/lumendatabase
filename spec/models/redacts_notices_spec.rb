@@ -27,6 +27,7 @@ describe RedactsNotices::RedactsPhoneNumbers do
     456-7890
     456.7890
     456\ 7890
+    90\ 212\ 326\ 06\ 15
   )
 
   PHONE_NUMBERS.each do |phone_number|
@@ -121,6 +122,17 @@ describe RedactsNotices do
       expect(notice.body).to eq "Some [REDACTED] text"
       expect(notice.body_original).to eq "Some sensitive text"
     end
+
+    it "ignores stopwords" do
+      notice = build(
+        :dmca,
+        body: "Text with the stopwords")
+      redactor = RedactsNotices.new([RedactsNotices::RedactsContent.new('the')])
+
+      redactor.redact(notice, :body)
+
+      expect(notice.body).to eq "Text with the stopwords"
+    end
   end
 
   context "#redact_all" do
@@ -142,7 +154,7 @@ describe RedactsNotices do
 
   def simple_redactor(from, to)
     redactor = RedactsNotices::RedactsContent.new(from)
-    redactor.stub(:mask).and_return(to)
+    allow(redactor).to receive(:mask).and_return(to)
 
     redactor
   end

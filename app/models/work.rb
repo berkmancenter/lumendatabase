@@ -11,6 +11,7 @@ class Work < ActiveRecord::Base
 
   accepts_nested_attributes_for :infringing_urls, :copyrighted_urls, :reject_if => proc { |attributes| attributes['url'].blank? }
   validates_associated :infringing_urls, :copyrighted_urls
+  validates :kind, length: { maximum: 255 }
 
   # Similar to the hack in EntityNoticeRole, because all validations are
   # run before all inserts, we have to save to ensure we don't have the
@@ -24,14 +25,19 @@ class Work < ActiveRecord::Base
         memo.merge(url.url_original => url.attributes.slice("url", "url_original"))
       end
       urls_to_associate = url_attributes.keys.compact
+      Rails.logger.debug "[importer][works] urls_to_associate: #{urls_to_associate}"
 
       return if urls_to_associate == ['']
 
       existing_url_instances = relation_class.where(url_original: urls_to_associate)
       existing_urls = existing_url_instances.map(&:url_original)
+      Rails.logger.debug "[importer][works] existing_urls: #{existing_urls}"
 
       new_urls = urls_to_associate - existing_urls
+      Rails.logger.debug "[importer][works] new_urls: #{new_urls}"
+
       new_url_instances = new_urls.map { |url| relation_class.new(url_attributes[url]) }
+      failing = new_url_instances.reject(&:valid?)
       relation_class.import new_url_instances
 
       existing_url_instances.each do |url|
@@ -43,14 +49,14 @@ class Work < ActiveRecord::Base
 
       send(
         "#{relation_type}=".to_sym,
-        existing_url_instances + relation_class.where(url_original: new_urls)
+        existing_url_instances + failing + relation_class.where(url_original: new_urls)
       )
     end
   end
 
   def self.unknown
     @unknown ||= find_or_create!(
-      kind: :unknown, description: UNKNOWN_WORK_DESCRIPTION
+      kind: 'unknown', description: UNKNOWN_WORK_DESCRIPTION
     )
   end
 

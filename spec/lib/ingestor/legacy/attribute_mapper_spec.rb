@@ -5,8 +5,8 @@ describe Ingestor::Legacy::AttributeMapper do
   context "#notice_type" do
     it "returns the notice_type of its importer" do
       importer = double("Importer")
-      importer.stub(:notice_type).and_return(Trademark)
-      Ingestor::ImportDispatcher.stub(:for).and_return(importer)
+      allow(importer).to receive(:notice_type).and_return(Trademark)
+      allow(Ingestor::ImportDispatcher).to receive(:for).and_return(importer)
 
       mapper = described_class.new({})
 
@@ -61,8 +61,8 @@ describe Ingestor::Legacy::AttributeMapper do
     expect(attributes[:updated_at]).to eq hash['alter_date']
     expect(attributes[:date_sent]).to eq hash['Date']
     expect(attributes[:date_received]).to eq hash['Date']
-    expect(attributes[:rescinded]).to be_false
-    expect(attributes[:hidden]).to be_false
+    expect(attributes[:rescinded]).to be_falsey
+    expect(attributes[:hidden]).to be_falsey
     expect(attributes[:mark_registration_number]).to be_empty
   end
 
@@ -85,9 +85,22 @@ describe Ingestor::Legacy::AttributeMapper do
     before do
       @import_class = double(
         "ImportClass",
-        works: 'works', file_uploads: 'files',
-        action_taken: 'Yes', require_review_if_works_empty?: true,
-        entities: {}, default_recipient: nil, mark_registration_number: nil
+        works: 'works',
+        file_uploads: 'files',
+        action_taken: 'Yes',
+        require_review_if_works_empty?: true,
+        entities: {},
+        default_recipient: nil,
+        default_submitter: nil,
+        mark_registration_number: nil,
+        body: nil,
+        body_original: nil,
+        hidden?: nil,
+        review_required?: false,
+        tag_list: nil,
+        date_received: nil,
+        sender_address: nil,
+        recipient: nil
       )
     end
 
@@ -96,8 +109,8 @@ describe Ingestor::Legacy::AttributeMapper do
         'OriginalFilePath' => 'path',
         'SupportingFilePath' => 'other path'
       }
-      Ingestor::ImportDispatcher.
-        should_receive(:for).with('path', 'other path').and_return(@import_class)
+      expect(Ingestor::ImportDispatcher).
+        to receive(:for).with('path', 'other path').and_return(@import_class)
 
       attributes = described_class.new(hash).mapped
 
@@ -106,12 +119,12 @@ describe Ingestor::Legacy::AttributeMapper do
       expect(attributes[:review_required]).to eq false
     end
 
-    it "does not pass through the Body value" do
-      Ingestor::ImportDispatcher.should_receive(:for).and_return(@import_class)
+    it "does pass through the Body value" do
+      expect(Ingestor::ImportDispatcher).to receive(:for).and_return(@import_class)
 
       attributes = described_class.new({ 'Body' => 'foobar' }).mapped
 
-      expect(attributes[:body]).to be_nil
+      expect(attributes[:body]).to eq('foobar')
     end
   end
 
@@ -295,15 +308,25 @@ contact_email_noprefill: info.antipiracy@dtecnet.com|,
   it "uses entities from the importer when none are in the hash" do
     import_class = double(
       "ImportClass",
-      entities: { sender: 'Sender' }, default_recipient: nil,
       works: [],
-      require_review_if_works_empty?: true,
-      action_taken: 'yes',
       file_uploads: [],
-      mark_registration_number: nil
+      action_taken: 'yes',
+      require_review_if_works_empty?: true,
+      entities: { sender: 'Sender' },
+      default_recipient: nil,
+      default_submitter: nil,
+      mark_registration_number: nil,
+      body: nil,
+      body_original: nil,
+      hidden?: nil,
+      review_required?: false,
+      tag_list: nil,
+      date_received: nil,
+      sender_address: nil,
+      recipient: nil
     )
-    Ingestor::ImportDispatcher.stub(:for).and_return(import_class)
-    import_class.should_receive(:entities).exactly(4).times
+    allow(Ingestor::ImportDispatcher).to receive(:for).and_return(import_class)
+    expect(import_class).to receive(:entities).exactly(4).times
 
     attributes = described_class.new({}).mapped
     entity = find_entity_notice_role(attributes, 'sender').entity
@@ -382,25 +405,25 @@ contact_email_noprefill: info.antipiracy@dtecnet.com|,
     it "marks a notice as rescinded if Readlevel is 10" do
       attributes = described_class.new("Readlevel" => "10").mapped
 
-      expect(attributes[:rescinded]).to be_true
+      expect(attributes[:rescinded]).to be true
     end
 
     it "marks a notice as hidden if Readlevel is 8" do
       attributes = described_class.new("Readlevel" => "8").mapped
 
-      expect(attributes[:hidden]).to be_true
+      expect(attributes[:hidden]).to be true
     end
 
     it "marks a notice as hidden if Readlevel is 3" do
       attributes = described_class.new("Readlevel" => "3").mapped
 
-      expect(attributes[:hidden]).to be_true
+      expect(attributes[:hidden]).to be true
     end
 
     it "also handles integer Readlevels" do
       attributes = described_class.new("Readlevel" => 3).mapped
 
-      expect(attributes[:hidden]).to be_true
+      expect(attributes[:hidden]).to be true
     end
   end
 
@@ -412,12 +435,24 @@ contact_email_noprefill: info.antipiracy@dtecnet.com|,
 
   def stub_importer_with_no_works(review_required = true)
     stubbed_methods = {
-      works: [], file_uploads: [],
+      works: [],
+      file_uploads: [],
       action_taken: nil,
       require_review_if_works_empty?: review_required,
-      entities: {}, default_recipient: nil, mark_registration_number: 10000
+      entities: {},
+      default_recipient: nil,
+      default_submitter: nil,
+      mark_registration_number: 10000,
+      body: nil,
+      body_original: nil,
+      hidden?: nil,
+      review_required?: false,
+      tag_list: nil,
+      date_received: nil,
+      sender_address: nil,
+      recipient: nil
     }
-    Ingestor::ImportDispatcher.stub(:for).and_return(double(
+    allow(Ingestor::ImportDispatcher).to receive(:for).and_return(double(
       "ImportClass", stubbed_methods
     ))
   end

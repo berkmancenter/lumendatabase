@@ -1,10 +1,10 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'notices/show.html.erb' do
   before do
     @ability = Object.new
     @ability.extend(CanCan::Ability)
-    view.controller.stub(:current_ability) { @ability }
+    allow(view.controller).to receive(:current_ability) { @ability }
   end
 
   it "displays a metadata from a notice" do
@@ -17,8 +17,8 @@ describe 'notices/show.html.erb' do
   end
 
   it "displays the date sent in the proper format" do
-    notice = build(:dmca, date_sent: Time.local(2013, 5, 4))
-    notice.stub(:sender).and_return(build(:entity))
+    notice = build(:dmca, date_sent: Time.zone.local(2013, 5, 4))
+    allow(notice).to receive(:sender).and_return(build(:entity))
     assign(:notice, notice)
 
     render
@@ -27,8 +27,8 @@ describe 'notices/show.html.erb' do
   end
 
   it "displays the date received in the proper format" do
-    notice = build(:dmca, date_received: Time.local(2013, 6, 5))
-    notice.stub(:recipient).and_return(build(:entity))
+    notice = build(:dmca, date_received: Time.zone.local(2013, 6, 5))
+    allow(notice).to receive(:recipient).and_return(build(:entity))
     assign(:notice, notice)
 
     render
@@ -110,7 +110,7 @@ describe 'notices/show.html.erb' do
   context "showing Principal" do
     it "displays the name as 'on behalf of principal' when differing" do
       notice = create(:dmca, role_names: %w( sender principal ))
-      notice.stub(:on_behalf_of_principal?).and_return(true)
+      allow(notice).to receive(:on_behalf_of_principal?).and_return(true)
       assign(:notice, notice)
 
       render
@@ -123,7 +123,7 @@ describe 'notices/show.html.erb' do
 
     it "does not display if not different" do
       notice = create(:dmca, role_names: %w( sender principal ))
-      notice.stub(:on_behalf_of_principal?).and_return(false)
+      allow(notice).to receive(:on_behalf_of_principal?).and_return(false)
       assign(:notice, notice)
 
       render
@@ -154,7 +154,60 @@ describe 'notices/show.html.erb' do
   end
 
   it "displays a notice's works and infringing urls" do
-    notice = create(:dmca, :with_infringing_urls, :with_copyrighted_urls)
+    params = {
+      notice: {
+        title: "A title",
+        type: "DMCA",
+        subject: "Infringement Notfication via Blogger Complaint",
+        date_sent: "2013-05-22",
+        date_received: "2013-05-23",
+        works_attributes: [
+          {
+            description: "The Avengers",
+            copyrighted_urls_attributes: [
+              { url: "http://example.com/test_url_1" },
+              { url: "http://example.com/test_url_2" },
+              { url: "http://example.com/test_url_3" }
+            ],
+            infringing_urls_attributes: [
+              { url: "http://youtube.com/bad_url_1" },
+              { url: "http://youtube.com/bad_url_2" },
+              { url: "http://youtube.com/bad_url_3" }
+            ]
+          }
+        ],
+        entity_notice_roles_attributes: [
+          {
+            name: "recipient",
+            entity_attributes: {
+              name: "Google",
+              kind: "organization",
+              address_line_1: "1600 Amphitheatre Parkway",
+              city: "Mountain View",
+              state: "CA", 
+              zip: "94043",
+              country_code: "US"
+            }
+          },
+          {
+            name: "sender",
+            entity_attributes: {
+              name: "Joe Lawyer",
+              kind: "individual",
+              address_line_1: "1234 Anystreet St.",
+              city: "Anytown",
+              state: "CA",
+              zip: "94044",
+              country_code: "US"
+            }
+          }
+        ]
+      }
+    }
+
+    notice = Notice.new(params[:notice])
+    notice.save
+
     assign(:notice, notice)
 
     render
@@ -163,7 +216,6 @@ describe 'notices/show.html.erb' do
       within("#work_#{work.id}") do
         expect(page).to have_content(work.description)
 
-        expect(notice.copyrighted_urls).to exist
         expect(notice.copyrighted_urls).to exist
 
         work.copyrighted_urls.each do |copyrighted_url|
@@ -216,7 +268,7 @@ describe 'notices/show.html.erb' do
   it "displays limited related blog entries" do
     blog_entries = build_stubbed_list(:blog_entry, 3)
     notice = build(:dmca)
-    notice.stub(:related_blog_entries).and_return(blog_entries)
+    allow(notice).to receive(:related_blog_entries).and_return(blog_entries)
     assign(:notice, notice)
 
     render
@@ -237,7 +289,7 @@ describe 'notices/show.html.erb' do
 
     render
 
-    within('ol.attachments') do
+    within('.main') do
       expect(page).not_to contain_link(original.url)
     end
   end

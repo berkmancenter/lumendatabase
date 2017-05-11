@@ -14,10 +14,12 @@ module Ingestor
           parser = FieldGroupParser.new(field_group)
 
           copyrighted_urls = parser.copyrighted_urls.map do |url|
+            Rails.logger.debug "[importer][google] c_url: '#{url}'"
             CopyrightedUrl.new(url: url)
           end
 
           infringing_urls = parser.infringing_urls.map do |url|
+            Rails.logger.debug "[importer][google] i_url: '#{url}'"
             InfringingUrl.new(url: url)
           end
 
@@ -29,11 +31,13 @@ module Ingestor
         end
       end
 
-      def default_recipient
+      def default_submitter
         'Google, Inc.'
       end
 
-      private
+      def default_recipient
+        'Google, Inc.'
+      end
 
       def sender(content)
         [
@@ -45,6 +49,8 @@ module Ingestor
       def principal(content)
         get_field(content, 'copyright_owner')
       end
+
+      private
 
       def get_field(content, field_name)
         if content.match(/field_#{field_name}:(.+?)field_/m)

@@ -5,7 +5,11 @@ class FileUpload < ActiveRecord::Base
 
   attr_accessor :file_name
 
+  # attr_protected :id, :pdf_requested, :pdf_request_fulfilled
+  # attr_protected :id, as: :admin
+
   validates_inclusion_of :kind, in: %w( original supporting )
+  validates :kind, length: { maximum: 255 }
 
   belongs_to :notice
   has_attached_file :file,
@@ -21,6 +25,10 @@ class FileUpload < ActiveRecord::Base
     when /\Aimage\// then 'Image'
     else 'Document'
     end
+  end
+
+  def request_pdf
+    self.pdf_requested = true
   end
 
   private

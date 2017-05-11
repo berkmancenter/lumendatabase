@@ -1,10 +1,10 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe NoticesController do
   context "#show" do
     it "finds the notice by ID" do
       notice = Notice.new
-      Notice.should_receive(:find).with('42').and_return(notice)
+      expect(Notice).to receive(:find).with('42').and_return(notice)
 
       get :show, id: 42
 
@@ -37,7 +37,7 @@ describe NoticesController do
           notice = stub_find_notice(model_class.new)
           serializer_class = model_class.active_model_serializer || NoticeSerializer
           serialized = serializer_class.new(notice)
-          serializer_class.should_receive(:new).
+          expect(serializer_class).to receive(:new).
             with(notice, anything).and_return(serialized)
 
           get :show, id: 1, format: :json
@@ -60,11 +60,70 @@ describe NoticesController do
         expect(json).to have_key('title').with_value(notice.title)
         expect(json).to have_key('body').with_value("Notice Rescinded")
       end
+
+      it "returns original URLs for a Notice if you are a researcher" do
+        user = create(:user, roles: [Role.researcher])
+        params = {
+          notice: {
+            title: "A title",
+            type: "DMCA",
+            subject: "Infringement Notfication via Blogger Complaint",
+            date_sent: "2013-05-22",
+            date_received: "2013-05-23",
+            works_attributes: [
+              {
+                description: "The Avengers",
+                infringing_urls_attributes: [
+                  { url: "http://youtube.com/bad_url_1" },
+                  { url: "http://youtube.com/bad_url_2" },
+                  { url: "http://youtube.com/bad_url_3" }
+                ]
+              }
+            ],
+            entity_notice_roles_attributes: [
+              {
+                name: "recipient",
+                entity_attributes: {
+                  name: "Google",
+                  kind: "organization",
+                  address_line_1: "1600 Amphitheatre Parkway",
+                  city: "Mountain View",
+                  state: "CA", 
+                  zip: "94043",
+                  country_code: "US"
+                }
+              },
+              {
+                name: "sender",
+                entity_attributes: {
+                  name: "Joe Lawyer",
+                  kind: "individual",
+                  address_line_1: "1234 Anystreet St.",
+                  city: "Anytown",
+                  state: "CA",
+                  zip: "94044",
+                  country_code: "US"
+                }
+              }
+            ]
+          }
+        }
+
+        notice = Notice.new(params[:notice])
+        notice.save
+        stub_find_notice(notice)
+
+        request.env['HTTP_AUTHENTICATION_TOKEN'] = user.authentication_token
+        get :show, id: 1, format: :json
+
+        json = JSON.parse(response.body)["dmca"]["works"][0]["infringing_urls"][0]
+        expect(json).to have_key('url_original')
+      end
     end
 
     def stub_find_notice(notice = nil)
       notice ||= Notice.new
-      notice.tap { |n| Notice.stub(:find).and_return(n) }
+      notice.tap { |n| allow(Notice).to receive(:find).and_return(n) }
     end
   end
 
@@ -76,7 +135,7 @@ describe NoticesController do
       end
 
       it "initializes a DMCA by default from params" do
-        SubmitNotice.should_receive(:new).
+        expect(SubmitNotice).to receive(:new).
           with(DMCA, @notice_params).
           and_return(@submit_notice)
 
@@ -84,7 +143,7 @@ describe NoticesController do
       end
 
       it "uses the type param to instantiate the correct class" do
-        SubmitNotice.should_receive(:new).
+        expect(SubmitNotice).to receive(:new).
           with(Trademark, @notice_params).
           and_return(@submit_notice)
 
@@ -94,7 +153,7 @@ describe NoticesController do
       it "defaults to DMCA if the type is missing or invalid" do
         invalid_types = ['', 'FlimFlam', 'Object', 'User', 'Hash']
 
-        SubmitNotice.should_receive(:new).
+        expect(SubmitNotice).to receive(:new).
           exactly(5).times.
           with(DMCA, @notice_params).
           and_return(@submit_notice)
@@ -116,7 +175,7 @@ describe NoticesController do
 
       it "renders the new template when unsuccessful" do
         submit_notice = stub_submit_notice
-        submit_notice.stub(:submit).and_return(false)
+        allow(submit_notice).to receive(:submit).and_return(false)
 
         post_create
 
@@ -130,7 +189,7 @@ describe NoticesController do
         @ability = Object.new
         @ability.extend(CanCan::Ability)
         @ability.can(:submit, Notice)
-        controller.stub(:current_ability) { @ability }
+        allow(controller).to receive(:current_ability) { @ability }
       end
 
       it "returns unauthorized if one cannot submit" do
@@ -145,7 +204,7 @@ describe NoticesController do
       it "returns a proper Location header when saved successfully" do
         notice = build_stubbed(:dmca)
         submit_notice = stub_submit_notice
-        submit_notice.stub(:notice).and_return(notice)
+        allow(submit_notice).to receive(:notice).and_return(notice)
 
         post_create :json
 
@@ -155,7 +214,7 @@ describe NoticesController do
 
       it "returns a useful status code when there are errors" do
         submit_notice = stub_submit_notice
-        submit_notice.stub(:submit).and_return(false)
+        allow(submit_notice).to receive(:submit).and_return(false)
 
         post_create :json
 
@@ -164,8 +223,8 @@ describe NoticesController do
 
       it "includes any errors in the response" do
         submit_notice = stub_submit_notice
-        submit_notice.stub(:submit).and_return(false)
-        submit_notice.stub(:errors).and_return(
+        allow(submit_notice).to receive(:submit).and_return(false)
+        allow(submit_notice).to receive(:errors).and_return(
           mock_errors(submit_notice.notice, works: "can't be blank")
         )
 
@@ -180,8 +239,8 @@ describe NoticesController do
 
     def stub_submit_notice
       SubmitNotice.new(DMCA, {}).tap do |submit_notice|
-        submit_notice.stub(:submit).and_return(true)
-        SubmitNotice.stub(:new).and_return(submit_notice)
+        allow(submit_notice).to receive(:submit).and_return(true)
+        allow(SubmitNotice).to receive(:new).and_return(submit_notice)
       end
     end
 

@@ -1,6 +1,9 @@
-require 'spec_helper'
+require 'rails_helper'
+require 'support/notice_actions'
 
 feature "Redactable fields" do
+  include NoticeActions
+  
   Notice::REDACTABLE_FIELDS.each do |field|
 
     scenario "#{field} is automatically redacted of phone numbers" do
@@ -64,7 +67,7 @@ feature "Redactable fields" do
         visit '/users/sign_in'
         fill_in "Email", with: user.email
         fill_in "Password", with: user.password
-        click_on "Sign in"
+        click_on "Log in"
 
         notice = create(:dmca, :redactable)
 

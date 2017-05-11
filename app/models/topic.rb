@@ -6,6 +6,8 @@ class Topic < ActiveRecord::Base
   include ValidatesAutomatically
   include HierarchicalRelationships
 
+  validates :name, length: { maximum: 255 }
+
   has_many :topic_assignments, dependent: :destroy
   has_many :notices, through: :topic_assignments
 

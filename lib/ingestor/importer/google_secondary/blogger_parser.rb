@@ -16,8 +16,16 @@ module Ingestor
           )]
         end
 
+        def tag_list
+          'blogger'
+        end
+
+        def default_submitter
+          'Google, Inc.'
+        end
+
         def default_recipient
-          'Google, Inc. [Blogger]'
+          'Google, Inc.'
         end
 
         private

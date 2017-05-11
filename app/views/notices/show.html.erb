@@ -3,7 +3,8 @@
 <article class="notice-show">
   <% if can?(:access, :rails_admin) %>
     <div class="admin-edit">
-      <%= link_to "Edit in Admin", admin_show_path(@notice) %>
+      <%= link_to "Show in Admin", admin_show_path(@notice) %> |
+      <%= link_to "Edit in Admin", admin_edit_path(@notice) %>
     </div>
   <% end %>
 
@@ -62,6 +63,45 @@
 	  <% end %>
 
       <%= render show_partial_for(@notice), notice: @notice %>
+
+    <% if @notice.tag_list.present? %>
+    <dl class="tag-list">
+      <dt class="label">Tags</dt>
+      <dd class="field"><%= @notice.tag_list %></dd>
+    </dl>
+    <% end %>
+    
+    <dl class="tag-list">
+      <dt class="label">Jurisdictions</dt>
+      <% if @notice.jurisdiction_list.present? %>
+        <dd class="field"><%= @notice.jurisdiction_list %></dd>
+      <% else %>
+        <dd class="field">Unspecified</dd>
+      <% end %>
+    </dl>
+
+    <% if @notice.original_documents.present? && !@notice.original_documents.first.pdf_request_fulfilled %>
+      <section class="attachments">
+        <h5 class="title">Original Documents</h5>
+        <ol class="attachments">
+          <% @notice.original_documents.each do |document| %>
+            <% if document.file_type == "PDF" && !document.pdf_requested? && !document.pdf_request_fulfilled %>
+              <li class="<%= document.file_type.downcase %>">
+                <%= link_to request_pdf_notice_path(document), class: "document-original", method: :put, remote: :true do %>
+                  <span>Supporting <%= document.file_type %> #<%= @notice.original_documents.index(document) + 1 %></span>
+                  <span class="download">Request Document</span>
+                <% end %>
+              </li>
+            <% elsif document.pdf_requested? %>
+              <li class="<%= document.file_type.downcase %>">
+                <span>Supporting <%= document.file_type %> #<%= @notice.original_documents.index(document) + 1 %></span>
+                <span class="download">Document Requested. Check back in 7 days.</span>
+              </li>
+            <% end %>
+          <% end %>
+        </ol>
+      </section>
+    <% end %>
 
       <% if @notice.supporting_documents.present? %>
         <section class="attachments">

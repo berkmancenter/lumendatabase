@@ -7,17 +7,15 @@
     <%= form_tag(notices_search_index_path, method: :get, id: 'facets-form') do %>
       <% if results.facets %>
         <ol class="results-facets">
-          <li class="title"><span>Facets<span></li>
-            <% Notice::FILTERABLE_FIELDS.each do |filterable_field| %>
-              <%= render filterable_field, results: results %>
-            <% end %>
-            <li class="title results-context-toggle">About Facets</li>
+          <% Notice::FILTERABLE_FIELDS.each do |filterable_field| %>
+            <%= render filterable_field, results: results %>
+          <% end %>
         </ol>
       <% end %>
       <%= hidden_field_tag(:sort_by, params[:sort_by], class: 'sort_by_field') %>
     <% end %>
-    <div class="results-context" style="display:none;">
-      Choosing to view a particular facet of the results does not filter the results. While the immediate view of the results will change to reflect the choice of facet(s), all of the original search’s totals will remain in the dropdowns.
+    <div class="results-context">
+      Filtering results using the above drop-down menus will change the listed results but not the listed totals in the drop-down menus.
     </div>
     <div class="result-stats">
       <span class="total-entries">Found <%= results.total_entries %> results</span>

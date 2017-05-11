@@ -14,7 +14,7 @@ describe Ingestor::Importer::Base do
     it "should be true by default" do
       importer = described_class.new('')
 
-      expect(importer.require_review_if_works_empty?).to be_true
+      expect(importer.require_review_if_works_empty?).to be_truthy
     end
   end
 end

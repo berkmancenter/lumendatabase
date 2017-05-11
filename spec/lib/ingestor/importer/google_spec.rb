@@ -11,11 +11,11 @@ describe Ingestor::Importer::Google do
     it "should not inspect binary files" do
       file_double = double('File handle')
 
-      File.stub(:open) do |&block|
+      allow(File).to receive(:open) do |&block|
         block.yield file_double
       end
 
-      file_double.should_not_receive(:grep)
+      expect(file_double).not_to receive(:grep)
       described_class.handles?('spec/support/example_files/original.jpg')
     end
   end

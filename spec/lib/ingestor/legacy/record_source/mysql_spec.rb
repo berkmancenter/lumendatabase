@@ -30,11 +30,11 @@ describe Ingestor::Legacy::RecordSource::Mysql do
 
   def mysql_record_source
     connection_double = double("Mysql connection")
-    connection_double.stub(:query).and_return([
+    allow(connection_double).to receive(:query).and_return([
       'foo' => 1, 'bar' => 2, 'OriginalFilePath' => 'foo.html',
       'SupportingFilePath' => 'bar.html']
     )
-    Mysql2::Client.stub(:new).and_return(connection_double)
+    allow(Mysql2::Client).to receive(:new).and_return(connection_double)
 
     described_class.new('select * from tNotice', 'test_records')
   end

@@ -11,33 +11,26 @@ describe Ingestor::Importer::GoogleSecondary::OtherParser do
   end
 
   it "has a default_recipient" do
-    expect(described_class.new('').default_recipient).to eq 'Google, Inc.'
+    expect(described_class.new('').default_recipient).to eq 'Google Inc.'
   end
 
   it "gets entities" do
     expect(described_class.new(sample_file).entities).to eq({
       sender: 'dan smith',
-      principal: 'FooCorp'
+      principal: 'FooCorp',
+      recipient: 'Google Inc.'
     })
   end
 
   it "gets work descriptions" do
-    work = described_class.new(sample_file).works.first
-
-    expect(work.description).to eq(
-"#{Ingestor::Importer::GoogleSecondary::RedactedContent::QUOTE_PREAMBLE.strip}
-violazione della privacy
-boofar
-#{Ingestor::Importer::GoogleSecondary::RedactedContent::EXPLAIN_PREAMBLE.strip}
-diffamazione e violazione della privacy
+    expect(described_class.new(sample_file).body).to eq(
+"diffamazione e violazione della privacy
 foobar"
     )
   end
 
   it "gets work description_originals" do
-    work = described_class.new(sample_file).works.first
-
-    expect(work.description_original).to eq(
+    expect(described_class.new(sample_file).body_original).to eq(
 "#{Ingestor::Importer::GoogleSecondary::RedactedContent::QUOTE_PREAMBLE.strip}
 violazione della privacy
 boofar
@@ -63,27 +56,16 @@ http://www.example.com/infringing|
   end
 
   it "redacts work descriptions" do
-    work = described_class.new(redaction_file).works.first
-
-    expect(work.description).to eq(
-"#{Ingestor::Importer::GoogleSecondary::RedactedContent::QUOTE_PREAMBLE.strip}
-[REDACTED] child abuser bristol durham real gay deep  
-ass - Flickr
-Also...[REDACTED]
-And [REDACTED]?
-And [REDACTED]?
-#{Ingestor::Importer::GoogleSecondary::RedactedContent::EXPLAIN_PREAMBLE.strip}
-Someone (unknown) has got hold of my personal details  
+    expect(described_class.new(redaction_file).body).to eq(
+"Someone (unknown) has got hold of my personal details  
 and posted images with my name and my cell phone number on flickr. I have  
 contacted flickr but please help me by removing the link if possible. i am  
 very concerned about this as you can imagine. My name and address [REDACTED] have been posted. http://[REDACTED].com [REDACTED] and [REDACTED]."
     )
   end
 
-  it "preserves work description_originals" do
-    work = described_class.new(redaction_file).works.first
-
-    expect(work.description_original).to eq(
+  it "preserves body_original" do
+    expect(described_class.new(redaction_file).body_original).to eq(
 "#{Ingestor::Importer::GoogleSecondary::RedactedContent::QUOTE_PREAMBLE.strip}
 Johnny Public child abuser bristol durham real gay deep  
 ass - Flickr

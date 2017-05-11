@@ -5,7 +5,6 @@ require 'validates_automatically'
 class Notice < ActiveRecord::Base
   include Tire::Model::Search
   include Searchability
-  include ValidatesAutomatically
 
   extend RecentScope
 
@@ -23,6 +22,8 @@ class Notice < ActiveRecord::Base
     TermSearch.new(:sender_name, :sender_name, 'Sender Name'),
     TermSearch.new(:principal_name, :principal_name, 'Principal Name'),
     TermSearch.new(:recipient_name, :recipient_name, 'Recipient Name'),
+    TermSearch.new(:submitter_name, :submitter_name, 'Submitter Name'),
+    TermSearch.new(:submitter_country_code, :submitter_country_code, 'Submitter Country'),
     TermSearch.new(:works, 'works.description', 'Works Descriptions'),
     TermSearch.new(:action_taken, :action_taken, 'Action taken'),
   ]
@@ -32,10 +33,12 @@ class Notice < ActiveRecord::Base
     TermFilter.new(:sender_name_facet, 'Sender'),
     TermFilter.new(:principal_name_facet, 'Principal'),
     TermFilter.new(:recipient_name_facet, 'Recipient'),
+    TermFilter.new(:submitter_name_facet, 'Submitter'),
     TermFilter.new(:tag_list_facet, 'Tags'),
     TermFilter.new(:country_code_facet, 'Country'),
     TermFilter.new(:language_facet, 'Language'),
-    TermFilter.new(:action_taken_facet, 'Action taken'),
+    TermFilter.new(:submitter_country_code_facet, 'Submitter Country'),
+    UnspecifiedTermFilter.new(:action_taken_facet, 'Action taken'),
     DateRangeFilter.new(:date_received_facet, :date_received, 'Date')
   ]
 
@@ -54,7 +57,7 @@ class Notice < ActiveRecord::Base
 
   DEFAULT_ENTITY_NOTICE_ROLES = %w|recipient sender|
 
-  VALID_ACTIONS = %w( Yes No Partial )
+  VALID_ACTIONS = %w( Yes No Partial Unspecified )
 
   OTHER_TOPIC = "Uncategorized"
 
@@ -75,14 +78,11 @@ class Notice < ActiveRecord::Base
 
   belongs_to :reviewer, class_name: 'User'
 
-  has_many :topic_assignments, dependent: :destroy, include: [ :topic ]
+  has_many :topic_assignments, dependent: :destroy
   has_many :topics, through: :topic_assignments
-  has_many :topic_relevant_questions,
-    through: :topics, source: :relevant_questions
-  has_many :related_blog_entries,
-    through: :topics, source: :blog_entries, uniq: true
-  has_many :entity_notice_roles, dependent: :destroy, inverse_of: :notice,
-    include: [ :entity ]
+  has_many :topic_relevant_questions, through: :topics, source: :relevant_questions
+  has_many :related_blog_entries, -> { distinct }, through: :topics, source: :blog_entries
+  has_many :entity_notice_roles, dependent: :destroy, inverse_of: :notice
   has_many :entities, through: :entity_notice_roles
   has_many :file_uploads
   has_many :infringing_urls, through: :works
@@ -98,8 +98,8 @@ class Notice < ActiveRecord::Base
   validates :date_received, date: { after: Proc.new { Date.new(1998,10,28) }, before: Proc.new { Time.now + 1.day }, allow_blank: true }
 
   # Using reset_type because type is ALWAYS protected (deep in the Rails code).
-  attr_protected :id, :type, :reset_type
-  attr_protected :id, :type, as: :admin
+  # attr_protected :id, :type, :reset_type
+  # attr_protected :id, :type, as: :admin
 
   def reset_type
     type
@@ -123,16 +123,16 @@ class Notice < ActiveRecord::Base
   acts_as_taggable_on :tags, :jurisdictions
 
   accepts_nested_attributes_for :file_uploads,
-    reject_if: ->(attributes) { attributes['file'].blank? }
+    reject_if: ->(attributes) { [attributes['file'], attributes[:pdf_request_fulfilled]].all?(&:blank?) }
 
-  accepts_nested_attributes_for :entity_notice_roles
+  accepts_nested_attributes_for :entity_notice_roles, :allow_destroy => true
 
-  accepts_nested_attributes_for :works
+  accepts_nested_attributes_for :works, :allow_destroy => true
 
   delegate :country_code, to: :recipient, allow_nil: true
 
   %i( sender principal recipient submitter attorney ).each do |entity|
-    delegate :name, to: entity, prefix: true, allow_nil: true
+    delegate :name, :country_code, to: entity, prefix: true, allow_nil: true
   end
 
   after_create :set_published!, if: :submitter
@@ -184,7 +184,11 @@ class Notice < ActiveRecord::Base
   end
 
   def self.visible
-    where(spam: false, hidden: false, published: true, rescinded: false)
+    where(visible_qualifiers)
+  end
+
+  def self.visible_qualifiers
+    { spam: false, hidden: false, published: true, rescinded: false }
   end
   
   def self.find_unpublished(notice_id)
@@ -275,10 +279,12 @@ class Notice < ActiveRecord::Base
   end
 
   def tag_list=(tag_list_value = '')
-    if tag_list_value.respond_to?(:each)
-      tag_list_value = tag_list_value.flatten.map{|tag|tag.downcase}
-    else
-      tag_list_value = tag_list_value.downcase
+    unless tag_list_value.nil?
+      if tag_list_value.respond_to?(:each)
+        tag_list_value = tag_list_value.flatten.map{|tag|tag.downcase}
+      else
+        tag_list_value = tag_list_value.downcase
+      end
     end
 
     super(tag_list_value)
@@ -317,13 +323,13 @@ class Notice < ActiveRecord::Base
   
   def notice_topic_map
     topic = TYPES_TO_TOPICS.key?(self.type) ? TYPES_TO_TOPICS[self.type] : OTHER_TOPIC
-    return Topic.find_or_create_by_name(topic) 
+    return Topic.find_or_create_by(name: topic)
   end
 
   def hide_identities?
     false
   end
-  
+
   before_save do
     notice_type = self.type
     topic = self.notice_topic_map

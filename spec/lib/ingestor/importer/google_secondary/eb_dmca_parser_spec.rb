@@ -10,7 +10,8 @@ describe Ingestor::Importer::GoogleSecondary::EbDMCAParser do
   it "gets entity information" do
     expect(described_class.new(sample_file).entities).to eq({
       sender: 'first name last name',
-      principal: 'Vsjrh32e8v13Mor'
+      principal: 'Vsjrh32e8v13Mor',
+      recipient: 'Google, Inc.'
     })
   end
 

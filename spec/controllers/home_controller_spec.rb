@@ -1,10 +1,13 @@
 require 'spec_helper'
 
 describe HomeController do
+  before(:each) do
+    Rails.cache.clear
+  end
   context "#index" do
     it "finds recent notices" do
       notices = double("Notices")
-      Notice.should_receive(:recent).and_return(notices)
+      expect(Notice).to receive(:recent).and_return(notices)
 
       get :index
 
@@ -14,7 +17,7 @@ describe HomeController do
 
     it "finds recent blog entries" do
       blog_entries = double("Blog entries")
-      BlogEntry.should_receive(:recent_posts).and_return(blog_entries)
+      expect(BlogEntry).to receive(:recent_posts).and_return(blog_entries)
 
       get :index
 

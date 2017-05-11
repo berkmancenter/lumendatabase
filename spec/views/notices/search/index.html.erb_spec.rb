@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'notices/search/index.html.erb' do
   it "display the results" do
@@ -109,18 +109,18 @@ describe 'notices/search/index.html.erb' do
 
   def mock_searcher(notices, options = {})
     results = notices.map { |notice| as_tire_result(notice, options) }
-    results.stub(:total_entries, results.length)
-    results.stub(:total_pages).and_return(1)
-    results.stub(:facets).and_return(facet_data)
-    results.stub(:current_page).and_return(1)
-    results.stub(:limit_value).and_return(1)
+    allow(results).to receive(:total_entries).and_return(results.length)
+    allow(results).to receive(:total_pages).and_return(1)
+    allow(results).to receive(:facets).and_return(facet_data)
+    allow(results).to receive(:current_page).and_return(1)
+    allow(results).to receive(:limit_value).and_return(1)
 
     search_results = double('results double')
-    search_results.stub(:results).and_return(results)
+    allow(search_results).to receive(:results).and_return(results)
 
     searcher = double('searcher double')
-    searcher.stub(:search).and_return(search_results)
-    searcher.stub(:cache_key).and_return('asdfasdf')
+    allow(searcher).to receive(:search).and_return(search_results)
+    allow(searcher).to receive(:cache_key).and_return('asdfasdf')
     assign(:searcher, searcher)
   end
 
@@ -138,6 +138,18 @@ describe 'notices/search/index.html.erb' do
           { "term" => "Imak Itten", "count" => 27 }
         ]
       },
+      "submitter_name_facet" => { "terms" =>
+        [
+          { "term" => "Google", "count" => 27 },
+          { "term" => "Twitter", "count" => 27 }
+        ]
+      },
+      "submitter_country_code_facet" => {"terms" =>
+        [
+          { "term" => "US", "count" => 27 },
+          { "term" => "UK", "count" => 27 }
+        ]
+        },
       "recipient_name_facet" => { "terms" =>
         [
           { "term" => "Twitter", "count" => 10 },

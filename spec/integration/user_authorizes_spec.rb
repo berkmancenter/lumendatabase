@@ -1,12 +1,15 @@
-require 'spec_helper'
+require 'rails_helper'
+require 'support/contain_link'
 
 feature "User authorization" do
+  include ContainLink
+  
   scenario "A non logged-in user is redirected to sign in" do
     user = AdminOnPage.new(create(:user))
 
     user.visit_admin
 
-    expect(user).to be_redirected_to_sign_in
+    expect(page).to have_text("You are not authorized to access this page.")
   end
 
   scenario "Submitters- cannot access admin" do
@@ -216,7 +219,7 @@ feature "User authorization" do
     other_user = create(:user)
 
     user.sign_in
-    user.edit(other_user, Email: "new-email@example.com")
+    user.edit(other_user, user_email: "new-email@example.com")
 
     expect(other_user.reload.email).to eq "new-email@example.com"
   end

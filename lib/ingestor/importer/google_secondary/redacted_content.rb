@@ -12,22 +12,31 @@ module Ingestor
         def initialize(file_path, description_start)
           super
           entity_name = yield content.dup
-          @redactor = RedactsNotices::RedactsEntityName.new(entity_name)
+          @redactor = RedactsNotices::RedactsEntityName.new( "deadbeef #{entity_name}" )
         end
 
         def to_work
           super.tap do |work|
-            work.description_original = work.description
+            work.description_original = work.description_original
             work.description = redact(work.description)
           end
         end
 
         def description
           s = super
-          "#{quote}\n#{EXPLAIN_PREAMBLE if s}#{s}".strip
+          "#{quote}\n#{s}".strip
+        end
+
+        def description_original
+          s = super
+          "#{quote_original}\n#{EXPLAIN_PREAMBLE if s}#{s}".strip
         end
 
         def quote
+          ''
+        end
+
+        def quote_original
           if content.match(/legalother_quote[^:]*:(.+?)\n[a-z_]+:/m)
             QUOTE_PREAMBLE + $1.strip
           end

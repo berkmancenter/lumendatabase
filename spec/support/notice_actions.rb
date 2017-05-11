@@ -11,6 +11,12 @@ module NoticeActions
     within('section.sender') do
       fill_in "Name", with: "Sender the first"
     end
+    within('section.principal') do
+      fill_in "Name", with: "Principal the first"
+    end
+    within('section.submitter') do
+      fill_in "Name", with: "Submitter the first"
+    end
 
     fill_in 'Work URL', with: 'http://www.example.com/original_work.pdf'
     fill_in 'Kind of Work', with: 'movie'
@@ -51,8 +57,4 @@ module NoticeActions
       yield(file)
     end
   end
-end
-
-RSpec.configure do |config|
-  config.include NoticeActions, type: :request
 end

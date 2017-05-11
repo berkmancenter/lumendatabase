@@ -1,14 +1,18 @@
 require 'validates_automatically'
 require 'hierarchical_relationships'
 require 'entity_index_queuer'
+require 'default_name_original'
 
 class Entity < ActiveRecord::Base
   include Tire::Model::Search
   include ValidatesAutomatically
   include HierarchicalRelationships
+  include DefaultNameOriginal
 
   PER_PAGE = 10
   HIGHLIGHTS = %i(name)
+
+  validates :address_line_1, length: { maximum: 255 }
 
   belongs_to :user
   has_many :entity_notice_roles, dependent: :destroy

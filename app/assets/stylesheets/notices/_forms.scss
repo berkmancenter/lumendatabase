@@ -138,11 +138,15 @@ form.new_notice, form.new_counter_notice {
     }
   }
 
-  select {
-    padding: 10px 10px 5px 10px;
-    margin-left: $form-label-width + $form-label-margin;
-    width: 270px;
-    margin-top: 5px;
+  .select2 {
+    margin-left: $form-label-width;
+    width: 285px;
+    margin-top: 1px;
+  }
+
+  .select2-selection {
+    border-radius: 0;
+    height: 32px;
   }
 
   input {

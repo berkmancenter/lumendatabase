@@ -13,6 +13,9 @@ Chill::Application.routes.draw do
     collection do
       get :url_input
     end
+    member do
+      put :request_pdf
+    end
   end
 
   resources :counter_notices, only: [:new, :create]
@@ -40,11 +43,13 @@ Chill::Application.routes.draw do
   get 'notices_feed', to: 'notices#feed'
   get 'blog_archive', to: 'blog_entries#archive'
 
-  match :faceted_search, controller: 'notices/search', action: 'index'
+  match :faceted_search, controller: 'notices/search', action: 'index', via: [:get, :post]
+
+  get "/twitter/international", to: "notices/search#index", defaults: {topics: "international, court orders, law enforcement requests, government requests", recipient_name: "twitter"}
 
   # N.B. no constraints on topics, that would require a db call
   match '/:recipient_name(/:topics)' => 'notices/search#index',
-    constraints: { recipient_name: /Twitter|Google/i }
+    constraints: { recipient_name: /Twitter|Google/i }, via: [:get, :post]
 
   root to: 'home#index'
 end

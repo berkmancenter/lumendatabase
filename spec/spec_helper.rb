@@ -10,7 +10,6 @@ Spork.prefork do
 
   require File.expand_path("../../config/environment", __FILE__)
   require 'rspec/rails'
-  require 'rspec/autorun'
   require 'capybara/rspec'
 
   # https://github.com/sporkrb/spork/issues/188
@@ -34,4 +33,8 @@ Spork.each_run do
   end
 end
 
-Capybara.javascript_driver = :webkit
+Capybara.register_driver :chrome do |app|
+  Capybara::Selenium::Driver.new(app, browser: :chrome)
+end
+
+Capybara.javascript_driver = :chrome

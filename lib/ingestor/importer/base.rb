@@ -63,6 +63,22 @@ module Ingestor
         ''
       end
 
+      def body
+        nil
+      end
+
+      def body_original
+        nil
+      end
+
+      def hidden?
+	      false
+      end
+
+      def date_received
+        nil
+      end
+
       def works
         file_paths.each do |file_path|
           if parsable?(file_path)
@@ -87,6 +103,7 @@ module Ingestor
         entities = {}
         sender(content).present? && entities[:sender] = sender(content)
         principal(content).present? && entities[:principal] = principal(content)
+        recipient(content).present? && entities[:recipient] = recipient(content)
         entities
       end
 
@@ -96,7 +113,14 @@ module Ingestor
       def sender(*)
       end
 
+      def sender_address(*)
+      end
+
       def principal(*)
+      end
+
+      def recipient(*)
+        default_recipient
       end
 
       def original_documents
@@ -125,11 +149,22 @@ module Ingestor
         original_documents + supporting_documents
       end
 
+      def tag_list
+        ''
+      end
+
       def action_taken
         ''
       end
 
+      def default_submitter
+      end
+
       def default_recipient
+      end
+
+      def review_required?
+        false
       end
 
       def require_review_if_works_empty?

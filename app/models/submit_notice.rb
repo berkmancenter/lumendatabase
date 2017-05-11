@@ -27,7 +27,12 @@ class SubmitNotice
   end
 
   def notice
-    @notice ||= model_class.new(parameters)
+    @notice ||= model_class.new(
+      if parameters.class == Hash
+        parameters
+      else
+        parameters.permit!
+      end)
   end
 
   private

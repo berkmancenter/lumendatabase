@@ -35,6 +35,23 @@ class FieldedSearchNoticeGenerator
     for_role_name('recipient')
   end
 
+  def for_submitter_name
+    for_role_name('submitter')
+  end
+
+  def for_submitter_country_code
+    matched_notice.entity_notice_roles = [build(
+      :entity_notice_role, name: 'submitter',
+      notice: matched_notice,
+      entity: build(:entity, country_code: query)
+    )]
+    unmatched_notice.entity_notice_roles = [build(
+      :entity_notice_role, name: 'submitter',
+      notice: unmatched_notice,
+      entity: build(:entity, country_code: "N/A")
+    )]
+  end
+
   def for_tags
     matched_notice.tag_list = query
     unmatched_notice.tag_list = "N/A"

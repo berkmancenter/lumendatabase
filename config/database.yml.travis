@@ -1,0 +1,8 @@
+test:
+  adapter: postgresql
+  database: chill_test
+  username: postgres
+  encoding: utf8
+  pool: 5
+  timeout: 5000
+

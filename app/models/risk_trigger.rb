@@ -1,12 +1,16 @@
 class RiskTrigger < ActiveRecord::Base
-
   def risky?(notice)
-    field_present?(notice) && condition_matches?(notice)
-
-  rescue NoMethodError => ex
-    Rails.logger.warn "Invalid risk trigger (#{id}): #{ex}"
-
-    false
+    if notice.submitter.try(:email) == 'google@lumendatabase.org' &&
+       notice.try(:type) == 'Defamation'
+      false
+    else
+      begin
+        field_present?(notice) && condition_matches?(notice)
+      rescue NoMethodError => ex
+        Rails.logger.warn "Invalid risk trigger (#{id}): #{ex}"
+        false
+      end
+    end
   end
 
   private
@@ -22,5 +26,4 @@ class RiskTrigger < ActiveRecord::Base
       notice.send(condition_field) == condition_value
     end
   end
-
 end

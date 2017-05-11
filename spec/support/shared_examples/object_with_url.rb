@@ -1,6 +1,5 @@
 shared_examples 'an object with a url' do
 
-  it { should validate_presence_of :url }
   ['http://foo.com',
     '//bar.com',
     'https://example.com/asdfasdf',
@@ -11,11 +10,11 @@ shared_examples 'an object with a url' do
     'https://example.com/asdfasfd?foo=bar#bleep',
     'ftp://example.com'
   ].each do |good_url|
-    it { should allow_value(good_url).for(:url) }
+    it { is_expected.to allow_value(good_url).for(:url) }
   end
 
   ['', 'bee', 'brap.com', 1, nil].each do |bad_url|
-    it { should_not allow_value(bad_url).for(:url) }
+    it { is_expected.not_to allow_value(bad_url).for(:url) }
   end
 
 end

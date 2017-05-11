@@ -1,0 +1,56 @@
+          .,,.                                                                             
+       ,:::::. .                                                                           
+      ::::::`; `,                                                                          
+    `:::::::. :: :;     ``````                                                             
+    :::::::.:.:: :;:   .::;;::.                                                            
+   :::::::, ,::: .;::     ;:                                                               
+   ::::::,, `,,:. :::     ;:                                                               
+  ::::::,,,` ,,.:`:::,    ;:                          ``    ``        ``           ``      
+  :::::,,,,` ., `:::::    ;:       ::;:   ::;,  :::: ::;:. ::::.    ::::::  ,::: :::;:     
+  :::::,,..` ..:`:::::    ;:         ::    .;,    ;::  `;::   :;   :;`   ;:   :;,.  ,;:    
+  :::::,,..` . `::::::    ;:         ::    .;,    ;:    ::    :;  `;:    ,;`  :;:    ;:    
+  :::::,,..` `,.,:::::    ;:         ::    .;,    ;:    :;    :;` :;.     ;:  :;.    ::    
+  :::::,,,.` ` ,,:::::    ;:      :, ::    .;,    ;:    :;    :;` :;::::::::  ::`    ::    
+  ::::::,,,``.,,:::::,    ;:      ;, ::    .;,    ;:    :;    :;` :;`         ::`    ::    
+  `::::::,, .`,::::::     ;:      ;, ::    .;,    ;:    :;    :;` :;.         :;`    ::    
+   ::::::::,,:::::::,     ;:      ;, ::    :;,    ;:    :;    :;` .::     :,  :;`    ::    
+    ::::::``:`:::::.      ;:      :, :;   ,:;,    ;:    :;    :;`  :;,   :;   :;`    ::    
+    .:::: ,:..:::;     .;:;;;;;;;;;, .:::::.:::`::;;::,:;;:: :;;::  :;::::  ,:;;:: ::;;::  
+     `:: :.:.:.  .      ```````````    ,,` `,.` `````` ````` `````   `,,.    ````` ``````  
+        ;`::::                                                                             
+         `,::,`                                                                            
+                                  
+
+CONGRATULATIONS, you found our humans.txt file!
+
+You must be quite the geek to find and read text files like this. Consider getting involved with
+geeky things at the Berkman Klein Center for Internet and Society.
+https://cyber.law.harvard.edu/getinvolved
+
+Berkman Klein Assembly Immersive Course for Experienced Developers
+http://berkmanassembly.org
+
+Submit a pull request to our GitHub Projects
+https://github.com/berkmancenter
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+           _     _ _       _           _
+ __      _| |__ (_) |_ ___| |__   __ _| |_
+ \ \ /\ / / '_ \| | __/ _ \ '_ \ / _` | __|
+  \ V  V /| | | | | ||  __/ | | | (_| | |_
+   \_/\_/ |_| |_|_|\__\___|_| |_|\__,_|\__|
+
+Lumen Database would like to acknowledge the contributions of the following
+people who have made a responsible disclosure to us:
+
+
+
+As a non-profit we do not have a bug bounty program but are happy to reocngize
+any responsible disclosures that are made.
+
+────────────────────────────────────────────────────────────────────────────────────────────────────
+
+Contacts:
+
+  info@lumendatabase.org   — Help, responsible disclosure, general support
+  
