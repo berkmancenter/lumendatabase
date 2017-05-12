@@ -431,7 +431,6 @@ DEPENDENCIES
   kaminari (= 0.14.1)
   launchy
   minitest
-  mysql2
   neat
   paperclip (= 3.5.4)
   pg
