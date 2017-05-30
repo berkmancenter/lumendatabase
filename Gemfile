@@ -62,7 +62,7 @@ group :development, :test do
   gem 'sham_rack'
   gem 'pry-rails'
   gem 'ruby-prof'
-  gem 'unicorn'
+  gem 'unicorn', '4.9.0'
   gem 'rspec-collection_matchers', '~> 1.1', '>= 1.1.2'
   gem 'pry-byebug'
   gem 'pry', '~> 0.10.4'
