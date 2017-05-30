@@ -16,7 +16,7 @@ services:
 before_install:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
-  - curl -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-0.90.3.deb && sudo dpkg -i --force-confnew elasticsearch-0.90.3.deb && sudo service elasticsearch restart
+  - curl -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-1.7.6.deb && sudo dpkg -i --force-confnew elasticsearch-1.7.6.deb && sudo service elasticsearch restart
 
 before_script:
   - sleep 10
@@ -26,6 +26,7 @@ before_script:
   - mkdir -p tmp/cache
 
 script:
+  - curl http://localhost:9200
   - bundle exec rspec spec/controllers
   - bundle exec rspec spec/models
   - bundle exec rspec spec/routing
