@@ -5,6 +5,10 @@ rvm: 2.2.4
 addons:
   postgresql: "9.1"
 
+  apt:
+    packages:
+      - libqtwebkit-dev
+
 services:
   - postgresql
   - elasticsearch
