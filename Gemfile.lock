@@ -217,10 +217,6 @@ GEM
       cocaine (~> 0.5.3)
       mime-types
     pg (0.15.1)
-    piwik_analytics (1.0.2)
-      actionpack
-      activesupport
-      rails (>= 3.0.0)
     pry (0.10.4)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -437,7 +433,6 @@ DEPENDENCIES
   neat
   paperclip (= 3.5.4)
   pg
-  piwik_analytics
   pry (~> 0.10.4)
   pry-byebug
   pry-rails
