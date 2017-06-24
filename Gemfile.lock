@@ -198,6 +198,7 @@ GEM
       metaclass (~> 0.0.1)
     multi_json (1.12.1)
     multipart-post (2.0.0)
+    mysql2 (0.4.3)
     naught (1.1.0)
     neat (1.3.0)
       bourbon (>= 2.1)
@@ -428,6 +429,7 @@ DEPENDENCIES
   kaminari (= 0.14.1)
   launchy
   minitest
+  mysql2
   neat
   paperclip (= 3.5.4)
   pg
