@@ -16,7 +16,6 @@ gem 'acts-as-taggable-on'
 gem 'ancestry'
 gem 'devise'
 gem 'rails_admin'
-gem 'gdbm', '~> 1.3', '>= 1.3.1'
 # kaminari is locked because we've monkeypatched it to work around
 # slow postgres table counts on large tables.
 gem 'kaminari', '0.14.1'
@@ -62,7 +61,6 @@ group :development, :test do
   gem 'sham_rack'
   gem 'pry-rails'
   gem 'ruby-prof'
-  gem 'unicorn', '4.9.0'
   gem 'rspec-collection_matchers', '~> 1.1', '>= 1.1.2'
   gem 'pry-byebug'
   gem 'pry', '~> 0.10.4'
@@ -76,9 +74,5 @@ group :test do
   gem 'shoulda-matchers', '~> 3.1', '>= 3.1.1'
   gem 'simplecov', require: false
   gem 'timecop'
-  gem 'selenium-webdriver'
-  gem 'guard-spork', '~> 2.1'
-  gem 'rb-inotify', require: false
   gem 'fakeweb'
-  gem 'curb'
 end
