@@ -12,29 +12,28 @@ Development
 
 Requirements:
 
-* ruby 2.2.4
-* modern postgres
-* A JRE (OpenJDK works fine)
+* ruby 2.2.6
+* PostgreSQL 9.1+
+* Elasticsearch 1.7+
+* Java Runtime Environment (OpenJDK works fine)
 
 Setup:
 
-    ./bin/setup
+    $ bundle install
+    $ cp config/database.yml.example config/database.yml
+      (edit database.yml as you wish)
+      (ensure PostgreSQL and Elasticsearch are running)
+    $ rake db:setup
 
 Running the app:
 
-    foreman start -f Procfile.dev
+    $ rails s
 
 Viewing the app:
 
-    $BROWSER 'http://localhost:5000'
+    $BROWSER 'http://localhost:3000'
 
-Resetting the database:
-
-    DB_RESET=1 ./bin/setup
-
-*Note*: foreman cannot be running during a db-reset.
-
-During seeding, you can customize behavior with a couple environment variables:
+You can customize behavior during seeding (db:setup) with a couple environment variables:
 
 * `NOTICE_COUNT=10` will generate 10 (or any number you pass it) notices
   instead of the default 500
@@ -47,8 +46,7 @@ Admin login:
 
 Running Tests:
 
-    A headless webkit is used but it requires X11 to function.
-    If you are connecting remotely (i.e. SSH), ensure that you have X11 Forwarding enabled.
+    $ bundle exec rspec spec/
 
 Ephemera
 ========
