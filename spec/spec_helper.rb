@@ -32,9 +32,3 @@ Spork.each_run do
     config.order = "random"
   end
 end
-
-# Capybara.register_driver :chrome do |app|
-#   Capybara::Selenium::Driver.new(app, browser: :chrome)
-# end
-Capybara.register_driver(:poltergeist) { |app| Capybara::Poltergeist::Driver.new(app, js_errors: false) }
-Capybara.javascript_driver = :poltergeist
