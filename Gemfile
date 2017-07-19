@@ -55,7 +55,7 @@ group :development do
 end
 
 group :development, :test do
-  gem 'phantomjs', '~> 2.1', '>= 2.1.1.0'
+  gem 'phantomjs'
   gem 'factory_girl_rails'
   gem 'rspec-rails'
   gem 'sham_rack'

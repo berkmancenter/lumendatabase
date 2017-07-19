@@ -390,7 +390,7 @@ DEPENDENCIES
   neat
   paperclip (= 3.5.4)
   pg (= 0.20.0)
-  phantomjs (~> 2.1, >= 2.1.1.0)
+  phantomjs
   poltergeist (~> 1.10)
   pry (~> 0.10.4)
   pry-byebug
