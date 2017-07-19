@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'blog_entries/show.html.erb' do
   it "shows the entry's title" do

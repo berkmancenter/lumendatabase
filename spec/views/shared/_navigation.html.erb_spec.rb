@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'shared/_navigation.html.erb' do
   it 'shows a link to create a new notice' do

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'rails_admin/application/redact_notice.html.erb' do
   before do

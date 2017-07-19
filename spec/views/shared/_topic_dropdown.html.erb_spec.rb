@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'shared/_topic_dropdown.html.erb' do
   it 'shows children in alphabetical order' do
