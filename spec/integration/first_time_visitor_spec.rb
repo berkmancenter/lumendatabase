@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 feature "Explanatory content on notice pages" do
   context "a first time visitor" do

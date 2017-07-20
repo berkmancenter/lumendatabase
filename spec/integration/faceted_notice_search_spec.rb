@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 feature "Faceted search of Notices", search: true do
   include SearchHelpers

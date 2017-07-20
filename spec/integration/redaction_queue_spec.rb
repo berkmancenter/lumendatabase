@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 feature "Redaction queue" do
   scenario "A user processes their queue" do

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 feature "Searching for Notices via the API" do
   include CurbHelpers

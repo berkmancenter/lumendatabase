@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 feature "Publishing high risk notices" do
   let(:harmless_text) { "Some harmless text" }
