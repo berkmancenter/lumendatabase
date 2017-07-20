@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'shared/_footer.html.erb' do
   include Devise::TestHelpers

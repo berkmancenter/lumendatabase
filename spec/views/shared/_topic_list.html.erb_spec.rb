@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'shared/_topic_list.html.erb' do
   it "includes links to each topic by name" do

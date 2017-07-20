@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe OriginalNewsIdsController do
   it_behaves_like "a redirecting controller for",

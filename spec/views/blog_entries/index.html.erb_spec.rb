@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'blog_entries/index.html.erb' do
   it "shows the publishing info for each entry" do

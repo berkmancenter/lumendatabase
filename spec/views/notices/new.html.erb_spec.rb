@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'notices/new.html.erb' do
   it "has a form for notices" do

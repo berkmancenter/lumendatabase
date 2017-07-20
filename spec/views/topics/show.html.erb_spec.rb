@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'topics/show.html.erb' do
   it "shows the topic's name" do

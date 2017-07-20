@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'notices/select_type.html.erb' do
   it "is not missing any translations" do
