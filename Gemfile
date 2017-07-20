@@ -48,9 +48,7 @@ group :assets do
 end
 
 group :development do
-  if RUBY_PLATFORM=~ /win/ || RUBY_PLATFORM=~ /ming/
-    gem 'win32console'
-  end
+  gem 'win32console', :platforms => [ :mingw ]
   gem 'foreman'
   gem 'dotenv-rails'
   # gem 'better_errors'
