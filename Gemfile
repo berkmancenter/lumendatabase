@@ -48,7 +48,6 @@ group :assets do
 end
 
 group :development do
-  gem 'win32console', :platforms => [ :mingw ]
   gem 'foreman'
   gem 'dotenv-rails'
   # gem 'better_errors'
