@@ -75,4 +75,5 @@ group :test do
   gem 'simplecov', require: false
   gem 'timecop'
   gem 'fakeweb'
+  gem 'curb'
 end

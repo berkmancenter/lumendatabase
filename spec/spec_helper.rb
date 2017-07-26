@@ -5,6 +5,7 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rubygems'
 require 'rspec/rails'
 require 'capybara/rspec'
+require 'curb'
 
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 

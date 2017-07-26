@@ -90,6 +90,7 @@ GEM
     coffee-script-source (1.12.2)
     concurrent-ruby (1.0.5)
     country_select (1.2.0)
+    curb (0.9.3)
     database_cleaner (1.5.3)
     date_validator (0.8.1)
       activemodel
@@ -371,6 +372,7 @@ DEPENDENCIES
   cancancan
   coffee-rails
   country_select
+  curb
   database_cleaner
   date_validator
   devise

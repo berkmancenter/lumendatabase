@@ -15,6 +15,12 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 Capybara.javascript_driver = :poltergeist
 Capybara.current_driver = :poltergeist
 
+Capybara.register_driver :poltergeist do |app|
+  Capybara::Poltergeist::Driver.new(app, {
+    phantomjs_logger: File.open("#{Rails.root}/log/test_phantomjs.log", "a")
+  })
+end
+
 ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
