@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 feature "Redaction queue" do
   scenario "A user processes their queue" do
@@ -99,6 +99,8 @@ feature "Redaction queue" do
     queue = RedactionQueueOnPage.new
     queue.visit_as(user)
 
+    expect(queue).to have_refill_queue
+
     queue.select_topic_profile(topic_one)
     queue.select_topic_profile(topic_two)
     queue.fill
@@ -117,7 +119,7 @@ feature "Redaction queue" do
 
       queue.redact_everywhere
 
-      expect(body_field).to have_content('[REDACTED]')
+      expect(page).to have_field('notice_body', with: '[REDACTED]')
 
       affected_notices.each do |notice|
         notice.reload

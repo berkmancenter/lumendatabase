@@ -11,7 +11,7 @@ class RedactionQueueOnPage < PageObject
   end
 
   def fill
-    within_profiles { click_on 'Fill Queue' }
+    click_on 'Fill Queue'
   end
 
   def select_topic_profile(topic)
@@ -76,9 +76,7 @@ class RedactionQueueOnPage < PageObject
     has_no_css?("input[value='Save and next']")
   end
 
-  private
-
-  def within_profiles(&block)
-    within('#refill-queue', &block)
+  def has_refill_queue?
+    has_css?("#refill-queue")
   end
 end

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'shared/_footer.html.erb' do
   include Devise::TestHelpers
@@ -9,7 +9,7 @@ describe 'shared/_footer.html.erb' do
 
       render
 
-      expect(page).to have_css('a', text: 'Admin')
+      expect(rendered).to have_css('a', text: 'Admin')
     end
 
   end
@@ -18,7 +18,7 @@ describe 'shared/_footer.html.erb' do
     it 'gives a link to sign in' do
       render
 
-      expect(page).to have_css('a', text: 'Sign In')
+      expect(rendered).to have_css('a', text: 'Sign In')
     end
 
   end

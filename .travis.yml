@@ -13,10 +13,28 @@ services:
   - postgresql
   - elasticsearch
 
+cache:
+  directories:
+    - travis_phantomjs
+
 before_install:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
+
+  # set our elasticsearch version
   - curl -O https://download.elasticsearch.org/elasticsearch/elasticsearch/elasticsearch-0.90.3.deb && sudo dpkg -i --force-confnew elasticsearch-0.90.3.deb && sudo service elasticsearch restart
+
+  # update phantomjs
+  - |
+      export PHANTOMJS_VERSION=2.1.1
+      export PATH=$PWD/travis_phantomjs/phantomjs-$PHANTOMJS_VERSION-linux-x86_64/bin:$PATH
+      if [ $(phantomjs --version) != $PHANTOMJS_VERSION ]; then
+        rm -rf $PWD/travis_phantomjs
+        mkdir -p $PWD/travis_phantomjs
+        wget https://github.com/Medium/phantomjs/releases/download/v$PHANTOMJS_VERSION/phantomjs-$PHANTOMJS_VERSION-linux-x86_64.tar.bz2
+        tar -xvf phantomjs-$PHANTOMJS_VERSION-linux-x86_64.tar.bz2 -C $PWD/travis_phantomjs
+      fi
+      phantomjs -v
 
 before_script:
   - sleep 10
@@ -27,6 +45,7 @@ before_script:
 
 script:
   - bundle exec rspec spec/controllers
+  - bundle exec rspec spec/integration
   - bundle exec rspec spec/models
   - bundle exec rspec spec/routing
   - bundle exec rspec spec/serializers

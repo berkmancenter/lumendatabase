@@ -42,29 +42,27 @@ describe 'notices/show.html.erb' do
 
     render
 
-    within('#tags') do
-      expect(page).to have_content("a_tag")
-      expect(page).to have_facet_link(:tags, 'a_tag')
-    end
+    expect(rendered).to have_css( '#tags', text: 'a_tag' )
+    expect(rendered).to have_facet_link(:tags, 'a_tag')
   end
 
   it "displays a notice with default entities" do
     notice = create(:dmca, role_names: ['sender', 'recipient'])
+    sender = notice.sender
+    recipient = notice.recipient
 
     assign(:notice, notice)
 
     render
 
-    within('#entities') do
-      notice.entities.each do |entity|
-        expect(page).to have_content(entity.name)
-        expect(page).to have_content(entity.city)
-        expect(page).to have_content(entity.state)
-        expect(page).to have_content(entity.country_code)
-        expect(page).to have_content("[Private]")
-        expect(page).not_to have_content(entity.address_line_1)
-        expect(page).not_to have_content(entity.address_line_2)
-      end
+    notice.entities.each do |entity|
+      expect(rendered).to have_css('#entities a', text: entity.name)
+      expect(rendered).to have_css('#entities span', text: entity.city)
+      expect(rendered).to have_css('#entities span', text: entity.state)
+      expect(rendered).to have_css('#entities span', text: entity.country_code)
+      expect(rendered).to have_css('#entities span.private', text: '[Private]')
+      expect(rendered).not_to have_css('#entities span', text: entity.address_line_1)
+      expect(rendered).not_to have_css('#entities span', text: entity.address_line_2)
     end
   end
 
@@ -78,18 +76,9 @@ describe 'notices/show.html.erb' do
 
     render
 
-    within('#entities') do
-      within('.other-entities') do
-        notice.other_entity_notice_roles.each do |role|
-          expect(page).to have_content(role.name.titleize)
-        end
-      end
-
-      within('.entities-wrapper') do
-        notice.other_entity_notice_roles.each do |role|
-          expect(page).to have_content(role.entity.name)
-        end
-      end
+    notice.other_entity_notice_roles.each do |role|
+      expect(rendered).to have_css( '.secondary.hide a', text: role.entity.name )
+      expect(rendered).to have_css( '.other-entities li', text: role.name.titleize )
     end
   end
 
@@ -100,11 +89,9 @@ describe 'notices/show.html.erb' do
 
     render
 
-    within('#entities') do
-      expect(page).to have_facet_link(:sender_name, notice.sender_name)
-      expect(page).to have_facet_link(:principal_name, notice.principal_name)
-      expect(page).to have_facet_link(:recipient_name, notice.recipient_name)
-    end
+    expect(rendered).to have_facet_link(:sender_name, notice.sender_name)
+    expect(rendered).to have_facet_link(:principal_name, notice.principal_name)
+    expect(rendered).to have_facet_link(:recipient_name, notice.recipient_name)
   end
 
   context "showing Principal" do
@@ -115,10 +102,9 @@ describe 'notices/show.html.erb' do
 
       render
 
-      within('#entities .sender') do
-        expect(page).to have_content(notice.sender_name)
-        expect(page).to have_content("on behalf of #{notice.principal_name}")
-      end
+      expect(rendered).to have_css( '.sender a', text: notice.sender_name )
+      expect(rendered).to have_css( '.sender span', text: 'on behalf of' )
+      expect(rendered).to have_css( '.sender a', text: notice.principal_name )
     end
 
     it "does not display if not different" do
@@ -128,10 +114,9 @@ describe 'notices/show.html.erb' do
 
       render
 
-      within('#entities .sender') do
-        expect(page).to have_content(notice.sender_name)
-        expect(page).not_to have_content("on behalf of #{notice.principal_name}")
-      end
+      expect(rendered).to have_css( '.sender a', text: notice.sender_name )
+      expect(rendered).not_to have_css( '.sender span', text: 'on behalf of' )
+      expect(rendered).not_to have_css( '.sender a', text: notice.principal_name )
     end
   end
 
@@ -146,10 +131,8 @@ describe 'notices/show.html.erb' do
     render
 
     [topic_question, notice_question].each do |question|
-      within("#relevant_question_#{question.id}") do
-        expect(page).to have_content(question.question)
-        expect(page).to have_content(question.answer)
-      end
+      expect(rendered).to have_css("#relevant_question_#{question.id} .question", text: question.question)
+      expect(rendered).to have_css("#relevant_question_#{question.id} .answer", text: question.answer)
     end
   end
 
@@ -213,20 +196,14 @@ describe 'notices/show.html.erb' do
     render
 
     notice.works.each do |work|
-      within("#work_#{work.id}") do
-        expect(page).to have_content(work.description)
+      expect(rendered).to have_css( "#work_#{work.id} .description", text: work.description )
 
-        expect(notice.copyrighted_urls).to exist
+      work.copyrighted_urls.each do |url|
+        expect(rendered).to have_css( "#work_#{work.id} li.copyrighted_url", text: url.url )
+      end
 
-        work.copyrighted_urls.each do |copyrighted_url|
-          expect(page).to have_content(copyrighted_url.url)
-        end
-
-        work.infringing_urls.each do |url|
-          within("#infringing_url_#{url.id}") do
-            expect(page).to have_content(url.url)
-          end
-        end
+      work.infringing_urls.each do |url|
+        expect(rendered).to have_css( "#work_#{work.id} li.infringing_url", text: url.url )
       end
     end
   end
@@ -236,7 +213,7 @@ describe 'notices/show.html.erb' do
 
     render
 
-    expect(page).to have_content("Sent via: Arbitrary source")
+    expect(rendered).to have_content("Sent via: Arbitrary source")
   end
 
   Notice::VALID_ACTIONS.each do |action|
@@ -245,7 +222,7 @@ describe 'notices/show.html.erb' do
 
       render
 
-      expect(page).to have_content("Action taken: #{action}")
+      expect(rendered).to have_content("Action taken: #{action}")
     end
   end
 
@@ -254,7 +231,7 @@ describe 'notices/show.html.erb' do
 
     render
 
-    expect(page).to have_content("Sent via: Unknown")
+    expect(rendered).to have_content("Sent via: Unknown")
   end
 
   it "displays the notice's subject" do
@@ -262,7 +239,7 @@ describe 'notices/show.html.erb' do
 
     render
 
-    expect(page).to have_content("Re: Some subject")
+    expect(rendered).to have_content("Re: Some subject")
   end
 
   it "displays limited related blog entries" do
@@ -274,11 +251,7 @@ describe 'notices/show.html.erb' do
     render
 
     blog_entries.each do |blog_entry|
-      within("#blog_entry_#{blog_entry.id}") do
-        expect(page).to(
-          contain_link(blog_entry_path(blog_entry), blog_entry.title)
-        )
-      end
+      expect(rendered).to have_link( blog_entry.title, href: blog_entry_path(blog_entry) )
     end
   end
 
@@ -289,9 +262,7 @@ describe 'notices/show.html.erb' do
 
     render
 
-    within('.main') do
-      expect(page).not_to contain_link(original.url)
-    end
+    expect(rendered).not_to have_link(original.url)
   end
 
   it "shows links to supporting documents" do
@@ -301,9 +272,8 @@ describe 'notices/show.html.erb' do
     render
 
     notice.file_uploads.each do |file_upload|
-      within("ol.attachments .#{file_upload.file_type.downcase}") do
-        expect(page).to contain_link(file_upload.url)
-      end
+      expect(rendered).to have_css( "ol.attachments .#{file_upload.file_type.downcase}" )
+      expect(rendered).to have_css( "ol.attachments a[href=\"#{file_upload.url}\"]" )
     end
   end
 
@@ -312,8 +282,8 @@ describe 'notices/show.html.erb' do
 
     render
 
-    expect(page).not_to have_content('Supporting Documents')
-    expect(page).not_to have_css('.attachments')
+    expect(rendered).not_to have_content('Supporting Documents')
+    expect(rendered).not_to have_css('.attachments')
   end
 
   it "shows a link to the admin page for admins" do
@@ -323,7 +293,7 @@ describe 'notices/show.html.erb' do
 
     render
 
-    expect(page).to contain_link(
+    expect(rendered).to contain_link(
       rails_admin.show_path(model_name: 'dmca', id: notice.id)
     )
   end
@@ -334,7 +304,7 @@ describe 'notices/show.html.erb' do
 
     render
 
-    expect(page).not_to contain_link(
+    expect(rendered).not_to contain_link(
       rails_admin.show_path(model_name: 'dmca', id: notice.id)
     )
   end

@@ -8,7 +8,7 @@ class RedactableFieldOnPage < PageObject
   def unredact
     page.find("#notice_#{@name}").click
 
-    click_on "Unredact field"
+    click_on 'Unredact field'
   end
 
   def select

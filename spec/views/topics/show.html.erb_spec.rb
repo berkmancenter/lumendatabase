@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'topics/show.html.erb' do
   it "shows the topic's name" do
@@ -40,9 +40,7 @@ describe 'topics/show.html.erb' do
 
       render
 
-      within('.topic-notices') do
-        expect(page).to have_css('li.notice', count: 2)
-      end
+      expect(rendered).to have_css('.topic-notices li.notice', count: 2)
     end
 
     it "does not show notices when they aren't there" do

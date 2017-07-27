@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'support/notice_actions'
 
 RSpec.configure do |config|
@@ -6,7 +6,7 @@ RSpec.configure do |config|
 end
 
 feature "notice submission" do
-  scenario "submitting a notice" do
+  scenario "submitting a notice with title" do
     submit_recent_notice("A title")
 
     expect(page).to have_css('#flash_notice')
