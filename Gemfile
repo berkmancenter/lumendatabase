@@ -16,6 +16,7 @@ gem 'acts-as-taggable-on'
 gem 'ancestry'
 gem 'devise'
 gem 'rails_admin'
+gem 'gdbm', '~> 1.3', '>= 1.3.1'
 # kaminari is locked because we've monkeypatched it to work around
 # slow postgres table counts on large tables.
 gem 'kaminari', '0.14.1'
@@ -55,6 +56,7 @@ group :development do
 end
 
 group :development, :test do
+  gem 'phantomjs', '~> 2.1', '>= 2.1.1.0'
   gem 'factory_girl_rails'
   gem 'rspec-rails'
   gem 'sham_rack'
@@ -68,7 +70,7 @@ end
 
 group :test do
   gem 'bourne', require: false
-  gem 'capybara-webkit', '~> 1.11.1'
+  gem 'poltergeist', '~> 1.10'
   gem 'database_cleaner'
   gem 'launchy'
   gem 'shoulda-matchers', '~> 3.1', '>= 3.1.1'
