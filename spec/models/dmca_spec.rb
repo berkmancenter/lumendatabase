@@ -310,10 +310,11 @@ describe DMCA, type: :model do
   context ".in_topics" do
     it "returns notices in the given topics" do
       single = create(:dmca) # not to be found
-      expected_notices = create_list(:dmca, 3, :with_topics)
-      topics = expected_notices.map(&:topics).flatten.uniq.delete_if do |t|
-        @notice_topics.include? t
-      end
+      topics = create_list(:topic, 3)
+      expected_notices = [
+        create(:dmca, topics: topics),
+        create(:dmca, topics: topics)
+      ]
 
       notices = DMCA.in_topics(topics)
 
