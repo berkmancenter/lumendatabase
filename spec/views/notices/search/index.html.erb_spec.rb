@@ -6,7 +6,7 @@ describe 'notices/search/index.html.erb' do
 
     render
 
-    expect(page).to have_css('.result', count: 5)
+    expect(rendered).to have_css('.result', count: 5)
   end
 
   it "includes facets" do
@@ -15,7 +15,7 @@ describe 'notices/search/index.html.erb' do
     render
 
     facet_data.keys.each do|facet|
-      expect(page).to have_css(".#{facet} span", count: 2)
+      expect(rendered).to have_css(".#{facet} span", count: 2)
     end
   end
 
@@ -29,10 +29,8 @@ describe 'notices/search/index.html.erb' do
 
     render
 
-    within('.result') do
-      expect(page).not_to have_content('on behalf of')
-      expect(page).not_to have_content('/faceted_search')
-    end
+    expect(rendered).not_to have_css( '.result', text: 'on behalf of')
+    expect(rendered).not_to have_css( '.result', text: '/faceted_search')
   end
 
   context "notice is sent on behalf of an entity" do
@@ -52,29 +50,23 @@ describe 'notices/search/index.html.erb' do
 
       render
 
-      within('.result') do
-        expect(page).to have_faceted_search_role_link(:sender_name, @notice)
-        expect(page).to have_faceted_search_role_link(:recipient_name, @notice)
-        expect(page).to have_faceted_search_role_link(:principal_name, @notice)
-      end
+      expect(rendered).to have_faceted_search_role_link(:sender_name, @notice)
+      expect(rendered).to have_faceted_search_role_link(:recipient_name, @notice)
+      expect(rendered).to have_faceted_search_role_link(:principal_name, @notice)
     end
 
     it "includes the relevant notice data" do
 
       render
 
-      within('.result') do
-        expect(page).to have_css('.title', text: 'A notice')
-        expect(page).to have_css(
-          '.date-received', text: @notice.date_received.to_s(:simple)
-        )
-        expect(page).to have_content(@on_behalf_of)
-        within('.topic') do
-          @notice.topics.each do |topic|
-            expect(page).to have_content(topic.name)
-          end
-        end
-        expect(page).to contain_link(notice_path(@notice))
+      expect(rendered).to have_link( @notice.title, href: notice_path(@notice) )
+      expect(rendered).to have_css(
+        '.result .date-received', text: @notice.date_received.to_s(:simple)
+      )
+      expect(rendered).to have_content( @on_behalf_of )
+
+      @notice.topics.each do |topic|
+        expect(rendered).to have_css( '.result .topic', text: topic.name)
       end
     end
   end
@@ -88,9 +80,7 @@ describe 'notices/search/index.html.erb' do
 
       render
 
-      within('.result') do
-        expect(page).to have_content('foo bar baz')
-      end
+      expect(rendered).to have_content('foo bar baz')
     end
 
     it 'sanatizes excerpts' do

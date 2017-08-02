@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 feature "typed notice submissions" do
   scenario "User submits and views a Trademark notice" do

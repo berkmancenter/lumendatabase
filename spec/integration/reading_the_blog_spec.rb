@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 feature "The Blog" do
   scenario "A user reads a blog entry" do

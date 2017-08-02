@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 feature "DMCA counter notices" do
   scenario "A user submits a DMCA counter notice" do

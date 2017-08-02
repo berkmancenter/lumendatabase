@@ -6,8 +6,8 @@ gem 'flutie'
 gem 'high_voltage'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
-gem 'pg'
-gem 'rails', '~> 4.2.6'
+gem 'pg', '0.20.0'
+gem 'rails', '~> 4.2.9'
 gem 'recipient_interceptor'
 gem 'simple_form'
 gem 'paperclip', '3.5.4'
@@ -29,11 +29,9 @@ gem 'cancancan'
 gem 'jquery-placeholder-rails'
 gem 'activerecord-import'
 gem 'html2md'
-gem 'mysql2'
 gem 'ruby-progressbar'
 gem 'turnout'
 gem 'date_validator'
-gem 'piwik_analytics'
 gem 'twitter'
 gem 'twitter-text'
 gem 'rails_admin_tag_list'
@@ -57,12 +55,12 @@ group :development do
 end
 
 group :development, :test do
+  gem 'phantomjs'
   gem 'factory_girl_rails'
   gem 'rspec-rails'
   gem 'sham_rack'
   gem 'pry-rails'
   gem 'ruby-prof'
-  gem 'unicorn', '4.9.0'
   gem 'rspec-collection_matchers', '~> 1.1', '>= 1.1.2'
   gem 'pry-byebug'
   gem 'pry', '~> 0.10.4'
@@ -70,15 +68,12 @@ end
 
 group :test do
   gem 'bourne', require: false
-  gem 'capybara-webkit', '~> 1.11.1'
+  gem 'poltergeist', '~> 1.10'
   gem 'database_cleaner'
   gem 'launchy'
   gem 'shoulda-matchers', '~> 3.1', '>= 3.1.1'
   gem 'simplecov', require: false
   gem 'timecop'
-  gem 'selenium-webdriver'
-  gem 'guard-spork', '~> 2.1'
-  gem 'rb-inotify', require: false
   gem 'fakeweb'
   gem 'curb'
 end

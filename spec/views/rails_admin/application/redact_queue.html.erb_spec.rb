@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'rails_admin/application/redact_queue.html.erb' do
   before do
@@ -22,13 +22,13 @@ describe 'rails_admin/application/redact_queue.html.erb' do
 
     render
 
-    expect(page).to have_content(notice.id)
-    expect(page).to have_content(notice.title)
-    expect(page).to have_content(notice.body)
-    expect(page).to have_content(notice.sender_name)
-    expect(page).to have_content(notice.recipient_name)
-    expect(page).to have_content(notice.submitter_name)
-    expect(page).to have_content(notice.date_received.to_s(:simple))
+    expect(rendered).to have_content(notice.id)
+    expect(rendered).to have_content(notice.title)
+    expect(rendered).to have_content(notice.body)
+    expect(rendered).to have_content(notice.sender_name)
+    expect(rendered).to have_content(notice.recipient_name)
+    expect(rendered).to have_content(notice.submitter_name)
+    expect(rendered).to have_content(notice.date_received.to_s(:simple))
   end
 
 end

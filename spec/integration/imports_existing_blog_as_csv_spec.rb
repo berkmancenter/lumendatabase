@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'blog_importer'
 
 feature "Importing the blog from CSV" do

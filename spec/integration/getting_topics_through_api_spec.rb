@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 feature "Topic lists as json" do
   scenario "an API consumer gets a list of topics" do

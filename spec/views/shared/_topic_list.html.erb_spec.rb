@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'shared/_topic_list.html.erb' do
   it "includes links to each topic by name" do
@@ -7,7 +7,7 @@ describe 'shared/_topic_list.html.erb' do
     render 'shared/topic_list', topics: topics
 
     topics.each do |topic|
-      expect(page).to contain_link(topic_path(topic), topic.name)
+      expect(rendered).to contain_link(topic_path(topic), topic.name)
     end
   end
 
@@ -16,6 +16,6 @@ describe 'shared/_topic_list.html.erb' do
 
     render 'shared/topic_list', topics: topics
 
-    expect(page).to have_content(/^#{topics.map(&:name).join(', ')}$/)
+    expect(rendered).to have_content(/^#{topics.map(&:name).join(', ')}$/)
   end
 end

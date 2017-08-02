@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'views/entities/_address.html.erb' do
   it "has relevant metadata" do

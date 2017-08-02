@@ -1,22 +1,22 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'shared/_navigation.html.erb' do
   it 'shows a link to create a new notice' do
     render
 
-    expect(page).to contain_link(new_notice_path)
+    expect(rendered).to contain_link(new_notice_path)
   end
 
   it 'shows a link to read the blog' do
     render
 
-    expect(page).to contain_link(blog_entries_path)
+    expect(rendered).to contain_link(blog_entries_path)
   end
 
   it 'shows a link to research' do
     render
 
-    expect(page).to contain_link(page_path("research"))
+    expect(rendered).to contain_link(page_path("research"))
   end
 
   it 'has links to all topics' do
@@ -25,7 +25,7 @@ describe 'shared/_navigation.html.erb' do
     render
 
     topics.each do |topic|
-      expect(page).to contain_link(topic_path(topic))
+      expect(rendered).to contain_link(topic_path(topic))
     end
   end
 
@@ -36,10 +36,8 @@ describe 'shared/_navigation.html.erb' do
 
     render
 
-    within('#dropdown-topics ol') do
-      expect(page).to have_css('li:nth-child(1)', text: first_topic.name)
-      expect(page).to have_css('li:nth-child(2)', text: second_topic.name)
-      expect(page).to have_css('li:nth-child(3)', text: third_topic.name)
-    end
+    expect(rendered).to have_css('#dropdown-topics li:nth-child(1)', text: first_topic.name)
+    expect(rendered).to have_css('#dropdown-topics li:nth-child(2)', text: second_topic.name)
+    expect(rendered).to have_css('#dropdown-topics li:nth-child(3)', text: third_topic.name)
   end
 end

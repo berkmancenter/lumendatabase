@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'rake'
 
 feature "Publishing notices via rake task" do

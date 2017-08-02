@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'views/entity_notice_roles/_entity_notice_role.html.erb' do
 

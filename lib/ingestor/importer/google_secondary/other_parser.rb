@@ -33,10 +33,28 @@ module Ingestor
           false
         end
 
+        def parse_date( str, format )
+          Date.strptime( str, format ) rescue nil
+        end
+
         def date_received
           content = Base.read_file(original_file_paths.first)
 
-          get_single_line_field(content, 'signature_date')
+          Rails.logger.debug "[importer][other] signature_date:  #{get_single_line_field(content, 'signature_date')}"
+
+          signature_date = get_single_line_field(content, 'signature_date')
+
+          dr = parse_date signature_date, '%Y-%m-%d'
+
+          if dr.nil?
+            dr = parse_date signature_date, '%m/%d/%Y'
+          end
+
+          if dr.nil?
+            dr = parse_date signature_date, '%m/%d/%y'
+          end
+
+          dr
         end
 
         def parse_works(file_path)
@@ -45,7 +63,7 @@ module Ingestor
           end
 
           work = content.to_work
-		  work.update_attributes description: '', description_original: ''
+          work.update_attributes description: '', description_original: ''
           [work]
         end
 
