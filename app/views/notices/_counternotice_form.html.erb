@@ -14,6 +14,7 @@
         label: t( 'views.counternotice_form.body_label' ),
         required: true
       %>
+      <%= form.input :counternotice_for_id, as: :integer, placeholder: 'Lumen DMCA Notice ID (if available)' %>
     </div>
     <div class="body-wrapper left main">
       <%= form.input :type, as: :hidden %>

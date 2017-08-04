@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170123110001) do
+ActiveRecord::Schema.define(version: 20170804185932) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -123,7 +123,7 @@ ActiveRecord::Schema.define(version: 20170123110001) do
 
   create_table "infringing_urls_works", id: false, force: :cascade do |t|
     t.integer "infringing_url_id", limit: 8, null: false
-    t.integer "work_id",           null: false
+    t.integer "work_id",                     null: false
   end
 
   add_index "infringing_urls_works", ["infringing_url_id"], name: "index_infringing_urls_works_on_infringing_url_id", using: :btree
@@ -165,6 +165,7 @@ ActiveRecord::Schema.define(version: 20170123110001) do
     t.integer  "url_count"
     t.boolean  "webform",                  default: false
     t.text     "notes"
+    t.integer  "counternotice_for_id"
   end
 
   add_index "notices", ["original_notice_id"], name: "index_notices_on_original_notice_id", using: :btree
