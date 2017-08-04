@@ -123,6 +123,7 @@ FactoryGirl.define do
       end
     end
 
+    factory :counternotice, class: 'Counternotice'
     factory :trademark, class: 'Trademark'
     factory :defamation, class: 'Defamation'
     factory :court_order, class: 'CourtOrder'

@@ -63,6 +63,7 @@ class Notice < ActiveRecord::Base
 
   TYPES_TO_TOPICS = {
     'DMCA'                  => "Copyright",
+    'Counternotice'         => "Copyright",
     'Trademark'             => "Trademark",
     'Defamation'            => "Defamation",
     'CourtOrder'            => "Court Orders",

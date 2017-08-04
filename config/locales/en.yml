@@ -3,6 +3,26 @@ en:
     pagination:
       previous: '&#8592; Previous'
       next: 'Next &#8594;'
+
+    notices:
+      disclaimer: 'Please do not include phone numbers, email addresses, personal name, or other private information other than those of the complainant.'
+
+    counternotice_form:
+      title: 'Report a DMCA Counternotice'
+      info: 'If you have sent or received a DMCA counternotice and want to submit it to our database, fill out the form below.'
+      step1_h: 'Describe the Notice'
+      step1_info: 'Provide us with information about the DMCA counternotice you <em>sent</em> or <em>received</em>.'
+      reason_h: 'Why are you requesting reinstatement?'
+      body_label: 'Reason'
+      reasons:
+        owner: 'I am the owner of the content'
+        authorized: 'I am not the owner, but I am authorized to use the content'
+        no_right: 'The complainant does not have the right to submit this request'
+        fair_use: 'The way I used the content is fair use'
+        removed: 'I have removed the content'
+        not_used: 'I never used the content'
+        other: 'Other'
+
     entities:
       entity:
         country: 'COUNTRY'
@@ -40,6 +60,9 @@ en:
   type_descriptions:
     DMCA:
       'Is someone complaining that images, text, video, or other content found online infringe their copyrights?'
+
+    Counternotice:
+      'Has someone complained that images, text, video, or other content you put online infringed their copyrights?'
 
     Trademark:
       'Is someone complaining that images, text, video, other content found online, or some other form of online activity, infringe their trademark(s)?'
