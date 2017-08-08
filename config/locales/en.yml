@@ -88,24 +88,21 @@ en:
     GovernmentRequest:
       'Has a government agency or an agent of a government agency requested the removal of images, text, video, or other content posted online, or that you or your ISP provide them with your or someone else’s identity, private information or data that would normally not be available to the public?'
 
-  first_time_visitor:
-    'The notice on this page represents a request to remove material from an online site. Lumen maintains an independent database of these notices -- we are not the senders or targets of the notices.
+  first_time_visitor: |
+    The information on this page represents either a request to remove material from an online site or a DMCA  (copyright) "counternotice," asking that material already removed be replaced.
 
+    Lumen maintains an independent database of these notices and counternotices - we are not their senders or recipients. All of the notices and requests in the Lumen database have been shared with Lumen voluntarily by the companies or individuals responsible for either originally sending or receiving the notices. **Lumen is ___not___ responsible in any way for either removing or restoring on-line content from the web or search engine listings, or for "blocking" or restoring access to websites or URLs.**
 
-Other information in the notice depends on what details the sender included.
+    Other information in the notice or counternotice depends on what details were included when a copy of the notice was shared with Lumen. Lumen does not have any more information about a particular notice than what is present within it.
 
+    * The "Recipient" of the notice is the person or organization, most often an OSP, controlling access to the material or search results that are the subject of the request, and is therefore in a position to remove or restore access to it.
+    * The "Principal" is the person or organization whose rights have allegedly been violated and on whose behalf the request is being made.
+    * The "Sender" is the same as the Principal, the person or entity who is requesting that the material be removed, unless a third party has sent the notice on the Principal's behalf, in which case both are listed, with the agent sending "on behalf of" the original complainant.
+    * The "Submitter" is the person or organization that shared a copy of the notice or counternotice with Lumen
 
-The category of request is listed at the top. The “Recipient” of the notice is the person or organization, most often an ISP, that controls access to the material, and is therefore in a position to remove or disable access to it.
+    Other important fields on each notice include the following, although not every notice will have information in all of these fields.
 
+    * The URL(s) for the material that the complainant wants taken down
+    * A brief description of the issue leading to the complaint; and whether the recipient acted on the complaint or not.
+    * In the case of a copyright complaint, the notice will also include a description of the original copyrighted material, and its URL if one exists.
 
-Every notice will show a Sender and Recipient. Where a notice was sent by an agent on behalf of a principal, both parties will be shown.  The “Sender” is the person or entity who is requesting that the material be removed unless an agent or law firm has sent the notice on the principal’s behalf, in which case both the agent’s name and that of the sender are listed, with the agent sending “on behalf of” the original complainant.
-
-
-Other critical fields on each notice include:
-
-
-  * The URL(s) for the material that the complainant wants taken down
-
-  * A brief description of the issue leading to the complaint; and whether the recipient acted on the complaint or not.
-
-  * In the case of a copyright complaint, the notice will also include a description of the original copyrighted material, and its URL if one exists.'
