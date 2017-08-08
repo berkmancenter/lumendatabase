@@ -146,7 +146,7 @@ class Notice < ActiveRecord::Base
   end
 
   def self.type_models
-    TYPES.map(&:constantize)
+    ( TYPES - ['Counternotice'] ).map(&:constantize)
   end
 
   def self.available_for_review
