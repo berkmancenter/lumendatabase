@@ -123,6 +123,7 @@ class NoticesController < ApplicationController
       :url_count,
       :webform,
       :counternotice_for_id,
+      :counternotice_for_sid,
       topic_ids: [],
       file_uploads_attributes: [:kind, :file, :file_name],
       entity_notice_roles_attributes: [
