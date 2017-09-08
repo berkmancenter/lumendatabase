@@ -6,8 +6,35 @@ describe 'notices/new.html.erb' do
 
     render
 
-    expect(rendered).to have_css 'form'
+    expect(rendered).to have_css 'form.new_notice'
   end
+
+  Notice.type_models.each do |model|
+    it "knows the notice type for #{model.to_s}" do
+      assign(:notice, model.new)
+
+      render
+
+      expect(rendered).to have_css %Q|input#notice_type[type="hidden"][value="#{model.to_s}"]|, visible: false
+    end
+  end
+
+  context 'new Counternotice' do
+    before do
+      assign(:notice, Counternotice.new)
+
+      render
+    end
+
+    it "has a selection for the body" do
+      expect(rendered).to have_css 'select#notice_body'
+    end
+
+    it "allows counternotice for" do
+      expect(rendered).to have_css 'input#notice_counternotice_for_id[type="number"]'
+    end
+  end
+
 
   it "should not require copyrighted urls" do
     params = {

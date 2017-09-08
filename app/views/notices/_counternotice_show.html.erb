@@ -1,0 +1,8 @@
+<section class="notice-body">
+  <% if notice.body.present? %>
+    <h5 class="title">Body</h5>
+    <p class="body"><pre><%= notice.redacted(:body) %></pre></p>
+  <% end %>
+</section>
+
+<%= render works_partial_for(notice), works: notice.works %>

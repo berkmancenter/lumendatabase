@@ -1,0 +1,121 @@
+<header>
+  <h3 class="title"><%= t( 'views.counternotice_form.title' ) %></h3>
+  <p><%= t( 'views.counternotice_form.info' ) %></p>
+  <p class="disclaimer"><%= t( 'views.notices.disclaimer' ) %></p>
+</header>
+<%= simple_form_for(notice) do |form| %>
+  <section class="notice-body">
+    <h4><span>Step 1.</span> <%= t( 'views.counternotice_form.step1_h' ) %></h4>
+    <p><%= raw( t( 'views.counternotice_form.step1_info' ) ) %></p>
+    <p><b><%= t( 'views.counternotice_form.reason_h' ) %></b></p>
+    <div class="body-wrapper main">
+      <%= form.input :body, 
+        collection: Counternotice::REASONS.map { |r| t( "views.counternotice_form.reasons.#{r}" ) },
+        label: t( 'views.counternotice_form.body_label' ),
+        required: true
+      %>
+      <%= form.input :counternotice_for_id, as: :integer, placeholder: 'Lumen DMCA Notice ID (if available)' %>
+    </div>
+    <div class="body-wrapper left main">
+      <%= form.input :type, as: :hidden %>
+      <%=
+        form.input :title, label_html: { data: {
+          tooltip: "If the notice you sent/received had a subject line, enter it here"
+        }}
+      %>
+      <%= form.hidden_field :webform, :value => true %>
+      <%= form.input :subject %>
+      <%= form.input :date_sent, as: :string, placeholder: "YYYY-MM-DD" %>
+      <%= form.input :date_received, as: :string, placeholder: "YYYY-MM-DD" %>
+      <%= form.input :source, label: "Sent via", placeholder: 'Online form, Email, Postal mail, etc.' %>
+      <%= form.input :tag_list, placeholder: 'movie, youtube, video, etc.' %>
+      <%=
+        form.input :topic_ids,
+          label: "Topics",
+          prompt: nil,
+          collection: available_topics,
+          input_html: { multiple: true }
+        %>
+      <%= form.input :language, collection: Language.all, label_method: :label, value_method: :code %>
+      <%= form.input :jurisdiction_list, label: "Jurisdiction", placeholder: 'a list of countries - US, CA, etc.' %>
+      <%#=
+        form.input :action_taken,
+          collection: Notice::VALID_ACTIONS,
+          label_html: { data: {
+            tooltip: "Did the recipient of the notice take action in response?"
+          }}
+        %>
+    </div>
+    <div class="body-wrapper right attach">
+      <%#= form.input :body %>
+      <%#= form.input :body, 
+        collection: Counternotice::REASONS,
+        html: { class: 'text' },
+        label: t( 'views.counternotice_form.body_label' ),
+        label_html: { class: 'text' }
+      %>
+
+      <%= form.simple_fields_for(:file_uploads) do |file_uploads_form| %>
+        <%= file_uploads_form.input :file, label: 'Attach Notice' %>
+        <a href="javascript:void(0);" id="add-another">Attach another</a>
+        <%= file_uploads_form.input :kind, as: :hidden %>
+      <% end %>
+    </div>
+  </section>
+
+  <section class="works">
+    <h4><span>Step 2.</span> Works in Question</h4>
+    <p>Enter information about the works which have been removed or to which access has been disabled.</p>
+
+    <% form.object.works.each_with_index do |work, index| %>
+      <%= form.simple_fields_for(:works, work, child_index: index) do |works_form| %>
+        <div class="body-wrapper left">
+          <% [:infringing_urls].each do |assoc| %>
+            <%= render(
+              partial: 'url_input_group',
+              locals: { notice: notice, assoc: assoc, works_form: works_form, index: index }
+            ) %>
+          <% end %>
+          <%= works_form.input :kind, label: "Kind of Work", placeholder: "Movie, Music, Book" %>
+        </div>
+        <div class="body-wrapper right">
+          <%= works_form.input :description %>
+        </div>
+        <% index += 1 %>
+      <% end %>
+    <% end %>
+  </section>
+
+  <% step_number = 3 %>
+  <%= form.simple_fields_for(:entity_notice_roles) do |roles_form| %>
+    <% role = roles_form.object.name.titleize %>
+    <section class="role <%= role.downcase %>">
+      <h4><span>Step <%= step_number %>.</span> <%= role %> of the Notice</h4>
+      <p>Enter information about the <b><%= role %></b> of the DMCA counternotice.</p>
+      <%= roles_form.input :name, as: :hidden %>
+      <%= roles_form.simple_fields_for(:entity) do |entity_form| %>
+        <div class="body-wrapper left required">
+          <%= entity_form.input :name, label: "Name" %>
+          <%= entity_form.input :kind,
+            label: "#{role} Type", prompt: nil, collection: Entity::KINDS %>
+        </div>
+        <div class="body-wrapper right optional">
+          <%= entity_form.input :address_line_1, label: "Address Line 1" %>
+          <%= entity_form.input :address_line_2, label: "Address Line 2" %>
+          <%= entity_form.input :city, label: "City" %>
+          <%= entity_form.input :state, label: "State", maxlength: "2" %>
+          <%= entity_form.input :zip, label: "Zip Code" %>
+          <%= entity_form.input :country_code, collection: iso_countries, label: "Country" %>
+          <%= entity_form.input :phone, label: "Phone" %>
+          <%= entity_form.input :email, label: "Email" %>
+          <%= entity_form.input :url, label: "#{role} URL" %>
+        </div>
+      <% end %>
+    </section>
+    <% step_number += 1 %>
+  <% end %>
+
+  <div class="buttons-wrapper">
+    <%= form.submit "Submit Notice", :class => "submit" %>
+  </div>
+<% end %>

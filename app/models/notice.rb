@@ -63,6 +63,7 @@ class Notice < ActiveRecord::Base
 
   TYPES_TO_TOPICS = {
     'DMCA'                  => "Copyright",
+    'Counternotice'         => "Copyright",
     'Trademark'             => "Trademark",
     'Defamation'            => "Defamation",
     'CourtOrder'            => "Court Orders",
@@ -145,7 +146,7 @@ class Notice < ActiveRecord::Base
   end
 
   def self.type_models
-    TYPES.map(&:constantize)
+    ( TYPES - ['Counternotice'] ).map(&:constantize)
   end
 
   def self.available_for_review
