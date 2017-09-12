@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170810170531) do
+ActiveRecord::Schema.define(version: 20170908160728) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -107,7 +107,7 @@ ActiveRecord::Schema.define(version: 20170810170531) do
     t.integer  "file_file_size"
     t.datetime "file_updated_at"
     t.boolean  "pdf_requested"
-    t.boolean  "pdf_request_fulfilled"
+    t.boolean  "pdf_request_fulfilled", default: false
   end
 
   add_index "file_uploads", ["notice_id"], name: "index_file_uploads_on_notice_id", using: :btree
