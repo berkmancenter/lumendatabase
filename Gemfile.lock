@@ -311,6 +311,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
+    stackprof (0.2.10)
     therubyracer (0.12.2)
       libv8 (~> 3.16.14.0)
       ref
@@ -417,6 +418,7 @@ DEPENDENCIES
   simple_form
   simplecov
   spork-rails!
+  stackprof
   therubyracer
   timecop
   tire (~> 0.6.0)

@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'stackprof'
 gem 'bourbon'
 gem 'neat'
 gem 'flutie'
