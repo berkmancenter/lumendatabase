@@ -10,6 +10,9 @@
 # Ignore the default SQLite database.
 /db/*.sqlite3
 
+# ignore stack prof output
+/prof
+
 # Ignore all logfiles and tempfiles.
 log/*
 tmp/

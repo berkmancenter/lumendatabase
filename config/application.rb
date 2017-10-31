@@ -79,6 +79,6 @@ module Chill
 
     config.middleware.insert_before ActionDispatch::ParamsParser, "CatchJsonParsingErrors"
     config.middleware.use Rack::Attack
-	config.middleware.use StackProf::Middleware, enabled: false, mode: :cpu, interval: 1000, save_every: 5
+    config.middleware.use StackProf::Middleware, enabled: false, mode: :cpu, interval: 1000, save_every: 5, path: 'prof'
   end
 end
