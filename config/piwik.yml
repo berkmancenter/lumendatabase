@@ -10,23 +10,16 @@
 #   The id of your website inside Piwik
 #
 production:
-  piwik:
-    id_site: 3
-    url: stats.berkman.harvard.edu
-    use_async: false
-    disabled: false
+  id_site: 3
+  url: stats.berkman.harvard.edu
+  disabled: false
 
 development:
-  piwik:
-    id_site: 4
-    url: stats.berkman.harvard.edu
-    disabled: false
-    use_async: false
+  id_site: 4
+  url: stats.berkman.harvard.edu
+  disabled: false
 
 test:
-  piwik:
-    id_site: 4
-    url: stats.berkman.harvard.edu
-    disabled: true
-    use_async: false
-    hostname: localhost
+  id_site: 4
+  url: stats.berkman.harvard.edu
+  disabled: true

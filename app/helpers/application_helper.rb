@@ -35,9 +35,4 @@ module ApplicationHelper
   def active_advanced_search_parameters?
     Notice::SEARCHABLE_FIELDS.find { |field| params[field.parameter] }.present?
   end
-
-  def piwik_tracking_tag
-    ''
-  end
-
 end
