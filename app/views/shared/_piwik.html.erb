@@ -13,7 +13,7 @@
     _paq.push(['setSiteId', '<%= Piwik[ 'id_site' ] %>']);
   })();
 </script>
-<%= javascript_include_tag 'piwik.js', defer: 'defer' %>
+<%= javascript_include_tag 'piwik.js', defer: 'defer', async: true %>
 <!-- End Piwik Code -->
 
 <% end %>
