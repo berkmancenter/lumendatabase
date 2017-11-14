@@ -166,11 +166,9 @@ GEM
       thread_safe (~> 0.3, >= 0.3.1)
     metaclass (0.0.1)
     method_source (0.8.2)
-    mime-types (3.1)
-      mime-types-data (~> 3.2015)
-    mime-types-data (3.2016.0521)
+    mime-types (2.99.3)
     mini_mime (1.0.0)
-    mini_portile2 (2.2.0)
+    mini_portile2 (2.3.0)
     minitest (5.10.3)
     mocha (0.13.3)
       metaclass (~> 0.0.1)
@@ -396,6 +394,7 @@ DEPENDENCIES
   jquery-ui-rails
   kaminari (= 0.14.1)
   launchy
+  mime-types (= 2.99.3)
   minitest
   neat
   paperclip (= 3.5.4)
