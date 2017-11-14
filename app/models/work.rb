@@ -29,27 +29,15 @@ class Work < ActiveRecord::Base
 
       return if urls_to_associate == ['']
 
-      existing_url_instances = relation_class.where(url_original: urls_to_associate)
-      existing_urls = existing_url_instances.map(&:url_original)
-      Rails.logger.debug "[importer][works] existing_urls: #{existing_urls}"
+      Rails.logger.debug "[importer][works] new_urls: #{urls_to_associate}"
 
-      new_urls = urls_to_associate - existing_urls
-      Rails.logger.debug "[importer][works] new_urls: #{new_urls}"
-
-      new_url_instances = new_urls.map { |url| relation_class.new(url_attributes[url]) }
+      new_url_instances = urls_to_associate.map { |url| relation_class.new(url_attributes[url]) }
       failing = new_url_instances.reject(&:valid?)
-      relation_class.import new_url_instances
-
-      existing_url_instances.each do |url|
-        atts = url_attributes[url.url_original]
-        if atts["url"].present? && atts["url"] != atts["url_original"]
-          url.update_attributes!(url: atts["url"]) if atts["url"] != url.url
-        end
-      end
+      relation_class.import new_url_instances, on_duplicate_key_ignore: [:url_original]
 
       send(
         "#{relation_type}=".to_sym,
-        existing_url_instances + failing + relation_class.where(url_original: new_urls)
+        failing + relation_class.where(url_original: urls_to_associate)
       )
     end
   end
