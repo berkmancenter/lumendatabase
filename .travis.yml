@@ -6,9 +6,10 @@ addons:
   apt:
     packages:
       - libqtwebkit-dev
+  postgresql: "9.6"
 
 services:
-  - postgresql: "9.6"
+  - postgresql
   - elasticsearch
 
 cache:
