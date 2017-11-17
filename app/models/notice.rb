@@ -3,8 +3,8 @@ require 'recent_scope'
 require 'validates_automatically'
 
 class Notice < ActiveRecord::Base
-  include Tire::Model::Search
   include Searchability
+  include Elasticsearch::Model
 
   extend RecentScope
 

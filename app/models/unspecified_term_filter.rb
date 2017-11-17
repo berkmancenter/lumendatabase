@@ -28,12 +28,13 @@ class UnspecifiedTermFilter < TermFilter
   end
 
   def unspecified_filter(searcher)
-    searcher.filter(
-      :bool,
-      should: [
-        { terms: { @indexed_attribute => [''] } },
-        { missing: { field: @indexed_attribute } }
-      ]
-    )
+    searcher[:filters] << {
+      bool: {
+        should: [
+          { terms: { @indexed_attribute => [''] } },
+          { missing: { field: @indexed_attribute } }
+        ]
+      }
+    }
   end
 end

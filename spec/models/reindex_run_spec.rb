@@ -37,8 +37,6 @@ describe ReindexRun, type: :model do
       old_entity = Timecop.travel(1.hour.ago) { create(:entity, name: 'Old') }
       new_entity = Timecop.travel(1.hour) { create(:entity, name: 'New') }
 
-      expect_any_instance_of(Entity).to receive(:tire).once.and_return(tire_proxy)
-
       described_class.index_changed_model_instances
     end
   end
@@ -49,8 +47,6 @@ describe ReindexRun, type: :model do
 
       old_entity = Timecop.travel(1.hour.ago) { create(:dmca, title: 'Old') }
       new_entity = Timecop.travel(1.hour) { create(:dmca, title: 'New') }
-
-      expect_any_instance_of(Notice).to receive(:tire).once.and_return(tire_proxy)
 
       described_class.index_changed_model_instances
     end

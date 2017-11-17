@@ -20,7 +20,24 @@ describe UnspecifiedTermFilter, type: :model do
 
   context "#apply_to_search" do
     let(:facet) { :some_facet }
-    let(:searcher) { Tire.search 'some_index' }
+    let(:searcher) {
+      {
+        registered_filters: [],
+        filters: [],
+        query: {
+          bool: {
+            must: [],
+            filter: []
+          }
+        },
+        aggregations: {},
+        highlight: {
+          pre_tags: '<em>',
+          post_tags: '</em>',
+          fields: {}
+        }
+      }
+    }
     let(:term_search) do
       described_class.new(facet, 'title')
     end
@@ -33,20 +50,20 @@ describe UnspecifiedTermFilter, type: :model do
     end
 
     it "adds a complex filter to searcher when the unspecified param is used" do
-      expected = "{\"filter\":{\"bool\":{\"should\":[{\"terms\":{\"some_facet\":[\"\"]}},{\"missing\":{\"field\":\"some_facet\"}}]}}}"
+      expected = "[{\"bool\":{\"should\":[{\"terms\":{\"some_facet\":[\"\"]}},{\"missing\":{\"field\":\"some_facet\"}}]}}]"
       @param = described_class.unspecified_identifier(facet)
-      expect { test_case }.to change { searcher.to_json }.from("{}").to(expected)
+      expect { test_case }.to change { searcher[:filters].to_json }.from("[]").to(expected)
     end
 
     it "adds a basic filter to searcher when the regular param is used" do
-      expected = "{\"filter\":{\"terms\":{\"some_facet\":[\"true\"]}}}"
+      expected = "[[\"terms\",{\"some_facet\":[\"true\"]}]]"
       @param = facet
-      expect { test_case }.to change { searcher.to_json }.from("{}").to(expected)
+      expect { test_case }.to change { searcher[:filters].to_json }.from("[]").to(expected)
     end
 
     it "does not add a filter to searcher when an inapplicable param is used" do
       @param = "not_a_facet"
-      expect { test_case }.not_to change { searcher.to_json }.from("{}")
+      expect { test_case }.not_to change { searcher[:filters].to_json }.from("[]")
     end
   end
 end

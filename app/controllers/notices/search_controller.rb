@@ -2,19 +2,22 @@ class Notices::SearchController < ApplicationController
   layout 'search'
 
   def index
-
     respond_to do |format|
       format.html do
         @searcher = notice_searcher
       end
       format.json do
-        results = notice_searcher.search.results
+        searcher = notice_searcher
+        raw_response = searcher.search
+        raw_results = raw_response.results
+        results = searcher.instances
+
         render(
           json: results,
           each_serializer: NoticeSerializerProxy,
           serializer: ActiveModel::ArraySerializer,
           root: 'notices',
-          meta: meta_hash_for(results)
+          meta: meta_hash_for(raw_results)
         )
       end
     end
@@ -42,5 +45,4 @@ class Notices::SearchController < ApplicationController
     sorting = Sortings.find(sort_by_param)
     sorting.sort_by
   end
-
 end

@@ -63,11 +63,11 @@ feature "Searching for Notices via the API" do
       ) do |json|
         results = {
           notices: json["notices"],
-          normal_facets: json["meta"]["facets"].except("date_received_facet").collect { |k, v| v["total"] }.uniq,
-          range_facets: json["meta"]["facets"]["date_received_facet"]["ranges"].collect { |h| h["total"] }.uniq
+          normal_facets: json["meta"]["facets"].except("date_received_facet").collect { |k, v| v["buckets"].length }.max,
+          range_facets: json["meta"]["facets"]["date_received_facet"]["buckets"].collect { |h| h["doc_count"] }.max
         }
 
-        expect(results).to eq(notices: [], normal_facets: [0], range_facets: [0])
+        expect(results).to eq(notices: [], normal_facets: 0, range_facets: 0)
       end
     end
   end
@@ -193,6 +193,7 @@ feature "Searching for Notices via the API" do
       end
 
       expect_api_search_to_find("king") do |json|
+        puts json.inspect
         json_item = json['notices'].first
         expect(json_item).to have_key('marks').with_value(marks)
         expect(json_item).not_to have_key('works')

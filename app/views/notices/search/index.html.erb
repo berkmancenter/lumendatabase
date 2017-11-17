@@ -1,14 +1,14 @@
 <%= title 'Search' %>
 <%= cache(@searcher.cache_key) do %>
-<% results = @searcher.search.results -%>
+<% response = @searcher.search -%>
 
 <section class="search-results">
   <header>
     <%= form_tag(notices_search_index_path, method: :get, id: 'facets-form') do %>
-      <% if results.facets %>
+      <% if response.response['aggregations'] %>
         <ol class="results-facets">
           <% Notice::FILTERABLE_FIELDS.each do |filterable_field| %>
-            <%= render filterable_field, results: results %>
+            <%= render filterable_field, results: response.response['aggregations'] %>
           <% end %>
         </ol>
       <% end %>
@@ -18,7 +18,7 @@
       Filtering results using the above drop-down menus will change the listed results but not the listed totals in the drop-down menus.
     </div>
     <div class="result-stats">
-      <span class="total-entries">Found <%= results.total_entries %> results</span>
+      <span class="total-entries">Found <%= response.results.total %> results</span>
       <div class="dropdown sort-order">
         Sort by: <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><%= sort_order_label(params[:sort_by]) %></a>
         <ol class="dropdown-menu" role="menu">
@@ -36,8 +36,8 @@
     </div>
   </header>
   <ol class="results-list">
-    <%= render partial: 'result', collection: results %>
+    <%= render partial: 'result', collection: @searcher.instances %>
   </ol>
-  <%= paginate results, left: 9, right: 2 %>
+  <%= paginate response.results, left: 9, right: 2, current_page: @searcher.page.to_i %>
 </section>
 <% end %>
