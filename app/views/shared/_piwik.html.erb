@@ -1,0 +1,19 @@
+<% unless Piwik[ 'disabled' ] %>
+<!-- Piwik -->
+<script type="text/javascript">
+  var _paq = _paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(["setDomains",
+["flutie.law.harvard.edu","*.www.chillingeffects.org","*.chillingeffects.org","*.lumendatabase.org","*.www.lumendatabase.org"]]);
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="//<%= Piwik[ 'url' ] %>/";
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', '<%= Piwik[ 'id_site' ] %>']);
+  })();
+</script>
+<%= javascript_include_tag 'piwik.js', defer: 'defer', async: true %>
+<!-- End Piwik Code -->
+
+<% end %>

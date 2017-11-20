@@ -557,6 +557,31 @@ where notices.id in (
     Notice.where(type: 'DMCA').update_all(type: 'Dmca')
   end
 
+  desc "Given a work, for every notice having that work: replace the notice's work with a new blank work"
+  task :blank_work_notices_works, [ :work_id ] => :environment do |t, args|
+    blank_work_notices_works args[ :work_id ]
+  end
+
+  def blank_work_notices_works( work_id )
+    usage = "usage: blank_work_notices_works['work_id']"
+
+    if work_id.blank?
+      puts usage
+      return
+    end
+
+    work = Work.find_by id: work_id
+
+    if work.nil?
+      puts "cannot find work with id: #{work_id}"
+      return
+    end
+
+    work.notices.each { |n|
+      puts "creating new empty work for notice: #{n.id}"
+    }
+  end
+
   desc "Remove future dates from date_received and date_sent in notices"
   task remove_future_dates: :environment do
     Notice.update_all("date_received = NULL", "date_received > CURRENT_DATE")

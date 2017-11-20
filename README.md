@@ -12,10 +12,11 @@ Development
 
 Requirements:
 
-* ruby 2.2.6
-* PostgreSQL 9.1+
-* Elasticsearch 1.7+
+* ruby 2.3.3
+* PostgreSQL 9.6
+* Elasticsearch 1.7.6
 * Java Runtime Environment (OpenJDK works fine)
+* Piwik Tracking
 
 Setup:
 
