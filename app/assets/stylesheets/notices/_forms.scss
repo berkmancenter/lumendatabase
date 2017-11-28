@@ -94,7 +94,7 @@ form.new_notice, form.new_counter_notice {
   }
 
   label {
-    @include linear-gradient(#eee, #eaeaea);
+    @include linear-gradient-background(#eee, #eaeaea);
     box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, 0.5);
     border-radius: $form-border-radius 0 0 $form-border-radius;
     border-right: 1px solid $form-border-color;
