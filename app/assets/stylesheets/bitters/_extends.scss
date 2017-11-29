@@ -6,7 +6,7 @@
 }
 
 %gray-gradient {
-  @include linear-gradient(to top, #fafafa, #fff);
+  @include linear-gradient-background(to top, #fafafa, #fff);
 }
 
 %base-shadow {

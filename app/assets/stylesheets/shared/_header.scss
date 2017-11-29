@@ -212,7 +212,7 @@ header.app .container.advanced-search {
 
     select {
       @include appearance(none);
-      @include linear-gradient(#FAFAFA, #E9E9E9);
+      @include linear-gradient-background(#FAFAFA, #E9E9E9);
       font-weight: 600;
       border: 0;
       border-right: 1px solid hsla(0, 0%, 0%, 0.2);
