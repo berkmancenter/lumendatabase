@@ -11,9 +11,7 @@ feature "notice submission" do
 
     expect(page).to have_css('#flash_notice')
 
-    within("#recent-notices") do
-      expect(page).to have_css(%{li:contains("A title")})
-    end
+    expect(page).to have_css( '#recent-notices li', text: 'A title' )
   end
 
   scenario "submitting a notice with language" do

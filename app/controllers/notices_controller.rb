@@ -1,6 +1,8 @@
 class NoticesController < ApplicationController
   layout :resolve_layout
 
+  protect_from_forgery only: :create, unless: -> { request.format.json? }
+
   def new
     if params[:type].blank?
       render :select_type and return
