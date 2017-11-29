@@ -7,10 +7,9 @@ class NoticeSubmissionOnPage < PageObject
   end
 
   def open_submission_form
-    visit '/'
+    visit '/notices/new'
 
-    click_on 'Report a Demand'
-    click_on @notice_class.to_s.titleize
+    click_on 'Report ' + @notice_class.to_s.titleize
   end
 
   def within_form(&block)
