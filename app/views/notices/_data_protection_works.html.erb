@@ -4,16 +4,12 @@
       <%= content_tag_for(:li, work) do %>
         <h4>Requests for Removal from Search Results</h4>
 
-        <div class="row">
-          <span class="label infringing-title">Location of Some of the Material Requested for Removal:</span>
-          <ol class="list infringing-urls">
-            <% work.infringing_urls.each do |url| %>
-              <%= content_tag_for(:li, url) do %>
-                <%= url.url %>
-              <% end %>
-            <% end %>
-          </ol>
-        </div>
+        <%= render 'works_urls',
+                    work: work,
+                    infringing_title: 'Location of Some of the Material Requested for Removal:',
+                    show_original: false,
+                    show_infringing: true
+        %>
       <% end %>
     <% end %>
 	This user requested removal of <%= @notice.url_count.nil? ? "unspecified" : @notice.url_count %> URLs.
