@@ -90,6 +90,7 @@ section.home-search-form {
   margin-bottom: 25px;
   background: #fff;
   border-radius: 3px;
+  font-size: $base-font-size-small-1;
 
   section {
     @include span-columns(6);
@@ -108,6 +109,10 @@ section.home-search-form {
       @include media($mobile) {
         border: 0;
         width: 100%;
+      }
+
+      a {
+        display: inline;
       }
 
       @include span-columns(6);

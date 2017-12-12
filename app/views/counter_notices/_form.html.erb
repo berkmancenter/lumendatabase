@@ -1,6 +1,11 @@
 <%= simple_form_for(counter_notice) do |f| %>
 
     <section class="important-terms">
+      <p>Please note that Lumen offers this counternotice generator form purely as a formatting convenience for users.</p>
+      <p>Filling out this form will present you with a copy of properly formated DMCA counternotice, which you must then save or copy in order to send it to its intended recipient by whatever means you choose.</p>
+      <p>Filling out the form will NOT store the counternotice in Lumen's database or send it to involved parties, nor can Lumen do anything with the information entered into the form.</p>
+      <p>Lumen is not the sender or original recipient of the DMCA notices within its database, and is not responsible in any way for either removing or restoring on-line content from the web or search engine listings, or for &quot;blocking&quot; or restoring access to websites or URLs.</p>
+      <p>Lumen is not the correct recipient of a counternotice and cannot take action of any kind on one.</p>
       <%= f.input :attach_list_of_works,
         as: :boolean,
         label: 'I will attach a list of works which have been removed or to which
@@ -25,7 +30,7 @@
     
       <%= f.input :consent_to_be_served,
         as: :boolean,
-        label: 'I consent to be served by the person who gave notice to my Service Provider, or his agent.'
+        label: "I consent to be served by the person who gave notice to my Service Provider, or my Service Provider's agent."
       %>
     </section>
 
