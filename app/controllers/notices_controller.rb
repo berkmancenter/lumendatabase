@@ -3,7 +3,11 @@ class NoticesController < ApplicationController
 
   def new
     if params[:type].blank?
-      render :select_type and return
+      if cannot?(:submit, Notice)
+        render :submission_disabled and return
+      else
+        render :select_type and return
+      end
     end
 
     model_class = get_notice_type(params)
