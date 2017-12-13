@@ -4,16 +4,12 @@
       <%= content_tag_for(:li, work) do %>
         <h4>Defamation Claim #<%= idx + 1 %></h4>
 
-        <div class="row">
-          <span class="label infringing-title">URLs of Allegedly Defamatory Material:</span>
-          <ol class="list infringing-urls">
-            <% work.infringing_urls.each do |url| %>
-              <%= content_tag_for(:li, url) do %>
-                <%= url.url %>
-              <% end %>
-            <% end %>
-          </ol>
-        </div>
+        <%= render 'works_urls',
+                    work: work,
+                    infringing_title: 'URLs of Allegedly Defamatory Material:',
+                    show_original: false,
+                    show_infringing: true
+        %>
       <% end %>
     <% end %>
   </ol>

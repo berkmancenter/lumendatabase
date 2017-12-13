@@ -28,7 +28,7 @@ feature "DMCA counter notices" do
     counternotice.check('I will attach a list of works which have been removed or to which access has been disabled. I will include the location of each work before it was removed or access to it was disabled.')
     counternotice.check("Each of those works were removed in error and I believe my posting them does not infringe anyone else's rights.")
     counternotice.check('I understand that I am declaring the above under penalty of perjury, meaning that if I am not telling the truth I may be commiting a crime.')
-    counternotice.check('I consent to be served by the person who gave notice to my Service Provider, or his agent.')
+    counternotice.check("I consent to be served by the person who gave notice to my Service Provider, or my Service Provider's agent.")
     counternotice.choose_radio_option('I live in the United States and I consent to the jurisdiction of the district court in whose district I reside.')
 
     counternotice.submit

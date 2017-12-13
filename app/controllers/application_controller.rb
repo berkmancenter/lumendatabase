@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
     redirect_to main_app.root_path, alert: ex.message
   end
 
-  protect_from_forgery
+  skip_before_action :verify_authenticity_token
 
   private
 

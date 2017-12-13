@@ -1,6 +1,8 @@
 class NoticesController < ApplicationController
   layout :resolve_layout
 
+  skip_before_action :verify_authenticity_token, only: :create
+
   def new
     if params[:type].blank?
       if cannot?(:submit, Notice)
