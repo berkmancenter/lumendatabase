@@ -144,12 +144,16 @@ describe NoticesController do
         notice.save
         stub_find_notice(notice)
 
-        request.env['HTTP_AUTHENTICATION_TOKEN'] = user.authentication_token
         get :show, id: 1, format: :json
 
         json = JSON.parse(response.body)['dmca']['works'][0]['infringing_urls'][0]
         expect(json).to have_key('count')
         expect(json).to have_key('domain')
+
+        get :show, id: 1, authentication_token: user.authentication_token, format: :json
+
+        json = JSON.parse(response.body)["dmca"]["works"][0]["infringing_urls"][0]
+        expect(json).to have_key('url_original')
       end
     end
 

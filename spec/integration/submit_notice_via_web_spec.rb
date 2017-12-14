@@ -1,8 +1,11 @@
 require 'rails_helper'
 require 'support/sign_in'
+require 'support/notice_actions'
+require 'support/user_helpers'
 
 feature 'notice submission' do
   include NoticeActions
+  include UserHelpers
 
   scenario 'non signed-in user cannot submit notices' do
     visit '/notices/new?type=DMCA'
@@ -212,6 +215,19 @@ feature 'notice submission' do
       expect(page).to have_content 'example.com - 1 URL'
       expect(page).to have_content 'movie'
       expect(page).to have_content 'A series of videos and still images'
+    end
+
+    login
+
+    open_recent_notice
+
+    within('#works') do
+      expect(page).to have_content 'http://www.example.com/original_work.pdf'
+      expect(page).to have_content 'movie'
+      expect(page).to have_content 'A series of videos and still images'
+      expect(page).to have_css(
+        %{.infringing_url:contains("http://example.com/infringing_url1")}
+      )
     end
   end
 

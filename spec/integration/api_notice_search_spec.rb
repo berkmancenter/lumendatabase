@@ -206,6 +206,22 @@ feature "Searching for Notices via the API" do
               ).to eq(marks.first['infringing_urls'].sort)
         expect(json_item).to have_key('mark_registration_number').with_value('1337')
       end
+
+      marks = notice.works.map do |work|
+        {
+          'description'=> work.description,
+          'infringing_urls' => work.infringing_urls.map(&:url)
+        }
+      end
+
+      user = create(:user)
+
+      expect_api_search_to_find("king", { authentication_token: user.authentication_token }) do |json|
+        json_item = json['notices'].first
+        expect(json_item).to have_key('marks').with_value(marks)
+        expect(json_item).not_to have_key('works')
+        expect(json_item).to have_key('mark_registration_number').with_value('1337')
+      end
     end
   end
 

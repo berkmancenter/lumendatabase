@@ -198,6 +198,22 @@ describe 'notices/show.html.erb' do
                                      text: url.url)
       end
     end
+
+    allow(controller).to receive(:current_user).and_return(nil)
+
+    render
+
+    notice.works.each do |work|
+      expect(rendered).to have_css( "#work_#{work.id} .description", text: work.description )
+
+      uri = URI.parse(work.copyrighted_urls.first.url)
+      domain = uri.host
+      expect(rendered).to have_css( "#work_#{work.id} li.copyrighted_url", text: domain + ' - 3 URLs' )
+
+      uri = URI.parse(work.infringing_urls.first.url)
+      domain = uri.host
+      expect(rendered).to have_css( "#work_#{work.id} li.infringing_url", text: domain + ' - 3 URLs' )
+    end
   end
 
   it 'displays the notice source' do

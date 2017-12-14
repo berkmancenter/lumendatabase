@@ -4,7 +4,7 @@
       <span class="label original-title"><%= original_title %></span>
       <ol class="list original-urls">
         <% # Don't do code style changes here, it's intentional to avoid additional spaces in the response %>
-        <% work.copyrighted_urls_counted_by_domain.each do |domain| %><li><%= domain[:domain] %> - <%= domain[:count] %> <%= 'URL'.pluralize(domain[:count]) %> </li><% end %>
+        <% work.copyrighted_urls_counted_by_domain.each do |domain| %><li class="copyrighted_url"><%= domain[:domain] %> - <%= domain[:count] %> <%= 'URL'.pluralize(domain[:count]) %></li><% end %>
       </ol>
     </div>
   <% end %>
@@ -14,7 +14,7 @@
       <span class="label infringing-title"><%= infringing_title %></span>
       <ol class="list infringing-urls">
         <% # Don't do code style changes here, it's intentional to avoid additional spaces in the response %>
-        <% work.infringing_urls_counted_by_domain.each do |domain| %><li><%= domain[:domain] %> - <%= domain[:count] %> <%= 'URL'.pluralize(domain[:count]) %> </li><% end %>
+        <% work.infringing_urls_counted_by_domain.each do |domain| %><li class="infringing_url"><%= domain[:domain] %> - <%= domain[:count] %> <%= 'URL'.pluralize(domain[:count]) %></li><% end %>
       </ol>
     </div>
   <% end %>
