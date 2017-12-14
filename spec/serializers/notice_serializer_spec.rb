@@ -25,6 +25,7 @@ describe NoticeSerializer do
     notice = build_notice
     allow(notice).to receive(:_score).and_return(2)
     serializer = NoticeSerializer.new(notice)
+    allow(serializer).to receive(:current_user).and_return(nil)
 
     score = serializer.as_json[:notice][:score]
 

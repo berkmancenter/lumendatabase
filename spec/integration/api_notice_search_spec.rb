@@ -188,7 +188,7 @@ feature "Searching for Notices via the API" do
       marks = notice.works.map do |work|
         {
           'description'=> work.description,
-          'infringing_urls' => work.infringing_urls.map(&:url)
+          'infringing_urls' => work.infringing_urls_counted_by_domain.as_json
         }
       end
 

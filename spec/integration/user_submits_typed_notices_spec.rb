@@ -70,8 +70,8 @@ feature 'typed notice submissions' do
     expect(page).to have_words('Defamation notice to Recipient')
 
     within('#works') do
-      expect(page).to have_words('URLs of Allegedly Defamatory Material')
-      expect(page).to have_words('http://example.com/defamatory_url1')
+      expect(page).to have_content('URLs of Allegedly Defamatory Material')
+      expect(page).to have_content('example.com - 1 URL')
     end
 
     within('.notice-body') do
@@ -104,11 +104,9 @@ feature 'typed notice submissions' do
 
     expect(page).to have_words('Data Protection notice to Recipient')
 
-    within('#works') do
-      expect(page).to have_words(
-        'Location of Some of the Material Requested for Removal'
-      )
-      expect(page).to have_words('http://example.com/defamatory_url1')
+    within("#works") do
+      expect(page).to have_content('Location of Some of the Material Requested for Removal')
+      expect(page).to have_content('example.com - 1 URL')
     end
   end
 
@@ -139,8 +137,8 @@ feature 'typed notice submissions' do
     expect(page).to have_words('Court Order notice to Recipient')
 
     within('#works') do
-      expect(page).to have_words('Targeted URLs')
-      expect(page).to have_words('http://example.com/targeted_url')
+      expect(page).to have_content('Targeted URLs')
+      expect(page).to have_content('example.com - 1 URL')
     end
 
     within('.notice-body') do
@@ -180,11 +178,11 @@ feature 'typed notice submissions' do
     expect(page).to have_words('Law Enforcement Request notice to Recipient')
 
     within('#works') do
-      expect(page).to have_words('URLs mentioned in request')
-      expect(page).to have_words('http://example.com/offending_url1')
-      expect(page).to have_words('URLs of original work')
-      expect(page).to have_words('http://example.com/original_object1')
-      expect(page).to have_words('My Tiny Tim fansite')
+      expect(page).to have_content('URLs mentioned in request')
+      expect(page).to have_content('example.com - 1 URL')
+      expect(page).to have_content('URLs of original work')
+      expect(page).to have_content('example2.com - 1 URL')
+      expect(page).to have_content('My Tiny Tim fansite')
     end
 
     within('.notice-body') do
@@ -225,10 +223,10 @@ feature 'typed notice submissions' do
     expect(page).to have_words('Private Information notice to Recipient')
 
     within('#works') do
-      expect(page).to have_words('URLs with private information')
-      expect(page).to have_words('http://example.com/offending_url1')
-      expect(page).to have_words('URLs of original work')
-      expect(page).to have_words('These URLs disclose my existence')
+      expect(page).to have_content('URLs with private information')
+      expect(page).to have_content('example.com - 1 URL')
+      expect(page).to have_content('URLs of original work')
+      expect(page).to have_content('These URLs disclose my existence')
     end
 
     within('.notice-body') do
@@ -262,11 +260,11 @@ feature 'typed notice submissions' do
     expect(page).to have_words('Other notice to Recipient')
 
     within('#works') do
-      expect(page).to have_words('Problematic URLs')
-      expect(page).to have_words('http://example.com/offending_url1')
-      expect(page).to have_words('URLs of original work')
-      expect(page).to have_words('http://example.com/original_object1')
-      expect(page).to have_words('These URLs are a serious problem')
+      expect(page).to have_content('Problematic URLs')
+      expect(page).to have_content('example.com - 1 URL')
+      expect(page).to have_content('URLs of original work')
+      expect(page).to have_content('example2.com - 1 URL')
+      expect(page).to have_content('These URLs are a serious problem')
     end
 
     within('.notice-body') do

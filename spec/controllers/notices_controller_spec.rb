@@ -62,10 +62,13 @@ describe NoticesController do
       Notice.type_models.each do |model_class|
         it "returns a serialized notice for #{model_class}" do
           notice = stub_find_notice(model_class.new)
+
           serializer_class = model_class.active_model_serializer || NoticeSerializer
           serialized = serializer_class.new(notice)
-          expect(serializer_class).to receive(:new)
-            .with(notice, anything)
+
+          allow(serialized).to receive(:current_user).and_return(nil)
+          expect(serializer_class).to receive(:new).
+            with(notice, anything)
             .and_return(serialized)
 
           get :show, id: 1, format: :json
@@ -145,7 +148,8 @@ describe NoticesController do
         get :show, id: 1, format: :json
 
         json = JSON.parse(response.body)['dmca']['works'][0]['infringing_urls'][0]
-        expect(json).to have_key('url_original')
+        expect(json).to have_key('count')
+        expect(json).to have_key('domain')
       end
     end
 
