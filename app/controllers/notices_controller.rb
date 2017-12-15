@@ -4,12 +4,12 @@ class NoticesController < ApplicationController
   skip_before_action :verify_authenticity_token, only: :create
 
   def new
+    if cannot?(:submit, Notice)
+      render :submission_disabled and return
+    end
+
     if params[:type].blank?
-      if cannot?(:submit, Notice)
-        render :submission_disabled and return
-      else
-        render :select_type and return
-      end
+      render :select_type and return
     end
 
     model_class = get_notice_type(params)
