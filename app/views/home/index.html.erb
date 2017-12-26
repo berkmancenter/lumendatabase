@@ -10,7 +10,7 @@
   <section class="recent-notices">
     <h2>Recent Takedown Notices</h2>
     <ol id="recent-notices">
-      <%= render @notices %>
+      <%= render partial: 'notice', collection: @notices %>
     </ol>
     <a href="notices_feed?format=rss"><%= image_tag("feed_icon.png", :size => "14x14") %></a>
   </section>
