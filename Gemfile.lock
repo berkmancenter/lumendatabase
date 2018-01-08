@@ -307,6 +307,8 @@ GEM
       multi_json (~> 1.0)
       simplecov-html (~> 0.7.1)
     simplecov-html (0.7.1)
+    skylight (1.5.0)
+      activesupport (>= 3.0.0)
     slop (3.6.0)
     spork (1.0.0rc4)
     sprockets (3.7.1)
@@ -423,6 +425,7 @@ DEPENDENCIES
   shoulda-matchers (~> 3.1, >= 3.1.1)
   simple_form
   simplecov
+  skylight
   spork-rails!
   stackprof
   therubyracer

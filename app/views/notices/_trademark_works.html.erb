@@ -10,16 +10,12 @@
           </div>
         </div>
 
-        <div class="row">
-          <span class="label infringing-title">Allegedly Infringing URLs:</span>
-          <ol class="list infringing-urls">
-            <% work.infringing_urls.each do |url| %>
-              <%= content_tag_for(:li, url) do %>
-                <%= url.url %>
-              <% end %>
-            <% end %>
-          </ol>
-        </div>
+        <%= render 'works_urls',
+                    work: work,
+                    infringing_title: 'Allegedly Infringing URLs:',
+                    show_original: false,
+                    show_infringing: true
+        %>
       <% end %>
     <% end %>
   </ol>

@@ -2,15 +2,25 @@ require_relative '../page_object'
 
 class NoticeSubmissionOnPage < PageObject
 
-  def initialize(notice_class)
+  def initialize(notice_class, user = nil)
     @notice_class = notice_class
+    @user = user
+  end
+
+  def sign_in
+    visit '/users/sign_out' # clear old session
+    visit '/users/sign_in'
+    fill_in "Email", with: @user.email
+    fill_in "Password", with: @user.password
+    click_on "Log in"
   end
 
   def open_submission_form
-    visit '/'
+    sign_in unless @user.nil?
+    
+    visit '/notices/new'
 
-    click_on 'Report a Demand'
-    click_on @notice_class.to_s.titleize
+    click_on 'Report ' + @notice_class.to_s.titleize
   end
 
   def within_form(&block)

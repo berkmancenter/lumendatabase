@@ -1,9 +1,13 @@
 class NoticesController < ApplicationController
   layout :resolve_layout
 
-  protect_from_forgery only: :create, unless: -> { request.format.json? }
+  skip_before_action :verify_authenticity_token, only: :create
 
   def new
+    if cannot?(:submit, Notice)
+      render :submission_disabled and return
+    end
+
     if params[:type].blank?
       render :select_type and return
     end

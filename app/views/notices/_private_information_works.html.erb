@@ -14,27 +14,13 @@
           </div>
         </div>
 
-        <div class="row">
-          <span class="label original-title">URLs of original work:</span>
-          <ol class="list original-urls">
-            <% work.copyrighted_urls.each do |url| %>
-              <%= content_tag_for(:li, url) do %>
-                <%= url.url %>
-              <% end %>
-            <% end %>
-          </ol>
-        </div>
-
-        <div class="row">
-          <span class="label infringing-title">URLs with private information:</span>
-          <ol class="list infringing-urls">
-            <% work.infringing_urls.each do |url| %>
-              <%= content_tag_for(:li, url) do %>
-                <%= url.url %>
-              <% end %>
-            <% end %>
-          </ol>
-        </div>
+        <%= render 'works_urls',
+                    work: work,
+                    original_title: 'URLs of original work:',
+                    infringing_title: 'URLs with private information:',
+                    show_original: true,
+                    show_infringing: true
+        %>
       <% end %>
     <% end %>
   </ol>
