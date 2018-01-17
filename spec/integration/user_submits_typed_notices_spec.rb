@@ -30,6 +30,8 @@ feature 'typed notice submissions' do
 
     submission.submit
 
+    logout
+
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
     expect(page).to have_words('Trademark notice to Recipient')
@@ -65,6 +67,8 @@ feature 'typed notice submissions' do
     end
 
     submission.submit
+
+    logout
 
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
@@ -112,6 +116,8 @@ feature 'typed notice submissions' do
 
     submission.submit
 
+    logout
+
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
     expect(page).to have_words('Data Protection notice to Recipient')
@@ -151,6 +157,8 @@ feature 'typed notice submissions' do
     end
 
     submission.submit
+
+    logout
 
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
@@ -200,6 +208,8 @@ feature 'typed notice submissions' do
     end
 
     submission.submit
+
+    logout
 
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
@@ -263,6 +273,8 @@ feature 'typed notice submissions' do
 
     submission.submit
 
+    logout
+
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
     expect(page).to have_words('Private Information notice to Recipient')
@@ -307,6 +319,8 @@ feature 'typed notice submissions' do
     end
 
     submission.submit
+
+    logout
 
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
