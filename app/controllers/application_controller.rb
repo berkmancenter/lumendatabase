@@ -11,6 +11,8 @@ class ApplicationController < ActionController::Base
 
   skip_before_action :verify_authenticity_token
 
+  after_action :include_auth_cookie
+
   private
 
   def meta_hash_for(results)
@@ -60,4 +62,9 @@ class ApplicationController < ActionController::Base
 
     params[key] || request.env["HTTP_X_#{key.upcase}"]
   end
+
+  def include_auth_cookie
+    cookies[:lumen_authenticated] = current_user.present?
+  end
+
 end
