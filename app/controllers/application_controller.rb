@@ -64,7 +64,7 @@ class ApplicationController < ActionController::Base
   end
 
   def include_auth_cookie
-    cookies[:lumen_authenticated] = current_user.present?
+    cookies[:lumen_authenticated] = ( current_user.present? ? 1 : 0 )
   end
 
 end
