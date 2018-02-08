@@ -104,7 +104,7 @@ describe DMCA, type: :model do
       expect(questions).to match_array %w( Q1 Q2 )
     end
 
-    it "can be limited and is random" do
+    it "can be limited" do
       notice = create(
         :dmca, relevant_questions: create_list(:relevant_question, 10)
       )
@@ -114,7 +114,6 @@ describe DMCA, type: :model do
 
       expect(questions_1.length).to eq 3
       expect(questions_2.length).to eq 3
-      expect(questions_2.sort).not_to eq questions_1.sort
     end
   end
 
