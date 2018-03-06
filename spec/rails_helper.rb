@@ -60,3 +60,7 @@ Shoulda::Matchers.configure do |config|
     #with.library :rails
   end
 end
+
+if ENV['LOG_ELASTICSEARCH'] == 'true'
+  Elasticsearch::Model.client = Elasticsearch::Client.new log: true, trace: true
+end

@@ -19,12 +19,13 @@ describe SearchesModels, type: :model do
   end
 
   it "returns an elasticsearch search instance" do
-    expect(subject.search).to be_instance_of(Tire::Search::Search)
+    expect(subject.search).to be_instance_of(Elasticsearch::Model::Response::Response)
   end
 
   it "finds the index_name from the model_class" do
-    expect(FakeModel).to receive(:index_name)
+    expect(FakeModel.index_name).to eq('fake_models')
 
+    FakeModel.__elasticsearch__.create_index! force: true
     searcher = described_class.new({foo: 'bar'}, FakeModel)
     searcher.search
   end
@@ -39,16 +40,16 @@ describe SearchesModels, type: :model do
 
   context 'filters' do
     it "correctly configures facets" do
-      subject.register TermFilter.new(:title)
-      expect(subject.search.facets[:title]).to be
+      subject.register TermFilter.new(:sender_name_facet)
+      expect(subject.search.aggregations[:sender_name_facet]).to be
     end
 
     it "asks for the filter" do
-      filter = TermFilter.new(:title)
+      filter = TermFilter.new(:sender_name_facet)
       searcher = described_class.new(params_hash)
       searcher.register filter
 
-      expect(filter).to receive(:filter_for).with(params_hash[:title]).and_return(
+      expect(filter).to receive(:filter_for).with(params_hash[:sender_name_facet]).and_return(
         [ bleep: { foo: ['as'] } ]
       )
       searcher.search
@@ -76,7 +77,7 @@ describe SearchesModels, type: :model do
       searcher = described_class.new(params_hash)
       searcher.register all_fields
 
-      expect(all_fields).to receive(:query_for).with(params_hash[:term], nil)
+      expect(all_fields).to receive(:query_for).with(params_hash[:term], nil).and_call_original
 
       searcher.search
     end
@@ -87,13 +88,17 @@ describe SearchesModels, type: :model do
       searcher = described_class.new(modified_params_hash)
       searcher.register all_fields
 
-      expect(all_fields).to receive(:query_for).with(params_hash[:term], 'AND')
+      expect(all_fields).to receive(:query_for).with(params_hash[:term], 'AND').and_call_original
       searcher.search
     end
   end
 end
 
 class FakeModel
+  include Elasticsearch::Model
+  include ActiveModel::Conversion
+  extend ActiveModel::Naming
+
   PER_PAGE = 10
   HIGHLIGHTS = %i(foo bar)
 end
@@ -101,6 +106,6 @@ end
 def params_hash
   {
     term: 'foo',
-    title: 'A title'
+    sender_name_facet: 'Sender name'
   }
 end

@@ -8,7 +8,7 @@ require 'csv'
 namespace :chillingeffects do
   desc 'Delete elasticsearch index'
   task delete_search_index: :environment do
-    Notice.index.delete
+    Notice.__elasticsearch__.delete_index!
     sleep 5
   end
 
@@ -129,10 +129,10 @@ namespace :chillingeffects do
 
       notices = Notice.where( hidden: true )
       Rails.logger.info "index_notices hidden: true"
-      
+
       count = 0
       notices.find_in_batches( batch_size: batch_size ) do |batch|
-        Tire.index( Notice.index_name ).import batch
+        Notice.import batch
         count += batch.count
         Rails.logger.info "index_notices hidden: true, count: #{count}, time: #{Time.now.to_i}"
       end
@@ -167,22 +167,21 @@ namespace :chillingeffects do
     batch_size = (ENV['BATCH_SIZE'] || 192).to_i
 
     csv = CSV.read input_csv, headers: true
-    
+
     Rails.logger.info "index_notices csv: #{input_csv}, total: #{csv.count}"
 
     count = 0
 
     csv[id_column].each_slice( batch_size ) { |ids|
       batch = Notice.where( "id in ( #{ ids.join ',' } )" )
-      
-      Tire.index( Notice.index_name ).import batch
+
+      Notice.import batch
       count += batch.count
       Rails.logger.info "index_notices csv: #{input_csv}, count: #{count}, time: #{Time.now.to_i}"
 
       ReindexRun.sweep_search_result_caches
 
       Rails.logger.info "index_notices done csv: #{input_csv}, count: #{count}, time: #{Time.now.to_i}"
-
     }
   end
 
@@ -193,10 +192,10 @@ namespace :chillingeffects do
 
       notices = Notice.where( "id in ( select notice_id from entity_notice_roles where name = 'recipient' and entity_id = #{args[:entity_id]} )" )
       Rails.logger.info "index_notices entity_id: #{args[:entity_id]}, total: #{notices.count}"
-      
+
       count = 0
       notices.find_in_batches( batch_size: batch_size ) do |batch|
-        Tire.index( Notice.index_name ).import batch
+        Notice.import batch
         count += batch.count
         Rails.logger.info "index_notices entity_id: #{args[:entity_id]}, count: #{count}, time: #{Time.now.to_i}"
       end
@@ -216,10 +215,10 @@ namespace :chillingeffects do
 
       notices = Notice.where( "created_at::date = '#{args[ :date ]}'" )
       Rails.logger.info "index_notices date: #{args[:date]}, total: #{notices.count}"
-      
+
       count = 0
       notices.find_in_batches( batch_size: batch_size ) do |batch|
-        Tire.index( Notice.index_name ).import batch
+        Notice.import batch
         count += batch.count
         Rails.logger.info "index_notices date: #{args[:date]}, count: #{count}, time: #{Time.now.to_i}"
       end
@@ -239,10 +238,10 @@ namespace :chillingeffects do
 
       notices = Notice.where( "extract( year from created_at ) = #{args[ :year ]} and extract( month from created_at ) = #{args[ :month ]}" )
       Rails.logger.info "index_notices date: #{args[:year]}-#{args[:month]}, total: #{notices.count}"
-      
+
       count = 0
       notices.find_in_batches( batch_size: batch_size ) do |batch|
-        Tire.index( Notice.index_name ).import batch
+        Notice.import batch
         count += batch.count
         Rails.logger.info "index_notices date: #{args[:year]}-#{args[:month]}, count: #{count}, time: #{Time.now.to_i}"
       end
@@ -262,10 +261,10 @@ namespace :chillingeffects do
 
       notices = Notice.where( "extract( year from created_at ) = #{args[ :year ]}" )
       Rails.logger.info "index_notices date: #{args[:year]}, total: #{notices.count}"
-      
+
       count = 0
       notices.find_in_batches( batch_size: batch_size ) do |batch|
-        Tire.index( Notice.index_name ).import batch
+        Notice.import batch
         count += batch.count
         Rails.logger.info "index_notices date: #{args[:year]}, count: #{count}, time: #{Time.now.to_i}"
       end
@@ -280,16 +279,15 @@ namespace :chillingeffects do
 
   desc "Recreate elasticsearch index memory efficiently"
   task recreate_elasticsearch_index: :environment do
-  begin
+    begin
       batch_size = (ENV['BATCH_SIZE'] || 100).to_i
       [Notice, Entity].each do |klass|
-        klass.index.delete
-        klass.create_elasticsearch_index
+        klass.__elasticsearch__.create_index! force: true
         count = 0
-        klass.find_in_batches(conditions: '1 = 1', batch_size: batch_size) do |instances|
+        klass.find_in_batches(batch_size: batch_size) do |instances|
           GC.start
           instances.each do |instance|
-            instance.update_index
+            instance.__elasticsearch__.index_document
             count += 1
             print '.'
           end
@@ -297,14 +295,13 @@ namespace :chillingeffects do
         end
       end
       ReindexRun.sweep_search_result_caches
-  rescue => e
-    Rails.logger.error "Reindexing did not succeed because: #{e.inspect}"
+    rescue => e
+      Rails.logger.error "Reindexing did not succeed because: #{e.inspect}"
     end
   end
 
   desc "Assign titles to untitled notices"
   task title_untitled_notices: :environment do
-
     # Similar to SubmitNotice model
     def generic_title(notice)
       if notice.recipient_name.present?
@@ -314,26 +311,24 @@ namespace :chillingeffects do
       end
     end
 
+    begin
+      untitled_notices = Notice.where(title: 'Untitled')
+      p = ProgressBar.create(
+        title: "Renaming",
+        total: untitled_notices.count,
+        format: "%t: %B %P%% %E %c/%C %R/s"
+      )
 
-  begin
-    untitled_notices = Notice.where(title: 'Untitled')
-    p = ProgressBar.create(
-      title: "Renaming",
-      total: untitled_notices.count,
-      format: "%t: %B %P%% %E %c/%C %R/s"
-    )
-
-    untitled_notices.each do |notice|
-      new_title = generic_title(notice)
-      #puts %Q|Changing title of Notice #{notice.id} to "#{new_title}"|
-      notice.update_attribute(:title, new_title)
-      p.increment
-    end
-  rescue => e
-    $stderr.puts "Titling did not succeed because: #{e.inspect}"
+      untitled_notices.each do |notice|
+        new_title = generic_title(notice)
+        notice.update_attribute(:title, new_title)
+        p.increment
+      end
+    rescue => e
+      $stderr.puts "Titling did not succeed because: #{e.inspect}"
     end
   end
-  
+
   desc "Hide notices by submission_id"
   task :hide_notices_by_sid, [:input_csv, :sid_column] => :environment do |t, args|
     hide_notices_by_sid args[:input_csv], args[:sid_column]
@@ -366,7 +361,6 @@ namespace :chillingeffects do
         notice.save!
         successful += 1
       rescue
-        #puts "Error processing #{row[sid_column]}"
         failed += 1
       end
 
@@ -387,18 +381,18 @@ namespace :chillingeffects do
       incorrect_notice_ids << row['id'].to_i
       incorrect_notice_id_type[row['id'].to_i] = row['type'].classify
     end
-    
+
     incorrect_notices = Notice.where(:id => incorrect_notice_ids)
     p = ProgressBar.create(
       type: "Reassigning",
       total: incorrect_notices.count,
       format: "%t: %B %P%% %E %c/%C %R/s"
     )
-    
+
     incorrect_notices.each do |notice|
       old_type = notice.class.name.constantize
       new_type = incorrect_notice_id_type[notice.id].constantize
-      notice.update_column(:type, new_type.name) 
+      notice.update_column(:type, new_type.name)
       notice = notice.becomes new_type
       notice.title = notice.title.sub(/^#{old_type.label} notice/, "#{new_type.label} notice")
       notice.topic_assignments.delete_all
@@ -410,26 +404,26 @@ namespace :chillingeffects do
 
   desc "Index non-indexed models"
   task index_non_indexed: :environment do
-  begin
-    require 'tire/http/clients/curb'
-    Tire.configure { client Tire::HTTP::Client::Curb }
-    p = ProgressBar.create(
-      title: "Objects",
-      total: (Notice.count + Entity.count),
-      format: "%t: %B %P%% %E %c/%C %R/s"
-    )
-    [Notice, Entity].each do |klass|
-      ids = klass.pluck(:id)
-      ids.each do |id|
-        unless ReindexRun.is_indexed?(klass, id)
-          puts "Indexing #{klass}, #{id}"
-          klass.find(id).update_index
+    begin
+      p = ProgressBar.create(
+        title: "Objects",
+        total: (Notice.count + Entity.count),
+        format: "%t: %B %P%% %E %c/%C %R/s"
+      )
+      [Notice, Entity].each do |klass|
+        ids = klass.pluck(:id)
+        ids.each do |id|
+          if ReindexRun.is_indexed?(klass, id)
+            puts "Skipping #{klass}, #{id}"
+          else
+            puts "Indexing #{klass}, #{id}"
+            klass.find(id).__elasticsearch__.index_document
+          end
+          p.increment
         end
-        p.increment
       end
-    end
-  rescue => e
-    $stderr.puts "Reindexing did not succeed because: #{e.inspect}"
+    rescue => e
+      $stderr.puts "Reindexing did not succeed because: #{e.inspect}"
     end
   end
 
@@ -468,7 +462,7 @@ where notices.id in (
       notices = Notice.includes(
         works: [:infringing_urls, :copyrighted_urls]
       ).where(
-        id: args[ :notice_id ]
+        id: args[:notice_id]
       )
 
       # even though there's only one notice,
@@ -497,44 +491,44 @@ where notices.id in (
   desc "Redact content in lr_legalother notices from Google"
   task redact_lr_legalother: :environment do
 
-  begin
-    entities = Entity.where("entities.name ilike '%Google%'")
-    total = entities.count
-    entities.each.with_index(1) do |e, i|
-      notices = e.notices.includes(
-        works: [:infringing_urls, :copyrighted_urls]
-      ).where(
-        entity_notice_roles: { name: 'recipient' }
-      ).where(
-        type: Ingestor::Importer::GoogleSecondary::OtherParser.notice_type
-      )
+    begin
+      entities = Entity.where("entities.name ilike '%Google%'")
+      total = entities.count
+      entities.each.with_index(1) do |e, i|
+        notices = e.notices.includes(
+          works: [:infringing_urls, :copyrighted_urls]
+        ).where(
+          entity_notice_roles: { name: 'recipient' }
+        ).where(
+          type: 'Defamation'
+        )
 
-      p = ProgressBar.create(
-        title: "updating #{e.name} (#{i} of #{total})",
-        total: ([notices.count, 1].max),
-        format: "%t: %b %p%% %e %c/%c %r/s"
-      )
-      notices.find_in_batches do |group|
-        group.each do |notice|
-          if notice.sender.present?
-            redactor = RedactsNotices::RedactsEntityName.new(notice.sender.name)
-            notice.works.each do |work|
-              work.update_attributes(description: redactor.redact(work.description))
-              work.infringing_urls.each do |iu|
-                iu.update_attributes(url: redactor.redact(iu.url))
+        p = ProgressBar.create(
+          title: "updating #{e.name} (#{i} of #{total})",
+          total: ([notices.count, 1].max),
+          format: "%t: %b %p%% %e %c/%c %r/s"
+        )
+        notices.find_in_batches do |group|
+          group.each do |notice|
+            if notice.sender.present?
+              redactor = RedactsNotices::RedactsEntityName.new(notice.sender.name)
+              notice.works.each do |work|
+                work.update_attributes(description: redactor.redact(work.description))
+                work.infringing_urls.each do |iu|
+                  iu.update_attributes(url: redactor.redact(iu.url))
+                end
+                work.copyrighted_urls.each do |cu|
+                  cu.update_attributes(url: redactor.redact(cu.url))
+                end
+                p.increment
               end
-              work.copyrighted_urls.each do |cu|
-                cu.update_attributes(url: redactor.redact(cu.url))
-              end
-              p.increment
             end
           end
         end
+        p.finish unless p.finished?
       end
-      p.finish unless p.finished?
-    end
-  rescue => e
-    $stderr.puts "reassigning did not succeed because: #{e.inspect}"
+    rescue => e
+      $stderr.puts "reassigning did not succeed because: #{e.inspect}"
     end
   end
 
@@ -558,8 +552,8 @@ where notices.id in (
   end
 
   desc "Given a work, for every notice having that work: replace the notice's work with a new blank work"
-  task :blank_work_notices_works, [ :work_id ] => :environment do |t, args|
-    blank_work_notices_works args[ :work_id ]
+  task :blank_work_notices_works, [:work_id] => :environment do |t, args|
+    blank_work_notices_works args[:work_id]
   end
 
   def blank_work_notices_works( work_id )
@@ -630,7 +624,7 @@ where works.id in (
     twitter_entities - [447642]
     EntityNoticeRole.where(:entity_id => twitter_entities).update_all(entity_id: 447642)
   end
-  
+
   desc 'Fix Google defamation notices in redact queue'
   task fix_google_redact_queue_notices: :environment do
     notices = Notice.where(title: 'Legal Complaint to Google',
@@ -657,5 +651,4 @@ where works.id in (
     Notice.where(title: 'Defamation Complaint to Google', review_required: true)
           .update_all(review_required: false)
   end
-
 end

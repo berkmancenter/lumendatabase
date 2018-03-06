@@ -15,7 +15,7 @@ class DateRangeFilter
   def apply_to_search(searcher, param, value)
     if handles?(param)
       date_range_filter = filter_for(value)
-      searcher.filter(*date_range_filter)
+      searcher[:filters]  << date_range_filter
     end
   end
 
@@ -25,9 +25,12 @@ class DateRangeFilter
     local_indexed_attribute = @indexed_attribute
     local_ranges = ranges
 
-    searcher.facet local_parameter do
-      range local_indexed_attribute, local_ranges
-    end
+    searcher[:registered_filters] << {
+      type: 'date_range',
+      local_parameter: local_parameter,
+      local_indexed_attribute: local_indexed_attribute,
+      local_ranges: local_ranges
+    }
   end
 
   def filter_for(value)

@@ -14,7 +14,7 @@ describe 'notices/search/index.html.erb' do
 
     render
 
-    facet_data.keys.each do|facet|
+    facet_data['aggregations'].keys.each do|facet|
       expect(rendered).to have_css(".#{facet} span", count: 2)
     end
   end
@@ -75,7 +75,7 @@ describe 'notices/search/index.html.erb' do
     it "includes excerpts" do
       mock_searcher(
         [build_stubbed(:dmca)],
-        'highlight' => { 'title' => ["foo <em>bar</em> baz"] }
+        [[['title'], ["foo <em>bar</em> baz"]]]
       )
 
       render
@@ -86,7 +86,7 @@ describe 'notices/search/index.html.erb' do
     it 'sanatizes excerpts' do
       mock_searcher(
         [build_stubbed(:dmca)],
-        'highlight' => { 'title' => ["<strong>foo</strong> and <em>bar</em>"] }
+        [[['title'], ["<strong>foo</strong> and <em>bar</em>"]]]
       )
 
       render
@@ -97,91 +97,101 @@ describe 'notices/search/index.html.erb' do
 
   private
 
-  def mock_searcher(notices, options = {})
-    results = notices.map { |notice| as_tire_result(notice, options) }
-    allow(results).to receive(:total_entries).and_return(results.length)
+  def mock_searcher(notices, highlight = [])
+    notices_wrapped = notices.map { |notice| NoticeSearchResult.new(notice, notice.attributes, highlight) }
+
+    results = double('results double')
+    allow(results).to receive(:total).and_return(1)
+    allow(results).to receive(:current_page).and_return(1)
     allow(results).to receive(:total_pages).and_return(1)
-    allow(results).to receive(:facets).and_return(facet_data)
     allow(results).to receive(:current_page).and_return(1)
     allow(results).to receive(:limit_value).and_return(1)
+    allow(results).to receive(:total_entries).and_return(notices.length)
 
-    search_results = double('results double')
-    allow(search_results).to receive(:results).and_return(results)
+    response = double('response double')
+    allow(response).to receive(:response).and_return(facet_data)
+    allow(response).to receive(:results).and_return(results)
 
     searcher = double('searcher double')
-    allow(searcher).to receive(:search).and_return(search_results)
+    allow(searcher).to receive(:search).and_return(response)
+    allow(searcher).to receive(:instances).and_return(notices_wrapped)
+    allow(searcher).to receive(:page).and_return(1)
     allow(searcher).to receive(:cache_key).and_return('asdfasdf')
+
     assign(:searcher, searcher)
   end
 
   def facet_data
     {
-      "sender_name_facet" => { "terms" =>
-        [
-          { "term" => "Mike's Lawyer", "count" => 27 },
-          { "term" => "Imak's Lawyer", "count" => 27 }
-        ]
-      },
-      "principal_name_facet" => { "terms" =>
-        [
-          { "term" => "Mike Itten", "count" => 27 },
-          { "term" => "Imak Itten", "count" => 27 }
-        ]
-      },
-      "submitter_name_facet" => { "terms" =>
-        [
-          { "term" => "Google", "count" => 27 },
-          { "term" => "Twitter", "count" => 27 }
-        ]
-      },
-      "submitter_country_code_facet" => {"terms" =>
-        [
-          { "term" => "US", "count" => 27 },
-          { "term" => "UK", "count" => 27 }
-        ]
-        },
-      "recipient_name_facet" => { "terms" =>
-        [
-          { "term" => "Twitter", "count" => 10 },
-          { "term" => "Twooter", "count" => 10 }
-        ]
-      },
-      "topic_facet" => { "terms" =>
-        [
-          { "term" => "DMCA", "count" => 10 },
-          { "term" => "DMCA Giveup", "count" => 10 }
-        ]
-      },
-      "tag_list_facet" => { "terms" =>
-        [
-          { "term" => "a tag", "count" => 27 },
-          { "term" => "another tag", "count" => 27 }
-        ]
-      },
-      "country_code_facet" => { "terms" =>
-        [
-          { "term" => "US", "count" => 27 },
-          { "term" => "CA", "count" => 27 }
-        ]
-      },
-      "language_facet" => { "terms" =>
-        [
-          { "term" => "EN", "count" => 27 },
-          { "term" => "SP", "count" => 27 }
-        ]
-      },
-      "date_received_facet"=>{ "ranges"=>
-        [
-          { "from" => 1371583484000.0, "to" => 1371669884000.0, "count" => 1},
-          { "from" => 1371583485000.0, "to" => 1371669885000.0, "count" => 1}
-        ]
-      },
-      "action_taken_facet" => { "terms" =>
-        [
-          { "term" => "No", "count" => 7 },
-          { "term" => "Yes", "count" => 10 },
-        ]
-      },
+      "aggregations" =>
+        {
+          "sender_name_facet" => { "buckets" =>
+            [
+              { "key" => "Mike's Lawyer", "doc_count" => 27 },
+              { "key" => "Imak's Lawyer", "doc_count" => 27 }
+            ]
+          },
+          "principal_name_facet" => { "buckets" =>
+            [
+              { "key" => "Mike Itten", "doc_count" => 27 },
+              { "key" => "Imak Itten", "doc_count" => 27 }
+            ]
+          },
+          "submitter_name_facet" => { "buckets" =>
+            [
+              { "key" => "Google", "doc_count" => 27 },
+              { "key" => "Twitter", "doc_count" => 27 }
+            ]
+          },
+          "submitter_country_code_facet" => {"buckets" =>
+            [
+              { "key" => "US", "doc_count" => 27 },
+              { "key" => "UK", "doc_count" => 27 }
+            ]
+            },
+          "recipient_name_facet" => { "buckets" =>
+            [
+              { "key" => "Twitter", "doc_count" => 10 },
+              { "key" => "Twooter", "doc_count" => 10 }
+            ]
+          },
+          "topic_facet" => { "buckets" =>
+            [
+              { "key" => "DMCA", "doc_count" => 10 },
+              { "key" => "DMCA Giveup", "doc_count" => 10 }
+            ]
+          },
+          "tag_list_facet" => { "buckets" =>
+            [
+              { "key" => "a tag", "doc_count" => 27 },
+              { "key" => "another tag", "doc_count" => 27 }
+            ]
+          },
+          "country_code_facet" => { "buckets" =>
+            [
+              { "key" => "US", "doc_count" => 27 },
+              { "key" => "CA", "doc_count" => 27 }
+            ]
+          },
+          "language_facet" => { "buckets" =>
+            [
+              { "key" => "EN", "doc_count" => 27 },
+              { "key" => "SP", "doc_count" => 27 }
+            ]
+          },
+          "date_received_facet"=>{ "buckets"=>
+            [
+              { "from" => 1371583484000.0, "to" => 1371669884000.0, "doc_count" => 1},
+              { "from" => 1371583485000.0, "to" => 1371669885000.0, "doc_count" => 1}
+            ]
+          },
+          "action_taken_facet" => { "buckets" =>
+            [
+              { "key" => "No", "doc_count" => 7 },
+              { "key" => "Yes", "doc_count" => 10 },
+            ]
+          }
+        }
     }
   end
 
