@@ -8,10 +8,10 @@ feature "Searching Entities" do
     entity = create(:entity, :with_parent, name: 'Foo bar')
     index_changed_models
 
-    expect_entity_api_search_to_find('bar') do|json|
+    expect_entity_api_search_to_find('bar') do |json|
       json_item = json['entities'].first
 
-      expect(json_item).to have_key('id').with_value(entity.id.to_s)
+      expect(json_item).to have_key('id').with_value(entity.id)
       %w(parent_id name country_code url).each do |key|
         expect(json_item).to have_key(key).with_value(entity.send(key.to_sym))
       end
@@ -25,7 +25,7 @@ feature "Searching Entities" do
     entity = create(:entity, name: 'Foo bar')
     index_changed_models
 
-    expect_entity_api_search_to_find('bar') do|json|
+    expect_entity_api_search_to_find('bar') do |json|
       metadata = json['meta']
       expect(metadata).to have_key('current_page').with_value(1)
       expect(metadata).to have_key('query').with_value("term" => "bar")
@@ -42,4 +42,3 @@ feature "Searching Entities" do
       end
   end
 end
-

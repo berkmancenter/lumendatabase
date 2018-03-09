@@ -74,4 +74,18 @@ module SearchHelpers
     have_css('.dropdown-menu li.active a', text: /^#{facet}/)
   end
 
+  def with_metadata(notice, options = {})
+    metadata = {
+      '_type' => "notice",
+      '_score' => 0.5,
+      '_index' => "development__notices",
+      '_version' => nil,
+      '_explanation' => nil,
+      'sort' => nil,
+      'class_name' => notice.class.to_s,
+      'highlight' => nil
+    }.merge(options)
+
+    notice.as_indexed_json({}).merge(metadata)
+  end
 end

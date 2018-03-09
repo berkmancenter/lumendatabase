@@ -18,9 +18,9 @@
       <% end %>
     </div>
     <ol class="excerpt">
-      <% result.with_excerpts do |excerpt| %>
+      <% result.highlight.each do |highlight_elem| %>
         <li class="excerpt">
-          <%= sanitize(excerpt, tags: ['em']) %>
+          <%= sanitize(highlight_elem, tags: ['em']) %>
         </li>
       <% end %>
     </ol>

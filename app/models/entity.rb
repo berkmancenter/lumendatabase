@@ -4,10 +4,10 @@ require 'entity_index_queuer'
 require 'default_name_original'
 
 class Entity < ActiveRecord::Base
-  include Tire::Model::Search
   include ValidatesAutomatically
   include HierarchicalRelationships
   include DefaultNameOriginal
+  include Elasticsearch::Model
 
   PER_PAGE = 10
   HIGHLIGHTS = %i(name)
@@ -20,11 +20,22 @@ class Entity < ActiveRecord::Base
 
   delegate :publication_delay, to: :user, allow_nil: true
 
-  mapping do
-    columns.map(&:name).reject{|name| name == 'id'}.each do|column_name|
+  mappings do
+    Entity.columns.map(&:name).reject{|name| name == 'id'}.each do |column_name|
       indexes column_name
     end
-    indexes :parent_id, as: 'parent_id'
+
+    indexes :parent_id
+  end
+
+  index_name [Rails.application.engine_name, Rails.env, self.name.demodulize.downcase].join('_')
+
+  def as_indexed_json(options)
+    out = as_json
+
+    out[:class_name] = 'entity'
+
+    out
   end
 
   KINDS = %w[organization individual]

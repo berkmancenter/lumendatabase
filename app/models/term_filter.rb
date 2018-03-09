@@ -13,24 +13,25 @@ class TermFilter
   end
 
   def filter_for(value)
-    [:terms, @indexed_attribute => [ value ]]
+    [:terms, @indexed_attribute => [value]]
   end
 
   def apply_to_search(searcher, param, value)
     if handles?(param)
       term_filter = filter_for(value)
-      searcher.filter(*term_filter)
+      searcher[:filters] << term_filter
     end
   end
 
   def register_filter(searcher)
-    # These must be local variables to be passed into the Tire searcher
     local_indexed_attribute = @indexed_attribute
     local_parameter = @parameter
 
-    searcher.facet local_parameter do
-      terms local_indexed_attribute
-    end
+    searcher[:registered_filters] << {
+      type: 'terms',
+      local_parameter: local_parameter,
+      local_indexed_attribute: local_indexed_attribute
+    }
   end
 
   def apply_to_query(*)

@@ -1,31 +1,20 @@
 class NoticeSearchResult < SimpleDelegator
   delegate :class, :is_a?, to: :notice
 
-  attr_reader :_score
+  attr_reader :_score, :highlight
 
-  def initialize(notice, attributes = {})
+  def initialize(notice, attributes = {}, highlight = [])
     @notice = assign_attributes(notice, attributes)
 
     @_score = attributes['_score']
-    @highlight = attributes['highlight']
+    @highlight = highlight.map { |highlight_single| highlight_single[1] }.flatten
 
     super(@notice)
   end
 
-  def with_excerpts(&block)
-    Notice::HIGHLIGHTS.each do |field|
-      excerpts_for(field).each(&block)
-    end
-  end
-
   private
 
-  attr_reader :notice, :highlight
-
-  def excerpts_for(field)
-    hash_like = highlight || {}
-    hash_like[field.to_s] || []
-  end
+  attr_reader :notice
 
   def assign_attributes(model, attributes)
     attributes.each do |key, value|

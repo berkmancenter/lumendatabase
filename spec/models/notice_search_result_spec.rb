@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe NoticeSearchResult, type: :model do
+  include SearchHelpers
 
   it "delegates id and title attributes to notice" do
     notice = build_stubbed(:dmca)
@@ -50,17 +51,13 @@ describe NoticeSearchResult, type: :model do
   it "provides access to excerpts" do
     notice = build_stubbed(:dmca)
     highlight = { 'title' => ["Lion <em>King</em>"] }
-    excerpts = []
 
     result = NoticeSearchResult.new(
       Notice.new,
-      with_metadata(notice, 'highlight' => highlight)
+      with_metadata(notice, {}),
+      highlight
     )
 
-    result.with_excerpts do |excerpt|
-      excerpts << excerpt
-    end
-
-    expect(excerpts).to eq(["Lion <em>King</em>"])
+    expect(result.highlight).to eq(["Lion <em>King</em>"])
   end
 end

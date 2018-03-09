@@ -11,6 +11,8 @@ class ApplicationController < ActionController::Base
 
   skip_before_action :verify_authenticity_token
 
+  after_action :include_auth_cookie
+
   private
 
   def meta_hash_for(results)
@@ -18,7 +20,11 @@ class ApplicationController < ActionController::Base
       current_page next_page offset per_page
       previous_page total_entries total_pages
     ).each_with_object(query_meta(results)) do |attribute, memo|
-      memo[attribute] = results.send(attribute)
+      begin
+        memo[attribute] = results.send(attribute)
+      rescue
+        memo[attribute] = nil
+      end
     end
   end
 
@@ -27,12 +33,12 @@ class ApplicationController < ActionController::Base
       query: {
         term: params[:term]
       }.merge(facet_query_meta(results) || {}),
-      facets: results.facets
+      facets: results.response.aggregations
     }
   end
 
   def facet_query_meta(results)
-    results.facets && results.facets.keys.each_with_object({}) do |facet, memo|
+    results.response.aggregations && results.response.aggregations.keys.each_with_object({}) do |facet, memo|
       if params[facet.to_sym].present?
         memo[facet.to_sym] = params[facet.to_sym]
       end
@@ -60,4 +66,9 @@ class ApplicationController < ActionController::Base
 
     params[key] || request.env["HTTP_X_#{key.upcase}"]
   end
+
+  def include_auth_cookie
+    cookies[:lumen_authenticated] = ( current_user.present? ? 1 : 0 )
+  end
+
 end

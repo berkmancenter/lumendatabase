@@ -4,9 +4,9 @@
   </a>
   <ol class="dropdown-menu <%= date_range_filter.parameter %>" role="menu">
     <li class="facet"><a href="javascript:void(0);" data-facet-name="<%= date_range_filter.parameter %>" data-value="">All</a></li>
-    <% results.facets[date_range_filter.parameter.to_s]['ranges'].each do |range| %>
+    <% results[date_range_filter.parameter.to_s]['buckets'].each do |range| %>
       <li class="facet <%= facet_active_indicator(date_range_filter.parameter, range_facet_param(range)) %>" name="<%= date_range_filter.parameter %>" >
-      <a href="javascript:void(0);" data-facet-name="<%= date_range_filter.parameter %>" data-value="<%= range_facet_param(range) %>">Since <%= formatted_facet_range_time(range['from']) %><span class="total-count"><%= range['count'] %> Results</span></a>
+      <a href="javascript:void(0);" data-facet-name="<%= date_range_filter.parameter %>" data-value="<%= range_facet_param(range) %>">Since <%= formatted_facet_range_time(range['from']) %><span class="total-count"><%= range[:doc_count] %> Results</span></a>
       </li>
     <% end %>
   </ol>
