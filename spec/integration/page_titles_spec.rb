@@ -1,10 +1,10 @@
-require 'spec_helper'
+require 'rails_helper'
 
 feature 'Page titles' do
   scenario "Home" do
     visit '/'
 
-    expect(page).to have_exact_title('Chilling Effects')
+    expect(page).to have_exact_title('Lumen')
   end
 
   scenario "Search", search: true do
@@ -12,7 +12,7 @@ feature 'Page titles' do
     fill_in "term", with: "search terms"
     click_on "Go"
 
-    expect(page).to have_exact_title('Search :: Chilling Effects')
+    expect(page).to have_exact_title('Search :: Lumen')
   end
 
   scenario "Blog" do
@@ -22,13 +22,13 @@ feature 'Page titles' do
     click_on 'Blog'
 
     # index
-    expect(page).to have_exact_title('Blog :: Chilling Effects')
+    expect(page).to have_exact_title('Blog :: Lumen')
     expect(page).to have_heading('Blog')
 
     click_on blog_entry.title
 
     # show
-    expect(page).to have_exact_title("#{blog_entry.title} :: Blog :: Chilling Effects")
+    expect(page).to have_exact_title("#{blog_entry.title} :: Blog :: Lumen")
     expect(page).to have_heading('Blog')
   end
 
@@ -39,23 +39,17 @@ feature 'Page titles' do
     click_on 'Topics'
     click_on topic.name
 
-    expect(page).to have_exact_title("#{topic.name} :: Topics :: Chilling Effects")
+    expect(page).to have_exact_title("#{topic.name} :: Topics :: Lumen")
     expect(page).to have_heading('Topics')
   end
 
-  scenario "Report a Demand" do
+  scenario "Actions" do
     visit '/'
-    click_on 'Report a Demand'
+    click_on 'Actions'
+    click_on 'Create DMCA Counter Notice'
 
-    # select type view
-    expect(page).to have_exact_title('Report a Demand :: Chilling Effects')
-    expect(page).to have_heading('Report a Demand')
-
-    click_on 'DMCA'
-
-    # submission form itself
-    expect(page).to have_exact_title('Dmca :: Report a Demand :: Chilling Effects')
-    expect(page).to have_heading('Report a Demand')
+    expect(page).to have_exact_title('Create DMCA Counter-Notification :: Lumen')
+    expect(page).to have_heading('Create DMCA Counter-Notification')
   end
 
   scenario "Notice" do
@@ -64,23 +58,23 @@ feature 'Page titles' do
     visit '/'
     click_on notice.title
 
-    expect(page).to have_exact_title("#{notice.title} :: Notices :: Chilling Effects")
+    expect(page).to have_exact_title("#{notice.title} :: Notices :: Lumen")
   end
 
   scenario "Sign in" do
     visit '/'
     click_on "Sign In"
 
-    expect(page).to have_exact_title('Sign In :: Chilling Effects')
+    expect(page).to have_exact_title('Sign In :: Lumen')
   end
 
   context "Pages" do
-    %w( About Privacy Disclaimer Researchers ).each do |area|
+    %w( About Privacy Legal Researchers ).each do |area|
       scenario area do
         visit '/'
         click_on area
 
-        expect(page).to have_exact_title("#{area} :: Chilling Effects")
+        expect(page).to have_exact_title("#{area} :: Lumen")
         expect(page).to have_heading(area)
       end
     end

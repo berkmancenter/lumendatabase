@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'base64'
 
 feature "notice submission" do
@@ -41,10 +41,10 @@ feature "notice submission" do
 
   scenario "submitting a notice with token in header", js: true do
     parameters = request_hash(default_notice_hash)
-    token = parameters.delete(:authentication_token)
+    token = parameters.delete(:x_authentication_token)
 
     curb = post_api('/notices', parameters) do |curl|
-      curl.headers['AUTHENTICATION_TOKEN'] = token
+      curl.headers['X_AUTHENTICATION_TOKEN'] = token
     end
 
     expect(curb.response_code).to eq 201

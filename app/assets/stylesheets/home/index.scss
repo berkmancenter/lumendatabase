@@ -90,10 +90,12 @@ section.home-search-form {
   margin-bottom: 25px;
   background: #fff;
   border-radius: 3px;
+  font-size: $base-font-size-small-1;
 
   section {
     @include span-columns(6);
     padding: 20px 40px 30px;
+    margin: 0px;
 
     @include media($mobile) {
       padding: 15px $base-padding-mobile;
@@ -101,19 +103,34 @@ section.home-search-form {
       width: auto;
     }
 
-    &:first-child {
-      margin-right: 1%;
-    }
-
-    &.news-snippets {
+    &.tweets {
       border-left: 3px solid $home-background-color;
 
       @include media($mobile) {
         border: 0;
+        width: 100%;
       }
+
+      a {
+        display: inline;
+      }
+
+      @include span-columns(6);
     }
 
     &.recent-notices {
+      @include span-columns(3 of 6);
+      @include omega();
+    }
+
+    &.news-snippets {
+      @include span-columns(6 of 6);
+
+      border-top: 3px solid $home-background-color;
+
+        @include media($mobile) {
+        border: 0;
+        }
     }
   }
 

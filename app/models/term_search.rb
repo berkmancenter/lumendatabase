@@ -12,10 +12,19 @@ class TermSearch
     'notices/search/term_search'
   end
 
-  def query_for(value, operator = 'OR')
+  def query_for(value, operator)
+    operator ||= 'OR'
     field = @field
-    lambda do |query|
-      query.must { match(field, value, operator: operator) }
+
+    h = {}
+    if field.is_a?(Array)
+      h = { query: value, fields: field.map(&:to_s) }
+
+      { multi_match: h }
+    else
+      h[field] = { query: value, operator: operator }
+
+      { match: h }
     end
   end
 
@@ -24,9 +33,20 @@ class TermSearch
 
   def apply_to_query(query, param, value, operator)
     if handles?(param)
-      term_query = query_for(value, operator)
-      query.boolean(&term_query)
+      if value.is_a?(Array)
+        value.each do |sub_val|
+          apply_to_query_single(query, sub_val, operator)
+        end
+      else
+        apply_to_query_single(query, value, operator)
+      end
     end
+  end
+
+  def apply_to_query_single(query, value, operator)
+    term_query = query_for(value, operator)
+
+    query[:bool][:must] << term_query
   end
 
   def register_filter(*)

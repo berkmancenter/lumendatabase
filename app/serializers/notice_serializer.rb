@@ -13,8 +13,8 @@ class NoticeSerializer < ActiveModel::Serializer
     object.works.as_json({
       only: [:description],
       include: {
-        infringing_urls: { only: [:url ] },
-        copyrighted_urls: { only: [:url ] }
+        infringing_urls: { only: [:url, :url_original ] },
+        copyrighted_urls: { only: [:url, :url_original ] }
       }
     })
   end

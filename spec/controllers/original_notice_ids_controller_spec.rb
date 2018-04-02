@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe OriginalNoticeIdsController do
   it_behaves_like "a redirecting controller for",

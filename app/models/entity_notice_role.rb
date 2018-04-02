@@ -2,8 +2,13 @@ require 'validates_automatically'
 
 class EntityNoticeRole < ActiveRecord::Base
   include ValidatesAutomatically
+
+  validates :name, length: { maximum: 255 }
+  
   belongs_to :entity
   belongs_to :notice, touch: true
+
+  default_scope { includes(:entity) }
 
   ROLES = %w(
     principal

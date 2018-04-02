@@ -27,11 +27,51 @@ describe RedactsNotices::RedactsPhoneNumbers do
     456-7890
     456.7890
     456\ 7890
+    90\ 212\ 326\ 06\ 15
   )
 
   PHONE_NUMBERS.each do |phone_number|
     it "redacts content like `#{phone_number}'" do
       original_text = "Something with #{phone_number} twice, #{phone_number}."
+      redacted_text = "Something with [REDACTED] twice, [REDACTED]."
+      redactor = described_class.new
+
+      redacted = redactor.redact(original_text)
+
+      expect(redacted).to eq redacted_text
+    end
+  end
+end
+
+describe RedactsNotices::RedactsSSNs do
+  SSNS = %w(
+    123-45-6789
+    123.45.6789
+  )
+
+  SSNS.each do |ssn|
+    it "redacts content like `#{ssn}'" do
+      original_text = "Something with #{ssn} twice, #{ssn}."
+      redacted_text = "Something with [REDACTED] twice, [REDACTED]."
+      redactor = described_class.new
+
+      redacted = redactor.redact(original_text)
+
+      expect(redacted).to eq redacted_text
+    end
+  end
+end
+
+describe RedactsNotices::RedactsEmail do
+  EMAILS = %w(
+    test@example.com
+    someone@cyber.law.harvard.edu
+    dot.man@gmail.com
+  )
+
+  EMAILS.each do |email|
+    it "redacts content like `#{email}'" do
+      original_text = "Something with #{email} twice, #{email}."
       redacted_text = "Something with [REDACTED] twice, [REDACTED]."
       redactor = described_class.new
 
@@ -82,6 +122,17 @@ describe RedactsNotices do
       expect(notice.body).to eq "Some [REDACTED] text"
       expect(notice.body_original).to eq "Some sensitive text"
     end
+
+    it "ignores stopwords" do
+      notice = build(
+        :dmca,
+        body: "Text with the stopwords")
+      redactor = RedactsNotices.new([RedactsNotices::RedactsContent.new('the')])
+
+      redactor.redact(notice, :body)
+
+      expect(notice.body).to eq "Text with the stopwords"
+    end
   end
 
   context "#redact_all" do
@@ -103,7 +154,7 @@ describe RedactsNotices do
 
   def simple_redactor(from, to)
     redactor = RedactsNotices::RedactsContent.new(from)
-    redactor.stub(:mask).and_return(to)
+    allow(redactor).to receive(:mask).and_return(to)
 
     redactor
   end

@@ -26,3 +26,9 @@ $('.other-entities li').hover (->
 ), ->
   id = $(this).attr('data-id')
   $(".#{id}").addClass('hide')
+
+$(document).ready ->
+  $('.document-original').click 'ajax:complete', (xhr, status) ->
+    $(this).find('.download').html 'Document requested. Check back in 7 days.'
+    return
+  return

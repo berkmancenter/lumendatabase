@@ -7,7 +7,7 @@ describe "RedactNoticeProc" do
   before { setup_action_context }
 
   context "Handling GET requests" do
-    before { request.stub(:get?).and_return(true) }
+    before { allow(request).to receive(:get?).and_return(true) }
 
     it "sets the correct redactable fields" do
       instance_eval(&RedactNoticeProc)
@@ -33,16 +33,16 @@ describe "RedactNoticeProc" do
     end
 
     it "renders the action template for html" do
-      format.stub(:html).and_yield
-      @action.stub(:template_name).and_return('template_name')
+      allow(format).to receive(:html).and_yield
+      allow(@action).to receive(:template_name).and_return('template_name')
       should_receive(:render).with('template_name')
 
       instance_eval(&RedactNoticeProc)
     end
 
     it "renders with layout false for js" do
-      format.stub(:js).and_yield
-      @action.stub(:template_name).and_return('template_name')
+      allow(format).to receive(:js).and_yield
+      allow(@action).to receive(:template_name).and_return('template_name')
       should_receive(:render).with('template_name', layout: false)
 
       instance_eval(&RedactNoticeProc)
@@ -50,12 +50,12 @@ describe "RedactNoticeProc" do
   end
 
   context "Handling PUT requests" do
-    before { request.stub(:put?).and_return(true) }
+    before { allow(request).to receive(:put?).and_return(true) }
 
     it "delegates to the PutResponder" do
       responder = double("Put responder")
-      responder.should_receive(:handle).with(params)
-      PutResponder.should_receive(:new).
+      expect(responder).to receive(:handle).with(params)
+      expect(PutResponder).to receive(:new).
         with(self, @abstract_model, @object).and_return(responder)
 
       instance_eval(&RedactNoticeProc)
@@ -68,10 +68,10 @@ describe "RedactNoticeProc" do
           body_original: "B",
           review_required: "1"
         )
-        @object.should_receive(:body=).with("A")
-        @object.should_receive(:body_original=).with("B")
-        @object.should_receive(:review_required=).with("1")
-        @object.should_receive(:save)
+        expect(@object).to receive(:body=).with("A")
+        expect(@object).to receive(:body_original=).with("B")
+        expect(@object).to receive(:review_required=).with("1")
+        expect(@object).to receive(:save)
 
         put_responder.handle(params)
       end
@@ -82,17 +82,17 @@ describe "RedactNoticeProc" do
           body_original: "B",
           review_required: "1"
         )
-        @object.should_receive(:body=).with("A")
-        @object.should_receive(:body_original=).with("B")
-        @object.should_receive(:review_required=).with("1")
-        @object.should_receive(:save)
+        expect(@object).to receive(:body=).with("A")
+        expect(@object).to receive(:body_original=).with("B")
+        expect(@object).to receive(:review_required=).with("1")
+        expect(@object).to receive(:save)
 
         put_responder.handle(params)
       end
 
       it "calls handle_save_error on failure" do
         stub_notice_params
-        @object.stub(:save).and_return(false)
+        allow(@object).to receive(:save).and_return(false)
         should_receive(:handle_save_error).with(:redact_notice)
 
         put_responder.handle(params)
@@ -101,11 +101,11 @@ describe "RedactNoticeProc" do
       context "successful save" do
         before do
           stub_notice_params
-          @object.stub(:save).and_return(true)
+          allow(@object).to receive(:save).and_return(true)
         end
 
         it "redirects to the queue path" do
-          format.stub(:html).and_yield
+          allow(format).to receive(:html).and_yield
           should_receive(:redact_queue_path).
             with(@abstract_model).and_return(:some_path)
           should_receive(:redirect_to).with(:some_path)
@@ -116,7 +116,7 @@ describe "RedactNoticeProc" do
         it "redirects to next when appropriate" do
           params[:save_and_next] = true
           params[:next_notices] = %w( 1 2 3 )
-          format.stub(:html).and_yield
+          allow(format).to receive(:html).and_yield
           should_receive(:redact_notice_path).
             with(@abstract_model, '1', next_notices: %w( 2 3 )).
             and_return(:some_path)
@@ -126,8 +126,8 @@ describe "RedactNoticeProc" do
         end
 
         it "renders JSON for js requests" do
-          format.stub(:js).and_yield
-          @object.stub(:id).and_return(1)
+          allow(format).to receive(:js).and_yield
+          allow(@object).to receive(:id).and_return(1)
           should_receive(:render).with(json: { id: "1", label: "Redact notice" })
 
           put_responder.handle(params)
@@ -136,7 +136,7 @@ describe "RedactNoticeProc" do
     end
 
     def stub_notice_params(notice_params = {})
-      @abstract_model.stub(:param_key).and_return(:notice)
+      allow(@abstract_model).to receive(:param_key).and_return(:notice)
       params[:notice] = notice_params
     end
 
@@ -145,12 +145,13 @@ describe "RedactNoticeProc" do
   end
 
   context "Handling POST requests" do
-    before { request.stub(:post?).and_return(true) }
+    before { allow(request).to receive(:post?).and_return(true) }
+    let!(:redactable_notices) { create_list(:dmca, 3, :redactable) }
 
     it "delegates to the PostResponder" do
       responder = double("Post responder")
-      responder.should_receive(:handle).with(params)
-      PostResponder.should_receive(:new).
+      expect(responder).to receive(:handle).with(params)
+      expect(PostResponder).to receive(:new).
         with(self, @abstract_model, @object).and_return(responder)
 
       instance_eval(&RedactNoticeProc)
@@ -160,26 +161,16 @@ describe "RedactNoticeProc" do
       it "redacts this and all next notices" do
         params[:selected_text] = "Sensitive thing"
         params[:next_notices]  = %w( 2 3 4 )
-        redactor = expect_new(RedactsNotices, [
-          expect_new(RedactsNotices::RedactsContent, "Sensitive thing")
-        ])
-        redactor.should_receive(:redact_all).with([@object.id, 2, 3, 4])
-        should_receive(:redact_notice_path).
-          with(@abstract_model, 1, next_notices: %w( 2 3 4 )).
-          and_return(:some_path)
-        should_receive(:redirect_to).with(:some_path)
-
-        post_responder.handle(params)
-      end
-
-      it "redacts only this notice if there are no next notices" do
-        params[:selected_text] = "Sensitive thing"
-        redactor = stub_new(RedactsNotices, [
-          stub_new(RedactsNotices::RedactsContent, "Sensitive thing")
-        ])
-        redactor.should_receive(:redact_all).with([@object.id])
-        should_receive(:redact_notice_path).
-          with(@abstract_model, 1, next_notices: nil).and_return(:some_path)
+        redactor = expect_new(RedactsNotices,
+                              [
+                                expect_new(RedactsNotices::RedactsContent,
+                                           'Sensitive thing')
+                              ])
+        review_required_ids = [@object.id] + redactable_notices.map(&:id)
+        expect(redactor).to receive(:redact_all).with(review_required_ids)
+        should_receive(:redact_notice_path)
+          .with(@abstract_model, 1, next_notices: %w( 2 3 4 ))
+          .and_return(:some_path)
         should_receive(:redirect_to).with(:some_path)
 
         post_responder.handle(params)
@@ -197,13 +188,13 @@ describe "RedactNoticeProc" do
 
   def stub_new(klass, *args)
     klass.new(*args).tap do |instance|
-      klass.stub(:new).and_return(instance)
+      allow(klass).to receive(:new).and_return(instance)
     end
   end
 
   def expect_new(klass, *args)
     klass.new(*args).tap do |instance|
-      klass.should_receive(:new).with(*args).and_return(instance)
+      expect(klass).to receive(:new).with(*args).and_return(instance)
     end
   end
 end

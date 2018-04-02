@@ -10,6 +10,9 @@
 # Ignore the default SQLite database.
 /db/*.sqlite3
 
+# ignore stack prof output
+/prof
+
 # Ignore all logfiles and tempfiles.
 log/*
 tmp/
@@ -19,9 +22,10 @@ tmp/
 .env
 bin/stubs
 coverage/*
-public/system
+paperclip/*
 public/assets
 rerun.txt
 tags
 vendor/bundler_gems
 config/database.yml
+.idea/*

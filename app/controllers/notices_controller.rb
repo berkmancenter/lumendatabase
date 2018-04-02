@@ -1,9 +1,13 @@
 class NoticesController < ApplicationController
   layout :resolve_layout
 
-  before_filter :authenticate_via_token, only: :create
+  skip_before_action :verify_authenticity_token, only: :create
 
   def new
+    if cannot?(:submit, Notice)
+      render :submission_disabled and return
+    end
+
     if params[:type].blank?
       render :select_type and return
     end
@@ -43,7 +47,7 @@ class NoticesController < ApplicationController
       end
 
       format.html do
-        if submission.submit
+        if submission.submit(current_user)
           redirect_to :root, notice: "Notice created!"
         else
           @notice = submission.notice
@@ -54,22 +58,51 @@ class NoticesController < ApplicationController
   end
 
   def show
-    @notice = Notice.find_visible(params[:id])
+    if @notice = Notice.find(params[:id])
+      respond_to do |format|
+        format.html do
+          if @notice.rescinded?
+            render :rescinded
+          elsif @notice.hidden || @notice.spam || !@notice.published
+            render file: 'public/404_unavailable', formats: [:html], status: :not_found, layout: false
+          else
+            render :show
+          end
+        end
 
-    respond_to do |format|
-      format.html do
-        if @notice.rescinded?
-          render :rescinded
-        else
-          render :show
+        format.json do
+          serializer = researcher? ? NoticeSerializerProxy : LimitedNoticeSerializerProxy
+          render json: @notice, serializer: serializer, root: json_root_for(@notice.class)  
         end
       end
-
-      format.json do
-        render json: @notice, serializer: NoticeSerializerProxy,
-          root: json_root_for(@notice.class)
-      end
     end
+  end
+
+  def url_input
+    notice = get_notice_type(params).new
+    @options = OpenStruct.new(
+      notice: notice,
+      url_type: params[:url_type].to_sym,
+      main_index: params[:index].to_i,
+      child_index: (Time.now.to_f * 10_000).to_i
+    )
+    notice.works.build do |w|
+      w.copyrighted_urls.build
+      w.infringing_urls.build
+    end
+  end
+
+  def feed
+    @recent_notices = Rails.cache.fetch("recent_notices", expires_in: 1.hour) { Notice.visible.recent }
+    respond_to do |format|
+      format.rss { render :layout => false }
+    end
+  end
+
+  def request_pdf
+    @pdf = FileUpload.find(params[:id])
+    @pdf.toggle!(:pdf_requested)
+    render nothing: true
   end
 
   private
@@ -94,6 +127,9 @@ class NoticesController < ApplicationController
       :request_type,
       :mark_registration_number,
       :url_count,
+      :webform,
+      :counternotice_for_id,
+      :counternotice_for_sid,
       topic_ids: [],
       file_uploads_attributes: [:kind, :file, :file_name],
       entity_notice_roles_attributes: [
@@ -121,22 +157,28 @@ class NoticesController < ApplicationController
     case action_name
     when "show"
       "search"
+    when "url_input"
+      false
     else
       "application"
     end
   end
 
   def get_notice_type(params)
-    notice_type = params.fetch(:type, 'dmca').classify.constantize
+    type_string = params.fetch(:type, 'DMCA')
+    if type_string == 'Dmca'
+      type_string = 'DMCA'
+    end
+    notice_type = type_string.classify.constantize
 
     if notice_type < Notice
       notice_type
     else
-      Dmca
+      DMCA
     end
 
   rescue NameError
-    Dmca
+    DMCA
   ensure
     params.delete(:type)
   end
@@ -147,5 +189,12 @@ class NoticesController < ApplicationController
     else
       'individual'
     end
+  end
+
+  def researcher?
+    return false unless request.headers['HTTP_X_AUTHENTICATION_TOKEN']
+    User.find_by_authentication_token(
+      request.headers['HTTP_X_AUTHENTICATION_TOKEN']
+    ).has_role?(Role.researcher)
   end
 end

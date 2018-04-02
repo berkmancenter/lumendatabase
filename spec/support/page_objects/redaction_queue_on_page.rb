@@ -5,13 +5,13 @@ class RedactionQueueOnPage < PageObject
     visit '/users/sign_in'
     fill_in "Email", with: user.email
     fill_in "Password", with: user.password
-    click_on "Sign in"
+    click_on "Log in"
 
     visit "/admin/notice/redact_queue"
   end
 
   def fill
-    within_profiles { click_on 'Fill Queue' }
+    click_on 'Fill Queue'
   end
 
   def select_topic_profile(topic)
@@ -76,9 +76,7 @@ class RedactionQueueOnPage < PageObject
     has_no_css?("input[value='Save and next']")
   end
 
-  private
-
-  def within_profiles(&block)
-    within('#refill-queue', &block)
+  def has_refill_queue?
+    has_css?("#refill-queue")
   end
 end

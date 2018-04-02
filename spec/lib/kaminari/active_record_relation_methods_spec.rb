@@ -6,7 +6,7 @@ describe 'Customized kaminari counting' do
     dummy = Dummy.new(table_name)
     execute_double = stub_execute(dummy)
 
-    execute_double.should_receive(:execute)
+    expect(execute_double).to receive(:execute)
 
     with_configured_pagination_overrides([ table_name ]) do
       dummy.total_count
@@ -20,7 +20,7 @@ describe 'Customized kaminari counting' do
     dummy = Dummy.new(table_name)
     execute_double = stub_execute(dummy)
 
-    execute_double.should_not_receive(:execute)
+    expect(execute_double).not_to receive(:execute)
 
     with_configured_pagination_overrides([ different_table_name ]) do
       begin
@@ -32,7 +32,7 @@ describe 'Customized kaminari counting' do
 
   def stub_execute(dummy)
     double('Execute double', execute: [{ 'reltuples' => 100 }]).tap do |execute_double|
-      dummy.stub(:connection).and_return(execute_double)
+      allow(dummy).to receive(:connection).and_return(execute_double)
     end
   end
 

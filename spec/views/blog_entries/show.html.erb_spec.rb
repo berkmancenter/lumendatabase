@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'blog_entries/show.html.erb' do
   it "shows the entry's title" do
@@ -6,7 +6,7 @@ describe 'blog_entries/show.html.erb' do
 
     render
 
-    expect(page).to have_content(blog_entry.title)
+    expect(rendered).to have_content(blog_entry.title)
   end
 
   it "shows the entry's publishing info" do
@@ -14,8 +14,8 @@ describe 'blog_entries/show.html.erb' do
 
     render
 
-    expect(page).to have_content(blog_entry.author)
-    expect(page).to have_content(blog_entry.published_at.to_s(:simple))
+    expect(rendered).to have_content(blog_entry.author)
+    expect(rendered).to have_content(blog_entry.published_at.to_s(:simple))
   end
 
   it "shows the entry's html content" do
@@ -31,7 +31,7 @@ describe 'blog_entries/show.html.erb' do
 
     render
 
-    expect(page).to have_css('.imagery.rain')
+    expect(rendered).to have_css('.imagery.rain')
   end
 
   private

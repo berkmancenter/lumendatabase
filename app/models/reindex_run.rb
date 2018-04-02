@@ -27,9 +27,10 @@ class ReindexRun < ActiveRecord::Base
   def self.sweep_search_result_caches
     ApplicationController.new.expire_fragment(/search-result-[a-f0-9]{32}/)
   end
-  
+
   def self.is_indexed?(klass, id)
-    Tire::Search::Count.new(klass.index_name, q: "id:#{id}").value == 1
+    client = klass.__elasticsearch__.client
+    client.get(index: klass.index_name, id: id)['found'] rescue false
   end
 
   private
@@ -40,7 +41,7 @@ class ReindexRun < ActiveRecord::Base
     model.where('updated_at > ? or updated_at is null', last_run_time).
       find_in_batches(batch_size: batch_size) do |instances|
       instances.each do |instance|
-        instance.tire.update_index
+        instance.__elasticsearch__.index_document
         count = count + 1
       end
     end

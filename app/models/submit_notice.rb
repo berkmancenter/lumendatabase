@@ -27,7 +27,13 @@ class SubmitNotice
   end
 
   def notice
-    @notice ||= model_class.new(parameters)
+    @notice ||= model_class.new(
+      if parameters.class == Hash
+        parameters
+      else
+        parameters.permit!
+      end
+    )
   end
 
   private
@@ -36,7 +42,7 @@ class SubmitNotice
 
   def set_entity(role_name, entity)
     parameters[:entity_notice_roles_attributes] ||= []
-    parameters[:entity_notice_roles_attributes] << {
+    flatten_param(parameters[:entity_notice_roles_attributes]) << {
       name: role_name,
       entity_id: entity.id
     }

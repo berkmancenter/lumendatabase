@@ -1,14 +1,20 @@
-require 'spec_helper'
+require 'rails_helper'
 
 feature "typed notice submissions" do
+  scenario "Non signed-in user cannot see new notice forms" do
+    visit '/notices/new'
+    
+    expect(page).to have_content('Direct submission to Lumen is no longer available. Please submit notices directly to the owner of the website hosting the content.')
+  end
+  
   scenario "User submits and views a Trademark notice" do
-    submission = NoticeSubmissionOnPage.new(Trademark)
+    submission = NoticeSubmissionOnPage.new(Trademark, create(:user, :submitter))
     submission.open_submission_form
 
     submission.fill_in_form_with({
       "Mark" => "My trademark (TM)",
       "Infringing URL" => "http://example.com/infringing_url1",
-      "Describe the alleged Infringment" => "They used my thing",
+      "Describe the alleged infringement" => "They used my thing",
       "Registration Number" => '1337'
     })
 
@@ -21,7 +27,7 @@ feature "typed notice submissions" do
 
     submission.submit
 
-    open_recent_notice
+    within('#recent-notices li:nth-child(1)') { find('a').click }
 
     expect(page).to have_content("Trademark notice to Recipient")
 
@@ -31,14 +37,14 @@ feature "typed notice submissions" do
     end
 
     within('.notice-body') do
-      expect(page).to have_content('Alleged Infringment')
+      expect(page).to have_content('Alleged Infringement')
       expect(page).to have_content('They used my thing')
       expect(page).to have_content('1337')
     end
   end
 
   scenario "User submits and views a Defamation notice" do
-    submission = NoticeSubmissionOnPage.new(Defamation)
+    submission = NoticeSubmissionOnPage.new(Defamation, create(:user, :submitter))
     submission.open_submission_form
 
     submission.fill_in_form_with({
@@ -55,7 +61,7 @@ feature "typed notice submissions" do
 
     submission.submit
 
-    open_recent_notice
+    within('#recent-notices li:nth-child(1)') { find('a').click }
 
     expect(page).to have_content("Defamation notice to Recipient")
 
@@ -71,12 +77,12 @@ feature "typed notice submissions" do
   end
   
   scenario "User submits and views a Data Protection notice" do
-    submission = NoticeSubmissionOnPage.new(DataProtection)
+    submission = NoticeSubmissionOnPage.new(DataProtection, create(:user, :submitter))
     submission.open_submission_form
 
     submission.fill_in_form_with({
       "Legal Complaint" => "I want to be forgotten",
-      "URLs mentioned in request" => "http://example.com/defamatory_url1",
+      "URL mentioned in request" => "http://example.com/defamatory_url1",
     })
 
     submission.fill_in_entity_form_with(:recipient, {
@@ -88,7 +94,7 @@ feature "typed notice submissions" do
 
     submission.submit
 
-    open_recent_notice
+    within('#recent-notices li:nth-child(1)') { find('a').click }
 
     expect(page).to have_content("Data Protection notice to Recipient")
 
@@ -104,7 +110,7 @@ feature "typed notice submissions" do
   end
 
   scenario "User submits and views a CourtOrder notice" do
-    submission = NoticeSubmissionOnPage.new(CourtOrder)
+    submission = NoticeSubmissionOnPage.new(CourtOrder, create(:user, :submitter))
     submission.open_submission_form
 
     submission.fill_in_form_with({
@@ -123,7 +129,7 @@ feature "typed notice submissions" do
 
     submission.submit
 
-    open_recent_notice
+    within('#recent-notices li:nth-child(1)') { find('a').click }
 
     expect(page).to have_content("Court Order notice to Recipient")
 
@@ -140,7 +146,7 @@ feature "typed notice submissions" do
   end
 
   scenario "User submits and views a Law Enforcement Request notice" do
-    submission = NoticeSubmissionOnPage.new(LawEnforcementRequest)
+    submission = NoticeSubmissionOnPage.new(LawEnforcementRequest, create(:user, :submitter))
     submission.open_submission_form
 
     submission.fill_in_form_with({
@@ -166,7 +172,7 @@ feature "typed notice submissions" do
 
     submission.submit
 
-    open_recent_notice
+    within('#recent-notices li:nth-child(1)') { find('a').click }
 
     expect(page).to have_content("Law Enforcement Request notice to Recipient")
 
@@ -191,7 +197,7 @@ feature "typed notice submissions" do
   end
 
   scenario "User submits and views a PrivateInformation notice" do
-    submission = NoticeSubmissionOnPage.new(PrivateInformation)
+    submission = NoticeSubmissionOnPage.new(PrivateInformation, create(:user, :submitter))
     submission.open_submission_form
 
     submission.fill_in_form_with({
@@ -210,7 +216,7 @@ feature "typed notice submissions" do
 
     submission.submit
 
-    open_recent_notice
+    within('#recent-notices li:nth-child(1)') { find('a').click }
 
     expect(page).to have_content("Private Information notice to Recipient")
 
@@ -228,7 +234,7 @@ feature "typed notice submissions" do
   end
 
   scenario "User submits and views an Other notice" do
-    submission = NoticeSubmissionOnPage.new(Other)
+    submission = NoticeSubmissionOnPage.new(Other, create(:user, :submitter))
     submission.open_submission_form
 
     submission.fill_in_form_with({
@@ -248,7 +254,7 @@ feature "typed notice submissions" do
 
     submission.submit
 
-    open_recent_notice
+    within('#recent-notices li:nth-child(1)') { find('a').click }
 
     expect(page).to have_content("Other notice to Recipient")
 
@@ -267,7 +273,7 @@ feature "typed notice submissions" do
   end
 
   scenario "Entities can have different default types depending on role" do
-    submission = NoticeSubmissionOnPage.new(CourtOrder)
+    submission = NoticeSubmissionOnPage.new(CourtOrder, create(:user, :submitter))
     submission.open_submission_form
 
     submission.within_entity_with_role('issuing_court') do

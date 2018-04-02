@@ -1,34 +1,34 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe Dmca do
+describe DMCA, type: :model do
   before do
     @notice_topics = create_list(:notice_topic, 8)
   end
 
-  it { should validate_presence_of :works }
-  it { should validate_presence_of :entity_notice_roles }
-  it { should ensure_inclusion_of(:language).in_array(Language.codes) }
-  it { should ensure_inclusion_of(:action_taken).in_array(Dmca::VALID_ACTIONS).allow_blank }
+  it { is_expected.to validate_presence_of :works }
+  it { is_expected.to validate_presence_of :entity_notice_roles }
+  it { is_expected.to validate_inclusion_of(:language).in_array(Language.codes) }
+  it { is_expected.to validate_inclusion_of(:action_taken).in_array(DMCA::VALID_ACTIONS).allow_blank }
 
   context 'automatic validations' do
-    it { should ensure_length_of(:title).is_at_most(255) }
+    it { is_expected.to validate_length_of(:title).is_at_most(255) }
   end
 
-  it { should have_many :file_uploads }
-  it { should have_many(:entity_notice_roles).dependent(:destroy) }
-  it { should have_and_belong_to_many :works }
-  it { should have_many(:infringing_urls).through(:works) }
-  it { should have_many(:entities).through(:entity_notice_roles)  }
-  it { should have_many(:topic_assignments).dependent(:destroy) }
-  it { should have_many(:topics).through(:topic_assignments) }
-  it { should have_and_belong_to_many :relevant_questions }
+  it { is_expected.to have_many :file_uploads }
+  it { is_expected.to have_many(:entity_notice_roles).dependent(:destroy) }
+  it { is_expected.to have_and_belong_to_many :works }
+  it { is_expected.to have_many(:infringing_urls).through(:works) }
+  it { is_expected.to have_many(:entities).through(:entity_notice_roles)  }
+  it { is_expected.to have_many(:topic_assignments).dependent(:destroy) }
+  it { is_expected.to have_many(:topics).through(:topic_assignments) }
+  it { is_expected.to have_and_belong_to_many :relevant_questions }
 
   it_behaves_like "an object with a recent scope"
   it_behaves_like "an object tagged in the context of", "tag", case_insensitive: true
   it_behaves_like "an object tagged in the context of", "jurisdiction"
 
   it "leaves no action taken as unspecified" do
-    notice = Dmca.new
+    notice = DMCA.new
 
     expect(notice.action_taken).to be_nil
   end
@@ -104,7 +104,7 @@ describe Dmca do
       expect(questions).to match_array %w( Q1 Q2 )
     end
 
-    it "can be limited and is random" do
+    it "can be limited" do
       notice = create(
         :dmca, relevant_questions: create_list(:relevant_question, 10)
       )
@@ -114,7 +114,6 @@ describe Dmca do
 
       expect(questions_1.length).to eq 3
       expect(questions_2.length).to eq 3
-      expect(questions_2.sort).not_to eq questions_1.sort
     end
   end
 
@@ -188,14 +187,14 @@ describe Dmca do
   end
 
   context "#redacted" do
-    it "returns '#{Dmca::UNDER_REVIEW_VALUE}' when review is required" do
-      notice = Dmca.new(review_required: true, body: "A value")
+    it "returns '#{DMCA::UNDER_REVIEW_VALUE}' when review is required" do
+      notice = DMCA.new(review_required: true, body: "A value")
 
-      expect(notice.redacted(:body)).to eq Dmca::UNDER_REVIEW_VALUE
+      expect(notice.redacted(:body)).to eq DMCA::UNDER_REVIEW_VALUE
     end
 
     it "returns the actual value when review is not required" do
-      notice = Dmca.new(review_required: false, body: "A value")
+      notice = DMCA.new(review_required: false, body: "A value")
 
       expect(notice.redacted(:body)).to eq "A value"
     end
@@ -203,10 +202,10 @@ describe Dmca do
 
   context "#auto_redact" do
     it "calls RedactsNotices#redact on itself" do
-      notice = Dmca.new
+      notice = DMCA.new
       redactor = RedactsNotices.new
-      redactor.should_receive(:redact).with(notice)
-      RedactsNotices.should_receive(:new).and_return(redactor)
+      expect(redactor).to receive(:redact).with(notice)
+      expect(RedactsNotices).to receive(:new).and_return(redactor)
 
       notice.auto_redact
     end
@@ -216,8 +215,8 @@ describe Dmca do
     it 'copies id to submission_id' do
       id_value = 100
       notice = build(:dmca)
-      notice.should_receive(:id).and_return(id_value)
-      notice.should_receive(:update_column).with(:submission_id, id_value)
+      expect(notice).to receive(:id).and_return(id_value)
+      expect(notice).to receive(:update_column).with(:submission_id, id_value)
 
       notice.copy_id_to_submission_id
     end
@@ -244,9 +243,9 @@ describe Dmca do
 
     def mock_assessment(notice, high_risk)
       assessment = RiskAssessment.new(notice)
-      assessment.stub(:high_risk?).and_return(high_risk)
+      allow(assessment).to receive(:high_risk?).and_return(high_risk)
 
-      RiskAssessment.should_receive(:new).with(notice).and_return(assessment)
+      expect(RiskAssessment).to receive(:new).with(notice).and_return(assessment)
     end
   end
 
@@ -276,7 +275,7 @@ describe Dmca do
       create_list(:dmca, 2, review_required: true, reviewer: user)
       create_list(:dmca, 2, review_required: false)
 
-      notices = Dmca.available_for_review
+      notices = DMCA.available_for_review
 
       expect(notices).to match_array(expected_notices)
     end
@@ -286,7 +285,7 @@ describe Dmca do
       create_list(:dmca, 2, review_required: true, spam: true)
       create_list(:dmca, 2, review_required: true, hidden: true)
 
-      notices = Dmca.available_for_review
+      notices = DMCA.available_for_review
 
       expect(notices).to match_array(expected_notices)
 
@@ -301,7 +300,7 @@ describe Dmca do
       )
       create_list(:dmca, 2, review_required: true, reviewer: user_two)
 
-      notices = Dmca.in_review(user_one)
+      notices = DMCA.in_review(user_one)
 
       expect(notices).to match_array(expected_notices)
     end
@@ -310,12 +309,13 @@ describe Dmca do
   context ".in_topics" do
     it "returns notices in the given topics" do
       single = create(:dmca) # not to be found
-      expected_notices = create_list(:dmca, 3, :with_topics)
-      topics = expected_notices.map(&:topics).flatten.uniq.delete_if do |t|
-        @notice_topics.include? t
-      end
+      topics = create_list(:topic, 3)
+      expected_notices = [
+        create(:dmca, topics: topics),
+        create(:dmca, topics: topics)
+      ]
 
-      notices = Dmca.in_topics(topics)
+      notices = DMCA.in_topics(topics)
 
       expect(notices).to match_array(expected_notices)
     end
@@ -327,7 +327,7 @@ describe Dmca do
       expected_notices = create_list(:dmca, 3, role_names: %w( submitter ))
       submitters = expected_notices.map(&:submitter)
 
-      notices = Dmca.submitted_by(submitters)
+      notices = DMCA.submitted_by(submitters)
 
       expect(notices).to match_array(expected_notices)
     end
@@ -344,6 +344,7 @@ describe Dmca do
       notice = create(:dmca, file_uploads: file_uploads)
 
       expect(notice).to have(2).supporting_documents
+
       expect(notice.supporting_documents).to be_all { |d| d.kind == 'supporting' }
     end
   end
@@ -359,6 +360,7 @@ describe Dmca do
       notice = create(:dmca, file_uploads: file_uploads)
 
       expect(notice).to have(2).original_documents
+      
       expect(notice.original_documents).to be_all { |d| d.kind == 'original' }
     end
   end

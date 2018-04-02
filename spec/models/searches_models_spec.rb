@@ -1,14 +1,31 @@
 require 'spec_helper'
 
-describe SearchesModels do
+describe SearchesModels, type: :model do
+  context 'visible_qualifiers' do
+    it "delegates to the @model_class" do
+      expected = { expected_key: :expected_value }
+      allow(FakeModel).to receive(:visible_qualifiers).and_return(expected)
+      expect(described_class.new({}, FakeModel).visible_qualifiers).to eq(expected)
+    end
+
+    it "fills in if @model_class does not support it" do
+      expect(described_class.new({}, FakeModel).visible_qualifiers).to eq({})
+    end
+
+    it "has a real value calling with all defaults" do
+      expected = { spam: false, hidden: false, published: true, rescinded: false }
+      expect(described_class.new.visible_qualifiers).to eq(expected)
+    end
+  end
 
   it "returns an elasticsearch search instance" do
-    expect(subject.search).to be_instance_of(Tire::Search::Search)
+    expect(subject.search).to be_instance_of(Elasticsearch::Model::Response::Response)
   end
 
   it "finds the index_name from the model_class" do
-    FakeModel.should_receive(:index_name)
+    expect(FakeModel.index_name).to eq('fake_models')
 
+    FakeModel.__elasticsearch__.create_index! force: true
     searcher = described_class.new({foo: 'bar'}, FakeModel)
     searcher.search
   end
@@ -23,16 +40,16 @@ describe SearchesModels do
 
   context 'filters' do
     it "correctly configures facets" do
-      subject.register TermFilter.new(:title)
-      expect(subject.search.facets[:title]).to be
+      subject.register TermFilter.new(:sender_name_facet)
+      expect(subject.search.aggregations[:sender_name_facet]).to be
     end
 
     it "asks for the filter" do
-      filter = TermFilter.new(:title)
+      filter = TermFilter.new(:sender_name_facet)
       searcher = described_class.new(params_hash)
       searcher.register filter
 
-      filter.should_receive(:filter_for).with(params_hash[:title]).and_return(
+      expect(filter).to receive(:filter_for).with(params_hash[:sender_name_facet]).and_return(
         [ bleep: { foo: ['as'] } ]
       )
       searcher.search
@@ -41,7 +58,7 @@ describe SearchesModels do
 
   context '.cache_key' do
     it "uses md5 hashing for uniqueness" do
-      Digest::MD5.should_receive(:hexdigest)
+      expect(Digest::MD5).to receive(:hexdigest)
       searcher = described_class.new
       searcher.cache_key
     end
@@ -60,7 +77,7 @@ describe SearchesModels do
       searcher = described_class.new(params_hash)
       searcher.register all_fields
 
-      all_fields.should_receive(:query_for).with(params_hash[:term], nil)
+      expect(all_fields).to receive(:query_for).with(params_hash[:term], nil).and_call_original
 
       searcher.search
     end
@@ -71,13 +88,17 @@ describe SearchesModels do
       searcher = described_class.new(modified_params_hash)
       searcher.register all_fields
 
-      all_fields.should_receive(:query_for).with(params_hash[:term], 'AND')
+      expect(all_fields).to receive(:query_for).with(params_hash[:term], 'AND').and_call_original
       searcher.search
     end
   end
 end
 
 class FakeModel
+  include Elasticsearch::Model
+  include ActiveModel::Conversion
+  extend ActiveModel::Naming
+
   PER_PAGE = 10
   HIGHLIGHTS = %i(foo bar)
 end
@@ -85,6 +106,6 @@ end
 def params_hash
   {
     term: 'foo',
-    title: 'A title'
+    sender_name_facet: 'Sender name'
   }
 end

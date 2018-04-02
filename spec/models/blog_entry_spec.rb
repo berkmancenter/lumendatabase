@@ -1,15 +1,15 @@
 require 'spec_helper'
 
-describe BlogEntry do
+describe BlogEntry, type: :model do
   context "automatic validations" do
-    it { should validate_presence_of(:author) }
-    it { should validate_presence_of(:title) }
+    it { is_expected.to validate_presence_of(:author) }
+    it { is_expected.to validate_presence_of(:title) }
   end
 
-  it { should belong_to(:user) }
-  it { should have_many(:blog_entry_topic_assignments).dependent(:destroy) }
-  it { should have_many(:topics).through(:blog_entry_topic_assignments) }
-  it { should ensure_inclusion_of(:image).in_array BlogEntry.valid_images }
+  it { is_expected.to belong_to(:user) }
+  it { is_expected.to have_many(:blog_entry_topic_assignments).dependent(:destroy) }
+  it { is_expected.to have_many(:topics).through(:blog_entry_topic_assignments) }
+  it { is_expected.to validate_inclusion_of(:image).in_array BlogEntry.valid_images }
 
   it_behaves_like "an object with a recent scope"
 
@@ -34,6 +34,18 @@ describe BlogEntry do
       older = create(:blog_entry, published_at: 2.days.ago)
 
       expect(BlogEntry.published).to eq [newer, older]
+    end
+  end
+
+  context ".archived" do
+    it "returns only archived blog entries in order" do
+      create_list(:blog_entry, 2)
+      create_list(:blog_entry, 2, archive: true, published_at: 1.day.from_now)
+      create_list(:blog_entry, 2, archive: true, published_at: 1.hour.from_now)
+      newer = create(:blog_entry, archive: true, published_at: 1.day.ago)
+      older = create(:blog_entry, archive: true, published_at: 2.days.ago)
+
+      expect(BlogEntry.archived).to eq [newer, older]
     end
   end
 

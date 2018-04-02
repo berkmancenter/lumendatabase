@@ -19,15 +19,30 @@ module Notices::SearchHelper
   end
 
   def facet_dropdown_active_indicator(type)
-    if params[type].present?
+    if params[type].present? || params[unspecified_identifiers(type)].present?
       'active'
     end
   end
 
   def facet_active_indicator(type, facet_value)
-    if params[type].present? && params[type] == facet_value
+    if param_matches?(type, facet_value) || param_unspecified?(type, facet_value)
       'active'
     end
+  end
+
+  def param_matches?(type, facet_value)
+    params[type].present? && params[type] == facet_value
+  end
+
+  def param_unspecified?(type, facet_value)
+    facet_value.blank? && params[unspecified_identifiers(type)]
+  end
+
+  def unspecified_identifiers(parameter)
+    @unspecified_identifiers ||= HashWithIndifferentAccess.new do |hash, key|
+      hash[key] = UnspecifiedTermFilter.unspecified_identifier(key)
+    end
+    @unspecified_identifiers[parameter]
   end
 
   def sort_order_label(sort_by_param)

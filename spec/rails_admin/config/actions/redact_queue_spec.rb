@@ -9,12 +9,12 @@ describe RedactQueueProc do
   context "GET request" do
     before do
       queue = stub_new(Redaction::Queue, current_user)
-      queue.stub(:notices).and_return([])
+      allow(queue).to receive(:notices).and_return([])
     end
 
     it "assigns a refill instance" do
       refill = Redaction::RefillQueue.new(params)
-      Redaction::RefillQueue.should_receive(:new).with(params).and_return(refill)
+      expect(Redaction::RefillQueue).to receive(:new).with(params).and_return(refill)
 
       instance_eval(&RedactQueueProc)
 
@@ -23,8 +23,8 @@ describe RedactQueueProc do
 
     it "assigns objects from the user's queue" do
       queue = Redaction::Queue.new(current_user)
-      queue.stub(:notices).and_return(:notices)
-      Redaction::Queue.should_receive(:new).with(current_user).and_return(queue)
+      allow(queue).to receive(:notices).and_return(:notices)
+      expect(Redaction::Queue).to receive(:new).with(current_user).and_return(queue)
 
       instance_eval(&RedactQueueProc)
 
@@ -32,16 +32,16 @@ describe RedactQueueProc do
     end
 
     it "renders the action template for html" do
-      format.stub(:html).and_yield
-      @action.stub(:template_name).and_return('template_name')
+      allow(format).to receive(:html).and_yield
+      allow(@action).to receive(:template_name).and_return('template_name')
       should_receive(:render).with('template_name')
 
       instance_eval(&RedactQueueProc)
     end
 
     it "renders with layout false for js" do
-      format.stub(:js).and_yield
-      @action.stub(:template_name).and_return('template_name')
+      allow(format).to receive(:js).and_yield
+      allow(@action).to receive(:template_name).and_return('template_name')
       should_receive(:render).with('template_name', layout: false)
 
       instance_eval(&RedactQueueProc)
@@ -49,13 +49,13 @@ describe RedactQueueProc do
   end
 
   context "POST request" do
-    before { request.stub(:post?).and_return(true) }
+    before { allow(request).to receive(:post?).and_return(true) }
 
     it "fills the users queue before redirecting" do
       params[:fill_queue] = true
       queue = stub_new(Redaction::Queue, current_user)
       refill = stub_new(Redaction::RefillQueue, params)
-      refill.should_receive(:fill).with(queue)
+      expect(refill).to receive(:fill).with(queue)
       should_redirect_back
 
       instance_eval(&RedactQueueProc)
@@ -84,7 +84,7 @@ describe RedactQueueProc do
           params[:selected] = %w( 1 3 5 9 )
           params[parameter] = true
           queue = stub_new(Redaction::Queue, current_user)
-          queue.should_receive(method).with(%w( 1 3 5 9 ))
+          expect(queue).to receive(method).with(%w( 1 3 5 9 ))
           should_redirect_back
 
           instance_eval(&RedactQueueProc)
@@ -95,7 +95,7 @@ describe RedactQueueProc do
 
   def stub_new(klass, *args)
     klass.new(*args).tap do |instance|
-      klass.stub(:new).and_return(instance)
+      allow(klass).to receive(:new).and_return(instance)
     end
   end
 

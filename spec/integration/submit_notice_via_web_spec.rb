@@ -1,14 +1,23 @@
-require 'spec_helper'
+require 'rails_helper'
+require 'support/notice_actions'
+
+RSpec.configure do |config|
+  config.include NoticeActions
+end
 
 feature "notice submission" do
-  scenario "submitting a notice" do
+  scenario "non signed-in user cannot submit notices" do
+    visit "/notices/new?type=DMCA"
+    
+    expect(page).to have_content('Direct submission to Lumen is no longer available. Please submit notices directly to the owner of the website hosting the content.')
+  end
+
+  scenario "submitting a notice with title" do
     submit_recent_notice("A title")
 
     expect(page).to have_css('#flash_notice')
 
-    within("#recent-notices") do
-      expect(page).to have_css(%{li:contains("A title")})
-    end
+    expect(page).to have_css( '#recent-notices li', text: 'A title' )
   end
 
   scenario "submitting a notice with language" do
@@ -41,8 +50,8 @@ feature "notice submission" do
 
   scenario "submitting a notice with dates" do
     submit_recent_notice do
-      fill_in "Date sent", with: Time.local(2013, 5, 4)
-      fill_in "Date received", with: Time.local(2013, 5, 5)
+      fill_in "Date sent", with: Time.zone.local(2013, 5, 4)
+      fill_in "Date received", with: Time.zone.local(2013, 5, 5)
     end
 
     open_recent_notice
@@ -71,10 +80,7 @@ feature "notice submission" do
     open_recent_notice
 
     within('ol.attachments') do
-      click_on "Supporting Document"
-
-      # page.html is actually plain-text in this case
-      expect(page.html).to eq "Some supporting content"
+      expect(page).to have_link("Supporting Document")
     end
   end
 
@@ -183,7 +189,7 @@ feature "notice submission" do
     submit_recent_notice
 
     expect(Notice.count).to eq 2
-    expect(Entity.count).to eq 2
+    expect(Entity.count).to eq 4
     expect(Work.count).to eq 2
     expect(InfringingUrl.count).to eq 1
   end
@@ -228,16 +234,20 @@ feature "notice submission" do
   end
 
   scenario "a form articulates its required fields correctly" do
-    visit "/notices/new?type=Dmca"
+    sign_in( create(:user, :submitter) )
+
+    visit "/notices/new?type=DMCA"
 
     within('form#new_notice') do
-      expect(page).to have_css("input##{works_copyrighted_url_id}.required")
+      expect(page).to have_css("input##{works_copyrighted_url_id}:not(.required)")
       expect(page).to have_css('input#notice_date_received:not(.required)')
     end
   end
 
   scenario "submitting a notice without required fields present" do
-    visit "/notices/new?type=Dmca"
+    sign_in( create(:user, :submitter) )
+    
+    visit "/notices/new?type=DMCA"
 
     click_on "Submit"
 

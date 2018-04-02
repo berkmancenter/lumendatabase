@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'blog_entries/index.html.erb' do
   it "shows the publishing info for each entry" do
@@ -7,8 +7,8 @@ describe 'blog_entries/index.html.erb' do
     render
 
     blog_entries.each do |blog_entry|
-      expect(page).to have_content(blog_entry.author)
-      expect(page).to have_content(blog_entry.published_at.to_s(:simple))
+      expect(rendered).to have_content(blog_entry.author)
+      expect(rendered).to have_content(blog_entry.published_at.to_s(:simple))
     end
   end
 
@@ -18,7 +18,7 @@ describe 'blog_entries/index.html.erb' do
     render
 
     blog_entries.each do |blog_entry|
-      expect(page).to contain_link(
+      expect(rendered).to contain_link(
         blog_entry_path(blog_entry), blog_entry.title
       )
     end
@@ -30,7 +30,7 @@ describe 'blog_entries/index.html.erb' do
     render
 
     blog_entries.each do |blog_entry|
-      expect(page).to have_content(blog_entry.abstract)
+      expect(rendered).to have_content(blog_entry.abstract)
     end
   end
 
@@ -43,7 +43,7 @@ describe 'blog_entries/index.html.erb' do
 
     render
 
-    expect(page).to contain_link('http://www.example.com')
+    expect(rendered).to contain_link('http://www.example.com')
   end
 
   it "displays the URL for an entry that has a URL defined" do
@@ -56,7 +56,7 @@ describe 'blog_entries/index.html.erb' do
 
     render
 
-    expect(page).to contain_link(url)
+    expect(rendered).to contain_link(url)
   end
 
   it "does not embed the custom search engine when not configured" do
@@ -64,25 +64,25 @@ describe 'blog_entries/index.html.erb' do
 
     render
 
-    expect(page).not_to have_custom_search_engine_embed
+    expect(rendered).not_to have_custom_search_engine_embed
   end
 
   it "has a custom search engine" do
-    Chill::Application.config.stub(:google_custom_blog_search_id).and_return('yep')
+    allow(Chill::Application.config).to receive(:google_custom_blog_search_id).and_return('yep')
     blog_entries = mock_blog_entries
 
     render
 
-    expect(page).to have_custom_search_engine_embed
+    expect(rendered).to have_custom_search_engine_embed
   end
 
   def mock_blog_entries
     blog_entries = create_list(:blog_entry, 3, :with_abstract, :published)
     yield blog_entries if block_given?
-    blog_entries.stub(:total_entries).and_return(blog_entries.length)
-    blog_entries.stub(:total_pages).and_return(1)
-    blog_entries.stub(:current_page).and_return(1)
-    blog_entries.stub(:limit_value).and_return(1)
+    allow(blog_entries).to receive(:total_entries).and_return(blog_entries.length)
+    allow(blog_entries).to receive(:total_pages).and_return(1)
+    allow(blog_entries).to receive(:current_page).and_return(1)
+    allow(blog_entries).to receive(:limit_value).and_return(1)
     assign(:blog_entries, blog_entries)
     assign(:we_are_reading, [])
     blog_entries

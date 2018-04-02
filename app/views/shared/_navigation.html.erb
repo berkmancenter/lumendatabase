@@ -8,19 +8,36 @@
       <div id="dropdown-topics" class="dropdown-menu" role="menu">
         <ol>
           <% topic_roots.each do |root| %>
-            <%= render "shared/topic_dropdown", topic: root %>
+            <% cache(root) do %>
+              <%= render "shared/topic_dropdown", topic: root %>
+            <% end %>
           <% end %>
         </ol>
       </div>
     </li>
-    <li class="nav-item new-notice">
-      <%= link_to("Report a Demand", new_notice_path) %>
+    <li class="nav-item actions dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown">Actions</a>
+      <div id="dropdown-actions" class="dropdown-menu" role="menu">
+        <ol>
+          <li>
+            <%=
+              link_to(
+                "Create DMCA Counter Notice",
+                new_counter_notice_path
+              )
+            %>
+          </li>
+        </ol>
+      </div>
     </li>
     <li class="nav-item blog">
       <%= link_to("Blog", blog_entries_path) %>
     </li>
     <li class="nav-item about">
       <%= link_to "About", page_path("about") %>
+    </li>
+    <li class="nav-item research">
+      <%= link_to "Research", page_path("research") %>
     </li>
   </ol>
 </nav>

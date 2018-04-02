@@ -3,7 +3,7 @@ RSpec::Matchers.define :match_interface_of do
     missing_methods.empty?
   end
 
-  failure_message_for_should do
+  failure_message do
     "expected #{actual.name} to respond to #{missing_methods.join(', ')}"
   end
 

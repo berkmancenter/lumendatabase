@@ -2,7 +2,7 @@
 
 AutoDetectedBrowser: Firefox 3
 AutoDetectedOS: Windows XP
-IssueType: blogger_dmca_infringment
+IssueType: blogger_dmca_infringement
 Language: fr
 a01_first_name: Sébastien
 a02_last_name: Forte

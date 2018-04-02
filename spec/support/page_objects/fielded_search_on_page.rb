@@ -3,6 +3,7 @@ require_relative '../page_object'
 class FieldedSearchOnPage < PageObject
   def open_advanced_search
     unless advanced_search_visible?
+      sleep ENV["SEARCH_SLEEP"].to_i if ENV["SEARCH_SLEEP"]
       find("a#toggle-advanced-search").click
     end
   end
@@ -67,19 +68,19 @@ class FieldedSearchOnPage < PageObject
   end
 
   def run_search(wait_for_index = true)
-    wait_for_index and sleep 1
+    wait_for_index and sleep((ENV["SEARCH_SLEEP"] && ENV["SEARCH_SLEEP"].to_i) || 1)
 
     find('.advanced-search .resubmit .button').click
   end
 
   def visit_search_page(wait_for_index = false)
-    wait_for_index and sleep 1
+    wait_for_index and sleep((ENV["SEARCH_SLEEP"] && ENV["SEARCH_SLEEP"].to_i) || 1)
 
     visit '/notices/search'
   end
 
   def parameterized_search_for(field, term)
-    sleep 1
+    sleep (ENV["SEARCH_SLEEP"] && ENV["SEARCH_SLEEP"].to_i) || 1
 
     visit "/notices/search?#{field}=#{URI.escape(term)}"
   end

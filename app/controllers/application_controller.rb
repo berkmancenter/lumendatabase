@@ -1,13 +1,17 @@
 class ApplicationController < ActionController::Base
   layout :layout_by_resource
 
+  before_filter :authenticate_user_from_token!
+
   rescue_from CanCan::AccessDenied do |ex|
     logger.warn "Unauthorized attempt to #{ex.action} #{ex.subject}"
 
     redirect_to main_app.root_path, alert: ex.message
   end
 
-  protect_from_forgery
+  skip_before_action :verify_authenticity_token
+
+  after_action :include_auth_cookie
 
   private
 
@@ -16,7 +20,11 @@ class ApplicationController < ActionController::Base
       current_page next_page offset per_page
       previous_page total_entries total_pages
     ).each_with_object(query_meta(results)) do |attribute, memo|
-      memo[attribute] = results.send(attribute)
+      begin
+        memo[attribute] = results.send(attribute)
+      rescue
+        memo[attribute] = nil
+      end
     end
   end
 
@@ -25,12 +33,12 @@ class ApplicationController < ActionController::Base
       query: {
         term: params[:term]
       }.merge(facet_query_meta(results) || {}),
-      facets: results.facets
+      facets: results.response.aggregations
     }
   end
 
   def facet_query_meta(results)
-    results.facets && results.facets.keys.each_with_object({}) do |facet, memo|
+    results.response.aggregations && results.response.aggregations.keys.each_with_object({}) do |facet, memo|
       if params[facet.to_sym].present?
         memo[facet.to_sym] = params[facet.to_sym]
       end
@@ -45,13 +53,22 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def authenticate_via_token
-    @current_user ||= User.find_by_authentication_token(authentication_token)
+  def authenticate_user_from_token!
+    user = authentication_token && User.find_by_authentication_token(authentication_token.to_s)
+
+    if user
+      sign_in user, store: false
+    end
   end
 
   def authentication_token
     key = 'authentication_token'
 
-    params[key] || request.env["HTTP_#{key.upcase}"]
+    params[key] || request.env["HTTP_X_#{key.upcase}"]
   end
+
+  def include_auth_cookie
+    cookies[:lumen_authenticated] = ( current_user.present? ? 1 : 0 )
+  end
+
 end

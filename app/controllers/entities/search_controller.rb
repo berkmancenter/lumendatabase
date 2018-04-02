@@ -1,19 +1,21 @@
 class Entities::SearchController < ApplicationController
-
   def index
-    search = entity_searcher.search
-    @results = search.results
+    searcher = entity_searcher
+    raw_response = searcher.search
+    raw_results = raw_response.results
+    results = searcher.instances
 
     respond_to do |format|
-      format.json do
+      format.json {
         render(
-          json: @results,
+          json: results,
           each_serializer: EntitySerializer,
           serializer: ActiveModel::ArraySerializer,
           root: 'entities',
-          meta: meta_hash_for(@results)
+          meta: meta_hash_for(raw_results)
         )
-      end
+      }
+      format.html { redirect_to root_path }
     end
   end
 
@@ -21,8 +23,11 @@ class Entities::SearchController < ApplicationController
 
   def entity_searcher
     SearchesModels.new(params, Entity).tap do |searcher|
-      searcher.register TermSearch.new(:term, :_all)
+      if can?(:search, Entity)
+        searcher.register TermSearch.new(:term, :_all)
+      else
+        searcher.register TermSearch.new(:term, [:name, :country_code, :url])
+      end
     end
   end
-
 end

@@ -1,10 +1,10 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe TopicsController do
   context "#show" do
     it "loads the topic by ID" do
       topic = double("Topic").as_null_object
-      Topic.should_receive(:find).with('42').and_return(topic)
+      expect(Topic).to receive(:find).with('42').and_return(topic)
 
       get :show, id: 42
 
@@ -15,11 +15,11 @@ describe TopicsController do
 
     it "uses SearchesModels to find recent notices" do
       topic = double("Topic")
-      topic.stub(:name).and_return('A topic name')
-      Topic.stub(:find).and_return(topic)
+      allow(topic).to receive(:name).and_return('A topic name')
+      allow(Topic).to receive(:find).and_return(topic)
 
       searcher = SearchesModels.new
-      SearchesModels.should_receive(:new).with(
+      expect(SearchesModels).to receive(:new).with(
         { topic: topic.name }).and_return(searcher)
 
       get :show, id: 42
@@ -30,14 +30,14 @@ describe TopicsController do
     it "cannot be routed" do
       expect do
         get(:index, format: :html)
-      end.to raise_error(ActionController::RoutingError)
+      end.to raise_error(ActionController::UrlGenerationError)
     end
   end
 
   context "#index as json" do
     it "loads all topics" do
       topic_list = build_list(:topic, 10)
-      Topic.should_receive(:all)
+      expect(Topic).to receive(:all)
 
       get :index, format: :json
 

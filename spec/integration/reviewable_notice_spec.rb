@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 feature "Publishing high risk notices" do
   let(:harmless_text) { "Some harmless text" }
@@ -11,7 +11,7 @@ feature "Publishing high risk notices" do
     end
 
     open_recent_notice
-    within('.notice-body .body') do
+    within('.notice-body') do
       expect(page).to have_content Notice::UNDER_REVIEW_VALUE
     end
   end
@@ -24,7 +24,7 @@ feature "Publishing high risk notices" do
     end
 
     open_recent_notice
-    within('.notice-body .body') do
+    within('.notice-body') do
       expect(page).to have_content harmless_text
     end
   end

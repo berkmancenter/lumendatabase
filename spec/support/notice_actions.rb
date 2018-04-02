@@ -1,6 +1,16 @@
 module NoticeActions
+  def sign_in( user = nil )
+    visit '/users/sign_out' # clear old session
+    visit '/users/sign_in'
+    fill_in "Email", with: user.email
+    fill_in "Password", with: user.password
+    click_on "Log in"
+  end
+  
   def submit_recent_notice(title = "A title")
-    visit "/notices/new?type=Dmca"
+    sign_in( create(:user, :submitter) )
+    
+    visit "/notices/new?type=DMCA"
 
     fill_in "Title", with: title
     fill_in "Date received", with: Time.now
@@ -10,6 +20,12 @@ module NoticeActions
     end
     within('section.sender') do
       fill_in "Name", with: "Sender the first"
+    end
+    within('section.principal') do
+      fill_in "Name", with: "Principal the first"
+    end
+    within('section.submitter') do
+      fill_in "Name", with: "Submitter the first"
     end
 
     fill_in 'Work URL', with: 'http://www.example.com/original_work.pdf'
@@ -51,8 +67,4 @@ module NoticeActions
       yield(file)
     end
   end
-end
-
-RSpec.configure do |config|
-  config.include NoticeActions, type: :request
 end

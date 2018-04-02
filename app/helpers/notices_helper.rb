@@ -49,4 +49,33 @@ module NoticesHelper
   def first_time_visitor_content
     Markdown.render( t('first_time_visitor') )
   end
+
+  def label_for_url_input(url_type, notice)
+    case url_type
+    when :infringing_urls
+      case notice
+      when ::DMCA, ::Trademark
+        "Allegedly Infringing URL"
+      when ::PrivateInformation
+        "URL with private information"
+      when ::CourtOrder
+        "Targeted URL"
+      when ::DataProtection, ::LawEnforcementRequest
+        "URL mentioned in request"
+      when ::Defamation
+        "Allegedly Defamatory URL"
+      when ::Other
+        "Problematic URL"
+      end
+    when :copyrighted_urls
+      case notice
+      when ::DMCA, ::Other
+        "Original Work URL"
+      when ::LawEnforcementRequest
+        "URL of original work"
+      end
+    else
+      fail "Unknown url_type: #{url_type}"
+    end
+  end
 end

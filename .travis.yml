@@ -1,0 +1,50 @@
+language: ruby
+
+rvm: 2.3.3
+
+addons:
+  apt:
+    packages:
+      - libqtwebkit-dev
+  postgresql: "9.6"
+
+services:
+  - postgresql
+  - elasticsearch
+
+cache:
+  directories:
+    - travis_phantomjs
+
+before_install:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.6.4.deb && sudo dpkg -i --force-confnew elasticsearch-5.6.4.deb && sudo service elasticsearch restart
+
+  # update phantomjs
+  - |
+      export PHANTOMJS_VERSION=2.1.1
+      export PATH=$PWD/travis_phantomjs/phantomjs-$PHANTOMJS_VERSION-linux-x86_64/bin:$PATH
+      if [ $(phantomjs --version) != $PHANTOMJS_VERSION ]; then
+        rm -rf $PWD/travis_phantomjs
+        mkdir -p $PWD/travis_phantomjs
+        wget https://github.com/Medium/phantomjs/releases/download/v$PHANTOMJS_VERSION/phantomjs-$PHANTOMJS_VERSION-linux-x86_64.tar.bz2
+        tar -xvf phantomjs-$PHANTOMJS_VERSION-linux-x86_64.tar.bz2 -C $PWD/travis_phantomjs
+      fi
+      phantomjs -v
+
+before_script:
+  - sleep 10
+  - psql -c 'create database chill_test;' -U postgres
+  - cp config/database.yml.travis config/database.yml
+  - bundle exec rake db:schema:load RAILS_ENV=test
+  - mkdir -p tmp/cache
+
+script:
+  - curl http://localhost:9200
+  - bundle exec rspec spec/controllers
+  - bundle exec rspec spec/integration
+  - bundle exec rspec spec/models
+  - bundle exec rspec spec/routing
+  - bundle exec rspec spec/serializers
+  - bundle exec rspec spec/views

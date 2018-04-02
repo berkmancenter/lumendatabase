@@ -7,5 +7,5 @@ if Rails.env.staging? || Rails.env.production?
     password: ENV['SMTP_PASSWORD'],
     port: ENV['SMTP_PORT'],
     user_name: ENV['SMTP_USERNAME']
-  }
+  } unless defined?( SMTP_SETTINGS )
 end

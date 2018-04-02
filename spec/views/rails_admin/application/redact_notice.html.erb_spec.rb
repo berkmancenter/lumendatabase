@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'rails_admin/application/redact_notice.html.erb' do
   before do
@@ -12,17 +12,17 @@ describe 'rails_admin/application/redact_notice.html.erb' do
 
     @ability = Object.new
     @ability.extend(CanCan::Ability)
-    controller.stub(:current_ability) { @ability }
+    allow(controller).to receive(:current_ability) { @ability }
   end
 
   it 'displays elapsed time in queue' do
     notice = build_stubbed(:dmca)
-    notice.stub(:created_at).and_return(2.hours.ago)
+    allow(notice).to receive(:created_at).and_return(2.hours.ago)
     assign(:object, notice)
 
     render
 
-    expect(page).to have_content("Time in queue: about 2 hours")
+    expect(rendered).to have_content("Time in queue: about 2 hours")
   end
 
   it 'displays notice id, and entity names' do
@@ -33,10 +33,10 @@ describe 'rails_admin/application/redact_notice.html.erb' do
 
     render
 
-    expect(page).to have_content(notice.id)
-    expect(page).to have_content(notice.submitter_name)
-    expect(page).to have_content(notice.recipient_name)
-    expect(page).to have_content(notice.sender_name)
+    expect(rendered).to have_content(notice.id)
+    expect(rendered).to have_content(notice.submitter_name)
+    expect(rendered).to have_content(notice.recipient_name)
+    expect(rendered).to have_content(notice.sender_name)
   end
 
   it 'shows redactable_fields alongside originals' do
@@ -50,10 +50,10 @@ describe 'rails_admin/application/redact_notice.html.erb' do
 
     render
 
-    expect(page).to have_css(
+    expect(rendered).to have_css(
       "textarea#notice_body:contains('Redacted')"
     )
-    expect(page).to have_css(
+    expect(rendered).to have_css(
       "textarea#notice_body_original:contains('Original')"
     )
   end
@@ -63,7 +63,7 @@ describe 'rails_admin/application/redact_notice.html.erb' do
 
     render
 
-    expect(page).not_to have_css('input#notice_review_required')
+    expect(rendered).not_to have_css('input#notice_review_required')
   end
 
   it 'shows publish checkbox if user can publish' do
@@ -72,7 +72,7 @@ describe 'rails_admin/application/redact_notice.html.erb' do
 
     render
 
-    expect(page).to have_css('input#notice_review_required')
+    expect(rendered).to have_css('input#notice_review_required')
   end
 
   context "buttons and links" do
@@ -84,8 +84,8 @@ describe 'rails_admin/application/redact_notice.html.erb' do
     it "does not show 'Save and next' or 'Next' if there is no next model" do
       render
 
-      expect(page).not_to have_css("input[value='Save and next']")
-      expect(page).not_to have_css("a:contains('Next')")
+      expect(rendered).not_to have_css("input[value='Save and next']")
+      expect(rendered).not_to have_css("a:contains('Next')")
     end
 
     it "shows 'Save and next' and 'Next' if there is a next model" do
@@ -93,8 +93,8 @@ describe 'rails_admin/application/redact_notice.html.erb' do
 
       render
 
-      expect(page).to have_css("input[value='Save and next']")
-      expect(page).to have_css("a:contains('Next')")
+      expect(rendered).to have_css("input[value='Save and next']")
+      expect(rendered).to have_css("a:contains('Next')")
     end
   end
 end

@@ -1,0 +1,16 @@
+development:
+  adapter: postgresql
+  encoding: utf8
+  database: lumen_dev
+  pool: 5
+  username: postgres
+  password: postgres
+
+test:
+  adapter: postgresql
+  encoding: utf8
+  database: lumen_test
+  pool: 5
+  username: postgres
+  password: postgres
+

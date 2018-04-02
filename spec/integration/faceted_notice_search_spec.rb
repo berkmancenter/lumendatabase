@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 feature "Faceted search of Notices", search: true do
   include SearchHelpers
@@ -57,7 +57,7 @@ feature "Faceted search of Notices", search: true do
       end
 
       open_dropdown_for_facet('date_received_facet')
-      facet = page.find('ol.date_received_facet li:nth-child(2)').text
+      facet = page.find('ol.date_received_facet li:nth-child(3)').text
 
       within_faceted_search_results_for("title", :date_received_facet, facet) do
         expect(page).to have_active_facet_dropdown(:date_received_facet)
@@ -78,7 +78,7 @@ feature "Faceted search of Notices", search: true do
       end
 
       click_on 'Date'
-      find('ol.date_received_facet li:nth-child(2) a').click
+      find('ol.date_received_facet li:nth-child(3) a').click
 
       expect(page).to have_active_facet_dropdown(:date_received_facet)
       expect(page).to have_n_results 1
@@ -87,7 +87,7 @@ feature "Faceted search of Notices", search: true do
   end
 
   def with_a_faceted_search(facet_name, facet_attribute_name)
-    sleep 1
+    sleep (ENV["SEARCH_SLEEP"] && ENV["SEARCH_SLEEP"].to_i) || 1
     results = Notice.search do
       query { match(:_all, 'title') }
       facet facet_name do

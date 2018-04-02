@@ -1,0 +1,25 @@
+# Configuration:
+# 
+# disabled
+#   false if tracking tag should be shown
+# use_async
+#   Set to true if you want to use asynchronous tracking
+# url
+#   The url of your piwik instance (e.g. localhost/piwik/
+# id_site
+#   The id of your website inside Piwik
+#
+production:
+  id_site: 3
+  url: stats.berkman.harvard.edu
+  disabled: false
+
+development:
+  id_site: 4
+  url: stats.berkman.harvard.edu
+  disabled: false
+
+test:
+  id_site: 4
+  url: stats.berkman.harvard.edu
+  disabled: true

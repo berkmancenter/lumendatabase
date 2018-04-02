@@ -4,7 +4,7 @@ RSpec::Matchers.define :have_heading do |heading|
     @page.has_css?("h2:contains('#{heading}')")
   end
 
-  failure_message_for_should do |_|
+  failure_message do |_|
     message = "expected page to have heading #{heading}"
 
     if element = @page.first('h2')
