@@ -219,6 +219,41 @@ namespace :chillingeffects do
     end
   end
 
+  desc "Recreate elasticsearch index memory efficiently"
+  task create_elasticsearch_index_for_updated_instances: :environment do
+    begin
+      batch_size = (ENV['BATCH_SIZE'] || 100).to_i
+      if ENV['from']
+        from = DateTime.parse(ENV['from'], "%Y-%m-%d")
+      end
+
+      if from.nil?
+        error = '"from" parameter is missing (correct format %Y-%m-%d)'
+        puts error
+        Rails.logger.error error
+
+        return
+      end
+
+      [Notice, Entity].each do |klass|
+        klass.__elasticsearch__.create_index! force: true
+        count = 0
+        klass.where('updated_at > ?', from).find_in_batches(batch_size: batch_size) do |instances|
+          GC.start
+          instances.each do |instance|
+            instance.__elasticsearch__.index_document
+            count += 1
+            print '.'
+          end
+          Rails.logger.info "#{count} #{klass} instances indexed at #{Time.now.to_i}"
+        end
+      end
+      ReindexRun.sweep_search_result_caches
+    rescue => e
+      Rails.logger.error "Reindexing did not succeed because: #{e.inspect}"
+    end
+  end
+
   desc "Assign titles to untitled notices"
   task title_untitled_notices: :environment do
     # Similar to SubmitNotice model
