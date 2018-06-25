@@ -236,7 +236,7 @@ namespace :chillingeffects do
       end
 
       [Notice, Entity].each do |klass|
-        klass.__elasticsearch__.create_index! force: true
+        klass.__elasticsearch__.create_index!
         count = 0
         klass.where('updated_at > ?', from).find_in_batches(batch_size: batch_size) do |instances|
           GC.start
