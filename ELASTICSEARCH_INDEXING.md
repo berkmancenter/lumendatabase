@@ -8,7 +8,7 @@ Elasticsearch indexing happens out-of-process, meaning you must keep the index
 up to date by periodically running `ReindexRun.index_changed_model_instances`.
 This method looks for models (currently Entity and Notice (and its subclasses))
 with an `updated_at` value greater than the last time we reindexed.  It will
-then retreive these model instances in batches (controlled by the value of
+then retrieve these model instances in batches (controlled by the value of
 ENV['BATCH_SIZE'], with a default of 100) and send each of them to
 elasticsearch.
 
