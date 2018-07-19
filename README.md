@@ -17,6 +17,7 @@ Requirements:
 * Elasticsearch 5.6.x
 * Java Runtime Environment (OpenJDK works fine)
 * Piwik Tracking
+* phantomjs (used only by test runner)
 
 Setup:
 
