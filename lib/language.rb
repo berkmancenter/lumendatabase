@@ -1,6 +1,6 @@
 Language = Struct.new(:code, :name) do
   # Labels:
-  #   http://en.wikipedia.org/w/index.php?title=List_of_ISO_639-1_codes
+  #   https://en.wikipedia.org/w/index.php?title=List_of_ISO_639-1_codes
   #
   def self.all
     [

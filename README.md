@@ -56,7 +56,7 @@ Ephemera
 The `/blog_entries` page contains a google custom search engine that's supposed
 to search the Lumen blog. To enable, create a custom search engine
 [here](https://www.google.com/cse/create/new) restricted to the path the blog
-lives at, for instance `http://www.lumendatabase.org/blog_entries/*`. Extract
+lives at, for instance `https://www.lumendatabase.org/blog_entries/*`. Extract
 the "cx" id from the javascript embed code and put it in the
 `GOOGLE_CUSTOM_BLOG_SEARCH_ID` environment variable. The blog search will
 appear after this variable has been configured.
