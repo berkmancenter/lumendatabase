@@ -160,7 +160,7 @@ feature "Searching for Notices via the API" do
                 kind: "organization",
                 address_line_1: "1600 Amphitheatre Parkway",
                 city: "Mountain View",
-                state: "CA", 
+                state: "CA",
                 zip: "94043",
                 country_code: "US"
               }
@@ -193,10 +193,17 @@ feature "Searching for Notices via the API" do
       end
 
       expect_api_search_to_find("king") do |json|
-        puts json.inspect
         json_item = json['notices'].first
-        expect(json_item).to have_key('marks').with_value(marks)
-        expect(json_item).not_to have_key('works')
+        expect(json_item).to have_key('marks')
+        # We can't just compare json_item['marks'] to marks, because the
+        # infringing_urls arrays may be in different orders, causing the
+        # comparison to fail.
+        expect(json_item['marks'].length).to eq(1)
+        expect(json_item['marks'].first.keys.sort).to eq(marks.first.keys.sort)
+        expect(json_item['marks'].first['description']
+              ).to eq(marks.first['description'])
+        expect(json_item['marks'].first['infringing_urls'].sort
+              ).to eq(marks.first['infringing_urls'].sort)
         expect(json_item).to have_key('mark_registration_number').with_value('1337')
       end
     end
@@ -224,7 +231,7 @@ feature "Searching for Notices via the API" do
       end
     end
   end
-  
+
   context DataProtection do
     scenario "has model-specific metadata", js: true, search: true do
       create(
