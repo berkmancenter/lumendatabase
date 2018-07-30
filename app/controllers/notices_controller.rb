@@ -72,7 +72,7 @@ class NoticesController < ApplicationController
 
         format.json do
           serializer = researcher? ? NoticeSerializerProxy : LimitedNoticeSerializerProxy
-          render json: @notice, serializer: serializer, root: json_root_for(@notice.class)  
+          render json: @notice, serializer: serializer, root: json_root_for(@notice.class)
         end
       end
     end

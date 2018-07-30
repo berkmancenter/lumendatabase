@@ -6,10 +6,10 @@ module NoticeActions
     fill_in "Password", with: user.password
     click_on "Log in"
   end
-  
+
   def submit_recent_notice(title = "A title")
     sign_in( create(:user, :submitter) )
-    
+
     visit "/notices/new?type=DMCA"
 
     fill_in "Title", with: title
