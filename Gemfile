@@ -43,6 +43,7 @@ gem 'minitest'
 gem 'spork-rails', git: 'https://github.com/sporkrb/spork-rails'
 gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
+gem 'coveralls', require: false
 
 group :assets do
   gem 'coffee-rails'
