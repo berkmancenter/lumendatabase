@@ -232,6 +232,4 @@ unless ENV['SKIP_FAKE_DATA']
 
   puts 'Indexing. . .'
   ReindexRun.index_changed_model_instances
-
-  puts
 end
