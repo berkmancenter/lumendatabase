@@ -10,7 +10,7 @@ feature "Rails admin dashboard" do
 
   scenario "It displays proper labels for Notice subclasses in the sidebar" do
     within('.sidebar-nav') do
-      expect(page).to have_css('a:contains(Notice)', count: 1)
+      expect(page).to have_css('a', text: /^Notices$/, count: 1)
 
       Notice.type_models.each do |model|
         expect(page).to have_css("a:contains('#{model.label}')")
