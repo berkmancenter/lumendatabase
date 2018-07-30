@@ -17,5 +17,5 @@ module RenderedPage
 end
 
 RSpec.configure do |config|
-  #config.include RenderedPage, type: :view
+  config.include RenderedPage, type: :view
 end
