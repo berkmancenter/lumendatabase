@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/berkmancenter/lumendatabase.svg?branch=master)](https://travis-ci.org/berkmancenter/lumendatabase)
+[![Coverage Status](https://coveralls.io/repos/github/berkmancenter/lumendatabase/badge.svg?branch=master)](https://coveralls.io/github/berkmancenter/lumendatabase?branch=master)
+[![Code Climate](https://codeclimate.com/github/codeclimate/codeclimate/badges/gpa.svg)](https://codeclimate.com/github/berkmancenter/lumendatabase)
+
 Lumen Database
 ================
 
