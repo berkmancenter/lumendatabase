@@ -17,7 +17,7 @@ class NoticeSubmissionOnPage < PageObject
 
   def open_submission_form
     sign_in unless @user.nil?
-    
+
     visit '/notices/new'
 
     click_on 'Report ' + @notice_class.to_s.titleize

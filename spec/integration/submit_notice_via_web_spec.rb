@@ -94,7 +94,7 @@ feature "notice submission" do
     open_recent_notice
 
     within('ol.attachments') do
-      expect(page).to have_css('li', 3)
+      expect(page).to have_css('li', count: 3)
     end
   end
 
