@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'support/sign_in'
 
 feature "notice submission" do
   include NoticeActions

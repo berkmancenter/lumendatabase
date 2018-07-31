@@ -1,12 +1,9 @@
 require_relative '../page_object'
+require_relative '../sign_in'
 
 class RedactionQueueOnPage < PageObject
   def visit_as(user)
-    visit '/users/sign_in'
-    fill_in "Email", with: user.email
-    fill_in "Password", with: user.password
-    click_on "Log in"
-
+    sign_in user
     visit "/admin/notice/redact_queue"
   end
 
