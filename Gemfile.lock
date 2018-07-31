@@ -52,6 +52,7 @@ GEM
     addressable (2.4.0)
     ancestry (2.0.0)
       activerecord (>= 3.0.0)
+    ansi (1.5.0)
     arel (6.0.4)
     bcrypt (3.1.11)
     binding_of_caller (0.7.2)
@@ -118,6 +119,10 @@ GEM
       elasticsearch-transport (= 5.0.4)
     elasticsearch-api (5.0.4)
       multi_json
+    elasticsearch-extensions (0.0.29)
+      ansi
+      elasticsearch
+      ruby-prof
     elasticsearch-model (5.0.1)
       activesupport (> 3)
       elasticsearch (~> 5)
@@ -399,6 +404,7 @@ DEPENDENCIES
   date_validator
   devise
   dotenv-rails
+  elasticsearch-extensions
   elasticsearch-model
   elasticsearch-rails
   factory_girl_rails

@@ -54,13 +54,12 @@ end
 
 group :development do
   gem 'foreman'
-  gem 'dotenv-rails'
-  # gem 'better_errors'
   gem 'binding_of_caller'
 end
 
 group :development, :test do
   gem 'phantomjs'
+  gem 'dotenv-rails'
   gem 'factory_girl_rails'
   gem 'rspec-rails'
   gem 'sham_rack'
@@ -81,4 +80,5 @@ group :test do
   gem 'timecop'
   gem 'fakeweb'
   gem 'curb'
+  gem 'elasticsearch-extensions'
 end
