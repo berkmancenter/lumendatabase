@@ -9,7 +9,7 @@ feature "Topics" do
   end
 
   scenario "user views a topic", search: true do
-    index_changed_models
+    index_changed_instances
 
     sleep 2
 
