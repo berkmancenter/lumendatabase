@@ -3,14 +3,16 @@ require 'elasticsearch/extensions/test/cluster'
 
 RSpec.configure do |config|
 
-  es_port = 9250 # should match the setting for elasticsearch.yml#test
+  es_port = 9250
   es_options = {
     network_host: 'localhost',
     port: es_port,
     number_of_nodes: 1,
-    timeout: 120,
-    command: ENV['TEST_CLUSTER_COMMAND']
+    timeout: 120
   }
+  if ENV['TEST_CLUSTER_COMMAND'].present?
+    es_options[:command] = ENV['TEST_CLUSTER_COMMAND']
+  end
 
   searchable_models = [Notice, Entity]
 
@@ -18,7 +20,7 @@ RSpec.configure do |config|
   # port 9250 so as not to interfere with development/production clusters.
   # This may throw a warning that the cluster is already running, but you can
   # ignore that.
-  config.before :suite, type: :feature do
+  config.before :suite do
     Elasticsearch::Extensions::Test::Cluster.start(**es_options) unless Elasticsearch::Extensions::Test::Cluster.running?(on: es_port)
   end
 
