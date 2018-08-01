@@ -44,4 +44,8 @@ Chill::Application.configure do
   config.action_controller.action_on_unpermitted_parameters = :raise
 
   config.action_mailer.default_url_options = { host: 'www.example.com' }
+
+  # Don't cache anything in tests - this can cause data persistence between
+  # test runs, resulting in random failures.
+  config.cache_store = :null_store
 end
