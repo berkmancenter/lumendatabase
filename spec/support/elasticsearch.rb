@@ -11,49 +11,50 @@ RSpec.configure do |config|
     timeout: 120,
     command: ENV['TEST_CLUSTER_COMMAND']
   }
+
+  searchable_models = [Notice, Entity]
+
   # Start an in-memory Elasticsearch cluster for integration tests. Runs on
   # port 9250 so as not to interfere with development/production clusters.
-  config.before :all, type: :request do
+  # This may throw a warning that the cluster is already running, but you can
+  # ignore that.
+  config.before :suite, type: :feature do
     Elasticsearch::Extensions::Test::Cluster.start(**es_options) unless Elasticsearch::Extensions::Test::Cluster.running?(on: es_port)
+  end
 
-    ActiveRecord::Base.descendants.each do |model|
-      if model.respond_to?(:__elasticsearch__)
+  # Reload connections periodically to avoid test failures due to exhausting
+  # the connection pool. (This may be a multithreading issue, with Capybara
+  # and webrick running in different threads; in theory the connection pool
+  # handling should be threadsafe but in practice maybe it isn't.)
+  config.before :all, type: :feature do
+    searchable_models.each do |model|
+      begin
         model.__elasticsearch__.client.transport.reload_connections!
-      end
+      rescue Elasticsearch::Transport::Transport::Errors::NotFound; end
+    end
+  end
+
+  # Wipe Elasticsearch clean between tests.
+  # First: delete content and indexes for indexed models. Then: recreate the
+  # index.
+  # Deleting the index alone doesn't suffice; you'll be left with content from
+  # prior tests, which will be reindexed when you refresh the index.
+  # The rescue blocks suppress noisy but irrelevant error messages.
+  config.before :each, type: :feature do
+    searchable_models.each do |model|
+      begin
+        model.__elasticsearch__.client.delete_by_query index: model.__elasticsearch__.index_name
+        model.__elasticsearch__.delete_index!
+      rescue Elasticsearch::Transport::Transport::Errors::NotFound; end
+
+      begin
+        model.__elasticsearch__.create_index!
+      rescue Elasticsearch::Transport::Transport::Errors::NotFound; end
     end
   end
 
   # Stop elasticsearch cluster after test run
   config.after :suite do
     Elasticsearch::Extensions::Test::Cluster.stop(**es_options) if Elasticsearch::Extensions::Test::Cluster.running?(on: es_port)
-  end
-
-# Create indexes for all elastic-searchable models
-  config.before :each, search: true do
-    ActiveRecord::Base.descendants.each do |model|
-      if model.respond_to?(:__elasticsearch__)
-        begin
-          model.__elasticsearch__.create_index!
-          # Refresh is a blocking method. This is great because it obviates
-          # the need for, and is more reliable than, sleep calls.
-          model.__elasticsearch__.refresh_index!
-        rescue Elasticsearch::Transport::Transport::Errors::NotFound;
-          # This kills "Index does not exist" errors being written to console
-          # by this: https://github.com/elastic/elasticsearch-rails/blob/738c63efacc167b6e8faae3b01a1a0135cfc8bbb/elasticsearch-model/lib/elasticsearch/model/indexing.rb#L268
-        end
-      end
-    end
-  end
-
-  # Delete indexes for all elastic searchable models to ensure clean state between tests
-  config.after :each, search: true do
-    ActiveRecord::Base.descendants.each do |model|
-      if model.respond_to?(:__elasticsearch__)
-        begin
-          model.__elasticsearch__.delete_index!
-        rescue Elasticsearch::Transport::Transport::Errors::NotFound;
-        end
-      end
-    end
   end
 end
