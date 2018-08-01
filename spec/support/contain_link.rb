@@ -12,5 +12,5 @@ end
 
 RSpec.configure do |config|
   config.include ContainLink, type: :view
-  config.include ContainLink, type: :request
+  config.include ContainLink, type: :feature
 end
