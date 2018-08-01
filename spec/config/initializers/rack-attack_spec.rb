@@ -8,7 +8,7 @@ describe Rack::Attack do
     Rails.application
   end
 
-  describe "throttle excessive API requests by IP address" do
+  describe "throttle excessive API requests by IP address", cache: true do
     let(:limit) { 5 }
 
     context "number of requests is lower than the limit" do

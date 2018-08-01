@@ -13,4 +13,12 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 RSpec.configure do |config|
   config.order = "random"
+
+  config.before :each, cache: true do
+    allow(Rails).to receive(:cache).and_return(ActiveSupport::Cache::MemoryStore.new)
+  end
+
+  config.after :each, cache: true do
+    allow(Rails).to receive(:cache).and_call_original
+  end
 end
