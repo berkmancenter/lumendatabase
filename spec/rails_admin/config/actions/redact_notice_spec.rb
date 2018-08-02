@@ -167,7 +167,7 @@ describe "RedactNoticeProc" do
                                            'Sensitive thing')
                               ])
         review_required_ids = [@object.id] + redactable_notices.map(&:id)
-        expect(redactor).to receive(:redact_all).with(review_required_ids)
+        expect(redactor).to receive(:redact_all).with(contain_exactly(*review_required_ids))
         should_receive(:redact_notice_path)
           .with(@abstract_model, 1, next_notices: %w( 2 3 4 ))
           .and_return(:some_path)
