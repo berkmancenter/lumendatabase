@@ -12,15 +12,21 @@ feature "A client submits invalid json" do
     end
   end
 
-  context "and they want an HTML response" do
-    scenario "they should get the rails default", js: true do
-      pending "Unsure how to trap the error in the server thread"
-
-      curb = post_broken_json_to_api_as('/notices', 'text/html', broken_json)
-      expect(curb.response_code).to eq 500
-      expect(curb.content_type).to match(/text\/html/)
-    end
-  end
+  # This spec hasn't been running because it's marked as pending, but it has
+  # somehow been causing spec/integration/reviewable_notice_spec.rb:9 to fail
+  # when run subsequently. Not sure what the test isolation failure is there.
+  # Also, it may not be testing the intended behavior; the errors that make it
+  # fail appear to be in the Capybara stack and thus not faithful tests of the
+  # desired behavior.
+  # context "and they want an HTML response" do
+  #   scenario "they should get the rails default", js: true do
+  #     pending "Unsure how to trap the error in the server thread"
+  #
+  #     curb = post_broken_json_to_api_as('/notices', 'text/html', broken_json)
+  #     expect(curb.response_code).to eq 500
+  #     expect(curb.content_type).to match(/text\/html/)
+  #   end
+  # end
 
   def broken_json
     invalid_tokens = ', , '
