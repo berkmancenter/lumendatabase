@@ -242,7 +242,7 @@ feature "typed notice submissions" do
       "Original Work URL" => "http://example.com/original_object1", # copyrighted_urls
       "Problematic URL" => "http://example.com/offending_url1", # infringing_urls
 
-      "Explanation of Complaint" => "I am complaining", #notice.body
+      "Explanation of Complaint" => "I am complaining", # notice.body
     })
 
     submission.fill_in_entity_form_with(:recipient, {

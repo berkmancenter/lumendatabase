@@ -49,12 +49,12 @@
     <div class="main">
       <h2>Re: <%= subject(@notice) %></h2>
       <p class="source">Sent via: <%= sent_via(@notice) %></p>
-	  
+
       <dl class="notice-type">
         <dt class="label">Notice Type:</dt>
         <dd class="field"><%= @notice.type.titleize %></dd>
       </dl>
-	  
+
 	  <% unless @notice.action_taken.nil? || @notice.action_taken.blank? %>
       <dl class="action-taken">
         <dt class="label">Action taken:</dt>
@@ -70,7 +70,7 @@
       <dd class="field"><%= @notice.tag_list %></dd>
     </dl>
     <% end %>
-    
+
     <dl class="tag-list">
       <dt class="label">Jurisdictions</dt>
       <% if @notice.jurisdiction_list.present? %>
@@ -125,12 +125,12 @@
 
     <section id="counter-notice">
       <% if @notice.type == "DMCA" %>
-        <%= 
+        <%=
           link_to(
-            "Create DMCA Counter Notice", 
-            new_counter_notice_path, 
+            "Create DMCA Counter Notice",
+            new_counter_notice_path,
             class: "button"
-          ) 
+          )
         %>
       <% end %>
     </section>
