@@ -3,8 +3,7 @@ require 'rails_helper'
 feature "Rails admin dashboard" do
   before do
     AdminOnPage.new(create(:user, :redactor)).tap do |page_object|
-      sign_in page_object.user
-      page_object.visit_admin
+      page_object.sign_into_admin
     end
   end
 
