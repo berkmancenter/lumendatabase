@@ -3,7 +3,7 @@ require 'rails_helper'
 feature "Topics" do
   include SearchHelpers
 
-  before :all do
+  before :each do
     @topic = create(:topic, name: 'An awesome name')
     @notice = create(:dmca, topics: [@topic])
   end

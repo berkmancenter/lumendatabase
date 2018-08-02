@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe 'notices/new.html.erb' do
+  include SearchHelpers
+
   it "has a form for notices" do
     assign(:notice, DMCA.new)
 
@@ -68,7 +70,7 @@ describe 'notices/new.html.erb' do
               kind: "organization",
               address_line_1: "1600 Amphitheatre Parkway",
               city: "Mountain View",
-              state: "CA", 
+              state: "CA",
               zip: "94043",
               country_code: "US"
             }
@@ -126,7 +128,7 @@ describe 'notices/new.html.erb' do
               kind: "organization",
               address_line_1: "1600 Amphitheatre Parkway",
               city: "Mountain View",
-              state: "CA", 
+              state: "CA",
               zip: "94043",
               country_code: "US"
             }
@@ -163,6 +165,7 @@ describe 'notices/new.html.erb' do
         assign(
           :notice, build(factory_name, role_names: %w( sender recipient ))
         )
+        index_changed_instances
 
         render
 
@@ -179,6 +182,7 @@ describe 'notices/new.html.erb' do
       third_topic = create(:topic, name: "C Topic")
       first_topic = create(:topic, name: "A Topic")
       assign(:notice, DMCA.new)
+      index_changed_instances
 
       render
 
