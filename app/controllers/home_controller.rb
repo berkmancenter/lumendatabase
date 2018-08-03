@@ -6,24 +6,22 @@ class HomeController < ApplicationController
       'recent_notices', expires_in: 1.hour
     ) { Notice.visible.recent }
     @blog_entries = BlogEntry.recent_posts
-    @tweet_news = fetch_tweets
+    fetch_tweets
   end
 
   private
 
   def fetch_tweets
-    return [] unless fragment_exist?('chillingeffects-tweets')
+    @tweet_news = []
+    return if fragment_exist?('chillingeffects-tweets')
 
     begin
       twitter_user = 'lumendatabase'
       tweets = new_client.user_timeline(twitter_user, count: 4)
-      tweets = [] unless tweets.respond_to? :each
+      @tweet_news = tweets if tweets.respond_to? :each
     rescue Twitter::Error => e
       logger.error "Twitter fetch failed: #{e.message}"
-      tweets = []
     end
-
-    tweets
   end
 
   def new_client
