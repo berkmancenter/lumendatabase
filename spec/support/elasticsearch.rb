@@ -2,7 +2,6 @@
 require 'elasticsearch/extensions/test/cluster'
 
 RSpec.configure do |config|
-
   es_port = 9250
   es_options = {
     network_host: 'localhost',
@@ -21,7 +20,9 @@ RSpec.configure do |config|
   # This may throw a warning that the cluster is already running, but you can
   # ignore that.
   config.before :suite do
-    Elasticsearch::Extensions::Test::Cluster.start(**es_options) unless Elasticsearch::Extensions::Test::Cluster.running?(on: es_port)
+    unless Elasticsearch::Extensions::Test::Cluster.running?(on: es_port)
+      Elasticsearch::Extensions::Test::Cluster.start(**es_options)
+    end
   end
 
   # Reload connections periodically to avoid test failures due to exhausting
@@ -45,7 +46,9 @@ RSpec.configure do |config|
   config.before :each, type: :feature do
     searchable_models.each do |model|
       begin
-        model.__elasticsearch__.client.delete_by_query index: model.__elasticsearch__.index_name
+        model.__elasticsearch__.client.delete_by_query(
+          index: model.__elasticsearch__.index_name
+        )
         model.__elasticsearch__.delete_index!
       rescue Elasticsearch::Transport::Transport::Errors::NotFound; end
 
@@ -57,6 +60,8 @@ RSpec.configure do |config|
 
   # Stop elasticsearch cluster after test run
   config.after :suite do
-    Elasticsearch::Extensions::Test::Cluster.stop(**es_options) if Elasticsearch::Extensions::Test::Cluster.running?(on: es_port)
+    if Elasticsearch::Extensions::Test::Cluster.running?(on: es_port)
+      Elasticsearch::Extensions::Test::Cluster.stop(**es_options)
+    end
   end
 end
