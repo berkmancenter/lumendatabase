@@ -38,11 +38,11 @@ class ReindexRun < ActiveRecord::Base
   def self.index_model_for(model, last_run_time)
     count = 0
     batch_size = (ENV['BATCH_SIZE'] || 100).to_i
-    model.where('updated_at > ? or updated_at is null', last_run_time).
-      find_in_batches(batch_size: batch_size) do |instances|
+    model.where('updated_at > ? or updated_at is null', last_run_time)
+         .find_in_batches(batch_size: batch_size) do |instances|
       instances.each do |instance|
         instance.__elasticsearch__.index_document
-        count = count + 1
+        count += 1
       end
     end
     count
