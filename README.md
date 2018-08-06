@@ -54,6 +54,8 @@ Running Tests:
 
     $ bundle exec rspec spec/
 
+If `elasticsearch` isn't on your $PATH, set `ENV['TEST_CLUSTER_COMMAND']=/path/to/elasticsearch`, and make sure permissions are set correctly for your test suite to run it.
+
 Ephemera
 ========
 

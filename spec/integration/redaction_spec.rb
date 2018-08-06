@@ -1,11 +1,8 @@
 require 'rails_helper'
-require 'support/notice_actions'
-
-RSpec.configure do |config|
-  config.include NoticeActions
-end
+require 'support/sign_in'
 
 feature "Redactable fields" do
+  include NoticeActions
 
   Notice::REDACTABLE_FIELDS.each do |field|
     scenario "#{field} is automatically redacted of phone numbers" do

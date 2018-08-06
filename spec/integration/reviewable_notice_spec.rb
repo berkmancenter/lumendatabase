@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 feature "Publishing high risk notices" do
+  include NoticeActions
+
   let(:harmless_text) { "Some harmless text" }
 
   scenario "A non-US notice with Body text" do

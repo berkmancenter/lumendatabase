@@ -6,7 +6,7 @@ feature "Searching for Notices via the API" do
 
   scenario "the results array has relevant metadata", js: true, search: true do
     create(:dmca, title: "The Lion King on Youtube")
-    index_changed_models
+    index_changed_instances
 
     expect_api_search_to_find("king") do |json|
       metadata = json['meta']
@@ -20,7 +20,7 @@ feature "Searching for Notices via the API" do
   context "facets" do
     scenario "returns facet information", js: true, search: true do
       create(:dmca, :with_facet_data, title: "The Lion King")
-      index_changed_models
+      index_changed_instances
 
       expect_api_search_to_find("king") do |json|
         facets = json['meta']['facets']
@@ -38,7 +38,7 @@ feature "Searching for Notices via the API" do
 
     scenario "return facet query information", js: true, search: true do
       notice = create(:dmca, :with_facet_data, title: "The Lion King")
-      index_changed_models
+      index_changed_instances
 
       expect_api_search_to_find(
         "king", sender_name_facet: notice.sender_name
@@ -56,7 +56,7 @@ feature "Searching for Notices via the API" do
         m.merge(k => !v)
       end
       notice = create(:dmca, :with_facet_data, options)
-      index_changed_models
+      index_changed_instances
 
       expect_api_search_to_find(
         "king", sender_name_facet: notice.sender_name
@@ -78,7 +78,7 @@ feature "Searching for Notices via the API" do
       older_notice = create(
         :dmca, title: 'Foobar Last', date_received: Time.now - 10.days
       )
-      index_changed_models
+      index_changed_instances
 
       expect_api_search_to_find("Foobar", sort_by: "date_received asc") do |json|
         expect(first_notice_id(json)).to be(older_notice.id)
@@ -94,7 +94,7 @@ feature "Searching for Notices via the API" do
     scenario "by relevancy", js: true, search: true do
       notice = create(:dmca, title: 'Foobar Foobar First')
       less_relevant_notice = create(:dmca, title: 'Foobar Last')
-      index_changed_models
+      index_changed_instances
 
       expect_api_search_to_find("Foobar", sort_by: "relevancy asc") do |json|
         expect(first_notice_id(json)).to be(less_relevant_notice.id)
@@ -118,7 +118,7 @@ feature "Searching for Notices via the API" do
         topics: [topic],
         title: "The Lion King on Youtube"
       )
-      index_changed_models
+      index_changed_instances
       expected_topics = [topic.name, Notice::TYPES_TO_TOPICS[notice.type]].sort
 
       expect_api_search_to_find("king") do |json|
@@ -183,7 +183,7 @@ feature "Searching for Notices via the API" do
 
       notice = Notice.new(params[:notice])
       notice.save
-      index_changed_models
+      index_changed_instances
 
       marks = notice.works.map do |work|
         {
@@ -216,7 +216,7 @@ feature "Searching for Notices via the API" do
         title: "The Lion King on Youtube",
         body: "A test body"
       )
-      index_changed_models
+      index_changed_instances
 
       expect_api_search_to_find("king") do |json|
         json_item = json['notices'].first
@@ -239,7 +239,7 @@ feature "Searching for Notices via the API" do
         title: "The Lion King on Youtube",
         body: "A test body"
       )
-      index_changed_models
+      index_changed_instances
 
       expect_api_search_to_find("king") do |json|
         json_item = json['notices'].first
@@ -260,7 +260,7 @@ feature "Searching for Notices via the API" do
         title: "The Lion King on Youtube",
         regulation_list: 'Foo bar 21, Baz blee 22'
       )
-      index_changed_models
+      index_changed_instances
 
       # TODO - figure out what to do with additional entities.
 
@@ -291,7 +291,7 @@ feature "Searching for Notices via the API" do
         regulation_list: 'Foo bar 21, Baz blee 22',
         request_type: 'Civil Subpoena',
       )
-      index_changed_models
+      index_changed_instances
 
       expect_api_search_to_find("king") do |json|
         json_item = json['notices'].first
@@ -320,7 +320,7 @@ feature "Searching for Notices via the API" do
         :private_information,
         title: "The Lion King on Youtube",
       )
-      index_changed_models
+      index_changed_instances
 
       expect_api_search_to_find("king") do |json|
         json_item = json['notices'].first
@@ -343,7 +343,7 @@ feature "Searching for Notices via the API" do
         :other,
         title: "The Lion King on Youtube",
       )
-      index_changed_models
+      index_changed_instances
 
       expect_api_search_to_find("king") do |json|
         json_item = json['notices'].first

@@ -1,21 +1,21 @@
 require 'spec_helper'
 
 describe Redaction::RefillQueue do
-  context "#each_input" do
-    it "yields an input for each supported profile" do
+  context '#each_input' do
+    it 'yields an input for each supported profile' do
       inputs = []
       refill = Redaction::RefillQueue.new
 
       refill.each_input { |input| inputs << input }
 
-      topic_input, submitter_input = inputs
+      topic_input, _submitter_input = inputs
       expect(topic_input.key).to eq :in_topics
-      expect(topic_input.label_text).to eq "In topics"
+      expect(topic_input.label_text).to eq 'In topics'
     end
   end
 
-  context "#fill" do
-    it "finds notices available for review" do
+  context '#fill' do
+    it 'finds notices available for review' do
       notice = create(:dmca, review_required: true)
       queue = new_queue
       refill = Redaction::RefillQueue.new
@@ -26,13 +26,15 @@ describe Redaction::RefillQueue do
       expect(queue.notices).to eq [notice]
     end
 
-    it "can be scoped by topic" do
+    it 'can be scoped by topic' do
       create(:dmca, :with_topics, review_required: true) # not to be found
       notice = create(:dmca, :with_topics, review_required: true)
       queue = new_queue
-      refill = Redaction::RefillQueue.new(notice_scopes: {
-        in_topics: [notice.topics.first.id]
-      })
+      refill = Redaction::RefillQueue.new(
+        notice_scopes: {
+          in_topics: [notice.topics.first.id]
+        }
+      )
 
       refill.fill(queue)
 
@@ -40,13 +42,16 @@ describe Redaction::RefillQueue do
       expect(queue.notices).to eq [notice]
     end
 
-    it "can be scoped by submitter" do
-      create(:dmca, role_names: %w( submitter ), review_required: true) # not to be found
-      notice = create(:dmca, role_names: %w( submitter ), review_required: true)
+    it 'can be scoped by submitter' do
+      # not to be found
+      create(:dmca, role_names: %w[submitter], review_required: true)
+      notice = create(:dmca, role_names: %w[submitter], review_required: true)
       queue = new_queue
-      refill = Redaction::RefillQueue.new(notice_scopes: {
-        submitted_by: [notice.submitter.id]
-      })
+      refill = Redaction::RefillQueue.new(
+        notice_scopes: {
+          submitted_by: [notice.submitter.id]
+        }
+      )
 
       refill.fill(queue)
 
@@ -54,7 +59,7 @@ describe Redaction::RefillQueue do
       expect(queue.notices).to eq [notice]
     end
 
-    it "does not find notices not up for review" do
+    it 'does not find notices not up for review' do
       create(:dmca, review_required: false)
       queue = new_queue
       refill = Redaction::RefillQueue.new
@@ -66,8 +71,9 @@ describe Redaction::RefillQueue do
     end
 
     it "does not find other user's notices" do
-      create(:dmca, review_required: true, reviewer_id: 1)
       queue = new_queue
+      # Ensure that the reviewer_id is not the queue user id.
+      create(:dmca, review_required: true, reviewer_id: queue.user.id + 1)
       refill = Redaction::RefillQueue.new
 
       refill.fill(queue)

@@ -3,7 +3,7 @@ require 'support/contain_link'
 
 feature "User authorization" do
   include ContainLink
-  
+
   scenario "A non logged-in user is redirected to sign in" do
     user = AdminOnPage.new(create(:user))
 
@@ -13,99 +13,92 @@ feature "User authorization" do
   end
 
   scenario "Submitters- cannot access admin" do
-    users = [
+    page_objects = [
       AdminOnPage.new(create(:user)),
       AdminOnPage.new(create(:user, :submitter))
     ]
 
-    users.each do |user|
-      user.sign_in
-      user.visit_admin
+    page_objects.each do |obj|
+      obj.sign_into_admin
 
-      expect(user).to be_denied_access
+      expect(obj).to be_denied_access
     end
   end
 
   scenario "Redactors+ are able to access admin" do
-    users = [
+    page_objects = [
       AdminOnPage.new(create(:user, :redactor)),
       AdminOnPage.new(create(:user, :publisher)),
       AdminOnPage.new(create(:user, :admin)),
       AdminOnPage.new(create(:user, :super_admin))
     ]
 
-    users.each do |user|
-      user.sign_in
-      user.visit_admin
+    page_objects.each do |obj|
+      obj.sign_into_admin
 
-      expect(user).to be_in_admin
+      expect(obj).to be_in_admin
     end
   end
 
   scenario "All levels can edit notices" do
     notice = create(:dmca)
-    users = [
+    page_objects = [
       AdminOnPage.new(create(:user, :redactor)),
       AdminOnPage.new(create(:user, :publisher)),
       AdminOnPage.new(create(:user, :admin)),
       AdminOnPage.new(create(:user, :super_admin))
     ]
 
-    users.each_with_index do |user,idx|
-      user.sign_in
-      user.edit(notice, Title: "New title #{idx}")
+    page_objects.each_with_index do |obj, idx|
+      obj.sign_in_and_edit(notice, Title: "New title #{idx}")
 
       expect(notice.reload.title).to eq "New title #{idx}"
     end
   end
 
   scenario "Redactors cannot publish (admin)" do
-    user = AdminOnPage.new(create(:user, :redactor))
+    page_object = AdminOnPage.new(create(:user, :redactor))
     notice = create(:dmca, review_required: true)
 
-    user.sign_in
-    user.edit(notice)
+    page_object.sign_in_and_edit(notice)
 
     expect(page).to have_no_css('input#notice_review_required')
   end
 
   scenario "Publishers+ can publish (admin)" do
     notice = create(:dmca, review_required: true)
-    users = [
+    page_objects = [
       AdminOnPage.new(create(:user, :publisher)),
       AdminOnPage.new(create(:user, :admin)),
       AdminOnPage.new(create(:user, :super_admin))
     ]
 
-    users.each do |user|
-      user.sign_in
-      user.edit(notice)
+    page_objects.each do |obj|
+      obj.sign_in_and_edit(notice)
 
       expect(page).to have_css('input#notice_review_required')
     end
   end
 
   scenario "Redactors cannot publish (redact tool)" do
-    user = AdminOnPage.new(create(:user, :redactor))
     notice = create(:dmca, review_required: true)
+    page_object = AdminOnPage.new(create(:user, :redactor))
 
-    user.sign_in
-    user.redact(notice)
+    page_object.sign_in_and_redact(notice)
 
     expect(page).to have_no_css('input#notice_review_required')
   end
 
   scenario "Publishers+ can publish (redact tool)" do
     notice = create(:dmca, review_required: true)
-    users = [
+    page_objects = [
       AdminOnPage.new(create(:user, :publisher)),
       AdminOnPage.new(create(:user, :admin)),
       AdminOnPage.new(create(:user, :super_admin))
     ]
 
-    users.each do |user|
-      user.sign_in
-      user.redact(notice)
+    page_objects.each do |obj|
+      obj.sign_in_and_redact(notice)
 
       expect(page).to have_css('input#notice_review_required')
     end
@@ -113,20 +106,19 @@ feature "User authorization" do
 
   scenario "Redactors and Publishers cannot create/delete notices" do
     notice = create(:dmca)
-    users = [
+    page_objects = [
       AdminOnPage.new(create(:user, :redactor)),
       AdminOnPage.new(create(:user, :publisher))
     ]
 
-    users.each do |user|
-      user.sign_in
-      user.create(Notice)
+    page_objects.each do |obj|
+      obj.sign_in_and_create(Notice)
 
-      expect(user).to be_denied_access
+      expect(obj).to be_denied_access
 
-      user.delete(notice)
+      obj.delete(notice)
 
-      expect(user).to be_denied_access
+      expect(obj).to be_denied_access
     end
   end
 
@@ -138,32 +130,31 @@ feature "User authorization" do
       create(:user),
       create(:role)
     ]
-    users = [
+    page_objects = [
       AdminOnPage.new(create(:user, :redactor)),
       AdminOnPage.new(create(:user, :publisher))
     ]
 
-    users.each do |user|
-      user.sign_in
+    page_objects.each do |obj|
+      sign_in obj.user
 
       site_data.each do |resource|
-        user.edit(resource)
+        obj.edit(resource)
 
-        expect(user).to be_denied_access
+        expect(obj).to be_denied_access
       end
     end
   end
 
   scenario "Redactors and Publishers cannot rescind notices" do
     notice = create(:dmca)
-    users = [
+    page_objects = [
       AdminOnPage.new(create(:user, :redactor)),
       AdminOnPage.new(create(:user, :publisher))
     ]
 
-    users.each do |user|
-      user.sign_in
-      user.edit(notice)
+    page_objects.each do |obj|
+      obj.sign_in_and_edit(notice)
 
       expect(page).to have_no_css('input#notice_rescinded')
     end
@@ -171,14 +162,13 @@ feature "User authorization" do
 
   scenario "Admins and Super admins can edit site data" do
     topic = create(:topic)
-    users = [
+    page_objects = [
       AdminOnPage.new(create(:user, :admin)),
       AdminOnPage.new(create(:user, :super_admin))
     ]
 
-    users.each_with_index do |user,idx|
-      user.sign_in
-      user.edit(topic, Name: "New name #{idx}")
+    page_objects.each_with_index do |obj, idx|
+      obj.sign_in_and_edit(topic, Name: "New name #{idx}")
 
       expect(topic.reload.name).to eq "New name #{idx}"
     end
@@ -186,14 +176,13 @@ feature "User authorization" do
 
   scenario "Admins and Super admins can rescind notices" do
     notice = create(:dmca)
-    users = [
+    page_objects = [
       AdminOnPage.new(create(:user, :admin)),
       AdminOnPage.new(create(:user, :super_admin))
     ]
 
-    users.each do |user|
-      user.sign_in
-      user.edit(notice)
+    page_objects.each do |obj|
+      obj.sign_in_and_edit(notice)
 
       expect(page).to have_css('input#notice_rescinded')
     end
@@ -204,32 +193,30 @@ feature "User authorization" do
       create(:user),
       create(:role)
     ]
-    user = AdminOnPage.new(create(:user, :admin))
-    user.sign_in
+    obj = AdminOnPage.new(create(:user, :admin))
+    sign_in obj.user
 
     site_data.each do |resource|
-      user.edit(resource)
+      obj.edit(resource)
 
-      expect(user).to be_denied_access
+      expect(obj).to be_denied_access
     end
   end
 
   scenario "Super admins can edit other Users" do
-    user = AdminOnPage.new(create(:user, :super_admin))
+    obj = AdminOnPage.new(create(:user, :super_admin))
     other_user = create(:user)
 
-    user.sign_in
-    user.edit(other_user, user_email: "new-email@example.com")
+    obj.sign_in_and_edit(other_user, user_email: "new-email@example.com")
 
     expect(other_user.reload.email).to eq "new-email@example.com"
   end
 
   scenario "Super admins can edit Roles" do
-    user = AdminOnPage.new(create(:user, :super_admin))
+    obj = AdminOnPage.new(create(:user, :super_admin))
     role = create(:role, name: "some_name")
 
-    user.sign_in
-    user.edit(role, Name: "another_name")
+    obj.sign_in_and_edit(role, Name: "another_name")
 
     expect(role.reload.name).to eq "another_name"
   end
@@ -242,8 +229,8 @@ feature "User authorization" do
 
     expect(page).not_to contain_link(admin_path)
 
-    user = AdminOnPage.new(create(:user, :admin))
-    user.sign_in
+    obj = AdminOnPage.new(create(:user, :admin))
+    sign_in obj.user
 
     visit notice_path(notice)
 
@@ -251,6 +238,6 @@ feature "User authorization" do
 
     click_on "Edit in Admin"
 
-    expect(user).to be_in_admin
+    expect(obj).to be_in_admin
   end
 end

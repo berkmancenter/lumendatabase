@@ -8,7 +8,7 @@ describe Rack::Attack do
     Rails.application
   end
 
-  describe "throttle excessive API requests by IP address" do
+  describe "throttle excessive API requests by IP address", cache: true do
     let(:limit) { 5 }
 
     context "number of requests is lower than the limit" do
@@ -20,7 +20,7 @@ describe Rack::Attack do
       end
     end
 
-    context "number of requests is higher than the limit" do
+    context "number of requests is higher than the limit", cache: true do
       it "changes the request status to 429" do
         (limit * 2).times do |i|
           get "/topics.json", {}, "REMOTE_ADDR" => "1.2.3.5"
@@ -42,7 +42,7 @@ describe Rack::Attack do
   describe "throttle excessive HTTP responses by IP address" do
     let(:limit) { 200 }
 
-    context "number of requests is lower than the limit" do
+    context "number of requests is lower than the limit", cache: true  do
       it "does not change the request status" do
         limit.times do
           get "/pages/license", {}, "REMOTE_ADDR" => "1.2.3.9"
@@ -51,7 +51,7 @@ describe Rack::Attack do
       end
     end
 
-    context "number of requests is higher than the limit" do
+    context "number of requests is higher than the limit", cache: true  do
       it "changes the request status to 429" do
         (limit + 1).times do |i|
           get "/pages/license", {}, "REMOTE_ADDR" => "1.2.4.7"

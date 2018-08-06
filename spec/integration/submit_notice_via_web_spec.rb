@@ -1,11 +1,9 @@
 require 'rails_helper'
-require 'support/notice_actions'
-
-RSpec.configure do |config|
-  config.include NoticeActions
-end
+require 'support/sign_in'
 
 feature "notice submission" do
+  include NoticeActions
+
   scenario "non signed-in user cannot submit notices" do
     visit "/notices/new?type=DMCA"
 
