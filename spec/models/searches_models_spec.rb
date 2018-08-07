@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe SearchesModels, type: :model do
+describe SearchesModels, type: %i[model search] do
   context 'visible_qualifiers' do
     it 'delegates to the @model_class' do
       expected = { expected_key: :expected_value }

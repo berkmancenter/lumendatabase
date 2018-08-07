@@ -45,7 +45,7 @@ RSpec.configure do |config|
   # Deleting the index alone doesn't suffice; you'll be left with content from
   # prior tests, which will be reindexed when you refresh the index.
   # The rescue blocks suppress noisy but irrelevant error messages.
-  config.before :each, type: :feature do
+  config.before :each, type: %i[search feature] do
     searchable_models.each do |model|
       begin
         model.__elasticsearch__.client.delete_by_query(
