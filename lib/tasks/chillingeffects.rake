@@ -402,7 +402,7 @@ namespace :chillingeffects do
 update notices
 set action_taken = '',
   updated_at = now()
-where notices.id in ( 
+where notices.id in (
   select notices.id from notices
   inner join entity_notice_roles on entity_notice_roles.notice_id = notices.id and entity_notice_roles.name = 'recipient'
   and entity_notice_roles.entity_id in (select id from entities where entities.name ilike '%google%')
@@ -604,5 +604,26 @@ where works.id in (
   task remove_google_api_redact_queue_notices: :environment do
     Notice.where(title: 'Defamation Complaint to Google', review_required: true)
           .update_all(review_required: false)
+  end
+
+  # Prior to https://github.com/berkmancenter/lumendatabase/pull/470, we were
+  # running the rails cache clear command every 20 minutes in prod via cron.
+  # Cache clear is very aggressive; it does an rm -rf of the filesystem cache.
+  # This could cause errors wherein Rails ensured the existence of a directory
+  # in which to write a cached fragment - then we destroyed those directories
+  # via cache clear - and then Rails attempted and failed to write to the
+  # directory in https://github.com/rails/rails/blob/4-2-stable/activesupport/lib/active_support/core_ext/file/atomic.rb#L49 .
+  # (This is called via the cache write stack.)
+  # These errors showed up in our logs per
+  # https://cyber.harvard.edu/projectmanagement/issues/14130 .
+  # This command, instead of rm -rfing the entire cache directory, finds all
+  # files and directories last accessed more than 20 minutes ago and deletes
+  # them. This should preserve two things we actually want to preserve:
+  # 1) cached fragments in active use;
+  # 2) directories and files just created as part of the cache key check and
+  # atomic file write process linked above.
+  desc 'safer cache clear'
+  task safer_cache_clear: :environment do
+    system("cd #{__dir__}/../../tmp/cache && find . -amin +20 -delete")
   end
 end
