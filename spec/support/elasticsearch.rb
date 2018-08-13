@@ -20,9 +20,11 @@ RSpec.configure do |config|
   # This may throw a warning that the cluster is already running, but you can
   # ignore that.
   config.before :suite do
-    unless Elasticsearch::Extensions::Test::Cluster.running?(on: es_port)
-      Elasticsearch::Extensions::Test::Cluster.start(**es_options)
-    end
+    # Stopping the cluster will throw an exception if it isn't running, but
+    # this won't stop the operation of the test suite. If it *is* running, we
+    # definitely want to stop and restart it to avoid test contamination.
+    Elasticsearch::Extensions::Test::Cluster.stop(**es_options)
+    Elasticsearch::Extensions::Test::Cluster.start(**es_options)
   end
 
   # Reload connections periodically to avoid test failures due to exhausting
@@ -43,7 +45,7 @@ RSpec.configure do |config|
   # Deleting the index alone doesn't suffice; you'll be left with content from
   # prior tests, which will be reindexed when you refresh the index.
   # The rescue blocks suppress noisy but irrelevant error messages.
-  config.before :each, type: :feature do
+  config.before :each, type: %i[search feature] do
     searchable_models.each do |model|
       begin
         model.__elasticsearch__.client.delete_by_query(
@@ -60,8 +62,6 @@ RSpec.configure do |config|
 
   # Stop elasticsearch cluster after test run
   config.after :suite do
-    if Elasticsearch::Extensions::Test::Cluster.running?(on: es_port)
-      Elasticsearch::Extensions::Test::Cluster.stop(**es_options)
-    end
+    Elasticsearch::Extensions::Test::Cluster.stop(**es_options)
   end
 end

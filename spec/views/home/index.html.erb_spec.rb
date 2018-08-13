@@ -14,14 +14,16 @@ describe 'home/index.html.erb' do
 
   it 'shows metadata and a link to each of its notices' do
     notices.each do |notice|
-      expect( rendered ).to have_link( notice.title, href: notice_path(notice) )
-      expect( rendered ).to have_css( "#notice_#{notice.id} time", text: notice.date_received.to_s(:simple) )
+      expect(rendered).to have_link(notice.title, href: notice_path(notice))
+      expect(rendered).to have_css("#notice_#{notice.id} time",
+                                   text: notice.date_received.to_s(:simple))
     end
   end
 
   it 'shows recent blog entries' do
     blog_entries.each do |blog_entry|
-      expect( rendered ).to have_link( blog_entry.title, href: blog_entry_path(blog_entry) )
+      expect(rendered).to have_link(blog_entry.title,
+                                    href: blog_entry_path(blog_entry))
     end
   end
 end

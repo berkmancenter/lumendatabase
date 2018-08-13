@@ -1,10 +1,10 @@
 require 'rails_helper'
 require 'base64'
 
-feature "notice submission" do
+feature 'notice submission' do
   include CurbHelpers
 
-  scenario "submitting as an unauthenticated user", js: true do
+  scenario 'submitting as an unauthenticated user', js: true do
     parameters = request_hash(default_notice_hash)
     parameters.delete(:authentication_token)
 
@@ -13,7 +13,7 @@ feature "notice submission" do
     expect(curb.response_code).to eq 401
   end
 
-  scenario "submitting as a normal user", js: true do
+  scenario 'submitting as a normal user', js: true do
     user = create(:user)
     parameters = request_hash(default_notice_hash, user)
 
@@ -22,7 +22,7 @@ feature "notice submission" do
     expect(curb.response_code).to eq 401
   end
 
-  scenario "submitting an incomplete notice", js: true do
+  scenario 'submitting an incomplete notice', js: true do
     curb = post_api('/notices', request_hash(title: 'foo'))
 
     expect(curb.response_code).to eq 422
@@ -39,7 +39,7 @@ feature "notice submission" do
     expect(Notice.last.title).to eq 'A superduper title'
   end
 
-  scenario "submitting a notice with token in header", js: true do
+  scenario 'submitting a notice with token in header', js: true do
     parameters = request_hash(default_notice_hash)
     token = parameters.delete(:x_authentication_token)
 
@@ -50,16 +50,18 @@ feature "notice submission" do
     expect(curb.response_code).to eq 201
   end
 
-  scenario "submitting a notice with an existing Entity", js: true do
+  scenario 'submitting a notice with an existing Entity', js: true do
     entity = create(:entity)
 
-    parameters = request_hash(default_notice_hash(
-      title: 'A notice with an entity created by id',
-      entity_notice_roles_attributes: [{
-        name: 'recipient',
-        entity_id: entity.id
-      }]
-    ))
+    parameters = request_hash(
+      default_notice_hash(
+        title: 'A notice with an entity created by id',
+        entity_notice_roles_attributes: [{
+          name: 'recipient',
+          entity_id: entity.id
+        }]
+      )
+    )
 
     curb = post_api('/notices', parameters)
 
@@ -68,9 +70,9 @@ feature "notice submission" do
     expect(Notice.last.title).to eq 'A notice with an entity created by id'
   end
 
-  scenario "submitting as a user with a linked entity", js: true do
+  scenario 'submitting as a user with a linked entity', js: true do
     user = create(:user, :submitter)
-    entity = create(:entity, user: user, name: "Twitter")
+    entity = create(:entity, user: user, name: 'Twitter')
     notice_parameters = default_notice_hash(title: 'A superduper title')
     notice_parameters.delete(:entity_notice_roles_attributes)
     parameters = request_hash(notice_parameters, user)
@@ -83,7 +85,7 @@ feature "notice submission" do
     expect(notice.recipient).to eq entity
   end
 
-  scenario "submitting a notice with text file attachments", js: true do
+  scenario 'submitting a notice with text file attachments', js: true do
     parameters = request_hash(notice_hash_with_text_files)
 
     post_api('/notices', parameters)
@@ -93,13 +95,15 @@ feature "notice submission" do
     supporting_document = supporting_document_file(notice)
 
     expect(file_contents_for(original_document.path)).to eq 'Original Document'
-    expect(file_contents_for(supporting_document.path)).to eq 'Supporting Document'
+    expect(file_contents_for(supporting_document.path))
+      .to eq 'Supporting Document'
 
     expect(original_document.original_filename).to eq 'original_document.txt'
-    expect(supporting_document.original_filename).to eq 'supporting_document.txt'
+    expect(supporting_document.original_filename)
+      .to eq 'supporting_document.txt'
   end
 
-  scenario "submitting a notice with binary file attachments", js: true do
+  scenario 'submitting a notice with binary file attachments', js: true do
     parameters = request_hash(notice_hash_with_binary_files)
 
     post_api('/notices', parameters)
@@ -141,12 +145,12 @@ feature "notice submission" do
     default_notice_hash(
       file_uploads_attributes: [{
         kind: 'original',
-        file: data_uri_for('text/plain','Original Document'),
-        file_name: 'original_document.txt',
+        file: data_uri_for('text/plain', 'Original Document'),
+        file_name: 'original_document.txt'
       }, {
         kind: 'supporting',
-        file: data_uri_for('text/plain','Supporting Document'),
-        file_name: 'supporting_document.txt',
+        file: data_uri_for('text/plain', 'Supporting Document'),
+        file_name: 'supporting_document.txt'
       }]
     )
   end
@@ -155,12 +159,18 @@ feature "notice submission" do
     default_notice_hash(
       file_uploads_attributes: [{
         kind: 'original',
-        file: data_uri_for('image/jpg',file_contents_for('spec/support/example_files/original.jpg')),
-        file_name: 'original.jpg',
+        file: data_uri_for('image/jpg',
+                           file_contents_for(
+                             'spec/support/example_files/original.jpg'
+                           )),
+        file_name: 'original.jpg'
       }, {
         kind: 'supporting',
-        file: data_uri_for('image/jpg',file_contents_for('spec/support/example_files/supporting.jpg')),
-        file_name: 'supporting.jpg',
+        file: data_uri_for('image/jpg',
+                           file_contents_for(
+                             'spec/support/example_files/supporting.jpg'
+                           )),
+        file_name: 'supporting.jpg'
       }]
     )
   end
