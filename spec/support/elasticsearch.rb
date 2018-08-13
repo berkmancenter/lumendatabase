@@ -20,9 +20,10 @@ RSpec.configure do |config|
   # This may throw a warning that the cluster is already running, but you can
   # ignore that.
   config.before :suite do
-    unless Elasticsearch::Extensions::Test::Cluster.running?(on: es_port)
-      Elasticsearch::Extensions::Test::Cluster.start(**es_options)
+    if Elasticsearch::Extensions::Test::Cluster.running?(on: es_port)
+      Elasticsearch::Extensions::Test::Cluster.stop(**es_options)
     end
+    Elasticsearch::Extensions::Test::Cluster.start(**es_options)
   end
 
   # Reload connections periodically to avoid test failures due to exhausting
