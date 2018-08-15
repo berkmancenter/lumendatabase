@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170908160728) do
+ActiveRecord::Schema.define(version: 20180815162606) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -169,6 +169,7 @@ ActiveRecord::Schema.define(version: 20170908160728) do
     t.integer  "counternotice_for_sid"
   end
 
+  add_index "notices", ["created_at"], name: "index_notices_on_created_at", using: :btree
   add_index "notices", ["original_notice_id"], name: "index_notices_on_original_notice_id", using: :btree
   add_index "notices", ["reviewer_id"], name: "index_notices_on_reviewer_id", using: :btree
   add_index "notices", ["submission_id"], name: "index_notices_on_submission_id", using: :btree
