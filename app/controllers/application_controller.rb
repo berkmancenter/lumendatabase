@@ -52,6 +52,7 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_user_from_token!
+    Rails.logger.info "Attempted login from token #{authentication_token.to_s}"
     user = authentication_token &&
            User.find_by_authentication_token(authentication_token.to_s)
 
