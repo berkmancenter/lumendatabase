@@ -54,7 +54,16 @@ Running Tests:
 
     $ bundle exec rspec spec/
 
+The integration tests are quite slow; for some development purposes you may
+find it more convenient to `bundle exec rspec spec/ --exclude-pattern="spec/integration/*"`.
+
 If `elasticsearch` isn't on your $PATH, set `ENV['TEST_CLUSTER_COMMAND']=/path/to/elasticsearch`, and make sure permissions are set correctly for your test suite to run it.
+
+Linting:
+
+Use rubocop and leave the code at least as clean as you found it. If you make
+linting-only changes, it's considerate to your code reviewer to keep them in
+their own commit.
 
 Ephemera
 ========
