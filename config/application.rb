@@ -80,5 +80,11 @@ module Chill
     config.middleware.insert_before ActionDispatch::ParamsParser, "CatchJsonParsingErrors"
     config.middleware.use Rack::Attack
     config.middleware.use StackProf::Middleware, enabled: false, mode: :cpu, interval: 1000, save_every: 5, path: 'prof'
+
+    # Active Record suppresses errors raised within
+    # `after_rollback`/`after_commit` callbacks, but these errors will
+    # propagate in later versions of AR. Setting this to true allows the error
+    # to propagate, so that we can find it.
+    config.active_record.raise_in_transactional_callbacks = true
   end
 end
