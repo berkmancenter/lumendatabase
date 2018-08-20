@@ -1,5 +1,4 @@
 class SubmitNotice
-
   delegate :errors, to: :notice
 
   def initialize(model_class, parameters)
@@ -8,22 +7,15 @@ class SubmitNotice
   end
 
   def submit(user = nil)
-    if user && (entity = user.entity)
-      entity_present?('submitter') or set_entity('submitter', entity)
-      entity_present?('recipient') or set_entity('recipient', entity)
-    end
-
-    unless notice.title.present?
-      notice.title = generic_title
-    end
-
+    set_all_entities(user)
+    notice.title = generic_title unless notice.title.present?
     notice.auto_redact
 
-    if notice.save
-      notice.mark_for_review
-      notice.copy_id_to_submission_id
-      true
-    end
+    return unless notice.save
+
+    notice.mark_for_review
+    notice.copy_id_to_submission_id
+    true
   end
 
   def notice
@@ -48,6 +40,12 @@ class SubmitNotice
     }
   end
 
+  def set_all_entities(user)
+    return unless user && (entity = user.entity)
+    set_entity('submitter', entity) unless entity_present?('submitter')
+    set_entity('recipient', entity) unless entity_present?('recipient')
+  end
+
   def recipient_name
     entity_name('recipient')
   end
@@ -63,12 +61,11 @@ class SubmitNotice
   def entity_name(role_name)
     role = entity_notice_role(role_name)
 
-    if role.present?
-      if role.has_key?(:entity_attributes)
-        role[:entity_attributes][:name]
-      elsif role.has_key?(:entity_id)
-        Entity.find(role[:entity_id]).name
-      end
+    return unless role.present?
+    if role.key?(:entity_attributes)
+      role[:entity_attributes][:name]
+    elsif role.key?(:entity_id)
+      Entity.find(role[:entity_id]).name
     end
   end
 
@@ -98,5 +95,4 @@ class SubmitNotice
     else []
     end
   end
-
 end
