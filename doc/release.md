@@ -17,8 +17,9 @@ If any deploys have special instructions, write them here, with a date and PR nu
   * Run tests
   * Merge hotfix branch back into `master`, `dev`, `dev-legacy`, `master-legacy`
 * Make a tagged release on the relevant commit
-* Deploy `master-legacy` to the dev server (flutie)
+* Deploy `master-legacy` to the dev server (flutie) and api-beta server (percy)
   * If anything fails at this stage, fix it before moving on! And ensure that fixes end up in `dev`, `dev-legacy`, `master`, and `master-legacy`, with tests passing.
+  * http://flutie.law.harvard.edu:8000/, ask Adam for credentials
 * Deploy `master-legacy` to the prod server (enyos)
 * Make sure you can load lumendatabase.org and skylight hasn't blown up
 
@@ -45,6 +46,8 @@ If any deploys have special instructions, write them here, with a date and PR nu
 * `git pull origin <branch>`
   * Servers have correct default branches set so this is just `git pull` unless you need a different branch
 * `bundle install`
+* `source bin/init-env.sh`
 * `rake db:migrate`
+  - The order of source and db:migrate is important!
 * `touch tmp/restart.txt`
   * This tells Passenger to restart its listener
