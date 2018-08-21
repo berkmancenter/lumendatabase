@@ -1,5 +1,6 @@
 config = {
-  host: "http://localhost:9200"
+  host: "http://localhost:9200",
+  request_timeout: 20
 }
 
 if File.exists?("config/elasticsearch.yml")
