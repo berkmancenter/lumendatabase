@@ -14,7 +14,7 @@
     </ol>
     <a href="notices_feed?format=rss"><%= image_tag("feed_icon.png", :size => "14x14") %></a>
   </section>
-  <% cache( 'chillingeffects-tweets', expires_in: 5.minutes ) { %>
+  <% cache( 'lumendatabase-tweets', expires_in: 5.minutes ) { %>
     <section class="tweets">
       <h2>@lumendatabase on twitter</h2>
       <% @tweet_news.each do |tweet| %>

@@ -4,7 +4,7 @@ require 'question_importer'
 require 'collapses_topics'
 require 'csv'
 
-namespace :chillingeffects do
+namespace :lumen do
   desc 'Delete elasticsearch index'
   task delete_search_index: :environment do
     Notice.__elasticsearch__.delete_index!

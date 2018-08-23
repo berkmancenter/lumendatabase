@@ -47,8 +47,10 @@ You can customize behavior during seeding (db:setup) with a couple environment v
 
 Admin login:
 
-    Username: admin@chillingeffects.org
+    Username: admin@lumendatabase.org
     Password: password
+
+If you seeded your database with an older version of `seeds.rb`, your username may be admin@chillingeffects.org.
 
 Running Tests:
 

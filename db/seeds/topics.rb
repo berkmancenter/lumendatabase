@@ -27,9 +27,9 @@ Getting Started:
 
 \r\n\r\n[\">Sample Cease and Desist Letter with Analysis](\"<!--GET)\r\nConceived and developed at the [Berkman Center for Internet & Society, Chilling Effects is a [joint project](\"org.cgi\") of the [Electronic Frontier Foundation (EFF) and clinics at Harvard Law School\'s [Berkman Center, [Stanford Law School\'s Center for Internet & Society, Boalt Hall\'s [Samuelson Law, Technology and Public Policy Clinic, and other law schools across the country.
 
-\r\n Syndicate our newest linked C&D notices: [RSS feed](\"//www.chillingeffects.org/index.xml\")
-   
-\r\nNew:  Syndicate our weather reports (news updates): [Weather RSS feed](\"//www.chillingeffects.org/weather.xml\")
+\r\n Syndicate our newest linked C&D notices: [RSS feed](\"//www.lumendatabase.org/notices_feed?format=rss\")
+
+\r\nNew:  Syndicate our blog updates: [Blog RSS feed](\"//www.lumendatabase.org/blog_feed?format=rss\")
 
 \r\n\r\n",
     original_category_id: 1
@@ -46,13 +46,13 @@ Does this sound familiar?\r\n
 \r\nFollow these links and then add your letter to our database.
 
 \r\n \r\n[\">What to Expect When You\'re Expecting To Be Sued for Trademark Infringement](\"<!--GET)
-   
+
 \r\n[\">Trademark and Domain Name FAQ](\"<!--GET)
-   
+
 \r\n[What Else Should I Worry About? (links to modules on copyright, defamation, etc.)](\"/topics.cgi\")
-   
+
 \r\n[\">What Information Should I Collect for My Defense?](\"<!--GET)
-   
+
 \r\n[ Submit Your Letter Here](\"/input.cgi\")
 
 \r\n\r\n\r\n",
@@ -122,11 +122,11 @@ TRADEMARK
 \r\n  3. And some individuals have copied trademarked logos and used them on their own websites to imply some authorized connection to the well-known product.
 
  Sometimes these acts are clear \"infringements\" of the mark owner\'s rights; sometimes they are non-infringing \"fair uses.\" Rights may be different from one nation to the next and yet a mark owner in one nation may pursue a claim against a domain holder from another since the site is visible in both. It is hoped that this site will help the public understand US trademark law and the terms that typically appear in a complaint about trademark infringement. \r\n\r\nIn any event, you\'re probably here because you have received a cease and desist letter accusing you of trademark infringement. \r\n\r\nStart with: [\">What to Expect When You\'re Expecting (to be sued for trademark infringement)](\"<!--GET)Frequently Asked Questions (and Answers) by Maya Alexandri
-   
+
 \r\nIf the c & d mentions the ACPA (Anticybersquatting Consumer Protection Act), look at:[\">ACPA FAQ](\"<!--GET) by Jared Kramer
-   
+
 \r\nIf it refers to the UDRP (Uniform Domain Name Dispute Resolution Policy), read: [\">UDRP FAQ](\"<!--GET) by Amy Bender
-   
+
 \r\n\r\nTrademark logos may also be protected by copyright which covers artistic works. Check out the [topics](\"/topics.cgi\") on Copyright and on Protest, Parody and Criticism.\r\n\r\n\r\n\r\n\r\n",
     original_category_id: 6
   )
@@ -310,104 +310,104 @@ Re: Infringement of XXX, Inc.\'s Intellectual Property Rights\r\n This firm repr
  Amazon.com sued its primary competitor, Barnesandnoble.com, for patent infringement. Although Amazon.com obtained a preliminary injunction from a federal district court, [an appellate court reversed, and the parties settled before trial.\r\n\r\nAnother often-cited example of a broad e-commerce patent is U.S. patent number 5,715,314 (entitled \"Network Sales System\") issued to Open Market, Inc for a technique for using an electronic shopping cart to purchase goods on the Internet. Read more: [http://news.com.com/2100-1017-221259.html?tag=rn
 
  Read on for some specifics on broadly asserted e-commerce patents: \r\n\r\n[PanIP](\"#PanIP\") | [Divine](\"#Divine\") | [SBC](\"#SBC\") | [Acacia](\"#Acacia\") | [References](\"#Sources\")
-   
-   
+
+
 Pangea Intellectual Properties (PanIP)
 --------------------------------------
 
 U.S. Patent numbers [5,576,951&[6,289,319
-   
-   
+
+
  Pangea Intellectual Properties, based in San Diego, California, owns patents that claim key aspects of electronic commerce. PanIP asserts that its \'951 patent covers the use of graphical and textual information on a video screen to sell products, and that its \'319 patent is infringed by websites that process financial information customers enter online.
-   
-   
+
+
  PanIP has sued small to medium sized businesses around the U.S. in several groups of ten. To date, PanIP has filed fifty claims in the Southern District of California, although it has yet to name a California-based business in its lawsuits. Among the businesses defending PanIP\'s patent infringement claims are small retailers with website offering music supplies, baked goods, coffee, and sewing materials. PanIP first offered to sell a lifetime license for $30,000; reports indicate the company has accepted licenses fees for $5000 - $10,000 as well.
-   
-   
+
+
  As of February 1, 2003, fifteen defendants had banned together to fight the lawsuit, defended by San Diego lawyer Jonathan Hangartner of Sheppard Mullin Richter & Hampton LLP. For more information about the PanIP defendants, visit [http://www.youmaybenext.com.
-   
-   
+
+
 Divine, Inc.
 -------------
 
 U.S. Patent numbers [5,715,314&[5,909,492&[5,724,424](\"5,724,424\")&[5,708,780
-   
-   
- Chicago-based divine, inc. (\"Divine\") owns patents claiming invention of basic online shopping cart systems. The \'314 patent and its continuation, the \'492 patent, both cover network-based sales systems that allow a company to conduct business through the Internet. Both have broad claims relating to the process of a buyer purchasing products from an online merchant with access to a payment system, as well as through use of a virtual shopping cart. The \'314 patent was filed in October 1994 and did not issue until 1998.
-   
-   
- Divine has been mailing between forty and fifty cease and desist letters per week, according to one source, and filing lawsuits against online merchants who refused to settle immediately. According another source, over 150 companies have paid Divine\'s licensing fee rather than fight the suit.
-   
-   
- Like PanIP, Divine appears to be targeting small retail businesses, even though major online retailers also use shopping carts. Indeed, it is curious to note that even the U.S. Patent Office website has a \"shopping cart\" feature.
-   
-   
-Chilling Effects Notices:
-   
-   
-   
 
-   
+
+ Chicago-based divine, inc. (\"Divine\") owns patents claiming invention of basic online shopping cart systems. The \'314 patent and its continuation, the \'492 patent, both cover network-based sales systems that allow a company to conduct business through the Internet. Both have broad claims relating to the process of a buyer purchasing products from an online merchant with access to a payment system, as well as through use of a virtual shopping cart. The \'314 patent was filed in October 1994 and did not issue until 1998.
+
+
+ Divine has been mailing between forty and fifty cease and desist letters per week, according to one source, and filing lawsuits against online merchants who refused to settle immediately. According another source, over 150 companies have paid Divine\'s licensing fee rather than fight the suit.
+
+
+ Like PanIP, Divine appears to be targeting small retail businesses, even though major online retailers also use shopping carts. Indeed, it is curious to note that even the U.S. Patent Office website has a \"shopping cart\" feature.
+
+
+Chilling Effects Notices:
+
+
+
+
+
  For more information about the Divine Inc. defendants, visit [http://divineintervention.biz/index.html
-   
-   
-   
+
+
+
 SBC Intellectual Property
 -------------------------
 
 U.S. Patent numbers [5,933,841&[6,442,574
-   
-   
+
+
  SBC Communications, based in San Antonio, Texas, established the SBC Intellectual Property division last year to enforce its patents. SBC\'s \'841 and \'574 patents cover the use of a \"structured documents browser\" which basically is the use of website frames technology. Frames allow a user to select from menu choices in the stationary frame while viewing the destinations triggered by that selection in another window frame on the screen. Nearly all websites with a menu or navigation tool appear to have the claimed features, if one follows SBC\'s broad interpretation of its patents.
-   
-   
+
+
  As of the end of January 2003, SBC had mailed at least thirty patent infringement notices to website owners and requiring the companies to establish licensing fees payments. A spokesman for SBC stated that the company\'s policy was to base licensing fees on annual revenues. According to one recipient of a patent infringement notice, the pay scales range from between $527 per year for companies with sales under $100,000 and $16.6 million per year for companies with over $10 billion in sales.
-   
-   
+
+
 Chilling Effects Notice:
-   
+
  To view a copy of SBC\'s patent infringement notice letter, visit
-   
+
 [http://www2.museumtour.com/sbc.html
-   
-   
+
+
 Acacia Media Technologies
 -------------------------
 
 U.S. Patent numbers [5,132,992; [5,253,275; [5,550,863; [6,002,720; [6,144,702
-   
-   
+
+
  Acacia Media Technologies has amassed an intellectual property portfolio covering several technologies, including patents that claim, among other things, the transmission of compressed video and music content via the Internet.
-   
-   
+
+
  In a systematic way, Acacia began offering licenses late last year to several Web content providers, starting first with adult websites. Many of those sites banned together to try to fight Acacia\'s patents. Others agreed to license the technology. Acacia has moved on to more mainstream content providers, securing a license from many including Radio Free Virgin. Citing that license as an example, Acacia is also informing other online content providers like RadioIO that its actions allegedly infringe Acacia\'s patents and seeking up to three-quarters of a percent of the company\'s revenue as a licensing fee.
-   
-   
+
+
 Chilling Effects Notice:
-   
+
  An example licensing proposal letter, license agreement and information about Acacia\'s patent portfolio can be found at: [http://www.radioio.com/acacia.pdf.
-   
-   
+
+
 Sources:
 --------
 
  1. Jon Van, Internet Brings to Light Gaps in U.S. Patent System, KNIGHT RIDDER TRIBUNE BUSINESS NEWS: CHICAGO TRIBUNE, January 12, 2003.
-   
+
  2. Patent Infringement, USA: Small Online Traders Get Sued for Being Small Online Traders, INTERNET MAGAZINE, February 1, 2003.
-   
+
  3. Mark Del Franco, Divine Intervention, CATALOG AGE, January 1, 2003.
-   
+
  4. [http://www.ecsforum.org/ecsforum.asp?page=divine#anchor6.
-   
+
  5. L.A. Lorek, SBC Seeks Royalties on Web Patent; Telecom Wants Companies to Pay to Use Menu Technology, SAN ANTONIO EXPRESS-NEWS, January 30, 2003.
-   
+
  6. Amy Harmon, Users Uneasy on SBC Claim to Patent on Web Tool, THE NEW YORK TIMES, January 28, 2003.
-   
+
  7. John Borland, Patent Scare Hits Streaming Industry, CNET News.com, February 6, 2003 ([http://news.com.com/2100-1023-983552.html?tag=fd\_ots).
-   
+
  8. [http://www.radioio.com/acacia.pdf.
-   
-   
+
+
 ",
     original_category_id: 24
   )

@@ -70,6 +70,6 @@ Chill::Application.configure do
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
 
   config.action_mailer.default_url_options = {
-    host: (ENV['EMAIL_DOMAIN'] || 'chillingeffects.org')
+    host: (ENV['EMAIL_DOMAIN'] || 'lumendatabase.org')
   }
 end
