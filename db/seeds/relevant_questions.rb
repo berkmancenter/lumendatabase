@@ -649,10 +649,10 @@ q = RelevantQuestion.create!(
 mapping[%{Chilling Effects}] << q.id
 
 q = RelevantQuestion.create!(
- question: %{What is the Chilling Effects clearinghouse? },
+ question: %{What is the Lumen Database clearinghouse? },
  answer:   %{The project invites recipients and senders of cease and desist notices to send them to a central point (here, at lumendatabase.org) for analysis, and to browse the website for background information and explanation of the laws they are charged with violating or enforcing.  Clinical law students will prepare issue-spotting analyses of the letters in the question-and-answer style of FAQs, which we will post alongside the letters in an online database.  The site aims to educate C&D recipients about their legal rights.  Site visitors may search the database by subject area or keyword.
 
-For more, see <a href="/about">about the Chilling Effects project</a>.}
+For more, see <a href="/about">about the Lumen project</a>.}
 )
 
 mapping[%{Chilling Effects}] << q.id
@@ -1659,8 +1659,8 @@ Most of the ACPA provisions are now found in the <a href="http://www.bitlaw.com/
 mapping[%{ACPA}] << q.id
 
 q = RelevantQuestion.create!(
- question: %{Who is behind the Chilling Effects project?},
- answer:   %{<p>The Chilling Effects Clearinghouse is a unique collaboration among law school clinics and the Electronic Frontier Foundation.  Conceived and developed at the <a href="http://cyber.law.harvard.edu/" target="new">Berkman Center for Internet & Society</a> by Berkman Fellow <a href="http://cyber.law.harvard.edu/seltzer.html" target="new">Wendy Seltzer</a>, the project is now supported by the following clinical programs:
+ question: %{Who is behind the Lumen Database project?},
+ answer:   %{<p>The Lumen Database is a unique collaboration among law school clinics and the Electronic Frontier Foundation.  Conceived and developed at the <a href="http://cyber.law.harvard.edu/" target="new">Berkman Center for Internet & Society</a> by Berkman Fellow <a href="http://cyber.law.harvard.edu/seltzer.html" target="new">Wendy Seltzer</a>, the project is now supported by the following clinical programs:
 <!--GET display_list Org 1-->
 
 The information and reports on the lumendatabase.org website are written by law students, under the supervision of the participating organizations.  Please see the <a href="about">About Us</a> page for more information and contacts.}
@@ -3678,7 +3678,7 @@ mapping[%{DMCA Safe Harbor}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Does this information apply in other countries too?},
- answer:   %{Chilling Effects is a United States organization and information on this website is based on U.S. law.  Other countries' laws differ, often significantly, so you should not assume that the analyses presented here apply outside the United States.    If you have further questions about non-U.S. law, we recommend contacting a lawyer in your jurisdiction.}
+ answer:   %{Lumen Database is a United States organization and information on this website is based on U.S. law.  Other countries' laws differ, often significantly, so you should not assume that the analyses presented here apply outside the United States.    If you have further questions about non-U.S. law, we recommend contacting a lawyer in your jurisdiction.}
 )
 
 mapping[%{Chilling Effects}] << q.id
@@ -4179,7 +4179,7 @@ q = RelevantQuestion.create!(
 },
  answer:   %{While it is difficult to predict what courts will do when faced with a fair use defense, the answer is probably no.  In 1997 the Sixth Circuit Court of Appeals held that it was not fair use for Michigan Document Services, a commercial copyshop, to copy works of scholarship and sell them to students without the permission of the copyright hodlers.
 
-The court ran through the four factor fair use analysis (see 17 USC Section 107: see Introduction to this Chilling Effects topic; see answer to FAQ: "what does the fair use defense protect?"), focusing on the effect that the copying would have on the potential market for the copyrighted works.  The court found that the copying would have a significant impact on the potential market for the works and consequently found that the copying was not protected by the fair use defense.  }
+The court ran through the four factor fair use analysis (see 17 USC Section 107: see Introduction to this Lumen topic; see answer to FAQ: "what does the fair use defense protect?"), focusing on the effect that the copying would have on the potential market for the copyrighted works.  The court found that the copying would have a significant impact on the potential market for the works and consequently found that the copying was not protected by the fair use defense.  }
 )
 
 mapping[%{Copyright and Fair Use}] << q.id
@@ -4193,7 +4193,7 @@ mapping[%{Copyright and Fair Use}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{If the owner of a copyrighted work that is displayed on a website uses technological measures to prevent me from copying the work onto my website, but my copying would be a fair use, can I use technological measures to circumvent the protection and make the copy anyway?},
- answer:   %{Yes.  Under the current copyright laws, it is lawful to circumvent technological copyright protection systems in order to make a copy.  Then, if the copyright holder sues you for making the copies, and your fair use defense is successful, you are in the clear.  But here's the catch:  It is UNLAWFUL for someone to traffic in technology that can be used to circumvent technological copyright protection systems.  Therefore, unless you can circumvent the copyright holder's protection yourself, it is unlikely that you will be able to find the technology you need elsewhere. Note that it is also UNLAWFUL for you to circumvent <b>access</b> control technologies.  See <a href="http://www.copyright.gov/title17/92chap12.html" target="new">Chapter 12 of the Copyright Act</a>, particularly <a href="http://static.chillingeffects.org/1201.html">section 1201</a>.  For more information on the anticircumvention provisions, see the Chilling Effects topic <!--GET CatLink 12-->.}
+ answer:   %{Yes.  Under the current copyright laws, it is lawful to circumvent technological copyright protection systems in order to make a copy.  Then, if the copyright holder sues you for making the copies, and your fair use defense is successful, you are in the clear.  But here's the catch:  It is UNLAWFUL for someone to traffic in technology that can be used to circumvent technological copyright protection systems.  Therefore, unless you can circumvent the copyright holder's protection yourself, it is unlikely that you will be able to find the technology you need elsewhere. Note that it is also UNLAWFUL for you to circumvent <b>access</b> control technologies.  See <a href="http://www.copyright.gov/title17/92chap12.html" target="new">Chapter 12 of the Copyright Act</a>, particularly <a href="http://static.chillingeffects.org/1201.html">section 1201</a>.  For more information on the anticircumvention provisions, see the Lumen topic <!--GET CatLink 12-->.}
 )
 
 mapping[%{Copyright and Fair Use}] << q.id
@@ -4449,7 +4449,7 @@ mapping[%{Copyright and Fair Use}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{How do I file a DMCA counter-notice?},
- answer:   %{If you believe your material was removed because of mistake or misidentification, you can file a "counter notification" asking the service provider to put it back up.  Chilling Effects offers a <a href="https://www.lumendatabase.org/counter_notices/new">form to build your own counter-notice</a>.}
+ answer:   %{If you believe your material was removed because of mistake or misidentification, you can file a "counter notification" asking the service provider to put it back up.  Lumen Database offers a <a href="https://www.lumendatabase.org/counter_notices/new">form to build your own counter-notice</a>.}
 )
 
 mapping[%{DMCA Safe Harbor}] << q.id
@@ -5596,7 +5596,7 @@ mapping[%{Domain Names and Trademarks}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What's this about "violent content"?},
- answer:   %{We're not sure either.  Chilling Effects knows of no law against depictions of violence toward imaginary creatures.}
+ answer:   %{We're not sure either.  Lumen Database knows of no law against depictions of violence toward imaginary creatures.}
 )
 
 mapping[%{Bookmarks}] << q.id
@@ -5795,7 +5795,7 @@ mapping[%{Copyright and Fair Use}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{If the owner of a copyrighted work that is displayed on a website uses technological measures to prevent me from copying the work onto my website, but my copying would be a fair use, can I use technological measures to circumvent the copy protection and make the copy anyway?},
- answer:   %{Yes. Under the current copyright laws, it is lawful to circumvent technological copyright protection systems in order to make a copy. Then, if the copyright holder sues you for making the copies, and your fair use defense is successful, you are in the clear. But here's the catch: It is UNLAWFUL for someone to TRAFFIC IN technology that can be used to circumvent technological copyright protection systems. Therefore, unless you can circumvent the copyright holder's protection yourself, it is unlikely that you will be able to find the technology you need elsewhere. Note that it is also UNLAWFUL for you to circumvent ACCESS control technologies. See Chapter 12 of the Copyright Act, particularly section 1201. For more information on the anticircumvention provisions, see the Chilling Effects topic Anticircumvention (DMCA). }
+ answer:   %{Yes. Under the current copyright laws, it is lawful to circumvent technological copyright protection systems in order to make a copy. Then, if the copyright holder sues you for making the copies, and your fair use defense is successful, you are in the clear. But here's the catch: It is UNLAWFUL for someone to TRAFFIC IN technology that can be used to circumvent technological copyright protection systems. Therefore, unless you can circumvent the copyright holder's protection yourself, it is unlikely that you will be able to find the technology you need elsewhere. Note that it is also UNLAWFUL for you to circumvent ACCESS control technologies. See Chapter 12 of the Copyright Act, particularly section 1201. For more information on the anticircumvention provisions, see the Lumen topic Anticircumvention (DMCA). }
 )
 
 mapping[%{Copyright and Fair Use}] << q.id
@@ -5813,7 +5813,7 @@ q = RelevantQuestion.create!(
  question: %{If I am engaged in research, educational, or academic pursuits, does the fair use doctrine permit me to copy articles from a journal or periodical?},
  answer:   %{As mentioned above, it is hard to predict what a court will do when presented with a fair use defense. However, in this case the answer depends in part on your purposes in copying. If you intend to archive the copies, the answer is probably no, while if you intend to use the copies in classroom instruction (without charging for the copies), the use may be fair.
 
-In 1994 the Second Circuit Court of Appeals held that it was not a fair use for research scientists at Texaco to photocopy articles from various scientific and technical journals. Texaco argued, on behalf of its scientists, that the use was for the purpose of research, and therefore was fair under Section 107. But the court was not convinced. In reaching its decision, the court in Texaco ran through the four factor fair use analysis (see generally, what types of uses does the fair use doctrine protect? and introduction to this Chilling Effects topic). The court found that three of the four factors weighed against Texaco, and focused much of its opinion on the fourth factor, deciding that Texaco's use would have a significant impact on the potential market for the journal articles. Thus, in order to make copies of the articles, the research scientists at Texaco had to either pay for them or get express permission from the publishers.  See American Geophysical Union v. Texaco Inc., 60 F.3d 913 (2d Cir. 1994).
+In 1994 the Second Circuit Court of Appeals held that it was not a fair use for research scientists at Texaco to photocopy articles from various scientific and technical journals. Texaco argued, on behalf of its scientists, that the use was for the purpose of research, and therefore was fair under Section 107. But the court was not convinced. In reaching its decision, the court in Texaco ran through the four factor fair use analysis (see generally, what types of uses does the fair use doctrine protect? and introduction to this Lumen topic). The court found that three of the four factors weighed against Texaco, and focused much of its opinion on the fourth factor, deciding that Texaco's use would have a significant impact on the potential market for the journal articles. Thus, in order to make copies of the articles, the research scientists at Texaco had to either pay for them or get express permission from the publishers.  See American Geophysical Union v. Texaco Inc., 60 F.3d 913 (2d Cir. 1994).
 
 Further, use of another's work for classroom instruction purposes may be protected under a separate provision of the Copyright Act. Section 110 of the Copyright Act contains exemptions that provide nonprofit educational institutions the limited right to use copyrighted materials in face-to-face classroom settings. This section provides: "Notwithstanding the provisions of section 106, the following are not infringements of copyright: (1) performance or display of a work by instructors or pupils in the course of face-to-face teaching activities of a nonprofit educational institution, in a classroom or similar place devoted to instruction . . . ."
 
@@ -6189,8 +6189,8 @@ q = RelevantQuestion.create!(
 mapping[%{Reverse Engineering}] << q.id
 
 q = RelevantQuestion.create!(
- question: %{Does a posting on Chilling Effects mean that a takedown was unlawful or wrong? },
- answer:   %{No. Chilling Effects serves as a clearinghouse for cease and desist letters. Our goal is to educate the public about the different kinds of cease and desist letters--both legitimate and questionable--that are being sent to Internet publishers. We annotate the letters to help the public understand their legal language, and collect as many letters as possible to help the public understand the types of letters that are being sent and what searches are affected by them. By posting cease and desist notices, we are not authenticating them or making any judgment on the validity of the claims they raise.}
+ question: %{Does a posting on Lumen Database mean that a takedown was unlawful or wrong? },
+ answer:   %{No. Lumen Database serves as a clearinghouse for cease and desist letters. Our goal is to educate the public about the different kinds of cease and desist letters--both legitimate and questionable--that are being sent to Internet publishers. We annotate the letters to help the public understand their legal language, and collect as many letters as possible to help the public understand the types of letters that are being sent and what searches are affected by them. By posting cease and desist notices, we are not authenticating them or making any judgment on the validity of the claims they raise.}
 )
 
 mapping[%{Chilling Effects}] << q.id
@@ -6386,10 +6386,10 @@ q = RelevantQuestion.create!(
 mapping[%{Copyright}] << q.id
 
 q = RelevantQuestion.create!(
- question: %{When shouldn't I contact Chilling Effects? },
- answer:   %{Chilling Effects is not and cannot be your lawyer.
+ question: %{When shouldn't I contact Lumen Database? },
+ answer:   %{Lumen Database is not and cannot be your lawyer.
 
-We cannot help you execute a request to remove online content.  Chilling Effects serves as a repository of requests made to others, along with analyses of the legal claims. We are not responsible for the removal of material. }
+We cannot help you execute a request to remove online content.  Lumen Database serves as a repository of requests made to others, along with analyses of the legal claims. We are not responsible for the removal of material. }
 )
 
 mapping[%{Chilling Effects}] << q.id

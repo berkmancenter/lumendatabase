@@ -2,14 +2,14 @@ Topic.transaction do
   Topic.create!(name: 'Uncategorized')
 
   Topic.create!(
-    name: "Chilling Effects",
+    name: "Lumen Database",
     description: ".\r\n
 
 A joint project of the Electronic Frontier Foundation and Harvard, Stanford, Berkeley, University of San Francisco, University of Maine, George Washington School of Law, and Santa Clara University School of Law clinics.
 
 \r\nDo you know your online rights? Have you received a letter asking you to remove information from a Web site or to stop engaging in an activity? Are you concerned about liability for information that someone else posted to your online forum? If so, this site is for you.\r\n
 
-\r\n Chilling Effects aims to help you understand the protections that the First Amendment and intellectual property laws give to your online activities. We are excited about the new opportunities the Internet offers individuals to express their views, parody politicians, celebrate their favorite movie stars, or criticize businesses. But we\'ve noticed that not everyone feels the same way. Anecdotal evidence suggests that some individuals and corporations are using intellectual property and other laws to silence other online users. Chilling Effects encourages respect for intellectual property law, while frowning on its misuse to \"chill\" legitimate activity. \r\n
+\r\n Lumen Database aims to help you understand the protections that the First Amendment and intellectual property laws give to your online activities. We are excited about the new opportunities the Internet offers individuals to express their views, parody politicians, celebrate their favorite movie stars, or criticize businesses. But we\'ve noticed that not everyone feels the same way. Anecdotal evidence suggests that some individuals and corporations are using intellectual property and other laws to silence other online users. Lumen Database encourages respect for intellectual property law, while frowning on its misuse to \"chill\" legitimate activity. \r\n
 
 \r\nThe website offers background material and explanations of the law for people whose websites deal with topics such as , , , \r\n[\">Anonymous Speech](\"<!--GET), and . \r\n
 
@@ -21,11 +21,11 @@ A joint project of the Electronic Frontier Foundation and Harvard, Stanford, Ber
 Getting Started:
 ----------------
 
- \r\nThe Chilling Effects Clearinghouse contains multiple topic areas. [Choose a topic area](\"topics.cgi\") to view its introduction, Frequently Asked Questions, and annotated Cease & Desist notices, along with reference material and recent news links.\r\n
+ \r\nThe Lumen Database contains multiple topic areas. [Choose a topic area](\"topics.cgi\") to view its introduction, Frequently Asked Questions, and annotated Cease & Desist notices, along with reference material and recent news links.\r\n
 
 \r\nIf you are visiting because you have received a Cease & Desist notice, we invite you to [input your notice in the database](\"input.cgi\"). Questions on the submission form will help to categorize your letter, and then guide you toward topic areas for further information. Once the notice is in our database, clinical law students will be able to annotate it with questions and answers.
 
-\r\n\r\n[\">Sample Cease and Desist Letter with Analysis](\"<!--GET)\r\nConceived and developed at the [Berkman Center for Internet & Society, Chilling Effects is a [joint project](\"org.cgi\") of the [Electronic Frontier Foundation (EFF) and clinics at Harvard Law School\'s [Berkman Center, [Stanford Law School\'s Center for Internet & Society, Boalt Hall\'s [Samuelson Law, Technology and Public Policy Clinic, and other law schools across the country.
+\r\n\r\n[\">Sample Cease and Desist Letter with Analysis](\"<!--GET)\r\nConceived and developed at the [Berkman Center for Internet & Society, Lumen Database is a [joint project](\"org.cgi\") of the [Electronic Frontier Foundation (EFF) and clinics at Harvard Law School\'s [Berkman Center, [Stanford Law School\'s Center for Internet & Society, Boalt Hall\'s [Samuelson Law, Technology and Public Policy Clinic, and other law schools across the country.
 
 \r\n Syndicate our newest linked C&D notices: [RSS feed](\"//www.lumendatabase.org/notices_feed?format=rss\")
 
@@ -342,7 +342,7 @@ U.S. Patent numbers [5,715,314&[5,909,492&[5,724,424](\"5,724,424\")&[5,708,780
  Like PanIP, Divine appears to be targeting small retail businesses, even though major online retailers also use shopping carts. Indeed, it is curious to note that even the U.S. Patent Office website has a \"shopping cart\" feature.
 
 
-Chilling Effects Notices:
+Lumen Notices:
 
 
 
@@ -364,7 +364,7 @@ U.S. Patent numbers [5,933,841&[6,442,574
  As of the end of January 2003, SBC had mailed at least thirty patent infringement notices to website owners and requiring the companies to establish licensing fees payments. A spokesman for SBC stated that the company\'s policy was to base licensing fees on annual revenues. According to one recipient of a patent infringement notice, the pay scales range from between $527 per year for companies with sales under $100,000 and $16.6 million per year for companies with over $10 billion in sales.
 
 
-Chilling Effects Notice:
+Lumen Notice:
 
  To view a copy of SBC\'s patent infringement notice letter, visit
 
@@ -383,7 +383,7 @@ U.S. Patent numbers [5,132,992; [5,253,275; [5,550,863; [6,002,720; [6,144,702
  In a systematic way, Acacia began offering licenses late last year to several Web content providers, starting first with adult websites. Many of those sites banned together to try to fight Acacia\'s patents. Others agreed to license the technology. Acacia has moved on to more mainstream content providers, securing a license from many including Radio Free Virgin. Citing that license as an example, Acacia is also informing other online content providers like RadioIO that its actions allegedly infringe Acacia\'s patents and seeking up to three-quarters of a percent of the company\'s revenue as a licensing fee.
 
 
-Chilling Effects Notice:
+Lumen Notice:
 
  An example licensing proposal letter, license agreement and information about Acacia\'s patent portfolio can be found at: [http://www.radioio.com/acacia.pdf.
 
@@ -414,7 +414,7 @@ Sources:
 
   Topic.create!(
     name: "DMCA Subpoenas",
-    description: "Report uses and abuses of DMCA section 512(h) subpoenas: [Follow this link to report](\"/subpoena.cgi\").\r\n\r\nIf someone is seeking your name without a reasonable claim of copyright infringement, that\'s an abuse: For example, if someone is using the subpoena to harass or defraud; if they\'ve matched filenames, but not their content; if you weren\'t using the IP address listed (because of a typo or other error, such as because someone else was using a wireless network). Even if you did have copyrighted material on your computer, you might have a lawful right of fair use.\r\n\r\nChilling Effects is collecting these materials to help gather a record of how the DMCA is being used. Since [512(h) subpoenas are issued without prior judicial review (the subject may bring it before a judge with a motion to quash only after the subpoena has issued), we are concerned that subpoenas may be used to obtain identity information in cases where there is no copyright infringement. Chilling Effects seeks to document those cases. \r\n\r\nSee [Subpoena Defense for more information.
+    description: "Report uses and abuses of DMCA section 512(h) subpoenas: [Follow this link to report](\"/subpoena.cgi\").\r\n\r\nIf someone is seeking your name without a reasonable claim of copyright infringement, that\'s an abuse: For example, if someone is using the subpoena to harass or defraud; if they\'ve matched filenames, but not their content; if you weren\'t using the IP address listed (because of a typo or other error, such as because someone else was using a wireless network). Even if you did have copyrighted material on your computer, you might have a lawful right of fair use.\r\n\r\nLumen Database is collecting these materials to help gather a record of how the DMCA is being used. Since [512(h) subpoenas are issued without prior judicial review (the subject may bring it before a judge with a motion to quash only after the subpoena has issued), we are concerned that subpoenas may be used to obtain identity information in cases where there is no copyright infringement. Lumen Database seeks to document those cases. \r\n\r\nSee [Subpoena Defense for more information.
 
 ",
     original_category_id: 25
@@ -422,7 +422,7 @@ Sources:
 
   Topic.create!(
     name: "International",
-    description: "The \"International\" category contains notices demanding takedowns from sites outside of the United States, invoking non-US law. We post them to give transparency to the \"notice and takedown\" process. Chilling Effects does not currently have the resources to annotate these notices with respect to the varying laws that may apply, but posts data for informational purposes.\r\n\r\nA few general notes: As with the U.S. C&Ds, Chilling Effects posting does not imply a judgment about the notice\'s legal validity, applicability, or indicate whether the notice was acted upon.\r\n\r\nThe varying substantive law of different countries means postings legal in one country might be unlawful in another. For example, French law outlaws public exhibition of Nazi symbols; U.S. law would protect that speech under the First Amendment. Jurisdiction, where and under what laws a person can be sued, matters too. Just because a website is accessible anywhere doesn\'t mean its proprietor can be sued anywhere. A U.S. company with no assets or business contacts abroad doesn\'t generally need to worry about non-U.S. law. Jurisdiction questions get murkier when a company has contacts or assets abroad -- Yahoo! sued a French group who had won an order from a French prohibiting Yahoo! from allowing French citizens access to Nazi memorabilia, ([Yahoo v. LICRA). The 9th Circuit dismissed Yahoo\'s challenge on mootness and procedural grounds.\r\n\r\nIf you too want to contribute to the transparency of notice-and-takedown procedures around the world, please submit your C&Ds to Chilling Effects. If you are a lawyer or legal academic ouside the U.S. who would like to participate in the Clearinghouse project, please [let us know.
+    description: "The \"International\" category contains notices demanding takedowns from sites outside of the United States, invoking non-US law. We post them to give transparency to the \"notice and takedown\" process. Lumen Database does not currently have the resources to annotate these notices with respect to the varying laws that may apply, but posts data for informational purposes.\r\n\r\nA few general notes: As with the U.S. C&Ds, Lumen Database posting does not imply a judgment about the notice\'s legal validity, applicability, or indicate whether the notice was acted upon.\r\n\r\nThe varying substantive law of different countries means postings legal in one country might be unlawful in another. For example, French law outlaws public exhibition of Nazi symbols; U.S. law would protect that speech under the First Amendment. Jurisdiction, where and under what laws a person can be sued, matters too. Just because a website is accessible anywhere doesn\'t mean its proprietor can be sued anywhere. A U.S. company with no assets or business contacts abroad doesn\'t generally need to worry about non-U.S. law. Jurisdiction questions get murkier when a company has contacts or assets abroad -- Yahoo! sued a French group who had won an order from a French prohibiting Yahoo! from allowing French citizens access to Nazi memorabilia, ([Yahoo v. LICRA). The 9th Circuit dismissed Yahoo\'s challenge on mootness and procedural grounds.\r\n\r\nIf you too want to contribute to the transparency of notice-and-takedown procedures around the world, please submit your C&Ds to Lumen Database. If you are a lawyer or legal academic ouside the U.S. who would like to participate in the Clearinghouse project, please [let us know.
 
 ",
     original_category_id: 28
@@ -430,7 +430,7 @@ Sources:
 
   Topic.create!(
     name: "Uncategorized",
-    description: "Notices here don\'t fit into any of Chilling Effects\' existing categories.
+    description: "Notices here don\'t fit into any of Lumen Database\'s existing categories.
 
 ",
     original_category_id: 29
