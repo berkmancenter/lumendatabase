@@ -1,5 +1,9 @@
 source 'https://rubygems.org'
 
+# This is not alphabetized. Is that sad? Yes. However, alphabetizing it causes
+# the test suite to fail, and tracking down where the dependency is would be
+# a pain.
+
 gem 'stackprof'
 gem 'skylight'
 gem 'bourbon'
@@ -44,6 +48,7 @@ gem 'spork-rails', git: 'https://github.com/sporkrb/spork-rails'
 gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
 gem 'coveralls', require: false
+gem 'lograge'
 
 group :assets do
   gem 'coffee-rails'

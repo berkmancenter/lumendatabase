@@ -9,7 +9,7 @@ Chill::Application.routes.draw do
     resources :search, only: [:index]
   end
 
-  resources :notices, only: [:show, :new, :create] do
+  resources :notices, only: %i[show new create] do
     collection do
       get :url_input
     end
@@ -18,7 +18,7 @@ Chill::Application.routes.draw do
     end
   end
 
-  resources :counter_notices, only: [:new, :create]
+  resources :counter_notices, only: %i[new create]
 
   namespace :entities do
     resources :search, only: [:index]
@@ -38,18 +38,24 @@ Chill::Application.routes.draw do
     resources :topics, only: [:index]
   end
 
-  resources :blog_entries, only: [:index, :show, :archive]
+  resources :blog_entries, only: %i[index show archive]
   get 'blog_feed', to: 'blog_entries#feed'
   get 'notices_feed', to: 'notices#feed'
   get 'blog_archive', to: 'blog_entries#archive'
 
-  match :faceted_search, controller: 'notices/search', action: 'index', via: [:get, :post]
+  match :faceted_search,
+        controller: 'notices/search',
+        action: 'index', via: %i[get post]
 
-  get "/twitter/international", to: "notices/search#index", defaults: {topics: "international, court orders, law enforcement requests, government requests", recipient_name: "twitter"}
+  get '/twitter/international',
+      to: 'notices/search#index',
+      defaults: { topics: 'international, court orders, law enforcement requests, government requests',
+                  recipient_name: 'twitter' }
 
   # N.B. no constraints on topics, that would require a db call
   match '/:recipient_name(/:topics)' => 'notices/search#index',
-    constraints: { recipient_name: /Twitter|Google/i }, via: [:get, :post]
+        constraints: { recipient_name: /Twitter|Google/i },
+        via: %i[get post]
 
   root to: 'home#index'
 end

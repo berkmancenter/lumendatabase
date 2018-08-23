@@ -90,7 +90,9 @@ module Chill
                                                  save_every: 5,
                                                  path: 'prof'
 
-    config.log_formatter = ::Logger::Formatter.new
-    config.log_formatter.datetime_format = '%Y-%m-%d %H:%M:%S (%Z) '
+    config.log_formatter = proc do |severity, datetime, progname, msg|
+      timestamp = datetime.strftime '%Y-%m-%d %H:%M:%S (%Z)'
+      "#{timestamp} #{severity}: #{progname} #{msg}\n"
+    end
   end
 end
