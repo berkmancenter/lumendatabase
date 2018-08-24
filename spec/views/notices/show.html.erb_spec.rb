@@ -120,22 +120,6 @@ describe 'notices/show.html.erb' do
     end
   end
 
-  it "displays a notice with all relevant questions" do
-    topic_question = create(:relevant_question, question: "Q 1", answer: "A 1")
-    notice_question = create(:relevant_question, question: "Q 2", answer: "A 2")
-    assign(:notice, create(:dmca,
-      topics: [create(:topic, relevant_questions: [topic_question])],
-      relevant_questions: [notice_question]
-    ))
-
-    render
-
-    [topic_question, notice_question].each do |question|
-      expect(rendered).to have_css("#relevant_question_#{question.id} .question", text: question.question)
-      expect(rendered).to have_css("#relevant_question_#{question.id} .answer", text: question.answer)
-    end
-  end
-
   it "displays a notice's works and infringing urls" do
     params = {
       notice: {
@@ -167,7 +151,7 @@ describe 'notices/show.html.erb' do
               kind: "organization",
               address_line_1: "1600 Amphitheatre Parkway",
               city: "Mountain View",
-              state: "CA", 
+              state: "CA",
               zip: "94043",
               country_code: "US"
             }
@@ -240,19 +224,6 @@ describe 'notices/show.html.erb' do
     render
 
     expect(rendered).to have_content("Re: Some subject")
-  end
-
-  it "displays limited related blog entries" do
-    blog_entries = build_stubbed_list(:blog_entry, 3)
-    notice = build(:dmca)
-    allow(notice).to receive(:related_blog_entries).and_return(blog_entries)
-    assign(:notice, notice)
-
-    render
-
-    blog_entries.each do |blog_entry|
-      expect(rendered).to have_link( blog_entry.title, href: blog_entry_path(blog_entry) )
-    end
   end
 
   it "does not link to the notices original" do
