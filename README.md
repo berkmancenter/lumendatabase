@@ -96,4 +96,4 @@ Copyright (c) 2016 President and Fellows of Harvard College
 Performance Monitoring
 ======================
 
-[![View performance data on Skylight](https://badges.skylight.io/status/utm46ElcSDtw.svg?token=PR5TfNu3JYQ6v9QPg-HUzY-a8E2F9wNnd1ukGU70T7M)](https://www.skylight.io/app/applications/utm46ElcSDtw)
+[View performance data on Skylight](https://www.skylight.io/app/applications/utm46ElcSDtw)
