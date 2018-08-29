@@ -17,7 +17,7 @@ module CurbHelpers
   end
 
   def with_curb_get_for_json(url, options)
-    sleep (ENV["SEARCH_SLEEP"] && ENV["SEARCH_SLEEP"].to_i) || 1
+    sleep (ENV['SEARCH_SLEEP'] && ENV['SEARCH_SLEEP'].to_i) || 1
 
     curb = Curl.get("http://#{host}:#{port}/#{url}", options) do |curl|
       set_default_headers(curl)

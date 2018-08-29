@@ -7,13 +7,9 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 
 require 'rubygems'
 require 'rspec/rails'
-require 'capybara/rspec'
 require 'capybara/poltergeist'
 
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
-
-Capybara.javascript_driver = :poltergeist
-Capybara.current_driver = :poltergeist
 
 Capybara.register_driver :poltergeist do |app|
   Capybara::Poltergeist::Driver.new(app, {
@@ -21,18 +17,14 @@ Capybara.register_driver :poltergeist do |app|
   })
 end
 
+Capybara.javascript_driver = :poltergeist
+
 ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
-  # Capybara
-  config.include Capybara::DSL
-
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
-
-  # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
   config.use_transactional_fixtures = false
 

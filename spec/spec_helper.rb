@@ -1,26 +1,36 @@
-ENV["RAILS_ENV"] ||= 'test'
+# These two lines must be first.
+require 'coveralls'
+Coveralls.wear!('rails')
+# Uncomment the following line if you'd like to get an HTML-formatted
+# coverage report (`coverage/index.html`) when you run tests on localhost.
+# SimpleCov.formatter = SimpleCov::Formatter::HTMLFormatter
 
-require File.expand_path("../../config/environment", __FILE__)
+ENV['RAILS_ENV'] ||= 'test'
+
+require File.expand_path('../config/environment', __dir__)
 
 require 'rubygems'
 require 'rspec/rails'
-require 'capybara/rspec'
-require 'curb'
 
-Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
+Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
 RSpec.configure do |config|
-  # Capybara
-  config.include Capybara::DSL
+  config.order = 'random'
 
-  config.expect_with :rspec do |c|
-    c.syntax = :expect
+  # If you need to see the order your specs are running in (i.e. to debug
+  # order-dependent test failures), uncomment the following. But you may find
+  # rspec --bisect more useful. (It may also need the --drb flag to work.)
+  # config.before :all do
+  #  puts "Running #{self.class.description}"
+  # end
+
+  config.before :each, cache: true do
+    allow(Rails).to receive(:cache).and_return(
+      ActiveSupport::Cache::MemoryStore.new
+    )
   end
 
-  config.use_transactional_fixtures = false
-
-  config.infer_spec_type_from_file_location!
-
-  config.infer_base_class_for_anonymous_controllers = false
-  config.order = "random"
+  config.after :each, cache: true do
+    allow(Rails).to receive(:cache).and_call_original
+  end
 end

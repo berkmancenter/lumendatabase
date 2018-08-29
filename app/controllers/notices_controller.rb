@@ -4,27 +4,15 @@ class NoticesController < ApplicationController
   skip_before_action :verify_authenticity_token, only: :create
 
   def new
-    if cannot?(:submit, Notice)
-      render :submission_disabled and return
-    end
+    (render :submission_disabled and return) if cannot?(:submit, Notice)
 
-    if params[:type].blank?
-      render :select_type and return
-    end
+    (render :select_type and return) if params[:type].blank?
 
     model_class = get_notice_type(params)
-
     @notice = model_class.new
+    build_entity_notice_roles(model_class)
     @notice.file_uploads.build(kind: 'original')
-    model_class::DEFAULT_ENTITY_NOTICE_ROLES.each do |role|
-      @notice.entity_notice_roles.build(name: role).build_entity(
-        kind: default_kind_based_on_role(role)
-      )
-    end
-    @notice.works.build do |notice|
-      notice.copyrighted_urls.build
-      notice.infringing_urls.build
-    end
+    build_works(@notice)
   end
 
   def create
@@ -35,9 +23,7 @@ class NoticesController < ApplicationController
 
     respond_to do |format|
       format.json do
-        if cannot?(:submit, Notice)
-          head :unauthorized and return
-        end
+        (head :unauthorized and return) if cannot?(:submit, Notice)
 
         if submission.submit(current_user)
           head :created, location: submission.notice
@@ -48,7 +34,7 @@ class NoticesController < ApplicationController
 
       format.html do
         if submission.submit(current_user)
-          redirect_to :root, notice: "Notice created!"
+          redirect_to :root, notice: 'Notice created!'
         else
           @notice = submission.notice
           render :new
@@ -58,22 +44,26 @@ class NoticesController < ApplicationController
   end
 
   def show
-    if @notice = Notice.find(params[:id])
-      respond_to do |format|
-        format.html do
-          if @notice.rescinded?
-            render :rescinded
-          elsif @notice.hidden || @notice.spam || !@notice.published
-            render file: 'public/404_unavailable', formats: [:html], status: :not_found, layout: false
-          else
-            render :show
-          end
+    return unless (@notice = Notice.find(params[:id]))
+    respond_to do |format|
+      format.html do
+        if @notice.rescinded?
+          render :rescinded
+        elsif @notice.hidden || @notice.spam || !@notice.published
+          render file: 'public/404_unavailable',
+                 formats: [:html],
+                 status: :not_found,
+                 layout: false
+        else
+          render :show
         end
+      end
 
-        format.json do
-          serializer = researcher? ? NoticeSerializerProxy : LimitedNoticeSerializerProxy
-          render json: @notice, serializer: serializer, root: json_root_for(@notice.class)  
-        end
+      format.json do
+        serializer = researcher? ? NoticeSerializerProxy : LimitedNoticeSerializerProxy
+        render json: @notice,
+               serializer: serializer,
+               root: json_root_for(@notice.class)
       end
     end
   end
@@ -86,16 +76,16 @@ class NoticesController < ApplicationController
       main_index: params[:index].to_i,
       child_index: (Time.now.to_f * 10_000).to_i
     )
-    notice.works.build do |w|
-      w.copyrighted_urls.build
-      w.infringing_urls.build
-    end
+    build_works(notice)
   end
 
   def feed
-    @recent_notices = Rails.cache.fetch("recent_notices", expires_in: 1.hour) { Notice.visible.recent }
+    @recent_notices = Rails.cache.fetch(
+      'recent_notices',
+      expires_in: 1.hour
+    ) { Notice.visible.recent }
     respond_to do |format|
-      format.rss { render :layout => false }
+      format.rss { render layout: false }
     end
   end
 
@@ -131,7 +121,7 @@ class NoticesController < ApplicationController
       :counternotice_for_id,
       :counternotice_for_sid,
       topic_ids: [],
-      file_uploads_attributes: [:kind, :file, :file_name],
+      file_uploads_attributes: %i[kind file file_name],
       entity_notice_roles_attributes: [
         :entity_id,
         :name,
@@ -142,14 +132,16 @@ class NoticesController < ApplicationController
   end
 
   def entity_params
-    [:name, :kind, :address_line_1, :address_line_2, :city, :state,
-     :zip, :country_code, :phone, :email, :url]
+    %i[name kind address_line_1 address_line_2 city state zip country_code
+       phone email url]
   end
 
   def work_params
     [
-      :description, :kind, infringing_urls_attributes: [:url],
-      copyrighted_urls_attributes: [:url],
+      :description,
+      :kind,
+      infringing_urls_attributes: [:url],
+      copyrighted_urls_attributes: [:url]
     ]
   end
 
@@ -166,9 +158,8 @@ class NoticesController < ApplicationController
 
   def get_notice_type(params)
     type_string = params.fetch(:type, 'DMCA')
-    if type_string == 'Dmca'
-      type_string = 'DMCA'
-    end
+    type_string = 'DMCA' if type_string == 'Dmca'
+
     notice_type = type_string.classify.constantize
 
     if notice_type < Notice
@@ -176,7 +167,6 @@ class NoticesController < ApplicationController
     else
       DMCA
     end
-
   rescue NameError
     DMCA
   ensure
@@ -196,5 +186,20 @@ class NoticesController < ApplicationController
     User.find_by_authentication_token(
       request.headers['HTTP_X_AUTHENTICATION_TOKEN']
     ).has_role?(Role.researcher)
+  end
+
+  def build_entity_notice_roles(model_class)
+    model_class::DEFAULT_ENTITY_NOTICE_ROLES.each do |role|
+      @notice.entity_notice_roles.build(name: role).build_entity(
+        kind: default_kind_based_on_role(role)
+      )
+    end
+  end
+
+  def build_works(notice)
+    notice.works.build do |w|
+      w.copyrighted_urls.build
+      w.infringing_urls.build
+    end
   end
 end

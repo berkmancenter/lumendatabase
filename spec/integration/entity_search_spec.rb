@@ -6,7 +6,7 @@ feature "Searching Entities" do
 
   scenario 'entities are found by name', js: true, search: true do
     entity = create(:entity, :with_parent, name: 'Foo bar')
-    index_changed_models
+    index_changed_instances
 
     expect_entity_api_search_to_find('bar') do |json|
       json_item = json['entities'].first
@@ -23,7 +23,7 @@ feature "Searching Entities" do
 
   scenario 'the results have relevant metadata', js: true, search: true do
     entity = create(:entity, name: 'Foo bar')
-    index_changed_models
+    index_changed_instances
 
     expect_entity_api_search_to_find('bar') do |json|
       metadata = json['meta']

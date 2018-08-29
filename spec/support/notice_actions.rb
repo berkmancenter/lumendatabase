@@ -1,15 +1,9 @@
+require 'support/sign_in'
+
 module NoticeActions
-  def sign_in( user = nil )
-    visit '/users/sign_out' # clear old session
-    visit '/users/sign_in'
-    fill_in "Email", with: user.email
-    fill_in "Password", with: user.password
-    click_on "Log in"
-  end
-  
   def submit_recent_notice(title = "A title")
     sign_in( create(:user, :submitter) )
-    
+
     visit "/notices/new?type=DMCA"
 
     fill_in "Title", with: title

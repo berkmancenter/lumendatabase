@@ -1,4 +1,5 @@
 require_relative '../page_object'
+require_relative '../sign_in'
 
 class AdminOnPage < PageObject
   attr_reader :user
@@ -7,21 +8,13 @@ class AdminOnPage < PageObject
     @user = user
   end
 
-  def sign_in
-    visit '/users/sign_out' # clear old session
-    visit '/users/sign_in'
-    fill_in "Email", with: user.email
-    fill_in "Password", with: user.password
-    click_on "Log in"
+  def sign_into_admin
+    sign_in @user
+    visit_admin
   end
 
   def visit_admin
     visit '/admin'
-  end
-
-  def sign_into_admin
-    sign_in
-    visit_admin
   end
 
   def create(model_class)
@@ -57,6 +50,26 @@ class AdminOnPage < PageObject
 
   def in_admin?
     current_path =~ %r{^/admin}
+  end
+
+  # These sign-in-and-X methods are a code smell, indicating that PageObject
+  # has bundled too many things together (both a user and the actions that a
+  # user can take). However, they greatly improve the readability of their
+  # associated tests by allowing for reuse of the sign_in function used
+  # elsewhere in tests, and this is simpler than refactoring PageObject.
+  def sign_in_and_create(model_class)
+    sign_in @user
+    create(model_class)
+  end
+
+  def sign_in_and_edit(resource, edits = {})
+    sign_in @user
+    edit(resource, edits)
+  end
+
+  def sign_in_and_redact(notice)
+    sign_in @user
+    redact(notice)
   end
 
   private

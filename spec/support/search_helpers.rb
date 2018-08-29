@@ -1,6 +1,6 @@
 module SearchHelpers
 
-  def index_changed_models
+  def index_changed_instances
     sleep ENV["SEARCH_SLEEP"].to_i if ENV["SEARCH_SLEEP"] # required for indexing to complete
     ReindexRun.index_changed_model_instances
     sleep ENV["SEARCH_SLEEP"].to_i if ENV["SEARCH_SLEEP"] # required for indexing to complete

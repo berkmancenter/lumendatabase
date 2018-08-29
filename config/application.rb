@@ -1,16 +1,16 @@
-require File.expand_path('../boot', __FILE__)
+require File.expand_path('boot', __dir__)
 
 # Pick the frameworks you want:
-require "active_record/railtie"
-require "action_controller/railtie"
-require "action_mailer/railtie"
+require 'active_record/railtie'
+require 'action_controller/railtie'
+require 'action_mailer/railtie'
 # require "active_resource/railtie"
-require "sprockets/railtie"
+require 'sprockets/railtie'
 # require "rails/test_unit/railtie"
 
 if defined?(Bundler)
   # If you precompile assets before deploying to production, use this line
-  Bundler.require(*Rails.groups(:assets => %w(development test)))
+  Bundler.require(*Rails.groups(assets: %w[development test]))
   # If you want your assets lazily compiled in production, use this line
   # Bundler.require(:default, :assets, Rails.env)
 end
@@ -51,7 +51,7 @@ module Chill
     # config.i18n.default_locale = :de
 
     # Configure the default encoding used in templates for Ruby 1.9.
-    config.encoding = "utf-8"
+    config.encoding = 'utf-8'
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
@@ -77,8 +77,22 @@ module Chill
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
 
-    config.middleware.insert_before ActionDispatch::ParamsParser, "CatchJsonParsingErrors"
+    config.middleware.insert_before ActionDispatch::ParamsParser, 'CatchJsonParsingErrors'
     config.middleware.use Rack::Attack
-    config.middleware.use StackProf::Middleware, enabled: false, mode: :cpu, interval: 1000, save_every: 5, path: 'prof'
+    # Active Record suppresses errors raised within
+    # `after_rollback`/`after_commit` callbacks, but these errors will
+    # propagate in later versions of AR. Setting this to true allows the error
+    # to propagate, so that we can find it.
+    config.active_record.raise_in_transactional_callbacks = true
+    config.middleware.use StackProf::Middleware, enabled: false,
+                                                 mode: :cpu,
+                                                 interval: 1000,
+                                                 save_every: 5,
+                                                 path: 'prof'
+
+    config.log_formatter = proc do |severity, datetime, progname, msg|
+      timestamp = datetime.strftime '%Y-%m-%d %H:%M:%S (%Z)'
+      "#{timestamp} #{severity}: #{progname} #{msg}\n"
+    end
   end
 end

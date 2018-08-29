@@ -10,19 +10,19 @@
   <section class="recent-notices">
     <h2>Recent Takedown Notices</h2>
     <ol id="recent-notices">
-      <%= render @notices %>
+      <%= render partial: 'notice', collection: @notices %>
     </ol>
     <a href="notices_feed?format=rss"><%= image_tag("feed_icon.png", :size => "14x14") %></a>
   </section>
-  <% cache( 'chillingeffects-tweets', expires_in: 5.minutes ) { %>
-  <section class="tweets">
-  <h2>@lumendatabase on twitter</h2>
-    <% @tweet_news.each do |tweet| %>
-    <ol>
-        <li><%= auto_link(tweet.text).html_safe %></li>
-    </ol>
-    <% end %>
-  </section>
+  <% cache( 'lumendatabase-tweets', expires_in: 5.minutes ) { %>
+    <section class="tweets">
+      <h2>@lumendatabase on twitter</h2>
+      <% @tweet_news.each do |tweet| %>
+        <ol>
+          <li><%= auto_link(tweet.text).html_safe %></li>
+        </ol>
+      <% end %>
+    </section>
   <% } %>
   <section class="news-snippets">
     <h2>From the Blog</h2>

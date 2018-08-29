@@ -57,7 +57,7 @@
 <h3>Contents</h3>
 
 <ul class="contents">
-<a href="#apidocs"><li>API Documentation</li></a>	
+<a href="#apidocs"><li>API Documentation</li></a>
 <a href="#formatting"><li>Formatting</li></a>
 <a href="#timestamps"><li>Understanding dates - Unix Timestamps</li></a>
 <a href="#searching"><li>Searching the database</li></a>
@@ -69,15 +69,15 @@
 
 <a id="formatting"><h2>Formatting</h2></a>
 
-<p>When a query or request is submitted to the database, the system will return a response with a list of JSON-encoded attributes.  Learn more about JSON (JavaScript Object/Open Notation) <a href="http://www.json.org/">here</a>. This format is designed to be “machine readable,” and not necessarily useful to a human reader in its raw form. However, there are many tools for rendering JSON output into a friendlier form, and we recommend finding one that works for you. </p>
+<p>When a query or request is submitted to the database, the system will return a response with a list of JSON-encoded attributes.  Learn more about JSON (JavaScript Object/Open Notation) <a href="https://www.json.org/">here</a>. This format is designed to be “machine readable,” and not necessarily useful to a human reader in its raw form. However, there are many tools for rendering JSON output into a friendlier form, and we recommend finding one that works for you. </p>
 
 Example JSON Request:
 <pre>
 <code>
-curl http://lumendatabase.org/notices/1.json
+curl https://lumendatabase.org/notices/1.json
 </code>
 </pre>
-Example Successful JSON Output: 
+Example Successful JSON Output:
 
 <pre>
 <code>
@@ -108,13 +108,13 @@ Example Successful JSON Output:
       {
         "description": "Lion King Video",
         "copyrighted_urls": [
-          { "url": "http://www.example.com/lion_king.mp4" },
-          { "url": "http://www.example.com/lion_king.mov" }
+          { "url": "https://www.example.com/lion_king.mp4" },
+          { "url": "https://www.example.com/lion_king.mov" }
         ],
         "infringing_urls": [
-          { "url": "http://www.example.com/infringing1" },
-          { "url": "http://www.example.com/infringing2" },
-          { "url": "http://www.example.com/infringing3" }
+          { "url": "https://www.example.com/infringing1" },
+          { "url": "https://www.example.com/infringing2" },
+          { "url": "https://www.example.com/infringing3" }
         ]
       }
     ]
@@ -125,7 +125,7 @@ Example Successful JSON Output:
 
 <a id="timestamps"><h2>Understanding dates - Unix Timestamps</h2></a>
 
-<p>The Lumen database accepts dates in a variety of formats but always outputs dates in Unix Time, which is the number of seconds elapsed since the beginning of the Unix epoch. This can be quite confusing at first, and we recommend using a Unix Timestamp conversion tool (like this one <a href="http://www.unixtimestamp.com/">here</a>) to transform these raw date outputs into something a human can understand.</p>
+<p>The Lumen database accepts dates in a variety of formats but always outputs dates in Unix Time, which is the number of seconds elapsed since the beginning of the Unix epoch. This can be quite confusing at first, and we recommend using a Unix Timestamp conversion tool (like this one <a href="https://www.unixtimestamp.com/">here</a>) to transform these raw date outputs into something a human can understand.</p>
 
 <a id="searching"><h2>Searching the Database</h2></a>
 
@@ -189,7 +189,7 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'https://
 
 <pre>
 <code>
- curl https://www.lumendatabase.org/topics.json 
+ curl https://www.lumendatabase.org/topics.json
 </code>
 </pre>
 

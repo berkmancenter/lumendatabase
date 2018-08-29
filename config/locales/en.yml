@@ -55,7 +55,7 @@ en:
         breadcrumb: 'PDF Requests'
         menu: 'PDF Requests'
         title: 'PDF Requests'
-        link: 'http://lumendatabase.org/'
+        link: 'https://lumendatabase.org/'
 
   type_descriptions:
     DMCA:

@@ -9,14 +9,14 @@
 	  <%= urls_form.input(
 	    :url,
 	    label: label_for_url_input(assoc, notice),
-	    placeholder: "http://",
-	    required: false 
+	    placeholder: "https://",
+	    required: false
 	  ) %>
 	<% else %>
 		<%= urls_form.input(
 		  :url,
 		  label: label_for_url_input(assoc, notice),
-		  placeholder: "http://"
+		  placeholder: "https://"
 		) %>
 	<% end %>
 <% end %>
