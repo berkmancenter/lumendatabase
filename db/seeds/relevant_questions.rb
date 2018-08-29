@@ -37,16 +37,16 @@ mapping[%{Copyright}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is copyright infringement?  Are there any defenses?},
- answer:   %{Infringement occurs whenever someone who is not the copyright holder (or a licensee of the copyright holder) exercises one of the exclusive rights listed <a href="#QID8">above</a>.  
+ answer:   %{Infringement occurs whenever someone who is not the copyright holder (or a licensee of the copyright holder) exercises one of the exclusive rights listed <a href="#QID8">above</a>.
 
-The most common defense to an infringement claim is "fair use," a doctrine that allows people to use copyrighted material without permission in certain situations, such as quotations in a book review.  To evaluate fair use of copyrighted material, the courts consider four factors:<ol class=main>        
+The most common defense to an infringement claim is "fair use," a doctrine that allows people to use copyrighted material without permission in certain situations, such as quotations in a book review.  To evaluate fair use of copyrighted material, the courts consider four factors:<ol class=main>
         <li> the purpose and character of the use
         <li> the nature of the copyrighted work
-        <li> the amount and substantiality of copying, and 
+        <li> the amount and substantiality of copying, and
         <li> the market effect.
 </ol><p>(<a href="http://www4.law.cornell.edu/uscode/17/107.html">17 U.S.C. 107</a>)
 
-The most significant factor in this analysis is the fourth, effect on the market.  If a copier's use supplants demand for the original work, then it will be very difficult for him or her to claim fair use.  On the other hand, if the use does not compete with the original, for example because it is a parody, criticism, or news report, it is more likely to be permitted as "fair use."  
+The most significant factor in this analysis is the fourth, effect on the market.  If a copier's use supplants demand for the original work, then it will be very difficult for him or her to claim fair use.  On the other hand, if the use does not compete with the original, for example because it is a parody, criticism, or news report, it is more likely to be permitted as "fair use."
 
 Trademarks are generally subject to fair use in two situations:  First, advertisers and other speakers are allowed to use a competitor's trademark when referring to that competitor's product ("nominative use").  Second, the law protects "fair comment," for instance, in parody.}
 )
@@ -76,7 +76,7 @@ mapping[%{John Doe Anonymity}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is FanFic?},
- answer:   %{Fan Fiction (FanFic) is a genre of amateur creative expression that features characters from movies, TV shows, and popular culture in new situations or adventures. 
+ answer:   %{Fan Fiction (FanFic) is a genre of amateur creative expression that features characters from movies, TV shows, and popular culture in new situations or adventures.
 
 The vast majority of these stories and poems are written by fans with no commercial interest who disseminate their work over the Internet, email lists, or newsgroups. The word "Fan," however, might not be the most appropriate term since not all FanFic is created by people who are truly "fans" of the original work as the term is traditionally used. Regardless of whether FanFic authors are really fans, owners of original works often do not look favorably upon these works. In response, the owners of the rights often try to stop the creation of FanFic through cease and desist letters and the threat of lawsuit. }
 )
@@ -85,7 +85,7 @@ mapping[%{Fan Fiction}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Is anonymous speech a right?},
- answer:   %{Yes.  Anonymous speech is presumptively protected by the First Amendment to the Constitution.  Anonymous pamphleteering played an important role for the Founding Fathers, including James Madison, Alexander Hamilton, and John Jay, whose Federalist Papers were first published anonymously.  
+ answer:   %{Yes.  Anonymous speech is presumptively protected by the First Amendment to the Constitution.  Anonymous pamphleteering played an important role for the Founding Fathers, including James Madison, Alexander Hamilton, and John Jay, whose Federalist Papers were first published anonymously.
 
 And the Supreme Court has consistently backed up that tradition.  The key U.S. Supreme Court case is McIntyre v. Ohio Elections Commission.  <a href="http://www.eff.org/Legal/Cases/mcintyre_v_ohio.decision">http://www.eff.org/Legal/Cases/mcintyre_v_ohio.decision</a>}
 )
@@ -94,7 +94,7 @@ mapping[%{John Doe Anonymity}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What are the key federal decisions involving anonymous speech?},
- answer:   %{1.  <a href="http://supct.law.cornell.edu/supct/html/97-930.ZO.html">Buckley v. American Constitutional Law Foundation</a> (1999) 525 U.S. 182, 197-200; 
+ answer:   %{1.  <a href="http://supct.law.cornell.edu/supct/html/97-930.ZO.html">Buckley v. American Constitutional Law Foundation</a> (1999) 525 U.S. 182, 197-200;
 
 2.  <a href="http://www.eff.org/Legal/Cases/mcintyre_v_ohio.decision">McIntyre v. Ohio Elections Commission</a> (1995) 514 U.S. 334.  In that case, on page 357, the Supreme Court said:
 
@@ -113,7 +113,7 @@ mapping[%{John Doe Anonymity}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Don't judges review subpoenas before they are sent to ISPs?},
- answer:   %{No.  The issuing of civil subpoenas is not monitored by the court handling the case.  Under the normal rules of discovery in civil lawsuits, parties to a suit can simply send a subpoena to anyone they believe has information that could be useful.  That information doesn't even have to be relevant to the lawsuit, as long as it could possibly lead to the discovery of relevant information. The only way that a court will evaluate an identity-seeking subpena is if either the ISP or the target of the subpoena files a motion asking the judge to block the subpoena.  Unfortunately, in practice that rarely happens.  That is because these subpoenas usually have a short, roughly 7-day deadline, and because many people never even find out that their Internet data has been subpoenaed. 
+ answer:   %{No.  The issuing of civil subpoenas is not monitored by the court handling the case.  Under the normal rules of discovery in civil lawsuits, parties to a suit can simply send a subpoena to anyone they believe has information that could be useful.  That information doesn't even have to be relevant to the lawsuit, as long as it could possibly lead to the discovery of relevant information. The only way that a court will evaluate an identity-seeking subpena is if either the ISP or the target of the subpoena files a motion asking the judge to block the subpoena.  Unfortunately, in practice that rarely happens.  That is because these subpoenas usually have a short, roughly 7-day deadline, and because many people never even find out that their Internet data has been subpoenaed.
 }
 )
 
@@ -137,7 +137,7 @@ mapping[%{John Doe Anonymity}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{How much time would I have to try to fight a subpoena?},
- answer:   %{The ISP's deadline for complying with a subpoena can vary depending on the judge, the jurisdiction where the case was filed, and other factors.  A typical deadline is 7 days.  This isn't much time, so again you may want to request an extension of the deadline from the ISP and the court so your lawyer can prepare your challenge to the subpoena. 
+ answer:   %{The ISP's deadline for complying with a subpoena can vary depending on the judge, the jurisdiction where the case was filed, and other factors.  A typical deadline is 7 days.  This isn't much time, so again you may want to request an extension of the deadline from the ISP and the court so your lawyer can prepare your challenge to the subpoena.
 
 }
 )
@@ -154,7 +154,7 @@ mapping[%{John Doe Anonymity}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{How do judges decide whether to let a subpoena go forward? },
- answer:   %{This is a very new area of the law, and there are few well-established principles.  The courts do have a duty to balance the right of anonymity against the need to prevent true defamation.  So far there have been both good and bad rulings from judges; fortunately several have ruled that the plaintiff must prove that his case has at least a theoretical chance of prevailing before anonymity can be stripped away.  Other cases have established a set of key factors to be used in judging anonymity-stripping subpoenas.  In most of these the key factors are 1) that the party seeking the subpoena provide evidence that the identity is needed; 2) that the identity is directly needed for a key element in the case; 3) and that the identity information is not otherwise available to the party seeking it. While not yet firmly entranched in the law, these common-sense principles are clearly the right way to ensure that First Amendment rights are protected while still allowing identity to be revealed when there is a genuine need to do so. 
+ answer:   %{This is a very new area of the law, and there are few well-established principles.  The courts do have a duty to balance the right of anonymity against the need to prevent true defamation.  So far there have been both good and bad rulings from judges; fortunately several have ruled that the plaintiff must prove that his case has at least a theoretical chance of prevailing before anonymity can be stripped away.  Other cases have established a set of key factors to be used in judging anonymity-stripping subpoenas.  In most of these the key factors are 1) that the party seeking the subpoena provide evidence that the identity is needed; 2) that the identity is directly needed for a key element in the case; 3) and that the identity information is not otherwise available to the party seeking it. While not yet firmly entranched in the law, these common-sense principles are clearly the right way to ensure that First Amendment rights are protected while still allowing identity to be revealed when there is a genuine need to do so.
 }
 )
 
@@ -162,10 +162,10 @@ mapping[%{John Doe Anonymity}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What are some of the important cases in this area of law?},
- answer:   %{Important CyberSLAPP cases include Dendrite v. Does, <a href="http://www.citizen.org/documents/dendriteappeal.pdf">http://www.citizen.org/documents/dendriteappeal.pdf</a>, 
+ answer:   %{Important CyberSLAPP cases include Dendrite v. Does, <a href="http://www.citizen.org/documents/dendriteappeal.pdf">http://www.citizen.org/documents/dendriteappeal.pdf</a>,
 Melvin v. Doe, <a href="http://legal.web.aol.com/decisions/dlpriv/melvinop.html">http://legal.web.aol.com/decisions/dlpriv/melvinop.html</a>,
-Doe v 2TheMart.com, <a href="http://www.eff.org/Cases/2TheMart_case/20010427_2themart_order.html">http://www.eff.org/Cases/2TheMart_case/20010427_2themart_order.html</a>, 
-Global Telemedia International v. Doe, <a href="http://www.casp.net/busted.html">http://www.casp.net/busted.html</a>.  Additional information about these and other cases can be found by searching the Internet or looking on the Web sites listed below. 
+Doe v 2TheMart.com, <a href="http://www.eff.org/Cases/2TheMart_case/20010427_2themart_order.html">http://www.eff.org/Cases/2TheMart_case/20010427_2themart_order.html</a>,
+Global Telemedia International v. Doe, <a href="http://www.casp.net/busted.html">http://www.casp.net/busted.html</a>.  Additional information about these and other cases can be found by searching the Internet or looking on the Web sites listed below.
 }
 )
 
@@ -173,7 +173,7 @@ mapping[%{John Doe Anonymity}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Can I do anything to help change this situation? },
- answer:   %{You can do several things.  Be educated about your rights.   Find out your ISP's policy on the handling of subpoenas, and encourage them - and any Web sites you frequent - to adopt good policies, especially a pledge to notify you of any subpoena before any private information is disclosed.  Encourage your state legislators to pass legislation requiring such notice, and press them to amend state anti-SLAPP statutes to explicitly include Internet anonymity cases. 
+ answer:   %{You can do several things.  Be educated about your rights.   Find out your ISP's policy on the handling of subpoenas, and encourage them - and any Web sites you frequent - to adopt good policies, especially a pledge to notify you of any subpoena before any private information is disclosed.  Encourage your state legislators to pass legislation requiring such notice, and press them to amend state anti-SLAPP statutes to explicitly include Internet anonymity cases.
 }
 )
 
@@ -183,13 +183,13 @@ q = RelevantQuestion.create!(
  question: %{What other resources are available?},
  answer:   %{Web sites dealing with this issue include:
 
-<a href="http://www.aclu.org">www.aclu.org</a>, 
-<a href="http://www.citizen.org">www.citizen.org</a>, 
-<a href="http://www.eff.org">www.eff.org</a>, 
-<a href="http://www.epic.org">www.epic.org</a>, 
-<a href="http://www.johndoes.org">www.johndoes.org</a>, 
-<a href="http://www.casp.net">www.casp.net</a>, 
-<a href="http://www.cybersecuritieslaw.com">www.cybersecuritieslaw.com</a>, 
+<a href="http://www.aclu.org">www.aclu.org</a>,
+<a href="http://www.citizen.org">www.citizen.org</a>,
+<a href="http://www.eff.org">www.eff.org</a>,
+<a href="http://www.epic.org">www.epic.org</a>,
+<a href="http://www.johndoes.org">www.johndoes.org</a>,
+<a href="http://www.casp.net">www.casp.net</a>,
+<a href="http://www.cybersecuritieslaw.com">www.cybersecuritieslaw.com</a>,
 <a href="http://cyber.findlaw.com/expression/censorship.html">cyber.findlaw.com/expression/censorship.html</a>
 }
 )
@@ -218,9 +218,9 @@ q = RelevantQuestion.create!(
  question: %{What is the Anti-Cybersquatting Consumer Protection Act (ACPA)?},
  answer:   %{The ACPA [codified as <a href="http://www4.law.cornell.edu/uscode/15/1125.html#d">15 USC 1125(d)</a>] is aimed at people who register a domain name with the intention of taking financial advantage of another's trademark. For instance, if BURGER KING did not have a web site, and you registered www.BURGERKING.com with the intent of selling the site to BURGER KING for a royal ransom, you could be liable under ACPA.
 
-ACPA applies to people who: 
-(1) have a bad faith intent to profit from a domain name; and 
-(2) register, use or traffic in a domain name; 
+ACPA applies to people who:
+(1) have a bad faith intent to profit from a domain name; and
+(2) register, use or traffic in a domain name;
 (3) that is identical, confusingly similar, or dilutive of certain trademarks. The trademark does not have to be registered.
 
 ACPA provides that cyberpirates can be fined between $1,000 and $100,000 per domain name for which they are found liable, as well as being forced to transfer the domain name.
@@ -299,9 +299,9 @@ mapping[%{ACPA}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Is it possible to hold a domain name in good faith even if it is identical or confusingly similar to another's trademark?},
- answer:   %{The ACPA is forgiving of legitimate uses of domain names.  There is less likely to be a violation of the Act if the domain name holder actually has some intellectual property rights in the name, or if the person has previously used the domain name in connection with bona fide offering of goods or services.  Operating a domain name to which you have fairly entrenched trademark rights, or having operated a sales website under the domain name for a long time, is somewhat safer. 
+ answer:   %{The ACPA is forgiving of legitimate uses of domain names.  There is less likely to be a violation of the Act if the domain name holder actually has some intellectual property rights in the name, or if the person has previously used the domain name in connection with bona fide offering of goods or services.  Operating a domain name to which you have fairly entrenched trademark rights, or having operated a sales website under the domain name for a long time, is somewhat safer.
 
-Take note, however, that this safety is illusory if your domain name resembles (or is) a famous mark.  Thus an Internet service provider, Virtual Works, lost a case to Volkswagen, over its domain name www.vw.net, because the "VW" mark is famous, even though VW is the abbreviation of Virtual Works, and even though they had operated the site for several years. 
+Take note, however, that this safety is illusory if your domain name resembles (or is) a famous mark.  Thus an Internet service provider, Virtual Works, lost a case to Volkswagen, over its domain name www.vw.net, because the "VW" mark is famous, even though VW is the abbreviation of Virtual Works, and even though they had operated the site for several years.
 
 If your domain name is your own name, or a name by which you are often referred, this is more likely to be deemed a good faith use.  Edwin Von Aschenbach will probably be safe in registering www.vonaschenbach.com, even if Von Aschenbach, Co., manufactures high quality desks and "Von Aschenbach" is a trademark in the sale of desks.  Edwin Pepsy should be more careful.}
 )
@@ -349,7 +349,7 @@ mapping[%{ACPA}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What are the possible penalties for violating the ACPA?},
- answer:   %{Normally, the domain name holder will not evaporate, and can be sued directly.  In such a case, the court can order the cancellation or transfer of the domain registration, as well as require the payment of money damages to the plaintiff trademark owner.  
+ answer:   %{Normally, the domain name holder will not evaporate, and can be sued directly.  In such a case, the court can order the cancellation or transfer of the domain registration, as well as require the payment of money damages to the plaintiff trademark owner.
 
 The trademark owner can recover (1) the domain holder's profits from use of the mark, (2) the trademark owner's damages resulting from harm to the value of mark, and (3) court costs as "actual damages."  In determining the award to be paid, the court can choose to award up to three times the amount of actual damages.  Attorney fees may be awarded in exceptional circumstances, such as when there was a willful and malicious violation.
 
@@ -360,7 +360,7 @@ mapping[%{ACPA}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{I'm a web designer and I posted the site at the direction of my client. Am I liable under the ACPA?},
- answer:   %{A person shall be liable under the ACPA for using a domain name under subparagraph only if that person is the domain name registrant or that registrant's authorized licensee.  
+ answer:   %{A person shall be liable under the ACPA for using a domain name under subparagraph only if that person is the domain name registrant or that registrant's authorized licensee.
 
 However, for use of trademarks elsewhere on the site (in metatags or in the page content, for example) be aware that there may still be a risk of liablity as a trademark infringer or contributing infringer.  The protections offered to }
 )
@@ -370,7 +370,7 @@ mapping[%{ACPA}] << q.id
 q = RelevantQuestion.create!(
  question: %{Are domain name registration authorities liable under the Act?},
  answer:   %{A domain name registration authority is not liable for money damages for the registration or maintenance of a domain name for another absent a showing of bad faith intent to profit from such registration or maintenance.<br>
-      <dd>A domain name registration authority is subject to court injunction if it refuses to provide the court with documentation concerning the domain name that would establish the court's control over it in an <a href="#find">in rem</a> suit, or if it transfers, changes, or cancels the domain name during an in rem suit.  
+      <dd>A domain name registration authority is subject to court injunction if it refuses to provide the court with documentation concerning the domain name that would establish the court's control over it in an <a href="#find">in rem</a> suit, or if it transfers, changes, or cancels the domain name during an in rem suit.
    </dd>}
 )
 
@@ -406,9 +406,9 @@ q = RelevantQuestion.create!(
  question: %{What exactly are the rights a trademark owner has?},
  answer:   %{In the US, trademark rights come from actual use of the mark to label one's services or products or they come from filing an application with the Patent and Trademark Office (<B>PTO</b>) that states an intention to use the mark in future commerce. In most foreign countries, trademarks are valid only upon registration.
 
-There are two trademark rights: the <B>right to use</b> (or authorize use) and the <B>right to register</b>. 
+There are two trademark rights: the <B>right to use</b> (or authorize use) and the <B>right to register</b>.
 
-The person who establishes priority rights in a mark gains the exclusive right to <b>use</b> it to label or identify their goods or services, and to authorize others to do so. According to the Lanham Act, determining who has priority rights in a mark involves establishing who was the first to use it to identify his/her goods.  
+The person who establishes priority rights in a mark gains the exclusive right to <b>use</b> it to label or identify their goods or services, and to authorize others to do so. According to the Lanham Act, determining who has priority rights in a mark involves establishing who was the first to use it to identify his/her goods.
 
 The PTO determines who has the right to <b>register</b> the mark. Someone who registers a trademark with the intent to use it gains <B>"constructive use"</b> when he/she begins using it, which entitles him/her to nationwide priority in the mark. However, if two users claim ownership of the same mark (or similar marks) at the same time, and neither has registered it, a court must decide who has the right to the mark. The court can issue an <B>injunction</b> (a ruling that requires other people to stop using the mark) or award damages if people other than the owner use the trademark (<A href="#infringe"><B>infringement</b></a>).<P>
 
@@ -422,7 +422,7 @@ mapping[%{Trademark}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Do I have to register my brand name to get trademark rights?},
- answer:   %{Not in the United States.  Here, you do not need to register a mark to establish rights to it, though registration provides important advantages. Registering a mark means that the registrant is presumed to be the owner of the mark for goods and services specified in the application. This makes proving your rights easier in court.  
+ answer:   %{Not in the United States.  Here, you do not need to register a mark to establish rights to it, though registration provides important advantages. Registering a mark means that the registrant is presumed to be the owner of the mark for goods and services specified in the application. This makes proving your rights easier in court.
 
 However, US federal law also provides rights to unregistered (<B>}
 )
@@ -434,7 +434,7 @@ q = RelevantQuestion.create!(
  answer:   %{.
 A mark that is <B>confusingly similar</b> so closely resembles a registered trademark that it is likely to confuse consumers as to the source of the product or service. Consumers could be likely to believe that the product with the confusingly similar mark is produced by the organization that holds the registered mark. Someone who holds a confusingly similar mark benefits from the good will associated with the registered mark and can lure customers to his/her product or service instead. <A NAME=infringe></a><B>Infringement</b> is determined by whether your mark is confusingly similar to a registered mark.  The factors that determine infringement include:<UL>
 <LI>proof of actual confusion</li>
-<LI><a href="http://www.chillingeffects.org/trademark/faq.cgi#QID252">strength</a> of the established mark</li>
+<LI><a href="https://www.lumendatabase.org/topics/6">strength</a> of the established mark</li>
 <LI>proximity of the goods in the marketplace</li>
 <LI>similarity of the marks? sound</li>
 <LI>appearance and meaning</li>
@@ -529,7 +529,7 @@ mapping[%{UDRP}] << q.id
 q = RelevantQuestion.create!(
  question: %{Why not go to court?},
  answer:   %{   As mentioned above, the UDRP is supposed to provide a faster, cheaper, and easier alternative to challenging domain names in courts of law.  Unless the domain holder fails to appear in court, it is likely that the UDRP proceeding will take less time (about 6 weeks).  UDRP proceedings generally cost less (as little as $750) since the dispute resolution Providers charge a flat fee and since the costs of hiring a lawyer (if you choose to use one) will generally be less because the types of documents used in UDRP proceedings require less time to prepare.  The UDRP procedures are supposed to be simple enough that an average person would not need legal assistance.  There is no charge to the domain holder, unless s/he requests a 3-person Panel or opts to hire an attorney.  An important advantage of the UDRP over courts is that courts can only enforce their orders within their own territories.  The UDRP can be enforced against all domain holders in .com, .org, .net. .biz and .info, regardless of where they live.
- 
+
         Of course, nothing in the UDRP prevents either the trademark owner or the domain name holder from choosing to go to court before, during, or after the UDRP proceeding.  You just have to let the Panel know if you have begun court action so the Panel can decide whether to postpone the proceeding or so that the Registrar won}
 )
 
@@ -545,7 +545,7 @@ mapping[%{UDRP}] << q.id
 q = RelevantQuestion.create!(
  question: %{Why do trademarks get such special protection?},
  answer:   %{   Consumers reap the benefit when trademarks are protected.  By preventing anyone but the actual mark owner from labeling goods with the mark, it helps prevent consumers getting cheated by shoddy knock-off imitators.  It encourages mark owners to maintain quality goods so that customers will reward them by looking for their label as an indication of excellence.  Consumers as well as mark owners benefit from trademark laws.
- 
+
         Trademark owners spend a lot of time, money, and effort to protect the distinctiveness of their trademark.  Once trademarks have become diluted to the point where the general public no longer recognizes them as distinctly applying to a particular manufacturer, they lose their value to the trademark owner because they no longer attract customers to his particular goods. For example, }
 )
 
@@ -553,7 +553,7 @@ mapping[%{UDRP}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Isn},
- answer:   %{Yes, as long as you have registered and used the domain name in good faith or have legitimate interests in the domain name.  However, you have no right to violate trademark law, or ignore your Registration Agreement, or engage in cybersquatting just because you registered the name first. 
+ answer:   %{Yes, as long as you have registered and used the domain name in good faith or have legitimate interests in the domain name.  However, you have no right to violate trademark law, or ignore your Registration Agreement, or engage in cybersquatting just because you registered the name first.
 }
 )
 
@@ -606,7 +606,7 @@ mapping[%{UDRP}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is Reverse Domain Name Hijacking?},
- answer:   %{Trademark owners may not file complaints just to harass domain name holders.  Under the Policy, trademark owners who file complaints in bad faith are said to have engaged in "Reverse Domain Name Hijacking."  It is considered an abuse of the administrative proceeding and the Panel can enter such a finding in the record to warn others about such a trademark owner. 
+ answer:   %{Trademark owners may not file complaints just to harass domain name holders.  Under the Policy, trademark owners who file complaints in bad faith are said to have engaged in "Reverse Domain Name Hijacking."  It is considered an abuse of the administrative proceeding and the Panel can enter such a finding in the record to warn others about such a trademark owner.
 }
 )
 
@@ -626,7 +626,7 @@ q = RelevantQuestion.create!(
 The UDRP Policy: <a href="http://www.icann.org/udrp/udrp-policy-24oct99.htm">http://www.icann.org/udrp/udrp-policy-24oct99.htm</a>
 The UDRP Rules of Procedure: <a href="http://www.icann.org/udrp/udrp-rules-24oct99.htm">http://www.icann.org/udrp/udrp-rules-24oct99.htm</a>
 Asian Domain Name Dispute Resolution Centre: <a href="http://www.hkiac.org/main.html">http://www.hkiac.org/main.html</a>
-CPR Institute for Dispute Resolution: <a href="http://www.cpradr.org/home1.htm">http://www.cpradr.org/home1.htm</a> 
+CPR Institute for Dispute Resolution: <a href="http://www.cpradr.org/home1.htm">http://www.cpradr.org/home1.htm</a>
 The National Arbitration Forum: <a href="http://www.arbforum.com/">http://www.arbforum.com/</a>
 World Intellectual Property Organization <a href="http://arbiter.wipo.int/domains/">http://arbiter.wipo.int/domains/</a>}
 )
@@ -649,10 +649,10 @@ q = RelevantQuestion.create!(
 mapping[%{Chilling Effects}] << q.id
 
 q = RelevantQuestion.create!(
- question: %{What is the Chilling Effects clearinghouse? },
- answer:   %{The project invites recipients and senders of cease and desist notices to send them to a central point (here, at chillingeffects.org) for analysis, and to browse the website for background information and explanation of the laws they are charged with violating or enforcing.  Clinical law students will prepare issue-spotting analyses of the letters in the question-and-answer style of FAQs, which we will post alongside the letters in an online database.  The site aims to educate C&D recipients about their legal rights.  Site visitors may search the database by subject area or keyword.
+ question: %{What is the Lumen Database clearinghouse? },
+ answer:   %{The project invites recipients and senders of cease and desist notices to send them to a central point (here, at lumendatabase.org) for analysis, and to browse the website for background information and explanation of the laws they are charged with violating or enforcing.  Clinical law students will prepare issue-spotting analyses of the letters in the question-and-answer style of FAQs, which we will post alongside the letters in an online database.  The site aims to educate C&D recipients about their legal rights.  Site visitors may search the database by subject area or keyword.
 
-For more, see <a href="/about">about the Chilling Effects project</a>.}
+For more, see <a href="/about">about the Lumen project</a>.}
 )
 
 mapping[%{Chilling Effects}] << q.id
@@ -687,7 +687,7 @@ mapping[%{Protest, Parody and Criticism Sites}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is trademark dilution?},
- answer:   %{A type of infringement of a famous trademark in which the defendant's use, while not causing a likelihood of confusion, tarnishes the image or blurs the distintiveness of the plaintiff's mark. For example, if someone tries to sell "KODAK" pianos, KODAK could stop the person--even if consumers were not confused--because "KODAK" is a famous mark, and its use on products other than film and film-printing accessories (or other products on which Eastman Kodak places the mark) dilutes its uniqueness. 
+ answer:   %{A type of infringement of a famous trademark in which the defendant's use, while not causing a likelihood of confusion, tarnishes the image or blurs the distintiveness of the plaintiff's mark. For example, if someone tries to sell "KODAK" pianos, KODAK could stop the person--even if consumers were not confused--because "KODAK" is a famous mark, and its use on products other than film and film-printing accessories (or other products on which Eastman Kodak places the mark) dilutes its uniqueness.
 
 Many states have anti-dilution laws.  The federal government only recently enacted anti-dilution legislation; see the <a href="http://www4.law.cornell.edu/uscode/15/1125.html">Federal Trademark Dilution Act at 15 USC 1125(c)</a>.}
 )
@@ -721,12 +721,12 @@ mapping[%{Protest, Parody and Criticism Sites}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What must a trademark owner prove to win a UDRP proceeding against a domain name holder?},
- answer:   %{     In order to win a UDRP proceeding against a domain name holder, the trademark owner must prove ALL of the following: 
-1) that the domain name registered by the domain name holder is the same or confusingly similar to a trademark or service mark in which the trademark owner has rights.  UDRP decisions have gone both ways on whether a protest, criticism or parody site is confusingly similar when a domain name consists of the trademark and another word such as "sucks."  The most important factor seems to be whether or not the domain name owner is using the site for commercial purposes.  If it is, the panel will probably find that the use of the trademark in the domain name causes a likelihood of confusion.      
-2) that the domain name owner does not have a legitimate interest in the domain name.  If the domain name owner's site is being used to criticize, protest or parody the trademarked entity or its owner's products and/or services, the panel will probably find that the domain name owner has a legitimate interest in the domain name.  This will probably be true, even if the domain name is, for all practical purposes, the same exact thing as the trademarked word.  
+ answer:   %{     In order to win a UDRP proceeding against a domain name holder, the trademark owner must prove ALL of the following:
+1) that the domain name registered by the domain name holder is the same or confusingly similar to a trademark or service mark in which the trademark owner has rights.  UDRP decisions have gone both ways on whether a protest, criticism or parody site is confusingly similar when a domain name consists of the trademark and another word such as "sucks."  The most important factor seems to be whether or not the domain name owner is using the site for commercial purposes.  If it is, the panel will probably find that the use of the trademark in the domain name causes a likelihood of confusion.
+2) that the domain name owner does not have a legitimate interest in the domain name.  If the domain name owner's site is being used to criticize, protest or parody the trademarked entity or its owner's products and/or services, the panel will probably find that the domain name owner has a legitimate interest in the domain name.  This will probably be true, even if the domain name is, for all practical purposes, the same exact thing as the trademarked word.
 3) that the domain name owner has used and registered the domain name in bad faith.  Bad faith can be found in any number of factors including, but not limited to a) registration for the purpose of selling the domain name to the trademark owner for profit; b) a pattern of registration to prevent the trademark owner from using the mark in a domain name; c) registration for the primary purpose of disrupting the business of a competitor, or d) an intentional attempt to attract, for commercial gain, Internet users to the domain name owner's web site by creating a likelihood of confusion as to the source of a product or service on the domain name owner's website.  One clear example of bad faith would be where the domain name owner creates a site that contains ads advertising the goods or services of the competitors of the trademark owner.
      Remember, that to prevail under the UDRP, the trademark owner must prove all of the points listed above.
-  
+
 }
 )
 
@@ -809,10 +809,10 @@ q = RelevantQuestion.create!(
  question: %{What are the DMCA's anti-circumvention provisions?},
  answer:   %{<p>The Digital Millennium Copyright Act (DMCA) is the latest amendment to copyright law, which introduced a new category of copyright violations that prohibit the "circumvention" of technical locks and controls on the use of digital content and products.  These anti-circumvention provisions put the force of law behind any technological systems used by copyright owners to control access to and copying of their digital works.</p>
 
-<p>The DMCA contains four main provisions: 
-<ol><li>a prohibition on circumventing access controls <a href="http://eon.law.harvard.edu/openlaw/DVD/1201.html#a">[1201(a)(1)(A)]</a>; 
-<li>an access control circumvention device ban (sometimes called the "trafficking" ban) <a href="http://eon.law.harvard.edu/openlaw/DVD/1201.html#a2">[1201(a)(2)]</a>; 
-<li>a copyright protection circumvention device ban <a href="http://eon.law.harvard.edu/openlaw/DVD/1201.html#b">[1201(b)]</a>; and, 
+<p>The DMCA contains four main provisions:
+<ol><li>a prohibition on circumventing access controls <a href="http://eon.law.harvard.edu/openlaw/DVD/1201.html#a">[1201(a)(1)(A)]</a>;
+<li>an access control circumvention device ban (sometimes called the "trafficking" ban) <a href="http://eon.law.harvard.edu/openlaw/DVD/1201.html#a2">[1201(a)(2)]</a>;
+<li>a copyright protection circumvention device ban <a href="http://eon.law.harvard.edu/openlaw/DVD/1201.html#b">[1201(b)]</a>; and,
 <li>a prohibition on the removal of copyright management information (CMI) [1202(b)].</ol></p>
 
 <p>The first provision prohibits the act of circumventing technological protection systems, the second and third ban technological devices that facilitate the circumvention of access control or copy controls, and the fourth prohibits individuals from removing information about access and use devices and rules. The first three provisions are also distinguishable in that the first two provisions focus on technological protection systems that provide access control to the copyright owner, while the third provision prohibits circumvention of technological protections against unauthorized duplication and other potentially copyright infringing activities.</p>}
@@ -879,7 +879,7 @@ mapping[%{Anticircumvention (DMCA)}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What kind of authorization is required of the copyright owner in order to legally circumvent a system?},
- answer:   %{It depends. In general, the anti-circumvention provisions of the DMCA reserve broad authority to copyright holders to determine who can circumvent their systems. 
+ answer:   %{It depends. In general, the anti-circumvention provisions of the DMCA reserve broad authority to copyright holders to determine who can circumvent their systems.
 
 For example, while the DMCA contains an encryption research exemption, to come under the exception,  a researcher must request the permission from the copyright holder to engage in circumvention in order to be exempted [1201(g)(2)(C)].  In addition, under the DMCA only individuals who are studying, trained, or employed in encryption research are likely to be considered legitimate researchers under the law [1201(g)(3)(B)].  Finally, an encryption researcher is required to immediately notify the creator of the protection system when she breaks it. [1201(g)(3)(C)]  The security testing exemption is even more restrictive in its rules about obtaining authorization from the copyright owner, requiring individuals engaged in security testing to not only request, but must actually obtain the authorization. [1201(j)(1)]  On the other hand, the exemption relating to law enforcement, intelligence, and other government purposes have no such requirements to notify copyright owners of their activities. [1201(e)]
 
@@ -935,7 +935,7 @@ mapping[%{Anticircumvention (DMCA)}] << q.id
 q = RelevantQuestion.create!(
  question: %{Can a technological protection measure be reverse engineered?},
  answer:   %{<p><a href="http://eon.law.harvard.edu/openlaw/DVD/1201.html#f">Section 1201(f)</a> allows software developers to circumvent technological protection measures of a computer program that was lawfully obtained in order to identify the elements necessary to achieve the interoperability of an independently created computer program with other programs. A software developer may reverse engineer the program only if:
-<ul><li>the elements necessary to achieve interoperability are not readily available and 
+<ul><li>the elements necessary to achieve interoperability are not readily available and
 <li>reverse engineering is otherwise permitted under the copyright law.</ul></p>
 <p>Software engineers are permitted to develop and employ circumvention devices for the purpose of achieving interoperability. <a href="http://eon.law.harvard.edu/openlaw/DVD/1201.html#f_2">[1201(f)(2)]</a>  Reverse engineers are exempt from the circumvention device ban only for the purpose of achieving interoperability, and not for gaining access to protected works for infringing purposes. <a href="http://eon.law.harvard.edu/openlaw/DVD/1201.html#f_2">[1201(f)(2)]</a></p>}
 )
@@ -947,12 +947,12 @@ q = RelevantQuestion.create!(
  answer:   %{<p>The encryption research exemption is intended to protect circumvention that advances the state of knowledge in the field of encryption technology or assists in the development of encryption products. Circumvention in encryption research may be allowed if, when done in good faith, if the following conditions are met:
 <ul><li>the researcher lawfully obtained the copyrighted work (ie. this exemption applies only to copy controls, not access controls); <a href="http://eon.law.harvard.edu/openlaw/DVD/1201.html#g_2_A">[1201(g)(2)(A)]</a>
 <li> circumvention is necessary for the encryption research; <a href="http://eon.law.harvard.edu/openlaw/DVD/1201.html#g_2_B">[1201(g)(2)(B)]</a>
-<li> the researcher tried to obtain authorization from the copyright owner before the circumvention; <a href="http://eon.law.harvard.edu/openlaw/DVD/1201.html#g_2_C">[1201(g)(2)(C)]</a> and 
+<li> the researcher tried to obtain authorization from the copyright owner before the circumvention; <a href="http://eon.law.harvard.edu/openlaw/DVD/1201.html#g_2_C">[1201(g)(2)(C)]</a> and
 <li> circumvention is otherwise permissible under the applicable laws. <a href="http://eon.law.harvard.edu/openlaw/DVD/1201.html#g_2_C">[1201(g)(2)(D)]</a></ul>
- 
-<p>In addition to the above factors, the DMCA directs courts to consider three other factors in determining whether or not to apply the exemption in a particular case: 
+
+<p>In addition to the above factors, the DMCA directs courts to consider three other factors in determining whether or not to apply the exemption in a particular case:
 <ul><li>whether the discovered information was disseminated, and if so, whether it was disseminated in a manner "reasonably calculated to advance" research or encryption technology development, or in a "manner that facilitates infringement";  <a href="http://eon.law.harvard.edu/openlaw/DVD/1201.html#g_3_A">[1201(g)(3)(A)]</a>
-<li> whether the researcher is engaged in a legitimate course of study, is employed, or is appropriately trained or experienced in the field of encryption technology; <a href="http://eon.law.harvard.edu/openlaw/DVD/1201.html#g_3_B">[1201(g)(3)(B)]</a> and 
+<li> whether the researcher is engaged in a legitimate course of study, is employed, or is appropriately trained or experienced in the field of encryption technology; <a href="http://eon.law.harvard.edu/openlaw/DVD/1201.html#g_3_B">[1201(g)(3)(B)]</a> and
 <li> whether the researcher notifies the copyright owner in a timely fashion of the findings and documentation of the research. <a href="http://eon.law.harvard.edu/openlaw/DVD/1201.html#g_3_B">[1201(g)(3)(C)]</a></ul>
 
 <p>Encryption researchers may develop, employ, and provide to collaborating researchers circumvention devices for the sole purpose of performing acts of good faith encryption research.</p>
@@ -1023,7 +1023,7 @@ q = RelevantQuestion.create!(
 
 <p>This amendment is intended to transform the prohibition of circumvention into a form of regulation that monitors developments in the marketplace for circumstances in which certain copyrighted materials become less available to the general public. This regulation system may be ineffective if the Copyright Office's findings also affect the circumvention device ban because of the necessity of using some sort of tool in order to engage in the exempted acts.<p>
 
-<p>The Copyright Office issued the following classes of works as exemptions to the circumvention activity ban at the conclusion of its first rulemaking proceedings: 
+<p>The Copyright Office issued the following classes of works as exemptions to the circumvention activity ban at the conclusion of its first rulemaking proceedings:
 <ol><li>Compilations consisting of lists to websites blocked by filtering software applications; and
 <li>Literary works, including computer programs and databases, protected by access control mechanisms that fail to permit access because of malfunction, damage, or obsoleteness.
 <a href="http://www.loc.gov/copyright/fedreg/65fr64555.html">[Exemption to Prohibition on Circumvention of Copyright Protection Systems for Access Control Technologies, 37 C.F.R. }
@@ -1077,7 +1077,7 @@ q = RelevantQuestion.create!(
 
 <p>To decide whether a use is "fair use" or not, courts consider:
 <ol><li>the purpose and character of the use, including whether such use is of a commercial nature or is for nonprofit education purposes;
-<li>the nature of the copyrighted work; 
+<li>the nature of the copyrighted work;
 <li>the amount and substantiality of the portion used in relation to the copyrighted work as a whole; and,
 <li>the effect of the use upon the potential market for or value of the copyrighted work.<a href="http://www4.law.cornell.edu/uscode/17/107.html">[17 U.S.C. 107(1-4)]</a></ol></p>
 
@@ -1154,9 +1154,9 @@ q = RelevantQuestion.create!(
  answer:   %{<p>A service provider is defined as "an entity offering transmission, routing, or providing connections for digital online communications, between or among points specified by a user, of material of the user's choosing, without modification to the content of the material as sent or received" or "a provider of online services or network access, or the operator of facilities thereof." [512(k)(1)(A-B)]   This broad definition includes network services companies such as internet service providers (ISPs), search engines, bulletin board system operators, and even auction web sites.  In <i>A&M Records, Inc. v. Napster Inc.</i>, the court refused to extend the safe harbor provisions to the Napster software program and service, leaving open the question of whether peer-to-peer networks also qualify under section 512.
 
 There are four major categories of network systems offered by service providers that qualify for protection under the safe harbor provisions:
-<sum> Conduit Communications include the transmission and routing of information, such as an email or internet service provider, which store the material only temporarily on their networks. [Sec. 512(a)] 
-<sum> System Caching refers to the temporary copies of data that are made by service providers in providing the various services that require such copying in order to transfer data. [Sec. 512(b)] 
-<sum> Storage Systems refers to services which allow users to store information on their networks, such as a web hosting service or a chat room. [Sec. 512(c)] 
+<sum> Conduit Communications include the transmission and routing of information, such as an email or internet service provider, which store the material only temporarily on their networks. [Sec. 512(a)]
+<sum> System Caching refers to the temporary copies of data that are made by service providers in providing the various services that require such copying in order to transfer data. [Sec. 512(b)]
+<sum> Storage Systems refers to services which allow users to store information on their networks, such as a web hosting service or a chat room. [Sec. 512(c)]
 <sum> Information Location Tools refer to services such as search engines, directories, or pages of recommended web sites which provides links to the allegedly infringing material. [Sec. 512(d)]
 }
 )
@@ -1168,9 +1168,9 @@ q = RelevantQuestion.create!(
  answer:   %{<p>A service provider is defined as "an entity offering transmission, routing, or providing connections for digital online communications, between or among points specified by a user, of material of the user's choosing, without modification to the content of the material as sent or received" or "a provider of online services or network access, or the operator of facilities thereof." [512(k)(1)(A-B)]   This broad definition includes network services companies such as Internet service providers (ISPs), search engines, bulletin board system operators, and even auction web sites.  In <i>A&M Records, Inc. v. Napster Inc.</i>, the court refused to extend the safe harbor provisions to the Napster software program and service, leaving open the question of whether peer-to-peer networks also qualify for safe harbor protection under Section 512.</p>
 
 <p>There are four major categories of network systems offered by service providers that qualify for protection under the safe harbor provisions:
-<ul><li>Conduit Communications include the transmission and routing of information, such as an email or Internet service provider, which store the material only temporarily on their networks. [Sec. 512(a)] 
-<li>System Caching refers to the temporary copies of data that are made by service providers in providing the various services that require such copying in order to transfer data. [Sec. 512(b)] 
-<li>Storage Systems refers to services which allow users to store information on their networks, such as a web hosting service or a chat room. [Sec. 512(c)] 
+<ul><li>Conduit Communications include the transmission and routing of information, such as an email or Internet service provider, which store the material only temporarily on their networks. [Sec. 512(a)]
+<li>System Caching refers to the temporary copies of data that are made by service providers in providing the various services that require such copying in order to transfer data. [Sec. 512(b)]
+<li>Storage Systems refers to services which allow users to store information on their networks, such as a web hosting service or a chat room. [Sec. 512(c)]
 <li>Information Location Tools refer to services such as search engines, directories, or pages of recommended web sites which provide links to the allegedly infringing material. [Sec. 512(d)]</ul>}
 )
 
@@ -1185,7 +1185,7 @@ mapping[%{DMCA Safe Harbor}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What does a service provider have to do in order to qualify for safe harbor protection?},
- answer:   %{<p>In addition to informing its customers of its policies <a href="#QID128">(discussed above)</a>, a service provider must follow the proper notice and takedown procedures <a href="#QID130">(discussed above)</a> and also meet several other requirements in order to qualify for exemption under the safe harbor provisions.</p> 
+ answer:   %{<p>In addition to informing its customers of its policies <a href="#QID128">(discussed above)</a>, a service provider must follow the proper notice and takedown procedures <a href="#QID130">(discussed above)</a> and also meet several other requirements in order to qualify for exemption under the safe harbor provisions.</p>
 
 <p>In order to facilitate the notification process in cases of infringement, ISPs which allow users to store information on their networks, such as a web hosting service, must designate an agent that will receive the notices from copyright owners that its network contains material which infringes their intellectual property rights.  The service provider must then notify the Copyright Office of the agent's name and address and make that information publicly available on its web site. [512(c)(2)]</p>
 
@@ -1250,7 +1250,7 @@ mapping[%{DMCA Safe Harbor}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{How are the safe harbor provisions applied to educational institutions?},
- answer:   %{<p>The safe harbor provisions make a special exception to educational institutions that qualify as service providers under section 512.  [512(e)]  While a corporation is responsible for the activities of its employees, faculty members or graduate student employees who are performing teaching or research functions are not considered a part of the institution itself for certain infringing activities so as to maintain the academic freedom of these institutions. [512(e)(1)]</p>  
+ answer:   %{<p>The safe harbor provisions make a special exception to educational institutions that qualify as service providers under section 512.  [512(e)]  While a corporation is responsible for the activities of its employees, faculty members or graduate student employees who are performing teaching or research functions are not considered a part of the institution itself for certain infringing activities so as to maintain the academic freedom of these institutions. [512(e)(1)]</p>
 
 <p>The institution can therefore avoid liability for infringement even if the infringing individuals knew they were infringing, provided that:
 <ul><li>the infringing activities did not involve the provision of access to materials required for a course within the previous three years [512(e)(1)(A)]
@@ -1262,14 +1262,14 @@ mapping[%{DMCA Safe Harbor}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{If a hyperlink is just a location pointer, how can it be illegal?},
- answer:   %{. 
+ answer:   %{.
 It probably isn't, however, a few courts have now held that a hyperlink violates the law if it points to illegal material with the <i>purpose of disseminating that illegal material</i>:  <ul>
-<li>In the DeCSS case, <a href="http://eon.law.harvard.edu/openlaw/DVD/NY/">Universal v. Reimerdes</a>, the court barred 2600 Magazine from posting hyperlinks to DeCSS code because it found the magazine had linked for the purpose of disseminating a circumvention device. (See <!--GET CatLink 12-->.) The court ruled that it could regulate the link because of its "function," even if the link was also speech.  
+<li>In the DeCSS case, <a href="http://eon.law.harvard.edu/openlaw/DVD/NY/">Universal v. Reimerdes</a>, the court barred 2600 Magazine from posting hyperlinks to DeCSS code because it found the magazine had linked for the purpose of disseminating a circumvention device. (See <!--GET CatLink 12-->.) The court ruled that it could regulate the link because of its "function," even if the link was also speech.
 <li> In another case, <a href="http://www.law.uh.edu/faculty/cjoyce/copyright/release10/IntRes.html">Intellectual Reserve v. Utah Lighthouse Ministry</a>, a Utah court found that linking to unauthorized copies of a text might be a contributory infringement of the work's copyright. (The defendant in that case had previously posted unauthorized copies on its own site, then replaced the copies with hyperlinks to other sites.)
 </ul>
 By contrast, the court in <a href="http://www.gigalaw.com/library/ticketmaster-tickets-2000-03-27.html">Ticketmaster v. Tickets.com</a> found that links were not infringements of copyright.
 </p><p>
-Like anything else on a website, a hyperlink could also be problematic if it <i>misrepresents</i> something about the website.  For example, if the link and surrounding text falsely stated that a website is affiliated with another site or sponsored by the linked company, it might be false advertising or defamation.  
+Like anything else on a website, a hyperlink could also be problematic if it <i>misrepresents</i> something about the website.  For example, if the link and surrounding text falsely stated that a website is affiliated with another site or sponsored by the linked company, it might be false advertising or defamation.
 </p>
 <p>Finally, post-<a href="http://www.eff.org/IP/P2P/MGM_v_Grokster/">Grokster</a>, a hyperlink might be argued to induce copyright infringement, if the link were made knowing that the linked-to material was infringing and with the intent of inducing people to follow the link and infringe copyright.</p>
 <p>In most cases, however, simple linking is unlikely to violate the law.</p>}
@@ -1278,14 +1278,14 @@ Like anything else on a website, a hyperlink could also be problematic if it <i>
 mapping[%{Linking}] << q.id
 
 q = RelevantQuestion.create!(
- question: %{What kinds of things are copyrighted? 
+ question: %{What kinds of things are copyrighted?
 
 },
  answer:   %{In order for a work to be protected by copyright, it must be an original creation set in a fixed medium.
 
-An artist or author does not have a copyright in material borrowed from someone else.  Also, stock characters (the sidekick) or plot lines (boy meets girl) are not copyrightable. 
+An artist or author does not have a copyright in material borrowed from someone else.  Also, stock characters (the sidekick) or plot lines (boy meets girl) are not copyrightable.
 
-The requirement that works be in a fixed medium means certain forms of expression, most notably choreography and oral performances such as speeches, are not copyrighted, (unless they are being recorded contemporaneously). For instance, if I perform a Klingon death wail in a local park, my wail of death is not copyrighted, and someone else may come along and do the same thing the next day.  However, if I film the performance, then the Klingon death wail does become copyrighted (since it is now "fixed" according to copyright law).  Contrary to popular belief, I do not have to register my copyrighted work for it to receive copyright protection.  In the United States, I only need to register if I'm going to sue.  
+The requirement that works be in a fixed medium means certain forms of expression, most notably choreography and oral performances such as speeches, are not copyrighted, (unless they are being recorded contemporaneously). For instance, if I perform a Klingon death wail in a local park, my wail of death is not copyrighted, and someone else may come along and do the same thing the next day.  However, if I film the performance, then the Klingon death wail does become copyrighted (since it is now "fixed" according to copyright law).  Contrary to popular belief, I do not have to register my copyrighted work for it to receive copyright protection.  In the United States, I only need to register if I'm going to sue.
 
 }
 )
@@ -1303,13 +1303,13 @@ q = RelevantQuestion.create!(
 (3) the amount and substantiality of the portion used in relation to the copyrighted work as a whole; and
 (4) the effect of the use upon the potential market for or value of the copyrighted work.
 
-Parody is also fair use.  
+Parody is also fair use.
 
 Under this doctrine, artists have been permitted to create and display their art even if it uses copyrighted works of others.  See <a href=&quot;http://abcnews.go.com/sections/us/DailyNews/barbie010223.html&quot;>Court Allows Artist to Sell Barbie Art</a>, for an example.
 
-There is a strong argument that many fan fiction stories are transformative since they create a different persona and set of events for the character. To create a new story cannot be seen as the same as posting video clips on a website. There must be a balancing between protecting copyrights in order to encourage innovation by authors and between allowing works to be in the public domain to allow creative uses. 
+There is a strong argument that many fan fiction stories are transformative since they create a different persona and set of events for the character. To create a new story cannot be seen as the same as posting video clips on a website. There must be a balancing between protecting copyrights in order to encourage innovation by authors and between allowing works to be in the public domain to allow creative uses.
 
-Whether a court will view this as the case for a particular work of fan fiction depends on how much of the story relies on copyrighted materials, whether the story is sold, or affects the market for the copyrighted work, and other factors.  There is no easy answer to the question, which is why it is often a good idea to consult a lawyer who can assess the particular facts of your case.  
+Whether a court will view this as the case for a particular work of fan fiction depends on how much of the story relies on copyrighted materials, whether the story is sold, or affects the market for the copyrighted work, and other factors.  There is no easy answer to the question, which is why it is often a good idea to consult a lawyer who can assess the particular facts of your case.
 }
 )
 
@@ -1324,7 +1324,7 @@ mapping[%{Fan Fiction}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Aren't I allowed to make a backup copy of my software?
- 
+
 },
  answer:   %{Yes, but only for specifically authorized archival purposes, as specified in 17 U.S.C. sec. 117(2).  This does not authorize sharing or selling of backup copies.  The rule allows transfer to another person only with the explicit authorization of the copyright owner and only if he original copy is transferred.  Backups for individual use and those considered "an essential step" in using the software with an individual's computer are also authorized. }
 )
@@ -1336,11 +1336,11 @@ q = RelevantQuestion.create!(
 },
  answer:   %{No. Copyright gives the owner exclusive rights to reproduce, adapt, publicly distribute, perform and display their work.  Nonetheless, the law allows "fair use" of copyrighted material. Fair use permits, in certain circumstances, the use or copying of all or a portion of a copyrighted work without the permission of the owner. Copyrighted works may be used for purposes such as criticism, comment, news reporting, teaching, scholarship, or research. To decide whether a use is "fair use" or not, courts consider, in part:
 (1) the purpose and character of the use  (including whether such use is of a commercial nature or is for nonprofit educational purposes);
-(2) the nature of the copyrighted work (giving creative works more protection than factual works);  
+(2) the nature of the copyrighted work (giving creative works more protection than factual works);
 (3) the amount and substantiality of the portion used in relation to the copyrighted work as a whole (including size and quality- i.e. Does the portion represent the "heart" of the work); and
-(4) the effect of the use upon the potential market for or value of the copyrighted work. 
+(4) the effect of the use upon the potential market for or value of the copyrighted work.
 
-Courts balance these factors, placing an emphasis on the fourth, however rulings have been unpredictable.  Parody may be protected by fair use where the user is actually making a comment on or criticism of the copyrighted material, even if a profit is made from the use.  Still, distributing copyrighted software will rarely be fair use because people will use those copies instead of buying the software from the legitimate vendor.  
+Courts balance these factors, placing an emphasis on the fourth, however rulings have been unpredictable.  Parody may be protected by fair use where the user is actually making a comment on or criticism of the copyrighted material, even if a profit is made from the use.  Still, distributing copyrighted software will rarely be fair use because people will use those copies instead of buying the software from the legitimate vendor.
 }
 )
 
@@ -1375,16 +1375,16 @@ q = RelevantQuestion.create!(
 mapping[%{Piracy or Copyright Infringement}] << q.id
 
 q = RelevantQuestion.create!(
- question: %{Do I have trademark rights in my domain name? 
+ question: %{Do I have trademark rights in my domain name?
 
 },
- answer:   %{You may actually have trademark rights superior to those of your accuser. You may have such trademark rights because 
-(a) you have a registered trademark;  
-(b) you have a pending "intent to use" trademark application, of which the filing date predates the use of the mark by your accuser; 
-(c) you have a pending "use based" trademark application and your date of first use predates the first use of the mark by your accuser; or 
-(d) you have ?common law? rights to the trademark.  
+ answer:   %{You may actually have trademark rights superior to those of your accuser. You may have such trademark rights because
+(a) you have a registered trademark;
+(b) you have a pending "intent to use" trademark application, of which the filing date predates the use of the mark by your accuser;
+(c) you have a pending "use based" trademark application and your date of first use predates the first use of the mark by your accuser; or
+(d) you have ?common law? rights to the trademark.
 
- In the U.S., the person who establishes priority in a mark gains the ultimate right to use it.  According to the Lanham Act, determining who owns a mark involves establishing who first used it to identify his/her goods.  That means, in the United States, you do not need to register a mark to establish rights to it. However, registering a mark means that the registrant is presumed to be the owner of the mark for the goods and services specified in the application. 
+ In the U.S., the person who establishes priority in a mark gains the ultimate right to use it.  According to the Lanham Act, determining who owns a mark involves establishing who first used it to identify his/her goods.  That means, in the United States, you do not need to register a mark to establish rights to it. However, registering a mark means that the registrant is presumed to be the owner of the mark for the goods and services specified in the application.
 }
 )
 
@@ -1399,7 +1399,7 @@ mapping[%{John Doe Anonymity}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{I signed a confidentiality/privacy agreement with my ISP that provides that they will not release my information.  Doesn},
- answer:   %{No. Most privacy agreements state that information will be turned over in response to legal requests, and a subpena is such a request.  Even if the agreement does not say so, a legally issued subpoena overrides such agreements as a matter of public policy.  Each ISP has a different policy about notifying users when their information has been subpoenaed, but they cannot simply ignore a subpoena under the law without risking legal santion themselves. 
+ answer:   %{No. Most privacy agreements state that information will be turned over in response to legal requests, and a subpena is such a request.  Even if the agreement does not say so, a legally issued subpoena overrides such agreements as a matter of public policy.  Each ISP has a different policy about notifying users when their information has been subpoenaed, but they cannot simply ignore a subpoena under the law without risking legal santion themselves.
 }
 )
 
@@ -1415,7 +1415,7 @@ mapping[%{John Doe Anonymity}] << q.id
 q = RelevantQuestion.create!(
  question: %{How do I prove that I have trademark rights in my domain name?
 },
- answer:   %{    Under (a), (b), and (c) above, if you have registered the trademark or have filed an application for the trademark that predates your accuser's use, your priority will be easy to prove. 
+ answer:   %{    Under (a), (b), and (c) above, if you have registered the trademark or have filed an application for the trademark that predates your accuser's use, your priority will be easy to prove.
 
     Under (d), above, to prove that you have "common law" rights in the trademark, you will need to prove when you first started to use the trademark. The following evidence can help you establish this:
 
@@ -1424,11 +1424,11 @@ q = RelevantQuestion.create!(
       ii. Public relation materials showing your use of the
       iii.Search on Internet for review of articles mentioning your use of the mark for your product or services
       iv. Advertising bills specifically mentioning ads for the product or services.
- 
+
     2. Any receipts or other documents showing sales of the product
 
     3. Any articles that contain a review of your product or services.
-    
+
     4. Any listing in trade brochures indicating use of the mark at a trade show.
 
     5.Any other documents which show when you started making the product or offering the services.
@@ -1473,9 +1473,9 @@ mapping[%{John Doe Anonymity}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What if I need to contact an attorney?},
- answer:   %{This website is meant as an aid to help you decipher Cease and Desist notices so you can make informed decisions about your course of action. If, after reading this, you think the C&D you received might have some merit, or you think you might engage your opponent in battle even if the C&D is, in your opinion, baseless, consultation with an attorney is always a good idea.  
+ answer:   %{This website is meant as an aid to help you decipher Cease and Desist notices so you can make informed decisions about your course of action. If, after reading this, you think the C&D you received might have some merit, or you think you might engage your opponent in battle even if the C&D is, in your opinion, baseless, consultation with an attorney is always a good idea.
 
-The <a href="http://www.omln.org/">Online Media Legal Network (OMLN)</a> is a network of law firms, law school clinics, in-house counsel, and individual lawyers throughout the United States willing to provide pro bono (free) and reduced fee legal assistance to qualifying online journalism ventures and other digital media creators. 
+The <a href="http://www.omln.org/">Online Media Legal Network (OMLN)</a> is a network of law firms, law school clinics, in-house counsel, and individual lawyers throughout the United States willing to provide pro bono (free) and reduced fee legal assistance to qualifying online journalism ventures and other digital media creators.
 
 You can find an intellectual property attorney at <a href="http://www.martindale.com">www.martindale.com</a> or by calling your state or local <a href="http://www.romingerlegal.com/natbar.htm">Bar Association</a> and asking for a referral.       }
 )
@@ -1484,7 +1484,7 @@ mapping[%{Chilling Effects}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{How do I find a "WHOIS" record?},
- answer:   %{On the web, you can start with the InterNIC registrar lookup, <a href="http://www.internic.net/whois.html">http://www.internic.net/whois.html</a> and follow that to the registrar's website, or try combined lookups at <a href="http://www.samspade.org/#TOC1">SamSpade</a>, <a href="http://www.geektools.com/whois.php">GeekTools</a>, or <a href="http://www.uwhois.com/cgi/domains.cgi?User=Default">uWhois</a>. Command line tools are available that use the port 43 WHOIS protocol. 
+ answer:   %{On the web, you can start with the InterNIC registrar lookup, <a href="http://www.internic.net/whois.html">http://www.internic.net/whois.html</a> and follow that to the registrar's website, or try combined lookups at <a href="http://www.samspade.org/#TOC1">SamSpade</a>, <a href="http://www.geektools.com/whois.php">GeekTools</a>, or <a href="http://www.uwhois.com/cgi/domains.cgi?User=Default">uWhois</a>. Command line tools are available that use the port 43 WHOIS protocol.
 }
 )
 
@@ -1513,7 +1513,7 @@ mapping[%{Documenting Your Domain Defense}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is a hyperlink?},
- answer:   %{Unless you typed the <a href="http://webopedia.com/TERM/U/URL.html">URL</a> directly into your web browser, you probably followed a hyperlink to get to this page.  A hyperlink is a location reference that the web browser interprets, often by underlining the text in blue, to "link" to another information resource when clicked.  In HTML (HyperText Markup Language, the code used to write web pages), a hyperlink looks like this: <b> <a href="http://chillingeffects.org/linking/"></b>link<b></a></b>}
+ answer:   %{Unless you typed the <a href="http://webopedia.com/TERM/U/URL.html">URL</a> directly into your web browser, you probably followed a hyperlink to get to this page.  A hyperlink is a location reference that the web browser interprets, often by underlining the text in blue, to "link" to another information resource when clicked.  In HTML (HyperText Markup Language, the code used to write web pages), a hyperlink looks like this: <b> <a href="https://www.lumendatabase.org/topics/18"></b>link<b></a></b>}
 )
 
 mapping[%{Linking}] << q.id
@@ -1521,7 +1521,7 @@ mapping[%{Linking}] << q.id
 q = RelevantQuestion.create!(
  question: %{Is "deep linking" illegal?},
  answer:   %{.
-"Deep linking" refers to the creation of hyperlinks to a page other than a website's homepage. For example, instead of pointing a link at http://www.chillingeffects.org, this site's "homepage," another site might link directly to the linking FAQ at http://www.chillingeffects.org/linking/faq .  
+"Deep linking" refers to the creation of hyperlinks to a page other than a website's homepage. For example, instead of pointing a link at http://www.lumendatabase.org, this site's "homepage," another site might link directly to the linking FAQ at https://www.lumendatabase.org/topics/18.
 <p>
 Some website owners complain that deep links "steal" traffic to their homepages or disrupt the intended flow of their websites.  In particular, Ticketmaster has argued that other sites should not be permitted to send browsers directly to Ticketmaster event listings.  <a href="http://www.nytimes.com/library/tech/99/02/cyber/articles/15tick.html">Ticketmaster settled its claim against Microsoft</a> and <a href="http://www.gigalaw.com/library/ticketmaster-tickets-2000-03-27.html">lost a suit against Tickets.com</a> over deep linking. <blockquote class="main"><i>From <a href="http://www.gigalaw.com/library/ticketmaster-tickets-2000-03-27.html">Ticketmaster v. Tickets.com opinion</a></i>:<br>Further, hyperlinking does not itself involve a violation of the Copyright Act (whatever it may do for other claims) since no copying is involved. The customer is automatically transferred to the particular genuine web page of the original author. There is no deception in what is happening. This is analogous to using a library's card index to get reference to particular items, albeit faster and more efficiently.</blockquote>
 <p>So far, courts have found that deep links to web pages were neither a copyright infringement nor a trespass.  }
@@ -1531,7 +1531,7 @@ mapping[%{Linking}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Can linking be trademark infringement?},
- answer:   %{Trademark infringement is misuse of another's mark to cause consumer confusion about the source or sponsorship of goods or services.  By contrast, many non-confusing uses of trademarks are fair and/or non-infringing.  (See <!--GET CatLink 6--> Topic.) 
+ answer:   %{Trademark infringement is misuse of another's mark to cause consumer confusion about the source or sponsorship of goods or services.  By contrast, many non-confusing uses of trademarks are fair and/or non-infringing.  (See <!--GET CatLink 6--> Topic.)
 
 If website uses hyperlinks, like any other content, to mislead viewers into thinking the site is endorsed by someone whose trademark it uses, (e.g., "This page sponsored by MEGACORP, click here for more details"), the website might be found to infringe the trademark.   A website merely linking to someone's web page, even if that page and its <a href="http://webopedia.com/TERM/U/URL.html">URL</a> include a trademark (e.g., "We disagree with MEGACORP, click here to visit their homepage"), is unlikely to be trademark infringement.  }
 )
@@ -1547,9 +1547,9 @@ mapping[%{Linking}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Can an operator of a visual search engine use the copyrighted images of another owner as "thumbnails" in its search engine?},
- answer:   %{Yes, the creation and use of "thumbnails" -- smaller, lower resolution depictions of the original image -- as part of such a search engine may be a fair use.  
+ answer:   %{Yes, the creation and use of "thumbnails" -- smaller, lower resolution depictions of the original image -- as part of such a search engine may be a fair use.
 
-The Ninth Circuit Court of Appeals recently held in Kelly v. Arriba Soft that displaying the copyrighed images of another as thumbnails on a search engine was a fair use because the thumbnails served a completely different purpose than the original images.  Working through the four factor fair use analysis, the court emphasized that it was essential to determine if defendant's use was transformative in nature.  It is more likely that a court will find fair use if the defendant's use of the image advances a purpose different than the copyright holder's, rather than merely superseding the object of the originals.  For example, the Ninth Circuit found there to be a fair use since the displayed images were not for illustrative artistic purposes, but were rather used as part of an image search engine as a means to access other images and web sites.  Even if defendant's website is operated for a commercial purpose, it may still be a fair use if the use of the image was "more incidental and less exploitative."  The court in Kelly found that defendant's search engine did not directly profit from the use of plaintiff's images, and therefore that their use was not highly exploitative.  In Kelly, the court also found that the use of the images would not hurt the plaintiff's market for the images.  
+The Ninth Circuit Court of Appeals recently held in Kelly v. Arriba Soft that displaying the copyrighed images of another as thumbnails on a search engine was a fair use because the thumbnails served a completely different purpose than the original images.  Working through the four factor fair use analysis, the court emphasized that it was essential to determine if defendant's use was transformative in nature.  It is more likely that a court will find fair use if the defendant's use of the image advances a purpose different than the copyright holder's, rather than merely superseding the object of the originals.  For example, the Ninth Circuit found there to be a fair use since the displayed images were not for illustrative artistic purposes, but were rather used as part of an image search engine as a means to access other images and web sites.  Even if defendant's website is operated for a commercial purpose, it may still be a fair use if the use of the image was "more incidental and less exploitative."  The court in Kelly found that defendant's search engine did not directly profit from the use of plaintiff's images, and therefore that their use was not highly exploitative.  In Kelly, the court also found that the use of the images would not hurt the plaintiff's market for the images.
 
 <a href="http://images.chillingeffects.org/cases/Kelly_v_Arriba.pdf">Kelly v. Arriba Soft Corporation</a>.}
 )
@@ -1590,9 +1590,9 @@ mapping[%{Documenting Your Domain Defense}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is the Paris Convention and how does it apply to United States Trademark Law},
- answer:   %{Please see <a href="http://www.bitlaw.com/source/treaties/paris.html">Bitlaw</a> for an online copy of the Treaty; the applicable lanugage reads as follows: 
+ answer:   %{Please see <a href="http://www.bitlaw.com/source/treaties/paris.html">Bitlaw</a> for an online copy of the Treaty; the applicable lanugage reads as follows:
 
-" (1)Any person who has duly filed an application for a patent, or for the registration of a utility model, or of an industrial design, or of a trademark, in one of the countries of the Union, or his successor in title, shall enjoy, for the purpose of filing in the other countries, a right of priority during the periods hereinafter fixed. 
+" (1)Any person who has duly filed an application for a patent, or for the registration of a utility model, or of an industrial design, or of a trademark, in one of the countries of the Union, or his successor in title, shall enjoy, for the purpose of filing in the other countries, a right of priority during the periods hereinafter fixed.
 
 (2) Any filing that is equivalent to a regular national filing under the domestic legislation of any country of the Union or under bilateral or multilateral treaties concluded between countries of the Union shall be recognized as giving rise to the right of priority."
 
@@ -1640,7 +1640,7 @@ q = RelevantQuestion.create!(
  question: %{How can I show that Complainant's trademark rights in a mark do not extend to my use of the mark in my domain name?},
  answer:   %{One way is by showing the mark is a common name or common word.  Using "Basset" as an example:
 A. Conduct a white pages search on the Internet, or local phone books, to demonstrate the word is a common last name.
-B. Using a search engine, such as "Google", show that the word has been used many times in many contexts not related to Complainant's field of use. 
+B. Using a search engine, such as "Google", show that the word has been used many times in many contexts not related to Complainant's field of use.
 C. (Attach this evidence to your Answer)
 D. (Link to UDRP decision concerning Basset)
 
@@ -1659,20 +1659,20 @@ Most of the ACPA provisions are now found in the <a href="http://www.bitlaw.com/
 mapping[%{ACPA}] << q.id
 
 q = RelevantQuestion.create!(
- question: %{Who is behind the Chilling Effects project?},
- answer:   %{<p>The Chilling Effects Clearinghouse is a unique collaboration among law school clinics and the Electronic Frontier Foundation.  Conceived and developed at the <a href="http://cyber.law.harvard.edu/" target="new">Berkman Center for Internet & Society</a> by Berkman Fellow <a href="http://cyber.law.harvard.edu/seltzer.html" target="new">Wendy Seltzer</a>, the project is now supported by the following clinical programs: 
+ question: %{Who is behind the Lumen Database project?},
+ answer:   %{<p>The Lumen Database is a unique collaboration among law school clinics and the Electronic Frontier Foundation.  Conceived and developed at the <a href="http://cyber.law.harvard.edu/" target="new">Berkman Center for Internet & Society</a> by Berkman Fellow <a href="http://cyber.law.harvard.edu/seltzer.html" target="new">Wendy Seltzer</a>, the project is now supported by the following clinical programs:
 <!--GET display_list Org 1-->
 
-The information and reports on the chillingeffects.org website are written by law students, under the supervision of the participating organizations.  Please see the <a href="about">About Us</a> page for more information and contacts.}
+The information and reports on the lumendatabase.org website are written by law students, under the supervision of the participating organizations.  Please see the <a href="about">About Us</a> page for more information and contacts.}
 )
 
 mapping[%{Chilling Effects}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{I purchased the movie, book, etc. Doesn},
- answer:   %{Mere ownership of a book, manuscript, painting, or any other copy or phonorecord does not give the possessor the copyright in the work. The law provides that transfer of ownership of any material object that embodies a protected work does not of itself convey any rights in the copyright. 
+ answer:   %{Mere ownership of a book, manuscript, painting, or any other copy or phonorecord does not give the possessor the copyright in the work. The law provides that transfer of ownership of any material object that embodies a protected work does not of itself convey any rights in the copyright.
 
-So, a FanFic author who purchases a book and creates an animation of that book cannot claim that she owns the copyright of that book since she purchased it. Copyrights may be divided into mini-rights in different parts of the work and transferred but the law requires a written agreement for the assignment of any ownership interest. Authors are also generally allowed to terminate earlier transfers.  
+So, a FanFic author who purchases a book and creates an animation of that book cannot claim that she owns the copyright of that book since she purchased it. Copyrights may be divided into mini-rights in different parts of the work and transferred but the law requires a written agreement for the assignment of any ownership interest. Authors are also generally allowed to terminate earlier transfers.
 }
 )
 
@@ -1680,7 +1680,7 @@ mapping[%{Fan Fiction}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is vicarious liability?},
- answer:   %{Vicarious liability, a form of indirect copyright infringement, is found where an operator has (1) the right and ability to control users and (2) a direct financial benefit from allowing their acts of piracy.  User agreements or Acceptable Use Policies may be evidence of an operator's authority over users.  The financial benefit may include a subscription fee, advertising revenues, or even a bartered exchange for other copyrighted.  Under the doctrine of vicarious liability, you may be found liable even if you do not have specific knowledge of infringing acts occurring on your site.  
+ answer:   %{Vicarious liability, a form of indirect copyright infringement, is found where an operator has (1) the right and ability to control users and (2) a direct financial benefit from allowing their acts of piracy.  User agreements or Acceptable Use Policies may be evidence of an operator's authority over users.  The financial benefit may include a subscription fee, advertising revenues, or even a bartered exchange for other copyrighted.  Under the doctrine of vicarious liability, you may be found liable even if you do not have specific knowledge of infringing acts occurring on your site.
 }
 )
 
@@ -1690,7 +1690,7 @@ q = RelevantQuestion.create!(
  question: %{How can marketing affect FanFic?},
  answer:   %{ Copyright law gives an author the exclusive right to distribute to the public by sale or other transfer of ownership.  This means that if a fan of Superman digitally scans images of Superman from comic books and makes them available on the Internet, then this marketing could be a violation of the right to distribute (regardless of whether it was for- or not-for-profit).  (Note that if a fan purchases a copy of a Superman comic book legitimately, then the fan is free to sell of transfer that specific comic book without getting the prior consent of the copyright holder; this is called the "doctrine of first sale").
 
-However, most FanFic works are not straight copies of another work; rather they are works that are often inspired by some book, movie or TV show.  Therefore, most FanFic authors are worried about whether they have violated an author's exclusive right to reproduce or prepare derivative works, rather than distribution.  In defense of their works, FanFic authors will often try to argue that their use constitutes fair use.  
+However, most FanFic works are not straight copies of another work; rather they are works that are often inspired by some book, movie or TV show.  Therefore, most FanFic authors are worried about whether they have violated an author's exclusive right to reproduce or prepare derivative works, rather than distribution.  In defense of their works, FanFic authors will often try to argue that their use constitutes fair use.
 
 Marketing activities by the FanFic author can impact the issue of fair use.  If the marketing activity is purely non-commercial, then this weighs in favor of the FanFic author.  }
 )
@@ -1699,9 +1699,9 @@ mapping[%{Fan Fiction}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is reverse engineering?},
- answer:   %{Reverse engineering is the general process of analyzing a technology specifically to ascertain how it was designed or how it operates. This kind of inquiry engages individuals in a constructive learning process about the operation of systems and products. Reverse engineering as a method is not confined to any particular purpose, but is often an important part of the scientific method and  technological development.  The process of taking something apart and revealing the way in which it works is often an effective way to learn how to build a technology or make improvements to it.  
+ answer:   %{Reverse engineering is the general process of analyzing a technology specifically to ascertain how it was designed or how it operates. This kind of inquiry engages individuals in a constructive learning process about the operation of systems and products. Reverse engineering as a method is not confined to any particular purpose, but is often an important part of the scientific method and  technological development.  The process of taking something apart and revealing the way in which it works is often an effective way to learn how to build a technology or make improvements to it.
 
-Through reverse engineering, a researcher gathers the technical data necessary for the documentation of the operation of a technology or component of a system. In "black box" reverse engineering, systems are observed without examining internal structure, while in "white box" reverse engineering the inner workings of the system are inspected. 
+Through reverse engineering, a researcher gathers the technical data necessary for the documentation of the operation of a technology or component of a system. In "black box" reverse engineering, systems are observed without examining internal structure, while in "white box" reverse engineering the inner workings of the system are inspected.
 
 When reverse engineering software, researchers are able to examine the strength of systems and identify their weaknesses in terms of performance, security, and interoperability.  The reverse engineering process allows researchers to understand both how a program works and also what aspects of the program contribute to its not working.  Independent manufacturers can participate in a competitive market that rewards the improvements made on dominant products.  For example, security audits, which allow users of software to better protect their systems and networks by revealing security flaws, require reverse engineering. The creation of better designs and the interoperability of existing products often begin with reverse engineering.}
 )
@@ -1712,7 +1712,7 @@ q = RelevantQuestion.create!(
  question: %{How does reverse engineering differ from other types of engineering?},
  answer:   %{The most traditional method of the development of a technology is referred to as "forward engineering." In the construction of a technology, manufacturers develop a product by implementing engineering concepts and abstractions.  By contrast, reverse engineering begins with final product, and works backward to recreate the engineering concepts by analyzing the design of the system and the interrelationships of its components.
 
-Value engineering refers to the creation of an improved system or product to the one originally analyzed. While there is often overlap between the methods of value engineering and reverse engineering, 
+Value engineering refers to the creation of an improved system or product to the one originally analyzed. While there is often overlap between the methods of value engineering and reverse engineering,
 the goal of reverse engineering itself is the improved documentation of how the original product works by uncovering the underlying design.  The working product that results from a reverse engineering effort is more like a duplicate of the original system, without necessarily adding modifications or improvements to the original design.}
 )
 
@@ -1745,7 +1745,7 @@ mapping[%{Reverse Engineering}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is disassembly or decompilation of a computer software program?},
- answer:   %{In the development of software, the <a href="http://www.chillingeffects.org/reverse/faq.cgi#QID192">source code</a> in which programmers originally write is translated into object (binary) code. The translation is done with a computer program called an "assembler" or "compiler," depending on the source code's language, such as Java, C++, or assembly.  A great deal of the original programmer's instructions, including commentary, notations, and specifications, are not included in the translation from source to object code (the assembly or compilation).  
+ answer:   %{In the development of software, the <a href="https://www.lumendatabase.org/topics/15">source code</a> in which programmers originally write is translated into object (binary) code. The translation is done with a computer program called an "assembler" or "compiler," depending on the source code's language, such as Java, C++, or assembly.  A great deal of the original programmer's instructions, including commentary, notations, and specifications, are not included in the translation from source to object code (the assembly or compilation).
 
 Disassembly or decompilation reverses this process by reading the object code of the program and translating them into source code.  By presenting the information in a computer language that a software programmer can understand, the reverse engineer can analyze the structure of the program and identify how it operates.
 
@@ -1767,7 +1767,7 @@ mapping[%{Reverse Engineering}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is interoperability?},
- answer:   %{Generally, interoperability allows technologies to work together when they use the same inputs and create the same outputs. For computers, interoperability is the abililty of programs and systems running on various kinds of software and hardware to communicate with each other. 
+ answer:   %{Generally, interoperability allows technologies to work together when they use the same inputs and create the same outputs. For computers, interoperability is the abililty of programs and systems running on various kinds of software and hardware to communicate with each other.
 
 Standards foster interoperability by ensuring that all groups implementing the standard interpret it the same way, so that the technology produces consistent performance regardless of the individual brand or model.  By contrast, a lack of standards means that parties must reverse engineer the technology to achieve interoperability.  Moreover, owners of proprietary, non-standardized technologies retain control over upgrades and developments to those technologies, and may change them at will, disrupting the interoperability with other technologies. }
 )
@@ -1892,7 +1892,7 @@ mapping[%{Reverse Engineering}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is the difference between a license and a sale of a product?},
- answer:   %{As opposed to the transfer of ownership of property when a consumer buys a product, a licensee enters into a relationship with the manufacturer where the permitted uses of the product are defined in a contract and the manufacturer still retains ownership. The software industry generally makes end-user license agreements, which define these permitted uses in the form of a shrink-wrap, click-wrap, or browse-wrap agreement.  
+ answer:   %{As opposed to the transfer of ownership of property when a consumer buys a product, a licensee enters into a relationship with the manufacturer where the permitted uses of the product are defined in a contract and the manufacturer still retains ownership. The software industry generally makes end-user license agreements, which define these permitted uses in the form of a shrink-wrap, click-wrap, or browse-wrap agreement.
 
 Even though copyright law includes explicit exemptions on the use of computer programs under section 117 of the Copyright Act, some controversy exists over whether those exemptions apply in the case of a license that prohibits reverse engineering.  Under section 117, an <a href="http://eon.law.harvard.edu:8080/chilly/reverse/faq.cgi#QID196>(see above)</a>individual is permitted to make a copy of a program if the copy is made is part of the process of making a program interoperable with a machine</a>. Supporters of the enforceability of anti reverse engineering provisions argue that this exception does not apply to licenses because it is defined only in terms of ownership, which remains under the control of the manufacturer in a licensing agreement.  Opponents of such provisions argue that individuals do in fact own their copy of the program if it is the copyright in the program rather than the program itself which is transferred in the license.
 }
@@ -1902,11 +1902,11 @@ mapping[%{Reverse Engineering}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What are shrink-wrap, click-wrap, and browse-wrap licenses?},
- answer:   %{In the context of computer software and the Internet, written agreements that indicate the formation of a contract between the user and the manufacturer have been replaced by shrink-wrap, click-wrap, and browse-wrap agreements. 
+ answer:   %{In the context of computer software and the Internet, written agreements that indicate the formation of a contract between the user and the manufacturer have been replaced by shrink-wrap, click-wrap, and browse-wrap agreements.
 
-Shrink-wrap licenses refer to the cellophane wrapping that seals boxes of mass marketed software are commonly called "shrink-wraps." Software manufacturers generally attach license agreements inside the packaging of their products, which bind the consumer to the terms of the agreement upon removal of the shrink-wrap. 
+Shrink-wrap licenses refer to the cellophane wrapping that seals boxes of mass marketed software are commonly called "shrink-wraps." Software manufacturers generally attach license agreements inside the packaging of their products, which bind the consumer to the terms of the agreement upon removal of the shrink-wrap.
 
-Some courts have held that shrink-wrap licenses are unenforceable as contracts of adhesion, while other courts have considered them valid. An adhesion contract is a bargain drafted unilaterally by a dominant party, and presented as a final offer to a party with very little bargaining power. The terms are generally presented as a preprinted form to the weaker party, who lacks any realistic ability to negotiate the terms. If an individual chooses to return the product, however, they are no longer bound by the terms of the contract. 
+Some courts have held that shrink-wrap licenses are unenforceable as contracts of adhesion, while other courts have considered them valid. An adhesion contract is a bargain drafted unilaterally by a dominant party, and presented as a final offer to a party with very little bargaining power. The terms are generally presented as a preprinted form to the weaker party, who lacks any realistic ability to negotiate the terms. If an individual chooses to return the product, however, they are no longer bound by the terms of the contract.
 
 Click-wrap licenses are another form of creating an electronic agreement, except that the license is included on the computer screen before installation rather than on the box. By clicking on a button that says "I agree" or "I accept," the licensee agrees to the terms of use of the contract. An important difference between click-wrap agreements and shrink-wrap agreements is the fact that the user actually has an opportunity to read the contract before using or installing the program.
 
@@ -1917,10 +1917,10 @@ mapping[%{Reverse Engineering}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Are licensing provisions prohibiting reverse engineering enforceable?},
- answer:   %{While the validity of licensing prohibitions of reverse engineering has not yet been decided by courts, the conflict between state laws that would enforce these provisions and federal intellectual property law has been addressed.  When considering cases where breach of contract or trade secret misappropriation is claimed (both state law claims), courts must first determine whether or not intellectual property law preempts those contracts enforced by the individual state. Preemption occurs when courts determine that federal intellectual property law must be considered in order to address the issues involved in the particular provisions.  
+ answer:   %{While the validity of licensing prohibitions of reverse engineering has not yet been decided by courts, the conflict between state laws that would enforce these provisions and federal intellectual property law has been addressed.  When considering cases where breach of contract or trade secret misappropriation is claimed (both state law claims), courts must first determine whether or not intellectual property law preempts those contracts enforced by the individual state. Preemption occurs when courts determine that federal intellectual property law must be considered in order to address the issues involved in the particular provisions.
 
-Section 301 of the Copyright Act provides that a state law claim is preempted if: 
-<ol><li type="1">(1) the work to be protected comes within the subject matter of copyright; and 
+Section 301 of the Copyright Act provides that a state law claim is preempted if:
+<ol><li type="1">(1) the work to be protected comes within the subject matter of copyright; and
 <li type="1">(2) the state-created right forming the basis of the state law claim is equivalent to any of the exclusive rights within the general scope of copyright."</ol>
 
 In order for the claim to be preempted it must first pass this equivalency test, which determines whether the state-created rights in upholding the contract are merely alternative articulations of the exclusive rights of copyright law.  If the court determines that the contract provisions contain an "extra element" that require analysis of the contract to be preempted by copyright law, the courts generally proceed to an analysis of the possible infringement or exemption under fair use of the activities of the reverse engineer.}
@@ -1946,7 +1946,7 @@ mapping[%{Reverse Engineering}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{How are software development projects conducted over the Internet affected by the DMCA?},
- answer:   %{While the reverse engineering exemption permits software programmers to develop and distribute circumvention tools as part of their projects, there are significant limitations over who can do so and in what manner they can do it. <a href="http://eon.law.harvard.edu/openlaw/DVD/1201.html#f_3">Section 1201(f)(3)</a> provides that only the person who performs the reverse engineering can provide the information necessary to achieve <a href="http://chillingeffects.org/reverse/faq.cgi#QID210">interoperability</a> to others. Collaborative project environments conducted over the Internet, such as those used by many open source software developers may be considered illegal under a strict interpretation of the exemption.  Even if the sharing of information regarding circumvention is done for the purpose of developing an interoperable product, its placement on the Internet may be interpreted as "trafficking" under the circumvention device ban.}
+ answer:   %{While the reverse engineering exemption permits software programmers to develop and distribute circumvention tools as part of their projects, there are significant limitations over who can do so and in what manner they can do it. <a href="http://eon.law.harvard.edu/openlaw/DVD/1201.html#f_3">Section 1201(f)(3)</a> provides that only the person who performs the reverse engineering can provide the information necessary to achieve <a href="https://www.lumendatabase.org/topics/15">interoperability</a> to others. Collaborative project environments conducted over the Internet, such as those used by many open source software developers may be considered illegal under a strict interpretation of the exemption.  Even if the sharing of information regarding circumvention is done for the purpose of developing an interoperable product, its placement on the Internet may be interpreted as "trafficking" under the circumvention device ban.}
 )
 
 mapping[%{Reverse Engineering}] << q.id
@@ -1979,7 +1979,7 @@ mapping[%{Trademark}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Where can I find state trademark law?},
- answer:   %{Each state has its own laws governing use of trademarks within its borders. To locate the trademark laws of the 50 states, use the <a href="http://www.law.cornell.edu/topics/trademark.html">Legal Information Institute</a> links. Both legislation and court opinions create trademark rights and remedies. 
+ answer:   %{Each state has its own laws governing use of trademarks within its borders. To locate the trademark laws of the 50 states, use the <a href="http://www.law.cornell.edu/topics/trademark.html">Legal Information Institute</a> links. Both legislation and court opinions create trademark rights and remedies.
 
 If marks are used in interstate commerce, then federal law will also apply.}
 )
@@ -1988,18 +1988,18 @@ mapping[%{Trademark}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What about common words that are used for many purposes?},
- answer:   %{Common words and alphabetical letters can be protectable trademarks if they are used in arbitrary or unusual ways.  One cannot trademark DIESEL to sell that generic type of fuel, otherwise no other diesel fuel dealer could use the word to identify the product.  However, one could trademark DIESEL as a brand of ice cream.  The owner of the ice cream mark can't use its rights to prevent fuel dealers from using the word on their station pumps nor can it prevent anyone else from using the word for non-trademark purposes, such as a website listing diesel fuel dealers.  
+ answer:   %{Common words and alphabetical letters can be protectable trademarks if they are used in arbitrary or unusual ways.  One cannot trademark DIESEL to sell that generic type of fuel, otherwise no other diesel fuel dealer could use the word to identify the product.  However, one could trademark DIESEL as a brand of ice cream.  The owner of the ice cream mark can't use its rights to prevent fuel dealers from using the word on their station pumps nor can it prevent anyone else from using the word for non-trademark purposes, such as a website listing diesel fuel dealers.
 
-In general, the more a mark describes the good or service that it labels, the less strong the trademark protection it gets and the more freedom others have to use the same word for other purposes. 
+In general, the more a mark describes the good or service that it labels, the less strong the trademark protection it gets and the more freedom others have to use the same word for other purposes.
 
-See also this question on the <a href="http://www.chillingeffects.org/trademark/faq.cgi#QID252">strength of trademarks</a>.}
+See also this question on the <a href="https://www.lumendatabase.org/topics/6">strength of trademarks</a>.}
 )
 
 mapping[%{Trademark}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is Common Law Trademark?},
- answer:   %{Where consumers have come to identify a particular brand name with certain goods or services, US courts will protect the brand owner's rights, whether or not the brand has been registered with any governmental authority.  "Common law" refers to law made by judges in their court decisions, as opposed to the laws that are enacted by legislatures.  
+ answer:   %{Where consumers have come to identify a particular brand name with certain goods or services, US courts will protect the brand owner's rights, whether or not the brand has been registered with any governmental authority.  "Common law" refers to law made by judges in their court decisions, as opposed to the laws that are enacted by legislatures.
 
 In the US, registration is neither required to establish common law rights in a mark, nor to begin use of a mark. Common law trademark rights are limited to the geographic area in which the mark is used.  Most nations do not follow the common law system; they require formal registration rather than use in order to obtain for trademark protection.}
 )
@@ -2008,13 +2008,13 @@ mapping[%{Trademark}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What civil and criminal liabilities may be imposed for trademark infringement?},
- answer:   %{Under federal law (Lanham Act Section 32), an infringer shall be liable in a civil action by the registrant for certain remedies provided in the Act. 
+ answer:   %{Under federal law (Lanham Act Section 32), an infringer shall be liable in a civil action by the registrant for certain remedies provided in the Act.
 
-One such remedy is an injunction, where a court orders a person who was found to violate the Act to stop its infringing activities. 
+One such remedy is an injunction, where a court orders a person who was found to violate the Act to stop its infringing activities.
 
 A trademark owner/registrant may also be able to obtain lost profits or damages against a defendant in a civil action only if the acts were committed with knowledge that such imitation was intended to be used to cause confusion, mistake, or to deceive. The trademark owner can recover (1) the domain holder's profits from use of the mark, (2) the trademark owner's damages resulting from harm to the value of mark, and (3) court costs as "actual damages." In determining the award to be paid, the court can choose to award up to three times the amount of actual damages. Instead of having to prove the amount of "actual" damages suffered as above, the mark owner can instead request payment of "statutory damages" from $1000 and $100,000 per domain name.
 
-Attorney fees may be awarded in exceptional circumstances, such as when there was a willful and malicious violation. 
+Attorney fees may be awarded in exceptional circumstances, such as when there was a willful and malicious violation.
 
 The court can order the cancellation or transfer of a domain registration.
 
@@ -2034,9 +2034,9 @@ q = RelevantQuestion.create!(
  question: %{I do not know what these cases or statutes cited in the C&D mean.},
  answer:   %{If your opponent has cited cases and statutes in the C&D, do not freak out. The fact that your opponent can include some legal authority in the C&D does not mean that the law is on its side. If you can, go look up the cases and statutes to see what they say. You can go to the nearest law school's law library for help, or you can try a free legal resource web site like <a href="http://www.findlaw.com">Findlaw</a>.  Many of them are accessible on the Internet by keyword search using the full case name or it's citation (the numbers and abbreviations that follow the names of the parties).
 
-If your opponent is relying on federal law, it will probably cite one or more of the following sections of the Lanham Act: 
-(1) section 32 (also known as <a href="http://www4.law.cornell.edu/uscode/15/1114.html">section 1114</a>); 
-(2) section 43(a) [a/k/a <a href="http://www.bitlaw.com/source/15usc/1125.html">section 1125(a)</a>]; or 
+If your opponent is relying on federal law, it will probably cite one or more of the following sections of the Lanham Act:
+(1) section 32 (also known as <a href="http://www4.law.cornell.edu/uscode/15/1114.html">section 1114</a>);
+(2) section 43(a) [a/k/a <a href="http://www.bitlaw.com/source/15usc/1125.html">section 1125(a)</a>]; or
 (3) section 43(c) [a/k/a <a href="http://www.bitlaw.com/source/15usc/1125.html#(c)">section 1125(c)</a>]. (The smaller numbers indicate how the statutory sections were numbered when the law was a bill in Congress; the larger numbers indicate how the statutory sections were re-numbered when the law was codified in the U.S. Code. Under either numbering system, the laws say the same thing). An additional statute, the Anti-cybersquatting Consumer Protection Act (ACPA) [a/k/a <a href="http://www.bitlaw.com/source/15usc/1125.html#(d)">section 1125(d)</a> relates specifically to domain names.
 
 Section 32 (codified as <a href="http://www4.law.cornell.edu/uscode/15/1114.html">15 U.S.C. 1114</a>) is the basic statute governing trademark infringement of registered marks. If you use a mark in commerce that is confusingly similar to a registered trademark, you may be civilly liable under section 32.  This section describes how to determine infringement, what the remedies are, and what defenses are available.
@@ -2050,7 +2050,7 @@ mapping[%{Trademark}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What about a fictional world and the events described in the world? Are they copyrightable? Can I use those in my story?},
- answer:   %{It seems unlikely that a FanFic work would include no previous characters but it is not impossible to imagine. Take Tolkien's "Middle-earth" world for example: this world has been taken without the main characters and has been used in role playing games (RPGs) and video games (see the TSR example below). For these cases, it is important to remember that copyright does not extend to ideas. Therefore, incidents, settings or other elements which are indispensable, or at least standard, in the treatment of a given topic are ideas and cannot be copyrighted. For example, the Court of Appeals for the Second Circuit has held that "elements such as drunks, prostitutes, vermin and derelict cars would appear in any realistic work about the work of policemen in the South Bronx." These "scenes a faire" are therefore unprotected. Likewise, the Seventh Circuit has held that mazes, tunnels and scoring tables are unprotected under the scenes a faire doctrine in video games like Duke Nukem. 
+ answer:   %{It seems unlikely that a FanFic work would include no previous characters but it is not impossible to imagine. Take Tolkien's "Middle-earth" world for example: this world has been taken without the main characters and has been used in role playing games (RPGs) and video games (see the TSR example below). For these cases, it is important to remember that copyright does not extend to ideas. Therefore, incidents, settings or other elements which are indispensable, or at least standard, in the treatment of a given topic are ideas and cannot be copyrighted. For example, the Court of Appeals for the Second Circuit has held that "elements such as drunks, prostitutes, vermin and derelict cars would appear in any realistic work about the work of policemen in the South Bronx." These "scenes a faire" are therefore unprotected. Likewise, the Seventh Circuit has held that mazes, tunnels and scoring tables are unprotected under the scenes a faire doctrine in video games like Duke Nukem.
 }
 )
 
@@ -2117,13 +2117,13 @@ mapping[%{Copyright}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{How can I find out if someone has a valid trademark?},
- answer:   %{It isn't easy.  In the United States, a trademark owner isn't required to register the mark anywhere, so there is no single central list of them all.  Unlike most other nations, registration here is optional.  
+ answer:   %{It isn't easy.  In the United States, a trademark owner isn't required to register the mark anywhere, so there is no single central list of them all.  Unlike most other nations, registration here is optional.
 
 Many owners do register their marks with the government, however, to better notify the world of their claims.  Each state has its own trademark registry for goods and services sold locally.  For companies that sell in more than one state, there is a US federal registry that is accessible online through <a href="http://tess.uspto.gov/">TESS</a>. TESS is searchable by key word as well as by registration number.
 
 Because registration is not required, however, a word might still be a protected mark even if it doesn't appear in any of these locations.
 
-When a company is selecting a new brand, its trademark attorney will usually conduct a "trademark availability" search which will look in many different locations to try and ferret out competing uses of the desired name.  Business directories, Internet search engines, telephone directories are other searched sources.  Multi-national vendors will search trademark registries in foreign nations as well. 
+When a company is selecting a new brand, its trademark attorney will usually conduct a "trademark availability" search which will look in many different locations to try and ferret out competing uses of the desired name.  Business directories, Internet search engines, telephone directories are other searched sources.  Multi-national vendors will search trademark registries in foreign nations as well.
 
 Even the most exhaustive search will not be conclusive, however, but it will usually indicate that if there is any other commercial use, it is probably limited to a very local area. It is OK to use the same mark as another company, so long as the new use isn't likely to confuse consumers.}
 )
@@ -2143,7 +2143,7 @@ q = RelevantQuestion.create!(
  question: %{Can the owner of a foreign trademark make any claim against me?},
  answer:   %{Trademark rights are limited to the territory of the government that grants them. The owner of a French trademark, for example, cannot block someone else from using the same term in New York.  However many courts around the world have held that they have authority to block Internet material because it "invades" their territory.
 
-Can a foreign court order be enforced against you?  Maybe. If you have assets in that country, they could be seized.  If you visit that location, you could be arrested.  If your website host has assets in the foreign jurisdiction, however, the host might delete your material to avoid liability.  Domain names registered in certain TLDs (such as .com, .org and .net) can be lost to foreign mark owners under the <a href="<!--GET URL Cat 9-->">UDRP</a>, the special ICANN-imposed dispute procedure which protects every trademark owner in every country. 
+Can a foreign court order be enforced against you?  Maybe. If you have assets in that country, they could be seized.  If you visit that location, you could be arrested.  If your website host has assets in the foreign jurisdiction, however, the host might delete your material to avoid liability.  Domain names registered in certain TLDs (such as .com, .org and .net) can be lost to foreign mark owners under the <a href="<!--GET URL Cat 9-->">UDRP</a>, the special ICANN-imposed dispute procedure which protects every trademark owner in every country.
 
 If the French trademark owner also has a US mark, then it can sue you in US courts, but only under the US mark rights and only for the kind of activity that would be an infringement under US trademark laws.  US law protects free speech rights much more strongly than most foreign nations.
 
@@ -2180,12 +2180,12 @@ mapping[%{Domain Names and Trademarks}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is a trademark and why does it get special protection?},
- answer:   %{A trademark includes any word, name, symbol, or device, or any combination, used, or intended to be used, in commerce to identify and distinguish the goods of one manufacturer or seller from goods manufactured or sold by others, and to indicate the source of the goods. In short, a trademark is a brand name. 
+ answer:   %{A trademark includes any word, name, symbol, or device, or any combination, used, or intended to be used, in commerce to identify and distinguish the goods of one manufacturer or seller from goods manufactured or sold by others, and to indicate the source of the goods. In short, a trademark is a brand name.
 
 Consumers reap the benefit when trademarks are protected.  By preventing anyone but the actual mark owner from labeling goods with the mark, it helps prevent consumers getting cheated by shoddy knock-off imitators.  It encourages mark owners to maintain quality goods so that customers will reward them by looking for their label as an indication of excellence.  Consumers as well as mark owners benefit from trademark laws.
- 
-Trademark owners spend a lot of time, money, and effort to protect the distinctiveness of their trademark.  Once trademarks have become diluted to the point where the general public no longer recognizes them as distinctly applying to a particular manufacturer, they lose their value to the trademark owner because they no longer attract customers to his particular goods. For example, ?aspirin? used to be the trademark of one particular manufacturer of synthesized acetylsalicylic acid, but is now used to generically describe that product regardless of who produces it. Trademarks owners must be vigilant to make sure that their trademarks rights are not being infringed and that their trademarks are not becoming diluted or generic.  
- 
+
+Trademark owners spend a lot of time, money, and effort to protect the distinctiveness of their trademark.  Once trademarks have become diluted to the point where the general public no longer recognizes them as distinctly applying to a particular manufacturer, they lose their value to the trademark owner because they no longer attract customers to his particular goods. For example, ?aspirin? used to be the trademark of one particular manufacturer of synthesized acetylsalicylic acid, but is now used to generically describe that product regardless of who produces it. Trademarks owners must be vigilant to make sure that their trademarks rights are not being infringed and that their trademarks are not becoming diluted or generic.
+
         The birth of the Internet and the use of character strings (domain names) to represent Internet addresses has presented trademark owners with a whole new set of problems.  It is often too expensive to register every variation of a trademark in every top level domain.  Therefore, trademark owners must make sure that the people who register domain names that are either the same as or confusingly similar to a trademark are not using the domain name in a way that infringes on the trademark.  One way to ensure that the trademark owner will not lose its rights in the mark is to file a UDRP complaint so that the Panel can decide whether the domain was registered in order to take unfair advantage of the mark owner.  The Panel may decide that the trademark owner was wrong and had nothing to worry about, but unless the trademark owner is vigilant and files the complaint, it may never know for sure whether its rights were being abused.
 }
 )
@@ -2194,7 +2194,7 @@ mapping[%{Domain Names and Trademarks}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Isn't the domain name registration process "first come first served"?},
- answer:   %{In .com, .org and .net, which are "open" to any kind of registrant, the policy is first-come, first-served, as long as you have registered and used the domain name in good faith or have legitimate interests in the domain name.  However, you have no right to violate trademark law, or ignore your Registration Agreement, or engage in cybersquatting just because you registered the name first. 
+ answer:   %{In .com, .org and .net, which are "open" to any kind of registrant, the policy is first-come, first-served, as long as you have registered and used the domain name in good faith or have legitimate interests in the domain name.  However, you have no right to violate trademark law, or ignore your Registration Agreement, or engage in cybersquatting just because you registered the name first.
 
 Furthermore, in the newer domains such as .biz and .name, there are additional registration requirements that must be met because some of these domains are restricted. Trademark owners may also have advance registration rights. Check  individual registry requirements. See list of generic top-level domain registries at <a href="http://www.internic.net/faqs/new-tlds.html">http://www.internic.net/faqs/new-tlds.html</a>.}
 )
@@ -2210,7 +2210,7 @@ mapping[%{Piracy or Copyright Infringement}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is "framing"?},
- answer:   %{Modern web browsers allow web authors to divide pages into panes or "frames".  Many sites use frames for navigation, putting a navigation bar in one frame and the main content in another.  Since it is possible for a site to call a frame's contents from a different location, a programmer might "frame" another's web content beneath his own navigation or banners.  See the <a href="http://www.totalnews.com/" target="new">TotalNEWS</a> site for an example of framing.  
+ answer:   %{Modern web browsers allow web authors to divide pages into panes or "frames".  Many sites use frames for navigation, putting a navigation bar in one frame and the main content in another.  Since it is possible for a site to call a frame's contents from a different location, a programmer might "frame" another's web content beneath his own navigation or banners.  See the <a href="http://www.totalnews.com/" target="new">TotalNEWS</a> site for an example of framing.
 
 The legal aspect of this web design are complex.  The creator of a frame does not literally "copy" the contents of the framed page, but the juxtaposition of pages may be claimed to create the mistaken impression of sponsorship or association. }
 )
@@ -2245,29 +2245,29 @@ mapping[%{Trademark}] << q.id
 q = RelevantQuestion.create!(
  question: %{What is this laundry list of things the C&D says will happen if I don't obey?
 },
- answer:   %{Your opponent may describe a parade of horribles to demonstrate with exquisite detail what it will do to you unless you capitulate. This list generally includes, but is not limited to: 
-(1) ceasing use of the allegedly infringing mark or surrendering the domain name; 
-(2) rendering an accounting; 
-(3) posting corrective advertising; 
-(4) obtaining an injunction; 
-(5) recovering costs and fees. 
+ answer:   %{Your opponent may describe a parade of horribles to demonstrate with exquisite detail what it will do to you unless you capitulate. This list generally includes, but is not limited to:
+(1) ceasing use of the allegedly infringing mark or surrendering the domain name;
+(2) rendering an accounting;
+(3) posting corrective advertising;
+(4) obtaining an injunction;
+(5) recovering costs and fees.
 
 Though these things sound awful, they are not medieval tortures (although that may be a function of the fact that Torquemada never thought of them).
 
-Ceasing use of the mark is self-explanatory: your opponent wants you to stop using the mark. Your opponent might also ask you to surrender your domain name if they believe the domain name causes (or is likely to cause) confusion with their trademark. For example, under ICANN rules (the <a href="http://www.chillingeffects.org/udrp/">UDRP</a>), you may have to surrender your domain name if the following three conditions are satisfied: 
+Ceasing use of the mark is self-explanatory: your opponent wants you to stop using the mark. Your opponent might also ask you to surrender your domain name if they believe the domain name causes (or is likely to cause) confusion with their trademark. For example, under ICANN rules (the <a href="https://www.lumendatabase.org/topics/9">UDRP</a>), you may have to surrender your domain name if the following three conditions are satisfied:
 (1) your domain name is identical or confusingly similar to your opponent?s;
-(2) you have no legitimate right or interest in the name (in other words, you are not using the name to conduct a bona fide business or for non-commercial fair use purposes); and 
+(2) you have no legitimate right or interest in the name (in other words, you are not using the name to conduct a bona fide business or for non-commercial fair use purposes); and
 (3) your name is registered and used in bad faith.
 
-An accounting basically means that you disclose the following information to your opponent: 
-(1) the date you began using the allegedly infringing mark; 
-(2) the names of individuals who knew of the use when it began; 
-(3) the amount of traffic at your web site or business at your store; and 
+An accounting basically means that you disclose the following information to your opponent:
+(1) the date you began using the allegedly infringing mark;
+(2) the names of individuals who knew of the use when it began;
+(3) the amount of traffic at your web site or business at your store; and
 (4) your profits and revenues during the time you used the allegedly infringing mark.
 
 Corrective advertising means you give notice to the public that you were using a mark confusingly similar to your opponent?s, and that you are not affiliated with your opponent.
 
-An injunction is a judicial order to do something. An injunction can prevent you from using the allegedly infringing trademark. 
+An injunction is a judicial order to do something. An injunction can prevent you from using the allegedly infringing trademark.
 
 Some provisions of the Lanham Act permit a trademark holder to recover attorney?s fees and court costs from an infringer.
 
@@ -2279,11 +2279,11 @@ mapping[%{Trademark}] << q.id
 q = RelevantQuestion.create!(
  question: %{What facts should a C&D include?
 },
- answer:   %{Recitation of Facts.  Read this section of the letter carefully. It should contain some or all of the following information: 
-(1) the trademark that is allegedly being infringed; 
-(2) the trademark, domain name or other use that is allegedly doing the infringing; 
-(3) the products and services on which your opponent uses the allegedly infringed mark; 
-(4) the date your opponent commenced such use; and 
+ answer:   %{Recitation of Facts.  Read this section of the letter carefully. It should contain some or all of the following information:
+(1) the trademark that is allegedly being infringed;
+(2) the trademark, domain name or other use that is allegedly doing the infringing;
+(3) the products and services on which your opponent uses the allegedly infringed mark;
+(4) the date your opponent commenced such use; and
 (5) the registration numbers, if the trademarks are registered with the Patent & Trademark Office.
 
 
@@ -2297,19 +2297,19 @@ q = RelevantQuestion.create!(
 },
  answer:   %{Your opponent should say that your mark is causing consumer confusion or is likely to cause consumer confusion. Or it should mention it's famousness and complain of dilution or tarnishment. (If the C&D does not say this, then no trademark claim may actually exist, and you can rest assured that your opponent is engaging in scare tactics or has hired a highly incompetent attorney). A mark  protects more than identical copying, it extends to anything that is confusingly similar, even if it isn't exactly the same.
 
-Functioning in a quasi-magical talisman-like capacity, trademarks designate the source or quality of goods or services. For this reason, the law protects against confusion in the market place by ensuring that marks on the same or similar products or services are sufficiently different. The law also protects famous marks against dilution of value and tarnishment of the reputation of the goods or services on which it appears or the source of those products, regardless of any confusion. 
+Functioning in a quasi-magical talisman-like capacity, trademarks designate the source or quality of goods or services. For this reason, the law protects against confusion in the market place by ensuring that marks on the same or similar products or services are sufficiently different. The law also protects famous marks against dilution of value and tarnishment of the reputation of the goods or services on which it appears or the source of those products, regardless of any confusion.
 
-You can roughly assess the validity of your opponent?s claim of confusion by classifying the marks involved.  A trademark can fall into one of 5 categories. It can be: (1) fanciful; (2) arbitrary; (3) suggestive; (4) descriptive; or (5) generic. Not all of these varieties of marks are entitled to the same level, or indeed any level, of trademark protection. 
+You can roughly assess the validity of your opponent?s claim of confusion by classifying the marks involved.  A trademark can fall into one of 5 categories. It can be: (1) fanciful; (2) arbitrary; (3) suggestive; (4) descriptive; or (5) generic. Not all of these varieties of marks are entitled to the same level, or indeed any level, of trademark protection.
 
-A fanciful mark is a mark someone made up; examples include KODAK or H?AGEN-DAZS. An arbitrary mark is a known term applied to a completely unrelated product or service; for instance, AMAZON.com for an online book-store cum one-stop shopping site or APPLE for computers. Fanciful and arbitrary marks are considered strong marks and garner substantial trademark protection. 
+A fanciful mark is a mark someone made up; examples include KODAK or H?AGEN-DAZS. An arbitrary mark is a known term applied to a completely unrelated product or service; for instance, AMAZON.com for an online book-store cum one-stop shopping site or APPLE for computers. Fanciful and arbitrary marks are considered strong marks and garner substantial trademark protection.
 
-A suggestive mark is one that hints at the product, but which requires an act of imagination to make the connection: COPPERTONE for sun tan lotion or PENGUIN for coolers or refrigerators are examples. Suggestive marks are also strong marks and receive protection. 
+A suggestive mark is one that hints at the product, but which requires an act of imagination to make the connection: COPPERTONE for sun tan lotion or PENGUIN for coolers or refrigerators are examples. Suggestive marks are also strong marks and receive protection.
 
-A descriptive mark, predictably, describes the product: HOLIDAY INN describes a vacation hotel and FISH-FRI describes batter for frying fish. Descriptive marks do not receive any trademark protection unless their user has used them in commerce and has built up secondary meaning. "Secondary meaning" occurs when consumers identify the goods or services on which the descriptive term appears with a single source. In other words, if consumers know that HOLIDAY INN hotels are all affiliated with a single source, then the mark has secondary meaning and receives trademark protection. 
+A descriptive mark, predictably, describes the product: HOLIDAY INN describes a vacation hotel and FISH-FRI describes batter for frying fish. Descriptive marks do not receive any trademark protection unless their user has used them in commerce and has built up secondary meaning. "Secondary meaning" occurs when consumers identify the goods or services on which the descriptive term appears with a single source. In other words, if consumers know that HOLIDAY INN hotels are all affiliated with a single source, then the mark has secondary meaning and receives trademark protection.
 
 Finally, generic marks simply designate the variety of goods involved: for example, "cola" used on soft drinks and "perfume" on perfume are both generic terms. Generic marks never receive any trademark protection; they are free for everybody to use. (Keep in mind, though, that "Cola" on a nightclub is arbitrary, and therefore receives protection).
 
-If your opponent is complaining that you have used the word "bakery" for a bake shop or "car" for a car repair shop, then you can safely guess that the c & d is baseless. On the other hand, if your opponent is concerned about the fact that both of you use of the term "Sweet Pickles" on alpaca sweaters, then the c & d may have some merit. 
+If your opponent is complaining that you have used the word "bakery" for a bake shop or "car" for a car repair shop, then you can safely guess that the c & d is baseless. On the other hand, if your opponent is concerned about the fact that both of you use of the term "Sweet Pickles" on alpaca sweaters, then the c & d may have some merit.
 
 There are a few more wrinkles as well.  Some marks are word marks (text only) and others are design marks (images which may or may not include text).  Design marks do not provide independent protectin for the text incorporated in the design.  So if the mark is only a design mark, it doesn't prevent others from using the text so long as they don't copy the design elements.  }
 )
@@ -2319,7 +2319,7 @@ mapping[%{Trademark}] << q.id
 q = RelevantQuestion.create!(
  question: %{What do these registration numbers mean? or Why don},
  answer:   %{Do not be led astray by the registration numbers: trademark rights in the United States arise from use of the mark in commerce, not from registering. However, both state and federal law can provide relief from trademark infringement.
- 
+
 If your opponent has registered its mark on the Patent & Trademark Office}
 )
 
@@ -2376,10 +2376,10 @@ mapping[%{Piracy or Copyright Infringement}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is contributory infringement?},
- answer:   %{The other form of indirect infringement, contributory infringement, requires (1) knowledge of the infringing activity and (2) a material contribution -- actual assistance or inducement -- to the alleged piracy.  
+ answer:   %{The other form of indirect infringement, contributory infringement, requires (1) knowledge of the infringing activity and (2) a material contribution -- actual assistance or inducement -- to the alleged piracy.
 
-Posting access codes from authorized copies of software, serial numbers, or other tools to assist in accessing such software may subject you to liability. Providing a forum for uploading and downloading any copyrighted file or cracker utility may also be contributory infringement.   Even though you may not actually make software directly available on your site, providing assistance (or supporting a forum in which others may provide assistance) in locating unauthorized copies of software, links to download sites, server space, or support for sites that do the above may contributorily infringe.  
-  
+Posting access codes from authorized copies of software, serial numbers, or other tools to assist in accessing such software may subject you to liability. Providing a forum for uploading and downloading any copyrighted file or cracker utility may also be contributory infringement.   Even though you may not actually make software directly available on your site, providing assistance (or supporting a forum in which others may provide assistance) in locating unauthorized copies of software, links to download sites, server space, or support for sites that do the above may contributorily infringe.
+
 To succeed on a contributory infringement claim, the copyright owner must show that the webmaster or service provider actually knew or should have known of the infringing activity.  }
 )
 
@@ -2395,7 +2395,7 @@ mapping[%{Trademark}] << q.id
 q = RelevantQuestion.create!(
  question: %{Isn't sending my friend a music file from a CD I already own just like loaning her the physical CD?
 },
- answer:   %{Loaning someone your CD or even selling (but not renting) it is protected by U.S. copyright law since no additional copies are being made.  However, when you send a music file to someone else, you retain your copy and an additional copy is made.  This copying may violate the exclusive rights of copyright holders.  
+ answer:   %{Loaning someone your CD or even selling (but not renting) it is protected by U.S. copyright law since no additional copies are being made.  However, when you send a music file to someone else, you retain your copy and an additional copy is made.  This copying may violate the exclusive rights of copyright holders.
 }
 )
 
@@ -2420,7 +2420,7 @@ mapping[%{Piracy or Copyright Infringement}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{I didn},
- answer:   %{No. Copyright infringement actions do not require that you actually knew that the files were protected by copyright or that your use of the files violated federal law. Claims of ignorance cannot be used as a defense to direct copyright infringement,   Lack of knowledge, is, however, a defense to contributory infringement [LINK].  
+ answer:   %{No. Copyright infringement actions do not require that you actually knew that the files were protected by copyright or that your use of the files violated federal law. Claims of ignorance cannot be used as a defense to direct copyright infringement,   Lack of knowledge, is, however, a defense to contributory infringement [LINK].
 }
 )
 
@@ -2517,7 +2517,7 @@ mapping[%{Piracy or Copyright Infringement}] << q.id
 q = RelevantQuestion.create!(
  question: %{Why are copyright holders concerned about piracy?
 },
- answer:   %{Free speech is protected by the U.S. Constitution but so are property rights.  Copyright law provides incentives for creating. One of the incentives for creating software, music, literature and other works is being able to reap the financial benefits as the creator. Illegitimate distribution of copies may prevent the copyright holder from benefiting from the sale of legitimate copies of the product. The theory is that significantly fewer people would buy copies from the copyright holder if other copies were available cheaper or for free. 
+ answer:   %{Free speech is protected by the U.S. Constitution but so are property rights.  Copyright law provides incentives for creating. One of the incentives for creating software, music, literature and other works is being able to reap the financial benefits as the creator. Illegitimate distribution of copies may prevent the copyright holder from benefiting from the sale of legitimate copies of the product. The theory is that significantly fewer people would buy copies from the copyright holder if other copies were available cheaper or for free.
 }
 )
 
@@ -2532,9 +2532,9 @@ mapping[%{Piracy or Copyright Infringement}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{I purchased the movie, book, etc. Doesn},
- answer:   %{Mere ownership of a book, manuscript, painting, or any other copy or phonorecord does not give the possessor the copyright in the work. The law provides that transfer of ownership of any material object that embodies a protected work does not of itself convey any rights in the copyright. 
+ answer:   %{Mere ownership of a book, manuscript, painting, or any other copy or phonorecord does not give the possessor the copyright in the work. The law provides that transfer of ownership of any material object that embodies a protected work does not of itself convey any rights in the copyright.
 
-So, a FanFic author who purchases a book does not also purchase the right to create a derivative work based on that book, for example a new story or a comic.    
+So, a FanFic author who purchases a book does not also purchase the right to create a derivative work based on that book, for example a new story or a comic.
 }
 )
 
@@ -2549,7 +2549,7 @@ mapping[%{Fan Fiction}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{How likely is copying to be found (by a court) and what are the possible remedies?},
- answer:   %{As mentioned in the legal introduction (see "Is there an infringement?"), a plaintiff must meet certain requirements in order to show that a FanFic author copied protected expression. In order to prove copying, it must be shown that the fan fiction author copied the work (either through direct or indirect evidence), and some of the copied elements are protected and that the "audience" of the work would also find similar elements. Since FanFic authors generally do not deny that characters and settings are borrowed ("copied"), as seen in their disclaimers, it is likely that copying will be found. Then you must raise the defense of fair use.   
+ answer:   %{As mentioned in the legal introduction (see "Is there an infringement?"), a plaintiff must meet certain requirements in order to show that a FanFic author copied protected expression. In order to prove copying, it must be shown that the fan fiction author copied the work (either through direct or indirect evidence), and some of the copied elements are protected and that the "audience" of the work would also find similar elements. Since FanFic authors generally do not deny that characters and settings are borrowed ("copied"), as seen in their disclaimers, it is likely that copying will be found. Then you must raise the defense of fair use.
 
 What happens if I lose the case? If the court finds that you unlawfully copied, it has several possible options. First, and most likely, an injunction could be granted to prevent the author from publishing and distributing the FanFic. The infringing materials could even be destroyed. The court also has the power to award monetary damages. The amount of damages would depend on the lost revenue suffered by the copyright owner and possible profits earned by the FanFic author. Generally, the loss of revenue is rare since FanFic does not draw audiences away from the original; rather, FanFic often serves to enhance sales of the original work. And if FanFic is not for profit, then it is unlikely that the author will have any profits to report. Since there is seldom lost revenue and profits, plaintiffs will often go for "statutory damages." This award can be between $200 (innocent infringement) and $100,000 (willful infringement) for each work infringed.
 }
@@ -2594,7 +2594,7 @@ mapping[%{Trademark}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is "intellectual property"?},
- answer:   %{Intellectual property refers to the rights one has in the product of one's intellect.  This includes copyright (rights in creative expression)and patents (rights in inventions, discoveries, methods, compositions of matter, etc.) which are granted by article I, section 8 clause 8 of the US Constitution which gives Congress the power to "To promote the Progress of Science and useful Arts, by securing for limited Times to Authors and Inventors the exclusive Right to their respective Writings and Discoveries." 
+ answer:   %{Intellectual property refers to the rights one has in the product of one's intellect.  This includes copyright (rights in creative expression)and patents (rights in inventions, discoveries, methods, compositions of matter, etc.) which are granted by article I, section 8 clause 8 of the US Constitution which gives Congress the power to "To promote the Progress of Science and useful Arts, by securing for limited Times to Authors and Inventors the exclusive Right to their respective Writings and Discoveries."
 
 Related rights include trademark (rights in the names one uses to identify one's goods and services), trade secret (confidential business practices), unfair trade practice, passing off, trade libel, false advertising, misappropriation.  Laws protecting most of these rights exist at both the state and federal level.  "Proprietary rights" is just a general term meaning "one's own rights." }
 )
@@ -2603,7 +2603,7 @@ mapping[%{Domain Names and Trademarks}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{How do companies usually react to FanFic?},
- answer:   %{Different companies have different methods in dealing with FanFic. Some, like Paramount Pictures, see that FanFic could actually help boost their sales and so encourage the writing of FanFic. Other companies are presumably waiting for more business information and legal clarity before making a decision. For example Universal, which owns the rights to Xena: the Warrior Princess, have yet to go after the numerous copyright violations involving what fans dub the "Xenaverse." The Universal approach is in sharp contrast to Fox Television and Viacom, both of whom resort to harsh cease-and-desist letters against unauthorized Web site creations by fans of such shows as "The X-Files," "Millennium" and "Star Trek." 
+ answer:   %{Different companies have different methods in dealing with FanFic. Some, like Paramount Pictures, see that FanFic could actually help boost their sales and so encourage the writing of FanFic. Other companies are presumably waiting for more business information and legal clarity before making a decision. For example Universal, which owns the rights to Xena: the Warrior Princess, have yet to go after the numerous copyright violations involving what fans dub the "Xenaverse." The Universal approach is in sharp contrast to Fox Television and Viacom, both of whom resort to harsh cease-and-desist letters against unauthorized Web site creations by fans of such shows as "The X-Files," "Millennium" and "Star Trek."
 
 In order for a corporation to win a cease-and-desist order against a FanFic author, it would have to prove that it was suffering financial damage, something that is hard to prove since much of FanFic actually helps boost sales. This has helped motivate companies to go after ISPs. Being caught in the middle of the battle, ISPs will often put pressure on the FanFIc authors in order to avoid liability, a decision which often leaves FanFic authors without any choice but to remove the supposedly offending material. }
 )
@@ -2612,7 +2612,7 @@ mapping[%{Fan Fiction}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{How do companies usually react to FanFic?},
- answer:   %{Different companies have different methods in dealing with FanFic. Some see that FanFic could actually help boost their sales and so encourage the writing of FanFic. Other companies are presumably waiting for more business information and legal clarity before making a decision. For example Universal, which owns the rights to Xena: the Warrior Princess, have yet to go after the numerous possible copyright infringements involving what fans dub the "Xenaverse." The Universal approach is in sharp contrast to Fox Television and Viacom, both of whom have resorted to harsh cease-and-desist letters against unauthorized Web site creations by fans of such shows as "The X-Files," "Millennium" and "Star Trek." 
+ answer:   %{Different companies have different methods in dealing with FanFic. Some see that FanFic could actually help boost their sales and so encourage the writing of FanFic. Other companies are presumably waiting for more business information and legal clarity before making a decision. For example Universal, which owns the rights to Xena: the Warrior Princess, have yet to go after the numerous possible copyright infringements involving what fans dub the "Xenaverse." The Universal approach is in sharp contrast to Fox Television and Viacom, both of whom have resorted to harsh cease-and-desist letters against unauthorized Web site creations by fans of such shows as "The X-Files," "Millennium" and "Star Trek."
 
 In order for a corporation to win a cease-and-desist order against a FanFic author, it would have to prove that it was suffering financial damage, something that is hard to prove since much of FanFic actually helps boost sales. This has helped motivate companies to go after ISPs. Being caught in the middle of the battle, ISPs will often put pressure on the FanFIc authors in order to avoid liability, a decision which often leaves FanFic authors without any choice but to remove the supposedly offending material. }
 )
@@ -2621,7 +2621,7 @@ mapping[%{Fan Fiction}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What liabilities could ISPs face? (And what can FanFic authors expect from their ISPs?)},
- answer:   %{As more companies deal with FanFic through ISPs, it is important for ISPs and FanFic authors to know what rights they have. The Digital Millennium Copyright Act ("DMCA") establishes a "safe harbor" from liability for ISPs that exercise no control over content other people provide.  If your ISP fits under the safe harbor provisions, then it will not face monetary damages, only a possible injunction.  Under the safe harbor provisions, you as the author are entited to notice that the ISP might take your story down, and you can issue a counter-notice claiming that your work is not infringing.  For more on how the DMCA Safe Harbor counter-notification procedures can protect your work, click here<!--GET CatLink 14-->.  
+ answer:   %{As more companies deal with FanFic through ISPs, it is important for ISPs and FanFic authors to know what rights they have. The Digital Millennium Copyright Act ("DMCA") establishes a "safe harbor" from liability for ISPs that exercise no control over content other people provide.  If your ISP fits under the safe harbor provisions, then it will not face monetary damages, only a possible injunction.  Under the safe harbor provisions, you as the author are entited to notice that the ISP might take your story down, and you can issue a counter-notice claiming that your work is not infringing.  For more on how the DMCA Safe Harbor counter-notification procedures can protect your work, click here<!--GET CatLink 14-->.
 
 The DMCA also has certain other procedural requirements that allocate the burdens between copyright holders, ISPs and individuals. Specifically, the copyright holder has the burden to find the ISPs that carry the offending material. The ISP then has the burden to send notice to the offending users. The user then has the right to file a counter-notice for fair use or some other defense, at which point the ISP can remove itself and let the copyright holder and the user fight it out. If the ISP is found to be secondary liable (see "Is there an infringement"), then it pays no monetary damages and suffers only the possibility of an injunction. Nonetheless, ISPs generally prefer less liability and will often exert enough pressure on the individual such that the individual complies or is forced to find another ISP. With little resources, it is only expected that individuals face the brunt of this burden allocation. (See the DMCA section of this website for more information).
 }
@@ -2666,10 +2666,10 @@ mapping[%{Fan Fiction}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is Slander Per Se?},
- answer:   %{Slander is a defamatory statement expressed in a transitory medium, such as verbal speech. It is considered a civil injury, as opposed to a criminal offence.  The tort of slander is often compared with that of libel, which is also characterized as a defamatory statement, but one made in a fixed form, such as writing. 
-Slander Per Se is slander for which special damages (e.g. actual loss in revenue) need not be proved in order to recover general damages (e.g. for emotional distress).  Slander Per Se only applies to slanderous publications which imputes to the plaintiff one of the four following categories:  
-1)a crime involving moral turpitude, 
-2)a loathsome disease (e.g. a sexually transmitted disease), 
+ answer:   %{Slander is a defamatory statement expressed in a transitory medium, such as verbal speech. It is considered a civil injury, as opposed to a criminal offence.  The tort of slander is often compared with that of libel, which is also characterized as a defamatory statement, but one made in a fixed form, such as writing.
+Slander Per Se is slander for which special damages (e.g. actual loss in revenue) need not be proved in order to recover general damages (e.g. for emotional distress).  Slander Per Se only applies to slanderous publications which imputes to the plaintiff one of the four following categories:
+1)a crime involving moral turpitude,
+2)a loathsome disease (e.g. a sexually transmitted disease),
 3)Unchastity (particularly concerns women)
 4)conduct that would adversely affect ones business or profession
 
@@ -2744,7 +2744,7 @@ q = RelevantQuestion.create!(
 
 <p><b>Is there a defense against infringement? </b></p>
 
-<p>Like copyrights, there are some defenses available to counter a trademark infringement. For example, a trademark action will not stop an author's deliberate parody of the mark. Also, a mark is no longer valid if it becomes generic or is abandoned. There is also a limited fair use defense under trademarks. 
+<p>Like copyrights, there are some defenses available to counter a trademark infringement. For example, a trademark action will not stop an author's deliberate parody of the mark. Also, a mark is no longer valid if it becomes generic or is abandoned. There is also a limited fair use defense under trademarks.
 
 <p><b>What happens if I'm found to have infringed? </b></p>
 
@@ -2771,14 +2771,14 @@ mapping[%{John Doe Anonymity}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What are the benefits of federal trademark registration? },
- answer:   %{Federal registration of a trademark has several advantages including notice to the public of the registrant's claim of ownership of the mark, a legal presumption of ownership nationwide, and the exclusive right to use the mark on or in connection with the goods or services set forth in the registration. 
+ answer:   %{Federal registration of a trademark has several advantages including notice to the public of the registrant's claim of ownership of the mark, a legal presumption of ownership nationwide, and the exclusive right to use the mark on or in connection with the goods or services set forth in the registration.
 
 Registration Provides the Following:
-1. Constructive notice nationwide of the trademark owner's claim. 
-2. Evidence of ownership of the trademark. 
-3. Jurisdiction of federal courts may be invoked. 
-4. Registration can be used as a basis for obtaining registration in foreign countries. 
-5. Registration may be filed with U.S. Customs Service to prevent importation of infringing foreign goods. 
+1. Constructive notice nationwide of the trademark owner's claim.
+2. Evidence of ownership of the trademark.
+3. Jurisdiction of federal courts may be invoked.
+4. Registration can be used as a basis for obtaining registration in foreign countries.
+5. Registration may be filed with U.S. Customs Service to prevent importation of infringing foreign goods.
 
 
 }
@@ -2864,7 +2864,7 @@ q = RelevantQuestion.create!(
  question: %{My host wants to remove my material just because some trademark owner complained.  Is that legal?},
  answer:   %{The answer depends on the terms of your agreement with your host.  If you agreed to allow them to do it, then they can. If you didn't read the fine legal print, that's considered your problem, not theirs. Some hosts may require complaining mark owners to substantiate their rights by submitting copies of trademark registrations.  Others may not ask for proof to back up the complaint.
 
-The reality is that your host is also liable if your material infringes a trademark, so they can face court claims also.  This is because the host is considered a contributory infringer because it circulates the infringing material further and benefits by collecting money from you. 
+The reality is that your host is also liable if your material infringes a trademark, so they can face court claims also.  This is because the host is considered a contributory infringer because it circulates the infringing material further and benefits by collecting money from you.
 
 Very few hosts can or will pay the costs of defending themselves in court.  It's much easier to simply delete the allegedly infringing material.}
 )
@@ -2935,7 +2935,7 @@ For example, in one case a court found that the operator of a California swap me
 
 However in another case a court felt that a company providing domain name registration, had less control over the use of its service and was not liable for contributory trademark infringement when someone registered a domain name that infringed a trademark.
 
-The important issues in determining liability for contributory trademark infringement are if you are aware of the infringement, if you have the ability to monitor and control the use of your product or service, and you are in a position to receive some benefit from the violation. 
+The important issues in determining liability for contributory trademark infringement are if you are aware of the infringement, if you have the ability to monitor and control the use of your product or service, and you are in a position to receive some benefit from the violation.
 }
 )
 
@@ -2974,7 +2974,7 @@ q = RelevantQuestion.create!(
  answer:   %{Under the Copyright Act, <a href="http://www4.law.cornell.edu/uscode/17/ch5.html" target="new">penalties for copyright infringement</a> can include:
 <ol class="main"><li class="main">an injunction against further infringement -- such as an order preventing the infringer from future copying or distribution of the copyrighted works
 <li class="main">impounding or destruction of infringing copies
-<li class="main"><a href="http://www4.law.cornell.edu/uscode/17/504.html" target="new">damages</a> -- either actual damages and the infringer's profits, or statutory damages 
+<li class="main"><a href="http://www4.law.cornell.edu/uscode/17/504.html" target="new">damages</a> -- either actual damages and the infringer's profits, or statutory damages
 <li class="main">costs and attorney's fees
 </ol>
 <p>A copyright owner can only sue for infringement on a work whose copyright was registered with the Copyright Office, and can get statutory damages and attorney's fees only if the copyright registration was filed before infringement or within three months of first publication.  (<a href="http://www4.law.cornell.edu/uscode/17/411.html" target="new">17 U.S.C. 411</a> and <a href="http://www4.law.cornell.edu/uscode/17/412.html" target="new">412</a>)}
@@ -3023,9 +3023,9 @@ mapping[%{Trademark}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is "injunctive relief"?},
- answer:   %{"Injunctive relief" (or injunction) refers to a court order that someone do or stop doing something.  A preliminary injunction is an order before a full trial, "to preserve the status quo," while a permanent injunction may be ordered after trial to protect the complainant's rights.  
+ answer:   %{"Injunctive relief" (or injunction) refers to a court order that someone do or stop doing something.  A preliminary injunction is an order before a full trial, "to preserve the status quo," while a permanent injunction may be ordered after trial to protect the complainant's rights.
 
-Normally, when one party sues another for trademark, patent, or copyright infringement, the parties can either settle the matter out of court or go to a civil trial.  Meanwhile both parties may continue their business until either event occurs. 
+Normally, when one party sues another for trademark, patent, or copyright infringement, the parties can either settle the matter out of court or go to a civil trial.  Meanwhile both parties may continue their business until either event occurs.
 
 However, if the owner of a trademark, patent, or copyright can show a court that the violation of its rights is obvious, that it is likely to prevail in a trial, and that it is being harmed by the continued violation of rights while it awaits trial, the court may order a preliminary injunction directing the other party to stop selling the infringing product or to cease operating an infringing web site immediately until the matter is settled.  Failure to respond to a court-ordered  injunction may result in criminal penalties for contempt, such as a fine or imprisonment.
 }
@@ -3087,7 +3087,7 @@ mapping[%{Patent}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What are the requirements for patent protection?},
- answer:   %{To qualify for patent protection, an invention must be new, useful and non-obvious.  
+ answer:   %{To qualify for patent protection, an invention must be new, useful and non-obvious.
 
 }
 )
@@ -3168,7 +3168,7 @@ q = RelevantQuestion.create!(
  question: %{What are the defenses to patent infringement?},
  answer:   %{There are two basic lines of defense: non-infringement and invalidity.
 
-<b>Non-infringement</b>: To infringe a patent, one must practice every element of a claim.  If you do not practice one or more of the elements of a claim, then you do not infringe that claim.  This determination often rests on how a court interprets the language of the claims you are accused of infringing.  
+<b>Non-infringement</b>: To infringe a patent, one must practice every element of a claim.  If you do not practice one or more of the elements of a claim, then you do not infringe that claim.  This determination often rests on how a court interprets the language of the claims you are accused of infringing.
 
 <b>Invalidity</b>: Only a valid patent can be enforced.  Issued patents are presumed valid, but this presumption can be overcome if prior art exists that demonstrates an invention was not novel or that it was obvious at the time the patent application was filed.  Especially in the case of software and Internet business method patents, articles disclosing or describing the patented inventions may exist in trade publications that would not have been found by the patent examiner and would not have been part of the prosecution file of an issued patent on file with the USPTO.  The patent holder's failure to name all inventors may also invalidate a patent.
 }
@@ -3192,7 +3192,7 @@ mapping[%{Patent}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{How does copyright protection differ from patent protection?},
- answer:   %{A copyright can protect the particular way in which ideas are expressed in a particular computer program.  A copyright owner has the right to prevent others from making unauthorized, literal copies of a software program, but not from independently creating software that performs the same functions.  
+ answer:   %{A copyright can protect the particular way in which ideas are expressed in a particular computer program.  A copyright owner has the right to prevent others from making unauthorized, literal copies of a software program, but not from independently creating software that performs the same functions.
 
 A patent, on the other hand, grants an inventor exclusive rights in the technology.  With a software patent, one may prevent others from making, using or selling a program that performs the same process or function as the patented technology, even if different code is used.  Often, a software developer does not merely wish to rely on the prevention of verbatim copying of the software, since a competitor may observe the functions performed by the software, and without knowing the details of the software code underlying the functions, write equivalent code.}
 )
@@ -3376,7 +3376,7 @@ mapping[%{Derivative Works}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{.I},
- answer:   %{.No. The design itself might be patentable, but it is not copyrightable. 
+ answer:   %{.No. The design itself might be patentable, but it is not copyrightable.
 Copyright law covers only expressions, not ideas.  So we can}
 )
 
@@ -3430,7 +3430,7 @@ mapping[%{Patent}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is the "principal register?"},
- answer:   %{The main federal register of marks established by the Lanham Act.  Trademarks, service marks, collective marks and certification marks may be registered on the principal register. 
+ answer:   %{The main federal register of marks established by the Lanham Act.  Trademarks, service marks, collective marks and certification marks may be registered on the principal register.
 }
 )
 
@@ -3446,7 +3446,7 @@ mapping[%{Documenting Your Domain Defense}] << q.id
 q = RelevantQuestion.create!(
  question: %{What are the elements of a defamation claim?},
  answer:   %{.
-The party making a defamation claim (plaintiff) must ordinarily prove four elements: 
+The party making a defamation claim (plaintiff) must ordinarily prove four elements:
 <ol>
         <li>a publication to one other than the person defamed;</li>
         <li>a false statement of fact; </li>
@@ -3478,7 +3478,7 @@ mapping[%{Bookmarks}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is the difference between copyright and trademark?},
- answer:   %{Copyright protects original expression in literary and artistic works such as plays, books, films, songs, software, performances, etc.).  To qualify for copyright protection, a work must be an original creation of the author and not copied from any other source.  In the U.S., copyright does not protect facts.  Individual words cannot be copyrighted, and there is a gray area of protection for short phrases.  Copyright owners have strong rights to prevent copying of their material, subject to the doctrine of "fair use."   Copyrights arise when the work is fixed in a permanent form.  Infringement consists of copying, publicly distributing, making changes to, or publicly distributing or performing the work without the author's permission. 
+ answer:   %{Copyright protects original expression in literary and artistic works such as plays, books, films, songs, software, performances, etc.).  To qualify for copyright protection, a work must be an original creation of the author and not copied from any other source.  In the U.S., copyright does not protect facts.  Individual words cannot be copyrighted, and there is a gray area of protection for short phrases.  Copyright owners have strong rights to prevent copying of their material, subject to the doctrine of "fair use."   Copyrights arise when the work is fixed in a permanent form.  Infringement consists of copying, publicly distributing, making changes to, or publicly distributing or performing the work without the author's permission.
 
 Trademark only protects names and logo images that are used to label goods or services.  Trademark does not require originality; its purpose is to identify the source of goods.  In the U.S., trademark rights arise only when there is actual use in commerce.  Infringement consists of selling goods or services under the same or a confusingly similar name.  Trademark has its own types of "fair uses" including use for product comparison and criticism, news reporting, and parody.}
 )
@@ -3525,7 +3525,7 @@ q = RelevantQuestion.create!(
  answer:   %{There are ordinarily 6 possible defenses available to a defendant who is sued for libel (published defamatory communication.)
 1. Truth.  This is a complete defense, but may be difficult to prove.
 2. Fair comment on a matter of public interest.  This defense applies to "opinion" only, as compared to a statement of fact.  The defendant usually needs to prove that the opinion is honestly held and the comments were not motivated by actual "malice." ( Malice means knowledge of falsity or reckless disregard for the truth of falsity of the defamatory statement.)
-3. Privilege.  The privilege may be absolute or qualified.  Privilege generally exists where the speaker or writer has a duty to communicate to a specific person or persons on a given occasion.  In some cases the privilege is qualified and may be lost if the publication is unnecessarily wide or made with malice. 
+3. Privilege.  The privilege may be absolute or qualified.  Privilege generally exists where the speaker or writer has a duty to communicate to a specific person or persons on a given occasion.  In some cases the privilege is qualified and may be lost if the publication is unnecessarily wide or made with malice.
 4. Consent.  This is rarely available, as plaintiffs will not ordinarily agree to the publication of statements that they find offensive.
 5. Innocent dissemination. In some caes a party who has no knowledge of the content of a defamatory statement may use this defense.  For example, a mailman who delivers a sealed envelope containing a defamatory statement, is not legally liable for any damages that come about from the statement.
 6. Plaintiff's poor reputation.  Defendant can mitigate (lessen) damages for a defamatory statement by proving that the plaintiff did not have a good reputation to begin with.  Defendant ordinarily can prove plaintiff's poor reputation by calling witnesses with knowledge of the plaintiff's prior reputation relating to the defamatory content.}
@@ -3579,7 +3579,7 @@ q = RelevantQuestion.create!(
  question: %{What does it mean to take all reasonable steps to protect a trademark?},
  answer:   %{If a trademark owner fails to police his or her mark, the owner may be deemed to have abandoned the mark or acquiesced in its misuse.  A trademark is only protected while it serves to identify the source of goods or services.
 
-If a trademark owner believes someone is infringing his or her trademark, the first thing the owner is likely to do is to write a "cease-and-desist" letter which asks the accused infringer to stop using the trademark.  If the accused infringer refuses to comply, the owner may file a lawsuit in Federal or state court.  The court may grant the plaintiff a preliminary injunction on use of the mark -- tell the infringer to stop using the trademark pending trial. 
+If a trademark owner believes someone is infringing his or her trademark, the first thing the owner is likely to do is to write a "cease-and-desist" letter which asks the accused infringer to stop using the trademark.  If the accused infringer refuses to comply, the owner may file a lawsuit in Federal or state court.  The court may grant the plaintiff a preliminary injunction on use of the mark -- tell the infringer to stop using the trademark pending trial.
 
 If the owner successfully proves trademark infringement in court, the court has the power to: order a permanent injunction; order monetary payment for profit the plaintiff can prove it would have made but for defendant's use of the mark; possibly increase this payment; possibly award a monetary payment of profits the defendant made while using the mark; and possibly order the defendant to pay the plaintiff's attorney fees in egregious cases of infringement.
 
@@ -3678,7 +3678,7 @@ mapping[%{DMCA Safe Harbor}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Does this information apply in other countries too?},
- answer:   %{Chilling Effects is a United States organization and information on this website is based on U.S. law.  Other countries' laws differ, often significantly, so you should not assume that the analyses presented here apply outside the United States.    If you have further questions about non-U.S. law, we recommend contacting a lawyer in your jurisdiction.}
+ answer:   %{Lumen Database is a United States organization and information on this website is based on U.S. law.  Other countries' laws differ, often significantly, so you should not assume that the analyses presented here apply outside the United States.    If you have further questions about non-U.S. law, we recommend contacting a lawyer in your jurisdiction.}
 )
 
 mapping[%{Chilling Effects}] << q.id
@@ -3828,7 +3828,7 @@ mapping[%{Piracy or Copyright Infringement}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is "interference with contract" or "interference with prospective business relations"?},
- answer:   %{One can be held liable for intentionally or negligently interfering with the  existing or prospective economic relationships of another. (e.g. contractual/business relationships)  
+ answer:   %{One can be held liable for intentionally or negligently interfering with the  existing or prospective economic relationships of another. (e.g. contractual/business relationships)
 
 The 2d restatement of the law which contain general defintions of the law taken from the laws of many states, defines the tort of Intentional Interference with Prospective Contractual Relations as follows:
 "One who intentionally and improperly interferes with another's prospective contractual relation (except a contract to marry) is subject to liability to the other for the pecuniary harm resulting from loss of the benefits of the relation, whether the interference consists of
@@ -3840,7 +3840,7 @@ Rest 2d (Torts) section 766B.
 
 
 
-Usually, damages are dependent on proof that "but for" the allegedly interfering behavior, an economic relationship, the contract, would have been entered into. 
+Usually, damages are dependent on proof that "but for" the allegedly interfering behavior, an economic relationship, the contract, would have been entered into.
 
 Most jurisdictions and the restatement have slightly different wording for the seperate tort of interference with an already existing contractual relationship.(e.g. when a 3rd party's behavior prevents the performance of or induces the breach of a pre-existing contract)
 
@@ -3852,7 +3852,7 @@ mapping[%{Uncategorized}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What rights does a domain owner have?},
- answer:   %{There are no rights that flow simply from registering a domain name; in fact domain name registrants do not even "own" the domain, they simply lease the service that resolves the domain name to certain files such as websites.  In the US, one acquires legaL rights to names by registering them with a government trademark authority or by actually using them to identify the origina of goods or services.  
+ answer:   %{There are no rights that flow simply from registering a domain name; in fact domain name registrants do not even "own" the domain, they simply lease the service that resolves the domain name to certain files such as websites.  In the US, one acquires legaL rights to names by registering them with a government trademark authority or by actually using them to identify the origina of goods or services.
 
 However, some domain names have also been used as trademarks (such as amazon.com) and many domain names contain existing trademarks (sony.com), therefore it is important to know whether or not one may be violating these underlying rights in a name that appears in a domain.}
 )
@@ -3861,11 +3861,11 @@ mapping[%{Bookmarks}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Can I copy an entire news article from a commercial news web site and post the article on my web site?},
- answer:   %{The fair use doctrine, as currently interpreted by the courts, probably would not entitle you to do so.  Even though news items are factual and facts themselves are not protected by copyright, an entire news article itself is expression protected by copyright.  
+ answer:   %{The fair use doctrine, as currently interpreted by the courts, probably would not entitle you to do so.  Even though news items are factual and facts themselves are not protected by copyright, an entire news article itself is expression protected by copyright.
 
-A court would apply the four factor fair use analysis to determine whether such a use is fair.  In Los Angeles Times v. Free Republic, the court found that such a use was minimally -- or not at all -- transformative, since the article ultimately served the same purpose as the original copyrighted work.  The initial posting of the article was a verbatim copy of the original with no added commentary or criticism and therefore did not transform the work at all.  Although it is often a fair use to copy excerpts of a copyrighted work for the purpose of criticism or commentary, the copying may not exceed the extent necessary to serve that purpose.  In this case, the court found that only a summary and not a complete verbatim copy of the work was necessary for the purpose of commentary and criticism.  
+A court would apply the four factor fair use analysis to determine whether such a use is fair.  In Los Angeles Times v. Free Republic, the court found that such a use was minimally -- or not at all -- transformative, since the article ultimately served the same purpose as the original copyrighted work.  The initial posting of the article was a verbatim copy of the original with no added commentary or criticism and therefore did not transform the work at all.  Although it is often a fair use to copy excerpts of a copyrighted work for the purpose of criticism or commentary, the copying may not exceed the extent necessary to serve that purpose.  In this case, the court found that only a summary and not a complete verbatim copy of the work was necessary for the purpose of commentary and criticism.
 
-The court also found that although the website solicited donations and advertised the services of another website, the overall nature of the website was non-commercial and benefited the public by promoting discussion of the issues presented in the articles on the website.  However, the court found that the nontransformative character of the copying outweighed the consideration of its minimally commercial nature.  
+The court also found that although the website solicited donations and advertised the services of another website, the overall nature of the website was non-commercial and benefited the public by promoting discussion of the issues presented in the articles on the website.  However, the court found that the nontransformative character of the copying outweighed the consideration of its minimally commercial nature.
 
 Finally, and most importantly, the court found that posting entire news articles on the website had an adverse market effect on the copyright owners.  }
 )
@@ -3910,7 +3910,7 @@ mapping[%{DMCA Safe Harbor}] << q.id
 q = RelevantQuestion.create!(
  question: %{What rights are associated with a movie or TV show?},
  answer:   %{.
-An audiovisual work can be covered by several overlapping "intellectual property" rights.  These might include: 
+An audiovisual work can be covered by several overlapping "intellectual property" rights.  These might include:
 <ul><li>Copyrights in the images, story, musical compositions, and sound recordings
 <li>Trademark in the name of a series or producer
 <li>Rights of publicity for the actors
@@ -3951,12 +3951,12 @@ mapping[%{Bookmarks}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Where is the fair use doctrine codified?},
- answer:   %{The fair use doctrine was originally a judge-made doctrine embodied in case law.  See Folsom v. Marsh, 9 F.Cas. 342 (1841).   Congress later codified it at Title 17 of the United States Code, Section 107.   
+ answer:   %{The fair use doctrine was originally a judge-made doctrine embodied in case law.  See Folsom v. Marsh, 9 F.Cas. 342 (1841).   Congress later codified it at Title 17 of the United States Code, Section 107.
 
 This section provides:
-  
-Section 107. Limitations on exclusive rights: Fair use 
- 
+
+Section 107. Limitations on exclusive rights: Fair use
+
 Notwithstanding the provisions of sections 106 and 106A [setting forth copyright owners' exclusive rights and visual artists' artistic rights], the fair use of a copyrighted work, including such use by reproduction in copies or phonorecords or by any other means specified by that section, for purposes such as criticism, comment, news reporting, teaching (including multiple copies for classroom use), scholarship, or research, is not an infringement of copyright. In determining whether the use made of a work in any particular case is a fair use the factors to be considered shall include }
 )
 
@@ -3964,9 +3964,9 @@ mapping[%{Copyright and Fair Use}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{May I post the name, phone number, or address of an individual on my webpage?},
- answer:   %{The common law in most states protects an individual's right to privacy.  State laws differ.  However, according to the Restatement of Torts (Second), which is a guide to general tort law, one's privacy may be invaded by (1) an intrusion upon seclusion, (2) appropriation of name or likeness, (3) publicity of one's private life, or (4) publicity placing one in a false light.  
+ answer:   %{The common law in most states protects an individual's right to privacy.  State laws differ.  However, according to the Restatement of Torts (Second), which is a guide to general tort law, one's privacy may be invaded by (1) an intrusion upon seclusion, (2) appropriation of name or likeness, (3) publicity of one's private life, or (4) publicity placing one in a false light.
 
-It would therefore seem that under the Restatement, the mere publication of a person's address, no matter what the circumstances, could not constitute an invasion of his privacy. This issue has seldom been raised, and when it has, the courts have generally held that the publication of a person's residential address is not an invasion of his privacy, particularly if that information is published elsewhere. 
+It would therefore seem that under the Restatement, the mere publication of a person's address, no matter what the circumstances, could not constitute an invasion of his privacy. This issue has seldom been raised, and when it has, the courts have generally held that the publication of a person's residential address is not an invasion of his privacy, particularly if that information is published elsewhere.
 
 However, if the information was released for the purpose of facilitating violence against the person, the publisher may not be protected by the First Amendment and could be subject to criminal and civil penalties.}
 )
@@ -3989,7 +3989,7 @@ mapping[%{Copyright and Fair Use}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What good is a disclaimer?},
- answer:   %{A disclaimer can help tell visitors what a website site is and isn't.  Much of trademark law aims to prevent consumer confusion; a disclaimer of sponsorship or association with the trademark holder could help avoid confusion.  In defamation law, statements of opinion are protected, but false statements of fact can be defamatory; a disclaimer could emphasize the opinion nature of a website.  A disclaimer can help the humor-impaired to understand a parody site. 
+ answer:   %{A disclaimer can help tell visitors what a website site is and isn't.  Much of trademark law aims to prevent consumer confusion; a disclaimer of sponsorship or association with the trademark holder could help avoid confusion.  In defamation law, statements of opinion are protected, but false statements of fact can be defamatory; a disclaimer could emphasize the opinion nature of a website.  A disclaimer can help the humor-impaired to understand a parody site.
 
 A disclaimer won't tip the balance on a site that is blatantly violating the law, though, and one may not be necessary if the nature of the website is clear from its face.  Think of it as a little special sauce.  }
 )
@@ -4000,7 +4000,7 @@ q = RelevantQuestion.create!(
  question: %{What defenses are there to trademark infringement or dilution?},
  answer:   %{.
 Defendants in a trademark infringement or dilution claim can assert
-basically two types of affirmative defense: fair use or parody.  
+basically two types of affirmative defense: fair use or parody.
 <p>
 <b>Fair use</b> occurs when a descriptive mark is used in
 good faith for its primary, rather than secondary (trademark),
@@ -4088,12 +4088,12 @@ q = RelevantQuestion.create!(
  question: %{In general, what types of uses does the fair use doctrine protect?},
  answer:   %{Fair use is a defense to a claim of copyright infringement.  The language used by Congress to codify the fair use defense to copyright infringement (set forth in <a href="http://www4.law.cornell.edu/uscode/17/107.html" target="new">Title 17, Section 107</a>) specifically lists criticism, comment, news reporting, teaching, scholarship, and research as examples of uses that might be protected under fair use. However, this list is non-exhaustive, and therefore a use not covered in one of the categories could nonetheless be successfully defended as a fair use.  Conversely, not every use that falls within the listed categories will necessarily be found by a court to be fair.  For example, not every use of another's work for research or educational purposes will be held to be a fair use.
 
-In considering a fair use defense to a claim of infringement, a court will focus its inquiry on the specific facts of the individual case. Therefore, it is very difficult to predict with accuracy what a court will do until it engages in the inquiry. What we do know is that a court will use the four factors listed by Congress as a guide in its inquiry. The four factors listed are 
+In considering a fair use defense to a claim of infringement, a court will focus its inquiry on the specific facts of the individual case. Therefore, it is very difficult to predict with accuracy what a court will do until it engages in the inquiry. What we do know is that a court will use the four factors listed by Congress as a guide in its inquiry. The four factors listed are
 <ol>
-<li> the purpose and character of the use (the more transformative defendant's use, the more likely to be fair use, whereas if defendant merely reproduces plaintiff's work without putting it to a transformative use, the less likely this use will be held to be fair; further, the more commercial defendant's use, the less likely such use will be fair), 
-<li> the nature of the copyrighted work (first, the more creative and less purely factual the copyrighted work, the stronger its protection; second, if a copyrighted work is unpublished, it will be harder to establish that defendant's use of it was fair), 
-<li> the amount and substantiality of the portion defendant used (did defendant copy nearly all of, or the heart of, the copyrighted work? if so, such use is less likely to be fair) and 
-<li> the effect of defendant's use on the potential market for the copyrighted work.  
+<li> the purpose and character of the use (the more transformative defendant's use, the more likely to be fair use, whereas if defendant merely reproduces plaintiff's work without putting it to a transformative use, the less likely this use will be held to be fair; further, the more commercial defendant's use, the less likely such use will be fair),
+<li> the nature of the copyrighted work (first, the more creative and less purely factual the copyrighted work, the stronger its protection; second, if a copyrighted work is unpublished, it will be harder to establish that defendant's use of it was fair),
+<li> the amount and substantiality of the portion defendant used (did defendant copy nearly all of, or the heart of, the copyrighted work? if so, such use is less likely to be fair) and
+<li> the effect of defendant's use on the potential market for the copyrighted work.
 </ol>
 The fourth factor -- the effect of defendant's use on plaintiff's market (or potential market) for her creative work -- is generally held to be the most important. }
 )
@@ -4112,9 +4112,9 @@ mapping[%{Copyright and Fair Use}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is the purpose of the fair use defense?},
- answer:   %{There is no easy answer to this question.  However, one way to approach the question is to examine the purposes of the copyright laws.  
+ answer:   %{There is no easy answer to this question.  However, one way to approach the question is to examine the purposes of the copyright laws.
 
-The clause of the Constitution that gives Congress the power to enact copyright laws indicates that the purpose of the given power is to "promote the progress of science and the useful arts" by allowing authors to secure the exclusive rights in their works for "limited times."  Thus, many see the Constitutional scheme behind copyright as a kind of balance between (1) forming incentives for authors to create new works by giving them rights that will allow them to make money from their works, and (2) limiting the rights so that the works themselves are useful to the public and in turn advance the "progress of science and the useful arts."  
+The clause of the Constitution that gives Congress the power to enact copyright laws indicates that the purpose of the given power is to "promote the progress of science and the useful arts" by allowing authors to secure the exclusive rights in their works for "limited times."  Thus, many see the Constitutional scheme behind copyright as a kind of balance between (1) forming incentives for authors to create new works by giving them rights that will allow them to make money from their works, and (2) limiting the rights so that the works themselves are useful to the public and in turn advance the "progress of science and the useful arts."
 
 Fair use fits into this scheme by giving the public the right to use copyrighted works in certain situations even though the author has exclusive rights.  That is, in some circumstances, such as certain uses involving scholarship or research, the "progress" referred to in the Constitution is best promoted and the public is best served by allowing a use of the copyrighted work.  These uses are deemed fair because they are consistent with the power given to Congress to enact copyright laws.  }
 )
@@ -4122,11 +4122,11 @@ Fair use fits into this scheme by giving the public the right to use copyrighted
 mapping[%{Copyright and Fair Use}] << q.id
 
 q = RelevantQuestion.create!(
- question: %{What is the purpose of the fair use defense? 
+ question: %{What is the purpose of the fair use defense?
 },
- answer:   %{There is no easy answer to this question. However, one way to approach the question is to examine the purposes of the copyright laws.  
+ answer:   %{There is no easy answer to this question. However, one way to approach the question is to examine the purposes of the copyright laws.
 
-The clause of the Constitution that gives Congress the power to enact copyright laws indicates that the purpose of the given power is to "promote the progress of science and the useful arts" by allowing authors to secure the exclusive rights in their works for "limited times." Thus, many see the Constitutional scheme behind copyright as a kind of balance between (1) forming incentives for authors to create new works by giving them rights that will allow them to make money from their works, and (2) limiting the rights so that the works themselves are useful to the public and in turn advance the "progress of science and the useful arts."  
+The clause of the Constitution that gives Congress the power to enact copyright laws indicates that the purpose of the given power is to "promote the progress of science and the useful arts" by allowing authors to secure the exclusive rights in their works for "limited times." Thus, many see the Constitutional scheme behind copyright as a kind of balance between (1) forming incentives for authors to create new works by giving them rights that will allow them to make money from their works, and (2) limiting the rights so that the works themselves are useful to the public and in turn advance the "progress of science and the useful arts."
 
 Fair use fits into this scheme by giving the public the right to use copyrighted works in certain situations even though the author has exclusive rights. That is, in some circumstances, such as certain uses involving scholarship or research, the "progress" referred to in the Constitution is best promoted and the public is best served by allowing an unauthorized use of the copyrighted work. These uses are deemed fair because they are consistent with the power given to Congress to enact copyright laws.}
 )
@@ -4161,13 +4161,13 @@ mapping[%{Copyright and Fair Use}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{If I am engaged in research, educational, or academic pursuits, does the fair use doctrine permit me to copy articles from a journal or periodical?},
- answer:   %{As mentioned above, it is hard to predict what a court will do when presented with a fair use defense. However, in this case the answer depends in part on your purposes in copying. If you intend to archive the copies, the answer is probably no, while if you intend to use the copies in classroom instruction (without charging for the copies), the use may be fair.  
+ answer:   %{As mentioned above, it is hard to predict what a court will do when presented with a fair use defense. However, in this case the answer depends in part on your purposes in copying. If you intend to archive the copies, the answer is probably no, while if you intend to use the copies in classroom instruction (without charging for the copies), the use may be fair.
 
-In 1994 the Second Circuit Court of Appeals held that it was not a fair use for research scientists at Texaco to photocopy articles from various scientific and technical journals. Texaco argued, on behalf of its scientists, that the use was for the purpose of research, and therefore was fair under Section 107. But the court was not convinced. In reaching its decision, the court in Texaco ran through the four factor fair use analysis (see generally, what types of uses does the fair use doctrine protect? and the introduction to this Lumen topic). The court found that three of the four factors weighed against Texaco, and focused much of its opinion on the fourth factor, deciding that Texaco's use would have a significant impact on the potential market for the journal articles. Thus, in order to make copies of the articles, the research scientists at Texaco had to either pay for them or get express permission from the publishers.  See American Geophysical Union v. Texaco Inc., 60 F.3d 913 (2d Cir. 1994).  
+In 1994 the Second Circuit Court of Appeals held that it was not a fair use for research scientists at Texaco to photocopy articles from various scientific and technical journals. Texaco argued, on behalf of its scientists, that the use was for the purpose of research, and therefore was fair under Section 107. But the court was not convinced. In reaching its decision, the court in Texaco ran through the four factor fair use analysis (see generally, what types of uses does the fair use doctrine protect? and the introduction to this Lumen topic). The court found that three of the four factors weighed against Texaco, and focused much of its opinion on the fourth factor, deciding that Texaco's use would have a significant impact on the potential market for the journal articles. Thus, in order to make copies of the articles, the research scientists at Texaco had to either pay for them or get express permission from the publishers.  See American Geophysical Union v. Texaco Inc., 60 F.3d 913 (2d Cir. 1994).
 
-Further, use of another's work for classroom instruction purposes may be protected under a separate provision of the Copyright Act. Section 110 of the Copyright Act contains exemptions that provide nonprofit educational institutions the limited right to use copyrighted materials in face-to-face classroom settings. This section provides: "Notwithstanding the provisions of section 106, the following are not infringements of copyright: (1) performance or display of a work by instructors or pupils in the course of face-to-face teaching activities of a nonprofit educational institution, in a classroom or similar place devoted to instruction . . . ."  
+Further, use of another's work for classroom instruction purposes may be protected under a separate provision of the Copyright Act. Section 110 of the Copyright Act contains exemptions that provide nonprofit educational institutions the limited right to use copyrighted materials in face-to-face classroom settings. This section provides: "Notwithstanding the provisions of section 106, the following are not infringements of copyright: (1) performance or display of a work by instructors or pupils in the course of face-to-face teaching activities of a nonprofit educational institution, in a classroom or similar place devoted to instruction . . . ."
 
-Furthermore, the recently enacted "Technology, Education, and Copyright Harmonization Act" -- the TEACH Act -- amends Section 110 to exempt certain uses of copyrighted works in the context of distance education (beyond the context of face-to-face teaching). The TEACH Act sets forth in detail the terms and conditions on which nonprofit educational institutions may use copyrighted works in the context of distance education (such as via websites or other digital means) without permission. 
+Furthermore, the recently enacted "Technology, Education, and Copyright Harmonization Act" -- the TEACH Act -- amends Section 110 to exempt certain uses of copyrighted works in the context of distance education (beyond the context of face-to-face teaching). The TEACH Act sets forth in detail the terms and conditions on which nonprofit educational institutions may use copyrighted works in the context of distance education (such as via websites or other digital means) without permission.
 
 }
 )
@@ -4175,11 +4175,11 @@ Furthermore, the recently enacted "Technology, Education, and Copyright Harmoniz
 mapping[%{Copyright and Fair Use}] << q.id
 
 q = RelevantQuestion.create!(
- question: %{As an owner of a commercial copyshop, can I make copies of copyrighted works of scholarship, bind them in coursepacks, and sell them to students for use in fulfilling reading assignment given by their professors?  
+ question: %{As an owner of a commercial copyshop, can I make copies of copyrighted works of scholarship, bind them in coursepacks, and sell them to students for use in fulfilling reading assignment given by their professors?
 },
- answer:   %{While it is difficult to predict what courts will do when faced with a fair use defense, the answer is probably no.  In 1997 the Sixth Circuit Court of Appeals held that it was not fair use for Michigan Document Services, a commercial copyshop, to copy works of scholarship and sell them to students without the permission of the copyright hodlers.  
+ answer:   %{While it is difficult to predict what courts will do when faced with a fair use defense, the answer is probably no.  In 1997 the Sixth Circuit Court of Appeals held that it was not fair use for Michigan Document Services, a commercial copyshop, to copy works of scholarship and sell them to students without the permission of the copyright hodlers.
 
-The court ran through the four factor fair use analysis (see 17 USC Section 107: see Introduction to this Chilling Effects topic; see answer to FAQ: "what does the fair use defense protect?"), focusing on the effect that the copying would have on the potential market for the copyrighted works.  The court found that the copying would have a significant impact on the potential market for the works and consequently found that the copying was not protected by the fair use defense.  }
+The court ran through the four factor fair use analysis (see 17 USC Section 107: see Introduction to this Lumen topic; see answer to FAQ: "what does the fair use defense protect?"), focusing on the effect that the copying would have on the potential market for the copyrighted works.  The court found that the copying would have a significant impact on the potential market for the works and consequently found that the copying was not protected by the fair use defense.  }
 )
 
 mapping[%{Copyright and Fair Use}] << q.id
@@ -4193,7 +4193,7 @@ mapping[%{Copyright and Fair Use}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{If the owner of a copyrighted work that is displayed on a website uses technological measures to prevent me from copying the work onto my website, but my copying would be a fair use, can I use technological measures to circumvent the protection and make the copy anyway?},
- answer:   %{Yes.  Under the current copyright laws, it is lawful to circumvent technological copyright protection systems in order to make a copy.  Then, if the copyright holder sues you for making the copies, and your fair use defense is successful, you are in the clear.  But here's the catch:  It is UNLAWFUL for someone to traffic in technology that can be used to circumvent technological copyright protection systems.  Therefore, unless you can circumvent the copyright holder's protection yourself, it is unlikely that you will be able to find the technology you need elsewhere. Note that it is also UNLAWFUL for you to circumvent <b>access</b> control technologies.  See <a href="http://www.copyright.gov/title17/92chap12.html" target="new">Chapter 12 of the Copyright Act</a>, particularly <a href="http://static.chillingeffects.org/1201.html">section 1201</a>.  For more information on the anticircumvention provisions, see the Chilling Effects topic <!--GET CatLink 12-->.}
+ answer:   %{Yes.  Under the current copyright laws, it is lawful to circumvent technological copyright protection systems in order to make a copy.  Then, if the copyright holder sues you for making the copies, and your fair use defense is successful, you are in the clear.  But here's the catch:  It is UNLAWFUL for someone to traffic in technology that can be used to circumvent technological copyright protection systems.  Therefore, unless you can circumvent the copyright holder's protection yourself, it is unlikely that you will be able to find the technology you need elsewhere. Note that it is also UNLAWFUL for you to circumvent <b>access</b> control technologies.  See <a href="http://www.copyright.gov/title17/92chap12.html" target="new">Chapter 12 of the Copyright Act</a>, particularly <a href="http://static.chillingeffects.org/1201.html">section 1201</a>.  For more information on the anticircumvention provisions, see the Lumen topic <!--GET CatLink 12-->.}
 )
 
 mapping[%{Copyright and Fair Use}] << q.id
@@ -4238,11 +4238,11 @@ mapping[%{Defamation}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is Trademark Misuse?},
- answer:   %{Trademark Misuse is a theoretical concept which pertains to how a trademark holder handles its rights.  It purports to be similar to the defenses brought in copyright and patent cases, which dictate that if the owner of the intellectual property rights (e.g. a patent or copyright) over-exerts its rights (e.g forces someone to buy an unrelated product to gain acess to the protected work), then the copyright or patent holder will lose its right to sue for infringement. 
+ answer:   %{Trademark Misuse is a theoretical concept which pertains to how a trademark holder handles its rights.  It purports to be similar to the defenses brought in copyright and patent cases, which dictate that if the owner of the intellectual property rights (e.g. a patent or copyright) over-exerts its rights (e.g forces someone to buy an unrelated product to gain acess to the protected work), then the copyright or patent holder will lose its right to sue for infringement.
 
 Recently, the theory was employed in challenging Network Solutions' dispute policy which held that registered trademark holders had the right to have Network Solutions immediately freeze any allegedly infringing domain names until the dispute was settled.  It was argued that often claims with little or no support were being alleged by Registered Trademark Holders so as to prevent possibly infringing sites from materializing.  Although the trademark holder's registration (and rights) were not cancelled, the argument that giving "extra" rights to registered trademark holders was unfair ultimately led to a change in Network Solution's dispute policy.
 
-It is believed that the trademark misuse theory may still prove useful where a domain name owner is forced by a trademark owner to litigate or arbitrate a frivolous claim of infringement.     
+It is believed that the trademark misuse theory may still prove useful where a domain name owner is forced by a trademark owner to litigate or arbitrate a frivolous claim of infringement.
  }
 )
 
@@ -4257,7 +4257,7 @@ mapping[%{Fan Fiction}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Does the fact that my fan fiction website is adult oriented put me at a heightened risk for copyright or trademark infringement?},
- answer:   %{  Yes, and no.  The fact that your website may contain sexually explicit images or verbage regarding a particular copyright or trademark should not make a court more likely to find against you for infringement.  Content of speech, even sexually explicit speech, is not generally a valid excuse for the government to bar access to content.  There are some recent holdings with regard to filtering software in libraries that speak to this point.  
+ answer:   %{  Yes, and no.  The fact that your website may contain sexually explicit images or verbage regarding a particular copyright or trademark should not make a court more likely to find against you for infringement.  Content of speech, even sexually explicit speech, is not generally a valid excuse for the government to bar access to content.  There are some recent holdings with regard to filtering software in libraries that speak to this point.
   The main issue here is that the more inflamatory (in the eyes of the copyright holder) your site is, the more likely they are to come after you.  Whether or not their claim has any validity is another question altogether.  }
 )
 
@@ -4265,13 +4265,13 @@ mapping[%{Bookmarks}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Is sexually explicit Fan Fiction protected by the First Amendment right to free speech?},
- answer:   %{Yes.  However, sexually explict materials receive different levels of First Amendment protection.  For example, child pornography and obscenity are not protected by the First Amendment.  In Miller v. California (1973), the Supreme Court, in a 5-to-4 vote, ruled that material could be banned as obscene if it met a three-part test: 
+ answer:   %{Yes.  However, sexually explict materials receive different levels of First Amendment protection.  For example, child pornography and obscenity are not protected by the First Amendment.  In Miller v. California (1973), the Supreme Court, in a 5-to-4 vote, ruled that material could be banned as obscene if it met a three-part test:
 
-1.  The average person, applying contemporary community standards, would find that the work, taken as a whole, appeals to the prurient interest; 
-2.  The work depicts, in a patently offensive way, sexual conduct specifically defined by the applicable state law; 
-3.  The work, taken as a whole, lacks serious literary, artistic, political or scientific value.  
+1.  The average person, applying contemporary community standards, would find that the work, taken as a whole, appeals to the prurient interest;
+2.  The work depicts, in a patently offensive way, sexual conduct specifically defined by the applicable state law;
+3.  The work, taken as a whole, lacks serious literary, artistic, political or scientific value.
 
-Material that meets all three parts is obscene and outside of First Amendment protection. Under the decision, only "ultimate sexual acts" could be forbidden, and relevant community standards were local, not nationwide.   
+Material that meets all three parts is obscene and outside of First Amendment protection. Under the decision, only "ultimate sexual acts" could be forbidden, and relevant community standards were local, not nationwide.
 
 Non-obscene pornography, indecent and other "adult" materials do receive some level of First Amendment protection.  }
 )
@@ -4280,16 +4280,16 @@ mapping[%{Fan Fiction}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What issues arise if my FanFic content is inappropriate for minors?  },
- answer:   %{  Age verification warnings may limit the possibility of a minor having a 
-chance encounter with unsuitable material.  Some sexually-explicit content 
-providers use age verification because they feel that industry-wide self 
-regulation will help quell the congressional demand for stricter online 
-content regulation.  
+ answer:   %{  Age verification warnings may limit the possibility of a minor having a
+chance encounter with unsuitable material.  Some sexually-explicit content
+providers use age verification because they feel that industry-wide self
+regulation will help quell the congressional demand for stricter online
+content regulation.
 
-Most states have laws that prohibit the distribution of sexually-explicit 
-material to underage people.  In California, for instance, it is a crime to 
-distribute material "to a minor with the intent of arousing, appealing to, or 
-gratifying the lust or passions or sexual desires of that person or of a 
+Most states have laws that prohibit the distribution of sexually-explicit
+material to underage people.  In California, for instance, it is a crime to
+distribute material "to a minor with the intent of arousing, appealing to, or
+gratifying the lust or passions or sexual desires of that person or of a
 minor..."  Cal. Pen. Code }
 )
 
@@ -4304,10 +4304,10 @@ mapping[%{Piracy or Copyright Infringement}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Does a cease and desist letter recipient have a duty to remove materials alleged to be defamatory? },
- answer:   %{No.  The cease and desist letter does not place you under an obligation to remove something.  There is no legal reason to remove the material before a court order has been issued to do so.  First Amendment Law regarding prior restraint forbids this.   
-Not taking down the material, however, might have an effect on damages if a suit is brought and a judgment found in favor of the accuser.  The amount of time a defamatory statement is in the public eye can favor a higher damage award.   
-The cease and desist letter gives its recipient ("you") notice that someone is claiming something you've done or something on your site that is defamatory.  It is merely a warning of concern by another party, and has no legal ramification.  
-         
+ answer:   %{No.  The cease and desist letter does not place you under an obligation to remove something.  There is no legal reason to remove the material before a court order has been issued to do so.  First Amendment Law regarding prior restraint forbids this.
+Not taking down the material, however, might have an effect on damages if a suit is brought and a judgment found in favor of the accuser.  The amount of time a defamatory statement is in the public eye can favor a higher damage award.
+The cease and desist letter gives its recipient ("you") notice that someone is claiming something you've done or something on your site that is defamatory.  It is merely a warning of concern by another party, and has no legal ramification.
+
 
 }
 )
@@ -4335,10 +4335,10 @@ q = RelevantQuestion.create!(
  question: %{Who owns the copyright?
 },
  answer:   %{
-If the work is protected, then it becomes important to know who owns the copyright. A copyright can be owned by one author (the original author) or by several authors when the work is a joint work. If the work is a joint work, then all authors are co-owners and are treated like tenants in common, each having an independent right to use or grant a "non-exclusive" license. A corporation can also own works produced by its employees as "works for hire," or have creators assign copyrights to it. Thus, fan fiction authors could be dealing with individual authors such as Anne Rice or large corporations such as Fox or Viacom. 
+If the work is protected, then it becomes important to know who owns the copyright. A copyright can be owned by one author (the original author) or by several authors when the work is a joint work. If the work is a joint work, then all authors are co-owners and are treated like tenants in common, each having an independent right to use or grant a "non-exclusive" license. A corporation can also own works produced by its employees as "works for hire," or have creators assign copyrights to it. Thus, fan fiction authors could be dealing with individual authors such as Anne Rice or large corporations such as Fox or Viacom.
 
 
-Now that many fan fiction authors publish on the Internet, copyright holders (regardless of whether they are individual authors or corporations) can easily use search engines to discover their characters being used in unauthorized or unapproved ways. Many owners have tried to stop that use, and as a result, fan fiction authors have received letters telling them to take their stories off-line (See cease and desist letters). 
+Now that many fan fiction authors publish on the Internet, copyright holders (regardless of whether they are individual authors or corporations) can easily use search engines to discover their characters being used in unauthorized or unapproved ways. Many owners have tried to stop that use, and as a result, fan fiction authors have received letters telling them to take their stories off-line (See cease and desist letters).
 
 }
 )
@@ -4348,7 +4348,7 @@ mapping[%{Bookmarks}] << q.id
 q = RelevantQuestion.create!(
  question: %{What is the effect of an age verification warning on a copyright claim?
 },
- answer:   %{Age verification has no effect on copyright claims.  The validity of a copyright has to do with the similarity between the alleged infringing work and the original work, not with its suitability for minors.  
+ answer:   %{Age verification has no effect on copyright claims.  The validity of a copyright has to do with the similarity between the alleged infringing work and the original work, not with its suitability for minors.
 }
 )
 
@@ -4356,9 +4356,9 @@ mapping[%{Fan Fiction}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Does a cease and desist letter recipient have a duty to remove materials alleged to be infringing? },
- answer:   %{No.  The cease and desist letter does not place you under an obligation to remove something.  There is no legal reason to remove the material before a court order has been issued to do so.  First Amendment Law regarding prior restraint forbids this.   
-Not taking down the material, however, might have an effect on damages if a suit is brought and a judgment found in favor of the accuser.  The amount of time infringing material is available for download and in the public eye can favor a higher damage award.   
-The cease and desist letter gives its recipient ("you") notice that someone is claiming something you've done or something on your site that is infringing on their work.  It is merely a warning of concern by another party, and has no legal ramification.  
+ answer:   %{No.  The cease and desist letter does not place you under an obligation to remove something.  There is no legal reason to remove the material before a court order has been issued to do so.  First Amendment Law regarding prior restraint forbids this.
+Not taking down the material, however, might have an effect on damages if a suit is brought and a judgment found in favor of the accuser.  The amount of time infringing material is available for download and in the public eye can favor a higher damage award.
+The cease and desist letter gives its recipient ("you") notice that someone is claiming something you've done or something on your site that is infringing on their work.  It is merely a warning of concern by another party, and has no legal ramification.
 }
 )
 
@@ -4380,9 +4380,9 @@ mapping[%{Copyright and Fair Use}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Does the fair use doctrine permit individuals to upload and download digital audio files containing copyrighted music through a file-sharing service that facilitates transmission and retention of the files by its users?},
- answer:   %{The courts that have considered this issue to date have held that this type of "peer to peer file sharing" violates the copyright owner's exclusive right to reproduce their copyrighted material and does not constitute a fair use.  
+ answer:   %{The courts that have considered this issue to date have held that this type of "peer to peer file sharing" violates the copyright owner's exclusive right to reproduce their copyrighted material and does not constitute a fair use.
 
-The Ninth Circuit Court of Appeals applied the four factor fair use analysis to address this issue.  First, the court found that the purpose and character of such a use was not transformative, since the work was merely retransmitted in a different medium.  Also, such use was found to be commercial in nature and resulted in the exploitation of copyrighted works since it saved the users the expense of purchasing the authorized copies.  The court also focussed on the fourth factor, the effect of the use on the market.  The court concluded that the internet service harmed the market for the plaintiff's copyrighted material by reducing CD sales and by interfereing with the copyright holder's attempts to charge for the same internet downloads.  
+The Ninth Circuit Court of Appeals applied the four factor fair use analysis to address this issue.  First, the court found that the purpose and character of such a use was not transformative, since the work was merely retransmitted in a different medium.  Also, such use was found to be commercial in nature and resulted in the exploitation of copyrighted works since it saved the users the expense of purchasing the authorized copies.  The court also focussed on the fourth factor, the effect of the use on the market.  The court concluded that the internet service harmed the market for the plaintiff's copyrighted material by reducing CD sales and by interfereing with the copyright holder's attempts to charge for the same internet downloads.
 
 A&M Records v. Napster, 239 F.3d 1004; see also MGM v. Grokster}
 )
@@ -4407,9 +4407,9 @@ mapping[%{Copyright and Fair Use}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Can a person or company create and stream line clips of movies over the internet to video retailers to play for their customers?},
- answer:   %{Probably not.  It is not a fair use to stream such clips over the internet if the purpose is to promote the sale and rental of the videos.  Such a use infringes on the copyright owner's exclusive rights to reproduce, publicly display and distribute their work, and to create derivative works.  
+ answer:   %{Probably not.  It is not a fair use to stream such clips over the internet if the purpose is to promote the sale and rental of the videos.  Such a use infringes on the copyright owner's exclusive rights to reproduce, publicly display and distribute their work, and to create derivative works.
 
-A court will apply the four factor fair use analysis to the individual facts of such a case to determine whether the use was fair.  Courts have found that stream lining movie trailers for the purpose of promoting sales or rentals serves a commercial purpose and is not transformative since the use is not different than the purpose for which it was originally created. However, if the video trailer adds criticism or commentary to the original work, it is more likely that the court will consider it to be a fair use.  Courts have also found that even if the movie clip is short and therefore only uses a small portion of the original work, the aggregation of scenes may reflect the themes and tone of the film in a way that inteferes with the plaintiff's ability to evoke the same expressive values in its own previews.  With regard to the effect of the use on the market, a misleading arrangement of scenes or a low quality clip could lead to an adverse effect on the copyright owner's market.  Also, such previews could detract from sales on the copyright owner's official website.  
+A court will apply the four factor fair use analysis to the individual facts of such a case to determine whether the use was fair.  Courts have found that stream lining movie trailers for the purpose of promoting sales or rentals serves a commercial purpose and is not transformative since the use is not different than the purpose for which it was originally created. However, if the video trailer adds criticism or commentary to the original work, it is more likely that the court will consider it to be a fair use.  Courts have also found that even if the movie clip is short and therefore only uses a small portion of the original work, the aggregation of scenes may reflect the themes and tone of the film in a way that inteferes with the plaintiff's ability to evoke the same expressive values in its own previews.  With regard to the effect of the use on the market, a misleading arrangement of scenes or a low quality clip could lead to an adverse effect on the copyright owner's market.  Also, such previews could detract from sales on the copyright owner's official website.
 
 Video Pipeline, Inc. v. Buena Vista Home Entertainment, 192 F.Supp.2d 321}
 )
@@ -4418,7 +4418,7 @@ mapping[%{Copyright and Fair Use}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Can an operator of a computer Bulletin Board Service (BBS) assert fair use as a defense to allowing a third party to use the service to post infringing copies of works to the BBS, creating a temporary copy of the work on the operator's server?},
- answer:   %{Maybe.  The California District Court has found that such a use benefits the public despite its commercial nature because it promotes the distribution of copyrighted works.  The court also found that the operator's purpose in using the work was different from that of the copyright owner's.  With regard to the nature of the copyrighted work, the court found that since the use of the work was for the purpose of facilitating the posting of the articles, the nature of the works themselves was not an important factor in the inquiry.  
+ answer:   %{Maybe.  The California District Court has found that such a use benefits the public despite its commercial nature because it promotes the distribution of copyrighted works.  The court also found that the operator's purpose in using the work was different from that of the copyright owner's.  With regard to the nature of the copyrighted work, the court found that since the use of the work was for the purpose of facilitating the posting of the articles, the nature of the works themselves was not an important factor in the inquiry.
 
 Although substantial amounts of the copyrighted works were copied onto the BBS, the court found that no more was copied than was necessary to serve the website's purpose.  Finally, the court found there was a qustion of fact as to whether the use affected the potential market for the work.  }
 )
@@ -4449,7 +4449,7 @@ mapping[%{Copyright and Fair Use}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{How do I file a DMCA counter-notice?},
- answer:   %{If you believe your material was removed because of mistake or misidentification, you can file a "counter notification" asking the service provider to put it back up.  Chilling Effects offers a <a href="http://www.chillingeffects.org/dmca/counter512.pdf">form to build your own counter-notice</a>.}
+ answer:   %{If you believe your material was removed because of mistake or misidentification, you can file a "counter notification" asking the service provider to put it back up.  Lumen Database offers a <a href="https://www.lumendatabase.org/counter_notices/new">form to build your own counter-notice</a>.}
 )
 
 mapping[%{DMCA Safe Harbor}] << q.id
@@ -4470,15 +4470,15 @@ mapping[%{Copyright and Fair Use}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Can I post a copyrighted image on my website?},
- answer:   %{Maybe.  In order to determine whether you can post a copyrighted image on your website, a court would apply the four factor fair use analysis.  
+ answer:   %{Maybe.  In order to determine whether you can post a copyrighted image on your website, a court would apply the four factor fair use analysis.
 
-First, it is important to determine the purpose and character of the use.  If the use is commercial in nature, rather than for nonprofit education purposes, it less likely to be considered a fair use.  To determine if it is commercial, a court would consider whether the use was exploitative and for direct profit, or if instead any commercial character was incidental.  Also, if the use is transformative and for a different purpose than the original work, it is more likely the first factor will weigh in favor of finding a fair use.  For example, in Kelly v. Arriba Soft Corporation, the court found that posting "thumbnail" images on a website was a fair use because such images served a different purpose than the original images.  
+First, it is important to determine the purpose and character of the use.  If the use is commercial in nature, rather than for nonprofit education purposes, it less likely to be considered a fair use.  To determine if it is commercial, a court would consider whether the use was exploitative and for direct profit, or if instead any commercial character was incidental.  Also, if the use is transformative and for a different purpose than the original work, it is more likely the first factor will weigh in favor of finding a fair use.  For example, in Kelly v. Arriba Soft Corporation, the court found that posting "thumbnail" images on a website was a fair use because such images served a different purpose than the original images.
 
 Second, the court would consider the nature of the copyrighted work.  The reproduction of a predominantly factual work is more likely to be considred a fair use than the reproduction of a highly creative one.
 
 Third, it is important to consider the amount and substantiality of the portion of the copyrighted image used.  This inquiry looks at not only the quantity, but also on the expressive value, of the portion used.  If a large amount of the original image is copied, or if the portion copied is substantially significant to the work as a whole, it is less likely the court will find such copying to be a fair use.
 
-Finally, the most important factor in this inquiry is the effect of the use on the potential market for the copyright owner's work.  If posting the image on the website leads to a reduction in sales of the copyrighted work or discourages people from accessing the copyright owner's website, a court is more likely to find that the use is not fair and has an adverse impact on the copyright owner's market.  
+Finally, the most important factor in this inquiry is the effect of the use on the potential market for the copyright owner's work.  If posting the image on the website leads to a reduction in sales of the copyrighted work or discourages people from accessing the copyright owner's website, a court is more likely to find that the use is not fair and has an adverse impact on the copyright owner's market.
 
 These four factors will be evaluated by a court in a factual inquiry to determine whether the posting of the image would constitute a fair use.}
 )
@@ -4503,11 +4503,11 @@ mapping[%{Trademark}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is trademark misuse?},
- answer:   %{Trademark Misuse is a largely theoretical argument about how a trademark holder can use its rights. It would be similar to the defenses brought in copyright and patent cases, which dictate that if the owner of the intellectual property rights (e.g. a patent or copyright) over-exerts its rights (e.g forces someone to buy an unrelated product to gain acess to the protected work), then the copyright or patent holder loses its right to sue for infringement. 
+ answer:   %{Trademark Misuse is a largely theoretical argument about how a trademark holder can use its rights. It would be similar to the defenses brought in copyright and patent cases, which dictate that if the owner of the intellectual property rights (e.g. a patent or copyright) over-exerts its rights (e.g forces someone to buy an unrelated product to gain acess to the protected work), then the copyright or patent holder loses its right to sue for infringement.
 
 Recently, the theory was employed in challenging Network Solutions' dispute policy which held that registered trademark holders had the right to have Network Solutions immediately freeze any allegedly infringing domain names until the dispute was settled. It was argued that often claims with little or no support were being alleged by registered trademark holders so as to prevent possibly infringing sites from materializing. Although the trademark holder's registration (and rights) were not cancelled, the argument that giving "extra" rights to registered trademark holders was unfair ultimately led to a change in Network Solution's dispute policy.
 
-It is believed that the trademark misuse theory may still prove useful where a domain name owner is forced by a trademark owner to litigate or arbitrate a frivolous claim of infringement. 
+It is believed that the trademark misuse theory may still prove useful where a domain name owner is forced by a trademark owner to litigate or arbitrate a frivolous claim of infringement.
 }
 )
 
@@ -4536,9 +4536,9 @@ mapping[%{DMCA Safe Harbor}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is a domain name?},
- answer:   %{A domain name is a name associated with a particular computer online.  In the domain name www.chillingeffects.org, .org is the top-level domain ("TLD"), chillingeffects is the second-level domain name, and www is a subdomain.  Domain names are looked up on name servers in the DNS hierarchy to resolve them to numerical IP addresses.
+ answer:   %{A domain name is a name associated with a particular computer online.  In the domain name www.lumendatabase.org, .org is the top-level domain ("TLD"), lumendatabase is the second-level domain name, and www is a subdomain.  Domain names are looked up on name servers in the DNS hierarchy to resolve them to numerical IP addresses.
 
-A domain name registration, like a telephone directory listing, is simply a service by which the domain registry agrees to list your domain name and the corresponding IP address in its domain zone file (such as the .com zone file). The routers that forward data bits around the Internet must consult these zone files to know which machine you're using.  If the registry removes the domain name from the zone file, then routers (and users) will not be able to address mail or see your website if they use your domain name.  They can, however, still reach you by using your IP address. 
+A domain name registration, like a telephone directory listing, is simply a service by which the domain registry agrees to list your domain name and the corresponding IP address in its domain zone file (such as the .com zone file). The routers that forward data bits around the Internet must consult these zone files to know which machine you're using.  If the registry removes the domain name from the zone file, then routers (and users) will not be able to address mail or see your website if they use your domain name.  They can, however, still reach you by using your IP address.
 
 There are over 250 top level domains (like .com, .us and .uk). Each has its own procedures for handling registrations and trademark disputes. }
 )
@@ -4561,45 +4561,45 @@ mapping[%{Protest, Parody and Criticism Sites}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is section 1 of the Defamation Act 1996?},
- answer:   %{ An Act to amend the law of defamation and to amend the law of limitation with respect to actions for defamation or malicious falsehood. 
+ answer:   %{ An Act to amend the law of defamation and to amend the law of limitation with respect to actions for defamation or malicious falsehood.
 
-[4th July 1996] 
+[4th July 1996]
 
-BE IT ENACTED by the Queen's most Excellent Majesty, by and with the advice and consent of the Lords Spiritual and Temporal, and Commons, in this present Parliament assembled, and by the authority of the same, as follows:- 
- 
- 
-  
-Responsibility for publication 
-Responsibility for publication.     1. - (1) In defamation proceedings a person has a defence if he shows that- 
-  
-  (a) he was not the author, editor or publisher of the statement complained of, 
-  (b) he took reasonable care in relation to its publication, and 
-  (c) he did not know, and had no reason to believe, that what he did caused or contributed to the publication of a defamatory statement. 
-      (2) For this purpose "author", "editor" and "publisher" have the following meanings, which are further explained in subsection (3)- 
-  
-  "author" means the originator of the statement, but does not include a person who did not intend that his statement be published at all; 
-  "editor" means a person having editorial or equivalent responsibility for the content of the statement or the decision to publish it; and 
-  "publisher" means a commercial publisher, that is, a person whose business is issuing material to the public, or a section of the public, who issues material containing the statement in the course of that business. 
-      (3) A person shall not be considered the author, editor or publisher of a statement if he is only involved- 
-  
-  (a) in printing, producing, distributing or selling printed material containing the statement; 
-  (b) in processing, making copies of, distributing, exhibiting or selling a film or sound recording (as defined in Part I of the Copyright, Designs and Patents Act 1988) containing the statement; 
-  (c) in processing, making copies of, distributing or selling any electronic medium in or on which the statement is recorded, or in operating or providing any equipment, system or service by means of which the statement is retrieved, copied, distributed or made available in electronic form; 
-  (d) as the broadcaster of a live programme containing the statement in circumstances in which he has no effective control over the maker of the statement; 
+BE IT ENACTED by the Queen's most Excellent Majesty, by and with the advice and consent of the Lords Spiritual and Temporal, and Commons, in this present Parliament assembled, and by the authority of the same, as follows:-
+
+
+
+Responsibility for publication
+Responsibility for publication.     1. - (1) In defamation proceedings a person has a defence if he shows that-
+
+  (a) he was not the author, editor or publisher of the statement complained of,
+  (b) he took reasonable care in relation to its publication, and
+  (c) he did not know, and had no reason to believe, that what he did caused or contributed to the publication of a defamatory statement.
+      (2) For this purpose "author", "editor" and "publisher" have the following meanings, which are further explained in subsection (3)-
+
+  "author" means the originator of the statement, but does not include a person who did not intend that his statement be published at all;
+  "editor" means a person having editorial or equivalent responsibility for the content of the statement or the decision to publish it; and
+  "publisher" means a commercial publisher, that is, a person whose business is issuing material to the public, or a section of the public, who issues material containing the statement in the course of that business.
+      (3) A person shall not be considered the author, editor or publisher of a statement if he is only involved-
+
+  (a) in printing, producing, distributing or selling printed material containing the statement;
+  (b) in processing, making copies of, distributing, exhibiting or selling a film or sound recording (as defined in Part I of the Copyright, Designs and Patents Act 1988) containing the statement;
+  (c) in processing, making copies of, distributing or selling any electronic medium in or on which the statement is recorded, or in operating or providing any equipment, system or service by means of which the statement is retrieved, copied, distributed or made available in electronic form;
+  (d) as the broadcaster of a live programme containing the statement in circumstances in which he has no effective control over the maker of the statement;
   (e) as the operator of or provider of access to a communications system by means of which the statement is transmitted, or made available, by a person over whom he has no effective control.
-  
-      In a case not within paragraphs (a) to (e) the court may have regard to those provisions by way of analogy in deciding whether a person is to be considered the author, editor or publisher of a statement. 
+
+      In a case not within paragraphs (a) to (e) the court may have regard to those provisions by way of analogy in deciding whether a person is to be considered the author, editor or publisher of a statement.
       (4) Employees or agents of an author, editor or publisher are in the same position as their employer or principal to the extent that they are responsible for the content of the statement or the decision to publish it.
-  
-      (5) In determining for the purposes of this section whether a person took reasonable care, or had reason to believe that what he did caused or contributed to the publication of a defamatory statement, regard shall be had to- 
-  
-  (a) the extent of his responsibility for the content of the statement or the decision to publish it, 
-  (b) the nature or circumstances of the publication, and 
-  (c) the previous conduct or character of the author, editor or publisher. 
+
+      (5) In determining for the purposes of this section whether a person took reasonable care, or had reason to believe that what he did caused or contributed to the publication of a defamatory statement, regard shall be had to-
+
+  (a) the extent of his responsibility for the content of the statement or the decision to publish it,
+  (b) the nature or circumstances of the publication, and
+  (c) the previous conduct or character of the author, editor or publisher.
       (6) This section does not apply to any cause of action which arose before the section came into force.
-  
-  
- 
+
+
+
 }
 )
 
@@ -4628,7 +4628,7 @@ mapping[%{Bookmarks}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is third-party liability, also known as "secondary liability"?},
- answer:   %{The concept of third party liability refers, as the name implies, to situations in which responsibility for harm can be placed on a party in addition to the one that actually caused the injury.  The most common example comes from tort law: a customer in a grocery store drops a bottle of wine and another customer slips on the puddle and injures himself; he may bring an action for negligence against the customer who dropped the bottle and against the owner of the grocery store.  Under the common law doctrine of third-party liability, a plaintiff must show not only that an injury actually occurred, but also (in most cases) that some sort of connection existed between the third party and the person who actually caused the injury.  
+ answer:   %{The concept of third party liability refers, as the name implies, to situations in which responsibility for harm can be placed on a party in addition to the one that actually caused the injury.  The most common example comes from tort law: a customer in a grocery store drops a bottle of wine and another customer slips on the puddle and injures himself; he may bring an action for negligence against the customer who dropped the bottle and against the owner of the grocery store.  Under the common law doctrine of third-party liability, a plaintiff must show not only that an injury actually occurred, but also (in most cases) that some sort of connection existed between the third party and the person who actually caused the injury.
 
 As such the concept of third-party liability is often divided into two different types: contributory infringement and vicarious liability.  Typically, contributory infringement exists when the third party either assists in the commission of the act which causes the injury, or simply induces the primary party to do so commit the act which caused the injury.  Vicarious liability often requires the third party to have exerted some form of control over the primary party}
 )
@@ -4669,7 +4669,7 @@ mapping[%{Bookmarks}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Are website terms of use binding contracts?},
- answer:   %{The law is still not settled on so-called "click-wrap" contracts, but a court will look at how prominently the terms of use are displayed and whether you had to agree to them before you could proceed with using the website or service.  
+ answer:   %{The law is still not settled on so-called "click-wrap" contracts, but a court will look at how prominently the terms of use are displayed and whether you had to agree to them before you could proceed with using the website or service.
 
 If you never saw the terms of use, there can be no "meeting of the minds" to form a contract.  In <a href="http://cyber.law.harvard.edu/stjohns/Specht_v_Netscape.pdf" target="new">Specht v. Netscape</a>, a court found that there was no contract for a software download, where there was no proof the downloaders were on notice of or agreed to the terms.}
 )
@@ -4685,17 +4685,17 @@ mapping[%{Chilling Effects}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What are the communication requirements that Section 512 imposes on OSPs, complainants, and alleged infringers?},
- answer:   %{<B>Each of the parties</B> -- the complainant, the Online Service Provider (OSP), and the alleged infringer -- has the right to communicate with the other parties.  In addition, OSPs and complainants are required to engage in certain communications in order to take advantage of the DMCA's notice-and-takedown and safe harbor provisions.   (For more information about the process see FAQ 130.)  
+ answer:   %{<B>Each of the parties</B> -- the complainant, the Online Service Provider (OSP), and the alleged infringer -- has the right to communicate with the other parties.  In addition, OSPs and complainants are required to engage in certain communications in order to take advantage of the DMCA's notice-and-takedown and safe harbor provisions.   (For more information about the process see FAQ 130.)
 
-<B>The complainant</B> starts the Sec. 512 process by notifying the Online Service Provider (OSP) or the OSP?s agent in writing of a copyright infringement.  (See [FAQ 127 for more information about what constitutes an OSP and FAQ 450 for more information about what constitutes copyright infringement.)  Section 512(c)(3)(A)(iii) sets out the requirements for notice to OSPs.  Under this section, the complainant must specifically identify the material that is claimed to be infringing or to be subject of infringing activity and that is to be removed or access to which is to be disabled, and information reasonably sufficient to permit the service provider to locate the material. 
- 
-Section 512(d)(3) sets out the procedure for contacting information location tools, such as search engines.  Under Sec. 512(d), the complainant must identify the reference or link to the allegedly infringing material, and must provide enough information for the search engine to locate the link.  (For more information about the contents of notices, see FAQ 440.)  
+<B>The complainant</B> starts the Sec. 512 process by notifying the Online Service Provider (OSP) or the OSP?s agent in writing of a copyright infringement.  (See [FAQ 127 for more information about what constitutes an OSP and FAQ 450 for more information about what constitutes copyright infringement.)  Section 512(c)(3)(A)(iii) sets out the requirements for notice to OSPs.  Under this section, the complainant must specifically identify the material that is claimed to be infringing or to be subject of infringing activity and that is to be removed or access to which is to be disabled, and information reasonably sufficient to permit the service provider to locate the material.
+
+Section 512(d)(3) sets out the procedure for contacting information location tools, such as search engines.  Under Sec. 512(d), the complainant must identify the reference or link to the allegedly infringing material, and must provide enough information for the search engine to locate the link.  (For more information about the contents of notices, see FAQ 440.)
 
 The complainant is not required to contact the alleged infringer at any time.  [&sect; 512(h)(5).]  However, complainants who do wish to contact the infringer, or to file suit on an infringer, may use the Sec. 512(h) subpoena process to require an OSP provide its customers? identifying information to the complainant.
 
 <B>The OSP</B> has two separate sets of communication obligations.  First, the OSP is generally required to establish policies regarding copyright infringement and repeat infringers and to inform subscribers and account holders about those policies as well as about the actions taken against repeat infringers.  [&sect; 512(i)(1)(A).]  This applies both to Sec. 512(c) ISPs and Sec. 512(d) information location tools.
 
-Second, once an OSP receives a Section 512 takedown notice, either one, Sec. 512(c) ISPs or Sec. 512(d) information location tools, is required to notify its subscriber that it has disabled access to the allegedly infringing material.  [&sect; 512(g)(2)(A).]   
+Second, once an OSP receives a Section 512 takedown notice, either one, Sec. 512(c) ISPs or Sec. 512(d) information location tools, is required to notify its subscriber that it has disabled access to the allegedly infringing material.  [&sect; 512(g)(2)(A).]
 
 <B>A recipient</B> is not required to respond in any way to Sec. 512 notices from OSPs or complainants.  However, without a recipient response, the OSP will generally remove or disable access to the material, possibly even disabling an ISP account.  To avoid this, the recipient may file a counter-notification with the OSP, denying that the material infringes copyright. [&sect; 512(g)]  If an OSP receives a counter-notification, then the service provider must notify the complainant that it will cease disabling access in 10 business days unless the complainant obtains a court-imposed restraining order. [&sect; 512(g)(2)(C)] }
 )
@@ -4814,10 +4814,10 @@ q = RelevantQuestion.create!(
  answer:   %{Courts usually consider the following three factors in determining whether you have a trade secret:
 
 <b>(1)  <u>Is the information deemed to be a "trade secret" valuable to the business?</b></u>
-Only secret information can be protected by trade secret law.  Secrecy is typically determined by evaluating whether or not the information is "generally known" or "readily ascertainable."  If the information is secret, you must consider whether the secret information is valuable to your business.  How would you rank its value?  Courts tend to find that the information is a trade secret if the information is so valuable as to significantly impact the operations of a business.   
+Only secret information can be protected by trade secret law.  Secrecy is typically determined by evaluating whether or not the information is "generally known" or "readily ascertainable."  If the information is secret, you must consider whether the secret information is valuable to your business.  How would you rank its value?  Courts tend to find that the information is a trade secret if the information is so valuable as to significantly impact the operations of a business.
 </p><p>
 <b>(2) <u>What steps have been taken to keep the information secret?</b></u>
-Trade secret laws require that you have taken some action to keep your information a secret.  The security procedure taken to protect the information is often the most important evidence that the information constitutes a trade secret.  For example, courts have often found that restricting access (on a "need to know" basis) to any sensitive information is a factor that helps to meet this requirement.  Courts have also found that physical security, such as keeping written trade secret information in a locked drawer and granting very limited access to it, can meet this requirement.  Generally, holders of trade secrets develop a formal system for safeguarding their trade secret information.  Such a system can include, for example, reviewing information to be sure that the secret information is not included in documents sent to customers and competitors.   In addition, proprietary notices can be placed on all documents containing information related to trade secrets and strict confidentiality provisions can be written into all consulting, manufacturing, employment, and/or non-disclosure agreements. 
+Trade secret laws require that you have taken some action to keep your information a secret.  The security procedure taken to protect the information is often the most important evidence that the information constitutes a trade secret.  For example, courts have often found that restricting access (on a "need to know" basis) to any sensitive information is a factor that helps to meet this requirement.  Courts have also found that physical security, such as keeping written trade secret information in a locked drawer and granting very limited access to it, can meet this requirement.  Generally, holders of trade secrets develop a formal system for safeguarding their trade secret information.  Such a system can include, for example, reviewing information to be sure that the secret information is not included in documents sent to customers and competitors.   In addition, proprietary notices can be placed on all documents containing information related to trade secrets and strict confidentiality provisions can be written into all consulting, manufacturing, employment, and/or non-disclosure agreements.
 </p><p>
 <b>(3)  <u>To what extent do employees and others involved in the business know about the information? What about people outside the business?</b></u>
 The extent that those in your business and those outside the business have access to the information can affect a court's decision as to whether you have a legal trade secret.  Generally, courts have found the information to be public knowledge and not a trade secret if people who do not have a need to know the information have access to it.  This is especially true if many people outside the company are familiar with the information.
@@ -4830,7 +4830,7 @@ mapping[%{Trade Secret}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{How is a trade secret related to a patent? },
- answer:   %{Both trade secrets and patents are forms of intellectual property that can be used to protect innovations.  Generally, the subject matter that can be protected by trade secrets is broader than that which can be protected by patents.  Trade secret protection is available for both technical information and information that does not relate to technical innovations.  Non-technical information for which trade secret protection can exist includes: business and marketing plans, and customer lists.  Patent protection is generally available for technical innovations, including a new and useful process, machine, manufacture or composition of matter.  Software and software-implemented business methods have the potential of being protected by both patents and trade secrets.  
+ answer:   %{Both trade secrets and patents are forms of intellectual property that can be used to protect innovations.  Generally, the subject matter that can be protected by trade secrets is broader than that which can be protected by patents.  Trade secret protection is available for both technical information and information that does not relate to technical innovations.  Non-technical information for which trade secret protection can exist includes: business and marketing plans, and customer lists.  Patent protection is generally available for technical innovations, including a new and useful process, machine, manufacture or composition of matter.  Software and software-implemented business methods have the potential of being protected by both patents and trade secrets.
 
 One of the differences between patent protection and trade secret protection is that patent protection requires the protected information become available to the public (through publication of the patent application and/or patent), whereas trade secret protection requires the protected information be kept secret.  Therefore, if you patent a trade secret, once the application or patent is published, it will no longer be protected by trade secret laws.  Accordingly, you have to choose between either patent protection or trade secret protection.
 
@@ -4898,7 +4898,7 @@ A non-disclosure agreement (NDA) is a confidentiality agreement that can be used
 
 <b><u>(2)  NON-COMPETE AGREEMENTS</b></u>
 
-During the regular course of business, you may have to disclose your business secrets to your employees.  But what happens when these employees leave your company?  By requiring your employees to sign a non-compete agreement, employees must agree not to work for a direct competitor for a certain amount of time after leaving your company.  The theory behind this type of agreement is that after a certain amount of time, your trade secret will no longer be valuable because of technological changes as your business advances, and, accordingly, the technology will no longer need to be protected as a trade secret.  
+During the regular course of business, you may have to disclose your business secrets to your employees.  But what happens when these employees leave your company?  By requiring your employees to sign a non-compete agreement, employees must agree not to work for a direct competitor for a certain amount of time after leaving your company.  The theory behind this type of agreement is that after a certain amount of time, your trade secret will no longer be valuable because of technological changes as your business advances, and, accordingly, the technology will no longer need to be protected as a trade secret.
 
 It is important to be aware that courts use a "rule of reason" in deciding whether a noncompete agreement is legal.  In other words, the terms of a non-compete agreement must be reasonable as to the duration, territory, and scope of the activity.  A restraint is generally enforceable if it is fairly designed to protect the employer}
 )
@@ -4937,7 +4937,7 @@ mapping[%{DMCA Safe Harbor}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is a "continuation"?},
- answer:   %{Applicable mainly in the US, continuations are second or subsequent applications which are subsequently filed while the original parent application is pending. Continuations must claim the same invention as the original application to gain the benefit of the parent filing date. 
+ answer:   %{Applicable mainly in the US, continuations are second or subsequent applications which are subsequently filed while the original parent application is pending. Continuations must claim the same invention as the original application to gain the benefit of the parent filing date.
 }
 )
 
@@ -4995,9 +4995,9 @@ mapping[%{References}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is non-commercial use of a trademark?  Is non-commercial use infringment of a trademark? },
- answer:   %{Non-commercial use of a trademark is generally that use which is not related to the sale of goods or services. If no funds are solicited or earned by using someone else's mark, this use is not normally infringement. 
+ answer:   %{Non-commercial use of a trademark is generally that use which is not related to the sale of goods or services. If no funds are solicited or earned by using someone else's mark, this use is not normally infringement.
 
-Trademark rights protect consumers from purchasing inferior goods because of false labeling. If no goods or services are being offered, or the goods would not be confused with those of the mark owner, or if the term is being used in a literary sense, but not to label or otherwise identify the origin of other goods or services, then the term is not being used commercially. 
+Trademark rights protect consumers from purchasing inferior goods because of false labeling. If no goods or services are being offered, or the goods would not be confused with those of the mark owner, or if the term is being used in a literary sense, but not to label or otherwise identify the origin of other goods or services, then the term is not being used commercially.
 
 One example of non-commercial use is descriptive use (where the name is used to describe something, such as "He went to MacDonald's for lunch" or "She was wearing the MacDonald tartan.")}
 )
@@ -5013,9 +5013,9 @@ mapping[%{Uncategorized}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is Section 43(a) of the Lanham Act?},
- answer:   %{The Lanham Act is the basic federal trademark and unfair competition law.  Section 43(a) (<a href="http://www.law.cornell.edu/uscode/15/1125.html">15 U.S.C. 1125(a)</a>) is intended to protect consumers and competitors against false advertising and false designations of origin.  
+ answer:   %{The Lanham Act is the basic federal trademark and unfair competition law.  Section 43(a) (<a href="http://www.law.cornell.edu/uscode/15/1125.html">15 U.S.C. 1125(a)</a>) is intended to protect consumers and competitors against false advertising and false designations of origin.
 
-The law allows for suit against someone who makes false claims about its own or a competitor's products. 
+The law allows for suit against someone who makes false claims about its own or a competitor's products.
 
 <blockquote>
 Sec. 1125. False designations of origin, false descriptions, and dilution forbidden
@@ -5041,17 +5041,17 @@ mapping[%{References}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is the duty of confidentiality of an employee?},
- answer:   %{Confidential information  or trade secrets received during the course of an employer-employee relationship cannot be used or disclosed to the detriment of the employer during or after termination of the relationship, even if the employee and the employer had no express contract prohibiting the use or disclosure. 
-However, an employee can use all the skills and knowledge he acquired during his employment, if the skills and knowledge are commonly used in the trade. 
+ answer:   %{Confidential information  or trade secrets received during the course of an employer-employee relationship cannot be used or disclosed to the detriment of the employer during or after termination of the relationship, even if the employee and the employer had no express contract prohibiting the use or disclosure.
+However, an employee can use all the skills and knowledge he acquired during his employment, if the skills and knowledge are commonly used in the trade.
 
 Many states have adopted the Uniform Trade Secrets Act, which is intended to provide states with a legal framework for improved trade-secret protection. The Act contains a definition of trade secrets which is consistent with common-law definitions. Factors used to determine if information is a trade secret include:
 
 ? The extent to which the information is known outside of the employer's business.
-? The extent to which the information is known by employees and others involved in the business. 
-? The extent of measures taken by the employer to guard the secrecy of the information. 
-? The value of the information to the employer and to competitors. 
-? The amount of effort or money expended by the company in developing the information. 
-? The extent to which the information could be easily or readily obtained through an independent source. 
+? The extent to which the information is known by employees and others involved in the business.
+? The extent of measures taken by the employer to guard the secrecy of the information.
+? The value of the information to the employer and to competitors.
+? The amount of effort or money expended by the company in developing the information.
+? The extent to which the information could be easily or readily obtained through an independent source.
 
 Trade secrets need not be technical in nature. Market-related information such as information on current and future projects, as well as potential future opportunities for a firm, may constitute a trade secret.
 }
@@ -5069,8 +5069,8 @@ mapping[%{Uncategorized}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What constitutes practice of law?},
- answer:   %{The "practice of law" is generally defined as doing and performing services in a court of justice. It also includes giving legal advice and counsel, rendering a service that requires the use of legal knowledge or skill, and preparing instruments and contracts by which legal rights are secured, whether or not the matter is pending in a court. The mere holding out by a layperson or suspended attorney that he or she is practicing or is entitled to practice law constitutes the unauthorized practice of law. However, as long as services in connection with preparation for trial are not distinctively legal and remain subject to the control of the lawyer who has responsibility for the case, those performing them are not engaged in the unauthorized practice of law. Thus, for example, an attorney may contract with a legal consulting firm for assistance in handling a medical malpractice lawsuit where the firm was to contact medical experts, but did not attempt to guaranty the "delivery" of expert testimony. 
-The publication of an article written by a suspended attorney in a professional journal does not constitute the unauthorized practice of law. 
+ answer:   %{The "practice of law" is generally defined as doing and performing services in a court of justice. It also includes giving legal advice and counsel, rendering a service that requires the use of legal knowledge or skill, and preparing instruments and contracts by which legal rights are secured, whether or not the matter is pending in a court. The mere holding out by a layperson or suspended attorney that he or she is practicing or is entitled to practice law constitutes the unauthorized practice of law. However, as long as services in connection with preparation for trial are not distinctively legal and remain subject to the control of the lawyer who has responsibility for the case, those performing them are not engaged in the unauthorized practice of law. Thus, for example, an attorney may contract with a legal consulting firm for assistance in handling a medical malpractice lawsuit where the firm was to contact medical experts, but did not attempt to guaranty the "delivery" of expert testimony.
+The publication of an article written by a suspended attorney in a professional journal does not constitute the unauthorized practice of law.
 Some courts hold that the practice of law does not necessarily involve charging or receiving a fee for services performed. Other courts, however, emphasize that the element of charging a fee for services is an important factor in determining whether specified conduct constitutes the practice of law.
 }
 )
@@ -5137,7 +5137,7 @@ q = RelevantQuestion.create!(
  question: %{Do the Section 512 Safe Harbor provisions apply to the distribution of circumvention tools such as serial numbers or to methods for disabling copyright management systems?},
  answer:   %{Section 512 creates a safe harbor from claims of "copyright infringement" for service providers who meet the statutorily-defined criteria. "Copyright infringement" is defined by Section 501 of the Copyright Act as any violation of the exclusive rights granted in sections 106 through 121 of the Act.  Copyright infringement thus does not include violations of the DMCA's Anticircumvention provisions, which are found in Section 1201 et seq. While they are unlikely to be deemed direct infringers, distributors of serial numbers may face either vicarious or contributory liability for copyright infringement.  Vicarious liability requires that the distributor have the right and ability to control the infringer's behavior and direct financial gain by the distributor.  In circumstances of serial numbers posted on free message boards of Usenet groups, the distributor likely lacks both control and financial benefit. Contributory liability requires that the distributor possess knowledge of infringing conduct and materially contribute to the infringement.  Although a distributor of serial numbers is likely aware that the numbers will be used to infringe, under Sony, if the serial numbers are capable of capable of "substantial non infringing use" contributory infringement may not be found.
 
-The anticircumvention provisions prohibit circumvention of technological access protection systems as well as the distribution of tools that facilitate circumvention of access or copy protection systems.  The publication of serial numbers, for example, would likely constitute the distribution of a "technology, product, service, device, component, or part thereof" that facilitates circumvention of an access control.  Under ? 1201 such a tool must either be primarily designed for or produced circumvention, have limited commercial purpose other than circumvention, or be marketed for circumvention. It is unlikely, however, that the publication would constitute "copyright infringement" as defined.  
+The anticircumvention provisions prohibit circumvention of technological access protection systems as well as the distribution of tools that facilitate circumvention of access or copy protection systems.  The publication of serial numbers, for example, would likely constitute the distribution of a "technology, product, service, device, component, or part thereof" that facilitates circumvention of an access control.  Under ? 1201 such a tool must either be primarily designed for or produced circumvention, have limited commercial purpose other than circumvention, or be marketed for circumvention. It is unlikely, however, that the publication would constitute "copyright infringement" as defined.
 
 
 While a service provider may be under no obligation to remove material in violation of the Anticircumvention provisions in order to maintain its safe harbor protection from copyright infringement, by hosting such material the provider is exposed to potential secondary liability under Section 1201 and may therefore have an independent reason for removing the material.
@@ -5155,7 +5155,7 @@ mapping[%{Uncategorized}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Does a DMCA takedown mean the material taken down was infringing?},
- answer:   %{No. ISPs can take down material according to the DMCA anytime they receive a compliant notice alleging copyright infringement 
+ answer:   %{No. ISPs can take down material according to the DMCA anytime they receive a compliant notice alleging copyright infringement
 
   The ISP does not have to investigate to determine whether the material was truly infringing before taking it down. The fact that someone has claimed infringement does not prove that infringement occurred -- there might be a fair use defense, or the claim might have been false or frivolous.
 
@@ -5176,7 +5176,7 @@ mapping[%{DMCA Safe Harbor}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is the purpose and effect of a cease and desist (C&D) notice in an alleged case of trademark infringement?},
- answer:   %{If a trademark owner believes someone is infringing his or her trademark, the first thing the owner is likely to do is to write a "cease-and-desist" letter which asks the accused infringer to stop using the trademark.  If the accused infringer refuses to comply, the owner may file a lawsuit in Federal or state court.  The court may grant the plaintiff a preliminary injunction on use of the mark -- tell the infringer to stop using the trademark pending trial. 
+ answer:   %{If a trademark owner believes someone is infringing his or her trademark, the first thing the owner is likely to do is to write a "cease-and-desist" letter which asks the accused infringer to stop using the trademark.  If the accused infringer refuses to comply, the owner may file a lawsuit in Federal or state court.  The court may grant the plaintiff a preliminary injunction on use of the mark -- tell the infringer to stop using the trademark pending trial.
 
 If the owner successfully proves trademark infringement in court, the court has the power to: order a permanent injunction; order monetary payment for profit the plaintiff can prove it would have made but for defendant's use of the mark; possibly increase this payment; possibly award a monetary payment of profits the defendant made while using the mark; and possibly order the defendant to pay the plaintiff's attorney fees in egregious cases of infringement.}
 )
@@ -5352,7 +5352,7 @@ mapping[%{Defamation}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{How do courts look at the context of a statement?},
- answer:   %{For a blog, a court would likely start with the general tenor, setting, and format of the blog, as well as the context of the links through which the user accessed the particular entry. Next the court would look at the specific context and content of the blog entry, analyzing the extent of figurative or hyperbolic language used and the reasonable expectations of the blog's audience. 
+ answer:   %{For a blog, a court would likely start with the general tenor, setting, and format of the blog, as well as the context of the links through which the user accessed the particular entry. Next the court would look at the specific context and content of the blog entry, analyzing the extent of figurative or hyperbolic language used and the reasonable expectations of the blog's audience.
 
 Context is critical.  For example, it was not libel for ESPN to caption a photo "<a href="http://en.wikipedia.org/wiki/Evel_Knievel">Evel Knievel</a> proves you're never too old to be a pimp," since it was (in context) "not intended as a criminal accusation, nor was it reasonably susceptible to such a literal interpretation. Ironically, it was most likely intended as a compliment." However, it would be defamatory to falsely assert "our dad's a pimp" or to accuse your dad of "dabbling in the pimptorial arts." (Real case, but the defendant sons succeeded in a truth defense).}
 )
@@ -5462,9 +5462,9 @@ mapping[%{Trademark}] << q.id
 q = RelevantQuestion.create!(
  question: %{What is a right of publicity claim?},
  answer:   %{.
-The right of publicity is a claim that you have used someone's name or likeness to your commercial advantage without consent and resulting in injury. The plaintiff generally must prove that you're using their image or likeness for advertising or other solicitations. Freedom of speech rights protect your use of a public figure's name and likeness in a truthful way, but you can still be liable if a court determines that your use implied a false endorsement. Here are a few examples of cases where the right of publicity was at odds with the Constitution. 
+The right of publicity is a claim that you have used someone's name or likeness to your commercial advantage without consent and resulting in injury. The plaintiff generally must prove that you're using their image or likeness for advertising or other solicitations. Freedom of speech rights protect your use of a public figure's name and likeness in a truthful way, but you can still be liable if a court determines that your use implied a false endorsement. Here are a few examples of cases where the right of publicity was at odds with the Constitution.
 <ul>
-        <li> 
+        <li>
 A newspaper's 900 number survey to determine the favorite <a href="http://en.wikipedia.org/wiki/New_Kids_On_The_Block">New Kid on the Block</a> was found to be a constitutionally protected use of the band member's name</li>
         <li> A newspaper's sale of a poster reproduction of its front page depicting <a href="http://en.wikipedia.org/wiki/Joe_Montana">Joe Montana</a> was determined to merit protection under the First Amendment</li>
         <li> A commercial featuring a robot resembling game show hostess <a href="http://en.wikipedia.org/wiki/Vanna_White">Vanna White</a> was found to infringe her right of publicity</li>
@@ -5479,7 +5479,7 @@ q = RelevantQuestion.create!(
 
 <blockquote><p>A statement that the plaintiff is a "Dumb Ass," even first among "Dumb Asses," communicates no factual proposition susceptible of proof or refutation. It is true that "dumb" by itself can convey the relatively concrete meaning "lacking in intelligence." Even so, depending on context, it may convey a lack less of objectively assayable mental function than of such imponderable and debatable virtues as judgment or wisdom. Here defendant did not use "dumb" in isolation, but as part of the idiomatic phrase, "dumb ass." When applied to a whole human being, the term "ass" is a general expression of contempt essentially devoid of factual content. Adding the word "dumb" merely converts "contemptible person" to "contemptible fool." Plaintiffs were justifiably insulted by this epithet, but they failed entirely to show how it could be found to convey a provable factual proposition. ... If the meaning conveyed cannot by its nature be proved false, it cannot support a libel claim.</p></blockquote>
 
-    This California case also rejected a claim that the defendant linked the plaintiffs' names to certain web addresses with objectionable addresses (i.e. www.satan.com), noting "merely linking a plaintiff's name to the word "satan" conveys nothing more than the author's opinion that there is something devilish or evil about the plaintiff." 
+    This California case also rejected a claim that the defendant linked the plaintiffs' names to certain web addresses with objectionable addresses (i.e. www.satan.com), noting "merely linking a plaintiff's name to the word "satan" conveys nothing more than the author's opinion that there is something devilish or evil about the plaintiff."
 
 }
 )
@@ -5488,7 +5488,7 @@ mapping[%{Defamation}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Why does a search engine get DMCA takedown notices for materials in its search listings?},
- answer:   %{Many copyright claimants are making complaints under the Digital Millennium Copyright Act, Section 512(d), a safe-harbor for providers of "information location tools." These safe harbors give providers immunity from liability for users' possible copyright infringement -- if they "expeditiously" remove material when they get complaints.  Whether or not the provider would have been liable for infringement by users' materials it links to, the provider can avoid the possibility of a lawsuit for money damages by following the DMCA's takedown procedure when it gets a complaint. The person whose information was removed can file a counter-notification if he or she believes the complaint was erroneous. 
+ answer:   %{Many copyright claimants are making complaints under the Digital Millennium Copyright Act, Section 512(d), a safe-harbor for providers of "information location tools." These safe harbors give providers immunity from liability for users' possible copyright infringement -- if they "expeditiously" remove material when they get complaints.  Whether or not the provider would have been liable for infringement by users' materials it links to, the provider can avoid the possibility of a lawsuit for money damages by following the DMCA's takedown procedure when it gets a complaint. The person whose information was removed can file a counter-notification if he or she believes the complaint was erroneous.
 
 <blockquote><!--GET display Question 129-->
 <!--GET display Question 440-->
@@ -5503,7 +5503,7 @@ mapping[%{DMCA Safe Harbor}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Why does a web host or blogging service provider get DMCA takedown notices?},
- answer:   %{Many copyright claimants are making complaints under the Digital Millennium Copyright Act, Section 512(c)m a safe-harbor for hosts of "Information Residing on Systems or Networks At Direction of Users." This safe harbors give providers immunity from liability for users' possible copyright infringement -- if they "expeditiously" remove material when they get complaints.  Whether or not the provider would have been liable for infringement by materials its users post, the provider can avoid the possibility of a lawsuit for money damages by following the DMCA's takedown procedure when it gets a complaint. The person whose information was removed can file a counter-notification if he or she believes the complaint was erroneous. 
+ answer:   %{Many copyright claimants are making complaints under the Digital Millennium Copyright Act, Section 512(c)m a safe-harbor for hosts of "Information Residing on Systems or Networks At Direction of Users." This safe harbors give providers immunity from liability for users' possible copyright infringement -- if they "expeditiously" remove material when they get complaints.  Whether or not the provider would have been liable for infringement by materials its users post, the provider can avoid the possibility of a lawsuit for money damages by following the DMCA's takedown procedure when it gets a complaint. The person whose information was removed can file a counter-notification if he or she believes the complaint was erroneous.
 <blockquote><!--GET display Question 129-->
 <!--GET display Question 440-->
 <!--GET display Question 588-->
@@ -5596,14 +5596,14 @@ mapping[%{Domain Names and Trademarks}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What's this about "violent content"?},
- answer:   %{We're not sure either.  Chilling Effects knows of no law against depictions of violence toward imaginary creatures.}
+ answer:   %{We're not sure either.  Lumen Database knows of no law against depictions of violence toward imaginary creatures.}
 )
 
 mapping[%{Bookmarks}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Why does a user-generated content site get DMCA takedown notices for links users have posted?},
- answer:   %{Many copyright claimants are making complaints under the Digital Millennium Copyright Act, Section 512(d), a safe-harbor for providers of "information location tools." These safe harbors give providers immunity from liability for users' possible copyright infringement -- if they "expeditiously" remove material when they get complaints.  Whether or not the provider would have been liable for infringement by users' materials it links to, the provider can avoid the possibility of a lawsuit for money damages by following the DMCA's takedown procedure when it gets a complaint. The person whose information was removed can file a counter-notification if he or she believes the complaint was erroneous. 
+ answer:   %{Many copyright claimants are making complaints under the Digital Millennium Copyright Act, Section 512(d), a safe-harbor for providers of "information location tools." These safe harbors give providers immunity from liability for users' possible copyright infringement -- if they "expeditiously" remove material when they get complaints.  Whether or not the provider would have been liable for infringement by users' materials it links to, the provider can avoid the possibility of a lawsuit for money damages by following the DMCA's takedown procedure when it gets a complaint. The person whose information was removed can file a counter-notification if he or she believes the complaint was erroneous.
 
 <blockquote><!--GET display Question 129-->
 <!--GET display Question 440-->
@@ -5618,7 +5618,7 @@ mapping[%{DMCA Safe Harbor}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What are the privacy torts?},
- answer:   %{Much privacy law is state law, and may differ from state to state.  As general categories, states may recognize interests in: 
+ answer:   %{Much privacy law is state law, and may differ from state to state.  As general categories, states may recognize interests in:
 <li>  unreasonable intrusion upon the seclusion of another;
 <li>  appropriation of the other's name or likeness;
 <li>  unreasonable publicity given to the other's private life; and
@@ -5637,9 +5637,9 @@ mapping[%{Copyright}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Does copyright protect techniques or methods?},
- answer:   %{No.  Copyright protects only expression, not ideas. So while copyright might protect one author's <i>description</i> of a bookkeeping method, it does not prevent others from using the method or copying the forms needed to use it.  
+ answer:   %{No.  Copyright protects only expression, not ideas. So while copyright might protect one author's <i>description</i> of a bookkeeping method, it does not prevent others from using the method or copying the forms needed to use it.
 
-This "idea/expression dichotomy" is spelled out in part in the Copyright Act's Section <a href="http://www4.law.cornell.edu/uscode/17/102.html">102(b)</a>: 
+This "idea/expression dichotomy" is spelled out in part in the Copyright Act's Section <a href="http://www4.law.cornell.edu/uscode/17/102.html">102(b)</a>:
 <blockquote>"In no case does copyright protection for an original work of authorship extend to any idea, procedure, process, system, method of operation, concept, principle, or discovery, regardless of the form in which it is described, explained, illustrated, or embodied in such work."</blockquote>}
 )
 
@@ -5702,7 +5702,7 @@ mapping[%{Copyright}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What are screenshots, and is using them copyright infringement?},
- answer:   %{Screen shots or screen dumps are still images taken from computer programs. Screen shots are often used in training materials to explain how to use a computer program. Screen shots are protected by copyright law if the original work is protected.  This is due to the fact that screenshots are viewed as derivative works.  
+ answer:   %{Screen shots or screen dumps are still images taken from computer programs. Screen shots are often used in training materials to explain how to use a computer program. Screen shots are protected by copyright law if the original work is protected.  This is due to the fact that screenshots are viewed as derivative works.
 
 The US Copyright Act of 1976, Section 101, says: "A derivative work is a work based upon one or more preexisting works, such as a translation, musical arrangement, dramatization, fictionalization, motion picture version, sound recording, art reproduction, abridgment, condensation, or any other form in which a work may be recast, transformed, or adapted. A work consisting of editorial revisions, annotations, elaborations, or other modifications which, as a whole, represent an original work of authorship, is a "derivative work."}
 )
@@ -5743,9 +5743,9 @@ mapping[%{Copyright}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is the purpose of the fair use defense? },
- answer:   %{There is no easy answer to this question. However, one way to approach the question is to examine the purposes of the copyright laws.  
+ answer:   %{There is no easy answer to this question. However, one way to approach the question is to examine the purposes of the copyright laws.
 
-The clause of the Constitution that gives Congress the power to enact copyright laws indicates that the purpose of the given power is to "promote the progress of science and the useful arts" by allowing authors to secure the exclusive rights in their works for "limited times." Thus, many see the Constitutional scheme behind copyright as a kind of balance between (1) forming incentives for authors to create new works by giving them rights that will allow them to make money from their works, and (2) limiting the rights so that the works themselves are useful to the public and in turn advance the "progress of science and the useful arts."  
+The clause of the Constitution that gives Congress the power to enact copyright laws indicates that the purpose of the given power is to "promote the progress of science and the useful arts" by allowing authors to secure the exclusive rights in their works for "limited times." Thus, many see the Constitutional scheme behind copyright as a kind of balance between (1) forming incentives for authors to create new works by giving them rights that will allow them to make money from their works, and (2) limiting the rights so that the works themselves are useful to the public and in turn advance the "progress of science and the useful arts."
 
 Fair use fits into this scheme by giving the public the right to use copyrighted works in certain situations even though the author has exclusive rights. That is, in some circumstances, such as certain uses involving scholarship or research, the "progress" referred to in the Constitution is best promoted and the public is best served by allowing an unauthorized use of the copyrighted work. These uses are deemed fair because they are consistent with the power given to Congress to enact copyright laws. }
 )
@@ -5754,11 +5754,11 @@ mapping[%{Copyright and Fair Use}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Where is the fair use doctrine codified? },
- answer:   %{The fair use doctrine was originally a judge-made doctrine embodied in case law.  See Folsom v. Marsh, 9 F.Cas. 342 (1841).   Congress later codified it at Title 17 of the United States Code, Section 107.   
+ answer:   %{The fair use doctrine was originally a judge-made doctrine embodied in case law.  See Folsom v. Marsh, 9 F.Cas. 342 (1841).   Congress later codified it at Title 17 of the United States Code, Section 107.
 
-This section provides:  
+This section provides:
 
-Section 107. Limitations on exclusive rights: Fair use  
+Section 107. Limitations on exclusive rights: Fair use
 
 Notwithstanding the provisions of sections 106 and 106A [setting forth copyright owners' exclusive rights and visual artists' artistic rights], the fair use of a copyrighted work, including such use by reproduction in copies or phonorecords or by any other means specified by that section, for purposes such as criticism, comment, news reporting, teaching (including multiple copies for classroom use), scholarship, or research, is not an infringement of copyright. In determining whether the use made of a work in any particular case is a fair use the factors to be considered shall include }
 )
@@ -5795,14 +5795,14 @@ mapping[%{Copyright and Fair Use}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{If the owner of a copyrighted work that is displayed on a website uses technological measures to prevent me from copying the work onto my website, but my copying would be a fair use, can I use technological measures to circumvent the copy protection and make the copy anyway?},
- answer:   %{Yes. Under the current copyright laws, it is lawful to circumvent technological copyright protection systems in order to make a copy. Then, if the copyright holder sues you for making the copies, and your fair use defense is successful, you are in the clear. But here's the catch: It is UNLAWFUL for someone to TRAFFIC IN technology that can be used to circumvent technological copyright protection systems. Therefore, unless you can circumvent the copyright holder's protection yourself, it is unlikely that you will be able to find the technology you need elsewhere. Note that it is also UNLAWFUL for you to circumvent ACCESS control technologies. See Chapter 12 of the Copyright Act, particularly section 1201. For more information on the anticircumvention provisions, see the Chilling Effects topic Anticircumvention (DMCA). }
+ answer:   %{Yes. Under the current copyright laws, it is lawful to circumvent technological copyright protection systems in order to make a copy. Then, if the copyright holder sues you for making the copies, and your fair use defense is successful, you are in the clear. But here's the catch: It is UNLAWFUL for someone to TRAFFIC IN technology that can be used to circumvent technological copyright protection systems. Therefore, unless you can circumvent the copyright holder's protection yourself, it is unlikely that you will be able to find the technology you need elsewhere. Note that it is also UNLAWFUL for you to circumvent ACCESS control technologies. See Chapter 12 of the Copyright Act, particularly section 1201. For more information on the anticircumvention provisions, see the Lumen topic Anticircumvention (DMCA). }
 )
 
 mapping[%{Copyright and Fair Use}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Is my parody of another's copyrighted work protected as a fair use?},
- answer:   %{It is likely that a bona fide parody, as opposed to satire, that does not usurp the market for plaintiff's work or unfairly free ride on plaintiff's work will be protected as a fair use.  See Campbell v. Acuff-Rose Music, 510 US 569 (1994). Courts have held that the fair use defense can protect a parody of a copyrighted work from an infringement claim.  However, that does not necessarily mean that all parodies will be protected. In the case of a parody where the defendant raises a fair use defense, the courts will run through the four part fair use analysis just as they would with any other fair use test. [See above for the four part test].  
+ answer:   %{It is likely that a bona fide parody, as opposed to satire, that does not usurp the market for plaintiff's work or unfairly free ride on plaintiff's work will be protected as a fair use.  See Campbell v. Acuff-Rose Music, 510 US 569 (1994). Courts have held that the fair use defense can protect a parody of a copyrighted work from an infringement claim.  However, that does not necessarily mean that all parodies will be protected. In the case of a parody where the defendant raises a fair use defense, the courts will run through the four part fair use analysis just as they would with any other fair use test. [See above for the four part test].
 
 While it is problematic to try to predict what a court will decide in any fair use case, it is likely that in the case of a parody the court will focus on the fourth factor of the inquiry, which requires the court to ask what effect the parody has on the potential market for the copyrighted work. If the parody usurps the market for the copyrighted work, then there is an increased chance that the court will find that the use is not fair. If the parody dampens the market for the copyrighted work as a result of its implicit criticism of the work, such a negative effect on the market does not render such use unfair. }
 )
@@ -5811,11 +5811,11 @@ mapping[%{Copyright and Fair Use}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{If I am engaged in research, educational, or academic pursuits, does the fair use doctrine permit me to copy articles from a journal or periodical?},
- answer:   %{As mentioned above, it is hard to predict what a court will do when presented with a fair use defense. However, in this case the answer depends in part on your purposes in copying. If you intend to archive the copies, the answer is probably no, while if you intend to use the copies in classroom instruction (without charging for the copies), the use may be fair.  
+ answer:   %{As mentioned above, it is hard to predict what a court will do when presented with a fair use defense. However, in this case the answer depends in part on your purposes in copying. If you intend to archive the copies, the answer is probably no, while if you intend to use the copies in classroom instruction (without charging for the copies), the use may be fair.
 
-In 1994 the Second Circuit Court of Appeals held that it was not a fair use for research scientists at Texaco to photocopy articles from various scientific and technical journals. Texaco argued, on behalf of its scientists, that the use was for the purpose of research, and therefore was fair under Section 107. But the court was not convinced. In reaching its decision, the court in Texaco ran through the four factor fair use analysis (see generally, what types of uses does the fair use doctrine protect? and introduction to this Chilling Effects topic). The court found that three of the four factors weighed against Texaco, and focused much of its opinion on the fourth factor, deciding that Texaco's use would have a significant impact on the potential market for the journal articles. Thus, in order to make copies of the articles, the research scientists at Texaco had to either pay for them or get express permission from the publishers.  See American Geophysical Union v. Texaco Inc., 60 F.3d 913 (2d Cir. 1994).  
+In 1994 the Second Circuit Court of Appeals held that it was not a fair use for research scientists at Texaco to photocopy articles from various scientific and technical journals. Texaco argued, on behalf of its scientists, that the use was for the purpose of research, and therefore was fair under Section 107. But the court was not convinced. In reaching its decision, the court in Texaco ran through the four factor fair use analysis (see generally, what types of uses does the fair use doctrine protect? and introduction to this Lumen topic). The court found that three of the four factors weighed against Texaco, and focused much of its opinion on the fourth factor, deciding that Texaco's use would have a significant impact on the potential market for the journal articles. Thus, in order to make copies of the articles, the research scientists at Texaco had to either pay for them or get express permission from the publishers.  See American Geophysical Union v. Texaco Inc., 60 F.3d 913 (2d Cir. 1994).
 
-Further, use of another's work for classroom instruction purposes may be protected under a separate provision of the Copyright Act. Section 110 of the Copyright Act contains exemptions that provide nonprofit educational institutions the limited right to use copyrighted materials in face-to-face classroom settings. This section provides: "Notwithstanding the provisions of section 106, the following are not infringements of copyright: (1) performance or display of a work by instructors or pupils in the course of face-to-face teaching activities of a nonprofit educational institution, in a classroom or similar place devoted to instruction . . . ."  
+Further, use of another's work for classroom instruction purposes may be protected under a separate provision of the Copyright Act. Section 110 of the Copyright Act contains exemptions that provide nonprofit educational institutions the limited right to use copyrighted materials in face-to-face classroom settings. This section provides: "Notwithstanding the provisions of section 106, the following are not infringements of copyright: (1) performance or display of a work by instructors or pupils in the course of face-to-face teaching activities of a nonprofit educational institution, in a classroom or similar place devoted to instruction . . . ."
 
 Furthermore, the recently enacted "Technology, Education, and Copyright Harmonization Act" -- the TEACH Act -- amends Section 110 to exempt certain uses of copyrighted works in the context of distance education (beyond the context of face-to-face teaching). The TEACH Act sets forth in detail the terms and conditions on which nonprofit educational institutions may use copyrighted works in the context of distance education (such as via websites or other digital means) without permission. }
 )
@@ -5824,13 +5824,13 @@ mapping[%{Copyright and Fair Use}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Can I copy an entire news article from a commercial news web site and post the article on my web site?},
- answer:   %{The fair use doctrine, as currently interpreted by the courts, probably would not entitle you to do so. Even though news items are factual and facts themselves are not protected by copyright, an entire news article itself is expression protected by copyright.  
+ answer:   %{The fair use doctrine, as currently interpreted by the courts, probably would not entitle you to do so. Even though news items are factual and facts themselves are not protected by copyright, an entire news article itself is expression protected by copyright.
 
-A court would apply the four factor fair use analysis to determine whether such a use is fair. In Los Angeles Times v. Free Republic, the court found that such a use was minimally -- or not at all -- transformative, since the article ultimately served the same purpose as the original copyrighted work. The initial posting of the article was a verbatim copy of the original with no added commentary or criticism and therefore did not transform the work at all. Although it is often a fair use to copy excerpts of a copyrighted work for the purpose of criticism or commentary, the copying may not exceed the extent necessary to serve that purpose. In this case, the court found that only a summary and not a complete verbatim copy of the work was necessary for the purpose of commentary and criticism.   
+A court would apply the four factor fair use analysis to determine whether such a use is fair. In Los Angeles Times v. Free Republic, the court found that such a use was minimally -- or not at all -- transformative, since the article ultimately served the same purpose as the original copyrighted work. The initial posting of the article was a verbatim copy of the original with no added commentary or criticism and therefore did not transform the work at all. Although it is often a fair use to copy excerpts of a copyrighted work for the purpose of criticism or commentary, the copying may not exceed the extent necessary to serve that purpose. In this case, the court found that only a summary and not a complete verbatim copy of the work was necessary for the purpose of commentary and criticism.
 
-The court also found that although the website solicited donations and advertised the services of another website, the overall nature of the website was non-commercial and benefited the public by promoting discussion of the issues presented in the articles on the website. However, the court found that the nontransformative character of the copying outweighed the consideration of its minimally commercial nature.  
+The court also found that although the website solicited donations and advertised the services of another website, the overall nature of the website was non-commercial and benefited the public by promoting discussion of the issues presented in the articles on the website. However, the court found that the nontransformative character of the copying outweighed the consideration of its minimally commercial nature.
 
-Finally, and most importantly, the court found that posting entire news articles on the website had an adverse market effect on the copyright owners.  
+Finally, and most importantly, the court found that posting entire news articles on the website had an adverse market effect on the copyright owners.
 
 See L.A. Times v. Free Republic, 2000 U.S. Dist. LEXIS 5669 (C.D. Cal. 2000). }
 )
@@ -5860,11 +5860,11 @@ mapping[%{Copyright}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Can an operator of a visual search engine use the copyrighted images of another owner as "thumbnails" in its search engine?},
- answer:   %{Probably.  The creation and use of "thumbnails" -- smaller, lower resolution copies of an image the enlargement of which would lead to a loss of clarity of the image-- as part of such a search engine may be a fair use.  
+ answer:   %{Probably.  The creation and use of "thumbnails" -- smaller, lower resolution copies of an image the enlargement of which would lead to a loss of clarity of the image-- as part of such a search engine may be a fair use.
 
-The Ninth Circuit Court of Appeals recently held in Kelly v. Arriba Soft that displaying the copyrighted images of another as thumbnails on a search engine was a fair use because the thumbnails served a completely different purpose than the original images. Working through the four factor fair use analysis, the court emphasized that it was essential to determine if defendant's use was transformative in nature. It is more likely that a court will find fair use if the defendant's use of the image advances a purpose different than the copyright holder's, rather than merely superseding the object of the originals. For example, the Ninth Circuit found there to be a fair use since the displayed images were not for illustrative artistic purposes, but were rather used as part of an image search engine as a means to access other images and web sites. Even if defendant's website is operated for a commercial purpose, it may still be a fair use if the use of the image was "more incidental and less exploitative." The court in Kelly found that defendant's search engine did not directly profit from the use of plaintiff's images, and therefore that their use was not highly exploitative. In Kelly, the court also found that the use of the images would not hurt the plaintiff's market for the images.  
+The Ninth Circuit Court of Appeals recently held in Kelly v. Arriba Soft that displaying the copyrighted images of another as thumbnails on a search engine was a fair use because the thumbnails served a completely different purpose than the original images. Working through the four factor fair use analysis, the court emphasized that it was essential to determine if defendant's use was transformative in nature. It is more likely that a court will find fair use if the defendant's use of the image advances a purpose different than the copyright holder's, rather than merely superseding the object of the originals. For example, the Ninth Circuit found there to be a fair use since the displayed images were not for illustrative artistic purposes, but were rather used as part of an image search engine as a means to access other images and web sites. Even if defendant's website is operated for a commercial purpose, it may still be a fair use if the use of the image was "more incidental and less exploitative." The court in Kelly found that defendant's search engine did not directly profit from the use of plaintiff's images, and therefore that their use was not highly exploitative. In Kelly, the court also found that the use of the images would not hurt the plaintiff's market for the images.
 
-Kelly v. Arriba Soft Corporation, 336 F.3d 811(9th Cir. Cal. 2003). 
+Kelly v. Arriba Soft Corporation, 336 F.3d 811(9th Cir. Cal. 2003).
 
 However, if there is an actual market for thumbnails, this may be copyright infringement.  The Central District of California recently granted an injunction preventing Google from displaying thumbnail size versions of Perfect 10}
 )
@@ -5887,7 +5887,7 @@ mapping[%{Copyright and Fair Use}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Can an internet service allow users to store and listen to compact discs sold by record companies through an internet connection?},
- answer:   %{Probably not. According to the court in UMG Recordings v. MP3.com, an internet company may not store MP3 music files to facilitate their retransmission. Reproducing audio compact discs in MP3 format does not transform the copyrighted work. An internet operator must do more than merely retransmit the original work in a different medium. The court in UMG also found that storing digital files in this way would have an adverse market effect on the record companies.  
+ answer:   %{Probably not. According to the court in UMG Recordings v. MP3.com, an internet company may not store MP3 music files to facilitate their retransmission. Reproducing audio compact discs in MP3 format does not transform the copyrighted work. An internet operator must do more than merely retransmit the original work in a different medium. The court in UMG also found that storing digital files in this way would have an adverse market effect on the record companies.
 
 UMG Recordings, Inc. v. MP3.com, Inc., 92 F. Supp. 2d 349, 350 (S.D.N.Y. 2000). }
 )
@@ -5896,9 +5896,9 @@ mapping[%{Copyright and Fair Use}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Does the fair use doctrine permit individuals to upload and download digital audio files containing copyrighted music through a file-sharing service that facilitates transmission and retention of the files by its users?},
- answer:   %{No.  The courts that have considered this issue to date have held that this type of "peer to peer file sharing" violates the copyright owner's exclusive right to reproduce their copyrighted material and does not constitute a fair use.  
+ answer:   %{No.  The courts that have considered this issue to date have held that this type of "peer to peer file sharing" violates the copyright owner's exclusive right to reproduce their copyrighted material and does not constitute a fair use.
 
-The Ninth Circuit Court of Appeals applied the four factor fair use analysis to address this issue. First, the court found that the purpose and character of such a use was not transformative, since the work was merely retransmitted in a different medium. Also, such use was found to be commercial in nature and resulted in the exploitation of copyrighted works since it saved the users the expense of purchasing the authorized copies. The court also focused on the fourth factor, the effect of the use on the market. The court concluded that the internet service harmed the market for the plaintiff's copyrighted material by reducing CD sales and by interfering with the copyright holder's attempts to charge for the same internet downloads.  
+The Ninth Circuit Court of Appeals applied the four factor fair use analysis to address this issue. First, the court found that the purpose and character of such a use was not transformative, since the work was merely retransmitted in a different medium. Also, such use was found to be commercial in nature and resulted in the exploitation of copyrighted works since it saved the users the expense of purchasing the authorized copies. The court also focused on the fourth factor, the effect of the use on the market. The court concluded that the internet service harmed the market for the plaintiff's copyrighted material by reducing CD sales and by interfering with the copyright holder's attempts to charge for the same internet downloads.
 
 A&M Records v. Napster, 239 F.3d 1004 (9th Cir. Cal. 2001); see also MGM v. Grokster, 125 S. Ct. 2764 (2005).}
 )
@@ -5907,7 +5907,7 @@ mapping[%{Copyright and Fair Use}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Does the fair use doctrine permit users to download MP3 files to make temporary copies of copyrighted sound recordings to "sample" the music before deciding whether to purchase the recording?},
- answer:   %{No.  The courts that have considered this issue thus far have held that allowing users to download a full, free, and permanent copy of the copyrighted recording would be a commercial use that would adversely affect the copyright owners' market for their work. The Napster court observed that "even if sampling enhanced the audio CD sales of the recording, the benefit to the copyright owner is not a sufficient indication of fair use." Further, the court held, even if the sampling benefited the copyright owner's audio CD sales, the copyright owner still enjoyed the right to develop alternative markets, such as the digital download market, and not to have such market usurped from them.  
+ answer:   %{No.  The courts that have considered this issue thus far have held that allowing users to download a full, free, and permanent copy of the copyrighted recording would be a commercial use that would adversely affect the copyright owners' market for their work. The Napster court observed that "even if sampling enhanced the audio CD sales of the recording, the benefit to the copyright owner is not a sufficient indication of fair use." Further, the court held, even if the sampling benefited the copyright owner's audio CD sales, the copyright owner still enjoyed the right to develop alternative markets, such as the digital download market, and not to have such market usurped from them.
 
 A&M Records, Inc. v. Napster, Inc., 239 F.3d 1004 (9th Cir. 2001). }
 )
@@ -5916,9 +5916,9 @@ mapping[%{Copyright and Fair Use}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Can a person or company create and streamline clips of movies over the internet to video retailers to play for their customers? },
- answer:   %{Probably not. It is not a fair use to stream such clips over the internet if the purpose is to promote the sale and rental of the videos. Such a use infringes on the copyright owner's exclusive rights to reproduce, publicly display and distribute their work, and to create derivative works.  
+ answer:   %{Probably not. It is not a fair use to stream such clips over the internet if the purpose is to promote the sale and rental of the videos. Such a use infringes on the copyright owner's exclusive rights to reproduce, publicly display and distribute their work, and to create derivative works.
 
-A court will apply the four factor fair use analysis to the individual facts of such a case to determine whether the use was fair. Courts have found that stream lining movie trailers for the purpose of promoting sales or rentals serves a commercial purpose and is not transformative since the use is not different than the purpose for which it was originally created. However, if the video trailer adds criticism or commentary to the original work, it is more likely that the court will consider it to be a fair use. Courts have also found that even if the movie clip is short and therefore only uses a small portion of the original work, the aggregation of scenes may reflect the themes and tone of the film in a way that interferes with the plaintiff's ability to evoke the same expressive values in its own previews. With regard to the effect of the use on the market, a misleading arrangement of scenes or a low quality clip could lead to an adverse effect on the copyright owner's market. Also, such previews could detract from sales on the copyright owner's official website.  
+A court will apply the four factor fair use analysis to the individual facts of such a case to determine whether the use was fair. Courts have found that stream lining movie trailers for the purpose of promoting sales or rentals serves a commercial purpose and is not transformative since the use is not different than the purpose for which it was originally created. However, if the video trailer adds criticism or commentary to the original work, it is more likely that the court will consider it to be a fair use. Courts have also found that even if the movie clip is short and therefore only uses a small portion of the original work, the aggregation of scenes may reflect the themes and tone of the film in a way that interferes with the plaintiff's ability to evoke the same expressive values in its own previews. With regard to the effect of the use on the market, a misleading arrangement of scenes or a low quality clip could lead to an adverse effect on the copyright owner's market. Also, such previews could detract from sales on the copyright owner's official website.
 
 Video Pipeline, Inc. v. Buena Vista Home Entertainment, 192 F.Supp.2d 321(D.N.J. 2002).}
 )
@@ -5941,11 +5941,11 @@ mapping[%{Copyright and Fair Use}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Is the look and feel of a website protected by copyright law?},
- answer:   %{An individual may own copyrights to the code and graphical design of a website.  In order for a website user interface to be considered copyrightable subject matter, it must be both fixed in a "tangible medium of expression" and original.  The code creating the look and feel of a website is fixed on a file in the hard drive, so it is likely considered a "tangible medium of expression."  To find a work is original, there must be some independent creation by the author, and some minimal degree of creativity.  Just because an individual puts time and effort into a work does not necessarily make the work original.  Although the level of creativity required is low, it may be difficult to find the originality required for copyright protection in simplistic websites that just arrange facts or information.  If, however, the visual user interface component contains some graphics or a creative, visual presentation, it will likely be considered original.    
+ answer:   %{An individual may own copyrights to the code and graphical design of a website.  In order for a website user interface to be considered copyrightable subject matter, it must be both fixed in a "tangible medium of expression" and original.  The code creating the look and feel of a website is fixed on a file in the hard drive, so it is likely considered a "tangible medium of expression."  To find a work is original, there must be some independent creation by the author, and some minimal degree of creativity.  Just because an individual puts time and effort into a work does not necessarily make the work original.  Although the level of creativity required is low, it may be difficult to find the originality required for copyright protection in simplistic websites that just arrange facts or information.  If, however, the visual user interface component contains some graphics or a creative, visual presentation, it will likely be considered original.
 
 Once it is determined that a website is copyrightable subject matter, a court will determine whether there is a substantial similarity between the protectable expressions compared.  To determine which elements are protectable and which are not, courts generally look at the level of structural abstraction.  Aspects of the website that are considered merely functional or ideas are not protected, and must therefore be separated prior to comparison.  Once the elements are separated, proving substantial similarity is not tremendously difficult.  It can be proven with circumstantial evidence that the wrongdoer had access to the work to copy it, or with direct evidence of copying.
 
-See Computer Associates v. Altai, 775 F. Supp. 544 (E.D.N.Y. 1991).  
+See Computer Associates v. Altai, 775 F. Supp. 544 (E.D.N.Y. 1991).
 
 }
 )
@@ -5961,7 +5961,7 @@ mapping[%{Copyright}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{Does filing a counter-notification indicate that you are willing to defend yourself against a claim of copyright infringement?},
- answer:   %{Filing a counter-notification indicates that the subscriber has a "good faith belief that the material was removed or disabled as a result of mistake or misidentification of the material to be removed or disabled." [15 U.S.C. s 512(g)(c)(3)]  A counter-notification also requires a statement that the subscriber consents to the jurisdiction in which the address of the subscriber is located. [17 U.S.C. s 512(g)(3)(D)] 
+ answer:   %{Filing a counter-notification indicates that the subscriber has a "good faith belief that the material was removed or disabled as a result of mistake or misidentification of the material to be removed or disabled." [15 U.S.C. s 512(g)(c)(3)]  A counter-notification also requires a statement that the subscriber consents to the jurisdiction in which the address of the subscriber is located. [17 U.S.C. s 512(g)(3)(D)]
 
 Thus, the filing of a counter-notification does not explicitly indicate consent to defend against a claim of copyright infringement; it merely indicates a good faith belief that the challenged material is non-infringing.  An individual who believes that a user has infringed or is infringing upon his or her copyright may sue the user for infringement regardless of whether a take-down notice is sent to the service provider.  The safe-harbor rules provided under 17 U.S.C. Sec. 512 do not affect the right of a lawful copyright holder to sue a <i>user</i> who directly infringes his or her copyright. }
 )
@@ -5997,7 +5997,7 @@ q = RelevantQuestion.create!(
 
 The current U.S. anti-cyberstalking law can be found in 47 USCS ? 223
 
-? 223.  Obscene or harassing telephone calls in the District of Columbia or in interstate or foreign communications 
+? 223.  Obscene or harassing telephone calls in the District of Columbia or in interstate or foreign communications
 
 (a) Prohibited acts generally. Whoever--
    (1) in interstate or foreign communications--
@@ -6013,9 +6013,9 @@ The current U.S. anti-cyberstalking law can be found in 47 USCS ? 223
       (D) makes or causes the telephone of another repeatedly or continuously to ring, with intent to harass any person at the called number; or
       (E) makes repeated telephone calls or repeatedly initiates communication with a telecommunications device, during which conversation or communication ensues, solely to harass any person at the called number or who receives the communication; or
    (2) knowingly permits any telecommunications facility under his control to be used for any activity prohibited by paragraph (1) with the intent that it be used for such activity,
- 
+
 shall be fined under title 18, United States Code, or imprisoned not more than two years, or both.
- 
+
 (b) Prohibited acts for commercial purposes; defense to prosecution.
    (1) Whoever knowingly--
       (A) within the United States, by means of telephone, makes (directly or by recording device) any obscene communication for commercial purposes to any person, regardless of whether the maker of such communication placed the call; or
@@ -6030,7 +6030,7 @@ shall be fined under title 18, United States Code, or imprisoned not more than t
          (i) by a court, pursuant to civil action by the Commission or any attorney employed by the Commission who is designated by the Commission for such purposes, or
          (ii) by the Commission after appropriate administrative proceedings.
    (6) The Attorney General may bring a suit in the appropriate district court of the United States to enjoin any act or practice which violates paragraph (1) or (2). An injunction may be granted in accordance with the Federal Rules of Civil Procedure.
- 
+
 (c) Restriction on access to subscribers by common carriers; judicial remedies respecting restrictions.
    (1) A common carrier within the District of Columbia or within any State, or in interstate or foreign commerce, shall not, to the extent technically feasible, provide access to a communication specified in subsection (b) from the telephone of any subscriber who has not previously requested in writing the carrier to provide access to such communication if the carrier collects from subscribers an identifiable charge for such communication that the carrier remits, in whole or in part, to the provider of such communication.
    (2) Except as provided in paragraph (3), no cause of action may be brought in any court or administrative agency against any common carrier, or any of its affiliates, including their officers, directors, employees, agents, or authorized representatives on account of--
@@ -6039,16 +6039,16 @@ shall be fined under title 18, United States Code, or imprisoned not more than t
          (i) in good faith reliance upon the lack of any representation by a provider of communications that communications provided by that provider are communications specified in subsection (b), or
          (ii) because a specific representation by the provider did not allow the carrier, acting in good faith, a sufficient period to restrict access to communications described in subsection (b).
    (3) Notwithstanding paragraph (2) of this subsection, a provider of communications services to which subscribers are denied access pursuant to paragraph (1) of this subsection may bring an action for a declaratory judgment or similar action in a court. Any such action shall be limited to the question of whether the communications which the provider seeks to provide fall within the category of communications to which the carrier will provide access only to subscribers who have previously requested such access.
- 
+
 (d) Sending or displaying offensive material to persons under 18. Whoever--
    (1) in interstate or foreign communications knowingly--
       (A) uses an interactive computer service to send to a specific person or persons under 18 years of age, or
       (B) uses any interactive computer service to display in a manner available to a person under 18 years of age,
    any comment, request, suggestion, proposal, image, or other communication that is obscene or child pornography, regardless of whether the user of such service placed the call or initiated the communication; or
    (2) knowingly permits any telecommunications facility under such person's control to be used for an activity prohibited by paragraph (1) with the intent that it be used for such activity,
- 
+
 shall be fined under title 18, United States Code, or imprisoned not more than two years, or both.
- 
+
 (e) Defenses. In addition to any other defenses available by law:
    (1) No person shall be held to have violated subsection (a) or (d) solely for providing access or connection to or from a facility, system, or network not under that person's control, including transmission, downloading, intermediate storage, access software, or other related capabilities that are incidental to providing such access or connection that does not include the creation of the content of the communication.
    (2) The defenses provided by paragraph (1) of this subsection shall not be applicable to a person who is a conspirator with an entity actively involved in the creation or knowing distribution of communications that violate this section, or who knowingly advertises the availability of such communications.
@@ -6058,13 +6058,13 @@ shall be fined under title 18, United States Code, or imprisoned not more than t
       (A) has taken, in good faith, reasonable, effective, and appropriate actions under the circumstances to restrict or prevent access by minors to a communication specified in such subsections, which may involve any appropriate measures to restrict minors from such communications, including any method which is feasible under available technology; or
       (B) has restricted access to such communication by requiring use of a verified credit card, debit account, adult access code, or adult personal identification number.
    (6) The Commission may describe measures which are reasonable, effective, and appropriate to restrict access to prohibited communications under subsection (d). Nothing in this section authorizes the Commission to enforce, or is intended to provide the Commission with the authority to approve, sanction, or permit, the use of such measures. The Commission shall have no enforcement authority over the failure to utilize such measures. The Commission shall not endorse specific products relating to such measures. The use of such measures shall be admitted as evidence of good faith efforts for purposes of paragraph (5) in any action arising under subsection (d). Nothing in this section shall be construed to treat interactive computer services as common carriers or telecommunications carriers.
- 
+
 (f) Violations of law required; commercial entities, nonprofit libraries, or institutions of higher education.
    (1) No cause of action may be brought in any court or administrative agency against any person on account of any activity that is not in violation of any law punishable by criminal or civil penalty, and that the person has taken in good faith to implement a defense authorized under this section or otherwise to restrict or prevent the transmission of, or access to, a communication specified in this section.
    (2) No State or local government may impose any liability for commercial activities or actions by commercial entities, nonprofit libraries, or institutions of higher education in connection with an activity or action described in subsection (a)(2) or (d) that is inconsistent with the treatment of those activities or actions under this section: Provided, however, That nothing herein shall preclude any State or local government from enacting and enforcing complementary oversight, liability, and regulatory systems, procedures, and requirements, so long as such systems, procedures, and requirements govern only intrastate services and do not result in the imposition of inconsistent rights, duties or obligations on the provision of interstate services. Nothing in this subsection shall preclude any State or local government from governing conduct not covered by this section.
- 
+
 (g) Application and enforcement of other Federal law. Nothing in subsection (a), (d), (e), or (f) or in the defenses to prosecution under subsection (a) or (d) shall be construed to affect or limit the application or enforcement of any other Federal law.
- 
+
 (h) Definitions. For purposes of this section--
    (1) The use of the term "telecommunications device" in this section--
       (A) shall not impose new obligations on broadcasting station licensees and cable operators covered by obscenity and indecency provisions elsewhere in this Act [47 USCS ?? 151 et seq.];
@@ -6098,7 +6098,7 @@ mapping[%{DMCA Safe Harbor}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is "willful infringement"?},
- answer:   %{Willful infringement occurs when the infringer knows that the material they are copying is protected by copyright. 
+ answer:   %{Willful infringement occurs when the infringer knows that the material they are copying is protected by copyright.
 
 In many cases, the penalties for copyright infringement are greater if the infringement is willful.}
 )
@@ -6189,8 +6189,8 @@ q = RelevantQuestion.create!(
 mapping[%{Reverse Engineering}] << q.id
 
 q = RelevantQuestion.create!(
- question: %{Does a posting on Chilling Effects mean that a takedown was unlawful or wrong? },
- answer:   %{No. Chilling Effects serves as a clearinghouse for cease and desist letters. Our goal is to educate the public about the different kinds of cease and desist letters--both legitimate and questionable--that are being sent to Internet publishers. We annotate the letters to help the public understand their legal language, and collect as many letters as possible to help the public understand the types of letters that are being sent and what searches are affected by them. By posting cease and desist notices, we are not authenticating them or making any judgment on the validity of the claims they raise.}
+ question: %{Does a posting on Lumen Database mean that a takedown was unlawful or wrong? },
+ answer:   %{No. Lumen Database serves as a clearinghouse for cease and desist letters. Our goal is to educate the public about the different kinds of cease and desist letters--both legitimate and questionable--that are being sent to Internet publishers. We annotate the letters to help the public understand their legal language, and collect as many letters as possible to help the public understand the types of letters that are being sent and what searches are affected by them. By posting cease and desist notices, we are not authenticating them or making any judgment on the validity of the claims they raise.}
 )
 
 mapping[%{Chilling Effects}] << q.id
@@ -6230,7 +6230,7 @@ mapping[%{International}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is the duty of confidentiality of an employee?},
- answer:   %{Confidential information or trade secrets received during the course of an employer-employee relationship cannot be used or disclosed to the detriment of the employer during or after termination of the relationship, even if the employee and the employer had no express contract prohibiting the use or disclosure. 
+ answer:   %{Confidential information or trade secrets received during the course of an employer-employee relationship cannot be used or disclosed to the detriment of the employer during or after termination of the relationship, even if the employee and the employer had no express contract prohibiting the use or disclosure.
 
 However, an employee can use all the skills and knowledge he acquired during his employment, if the skills and knowledge are commonly used in the trade.
 
@@ -6238,13 +6238,13 @@ Many states have adopted the Uniform Trade Secrets Act, which is intended to pro
 
 -The extent to which the information is known outside of the employer's business.
 
--The extent to which the information is known by employees and others involved in the business. 
+-The extent to which the information is known by employees and others involved in the business.
 
--The extent of measures taken by the employer to guard the secrecy of the information. 
+-The extent of measures taken by the employer to guard the secrecy of the information.
 
--The value of the information to the employer and to competitors. 
+-The value of the information to the employer and to competitors.
 
--The amount of effort or money expended by the company in developing the information. 
+-The amount of effort or money expended by the company in developing the information.
 
 -The extent to which the information could be easily or readily obtained through an independent source.
 
@@ -6264,16 +6264,16 @@ mapping[%{Derivative Works}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is the duty of confidentiality of an employee?},
- answer:   %{Confidential information or trade secrets received during the course of an employer-employee relationship cannot be used or disclosed to the detriment of the employer during or after termination of the relationship, even if the employee and the employer had no express contract prohibiting the use or disclosure. 
+ answer:   %{Confidential information or trade secrets received during the course of an employer-employee relationship cannot be used or disclosed to the detriment of the employer during or after termination of the relationship, even if the employee and the employer had no express contract prohibiting the use or disclosure.
 However, an employee can use all the skills and knowledge he acquired during his employment, if the skills and knowledge are commonly used in the trade.
 
 Many states have adopted the Uniform Trade Secrets Act, which is intended to provide states with a legal framework for improved trade-secret protection. The Act contains a definition of trade secrets which is consistent with common-law definitions. Factors used to determine if information is a trade secret include:
 
 ? The extent to which the information is known outside of the employer's business.
-? The extent to which the information is known by employees and others involved in the business. 
-? The extent of measures taken by the employer to guard the secrecy of the information. 
-? The value of the information to the employer and to competitors. 
-? The amount of effort or money expended by the company in developing the information. 
+? The extent to which the information is known by employees and others involved in the business.
+? The extent of measures taken by the employer to guard the secrecy of the information.
+? The value of the information to the employer and to competitors.
+? The amount of effort or money expended by the company in developing the information.
 ? The extent to which the information could be easily or readily obtained through an independent source.
 
 Trade secrets need not be technical in nature. Market-related information such as information on current and future projects, as well as potential future opportunities for a firm, may constitute a trade secret.}
@@ -6328,7 +6328,7 @@ mapping[%{DMCA Safe Harbor}] << q.id
 
 q = RelevantQuestion.create!(
  question: %{What is the Streisand Effect?},
- answer:   %{The "Streisand Effect" refers to the likelihood of a cease-and-desist demand attracting more attention to the complained-of material than it had before the demand. 
+ answer:   %{The "Streisand Effect" refers to the likelihood of a cease-and-desist demand attracting more attention to the complained-of material than it had before the demand.
 
 The effect gets its name from a 2003 incident in which Barbra Streisand sued a California photographer for including aerial photographs of her Malibu house on his coastal survey website. Instead of removing the image, the photographer publicized the suit, drawing further attention to the photo. See <a href="http://www.forbes.com/2007/05/10/streisand-digg-web-tech-cx_ag_0511streisand.html">Andy Greenberg, The Streisand Effect, Forbes</a>. Adelman, who maintained <a href="http://californiacoastline.org/">californiacoastline.org</a>, obtained dismissal of the suit under California’s anti-SLAPP law, and won attorneys’ fees and costs. See <a href="http://www.californiacoastline.org/streisand/fees-ruling.pdf">Streisand v. Adelman, No. SC 077 257</a> (L.A. Sup. Ct. May 10, 2004).}
 )
@@ -6386,10 +6386,10 @@ q = RelevantQuestion.create!(
 mapping[%{Copyright}] << q.id
 
 q = RelevantQuestion.create!(
- question: %{When shouldn't I contact Chilling Effects? },
- answer:   %{Chilling Effects is not and cannot be your lawyer. 
+ question: %{When shouldn't I contact Lumen Database? },
+ answer:   %{Lumen Database is not and cannot be your lawyer.
 
-We cannot help you execute a request to remove online content.  Chilling Effects serves as a repository of requests made to others, along with analyses of the legal claims. We are not responsible for the removal of material. }
+We cannot help you execute a request to remove online content.  Lumen Database serves as a repository of requests made to others, along with analyses of the legal claims. We are not responsible for the removal of material. }
 )
 
 mapping[%{Chilling Effects}] << q.id

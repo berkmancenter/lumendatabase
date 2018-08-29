@@ -13,7 +13,7 @@ class HomeController < ApplicationController
 
   def fetch_tweets
     @tweet_news = []
-    return if fragment_exist?('chillingeffects-tweets')
+    return if fragment_exist?('lumendatabase-tweets')
 
     begin
       twitter_user = 'lumendatabase'
