@@ -5,7 +5,8 @@ Maintenance windows are Wednesday and Saturday nights (after 5pm Eastern).
 ## Special instructions
 If any deploys have special instructions, write them here, with a date and PR number. When that PR has been deployed, you can erase the special instructions.
 
-* 16 August 2018/PR #170: requires cron job update (see https://github.com/berkmancenter/lumendatabase/pull/470)
+* 16 August 2018/PR #470: requires cron job update (see https://github.com/berkmancenter/lumendatabase/pull/470)
+* 29 August 2018/PR #482: crontabs on enyos, percy, and flutie will need to be edited so to run rake lumen:* tasks rather than rake chillingeffects:* tasks. https://github.com/berkmancenter/lumendatabase/pull/482
 
 ## Hotfix
 * Write code, code-review, and merge into `dev` via the normal process.
