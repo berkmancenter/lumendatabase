@@ -3,10 +3,10 @@ require 'rails_helper'
 feature "typed notice submissions" do
   scenario "Non signed-in user cannot see new notice forms" do
     visit '/notices/new'
-    
-    expect(page).to have_content('Direct submission to Lumen is no longer available. Please submit notices directly to the owner of the website hosting the content.')
+
+    expect(page).to have_content('Direct submission to Lumen is no longer available. If you are interested in sharing with Lumen copies of takedown notices you have sent or received, please contact Lumen.')
   end
-  
+
   scenario "User submits and views a Trademark notice" do
     submission = NoticeSubmissionOnPage.new(Trademark, create(:user, :submitter))
     submission.open_submission_form
@@ -75,7 +75,7 @@ feature "typed notice submissions" do
       expect(page).to have_content('They impuned upon my good character')
     end
   end
-  
+
   scenario "User submits and views a Data Protection notice" do
     submission = NoticeSubmissionOnPage.new(DataProtection, create(:user, :submitter))
     submission.open_submission_form
@@ -242,7 +242,7 @@ feature "typed notice submissions" do
       "Original Work URL" => "http://example.com/original_object1", # copyrighted_urls
       "Problematic URL" => "http://example.com/offending_url1", # infringing_urls
 
-      "Explanation of Complaint" => "I am complaining", #notice.body
+      "Explanation of Complaint" => "I am complaining", # notice.body
     })
 
     submission.fill_in_entity_form_with(:recipient, {

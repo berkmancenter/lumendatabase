@@ -29,3 +29,5 @@ tags
 vendor/bundler_gems
 config/database.yml
 .idea/*
+.byebug_history
+.rubocop.yml

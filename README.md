@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/berkmancenter/lumendatabase.svg?branch=master)](https://travis-ci.org/berkmancenter/lumendatabase)
+[![Coverage Status](https://coveralls.io/repos/github/berkmancenter/lumendatabase/badge.svg?branch=master)](https://coveralls.io/github/berkmancenter/lumendatabase?branch=master)
+[![Code Climate](https://codeclimate.com/github/codeclimate/codeclimate/badges/gpa.svg)](https://codeclimate.com/github/berkmancenter/lumendatabase)
+
 Lumen Database
 ================
 
@@ -14,9 +18,10 @@ Requirements:
 
 * ruby 2.3.3
 * PostgreSQL 9.6
-* Elasticsearch 1.7.6
+* Elasticsearch 5.6.x
 * Java Runtime Environment (OpenJDK works fine)
 * Piwik Tracking
+* phantomjs (used only by test runner)
 
 Setup:
 
@@ -42,12 +47,25 @@ You can customize behavior during seeding (db:setup) with a couple environment v
 
 Admin login:
 
-    Username: admin@chillingeffects.org
+    Username: admin@lumendatabase.org
     Password: password
+
+If you seeded your database with an older version of `seeds.rb`, your username may be admin@chillingeffects.org.
 
 Running Tests:
 
     $ bundle exec rspec spec/
+
+The integration tests are quite slow; for some development purposes you may
+find it more convenient to `bundle exec rspec spec/ --exclude-pattern="spec/integration/*"`.
+
+If `elasticsearch` isn't on your $PATH, set `ENV['TEST_CLUSTER_COMMAND']=/path/to/elasticsearch`, and make sure permissions are set correctly for your test suite to run it.
+
+Linting:
+
+Use rubocop and leave the code at least as clean as you found it. If you make
+linting-only changes, it's considerate to your code reviewer to keep them in
+their own commit.
 
 Ephemera
 ========
@@ -55,7 +73,7 @@ Ephemera
 The `/blog_entries` page contains a google custom search engine that's supposed
 to search the Lumen blog. To enable, create a custom search engine
 [here](https://www.google.com/cse/create/new) restricted to the path the blog
-lives at, for instance `http://www.lumendatabase.org/blog_entries/*`. Extract
+lives at, for instance `https://www.lumendatabase.org/blog_entries/*`. Extract
 the "cx" id from the javascript embed code and put it in the
 `GOOGLE_CUSTOM_BLOG_SEARCH_ID` environment variable. The blog search will
 appear after this variable has been configured.
@@ -75,3 +93,9 @@ Copyright
 =========
 
 Copyright (c) 2016 President and Fellows of Harvard College
+
+
+Performance Monitoring
+======================
+
+[View performance data on Skylight](https://www.skylight.io/app/applications/utm46ElcSDtw)

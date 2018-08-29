@@ -6,7 +6,7 @@ class Entities::SearchController < ApplicationController
     results = searcher.instances
 
     respond_to do |format|
-      format.json {
+      format.json do
         render(
           json: results,
           each_serializer: EntitySerializer,
@@ -14,7 +14,7 @@ class Entities::SearchController < ApplicationController
           root: 'entities',
           meta: meta_hash_for(raw_results)
         )
-      }
+      end
       format.html { redirect_to root_path }
     end
   end
@@ -26,7 +26,7 @@ class Entities::SearchController < ApplicationController
       if can?(:search, Entity)
         searcher.register TermSearch.new(:term, :_all)
       else
-        searcher.register TermSearch.new(:term, [:name, :country_code, :url])
+        searcher.register TermSearch.new(:term, %i[name country_code url])
       end
     end
   end

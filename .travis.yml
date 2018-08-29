@@ -10,7 +10,9 @@ addons:
 
 services:
   - postgresql
-  - elasticsearch
+  # We don't start elasticsearch here; instead we download it later and run it
+  # directly in order to enable the test cluster to start up. See
+  # https://github.com/elastic/elasticsearch-ruby/issues/365 .
 
 cache:
   directories:
@@ -19,7 +21,8 @@ cache:
 before_install:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
-  - curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.6.4.deb && sudo dpkg -i --force-confnew elasticsearch-5.6.4.deb && sudo service elasticsearch restart
+  - wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.6.4.tar.gz
+  - tar -xvf elasticsearch-5.6.4.tar.gz
 
   # update phantomjs
   - |
@@ -33,18 +36,14 @@ before_install:
       fi
       phantomjs -v
 
+env:
+  - TEST_CLUSTER_COMMAND=elasticsearch-5.6.4/bin/elasticsearch
+
 before_script:
-  - sleep 10
   - psql -c 'create database chill_test;' -U postgres
   - cp config/database.yml.travis config/database.yml
   - bundle exec rake db:schema:load RAILS_ENV=test
   - mkdir -p tmp/cache
 
 script:
-  - curl http://localhost:9200
-  - bundle exec rspec spec/controllers
-  - bundle exec rspec spec/integration
-  - bundle exec rspec spec/models
-  - bundle exec rspec spec/routing
-  - bundle exec rspec spec/serializers
-  - bundle exec rspec spec/views
+  - bundle exec rspec spec/

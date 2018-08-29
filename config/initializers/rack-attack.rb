@@ -52,4 +52,3 @@ class Rack::Attack
     ] # body
   end
 end
-

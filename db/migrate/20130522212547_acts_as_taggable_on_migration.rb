@@ -13,7 +13,7 @@ class ActsAsTaggableOnMigration < ActiveRecord::Migration
       t.references :tagger, :polymorphic => true
 
       # Limit is created to prevent MySQL error on index
-      # length for MyISAM table type: http://bit.ly/vgW2Ql
+      # length for MyISAM table type: https://bit.ly/vgW2Ql
       t.string :context, :limit => 128
 
       t.datetime :created_at

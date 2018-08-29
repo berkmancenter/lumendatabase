@@ -1,11 +1,10 @@
 require 'rails_helper'
-require 'support/notice_actions'
+require 'support/sign_in'
 
 feature "Redactable fields" do
   include NoticeActions
 
   Notice::REDACTABLE_FIELDS.each do |field|
-
     scenario "#{field} is automatically redacted of phone numbers" do
       original_text = <<-EOT
         Please contact my laywer at (123) 456-7890 or, if
@@ -65,10 +64,7 @@ feature "Redactable fields" do
 
       def visit_redact_notice
         user = create(:user, :admin)
-        visit '/users/sign_in'
-        fill_in "Email", with: user.email
-        fill_in "Password", with: user.password
-        click_on "Log in"
+        sign_in user
 
         notice = create(:dmca, :redactable)
 

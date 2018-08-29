@@ -11,7 +11,7 @@ BlogEntry.create!(
   published_at: Time.zone.local(2013, 5, 13),
   topics: topics,
   content: %{
-Chilling Effects fans and those who follow takedown notice stories will
+Lumen fans and those who follow takedown notice stories will
 recall the relatively recent brouhaha in which a NASCAR fan filmed a
 crash with his cellphone and posted it to YouTube, whereupon NASCAR
 asserted claim in the cellphone video and filed a DMCA takedown notice
@@ -53,7 +53,7 @@ their opponent's lawyers are too good. Go, DMLP!
 [interest]:    http://www.dmlp.org/threats/tuteur-v-crosley-corcoran
 
 You can dive into all the details at your leisure, but we here at
-Chilling Effects are keenly interested in this case because of what it
+Lumen are keenly interested in this case because of what it
 portends for the DMCA notice and takedown process.  Here's the DMLP on
 the key elements from our perspective. [emphasis added]
 

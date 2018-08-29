@@ -54,10 +54,10 @@
     <div class="body-wrapper left">
       <%= form.simple_fields_for(:works) do |works_form| %>
         <%= works_form.simple_fields_for(:copyrighted_urls) do |urls_form| %>
-          <%= urls_form.input :url, label: "URL of original work", placeholder: "http://" %>
+          <%= urls_form.input :url, label: "URL of original work", placeholder: "https://" %>
         <% end %>
         <%= works_form.simple_fields_for(:infringing_urls) do |urls_form| %>
-          <%= urls_form.input :url, label: "URL mentioned in request", placeholder: "http://" %>
+          <%= urls_form.input :url, label: "URL mentioned in request", placeholder: "https://" %>
         <% end %>
         <%= works_form.input :kind, label: "Kind of Work", placeholder: "Movie, Music, Book" %>
       </div>

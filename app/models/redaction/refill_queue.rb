@@ -1,6 +1,5 @@
 module Redaction
   class RefillQueue
-
     SelectInput = Struct.new(:label_text, :collection) do
       def key
         label_text.downcase.gsub(/\s+/, '_').to_sym
@@ -12,8 +11,7 @@ module Redaction
     end
 
     def each_input
-      yield SelectInput.new("In topics", Topic.all)
-      #yield SelectInput.new("Submitted by", Entity.submitters)
+      yield SelectInput.new('In topics', Topic.all)
     end
 
     def fill(queue)
@@ -23,13 +21,10 @@ module Redaction
       relation = base_relation
 
       scopes.each do |scope, argument|
-        if argument.present?
-          relation = relation.send(scope, argument)
-        end
+        relation = relation.send(scope, argument) if argument.present?
       end
 
-      relation.limit(queue.available_space).
-        update_all(reviewer_id: queue.user)
+      relation.limit(queue.available_space).update_all(reviewer_id: queue.user)
     end
 
     def root_key
@@ -43,6 +38,5 @@ module Redaction
     def base_relation
       Notice.available_for_review
     end
-
   end
 end

@@ -1,8 +1,10 @@
-Notice.index.delete
-Notice.create_elasticsearch_index
+# The following four lines may spit out "Index does not
+# exist" errors, but they don't matter.
+Notice.__elasticsearch__.delete_index! force: true
+Notice.__elasticsearch__.create_index! force: true
 
-Entity.index.delete
-Entity.create_elasticsearch_index
+Entity.__elasticsearch__.delete_index! force: true
+Entity.__elasticsearch__.create_index! force: true
 
 # Execute seeds in a logical order
 seed_files = %w(
@@ -230,6 +232,4 @@ unless ENV['SKIP_FAKE_DATA']
 
   puts 'Indexing. . .'
   ReindexRun.index_changed_model_instances
-
-  puts
 end

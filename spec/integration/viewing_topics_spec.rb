@@ -3,13 +3,13 @@ require 'rails_helper'
 feature "Topics" do
   include SearchHelpers
 
-  before :all do
+  before :each do
     @topic = create(:topic, name: 'An awesome name')
     @notice = create(:dmca, topics: [@topic])
   end
 
   scenario "user views a topic", search: true do
-    index_changed_models
+    index_changed_instances
 
     sleep 2
 

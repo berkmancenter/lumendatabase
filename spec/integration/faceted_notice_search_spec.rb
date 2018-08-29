@@ -17,7 +17,7 @@ feature "Faceted search of Notices", search: true do
       it "on #{facet_type}", js: true, search: true do
         outside_facet = create(:dmca, title: "King of New York")
         inside_facet = create(:dmca, :with_facet_data, title: "Lion King two")
-        index_changed_models
+        index_changed_instances
 
         within_search_results_for('king') do
           expect(page).to have_n_results 2
@@ -50,7 +50,7 @@ feature "Faceted search of Notices", search: true do
       inside_facet = create(
         :dmca, title: 'A title', date_received: Time.now - 1.day
       )
-      index_changed_models
+      index_changed_instances
 
       within_search_results_for('title') do
         expect(page).to have_n_results 2
@@ -71,7 +71,7 @@ feature "Faceted search of Notices", search: true do
     scenario "a user selects a facet", js: true, search: true do
       create(:dmca, title: "Lion King", date_received: 10.months.ago)
       notice = create(:dmca, title: "King Leon", date_received: 1.day.ago)
-      index_changed_models
+      index_changed_instances
 
       within_search_results_for('king') do
         expect(page).to have_n_results 2

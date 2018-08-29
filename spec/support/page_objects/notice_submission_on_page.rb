@@ -1,4 +1,5 @@
 require_relative '../page_object'
+require_relative '../sign_in'
 
 class NoticeSubmissionOnPage < PageObject
 
@@ -7,17 +8,9 @@ class NoticeSubmissionOnPage < PageObject
     @user = user
   end
 
-  def sign_in
-    visit '/users/sign_out' # clear old session
-    visit '/users/sign_in'
-    fill_in "Email", with: @user.email
-    fill_in "Password", with: @user.password
-    click_on "Log in"
-  end
-
   def open_submission_form
-    sign_in unless @user.nil?
-    
+    sign_in(@user) unless @user.nil?
+
     visit '/notices/new'
 
     click_on 'Report ' + @notice_class.to_s.titleize

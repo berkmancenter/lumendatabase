@@ -191,14 +191,14 @@ class Notice < ActiveRecord::Base
   def self.visible_qualifiers
     { spam: false, hidden: false, published: true, rescinded: false }
   end
-  
+
   def self.find_unpublished(notice_id)
-    begin 
+    begin
       self.where(spam: false, hidden: false, published: false).find(notice_id)
       return true
     rescue
       return false
-    end    
+    end
   end
 
   def active_model_serializer
@@ -321,7 +321,7 @@ class Notice < ActiveRecord::Base
     self.published = should_be_published?
     save
   end
-  
+
   def notice_topic_map
     topic = TYPES_TO_TOPICS.key?(self.type) ? TYPES_TO_TOPICS[self.type] : OTHER_TOPIC
     return Topic.find_or_create_by(name: topic)
@@ -337,7 +337,7 @@ class Notice < ActiveRecord::Base
 
     unless self.topics.include?(topic)
       self.topics << topic
-    end  
+    end
   end
 
   private
