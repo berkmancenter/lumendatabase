@@ -7,6 +7,7 @@ If any deploys have special instructions, write them here, with a date and PR nu
 
 * 16 August 2018/PR #470: requires cron job update (see https://github.com/berkmancenter/lumendatabase/pull/470)
 * 29 August 2018/PR #482: crontabs on enyos, percy, and flutie will need to be edited so to run rake lumen:* tasks rather than rake chillingeffects:* tasks. https://github.com/berkmancenter/lumendatabase/pull/482
+* Move bin/init-env.sh to .env
 
 ## Hotfix
 * Write code, code-review, and merge into `dev` via the normal process.
@@ -44,13 +45,15 @@ If any deploys have special instructions, write them here, with a date and PR nu
 * Log in to the relevant server (`psh <servername>`)
 * `sudo -su chill-prod` (enyos) or `sudo -su chill-dev` (flutie) or `sudo -su chill-api` (percy)
 * cd into the directory where chill files live (look under `/web/<servername>`)
-* `cp bin/init-env.sh ../` (as a precaution)
+* `cp .env ../` (as a precaution)
 * `git checkout <branch>`
+* `git checkout db/schema.rb`
+  * This will differ from the version-controlled one as running db:migrate will change its datestamp
+  * You don't want merge conflicts
 * `git pull origin <branch>`
   * Servers have correct default branches set so this is just `git pull` unless you need a different branch
 * `bundle install`
-* `cp ../init-env.sh bin/init-env.sh`
-* `source bin/init-env.sh`
+* `cp ../ .env`
 * `rake db:migrate`
   - The order of source and db:migrate is important!
 * `touch tmp/restart.txt`
