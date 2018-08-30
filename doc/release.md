@@ -41,12 +41,15 @@ If any deploys have special instructions, write them here, with a date and PR nu
 * Make sure you can load lumendatabase.org and skylight hasn't blown up
 
 ## What "deploy" means
-* Log in to the relevant server
+* Log in to the relevant server (`psh <servername>`)
 * `sudo -su chill-prod` (enyos) or `sudo -su chill-dev` (flutie) or `sudo -su chill-api` (percy)
 * cd into the directory where chill files live (look under `/web/<servername>`)
+* `cp bin/init-env.sh ../` (as a precaution)
+* `git checkout <branch>`
 * `git pull origin <branch>`
   * Servers have correct default branches set so this is just `git pull` unless you need a different branch
 * `bundle install`
+* `cp ../init-env.sh bin/init-env.sh`
 * `source bin/init-env.sh`
 * `rake db:migrate`
   - The order of source and db:migrate is important!

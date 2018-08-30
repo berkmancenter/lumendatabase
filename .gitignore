@@ -21,6 +21,7 @@ tmp/
 *.swp
 .env
 bin/stubs
+bin/init-env.sh
 coverage/*
 paperclip/*
 public/assets
