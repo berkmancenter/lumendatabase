@@ -35,6 +35,7 @@ gem 'cancancan'
 gem 'jquery-placeholder-rails'
 gem 'activerecord-import'
 gem 'html2md'
+gem 'mysql2'
 gem 'ruby-progressbar'
 gem 'turnout'
 gem 'date_validator'
@@ -49,6 +50,7 @@ gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
 gem 'coveralls', require: false
 gem 'lograge'
+gem 'dotenv-rails'
 
 group :assets do
   gem 'coffee-rails'
@@ -64,7 +66,6 @@ end
 
 group :development, :test do
   gem 'phantomjs'
-  gem 'dotenv-rails'
   gem 'factory_girl_rails'
   gem 'rspec-rails'
   gem 'sham_rack'
