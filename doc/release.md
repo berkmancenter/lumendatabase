@@ -53,7 +53,7 @@ If any deploys have special instructions, write them here, with a date and PR nu
 * `git pull origin <branch>`
   * Servers have correct default branches set so this is just `git pull` unless you need a different branch
 * `bundle install`
-* `cp ../ .env`
+* `cp ../.env .`
 * `rake db:migrate`
   - The order of source and db:migrate is important!
 * `touch tmp/restart.txt`
