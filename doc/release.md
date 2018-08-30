@@ -56,5 +56,6 @@ If any deploys have special instructions, write them here, with a date and PR nu
 * `cp ../.env .`
 * `rake db:migrate`
   - The order of source and db:migrate is important!
+* `rake assets:precompile`
 * `touch tmp/restart.txt`
   * This tells Passenger to restart its listener
