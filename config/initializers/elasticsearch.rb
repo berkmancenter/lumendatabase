@@ -8,4 +8,6 @@ if File.exist?('config/elasticsearch.yml')
     .symbolize_keys)
 end
 
+config[:host] = ENV['ELASTICSEARCH_URL'] || config[:host]
+
 Elasticsearch::Model.client = Elasticsearch::Client.new(config)
