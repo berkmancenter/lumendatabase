@@ -7,7 +7,8 @@ If any deploys have special instructions, write them here, with a date and PR nu
 
 * 16 August 2018/PR #470: requires cron job update (see https://github.com/berkmancenter/lumendatabase/pull/470)
 * 29 August 2018/PR #482: crontabs on enyos, percy, and flutie will need to be edited so to run rake lumen:* tasks rather than rake chillingeffects:* tasks. https://github.com/berkmancenter/lumendatabase/pull/482
-* Move bin/init-env.sh to .env
+* Move bin/init-env.sh to .env (cat bin/init-env.sh >> .env; vi .env; : ; %s/export\s//g ; remove first line; exit, save)
+* Remove these instructions
 
 ## Hotfix
 * Write code, code-review, and merge into `dev` via the normal process.
@@ -53,8 +54,10 @@ If any deploys have special instructions, write them here, with a date and PR nu
 * `git pull origin <branch>`
   * Servers have correct default branches set so this is just `git pull` unless you need a different branch
 * `bundle install`
-* `cp ../ .env`
+* `cp ../.env .`
 * `rake db:migrate`
-  - The order of source and db:migrate is important!
+  - If this throws a `PG::ConnectionBad:` and asks something like "Is the server running locally and accepting connections on Unix domain socket "/var/run/postgresql/.s.PGSQL.5432"?", use `RAILS_ENV=production rake db:migrate`
+* `rake assets:clobber`
+* `rake assets:precompile`
 * `touch tmp/restart.txt`
   * This tells Passenger to restart its listener
