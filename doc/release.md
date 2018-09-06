@@ -5,11 +5,6 @@ Maintenance windows are Wednesday and Saturday nights (after 5pm Eastern).
 ## Special instructions
 If any deploys have special instructions, write them here, with a date and PR number. When that PR has been deployed, you can erase the special instructions.
 
-* 16 August 2018/PR #470: requires cron job update (see https://github.com/berkmancenter/lumendatabase/pull/470)
-* 29 August 2018/PR #482: crontabs on enyos, percy, and flutie will need to be edited so to run rake lumen:* tasks rather than rake chillingeffects:* tasks. https://github.com/berkmancenter/lumendatabase/pull/482
-* Move bin/init-env.sh to .env (cat bin/init-env.sh >> .env; vi .env; : ; %s/export\s//g ; remove first line; exit, save)
-* Remove these instructions
-
 ## Hotfix
 * Write code, code-review, and merge into `dev` via the normal process.
 * Give Adam a heads-up: what you're doing, what it fixes, why it needs to be pushed out ASAP.
