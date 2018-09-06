@@ -209,14 +209,6 @@ class Notice < ActiveRecord::Base
     end
   end
 
-  def all_relevant_questions(limit = 15)
-    (relevant_questions | topic_relevant_questions).sample(limit)
-  end
-
-  def related_blog_entries(limit = 5)
-    super.published.limit(limit)
-  end
-
   def other_entity_notice_roles
     other_roles = self.class::DEFAULT_ENTITY_NOTICE_ROLES - Notice::DEFAULT_ENTITY_NOTICE_ROLES
     entity_notice_roles.find_all do |entity_notice_role|
