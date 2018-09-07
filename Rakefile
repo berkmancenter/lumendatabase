@@ -3,6 +3,7 @@
 # for example lib/tasks/capistrano.rake, and they will automatically be
 # available to Rake.
 
+require 'turnout/rake_tasks'
 require File.expand_path('../config/application', __FILE__)
 
 Chill::Application.load_tasks
