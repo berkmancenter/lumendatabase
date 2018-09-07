@@ -232,8 +232,6 @@ GEM
     pry-rails (0.3.1)
       pry (>= 0.9.10)
     rack (1.6.8)
-    rack-accept (0.4.5)
-      rack (>= 0.4)
     rack-attack (4.3.0)
       rack
     rack-pjax (1.0.0)
@@ -358,9 +356,6 @@ GEM
     tilt (2.0.7)
     timecop (0.6.1)
     tins (1.16.3)
-    turnout (2.2.0)
-      rack (~> 1.3)
-      rack-accept (~> 0.4)
     twitter (5.15.0)
       addressable (~> 2.3)
       buftok (~> 0.2.0)
@@ -458,7 +453,6 @@ DEPENDENCIES
   stackprof
   therubyracer
   timecop
-  turnout
   twitter
   twitter-text
   uglifier
