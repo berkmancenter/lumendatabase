@@ -75,8 +75,7 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
-    climate_control (0.0.3)
-      activesupport (>= 3.0)
+    climate_control (0.2.0)
     cliver (0.3.2)
     cocaine (0.5.8)
       climate_control (>= 0.0.3, < 1.0)
@@ -196,6 +195,7 @@ GEM
     metaclass (0.0.1)
     method_source (0.8.2)
     mime-types (2.99.3)
+    mimemagic (0.3.0)
     mini_mime (1.0.1)
     mini_portile2 (2.3.0)
     minitest (5.11.3)
@@ -212,11 +212,12 @@ GEM
     nokogiri (1.8.4)
       mini_portile2 (~> 2.3.0)
     orm_adapter (0.5.0)
-    paperclip (3.5.4)
-      activemodel (>= 3.0.0)
-      activesupport (>= 3.0.0)
-      cocaine (~> 0.5.3)
+    paperclip (4.3.7)
+      activemodel (>= 3.2.0)
+      activesupport (>= 3.2.0)
+      cocaine (~> 0.5.5)
       mime-types
+      mimemagic (= 0.3.0)
     pg (0.20.0)
     phantomjs (2.1.1.0)
     poltergeist (1.15.0)
@@ -432,7 +433,7 @@ DEPENDENCIES
   mime-types (= 2.99.3)
   minitest
   neat
-  paperclip (= 3.5.4)
+  paperclip (~> 4)
   pg (= 0.20.0)
   phantomjs
   poltergeist (~> 1.10)
