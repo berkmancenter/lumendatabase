@@ -10,18 +10,24 @@
       <%= render 'shared/search' %>
     </div>
     <%= form_tag(notices_search_index_path, method: :get) do %>
-      <div class="container advanced-search">
-        <div class="width-wrapper">
-          <h5>Advanced Search: <span>add additional search queries<span></h5>
-          <% Notice::SEARCHABLE_FIELDS.each do |field| %>
-            <%= render field %>
-          <% end %>
-          <a id="duplicate-field" href="javascript:void(0);" class="add-group">Add more</a>
-          <div class="resubmit">
-            <button class="button">Advanced Search</button>
+      <%# Don't cache the entire page, because caching the form caches its
+          authenticity token, which will break that security feature. However,
+          do cache this section; it's static, and dynamically generating it
+          like this results in a lot of rendering calls. %>
+      <% cache 'advanced_search' do %>
+        <div class="container advanced-search">
+          <div class="width-wrapper">
+            <h5>Advanced Search: <span>add additional search queries<span></h5>
+            <% Notice::SEARCHABLE_FIELDS.each do |field| %>
+              <%= render field %>
+            <% end %>
+            <a id="duplicate-field" href="javascript:void(0);" class="add-group">Add more</a>
+            <div class="resubmit">
+              <button class="button">Advanced Search</button>
+            </div>
           </div>
         </div>
-      </div>
+      <% end %>
       <%= hidden_field_tag(:sort_by, params[:sort_by], class: 'sort_by_field') %>
     <% end %>
   </div>
