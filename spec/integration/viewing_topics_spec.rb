@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature "Topics" do
+feature 'Topics' do
   include SearchHelpers
 
   before :each do
@@ -8,7 +8,7 @@ feature "Topics" do
     @notice = create(:dmca, topics: [@topic])
   end
 
-  scenario "user views a topic", search: true do
+  scenario 'user views a topic', search: true do
     index_changed_instances
 
     sleep 2

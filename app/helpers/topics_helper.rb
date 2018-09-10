@@ -1,6 +1,5 @@
 module TopicsHelper
   def construct_recent_notices
-    $stdout.puts "Helper can see #{Notice.count} notices"
     searcher = topic_notice_searcher
     searcher.search
     searcher.instances
