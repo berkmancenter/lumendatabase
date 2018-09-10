@@ -1,5 +1,4 @@
 module NoticesHelper
-
   def form_partial_for(instance)
     "#{instance.type.tableize.singularize}_form"
   end
@@ -13,9 +12,8 @@ module NoticesHelper
   end
 
   def display_date_field(record, field)
-    if date = record.send(field)
-      time_tag date, date.to_s(:simple)
-    end
+    return unless (date = record.send(field))
+    time_tag date, date.to_s(:simple)
   end
 
   def date_sent(notice)
@@ -47,35 +45,45 @@ module NoticesHelper
   end
 
   def first_time_visitor_content
-    Markdown.render( t('first_time_visitor') )
+    Markdown.render(t('first_time_visitor'))
   end
 
   def label_for_url_input(url_type, notice)
     case url_type
     when :infringing_urls
-      case notice
-      when ::DMCA, ::Trademark
-        "Allegedly Infringing URL"
-      when ::PrivateInformation
-        "URL with private information"
-      when ::CourtOrder
-        "Targeted URL"
-      when ::DataProtection, ::LawEnforcementRequest
-        "URL mentioned in request"
-      when ::Defamation
-        "Allegedly Defamatory URL"
-      when ::Other
-        "Problematic URL"
-      end
+      infringing_url_label(notice)
     when :copyrighted_urls
-      case notice
-      when ::DMCA, ::Other
-        "Original Work URL"
-      when ::LawEnforcementRequest
-        "URL of original work"
-      end
+      copyrighted_url_label(notice)
     else
-      fail "Unknown url_type: #{url_type}"
+      raise "Unknown url_type: #{url_type}"
+    end
+  end
+
+  private
+
+  def infringing_url_label(notice)
+    case notice
+    when ::DMCA, ::Trademark
+      'Allegedly Infringing URL'
+    when ::PrivateInformation
+      'URL with private information'
+    when ::CourtOrder
+      'Targeted URL'
+    when ::DataProtection, ::LawEnforcementRequest
+      'URL mentioned in request'
+    when ::Defamation
+      'Allegedly Defamatory URL'
+    when ::Other
+      'Problematic URL'
+    end
+  end
+
+  def copyrighted_url_label(notice)
+    case notice
+    when ::DMCA, ::Other
+      'Original Work URL'
+    when ::LawEnforcementRequest
+      'URL of original work'
     end
   end
 end
