@@ -254,6 +254,14 @@ feature 'notice submission' do
     end
   end
 
+  scenario 'government requests include submitter' do
+    sign_in(create(:user, :submitter))
+
+    visit '/notices/new?type=GovernmentRequest'
+
+    expect(page).to have_text('Submitter of the Notice')
+  end
+
   private
 
   def works_copyrighted_url_id
