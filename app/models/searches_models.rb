@@ -47,7 +47,7 @@ class SearchesModels
     search_definition[:highlight] = search_config[:highlight]
     search_definition[:size] = @per_page
     search_definition[:from] = this_page
-    if local_sort_by = sort_by
+    if (local_sort_by = sort_by)
       h = {}
       h[local_sort_by[0]] = {
         order: local_sort_by[1]
