@@ -28,7 +28,7 @@ feature 'notice submission' do
     expect(curb.response_code).to eq 422
   end
 
-  scenario "submitting a notice", js: true do
+  scenario 'submitting a notice', js: true do
     parameters = request_hash(
       default_notice_hash(title: 'A superduper title')
     )
