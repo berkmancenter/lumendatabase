@@ -2,16 +2,16 @@ require 'rails_helper'
 
 describe 'topics/show.html.erb' do
   it "shows the topic's name" do
-    assign(:topic, build(:topic, name: "The Name"))
+    assign(:topic, build(:topic, name: 'The Name'))
     assign(:notices, [])
 
     render
 
-    expect(rendered).to include("The Name")
+    expect(rendered).to include('The Name')
   end
 
   it "shows the topic's html description" do
-    topic = build(:topic, description: "Some *markdown*")
+    topic = build(:topic, description: 'Some *markdown*')
     assign(:topic, topic)
     assign(:notices, [])
 
@@ -30,26 +30,6 @@ describe 'topics/show.html.erb' do
     questions.each do |question|
       expect(rendered).to include(question.question)
       expect(rendered).to include(question.answer_html)
-    end
-  end
-
-  context "notices" do
-    it "shows a list of notices" do
-      assign(:topic, build(:topic))
-      assign(:notices, build_stubbed_list(:dmca, 2))
-
-      render
-
-      expect(rendered).to have_css('.topic-notices li.notice', count: 2)
-    end
-
-    it "does not show notices when they aren't there" do
-      assign(:topic, build(:topic))
-      assign(:notices, [])
-
-      render
-
-      expect(rendered).to_not have_css('.topic-notices')
     end
   end
 end
