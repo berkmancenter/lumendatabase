@@ -729,6 +729,12 @@ where works.id in (
   # atomic file write process linked above.
   desc 'safer cache clear'
   task safer_cache_clear: :environment do
-    system("cd #{__dir__}/../../tmp/cache && find . -amin +20 -delete")
+    # Go to cache dir;
+    # clear out any files more than 20 minutes old;
+    # remove empty directories.
+    cmd = "cd #{__dir__}/../../tmp/cache && " \
+          'find . -type f -amin +20 -delete && ' \
+          'find . -type d -empty -delete'
+    system(cmd)
   end
 end
