@@ -1,6 +1,5 @@
 class GovernmentRequest < Notice
-
-  DEFAULT_ENTITY_NOTICE_ROLES = %w|recipient sender principal|
+  DEFAULT_ENTITY_NOTICE_ROLES = %w[recipient sender principal submitter].freeze
   acts_as_taggable_on :regulations
 
   define_elasticsearch_mapping
@@ -11,11 +10,12 @@ class GovernmentRequest < Notice
     'Email',
     'Records Preservation',
     'Subpoena',
-    'Warrant',
-  ]
+    'Warrant'
+  ].freeze
 
   validates_inclusion_of :request_type,
-    in: VALID_REQUEST_TYPES, allow_blank: true
+                         in: VALID_REQUEST_TYPES,
+                         allow_blank: true
 
   def self.model_name
     Notice.model_name
