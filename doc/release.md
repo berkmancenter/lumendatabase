@@ -42,13 +42,13 @@ If any deploys have special instructions, write them here, with a date and PR nu
 * `sudo -su chill-prod` (enyos) or `sudo -su chill-dev` (flutie) or `sudo -su chill-api` (percy)
 * cd into the directory where chill files live (look under `/web/<servername>`)
 * `cp .env ../` (as a precaution)
-* `git checkout <branch>`
 * `git checkout db/schema.rb`
+* `git checkout <branch>`
   * This will differ from the version-controlled one as running db:migrate will change its datestamp
   * You don't want merge conflicts
-* `git pull origin <branch>`
-  * Servers have correct default branches set so this is just `git pull` unless you need a different branch
+* `git pull`
 * `bundle install`
+  * This will throw an error if the user doesn't have write permissions on the home directory inferred by bundler (probably the one specified in /etc/passwd/), but it probably works anyway.
 * `cp ../.env .`
 * `rake db:migrate`
   - If this throws a `PG::ConnectionBad:` and asks something like "Is the server running locally and accepting connections on Unix domain socket "/var/run/postgresql/.s.PGSQL.5432"?", use `RAILS_ENV=production rake db:migrate`
