@@ -15,7 +15,7 @@
       tooltip: "If the notice you sent/received had a subject line, enter it here"
     }}
   %>
-  <%= form.hidden_field :webform, :value => true %>
+  <%= form.hidden_field :webform, value: true %>
   <% if subject %>
     <%= form.input :subject %>
   <% end %>

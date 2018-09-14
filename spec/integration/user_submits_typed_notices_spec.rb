@@ -1,37 +1,41 @@
 require 'rails_helper'
 
-feature "typed notice submissions" do
-  scenario "Non signed-in user cannot see new notice forms" do
+feature 'typed notice submissions' do
+  scenario 'Non signed-in user cannot see new notice forms' do
     visit '/notices/new'
 
     expect(page).to have_content('Direct submission to Lumen is no longer available. If you are interested in sharing with Lumen copies of takedown notices you have sent or received, please contact Lumen.')
   end
 
-  scenario "User submits and views a Trademark notice" do
-    submission = NoticeSubmissionOnPage.new(Trademark, create(:user, :submitter))
+  scenario 'User submits and views a Trademark notice' do
+    submission = NoticeSubmissionOnPage.new(
+      Trademark, create(:user, :submitter)
+    )
     submission.open_submission_form
 
-    submission.fill_in_form_with({
-      "Mark" => "My trademark (TM)",
-      "Infringing URL" => "http://example.com/infringing_url1",
-      "Describe the alleged infringement" => "They used my thing",
-      "Registration Number" => '1337'
-    })
+    submission.fill_in_form_with(
+      'Mark' => 'My trademark (TM)',
+      'Infringing URL' => 'http://example.com/infringing_url1',
+      'Describe the alleged infringement' => 'They used my thing',
+      'Registration Number' => '1337'
+    )
 
-    submission.fill_in_entity_form_with(:recipient, {
-      'Name' => 'Recipient',
-    })
-    submission.fill_in_entity_form_with(:sender, {
-      'Name' => 'Sender',
-    })
+    submission.fill_in_entity_form_with(
+      :recipient,
+      'Name' => 'Recipient'
+    )
+    submission.fill_in_entity_form_with(
+      :sender,
+      'Name' => 'Sender'
+    )
 
     submission.submit
 
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
-    expect(page).to have_content("Trademark notice to Recipient")
+    expect(page).to have_content('Trademark notice to Recipient')
 
-    within("#works") do
+    within('#works') do
       expect(page).to have_content('Description of allegedly infringed mark')
       expect(page).to have_content('My trademark (TM)')
     end
@@ -43,97 +47,99 @@ feature "typed notice submissions" do
     end
   end
 
-  scenario "User submits and views a Defamation notice" do
-    submission = NoticeSubmissionOnPage.new(Defamation, create(:user, :submitter))
+  scenario 'User submits and views a Defamation notice' do
+    submission = NoticeSubmissionOnPage.new(
+      Defamation, create(:user, :submitter)
+    )
     submission.open_submission_form
 
-    submission.fill_in_form_with({
-      "Legal Complaint" => "They impuned upon my good character",
-      "Allegedly Defamatory URL" => "http://example.com/defamatory_url1",
-    })
+    submission.fill_in_form_with(
+      'Legal Complaint' => 'They impugned upon my good character',
+      'Allegedly Defamatory URL' => 'http://example.com/defamatory_url1'
+    )
 
-    submission.fill_in_entity_form_with(:recipient, {
-      'Name' => 'Recipient',
-    })
-    submission.fill_in_entity_form_with(:sender, {
-      'Name' => 'Sender',
-    })
+    submission.fill_in_entity_form_with(
+      :recipient,
+      'Name' => 'Recipient'
+    )
+    submission.fill_in_entity_form_with(
+      :sender,
+      'Name' => 'Sender'
+    )
 
     submission.submit
 
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
-    expect(page).to have_content("Defamation notice to Recipient")
+    expect(page).to have_content('Defamation notice to Recipient')
 
-    within("#works") do
+    within('#works') do
       expect(page).to have_content('URLs of Allegedly Defamatory Material')
       expect(page).to have_content('http://example.com/defamatory_url1')
     end
 
     within('.notice-body') do
       expect(page).to have_content('Legal Complaint')
-      expect(page).to have_content('They impuned upon my good character')
+      expect(page).to have_content('They impugned upon my good character')
     end
   end
 
-  scenario "User submits and views a Data Protection notice" do
-    submission = NoticeSubmissionOnPage.new(DataProtection, create(:user, :submitter))
+  scenario 'User submits and views a Data Protection notice' do
+    submission = NoticeSubmissionOnPage.new(
+      DataProtection, create(:user, :submitter)
+    )
     submission.open_submission_form
 
-    submission.fill_in_form_with({
-      "Legal Complaint" => "I want to be forgotten",
-      "URL mentioned in request" => "http://example.com/defamatory_url1",
-    })
+    submission.fill_in_form_with(
+      'Legal Complaint' => 'I want to be forgotten',
+      'URL mentioned in request' => 'http://example.com/defamatory_url1'
+    )
 
-    submission.fill_in_entity_form_with(:recipient, {
-      'Name' => 'Recipient',
-    })
-    #submission.fill_in_entity_form_with(:sender, {
-    #  'Name' => 'Sender',
-    #})
+    submission.fill_in_entity_form_with(
+      :recipient,
+      'Name' => 'Recipient'
+    )
 
     submission.submit
 
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
-    expect(page).to have_content("Data Protection notice to Recipient")
+    expect(page).to have_content('Data Protection notice to Recipient')
 
-    within("#works") do
+    within('#works') do
       expect(page).to have_content('Location of Some of the Material Requested for Removal')
       expect(page).to have_content('http://example.com/defamatory_url1')
     end
-
-    #within('.notice-body') do
-    #  expect(page).to have_content('Legal Complaint')
-    #  expect(page).to have_content('I want to be forgotten')
-    #end
   end
 
-  scenario "User submits and views a CourtOrder notice" do
-    submission = NoticeSubmissionOnPage.new(CourtOrder, create(:user, :submitter))
+  scenario 'User submits and views a CourtOrder notice' do
+    submission = NoticeSubmissionOnPage.new(
+      CourtOrder, create(:user, :submitter)
+    )
     submission.open_submission_form
 
-    submission.fill_in_form_with({
-      "Subject of Court Order" => "My sweet website", # works.description
-      "Targeted URL" => "http://example.com/targeted_url", # infringing_urls
+    submission.fill_in_form_with(
+      'Subject of Court Order' => 'My sweet website', # works.description
+      'Targeted URL' => 'http://example.com/targeted_url', # infringing_urls
 
-      "Explanation of Court Order" => "I guess they don't like me", #notice.body
-      "Laws Referenced by Court Order" => "USC foo bar 21"
-    })
+      'Explanation of Court Order' => "I guess they don't like me", # notice.body
+      'Laws Referenced by Court Order' => 'USC foo bar 21'
+    )
 
-    %i|recipient sender principal issuing_court plaintiff defendant|.each do |role|
-      submission.fill_in_entity_form_with(role, {
+    %i[recipient sender principal issuing_court plaintiff defendant].each do |role|
+      submission.fill_in_entity_form_with(
+        role,
         'Name' => role.capitalize
-      })
+      )
     end
 
     submission.submit
 
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
-    expect(page).to have_content("Court Order notice to Recipient")
+    expect(page).to have_content('Court Order notice to Recipient')
 
-    within("#works") do
+    within('#works') do
       expect(page).to have_content('Targeted URLs')
       expect(page).to have_content('http://example.com/targeted_url')
     end
@@ -145,43 +151,48 @@ feature "typed notice submissions" do
     end
   end
 
-  scenario "User submits and views a Law Enforcement Request notice" do
-    submission = NoticeSubmissionOnPage.new(LawEnforcementRequest, create(:user, :submitter))
+  scenario 'User submits and views a Law Enforcement Request notice' do
+    submission = NoticeSubmissionOnPage.new(
+      LawEnforcementRequest, create(:user, :submitter)
+    )
     submission.open_submission_form
 
-    submission.fill_in_form_with({
-      "Subject of Enforcement Request" => "My Tiny Tim fansite", # works.description
-      "URL of original work" => "http://example.com/original_object1", # copyrighted_urls
-      "URL mentioned in request" => "http://example.com/offending_url1", # infringing_urls
+    submission.fill_in_form_with(
+      'Subject of Enforcement Request' => 'My Tiny Tim fansite', # works.description
+      'URL of original work' => 'http://example.com/original_object1', # copyrighted_urls
+      'URL mentioned in request' => 'http://example.com/offending_url1', # infringing_urls
 
-      "Explanation of Law Enforcement Request" => "I don't get it. He made sick music.", #notice.body
-      "Relevant laws or regulations" => "USC foo bar 21",
-    })
+      'Explanation of Law Enforcement Request' => "I don't get it. He made sick music.", #notice.body
+      'Relevant laws or regulations' => 'USC foo bar 21'
+    )
 
     submission.choose('Civil Subpoena', :request_type)
 
-    submission.fill_in_entity_form_with(:recipient, {
-      'Name' => 'Recipient',
-    })
-    submission.fill_in_entity_form_with(:sender, {
-      'Name' => 'Sender',
-    })
-    submission.fill_in_entity_form_with(:principal, {
-      'Name' => 'Principal Issuing Authority',
-    })
+    submission.fill_in_entity_form_with(
+      :recipient,
+      'Name' => 'Recipient'
+    )
+    submission.fill_in_entity_form_with(
+      :sender,
+      'Name' => 'Sender'
+    )
+    submission.fill_in_entity_form_with(
+      :principal,
+      'Name' => 'Principal Issuing Authority'
+    )
 
     submission.submit
 
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
-    expect(page).to have_content("Law Enforcement Request notice to Recipient")
+    expect(page).to have_content('Law Enforcement Request notice to Recipient')
 
-    within("#works") do
+    within('#works') do
       expect(page).to have_content('URLs mentioned in request')
       expect(page).to have_content('http://example.com/offending_url1')
       expect(page).to have_content('URLs of original work')
       expect(page).to have_content('http://example.com/original_object1')
-      expect(page).to have_content("My Tiny Tim fansite")
+      expect(page).to have_content('My Tiny Tim fansite')
     end
 
     within('.notice-body') do
@@ -196,31 +207,35 @@ feature "typed notice submissions" do
     end
   end
 
-  scenario "User submits and views a PrivateInformation notice" do
-    submission = NoticeSubmissionOnPage.new(PrivateInformation, create(:user, :submitter))
+  scenario 'User submits and views a PrivateInformation notice' do
+    submission = NoticeSubmissionOnPage.new(
+      PrivateInformation, create(:user, :submitter)
+    )
     submission.open_submission_form
 
-    submission.fill_in_form_with({
-      "Type of information" => "These URLs disclose my existence", # works.description
-      "URL with private information" => "http://example.com/offending_url1", # infringing_urls
+    submission.fill_in_form_with(
+      'Type of information' => 'These URLs disclose my existence', # works.description
+      'URL with private information' => 'http://example.com/offending_url1', # infringing_urls
 
-      "Explanation of Complaint" => "I am in witness protection", #notice.body
-    })
+      'Explanation of Complaint' => 'I am in witness protection' # notice.body
+    )
 
-    submission.fill_in_entity_form_with(:recipient, {
-      'Name' => 'Recipient',
-    })
-    submission.fill_in_entity_form_with(:sender, {
-      'Name' => 'Sender',
-    })
+    submission.fill_in_entity_form_with(
+      :recipient,
+      'Name' => 'Recipient'
+    )
+    submission.fill_in_entity_form_with(
+      :sender,
+      'Name' => 'Sender'
+    )
 
     submission.submit
 
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
-    expect(page).to have_content("Private Information notice to Recipient")
+    expect(page).to have_content('Private Information notice to Recipient')
 
-    within("#works") do
+    within('#works') do
       expect(page).to have_content('URLs with private information')
       expect(page).to have_content('http://example.com/offending_url1')
       expect(page).to have_content('URLs of original work')
@@ -233,32 +248,34 @@ feature "typed notice submissions" do
     end
   end
 
-  scenario "User submits and views an Other notice" do
+  scenario 'User submits and views an Other notice' do
     submission = NoticeSubmissionOnPage.new(Other, create(:user, :submitter))
     submission.open_submission_form
 
-    submission.fill_in_form_with({
-      "Complaint" => "These URLs are a serious problem", # works.description
-      "Original Work URL" => "http://example.com/original_object1", # copyrighted_urls
-      "Problematic URL" => "http://example.com/offending_url1", # infringing_urls
+    submission.fill_in_form_with(
+      'Complaint' => 'These URLs are a serious problem', # works.description
+      'Original Work URL' => 'http://example.com/original_object1', # copyrighted_urls
+      'Problematic URL' => 'http://example.com/offending_url1', # infringing_urls
 
-      "Explanation of Complaint" => "I am complaining", # notice.body
-    })
+      'Explanation of Complaint' => 'I am complaining' # notice.body
+    )
 
-    submission.fill_in_entity_form_with(:recipient, {
-      'Name' => 'Recipient',
-    })
-    submission.fill_in_entity_form_with(:sender, {
-      'Name' => 'Sender',
-    })
+    submission.fill_in_entity_form_with(
+      :recipient,
+      'Name' => 'Recipient'
+    )
+    submission.fill_in_entity_form_with(
+      :sender,
+      'Name' => 'Sender'
+    )
 
     submission.submit
 
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
-    expect(page).to have_content("Other notice to Recipient")
+    expect(page).to have_content('Other notice to Recipient')
 
-    within("#works") do
+    within('#works') do
       expect(page).to have_content('Problematic URLs')
       expect(page).to have_content('http://example.com/offending_url1')
       expect(page).to have_content('URLs of original work')
@@ -272,17 +289,19 @@ feature "typed notice submissions" do
     end
   end
 
-  scenario "Entities can have different default types depending on role" do
-    submission = NoticeSubmissionOnPage.new(CourtOrder, create(:user, :submitter))
+  scenario 'Entities can have different default types depending on role' do
+    submission = NoticeSubmissionOnPage.new(
+      CourtOrder, create(:user, :submitter)
+    )
     submission.open_submission_form
 
     submission.within_entity_with_role('issuing_court') do
-      expect(page).to have_select('Issuing Court Type', selected: 'organization')
+      expect(page).to have_select('Issuing Court Type',
+                                  selected: 'organization')
     end
 
     submission.within_entity_with_role('sender') do
       expect(page).to have_select('Sender Type', selected: 'individual')
     end
   end
-
 end
