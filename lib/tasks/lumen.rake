@@ -652,8 +652,8 @@ where works.id in (
     # clear out any files more than 20 minutes old;
     # remove empty directories.
     cmd = "cd #{__dir__}/../../tmp/cache && " \
-          'find . -type f -amin +20 -delete && ' \
-          'find . -type d -empty -delete'
+          'find . -type f -amin +20 -delete 2> /dev/null && ' \
+          'find . -type d -empty -delete 2> /dev/null'
     system(cmd)
   end
 end
