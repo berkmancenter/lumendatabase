@@ -123,7 +123,6 @@ describe SubmitNotice, type: :model do
 
       expect(ret).to be_falsey
     end
-
   end
 
   context "#submit for a user" do
