@@ -16,30 +16,13 @@ class NoticesController < ApplicationController
   end
 
   def create
-    submission = SubmitNotice.new(
-      get_notice_type(params[:notice]),
-      notice_params
-    )
-
     respond_to do |format|
       format.json do
-        (head :unauthorized and return) if cannot?(:submit, Notice)
-
-        if submission.submit(current_user)
-          head :created, location: submission.notice
-        else
-          render json: submission.errors, status: :unprocessable_entity
-        end
+        return unless authorized_to_create?
+        create_respond_json
       end
 
-      format.html do
-        if submission.submit(current_user)
-          redirect_to :root, notice: 'Notice created!'
-        else
-          @notice = submission.notice
-          render :new
-        end
-      end
+      format.html { create_respond_html }
     end
   end
 
@@ -200,6 +183,52 @@ class NoticesController < ApplicationController
     notice.works.build do |w|
       w.copyrighted_urls.build
       w.infringing_urls.build
+    end
+  end
+
+  def authorized_to_create?
+    if cannot?(:submit, Notice)
+      head :unauthorized
+      false
+    else
+      true
+    end
+  end
+
+  def preliminary_submission
+    SubmitNotice.new(
+      get_notice_type(params[:notice]),
+      notice_params
+    )
+  end
+
+  def create_respond_json
+    submission = preliminary_submission
+    if submission.submit(current_user)
+      head :created, location: submission.notice
+    else
+      render json: submission.errors, status: :unprocessable_entity
+    end
+  end
+
+  def create_respond_html
+    submission = preliminary_submission
+
+    if submission.submit(current_user)
+      redirect_to :root, notice: 'Notice created!'
+    else
+      @notice = submission.notice
+      render :new
+    end
+  end
+
+  def json_errors(notice)
+    if notice.present?
+      notice.errors
+    else
+      msg = 'You are not authorized to do that, or you are missing required ' \
+            'parameters'.freeze
+      { errors: msg }
     end
   end
 end
