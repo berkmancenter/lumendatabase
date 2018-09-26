@@ -80,6 +80,13 @@ class NoticesController < ApplicationController
 
   private
 
+  # These parameters will be added to the Notice instance during the delayed
+  # job outside of the request/response loop. Skylight reveals that adding
+  # infringing_urls is slow, particularly if the number is large, and involves
+  # repeated SQL queries. Tracking down those queries is much harder than
+  # delegating the job to a place where it won't annoy users.
+  DELAYED_PARAMS = %i[works_attributes].freeze
+
   def json_root_for(klass)
     klass.to_s.tableize.singularize
   end
@@ -198,13 +205,29 @@ class NoticesController < ApplicationController
   def preliminary_submission
     SubmitNotice.new(
       get_notice_type(params[:notice]),
-      notice_params
+      initial_params
     )
+  end
+
+  # initial_params are used to create the notice instance. final_params are
+  # used to update it in the delayed job.
+  def initial_params
+    notice_params.except(*DELAYED_PARAMS)
+  end
+
+  def final_params
+    notice_params.slice(*DELAYED_PARAMS)
+  end
+
+  def finalize(notice)
+    NoticeSubmissionFinalizer.new(notice, final_params).finalize
   end
 
   def create_respond_json
     submission = preliminary_submission
+
     if submission.submit(current_user)
+      finalize(submission.notice)
       head :created, location: submission.notice
     else
       render json: submission.errors, status: :unprocessable_entity
@@ -215,6 +238,7 @@ class NoticesController < ApplicationController
     submission = preliminary_submission
 
     if submission.submit(current_user)
+      finalize(submission.notice)
       redirect_to :root, notice: 'Notice created!'
     else
       @notice = submission.notice

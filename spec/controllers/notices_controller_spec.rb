@@ -163,6 +163,50 @@ describe NoticesController do
           post :create, notice: @notice_params.merge(type: invalid_type)
         end
       end
+
+      it 'has the expected delayed parameters' do
+        expect(NoticesController::DELAYED_PARAMS).to eq %i[works_attributes]
+      end
+
+      it 'initializes SubmitNotice without delayed parameters' do
+        stub_submit_notice
+
+        params = @notice_params
+        params[:works_attributes] = [{
+          description: 'The model of a modern major-general',
+          kind: 'polymath',
+          infringing_urls_attributes: ['https://url.one', 'https://url.two'],
+          copyrighted_urls_attributes: ['https://url.three']
+        }]
+
+        expect(SubmitNotice).to receive(:new)
+          .with(anything, params.except(:works_attributes))
+
+        post :create, notice: params
+      end
+
+      it 'initializes NoticeSubmissionFinalizer with delayed parameters' do
+        submit_notice = stub_submit_notice
+        finalizer = stub_finalize_notice
+
+        notice = build_stubbed(:dmca)
+
+        allow(submit_notice).to receive(:notice).and_return(notice)
+        allow(finalizer).to receive(:finalize).and_return(notice)
+
+        params = @notice_params
+        params[:works_attributes] = [{
+          description: 'The model of a modern major-general',
+          kind: 'polymath',
+          infringing_urls_attributes: ['https://url.one', 'https://url.two'],
+          copyrighted_urls_attributes: ['https://url.three']
+        }]
+
+        expect(NoticeSubmissionFinalizer).to receive(:new)
+          .with(anything, hash_including(:works_attributes))
+
+        post :create, notice: params
+      end
     end
 
     context 'as HTML' do
@@ -205,7 +249,9 @@ describe NoticesController do
       it 'returns a proper Location header when saved successfully' do
         notice = build_stubbed(:dmca)
         submit_notice = stub_submit_notice
+        finalizer = stub_finalize_notice
         allow(submit_notice).to receive(:notice).and_return(notice)
+        allow(finalizer).to receive(:finalize).and_return(notice)
 
         post_create :json
 
@@ -242,6 +288,14 @@ describe NoticesController do
       SubmitNotice.new(DMCA, {}).tap do |submit_notice|
         allow(submit_notice).to receive(:submit).and_return(true)
         allow(SubmitNotice).to receive(:new).and_return(submit_notice)
+      end
+    end
+
+    def stub_finalize_notice
+      NoticeSubmissionFinalizer.new(DMCA, {}).tap do |finalizer|
+        allow(NoticeSubmissionFinalizer)
+          .to receive(:new)
+          .and_return(finalizer)
       end
     end
 

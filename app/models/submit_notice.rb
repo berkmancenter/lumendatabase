@@ -1,6 +1,11 @@
 class SubmitNotice
   delegate :errors, to: :notice
 
+  # Notice validates the presence of works, but we delay adding works because
+  # it is too time-consuming for the request/response cycle. Therefore we
+  # need to add a placeholder so the Notice instance can save.
+  PLACEHOLDER_WORKS = [Work.unknown].freeze
+
   def initialize(model_class, parameters)
     @model_class = model_class
     @parameters = parameters
@@ -9,6 +14,7 @@ class SubmitNotice
   def submit(user = nil)
     set_all_entities(user)
     notice.title = generic_title unless notice.title.present?
+    notice.works = PLACEHOLDER_WORKS
     notice.auto_redact
 
     return unless notice.save
