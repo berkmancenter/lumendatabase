@@ -1,3 +1,7 @@
+# This performs final updates to a Notice instance that has been created, but
+# not yet supplied with all its attributes. The goal here is to be able to
+# move slow parts of the notice creation process outside the request/response
+# cycle.
 class NoticeSubmissionFinalizer
   delegate :errors, to: :notice
 

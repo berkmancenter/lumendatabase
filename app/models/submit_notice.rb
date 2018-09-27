@@ -1,3 +1,7 @@
+# This performs initial steps of the Notice submission process: creating a
+# new Notice with enough of the provided attributes that it can be persisted.
+# Where persisting attributes is slow, those can be deferred to the
+# NoticeSubmissionFinalizer.
 class SubmitNotice
   delegate :errors, to: :notice
 

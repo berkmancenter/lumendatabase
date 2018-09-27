@@ -1,7 +1,7 @@
 require 'support/sign_in'
 
 module NoticeActions
-  def submit_recent_notice(title = "A title")
+  def submit_recent_notice(title = 'A title')
     sign_in(create(:user, :submitter))
 
     visit '/notices/new?type=DMCA'

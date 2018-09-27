@@ -137,12 +137,12 @@ class NoticesController < ApplicationController
 
   def resolve_layout
     case action_name
-    when "show"
-      "search"
-    when "url_input"
+    when 'show'
+      'search'
+    when 'url_input'
       false
     else
-      "application"
+      'application'
     end
   end
 
