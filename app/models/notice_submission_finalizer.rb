@@ -12,7 +12,7 @@ class NoticeSubmissionFinalizer
 
   def finalize
     parameters[:submission_id] = notice.id
-    notice.works.delete(SubmitNotice::PLACEHOLDER_WORKS)
+    notice.works.delete(NoticeSubmissionInitializer::PLACEHOLDER_WORKS)
     notice.update_attributes(parameters)
   end
 

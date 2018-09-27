@@ -203,7 +203,7 @@ class NoticesController < ApplicationController
   end
 
   def preliminary_submission
-    SubmitNotice.new(
+    NoticeSubmissionInitializer.new(
       get_notice_type(params[:notice]),
       initial_params
     )

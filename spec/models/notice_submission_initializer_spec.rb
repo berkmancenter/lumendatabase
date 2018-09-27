@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-describe SubmitNotice, type: :model do
+describe NoticeSubmissionInitializer, type: :model do
   context '#notice' do
     it 'returns a memoized instance' do
       notice = DMCA.new
       expect(DMCA).to receive(:new).once.
         with(attribute: 'value').and_return(notice)
 
-      submit_notice = SubmitNotice.new(DMCA, attribute: 'value')
+      submit_notice = NoticeSubmissionInitializer.new(DMCA, attribute: 'value')
 
       expect(submit_notice.notice).to eq notice
       expect(submit_notice.notice).to eq notice
@@ -18,7 +18,7 @@ describe SubmitNotice, type: :model do
     it 'delegates to #notice' do
       notice = stub_new(DMCA)
       allow(notice).to receive(:errors).and_return(:arbitrary)
-      submit_notice = SubmitNotice.new(DMCA, {})
+      submit_notice = NoticeSubmissionInitializer.new(DMCA, {})
 
       expect(submit_notice.errors).to eq :arbitrary
     end
@@ -27,7 +27,7 @@ describe SubmitNotice, type: :model do
   context '#submit' do
     context 'setting a default title' do
       it 'preserves a provided title' do
-        submit_notice = SubmitNotice.new(DMCA, title: 'Arbitrary title')
+        submit_notice = NoticeSubmissionInitializer.new(DMCA, title: 'Arbitrary title')
 
         submit_notice.submit
 
@@ -37,7 +37,7 @@ describe SubmitNotice, type: :model do
 
       it 'defaults based on type' do
         [DMCA, Trademark, Other].each do |notice_type|
-          submit_notice = SubmitNotice.new(notice_type, {})
+          submit_notice = NoticeSubmissionInitializer.new(notice_type, {})
 
           submit_notice.submit
 
@@ -86,7 +86,7 @@ describe SubmitNotice, type: :model do
     private
 
       def submit_with_roles_attributes(klass, attributes)
-        SubmitNotice.new(klass, entity_notice_roles_attributes: attributes)
+        NoticeSubmissionInitializer.new(klass, entity_notice_roles_attributes: attributes)
       end
     end
 
@@ -94,7 +94,7 @@ describe SubmitNotice, type: :model do
       notice = stub_new(DMCA)
       expect(notice).to receive(:auto_redact)
 
-      SubmitNotice.new(DMCA, {}).submit
+      NoticeSubmissionInitializer.new(DMCA, {}).submit
     end
 
     it 'returns true and marks for review success' do
@@ -102,7 +102,7 @@ describe SubmitNotice, type: :model do
       allow(notice).to receive(:save).and_return(true)
       expect(notice).to receive(:mark_for_review)
 
-      ret = SubmitNotice.new(DMCA, {}).submit
+      ret = NoticeSubmissionInitializer.new(DMCA, {}).submit
 
       expect(ret).to be_truthy
     end
@@ -111,7 +111,7 @@ describe SubmitNotice, type: :model do
       notice = stub_new(DMCA)
       allow(notice).to receive(:save).and_return(false)
 
-      ret = SubmitNotice.new(DMCA, {}).submit
+      ret = NoticeSubmissionInitializer.new(DMCA, {}).submit
 
       expect(ret).to be_falsey
     end
@@ -121,7 +121,7 @@ describe SubmitNotice, type: :model do
     it 'does nothing if the user has no entity' do
       expect(DMCA).to receive(:new).with(title: 'A title').and_return(null_object)
 
-      SubmitNotice.new(DMCA, title: 'A title').submit(User.new)
+      NoticeSubmissionInitializer.new(DMCA, title: 'A title').submit(User.new)
     end
 
     it 'adds entity attributes when user has an entity' do
@@ -134,7 +134,7 @@ describe SubmitNotice, type: :model do
         ]
       ).and_return(null_object)
 
-      SubmitNotice.new(DMCA, title: 'A title').submit(user)
+      NoticeSubmissionInitializer.new(DMCA, title: 'A title').submit(user)
     end
 
     it 'does not affect other roles' do
@@ -147,7 +147,7 @@ describe SubmitNotice, type: :model do
         ]
       ).and_return(null_object)
 
-      SubmitNotice.new(
+      NoticeSubmissionInitializer.new(
         DMCA,
         entity_notice_roles_attributes: [
           { name: 'sender', entity_attributes: { name: 'Sender' } }
@@ -164,7 +164,7 @@ describe SubmitNotice, type: :model do
         ]
       ).and_return(null_object)
 
-      SubmitNotice.new(
+      NoticeSubmissionInitializer.new(
         DMCA,
         entity_notice_roles_attributes: [
           { name: 'recipient', entity_attributes: { name: 'Recipient' } }

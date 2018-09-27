@@ -131,12 +131,12 @@ describe NoticesController do
   context '#create' do
     context 'format-independent logic' do
       before do
-        @submit_notice = double('SubmitNotice').as_null_object
+        @submit_notice = double('NoticeSubmissionInitializer').as_null_object
         @notice_params = HashWithIndifferentAccess.new(title: 'A title')
       end
 
       it 'initializes a DMCA by default from params' do
-        expect(SubmitNotice).to receive(:new)
+        expect(NoticeSubmissionInitializer).to receive(:new)
           .with(DMCA, @notice_params)
           .and_return(@submit_notice)
 
@@ -144,7 +144,7 @@ describe NoticesController do
       end
 
       it 'uses the type param to instantiate the correct class' do
-        expect(SubmitNotice).to receive(:new)
+        expect(NoticeSubmissionInitializer).to receive(:new)
           .with(Trademark, @notice_params)
           .and_return(@submit_notice)
 
@@ -154,7 +154,7 @@ describe NoticesController do
       it 'defaults to DMCA if the type is missing or invalid' do
         invalid_types = ['', 'FlimFlam', 'Object', 'User', 'Hash']
 
-        expect(SubmitNotice).to receive(:new)
+        expect(NoticeSubmissionInitializer).to receive(:new)
           .exactly(5).times
           .with(DMCA, @notice_params)
           .and_return(@submit_notice)
@@ -168,7 +168,7 @@ describe NoticesController do
         expect(NoticesController::DELAYED_PARAMS).to eq %i[works_attributes]
       end
 
-      it 'initializes SubmitNotice without delayed parameters' do
+      it 'initializes NoticeSubmissionInitializer without delayed parameters' do
         stub_submit_notice
 
         params = @notice_params
@@ -179,7 +179,7 @@ describe NoticesController do
           copyrighted_urls_attributes: ['https://url.three']
         }]
 
-        expect(SubmitNotice).to receive(:new)
+        expect(NoticeSubmissionInitializer).to receive(:new)
           .with(anything, params.except(:works_attributes))
 
         post :create, notice: params
@@ -285,9 +285,9 @@ describe NoticesController do
     private
 
     def stub_submit_notice
-      SubmitNotice.new(DMCA, {}).tap do |submit_notice|
+      NoticeSubmissionInitializer.new(DMCA, {}).tap do |submit_notice|
         allow(submit_notice).to receive(:submit).and_return(true)
-        allow(SubmitNotice).to receive(:new).and_return(submit_notice)
+        allow(NoticeSubmissionInitializer).to receive(:new).and_return(submit_notice)
       end
     end
 

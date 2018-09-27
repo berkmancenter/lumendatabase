@@ -255,7 +255,7 @@ namespace :lumen do
 
   desc 'Assign titles to untitled notices'
   task title_untitled_notices: :environment do
-    # Similar to SubmitNotice model
+    # Similar to NoticeSubmissionInitializer model
     def generic_title(notice)
       if notice.recipient_name.present?
         "#{notice.class.label} notice to #{notice.recipient_name}"

@@ -2,7 +2,7 @@
 # new Notice with enough of the provided attributes that it can be persisted.
 # Where persisting attributes is slow, those can be deferred to the
 # NoticeSubmissionFinalizer.
-class SubmitNotice
+class NoticeSubmissionInitializer
   delegate :errors, to: :notice
 
   # Notice validates the presence of works, but we delay adding works because
