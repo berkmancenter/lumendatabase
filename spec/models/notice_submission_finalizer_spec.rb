@@ -19,6 +19,19 @@ describe NoticeSubmissionFinalizer, type: :model do
     ).to be true
   end
 
+  it 'copies id to submission_id' do
+    notice = build(:dmca)
+    notice.save
+    notice.reload
+
+    NoticeSubmissionFinalizer.new(
+      notice, works_attributes: works_attributes
+    ).finalize
+
+    notice.reload
+    expect(notice.submission_id).to eq notice.id
+  end
+
   private
 
   def works_attributes

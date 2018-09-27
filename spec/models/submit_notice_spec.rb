@@ -98,21 +98,11 @@ describe SubmitNotice, type: :model do
     it "returns true and marks for review success" do
       notice = stub_new(DMCA)
       allow(notice).to receive(:save).and_return(true)
-      allow(notice).to receive(:copy_id_to_submission_id)
       expect(notice).to receive(:mark_for_review)
 
       ret = SubmitNotice.new(DMCA, {}).submit
 
       expect(ret).to be_truthy
-    end
-
-    it 'copies id to submission_id' do
-      notice = stub_new(DMCA)
-      allow(notice).to receive(:save).and_return(true)
-      allow(notice).to receive(:mark_for_review)
-      expect(notice).to receive(:copy_id_to_submission_id)
-
-      SubmitNotice.new(DMCA, {}).submit
     end
 
     it "returns false on failure" do

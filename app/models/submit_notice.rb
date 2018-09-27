@@ -17,10 +17,9 @@ class SubmitNotice
     notice.works = PLACEHOLDER_WORKS
     notice.auto_redact
 
-    return unless notice.save
+    return false unless notice.save
 
     notice.mark_for_review
-    notice.copy_id_to_submission_id
     true
   end
 
