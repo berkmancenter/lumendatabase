@@ -18,8 +18,8 @@
         <%= entity_form.input :address_line_1, label: "Address Line 1" %>
         <%= entity_form.input :address_line_2, label: "Address Line 2" %>
         <%= entity_form.input :city, label: "City" %>
-        <%= entity_form.input :state, label: "State", maxlength: "2" %>
-        <%= entity_form.input :zip, label: "Zip Code" %>
+        <%= entity_form.input :state, label: "State", label_html: { class: 'half-width' }, maxlength: "2" %>
+        <%= entity_form.input :zip, label: "Zip Code", label_html: { class: 'half-width' } %>
         <%= entity_form.input :country_code, collection: iso_countries, label: "Country" %>
         <%= entity_form.input :phone, label: "Phone" %>
         <%= entity_form.input :email, label: "Email" %>
