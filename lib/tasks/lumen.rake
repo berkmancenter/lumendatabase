@@ -731,10 +731,14 @@ where works.id in (
   task safer_cache_clear: :environment do
     # Go to cache dir;
     # clear out any files more than 20 minutes old;
-    # remove empty directories.
+    # remove empty directories;
+    # dump stderr to logfiles so it stops emailing us.
+    # (Everything in log/ should get autorotated on prod based on its logrotate
+    # configuration.)
     cmd = "cd #{__dir__}/../../tmp/cache && " \
-          'find . -type f -amin +20 -delete && ' \
-          'find . -type d -empty -delete'
+          "touch #{__dir__}/../../log/safer_cache_clear.log &&" \
+          "find . -type f -amin +20 -delete 2>> #{__dir__}/../../log/safer_cache_clear.log && " \
+          "find . -type d -empty -delete 2>> #{__dir__}/../../log/safer_cache_clear.log"
     system(cmd)
   end
 end
