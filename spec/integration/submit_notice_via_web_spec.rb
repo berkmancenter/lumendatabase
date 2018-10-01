@@ -262,6 +262,192 @@ feature 'notice submission' do
     expect(page).to have_text('Submitter of the Notice')
   end
 
+  context 'template rendering' do
+    scenario 'counternotice form' do
+      sign_in(create(:user, :submitter))
+      visit '/notices/new?type=Counternotice'
+
+      expect(page).to have_content 'Provide us with information about the DMCA counternotice'
+      expect(page).to have_css '#notice_counternotice_for_id'
+      expect(page).not_to have_css '#notice_action_taken'
+      expect(page).not_to have_css 'textarea#notice_body'
+      expect(page).to have_css 'select#notice_body'
+
+      check_all_sections_rendered(page)
+    end
+
+    scenario 'court order form' do
+      sign_in(create(:user, :submitter))
+      visit '/notices/new?type=CourtOrder'
+
+      expect(page).to have_content 'Provide us with information about the Court Order'
+      expect(page).to have_css '#notice_action_taken'
+      expect(page).to have_css '#notice_subject'
+      expect(page).to have_css '#notice_topic_ids'
+      expect(page).to have_css '#notice_tag_list'
+      expect(page).not_to have_css 'select#notice_body'
+      expect(page).to have_css('textarea#notice_body')
+      expect(page).to have_css('.notice_body label',
+                               text: 'Explanation of Court Order')
+      expect(page).not_to have_css '#notice_request_type'
+      expect(page).not_to have_css '#notice_mark_registration_number'
+
+      check_all_sections_rendered(page)
+    end
+
+    scenario 'data protection form' do
+      sign_in(create(:user, :submitter))
+      visit '/notices/new?type=DataProtection'
+
+      expect(page).to have_content 'Provide us with information about the Data Protection takedown notice'
+      expect(page).to have_css '#notice_action_taken'
+      expect(page).not_to have_css '#notice_subject'
+      expect(page).not_to have_css '#notice_topic_ids'
+      expect(page).not_to have_css '#notice_tag_list'
+      expect(page).not_to have_css 'select#notice_body'
+      expect(page).to have_css('textarea#notice_body')
+      expect(page).to have_css('.notice_body label',
+                               text: 'Legal Complaint')
+      expect(page).not_to have_css '#notice_request_type'
+      expect(page).not_to have_css '#notice_mark_registration_number'
+
+      check_all_sections_rendered(page)
+    end
+
+    scenario 'defamation form' do
+      sign_in(create(:user, :submitter))
+      visit '/notices/new?type=Defamation'
+
+      expect(page).to have_content 'Provide us with information about the Defamation takedown notice'
+      expect(page).to have_css '#notice_action_taken'
+      expect(page).to have_css '#notice_subject'
+      expect(page).to have_css '#notice_topic_ids'
+      expect(page).to have_css '#notice_tag_list'
+      expect(page).not_to have_css 'select#notice_body'
+      expect(page).to have_css('textarea#notice_body')
+      expect(page).to have_css('.notice_body label',
+                               text: 'Legal Complaint')
+      expect(page).not_to have_css '#notice_request_type'
+      expect(page).not_to have_css '#notice_mark_registration_number'
+
+      check_all_sections_rendered(page)
+    end
+
+    scenario 'DMCA form' do
+      sign_in(create(:user, :submitter))
+      visit '/notices/new?type=DMCA'
+
+      expect(page).to have_content 'Provide us with information about the DMCA takedown notice'
+      expect(page).to have_css '#notice_action_taken'
+      expect(page).to have_css '#notice_subject'
+      expect(page).to have_css '#notice_topic_ids'
+      expect(page).to have_css '#notice_tag_list'
+      expect(page).not_to have_css 'select#notice_body'
+      expect(page).to have_css('textarea#notice_body')
+      expect(page).to have_css('.notice_body label',
+                               text: 'Body')
+      expect(page).not_to have_css '#notice_request_type'
+      expect(page).not_to have_css '#notice_mark_registration_number'
+
+      check_all_sections_rendered(page)
+    end
+
+    scenario 'government request form' do
+      sign_in(create(:user, :submitter))
+      visit '/notices/new?type=GovernmentRequest'
+
+      expect(page).to have_content 'Provide us with information about the Government Request'
+      expect(page).to have_css '#notice_action_taken'
+      expect(page).to have_css '#notice_subject'
+      expect(page).to have_css '#notice_topic_ids'
+      expect(page).to have_css '#notice_tag_list'
+      expect(page).not_to have_css 'select#notice_body'
+      expect(page).to have_css('textarea#notice_body')
+      expect(page).to have_css('.notice_body label',
+                               text: 'Explanation of Government Request')
+      expect(page).to have_css '#notice_request_type'
+      expect(page).not_to have_css '#notice_mark_registration_number'
+
+      check_all_sections_rendered(page)
+    end
+
+    scenario 'law enforcement request form' do
+      sign_in(create(:user, :submitter))
+      visit '/notices/new?type=LawEnforcementRequest'
+
+      expect(page).to have_content 'Provide us with information about the Law Enforcement Request'
+      expect(page).to have_css '#notice_action_taken'
+      expect(page).to have_css '#notice_subject'
+      expect(page).to have_css '#notice_topic_ids'
+      expect(page).to have_css '#notice_tag_list'
+      expect(page).not_to have_css 'select#notice_body'
+      expect(page).to have_css('textarea#notice_body')
+      expect(page).to have_css('.notice_body label',
+                               text: 'Explanation of Law Enforcement Request')
+      expect(page).to have_css '#notice_request_type'
+      expect(page).not_to have_css '#notice_mark_registration_number'
+
+      check_all_sections_rendered(page)
+    end
+
+    scenario 'other notice type form' do
+      sign_in(create(:user, :submitter))
+      visit '/notices/new?type=Other'
+
+      expect(page).to have_content 'Provide us with information about the notice'
+      expect(page).to have_css '#notice_action_taken'
+      expect(page).to have_css '#notice_subject'
+      expect(page).to have_css '#notice_topic_ids'
+      expect(page).to have_css '#notice_tag_list'
+      expect(page).not_to have_css 'select#notice_body'
+      expect(page).to have_css('textarea#notice_body')
+      expect(page).to have_css('.notice_body label',
+                               text: 'Explanation of Complaint')
+      expect(page).not_to have_css '#notice_request_type'
+      expect(page).not_to have_css '#notice_mark_registration_number'
+
+      check_all_sections_rendered(page)
+    end
+
+    scenario 'private information form' do
+      sign_in(create(:user, :submitter))
+      visit '/notices/new?type=PrivateInformation'
+
+      expect(page).to have_content 'Provide us with information about the Private Information notice'
+      expect(page).to have_css '#notice_action_taken'
+      expect(page).to have_css '#notice_subject'
+      expect(page).to have_css '#notice_topic_ids'
+      expect(page).to have_css '#notice_tag_list'
+      expect(page).not_to have_css 'select#notice_body'
+      expect(page).to have_css('textarea#notice_body')
+      expect(page).to have_css('.notice_body label',
+                               text: 'Explanation of Complaint')
+      expect(page).not_to have_css '#notice_request_type'
+      expect(page).not_to have_css '#notice_mark_registration_number'
+
+      check_all_sections_rendered(page)
+    end
+
+    scenario 'trademark form' do
+      sign_in(create(:user, :submitter))
+      visit '/notices/new?type=Trademark'
+
+      expect(page).to have_content 'Provide us with information about the Trademark takedown notice'
+      expect(page).to have_css '#notice_action_taken'
+      expect(page).to have_css '#notice_subject'
+      expect(page).to have_css '#notice_topic_ids'
+      expect(page).to have_css '#notice_tag_list'
+      expect(page).not_to have_css 'select#notice_body'
+      expect(page).to have_css('textarea#notice_body')
+      expect(page).to have_css('.notice_body label',
+                               text: 'Describe the alleged infringement of trademark')
+      expect(page).not_to have_css '#notice_request_type'
+      expect(page).to have_css '#notice_mark_registration_number'
+
+      check_all_sections_rendered(page)
+    end
+  end
+
   private
 
   def works_copyrighted_url_id
@@ -270,5 +456,13 @@ feature 'notice submission' do
 
   def entity_name_class
     'notice_entity_notice_roles_entity_name'
+  end
+
+  def check_all_sections_rendered(page)
+    expect(page).to have_css '.body-wrapper.left.main'
+    expect(page).to have_css '.body-wrapper.right.attach'
+    expect(page).to have_css 'header'
+    expect(page).to have_css '.role'
+    expect(page).to have_css '.submit'
   end
 end
