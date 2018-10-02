@@ -63,30 +63,41 @@ feature 'notice submission' do
     end
   end
 
-  scenario 'submitting a notice with an original attached' do
+  scenario 'attached documents default to type supporting' do
     submit_recent_notice { attach_notice }
 
     notice = Notice.last
-    expect(notice).to have(1).original_document
+    expect(notice).to have(0).original_documents
+    expect(notice).to have(1).supporting_document
   end
 
   scenario 'submitting a notice with a supporting document', js: true do
     submit_recent_notice do
-      add_supporting_document('Some supporting content')
+      add_document('supporting')
     end
 
-    open_recent_notice
+    notice = Notice.last
 
-    within('ol.attachments') do
-      expect(page).to have_link('Supporting Document')
+    expect(notice).to have(0).original_documents
+    expect(notice).to have(1).supporting_document
+  end
+
+  scenario 'submitting a notice with an original document', js: true do
+    submit_recent_notice do
+      add_document('original')
     end
+
+    notice = Notice.last
+
+    expect(notice).to have(1).original_documents
+    expect(notice).to have(0).supporting_documents
   end
 
   scenario 'submitting a notice with multiple supporting documents', js: true do
     submit_recent_notice do
-      add_supporting_document
-      add_supporting_document
-      add_supporting_document
+      add_document('supporting')
+      add_document('supporting')
+      add_document('supporting')
     end
 
     open_recent_notice

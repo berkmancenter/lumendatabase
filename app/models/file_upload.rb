@@ -5,7 +5,9 @@ class FileUpload < ActiveRecord::Base
 
   attr_accessor :file_name
 
-  validates_inclusion_of :kind, in: %w[original supporting]
+  ALLOWED_KINDS = %w[original supporting].freeze
+
+  validates_inclusion_of :kind, in: ALLOWED_KINDS
   validates :kind, length: { maximum: 255 }
 
   belongs_to :notice
