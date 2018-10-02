@@ -21,8 +21,13 @@
     <%= form.input :mark_registration_number, label: "Registration Number" %>
   <% end %>
   <%= form.simple_fields_for(:file_uploads) do |file_uploads_form| %>
-    <%= file_uploads_form.input :file, label: 'Attach Notice' %>
+    <div id="file_uploads_inputs">
+      <%= file_uploads_form.input :file, label: 'Attach Notice' %>
+      <%= file_uploads_form.input :kind,
+          label: 'Document type',
+          prompt: nil,
+          collection: FileUpload::ALLOWED_KINDS %>
+    </div>
     <a href="javascript:void(0);" id="add-another">Attach another</a>
-    <%= file_uploads_form.input :kind, as: :hidden %>
   <% end %>
 </div>

@@ -11,7 +11,7 @@ class NoticesController < ApplicationController
     model_class = get_notice_type(params)
     @notice = model_class.new
     build_entity_notice_roles(model_class)
-    @notice.file_uploads.build(kind: 'original')
+    @notice.file_uploads.build(kind: 'supporting')
     build_works(@notice)
   end
 
@@ -92,7 +92,7 @@ class NoticesController < ApplicationController
   end
 
   def notice_params
-    params.require(:notice).permit(
+    params.require(:notice).except(:type).permit(
       :title,
       :subject,
       :body,
