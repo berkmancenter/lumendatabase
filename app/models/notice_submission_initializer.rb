@@ -1,5 +1,14 @@
-class SubmitNotice
+# This performs initial steps of the Notice submission process: creating a
+# new Notice with enough of the provided attributes that it can be persisted.
+# Where persisting attributes is slow, those can be deferred to the
+# NoticeSubmissionFinalizer.
+class NoticeSubmissionInitializer
   delegate :errors, to: :notice
+
+  # Notice validates the presence of works, but we delay adding works because
+  # it is too time-consuming for the request/response cycle. Therefore we
+  # need to add a placeholder so the Notice instance can save.
+  PLACEHOLDER_WORKS = [Work.unknown].freeze
 
   def initialize(model_class, parameters)
     @model_class = model_class
@@ -9,12 +18,12 @@ class SubmitNotice
   def submit(user = nil)
     set_all_entities(user)
     notice.title = generic_title unless notice.title.present?
+    notice.works = PLACEHOLDER_WORKS
     notice.auto_redact
 
-    return unless notice.save
+    return false unless notice.save
 
     notice.mark_for_review
-    notice.copy_id_to_submission_id
     true
   end
 

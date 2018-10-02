@@ -244,10 +244,6 @@ class Notice < ActiveRecord::Base
     update_column(:review_required, RiskAssessment.new(self).high_risk?)
   end
 
-  def copy_id_to_submission_id
-    update_column(:submission_id, id)
-  end
-
   def redacted(field)
     if review_required?
       UNDER_REVIEW_VALUE

@@ -96,17 +96,6 @@ describe DMCA, type: :model do
     end
   end
 
-  context '#copy_id_to_submission_id' do
-    it 'copies id to submission_id' do
-      id_value = 100
-      notice = build(:dmca)
-      expect(notice).to receive(:id).and_return(id_value)
-      expect(notice).to receive(:update_column).with(:submission_id, id_value)
-
-      notice.copy_id_to_submission_id
-    end
-  end
-
   context '#mark_for_review' do
     it 'Sets review_required to true if risk is assessed as high' do
       notice = create(:dmca, review_required: false)
