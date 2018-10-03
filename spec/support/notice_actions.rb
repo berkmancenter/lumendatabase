@@ -36,21 +36,25 @@ module NoticeActions
     within('#recent-notices li:nth-child(1)') { find('a').click }
   end
 
-  def attach_notice(content = 'Some content')
+  def attach_notice(content: 'Some content')
     with_file(content) { |file| attach_file 'Attach Notice', file.path }
   end
 
-  def add_supporting_document(content = 'Some content')
+  def add_document(kind = 'supporting')
     @field_index ||= 0
-    @field_index  += 1
 
-    click_on 'Attach another'
+    if @field_index > 0
+      click_on 'Attach another'
+      sleep 0.2
+    end
 
     field_name = "notice_file_uploads_attributes_#{@field_index}_file"
 
-    with_file(content) do |file|
+    with_file('some content') do |file|
       attach_file field_name, file.path
     end
+    select kind, from: "notice_file_uploads_attributes_#{@field_index}_kind"
+    @field_index += 1
   end
 
   def with_file(content)

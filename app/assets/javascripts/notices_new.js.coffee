@@ -1,5 +1,6 @@
 addFileUploadInput = (field, parent, updateContainer) ->
   containers = parent.find(".notice_file_uploads_#{field}")
+  console.log(containers.length)
 
   nextId = "notice_file_uploads_attributes_#{containers.length}_#{field}"
   nextName =  "notice[file_uploads_attributes][#{containers.length}][#{field}]"
@@ -9,7 +10,7 @@ addFileUploadInput = (field, parent, updateContainer) ->
 
   updateContainer(newContainer, nextId, nextName)
 
-  newContainer.insertAfter(container)
+  newContainer.appendTo($('#file_uploads_inputs'))
 
 $('.new_notice select').each ->
   $(this).select2
@@ -27,10 +28,11 @@ $('.attach #add-another').click ->
 
   addFileUploadInput 'file', parent, (newContainer, nextId, nextName) ->
     newContainer.find('input').attr('id', nextId).attr('name', nextName)
-    newContainer.find('label').attr('for', nextId).html('Other Documents')
+    newContainer.find('label').attr('for', nextId).html('Additional document')
 
   addFileUploadInput 'kind', parent, (newContainer, nextId, nextName) ->
-    newContainer.find('input').attr('id', nextId).attr('name', nextName).attr('value', 'supporting')
+    newContainer.find('select').attr('id', nextId).attr('name', nextName).attr('value', 'supporting')
+    newContainer.find('label').attr('for', nextId).html('Document type')
 
 $(document).on 'click', '.add-another-url', ->
   anchor = $(this)
@@ -62,5 +64,3 @@ toggleReportNoticePanels = ->
       $info.find("[data-id='#{id}']").addClass('active').siblings().removeClass('active')
 
 toggleReportNoticePanels()
-
-

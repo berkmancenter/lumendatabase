@@ -84,7 +84,7 @@ RailsAdmin.config do |config|
       edit do
         configure :action_taken, :enum do
           enum do
-            ['Yes', 'No', 'Partial', 'Unspecified']
+            %w[Yes No Partial Unspecified]
           end
           default_value 'Unspecified'
         end
@@ -93,7 +93,7 @@ RailsAdmin.config do |config|
           hide
         end
         configure :reset_type, :enum do
-          label "Type"
+          label 'Type'
           required true
         end
         configure(:topic_assignments) { hide }
@@ -168,7 +168,7 @@ RailsAdmin.config do |config|
     edit do
       configure :kind, :enum do
         enum do
-          ['individual', 'organization']
+          %w[individual organization]
         end
         default_value 'organization'
       end
@@ -191,7 +191,7 @@ RailsAdmin.config do |config|
 
   config.model 'Work' do
     object_label_method { :custom_work_label }
-    
+
     edit do
       configure(:notices) { hide }
     end
@@ -204,7 +204,6 @@ RailsAdmin.config do |config|
       configure(:infringing_urls) { hide }
       configure(:copyrighted_urls) { hide }
     end
-
   end
 
   config.model 'InfringingUrl' do
@@ -215,18 +214,17 @@ RailsAdmin.config do |config|
     edit do
       configure :kind, :enum do
         enum do
-          ['original', 'supporting']
+          %w[original supporting]
         end
       end
     end
   end
 
   config.model 'ReindexRun' do
-
   end
 
   def custom_work_label
-    %Q|#{self.id}: #{self.description && self.description[0,30]}...|
+    %Q(#{self.id}: #{self.description && self.description[0,30]}...)
   end
 
   config.model 'User' do

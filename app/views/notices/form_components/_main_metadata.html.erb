@@ -1,0 +1,48 @@
+<%# Displays the right-hand column of the top of a notice form.
+    Required: form
+    Optional: action_taken, subject, topics, tag_list (default: true)
+    The optional parameters, if false, will suppress display of associated
+    sections.
+    #%>
+<% action_taken = true if local_assigns[:action_taken].nil? %>
+<% subject = true if local_assigns[:subject].nil? %>
+<% topics = true if local_assigns[:topics].nil? %>
+<% tag_list = true if local_assigns[:tag_list].nil? %>
+<div class="body-wrapper left main">
+  <%= form.input :type, as: :hidden %>
+  <%=
+    form.input :title, label_html: { data: {
+      tooltip: "If the notice you sent/received had a subject line, enter it here"
+    }}
+  %>
+  <%= form.hidden_field :webform, value: true %>
+  <% if subject %>
+    <%= form.input :subject %>
+  <% end %>
+  <%= form.input :date_sent, as: :string, placeholder: "YYYY-MM-DD" %>
+  <%= form.input :date_received, as: :string, placeholder: "YYYY-MM-DD" %>
+  <%= form.input :source, label: "Sent via", placeholder: 'Online form, Email, Postal mail, etc.' %>
+  <%if tag_list %>
+    <%= form.input :tag_list, placeholder: 'movie, youtube, video, etc.' %>
+  <% end %>
+  <%if topics %>
+    <%=
+      form.input :topic_ids,
+        label: "Topics",
+        prompt: nil,
+        collection: available_topics,
+        input_html: { multiple: true }
+      %>
+  <% end %>
+  <%= form.input :language, collection: Language.all, label_method: :label, value_method: :code %>
+  <%= form.input :jurisdiction_list, label: "Jurisdiction", placeholder: 'a list of countries - US, CA, etc.' %>
+  <% if action_taken %>
+    <%=
+      form.input :action_taken,
+        collection: Notice::VALID_ACTIONS,
+        label_html: { data: {
+          tooltip: "Did the recipient of the notice take action in response?"
+        }}
+      %>
+  <% end %>
+</div>
