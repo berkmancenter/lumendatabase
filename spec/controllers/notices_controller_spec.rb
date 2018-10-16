@@ -29,6 +29,33 @@ describe NoticesController do
         expect(response).to be_successful
         expect(response).to render_template(:rescinded)
       end
+
+      it 'renders the unavailable template if the notice is spam' do
+        stub_find_notice(build(:dmca, spam: true))
+
+        get :show, id: 1
+
+        expect(response.status).to eq(404)
+        expect(response).to render_template(file: '404_unavailable.html')
+      end
+
+      it 'renders the unavailable template if the notice is unpublished' do
+        stub_find_notice(build(:dmca, published: false))
+
+        get :show, id: 1
+
+        expect(response.status).to eq(404)
+        expect(response).to render_template(file: '404_unavailable.html')
+      end
+
+      it 'renders the hidden template if the notice is hidden' do
+        stub_find_notice(build(:dmca, hidden: true))
+
+        get :show, id: 1
+
+        expect(response.status).to eq(404)
+        expect(response).to render_template(file: '404_hidden.html')
+      end
     end
 
     context 'as JSON' do
