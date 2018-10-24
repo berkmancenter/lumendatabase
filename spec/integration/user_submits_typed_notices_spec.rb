@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'support/user_helpers'
+require 'support/sign_in'
 
 feature 'typed notice submissions' do
   scenario 'Non signed-in user cannot see new notice forms' do
@@ -30,7 +30,7 @@ feature 'typed notice submissions' do
 
     submission.submit
 
-    logout
+    sign_out
 
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
@@ -68,7 +68,9 @@ feature 'typed notice submissions' do
 
     submission.submit
 
-    logout
+    sign_out
+
+    visit '/'
 
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
@@ -79,7 +81,9 @@ feature 'typed notice submissions' do
       expect(page).to have_content('example.com - 1 URL')
     end
 
-    login
+    sign_in(create(:user))
+
+    visit '/'
 
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
@@ -116,7 +120,9 @@ feature 'typed notice submissions' do
 
     submission.submit
 
-    logout
+    sign_out
+
+    visit '/'
 
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
@@ -127,7 +133,9 @@ feature 'typed notice submissions' do
       expect(page).to have_content('example.com - 1 URL')
     end
 
-    login
+    sign_in(create(:user))
+
+    visit '/'
 
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
@@ -158,7 +166,9 @@ feature 'typed notice submissions' do
 
     submission.submit
 
-    logout
+    sign_out
+
+    visit '/'
 
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
@@ -175,7 +185,9 @@ feature 'typed notice submissions' do
       expect(page).to have_content('example.com - 1 URL')
     end
 
-    login
+    sign_in(create(:user))
+
+    visit '/'
 
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
@@ -209,7 +221,9 @@ feature 'typed notice submissions' do
 
     submission.submit
 
-    logout
+    sign_out
+
+    visit '/'
 
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
@@ -242,7 +256,9 @@ feature 'typed notice submissions' do
       expect(page).to have_content("My Tiny Tim fansite")
     end
 
-    login
+    sign_in(create(:user))
+
+    visit '/'
 
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
@@ -273,7 +289,9 @@ feature 'typed notice submissions' do
 
     submission.submit
 
-    logout
+    sign_out
+
+    visit '/'
 
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
@@ -291,7 +309,9 @@ feature 'typed notice submissions' do
       expect(page).to have_content('These URLs disclose my existence')
     end
 
-    login
+    visit '/'
+
+    sign_in(create(:user))
 
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
@@ -320,7 +340,9 @@ feature 'typed notice submissions' do
 
     submission.submit
 
-    logout
+    sign_out
+
+    visit '/'
 
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
@@ -339,7 +361,9 @@ feature 'typed notice submissions' do
       expect(page).to have_content('These URLs are a serious problem')
     end
 
-    login
+    sign_in(create(:user))
+
+    visit '/'
 
     within('#recent-notices li:nth-child(1)') { find('a').click }
 

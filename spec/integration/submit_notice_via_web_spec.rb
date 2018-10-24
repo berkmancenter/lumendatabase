@@ -1,11 +1,9 @@
 require 'rails_helper'
 require 'support/sign_in'
 require 'support/notice_actions'
-require 'support/user_helpers'
 
 feature 'notice submission' do
   include NoticeActions
-  include UserHelpers
 
   scenario 'non signed-in user cannot submit notices' do
     visit '/notices/new?type=DMCA'
@@ -203,7 +201,9 @@ feature 'notice submission' do
   end
 
   scenario "submitting a notice with works" do
-    login
+    user = create(:user, :submitter)
+
+    sign_in(user)
 
     submit_recent_notice do
       fill_in 'Work URL', with: 'http://www.example.com/original_work.pdf'
@@ -211,7 +211,9 @@ feature 'notice submission' do
       fill_in 'Infringing URL', with: 'http://example.com/infringing_url1'
     end
 
-    logout
+    sign_out
+
+    visit '/'
 
     open_recent_notice
 
@@ -221,7 +223,9 @@ feature 'notice submission' do
       expect(page).to have_content 'A series of videos and still images'
     end
 
-    login
+    sign_in(user)
+
+    visit '/'
 
     open_recent_notice
 
