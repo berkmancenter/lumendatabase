@@ -32,3 +32,4 @@ config/database.yml
 .idea/*
 .byebug_history
 .rubocop.yml
+rspec_examples.txt
