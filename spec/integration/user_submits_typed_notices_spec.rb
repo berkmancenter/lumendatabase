@@ -20,14 +20,12 @@ feature 'typed notice submissions' do
       'Registration Number' => '1337'
     )
 
-    submission.fill_in_entity_form_with(
-      :recipient,
-      'Name' => 'Recipient'
-    )
-    submission.fill_in_entity_form_with(
-      :sender,
-      'Name' => 'Sender'
-    )
+    Trademark::DEFAULT_ENTITY_NOTICE_ROLES.each do |role|
+      submission.fill_in_entity_form_with(
+        role,
+        'Name' => role.capitalize
+      )
+    end
 
     submission.submit
 
@@ -54,18 +52,16 @@ feature 'typed notice submissions' do
     submission.open_submission_form
 
     submission.fill_in_form_with(
-      'Legal Complaint' => 'They impugned upon my good character',
+      'Legal Complaint' => 'They impugned my good character',
       'Allegedly Defamatory URL' => 'http://example.com/defamatory_url1'
     )
 
-    submission.fill_in_entity_form_with(
-      :recipient,
-      'Name' => 'Recipient'
-    )
-    submission.fill_in_entity_form_with(
-      :sender,
-      'Name' => 'Sender'
-    )
+    Defamation::DEFAULT_ENTITY_NOTICE_ROLES.each do |role|
+      submission.fill_in_entity_form_with(
+        role,
+        'Name' => role.capitalize
+      )
+    end
 
     submission.submit
 
@@ -80,7 +76,7 @@ feature 'typed notice submissions' do
 
     within('.notice-body') do
       expect(page).to have_content('Legal Complaint')
-      expect(page).to have_content('They impugned upon my good character')
+      expect(page).to have_content('They impugned my good character')
     end
   end
 
@@ -95,10 +91,12 @@ feature 'typed notice submissions' do
       'URL mentioned in request' => 'http://example.com/defamatory_url1'
     )
 
-    submission.fill_in_entity_form_with(
-      :recipient,
-      'Name' => 'Recipient'
-    )
+    DataProtection::DEFAULT_ENTITY_NOTICE_ROLES.each do |role|
+      submission.fill_in_entity_form_with(
+        role,
+        'Name' => role.capitalize
+      )
+    end
 
     submission.submit
 
@@ -107,7 +105,9 @@ feature 'typed notice submissions' do
     expect(page).to have_content('Data Protection notice to Recipient')
 
     within('#works') do
-      expect(page).to have_content('Location of Some of the Material Requested for Removal')
+      expect(page).to have_content(
+        'Location of Some of the Material Requested for Removal'
+      )
       expect(page).to have_content('http://example.com/defamatory_url1')
     end
   end
@@ -121,12 +121,11 @@ feature 'typed notice submissions' do
     submission.fill_in_form_with(
       'Subject of Court Order' => 'My sweet website', # works.description
       'Targeted URL' => 'http://example.com/targeted_url', # infringing_urls
-
       'Explanation of Court Order' => "I guess they don't like me", # notice.body
       'Laws Referenced by Court Order' => 'USC foo bar 21'
     )
 
-    %i[recipient sender principal issuing_court plaintiff defendant].each do |role|
+    CourtOrder::DEFAULT_ENTITY_NOTICE_ROLES.each do |role|
       submission.fill_in_entity_form_with(
         role,
         'Name' => role.capitalize
@@ -161,25 +160,18 @@ feature 'typed notice submissions' do
       'Subject of Enforcement Request' => 'My Tiny Tim fansite', # works.description
       'URL of original work' => 'http://example.com/original_object1', # copyrighted_urls
       'URL mentioned in request' => 'http://example.com/offending_url1', # infringing_urls
-
       'Explanation of Law Enforcement Request' => "I don't get it. He made sick music.", #notice.body
       'Relevant laws or regulations' => 'USC foo bar 21'
     )
 
     submission.choose('Civil Subpoena', :request_type)
 
-    submission.fill_in_entity_form_with(
-      :recipient,
-      'Name' => 'Recipient'
-    )
-    submission.fill_in_entity_form_with(
-      :sender,
-      'Name' => 'Sender'
-    )
-    submission.fill_in_entity_form_with(
-      :principal,
-      'Name' => 'Principal Issuing Authority'
-    )
+    LawEnforcementRequest::DEFAULT_ENTITY_NOTICE_ROLES.each do |role|
+      submission.fill_in_entity_form_with(
+        role,
+        'Name' => role.capitalize
+      )
+    end
 
     submission.submit
 
@@ -203,7 +195,7 @@ feature 'typed notice submissions' do
     end
 
     within('#entities') do
-      expect(page).to have_content('Principal Issuing Authority')
+      expect(page).to have_content('Principal')
     end
   end
 
@@ -216,18 +208,15 @@ feature 'typed notice submissions' do
     submission.fill_in_form_with(
       'Type of information' => 'These URLs disclose my existence', # works.description
       'URL with private information' => 'http://example.com/offending_url1', # infringing_urls
-
-      'Explanation of Complaint' => 'I am in witness protection' # notice.body
+      'Explanation of Complaint' => 'I am in witness protection', #notice.body
     )
 
-    submission.fill_in_entity_form_with(
-      :recipient,
-      'Name' => 'Recipient'
-    )
-    submission.fill_in_entity_form_with(
-      :sender,
-      'Name' => 'Sender'
-    )
+    PrivateInformation::DEFAULT_ENTITY_NOTICE_ROLES.each do |role|
+      submission.fill_in_entity_form_with(
+        role,
+        'Name' => role.capitalize
+      )
+    end
 
     submission.submit
 
@@ -256,18 +245,15 @@ feature 'typed notice submissions' do
       'Complaint' => 'These URLs are a serious problem', # works.description
       'Original Work URL' => 'http://example.com/original_object1', # copyrighted_urls
       'Problematic URL' => 'http://example.com/offending_url1', # infringing_urls
-
-      'Explanation of Complaint' => 'I am complaining' # notice.body
+      'Explanation of Complaint' => 'I am complaining', # notice.body
     )
 
-    submission.fill_in_entity_form_with(
-      :recipient,
-      'Name' => 'Recipient'
-    )
-    submission.fill_in_entity_form_with(
-      :sender,
-      'Name' => 'Sender'
-    )
+    Other::DEFAULT_ENTITY_NOTICE_ROLES.each do |role|
+      submission.fill_in_entity_form_with(
+        role,
+        'Name' => role.capitalize
+      )
+    end
 
     submission.submit
 
