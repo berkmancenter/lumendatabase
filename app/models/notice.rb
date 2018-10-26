@@ -55,7 +55,13 @@ class Notice < ActiveRecord::Base
   UNDER_REVIEW_VALUE = 'Under review'
   RANGE_SEPARATOR = '..'
 
-  DEFAULT_ENTITY_NOTICE_ROLES = %w|recipient sender|
+  # Base entity notice roles allow us to define additional roles on subclasses
+  # without having to keep track of what they are on notice. As long as
+  # subclasses define DEFAULT_ENTITY_NOTICE_ROLES =
+  # BASE_ENTITY_NOTICE_ROLES | local_roles, the OR will preserve all elements
+  # of both.
+  BASE_ENTITY_NOTICE_ROLES = %w[recipient sender submitter].freeze
+  DEFAULT_ENTITY_NOTICE_ROLES = BASE_ENTITY_NOTICE_ROLES
 
   VALID_ACTIONS = %w( Yes No Partial Unspecified )
 

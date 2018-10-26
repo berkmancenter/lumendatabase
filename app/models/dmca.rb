@@ -1,8 +1,8 @@
 class DMCA < Notice
-
   define_elasticsearch_mapping
 
-  DEFAULT_ENTITY_NOTICE_ROLES = %w|recipient sender principal submitter|
+  DEFAULT_ENTITY_NOTICE_ROLES = (BASE_ENTITY_NOTICE_ROLES |
+                                %w[recipient sender principal]).freeze
 
   validates :title, length: { maximum: 255 }
 

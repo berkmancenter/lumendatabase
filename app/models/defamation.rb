@@ -1,6 +1,6 @@
 class Defamation < Notice
-	MASK = "REDACTED"
-	REDACTION_REGEX = /google/i
+  MASK = 'REDACTED'.freeze
+  REDACTION_REGEX = /google/i
 
   define_elasticsearch_mapping(works: [:description])
 
@@ -31,5 +31,4 @@ class Defamation < Notice
   def hide_identities?
     recipient_name =~ REDACTION_REGEX
   end
-
 end
