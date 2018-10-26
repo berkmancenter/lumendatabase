@@ -60,8 +60,9 @@ class Notice < ActiveRecord::Base
   # subclasses define DEFAULT_ENTITY_NOTICE_ROLES =
   # BASE_ENTITY_NOTICE_ROLES | local_roles, the OR will preserve all elements
   # of both.
-  BASE_ENTITY_NOTICE_ROLES = %w[recipient sender submitter].freeze
-  DEFAULT_ENTITY_NOTICE_ROLES = BASE_ENTITY_NOTICE_ROLES
+  BASE_ENTITY_NOTICE_ROLES = %w[submitter].freeze
+  DEFAULT_ENTITY_NOTICE_ROLES = (BASE_ENTITY_NOTICE_ROLES |
+                                 %w[recipient sender]).freeze
 
   VALID_ACTIONS = %w[Yes No Partial Unspecified].freeze
 
