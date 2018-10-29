@@ -1,6 +1,8 @@
 addFileUploadInput = (field, parent, updateContainer) ->
   containers = parent.find(".notice_file_uploads_#{field}")
 
+  containers.find('select').select2('destroy')
+
   nextId = "notice_file_uploads_attributes_#{containers.length}_#{field}"
   nextName =  "notice[file_uploads_attributes][#{containers.length}][#{field}]"
 
@@ -9,7 +11,12 @@ addFileUploadInput = (field, parent, updateContainer) ->
 
   updateContainer(newContainer, nextId, nextName)
 
-  newContainer.insertAfter(container)
+  newContainer.appendTo($('#file_uploads_inputs'))
+
+  $('#file_uploads_inputs').find('select').each ->
+    $(this).select2
+      placeholder: ''
+      width: 'off'
 
 $('.new_notice select').each ->
   $(this).select2
@@ -26,11 +33,12 @@ $('.attach #add-another').click ->
   parent = $(this).parent()
 
   addFileUploadInput 'file', parent, (newContainer, nextId, nextName) ->
-    newContainer.find('input').attr('id', nextId).attr('name', nextName)
-    newContainer.find('label').attr('for', nextId).html('Other Documents')
+    newContainer.find('input').attr('id', nextId).attr('name', nextName).val('')
+    newContainer.find('label').attr('for', nextId).html('Additional document')
 
   addFileUploadInput 'kind', parent, (newContainer, nextId, nextName) ->
-    newContainer.find('input').attr('id', nextId).attr('name', nextName).attr('value', 'supporting')
+    newContainer.find('select').attr('id', nextId).attr('name', nextName).attr('value', 'supporting')
+    newContainer.find('label').attr('for', nextId).html('Document type')
 
 $(document).on 'click', '.add-another-url', ->
   anchor = $(this)
@@ -49,7 +57,6 @@ $(document).on 'click', '.remove-url', ->
   if $('#notice_url_count').length > 0
     $('#notice_url_count').val(section.find('.input.url').length)
 
-
 toggleReportNoticePanels = ->
   $list = $('.notices-list ul')
   $info = $('.info-panel')
@@ -62,5 +69,3 @@ toggleReportNoticePanels = ->
       $info.find("[data-id='#{id}']").addClass('active').siblings().removeClass('active')
 
 toggleReportNoticePanels()
-
-

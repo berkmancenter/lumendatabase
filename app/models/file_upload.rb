@@ -5,10 +5,9 @@ class FileUpload < ActiveRecord::Base
 
   attr_accessor :file_name
 
-  # attr_protected :id, :pdf_requested, :pdf_request_fulfilled
-  # attr_protected :id, as: :admin
+  ALLOWED_KINDS = %w[original supporting].freeze
 
-  validates_inclusion_of :kind, in: %w[original supporting]
+  validates_inclusion_of :kind, in: ALLOWED_KINDS
   validates :kind, length: { maximum: 255 }
 
   belongs_to :notice
