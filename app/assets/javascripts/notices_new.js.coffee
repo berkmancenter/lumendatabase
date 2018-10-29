@@ -1,6 +1,7 @@
 addFileUploadInput = (field, parent, updateContainer) ->
   containers = parent.find(".notice_file_uploads_#{field}")
-  console.log(containers.length)
+
+  containers.find('select').select2('destroy')
 
   nextId = "notice_file_uploads_attributes_#{containers.length}_#{field}"
   nextName =  "notice[file_uploads_attributes][#{containers.length}][#{field}]"
@@ -11,6 +12,11 @@ addFileUploadInput = (field, parent, updateContainer) ->
   updateContainer(newContainer, nextId, nextName)
 
   newContainer.appendTo($('#file_uploads_inputs'))
+
+  $('#file_uploads_inputs').find('select').each ->
+    $(this).select2
+      placeholder: ''
+      width: 'off'
 
 $('.new_notice select').each ->
   $(this).select2
@@ -50,7 +56,6 @@ $(document).on 'click', '.remove-url', ->
   $(this).parent().remove()
   if $('#notice_url_count').length > 0
     $('#notice_url_count').val(section.find('.input.url').length)
-
 
 toggleReportNoticePanels = ->
   $list = $('.notices-list ul')
