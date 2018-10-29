@@ -137,7 +137,11 @@ class Notice < ActiveRecord::Base
   end
 
   after_create :set_published!, if: :submitter
-  after_destroy :remove_from_index
+  # This may fail in the dev environment if you don't have ES up and running,
+  # but is works in other envs.
+  after_destroy do
+    __elasticsearch__.delete_document ignore: 404
+  end
 
   define_elasticsearch_mapping
 
@@ -348,9 +352,5 @@ class Notice < ActiveRecord::Base
 
   def attorneys
     entity_notice_roles.attorneys.map(&:entity)
-  end
-
-  def remove_from_index
-    self.index.remove self
   end
 end
