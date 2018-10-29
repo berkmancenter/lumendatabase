@@ -33,7 +33,7 @@ $('.attach #add-another').click ->
   parent = $(this).parent()
 
   addFileUploadInput 'file', parent, (newContainer, nextId, nextName) ->
-    newContainer.find('input').attr('id', nextId).attr('name', nextName)
+    newContainer.find('input').attr('id', nextId).attr('name', nextName).val('')
     newContainer.find('label').attr('for', nextId).html('Additional document')
 
   addFileUploadInput 'kind', parent, (newContainer, nextId, nextName) ->
