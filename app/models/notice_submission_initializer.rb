@@ -19,6 +19,9 @@ class NoticeSubmissionInitializer
     set_all_entities(user)
     notice.title = generic_title unless notice.title.present?
     notice.works = PLACEHOLDER_WORKS
+    notice.file_uploads.map do |file|
+      file.kind = 'supporting' if file.kind.nil?
+    end
     notice.auto_redact
 
     return false unless notice.save

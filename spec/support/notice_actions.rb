@@ -40,7 +40,7 @@ module NoticeActions
     with_file(content) { |file| attach_file 'Attach Notice', file.path }
   end
 
-  def add_document(kind = 'supporting')
+  def add_document
     @field_index ||= 0
 
     if @field_index > 0
@@ -53,7 +53,6 @@ module NoticeActions
     with_file('some content') do |file|
       attach_file field_name, file.path
     end
-    select kind, from: "notice_file_uploads_attributes_#{@field_index}_kind"
     @field_index += 1
   end
 

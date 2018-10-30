@@ -71,33 +71,21 @@ feature 'notice submission' do
     expect(notice).to have(1).supporting_document
   end
 
-  scenario 'submitting a notice with a supporting document', js: true do
+  scenario 'submitting a notice with a document', js: true do
     submit_recent_notice do
-      add_document('supporting')
+      add_document
     end
 
     notice = Notice.last
 
-    expect(notice).to have(0).original_documents
     expect(notice).to have(1).supporting_document
   end
 
-  scenario 'submitting a notice with an original document', js: true do
+  scenario 'submitting a notice with multiple documents', js: true do
     submit_recent_notice do
-      add_document('original')
-    end
-
-    notice = Notice.last
-
-    expect(notice).to have(1).original_documents
-    expect(notice).to have(0).supporting_documents
-  end
-
-  scenario 'submitting a notice with multiple supporting documents', js: true do
-    submit_recent_notice do
-      add_document('supporting')
-      add_document('supporting')
-      add_document('supporting')
+      add_document
+      add_document
+      add_document
     end
 
     open_recent_notice
