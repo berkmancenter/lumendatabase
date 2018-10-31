@@ -50,6 +50,10 @@ RailsAdmin.config do |config|
     config.model notice_type do
       label { abstract_model.model.label }
       list do
+        # SELECT COUNT is slow when the number of instances is large; let's
+        # avoid calling it for Notice and its subclasses.
+        limited_pagination true
+
         field :id
         field :title
         field(:date_sent)     { label 'Sent' }
