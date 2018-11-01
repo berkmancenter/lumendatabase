@@ -139,7 +139,11 @@ RailsAdmin.config do |config|
       end
     end
     edit do
-      configure(:notices) { hide }
+      # This improves performance by preventing a SELECT COUNT (*) on Notice.
+      # This is especially important on the edit page for a *notice*, which
+      # has a nested edit form for Topic. SELECT COUNT is very slow when the
+      # number of records is high, as is the case for Notice.
+      exclude_fields :notices
       configure(:topic_assignments) { hide }
 
       configure(:blog_entries) { hide }
@@ -160,7 +164,8 @@ RailsAdmin.config do |config|
 
   config.model 'Entity' do
     list do
-      configure(:notices) { hide }
+      # See exclude_fields comment for Topic.
+      exclude_fields :notices
       configure(:entity_notice_roles) { hide }
       configure :parent do
         formatted_value do
