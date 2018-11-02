@@ -37,7 +37,7 @@ module NoticeActions
   end
 
   def attach_notice(content: 'Some content')
-    with_file(content) { |file| attach_file 'Attach Notice', file.path }
+    with_file(content) { |file| attach_file 'Attach file', file.path }
   end
 
   def add_document
