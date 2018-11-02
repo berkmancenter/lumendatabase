@@ -64,3 +64,19 @@ RSpec.configure do |config|
     Elasticsearch::Extensions::Test::Cluster.stop(**es_options)
   end
 end
+
+# Must be 127.0.0.1 to let VCR match recorded urls, elasticsearch-ruby has an
+# issue with reloading connections and even if we set it to localhost here on
+# reconnection it will use 127.0.0.1 instead, that's why we need to use
+# 127.0.0.1, at least for now, unless they fix the issue
+config = {
+  host: 'http://127.0.0.1:9250',
+  request_timeout: 20
+}
+
+if ENV['LOG_ELASTICSEARCH'] == 'true'
+  config[:log] = true
+  config[:trace] = true
+end
+
+Elasticsearch::Model.client = Elasticsearch::Client.new config
