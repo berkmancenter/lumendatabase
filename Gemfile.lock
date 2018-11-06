@@ -183,7 +183,7 @@ GEM
       activesupport (>= 4)
       railties (>= 4)
       request_store (~> 1.0)
-    loofah (2.2.2)
+    loofah (2.2.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.0)
@@ -207,7 +207,7 @@ GEM
       sass (>= 3.2)
     nested_form (0.3.2)
     netrc (0.11.0)
-    nokogiri (1.8.4)
+    nokogiri (1.8.5)
       mini_portile2 (~> 2.3.0)
     orm_adapter (0.5.0)
     paperclip (5.3.0)
@@ -430,6 +430,7 @@ DEPENDENCIES
   kaminari (= 0.14.1)
   launchy
   lograge
+  loofah (>= 2.2.3)
   mime-types (= 2.99.3)
   minitest
   neat
