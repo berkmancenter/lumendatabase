@@ -265,10 +265,8 @@ feature 'Fielded searches of Notices' do
           search_on_page.add_fielded_search_for(field, 'test')
         end
 
-        sleep 0.2
-
         search_on_page.within_fielded_searches do
-          expect(page).to have_no_css('#duplicate-field')
+          expect(page).to have_no_css('#duplicate-field', wait: 5)
         end
       end
 
