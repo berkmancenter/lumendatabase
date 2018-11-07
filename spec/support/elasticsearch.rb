@@ -44,18 +44,20 @@ RSpec.configure do |config|
   # Deleting the index alone doesn't suffice; you'll be left with content from
   # prior tests, which will be reindexed when you refresh the index.
   # The rescue blocks suppress noisy but irrelevant error messages.
-  config.before :each, type: :feature do
-    searchable_models.each do |model|
-      begin
-        model.__elasticsearch__.client.delete_by_query(
-          index: model.__elasticsearch__.index_name
-        )
-        model.__elasticsearch__.delete_index!
-      rescue Elasticsearch::Transport::Transport::Errors::NotFound; end
+  %i[feature controller].each do |type|
+    config.before :each, type: type do
+      searchable_models.each do |model|
+        begin
+          model.__elasticsearch__.client.delete_by_query(
+            index: model.__elasticsearch__.index_name
+          )
+          model.__elasticsearch__.delete_index!
+        rescue Elasticsearch::Transport::Transport::Errors::NotFound; end
 
-      begin
-        model.__elasticsearch__.create_index!
-      rescue Elasticsearch::Transport::Transport::Errors::NotFound; end
+        begin
+          model.__elasticsearch__.create_index!
+        rescue Elasticsearch::Transport::Transport::Errors::NotFound; end
+      end
     end
   end
 
