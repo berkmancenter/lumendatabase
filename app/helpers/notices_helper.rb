@@ -59,6 +59,10 @@ module NoticesHelper
     end
   end
 
+  def can_see_full_notice_version?(notice)
+    TokenUrl.validate_token(params[:access_token], notice)
+  end
+
   private
 
   def infringing_url_label(notice)
