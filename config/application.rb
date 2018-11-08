@@ -20,6 +20,11 @@ module Chill
     config.active_record.default_timezone = :utc
     I18n.config.enforce_available_locales = true
 
+    lumen_config = YAML.load_file("#{Rails.root}/config/lumen.yml")
+    lumen_config.keys.collect do |k|
+      Chill::Application.config.send("#{k}=", lumen_config[k])
+    end
+
     config.generators do |generate|
       generate.test_framework :rspec
       generate.helper false

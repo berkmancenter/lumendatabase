@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180815162606) do
+ActiveRecord::Schema.define(version: 20181105193550) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -267,6 +267,22 @@ ActiveRecord::Schema.define(version: 20180815162606) do
   end
 
   add_index "tags", ["name"], name: "index_tags_on_name", unique: true, using: :btree
+
+  create_table "token_urls", force: :cascade do |t|
+    t.string   "email"
+    t.string   "token"
+    t.integer  "notice_id"
+    t.integer  "user_id"
+    t.datetime "expiration_date"
+    t.boolean  "valid_forever"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "token_urls", ["email"], name: "index_token_urls_on_email", using: :btree
+  add_index "token_urls", ["notice_id"], name: "index_token_urls_on_notice_id", using: :btree
+  add_index "token_urls", ["token"], name: "index_token_urls_on_token", using: :btree
+  add_index "token_urls", ["user_id"], name: "index_token_urls_on_user_id", using: :btree
 
   create_table "topic_assignments", force: :cascade do |t|
     t.integer "topic_id"

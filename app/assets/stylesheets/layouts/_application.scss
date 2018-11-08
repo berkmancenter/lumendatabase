@@ -58,3 +58,10 @@ body.high_voltage-pages {
     }
   }
 }
+
+// Flash message box
+#flash {
+  > div {
+    padding: 10px 20px;
+  }
+}

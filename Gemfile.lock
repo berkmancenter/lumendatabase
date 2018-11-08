@@ -295,6 +295,8 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
+    recaptcha (4.13.0)
+      json
     recipient_interceptor (0.1.1)
       mail
     redcarpet (2.3.0)
@@ -470,6 +472,7 @@ DEPENDENCIES
   rails (~> 4.2.11)
   rails_admin
   rails_admin_tag_list
+  recaptcha
   recipient_interceptor
   redcarpet (~> 2.3.0)
   rspec-collection_matchers (~> 1.1, >= 1.1.2)
