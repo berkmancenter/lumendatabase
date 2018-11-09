@@ -1,5 +1,4 @@
 require 'validates_automatically'
-require 'uri/http'
 
 class Work < ActiveRecord::Base
   include ValidatesAutomatically
@@ -73,7 +72,7 @@ class Work < ActiveRecord::Base
     counted_urls = {}
 
     urls.each do |url|
-      uri = URI.parse(url.url)
+      uri = Addressable::URI.parse(url.url)
 
       # get just domain
       domain = uri.host
