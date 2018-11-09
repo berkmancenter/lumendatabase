@@ -17,6 +17,16 @@ class NoticeSubmissionInitializer
 
   def submit(user = nil)
     set_all_entities(user)
+
+    notice = add_notice_defaults(notice)
+
+    return false unless notice.save
+
+    notice.mark_for_review
+    true
+  end
+
+  def add_notice_defaults(notice)
     notice.title = generic_title unless notice.title.present?
     notice.works = PLACEHOLDER_WORKS
     notice.file_uploads.map do |file|
@@ -24,10 +34,7 @@ class NoticeSubmissionInitializer
     end
     notice.auto_redact
 
-    return false unless notice.save
-
-    notice.mark_for_review
-    true
+    notice
   end
 
   def notice
