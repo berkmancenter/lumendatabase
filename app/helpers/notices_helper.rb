@@ -60,7 +60,9 @@ module NoticesHelper
   end
 
   def can_see_full_notice_version?(notice)
-    return true if current_user&.roles & [Role.admin, Role.super_admin]
+    return true if
+      current_user &&
+      (current_user.roles & [Role.admin, Role.super_admin]).any?
 
     TokenUrl.validate_token(params[:access_token], notice)
   end

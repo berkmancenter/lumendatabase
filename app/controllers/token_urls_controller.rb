@@ -56,20 +56,20 @@ class TokenUrlsController < ApplicationController
       }
     end
 
-    # unless verify_recaptcha(model: @token_url)
-    #   return {
-    #     status: false,
-    #     why: 'Captcha verification failed, please try again.'
-    #   }
-    # end
+    unless verify_recaptcha(model: @token_url)
+      return {
+        status: false,
+        why: 'Captcha verification failed, please try again.'
+      }
+    end
 
-    # if TokenUrl.where(email: token_url_params[:email]).any?
-    #   return {
-    #     status: false,
-    #     why: 'This email address has been used already, use a different ' \
-    #          'address or contact our team to get a researcher account.'
-    #   }
-    # end
+    if TokenUrl.where(email: token_url_params[:email]).any?
+      return {
+        status: false,
+        why: 'This email address has been used already, use a different ' \
+             'address or contact our team to get a researcher account.'
+      }
+    end
 
     {
       status: true
