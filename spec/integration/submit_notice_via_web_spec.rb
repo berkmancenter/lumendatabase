@@ -223,6 +223,8 @@ feature 'notice submission' do
       expect(page).to have_content 'A series of videos and still images'
     end
 
+    user = create(:user, :super_admin)
+
     sign_in(user)
 
     visit '/'

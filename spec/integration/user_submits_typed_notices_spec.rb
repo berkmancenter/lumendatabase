@@ -81,7 +81,7 @@ feature 'typed notice submissions' do
       expect(page).to have_content('example.com - 1 URL')
     end
 
-    sign_in(create(:user))
+    sign_in(create(:user, :admin))
 
     visit '/'
 
@@ -133,7 +133,7 @@ feature 'typed notice submissions' do
       expect(page).to have_content('example.com - 1 URL')
     end
 
-    sign_in(create(:user))
+    sign_in(create(:user, :admin))
 
     visit '/'
 
@@ -185,7 +185,7 @@ feature 'typed notice submissions' do
       expect(page).to have_content('example.com - 1 URL')
     end
 
-    sign_in(create(:user))
+    sign_in(create(:user, :admin))
 
     visit '/'
 
@@ -256,7 +256,7 @@ feature 'typed notice submissions' do
       expect(page).to have_content("My Tiny Tim fansite")
     end
 
-    sign_in(create(:user))
+    sign_in(create(:user, :admin))
 
     visit '/'
 
@@ -311,7 +311,7 @@ feature 'typed notice submissions' do
 
     visit '/'
 
-    sign_in(create(:user))
+    sign_in(create(:user, :admin))
 
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
@@ -361,7 +361,7 @@ feature 'typed notice submissions' do
       expect(page).to have_content('These URLs are a serious problem')
     end
 
-    sign_in(create(:user))
+    sign_in(create(:user, :admin))
 
     visit '/'
 
