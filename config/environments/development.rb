@@ -52,7 +52,8 @@ Chill::Application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     address: ENV['SMTP_ADDRESS'] || 'localhost',
-    port: ENV['SMTP_PORT'] || 1025
+    port: ENV['SMTP_PORT'] || 1025,
+    openssl_verify_mode: ENV['SMTP_VERIFY_MODE'] || 'none'
   }
 
   #begin
