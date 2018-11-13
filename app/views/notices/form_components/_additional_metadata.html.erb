@@ -20,13 +20,10 @@
   <% if mark_reg %>
     <%= form.input :mark_registration_number, label: "Registration Number" %>
   <% end %>
+  <p>Any file you attach to this notice will be viewable by the public in the form in which you have attached it. It will not be reviewed by Lumen staff prior to being available to download.</p>
   <%= form.simple_fields_for(:file_uploads) do |file_uploads_form| %>
     <div id="file_uploads_inputs">
-      <%= file_uploads_form.input :file, label: 'Attach Notice' %>
-      <%= file_uploads_form.input :kind,
-          label: 'Document type',
-          prompt: nil,
-          collection: FileUpload::ALLOWED_KINDS %>
+      <%= file_uploads_form.input :file, label: 'Attach file' %>
     </div>
     <a href="javascript:void(0);" id="add-another" class="button">Attach another</a>
   <% end %>

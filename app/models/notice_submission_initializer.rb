@@ -17,14 +17,22 @@ class NoticeSubmissionInitializer
 
   def submit(user = nil)
     set_all_entities(user)
-    notice.title = generic_title unless notice.title.present?
-    notice.works = PLACEHOLDER_WORKS
-    notice.auto_redact
+
+    add_notice_defaults
 
     return false unless notice.save
 
     notice.mark_for_review
     true
+  end
+
+  def add_notice_defaults
+    notice.title = generic_title unless notice.title.present?
+    notice.works = PLACEHOLDER_WORKS
+    notice.file_uploads.map do |file|
+      file.kind = 'supporting' if file.kind.nil?
+    end
+    notice.auto_redact
   end
 
   def notice
