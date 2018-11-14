@@ -86,6 +86,11 @@ RailsAdmin.config do |config|
       end
 
       edit do
+        # This dramatically speeds up the admin page.
+        configure :works do
+          nested_form false
+        end
+
         configure :action_taken, :enum do
           enum do
             %w[Yes No Partial Unspecified]
@@ -100,11 +105,11 @@ RailsAdmin.config do |config|
           label 'Type'
           required true
         end
+
         exclude_fields :topic_assignments,
                        :topic_relevant_questions,
                        :related_blog_entries,
                        :blog_topic_assignments,
-                       :entities,
                        :infringing_urls,
                        :copyrighted_urls
 
@@ -157,6 +162,9 @@ RailsAdmin.config do |config|
   config.model 'EntityNoticeRole' do
     edit do
       configure(:notice) { hide }
+      configure :entity do
+        nested_form false
+      end
     end
   end
 
@@ -207,6 +215,7 @@ RailsAdmin.config do |config|
       configure(:copyrighted_urls) { hide }
       configure(:infringing_urls) { hide }
     end
+
     nested do
       configure(:infringing_urls) { hide }
       configure(:copyrighted_urls) { hide }
