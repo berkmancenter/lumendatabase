@@ -41,8 +41,13 @@ describe DMCA, type: :model do
   end
 
   context 'entity notice roles' do
+    it 'has the expected entity notice roles' do
+      expected = %w[recipient sender principal submitter]
+      expect(described_class::DEFAULT_ENTITY_NOTICE_ROLES).to match_array expected
+    end
+
     context 'with entities' do
-      %w[sender principal recipient].each do |role_name|
+      described_class::DEFAULT_ENTITY_NOTICE_ROLES.each do |role_name|
         context "##{role_name}" do
           it "returns entity of type #{role_name}" do
             # note: must use role names we're not testing in the factory

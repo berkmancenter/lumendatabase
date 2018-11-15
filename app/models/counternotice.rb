@@ -1,10 +1,10 @@
 class Counternotice < Notice
-
   define_elasticsearch_mapping
 
-  DEFAULT_ENTITY_NOTICE_ROLES = %w|recipient sender principal submitter|
+  DEFAULT_ENTITY_NOTICE_ROLES = (BASE_ENTITY_NOTICE_ROLES |
+                                %w[recipient sender principal submitter]).freeze
 
-  REASONS = %w( owner authorized no_right fair_use removed not_used other )
+  REASONS = %w[owner authorized no_right fair_use removed not_used other].freeze
 
   validates :title, length: { maximum: 255 }
 
