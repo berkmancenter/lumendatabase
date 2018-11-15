@@ -205,7 +205,7 @@ feature 'typed notice submissions' do
     submission.fill_in_form_with(
       'Subject of Enforcement Request' => 'My Tiny Tim fansite', # works.description
       'URL of original work' => 'http://example.com/original_object1', # copyrighted_urls
-      'URL mentioned in request' => 'http://example.com/offending_url1', # infringing_urls
+      'URL mentioned in request' => 'http://example2.com/offending_url1', # infringing_urls
       'Explanation of Law Enforcement Request' => "I don't get it. He made sick music.", #notice.body
       'Relevant laws or regulations' => 'USC foo bar 21'
     )
@@ -246,14 +246,6 @@ feature 'typed notice submissions' do
 
     within('#entities') do
       expect(page).to have_words('Principal')
-    end
-
-    within("#works") do
-      expect(page).to have_content('URLs mentioned in request')
-      expect(page).to have_content('example.com - 1 URL')
-      expect(page).to have_content('URLs of original work')
-      expect(page).to have_content('example2.com - 1 URL')
-      expect(page).to have_content("My Tiny Tim fansite")
     end
 
     sign_in(create(:user, :admin))
@@ -327,7 +319,7 @@ feature 'typed notice submissions' do
     submission.fill_in_form_with(
       'Complaint' => 'These URLs are a serious problem', # works.description
       'Original Work URL' => 'http://example.com/original_object1', # copyrighted_urls
-      'Problematic URL' => 'http://example.com/offending_url1', # infringing_urls
+      'Problematic URL' => 'http://example2.com/offending_url1', # infringing_urls
       'Explanation of Complaint' => 'I am complaining', # notice.body
     )
 
