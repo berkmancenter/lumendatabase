@@ -142,11 +142,9 @@ RailsAdmin.config do |config|
       end
     end
     edit do
-      # This improves performance by preventing a SELECT COUNT (*) on Notice.
-      # This is especially important on the edit page for a *notice*, which
-      # has a nested edit form for Topic. SELECT COUNT is very slow when the
-      # number of records is high, as is the case for Notice.
-      exclude_fields :notices
+      # exclude_fields :notices might be a better performance option than hide,
+      # but it prevents topics with null ancestries from being saved.
+      configure(:notices) { hide }
       configure(:topic_assignments) { hide }
 
       configure(:blog_entries) { hide }
