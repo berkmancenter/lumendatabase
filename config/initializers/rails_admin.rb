@@ -100,15 +100,13 @@ RailsAdmin.config do |config|
           label 'Type'
           required true
         end
-        configure(:topic_assignments) { hide }
-        configure(:topic_relevant_questions) { hide }
-
-        configure(:related_blog_entries) { hide }
-
-        configure(:blog_topic_assignments) { hide }
-        configure(:entities) { hide }
-        configure(:infringing_urls) { hide }
-        configure(:copyrighted_urls) { hide }
+        exclude_fields :topic_assignments,
+                       :topic_relevant_questions,
+                       :related_blog_entries,
+                       :blog_topic_assignments,
+                       :entities,
+                       :infringing_urls,
+                       :copyrighted_urls
 
         configure :review_required do
           visible do
