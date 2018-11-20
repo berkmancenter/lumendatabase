@@ -29,6 +29,8 @@ Setup:
     $ cp config/database.yml.example config/database.yml
       (edit database.yml as you wish)
       (ensure PostgreSQL and Elasticsearch are running)
+    $ cp config/elasticsearch.yml.example config/elasticsearch.yml
+      (edit elasticsearch.yml as you wish)
     $ rake db:setup
 
 Running the app:
