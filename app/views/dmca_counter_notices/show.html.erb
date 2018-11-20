@@ -3,19 +3,19 @@
 <section class="counter-notice">
   <article class="counter-notice-show">
     <p>
-    <%= @counter_notice.service_provider_name %><br/>
-    <%= @counter_notice.service_provider_address_line_1 %><br/>
-    <%= @counter_notice.service_provider_address_line_2 %><br/>
-    <%= @counter_notice.service_provider_address_line_3 %><br/>
-    <%= @counter_notice.service_provider_address_line_4 %><br/>
-    <%= @counter_notice.service_provider_phone %><br/>
+    <%= @dmca_counter_notice.service_provider_name %><br/>
+    <%= @dmca_counter_notice.service_provider_address_line_1 %><br/>
+    <%= @dmca_counter_notice.service_provider_address_line_2 %><br/>
+    <%= @dmca_counter_notice.service_provider_address_line_3 %><br/>
+    <%= @dmca_counter_notice.service_provider_address_line_4 %><br/>
+    <%= @dmca_counter_notice.service_provider_phone %><br/>
     </p>
 
     <p class="date"><%= l(Date.today, format: :friendly_date) %></p>
 
     <p><strong>RE: Mistaken Removal</strong>
 
-    <p>Dear <%= @counter_notice.service_provider_name %>;</p>
+    <p>Dear <%= @dmca_counter_notice.service_provider_name %>;</p>
 
     <p> Please find attached to this letter a list of material removed by you
     pursuant to 17 U.S.C. Section 512. I have a good faith belief that this
@@ -23,7 +23,7 @@
     misidentification of the material. I declare that this is true and accurate
     under penalty of perjury under the laws of the United States of America.</p>
 
-    <% if @counter_notice.in_us? %>
+    <% if @dmca_counter_notice.in_us? %>
       <p>For the purposes of this matter, I consent to the jurisdiction of the
     Federal District Court for the judicial district in which I reside.
 
@@ -57,12 +57,12 @@
 
     <hr class="signature-line"/>
 
-    <p><%= @counter_notice.your_name %><br />
-    <%= @counter_notice.your_phone %><br />
-    <%= @counter_notice.your_address_line_1 %><br />
-    <%= @counter_notice.your_address_line_2 %><br />
-    <%= @counter_notice.your_address_line_3 %><br />
-    <%= @counter_notice.your_address_line_4 %><br />
+    <p><%= @dmca_counter_notice.your_name %><br />
+    <%= @dmca_counter_notice.your_phone %><br />
+    <%= @dmca_counter_notice.your_address_line_1 %><br />
+    <%= @dmca_counter_notice.your_address_line_2 %><br />
+    <%= @dmca_counter_notice.your_address_line_3 %><br />
+    <%= @dmca_counter_notice.your_address_line_4 %><br />
     </p>
     <p>Enclosure</p>
   </article>
