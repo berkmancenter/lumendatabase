@@ -79,7 +79,7 @@ section.notice-new {
 // Form
 //************************************************************************//
 $long-label-width: $form-label-width + 55px;
-form.new_notice, form.new_counter_notice {
+form.new_notice, form.new_dmca_counter_notice {
   div {
     @include clearfix;
   }
@@ -233,7 +233,7 @@ form.new_notice, form.new_counter_notice {
   }
 }
 
-form.new_counter_notice {
+form.new_dmca_counter_notice {
 
   section.important-terms{
     padding-top: 0;

@@ -19,6 +19,7 @@ Chill::Application.routes.draw do
   end
 
   resources :dmca_counter_notices, only: %i[new create]
+  get '/counter_notices/new', to: redirect('/dmca_counter_notices/new')
 
   namespace :entities do
     resources :search, only: [:index]
