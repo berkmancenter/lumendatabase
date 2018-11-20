@@ -181,6 +181,10 @@ describe 'notices/show.html.erb' do
 
     assign(:notice, notice)
     allow(controller).to receive(:current_user).and_return(create(:user, :admin))
+    ability = Object.new
+    ability.extend(CanCan::Ability)
+    controller.stub(:current_ability) { ability }
+    ability.can :view_full_version, Notice
 
     render
 
@@ -200,6 +204,7 @@ describe 'notices/show.html.erb' do
     end
 
     allow(controller).to receive(:current_user).and_return(nil)
+    ability.cannot :view_full_version, Notice
 
     render
 
