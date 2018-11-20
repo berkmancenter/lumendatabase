@@ -60,11 +60,23 @@ module NoticesHelper
   end
 
   def can_see_full_notice_version?(notice)
-    return true if
-      current_user &&
-      (current_user.roles & [Role.admin, Role.super_admin]).any?
+    return true if can?(:view_full_version, notice)
 
     TokenUrl.validate_token(params[:access_token], notice)
+  end
+
+  def permanent_url_full_notice(notice)
+    token_url = permanent_token_url(notice)
+
+    if token_url
+      return notice_url(
+        notice,
+        access_token: token_url.token,
+        host: Chill::Application.config.site_host
+      )
+    end
+
+    false
   end
 
   private
@@ -93,5 +105,13 @@ module NoticesHelper
     when ::LawEnforcementRequest
       'URL of original work'
     end
+  end
+
+  def permanent_token_url(notice)
+    TokenUrl.find_by(
+      notice: notice,
+      user: current_user,
+      valid_forever: true
+    )
   end
 end

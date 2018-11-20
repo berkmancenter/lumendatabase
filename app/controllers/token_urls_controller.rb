@@ -39,6 +39,31 @@ class TokenUrlsController < ApplicationController
     end
   end
 
+  def generate_permanent
+    return unless (@notice = Notice.find(params[:id]))
+    return if cannot?(:generate_permanent_notice_token_urls, @notice)
+
+    @token_url = TokenUrl.new(
+      user: current_user,
+      email: current_user.email,
+      valid_forever: true,
+      notice: @notice
+    )
+
+    if @token_url.save
+      redirect_to(
+        notice_path(@notice),
+        notice: 'Permanent URL for this notice has been created, you can ' \
+                'view it below'
+      )
+    else
+      redirect_to(
+        notice_path(@notice),
+        alert: @token_url.errors.full_messages.join('<br>').html_safe
+      )
+    end
+  end
+
   private
 
   def token_url_params

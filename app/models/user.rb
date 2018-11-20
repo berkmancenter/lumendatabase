@@ -11,7 +11,7 @@ class User < ActiveRecord::Base
   accepts_nested_attributes_for :entity
 
   def has_role?(role)
-    self.roles.include?(role)
+    roles.include?(role)
   end
 
   def ensure_authentication_token

@@ -6,6 +6,7 @@ class Role < ActiveRecord::Base
     admin
     super_admin
     researcher
+    notice_viewer
   ].freeze
 
   NAMES.each do |name|

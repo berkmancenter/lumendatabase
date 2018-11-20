@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181105193550) do
+ActiveRecord::Schema.define(version: 20181119200641) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -314,14 +314,18 @@ ActiveRecord::Schema.define(version: 20181105193550) do
   add_index "topics", ["ancestry"], name: "index_topics_on_ancestry", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                  default: "", null: false
-    t.string   "encrypted_password",     default: "", null: false
+    t.string   "email",                                    default: "", null: false
+    t.string   "encrypted_password",                       default: "", null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.string   "authentication_token"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "publication_delay",      default: 0,  null: false
+    t.integer  "publication_delay",                        default: 0,  null: false
+    t.boolean  "can_generate_permanent_notice_token_urls"
+    t.integer  "notice_viewer_views_limit"
+    t.integer  "notice_viewer_viewed_notices",             default: 0,  null: false
+    t.datetime "notice_viewer_time_limit"
   end
 
   add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree

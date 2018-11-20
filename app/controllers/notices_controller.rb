@@ -44,6 +44,8 @@ class NoticesController < ApplicationController
                  layout: false
         else
           render :show
+
+          run_show_callbacks
         end
       end
 
@@ -263,5 +265,22 @@ class NoticesController < ApplicationController
             'parameters'.freeze
       { errors: msg }
     end
+  end
+
+  def run_show_callbacks
+    process_notice_viewer_request
+  end
+
+  def process_notice_viewer_request
+    # No need to process anonymous users
+    return if current_user.nil?
+    # Only notice viewers
+    return unless current_user.has_role?(Role.notice_viewer)
+    # Only when the views limit is set for a user
+    return unless current_user.notice_viewer_views_limit
+    # No need to update the counter when the limit is reached
+    return if current_user.notice_viewer_viewed_notices >= current_user.notice_viewer_views_limit
+
+    current_user.increment!(:notice_viewer_viewed_notices)
   end
 end

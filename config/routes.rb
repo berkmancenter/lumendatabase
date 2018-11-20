@@ -16,6 +16,7 @@ Chill::Application.routes.draw do
     member do
       put :request_pdf
       get :request_access, to: 'token_urls#new'
+      post :generate_permanent_full_url, to: 'token_urls#generate_permanent'
     end
   end
 
