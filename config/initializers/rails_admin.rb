@@ -50,6 +50,10 @@ RailsAdmin.config do |config|
     config.model notice_type do
       label { abstract_model.model.label }
       list do
+        # SELECT COUNT is slow when the number of instances is large; let's
+        # avoid calling it for Notice and its subclasses.
+        limited_pagination true
+
         field :id
         field :title
         field(:date_sent)     { label 'Sent' }
@@ -82,6 +86,11 @@ RailsAdmin.config do |config|
       end
 
       edit do
+        # This dramatically speeds up the admin page.
+        configure :works do
+          nested_form false
+        end
+
         configure :action_taken, :enum do
           enum do
             %w[Yes No Partial Unspecified]
@@ -96,15 +105,13 @@ RailsAdmin.config do |config|
           label 'Type'
           required true
         end
-        configure(:topic_assignments) { hide }
-        configure(:topic_relevant_questions) { hide }
 
-        configure(:related_blog_entries) { hide }
-
-        configure(:blog_topic_assignments) { hide }
-        configure(:entities) { hide }
-        configure(:infringing_urls) { hide }
-        configure(:copyrighted_urls) { hide }
+        exclude_fields :topic_assignments,
+                       :topic_relevant_questions,
+                       :related_blog_entries,
+                       :blog_topic_assignments,
+                       :infringing_urls,
+                       :copyrighted_urls
 
         configure :review_required do
           visible do
@@ -135,6 +142,8 @@ RailsAdmin.config do |config|
       end
     end
     edit do
+      # exclude_fields :notices might be a better performance option than hide,
+      # but it prevents topics with null ancestries from being saved.
       configure(:notices) { hide }
       configure(:topic_assignments) { hide }
 
@@ -151,12 +160,16 @@ RailsAdmin.config do |config|
   config.model 'EntityNoticeRole' do
     edit do
       configure(:notice) { hide }
+      configure :entity do
+        nested_form false
+      end
     end
   end
 
   config.model 'Entity' do
     list do
-      configure(:notices) { hide }
+      # See exclude_fields comment for Topic.
+      exclude_fields :notices
       configure(:entity_notice_roles) { hide }
       configure :parent do
         formatted_value do
@@ -200,6 +213,7 @@ RailsAdmin.config do |config|
       configure(:copyrighted_urls) { hide }
       configure(:infringing_urls) { hide }
     end
+
     nested do
       configure(:infringing_urls) { hide }
       configure(:copyrighted_urls) { hide }

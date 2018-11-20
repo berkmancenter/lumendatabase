@@ -33,3 +33,4 @@ config/database.yml
 .byebug_history
 .rubocop.yml
 rspec_examples.txt
+.reek.yml
