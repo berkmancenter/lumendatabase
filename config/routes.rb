@@ -18,7 +18,7 @@ Chill::Application.routes.draw do
     end
   end
 
-  resources :counter_notices, only: %i[new create]
+  resources :dmca_counter_notices, only: %i[new create]
 
   namespace :entities do
     resources :search, only: [:index]

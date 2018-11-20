@@ -1,4 +1,4 @@
-class CounterNotice
+class DMCACounterNotice
   extend ActiveModel::Naming
   include ActiveModel::Conversion
   include ActiveModel::Validations
@@ -48,5 +48,4 @@ class CounterNotice
   def persisted?
     false
   end
-
 end

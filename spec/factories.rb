@@ -272,7 +272,7 @@ FactoryGirl.define do
     name 'test_role'
   end
 
-  factory :counter_notice do
+  factory :dmca_counter_notice do
     attach_list_of_works true
     list_removed_in_error true
     perjury_risk_acknowledged true

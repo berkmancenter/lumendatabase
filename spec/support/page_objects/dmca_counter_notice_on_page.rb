@@ -1,13 +1,13 @@
 require_relative '../page_object'
 
-class CounterNoticeOnPage < PageObject
+class DMCACounterNoticeOnPage < PageObject
 
   def choose_radio_option(option)
     choose(option)
   end
 
   def visit_counter_notice_page
-    visit '/counter_notices/new'
+    visit '/dmca_counter_notices/new'
   end
 
   def fill_in_user_form_with(attributes)

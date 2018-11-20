@@ -3,7 +3,7 @@ require 'rails_helper'
 feature "DMCA counter notices" do
   scenario "A user submits a DMCA counter notice" do
 
-    counternotice = CounterNoticeOnPage.new
+    counternotice = DMCACounterNoticeOnPage.new
 
     counternotice.visit_counter_notice_page
 
