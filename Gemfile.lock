@@ -234,7 +234,7 @@ GEM
       pry (~> 0.10)
     pry-rails (0.3.1)
       pry (>= 0.9.10)
-    rack (1.6.10)
+    rack (1.6.11)
     rack-attack (4.3.0)
       rack
     rack-pjax (1.0.0)
@@ -450,6 +450,7 @@ DEPENDENCIES
   pry (~> 0.10.4)
   pry-byebug
   pry-rails
+  rack (>= 1.6.11)
   rack-attack
   rack-test
   rails (~> 4.2.10)
@@ -479,4 +480,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   1.16.2
+   1.17.1
