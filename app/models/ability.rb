@@ -33,6 +33,7 @@ class Ability
       grant_admin_access
       grant_redact
       grant_permanent_notice_url_generation(user)
+      grant_full_notice_api_response(user)
 
       can :edit, :all
       cannot :edit, [User, Role]
@@ -44,19 +45,19 @@ class Ability
 
       can :pdf_requests, :all
       can :view_full_version, Notice
-      can :view_full_version_api, Notice
     end
 
     if user.has_role?(Role.super_admin)
       grant_permanent_notice_url_generation(user)
+      grant_full_notice_api_response(user)
 
       can :manage, :all
       can :view_full_version, Notice
-      can :view_full_version_api, Notice
     end
 
     if user.has_role?(Role.researcher)
-      can :view_full_version_api, Notice
+      grant_full_notice_api_response(user)
+
       can :read, Notice
     end
   end
@@ -82,5 +83,9 @@ class Ability
     return unless user.can_generate_permanent_notice_token_urls
 
     can :generate_permanent_notice_token_urls, Notice
+  end
+
+  def grant_full_notice_api_response(user)
+    can :view_full_version_api, Notice unless user.limit_notice_api_response
   end
 end

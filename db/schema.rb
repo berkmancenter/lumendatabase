@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181119200641) do
+ActiveRecord::Schema.define(version: 20181123130119) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -326,6 +326,7 @@ ActiveRecord::Schema.define(version: 20181119200641) do
     t.integer  "notice_viewer_views_limit"
     t.integer  "notice_viewer_viewed_notices",             default: 0,  null: false
     t.datetime "notice_viewer_time_limit"
+    t.boolean  "limit_notice_api_response"
   end
 
   add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree
