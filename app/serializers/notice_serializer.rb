@@ -10,22 +10,22 @@ class NoticeSerializer < ActiveModel::Serializer
   end
 
   def works
-    if current_user.nil?
+    if current_user && Ability.new(scope).can?(:view_full_version_api, object)
+      object.works.as_json(
+        only: [:description],
+        include: {
+          infringing_urls: { only: %i[url url_original] },
+          copyrighted_urls: { only: %i[url url_original] }
+        }
+      )
+    else
       object.works.map do |work|
         {
           description: work.description,
           infringing_urls: work.infringing_urls_counted_by_domain,
           copyrighted_urls: work.copyrighted_urls_counted_by_domain
         }
-      end
-    else
-      object.works.as_json({
-        only: [:description],
-        include: {
-          infringing_urls: { only: [:url, :url_original ] },
-          copyrighted_urls: { only: [:url, :url_original ] }
-        }
-      })
+      end.as_json
     end
   end
 
@@ -53,5 +53,4 @@ class NoticeSerializer < ActiveModel::Serializer
     original_value = hash.delete(original_key)
     hash[new_key] = original_value
   end
-
 end

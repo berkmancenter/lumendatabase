@@ -44,6 +44,7 @@ class Ability
 
       can :pdf_requests, :all
       can :view_full_version, Notice
+      can :view_full_version_api, Notice
     end
 
     if user.has_role?(Role.super_admin)
@@ -51,9 +52,13 @@ class Ability
 
       can :manage, :all
       can :view_full_version, Notice
+      can :view_full_version_api, Notice
     end
 
-    can :read, Notice if user.has_role?(Role.researcher)
+    if user.has_role?(Role.researcher)
+      can :view_full_version_api, Notice
+      can :read, Notice
+    end
   end
 
   def grant_admin_access

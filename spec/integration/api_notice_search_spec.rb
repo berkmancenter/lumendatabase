@@ -146,9 +146,7 @@ feature "Searching for Notices via the API" do
             {
               description: "The Lion King on YouTube",
               infringing_urls_attributes: [
-                { url: "http://youtube.com/bad_url_3" },
-                { url: "http://youtube.com/bad_url_2" },
-                { url: "http://youtube.com/bad_url_1" }
+                { domain: 'youtube.com', count: 3 }
               ]
             }
           ],
