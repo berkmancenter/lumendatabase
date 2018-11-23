@@ -241,4 +241,25 @@ feature 'User authorization' do
 
     expect(obj).to be_in_admin
   end
+
+  scenario 'Users are redirected to pre-sign-in page after login' do
+    notice = create(:dmca)
+    notice_url = notice_url(notice)
+    create(
+      :user,
+      email: 'someone@example.com',
+      password: 'somepassword',
+      password_confirmation: 'somepassword'
+    )
+
+    visit notice_url
+
+    visit new_user_session_path
+
+    fill_in 'Email', with: 'someone@example.com'
+    fill_in 'Password', with: 'somepassword'
+    click_button 'Log in'
+
+    expect(current_url).to eq(notice_url)
+  end
 end
