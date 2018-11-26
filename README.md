@@ -25,6 +25,8 @@ Requirements:
 
 Setup:
 
+By default the app will try to connect to Elasticsearch on `http://localhost:9200`. If you want to use a different host set the `ELASTICSEARCH_URL` environment variable.
+
     $ bundle install
     $ cp config/database.yml.example config/database.yml
       (edit database.yml as you wish)
