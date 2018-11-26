@@ -122,7 +122,7 @@ feature 'Fielded searches of Notices' do
 
       search_on_page.add_fielded_search_for(title_field, 'lion')
 
-      sleep 0.2
+      expect(page).to have_css(".field-group.#{title_field.parameter}")
 
       open_and_select_facet(:sender_name_facet, notice.sender_name)
 
@@ -263,10 +263,11 @@ feature 'Fielded searches of Notices' do
         search_on_page = FieldedSearchOnPage.new
         Notice::SEARCHABLE_FIELDS.each do |field|
           search_on_page.add_fielded_search_for(field, 'test')
+          expect(page).to have_css(".field-group.#{field.parameter}")
         end
 
         search_on_page.within_fielded_searches do
-          expect(page).to have_no_css('#duplicate-field', wait: 5)
+          expect(page).to have_no_css('#duplicate-field')
         end
       end
 
@@ -274,6 +275,7 @@ feature 'Fielded searches of Notices' do
         search_on_page = FieldedSearchOnPage.new
         Notice::SEARCHABLE_FIELDS.each do |field|
           search_on_page.add_fielded_search_for(field, 'test')
+          expect(page).to have_css(".field-group.#{field.parameter}")
         end
 
         search_on_page.remove_fielded_search_for(:title)
