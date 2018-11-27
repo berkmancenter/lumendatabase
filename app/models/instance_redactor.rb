@@ -5,19 +5,21 @@ class InstanceRedactor
     @redactors = redactors
   end
 
-  def redact(notice, field_or_fields = Notice::REDACTABLE_FIELDS)
+  def redact(instance, field_or_fields = Notice::REDACTABLE_FIELDS)
     Array(field_or_fields).each do |field|
-      next unless (text = notice.send(field)).present?
+      next unless (text = instance.send(field)).present?
 
-      redact_field(notice, field, text)
-      update_original(notice, field, text)
+      redact_field(instance, field, text)
+      update_original(instance, field, text)
     end
   end
 
-  def redact_all(notice_ids, field_or_fields = Notice::REDACTABLE_FIELDS)
-    Notice.where(id: notice_ids).each do |notice|
-      redact(notice, field_or_fields)
-      notice.save
+  def redact_all(instance_ids,
+                 field_or_fields = Notice::REDACTABLE_FIELDS,
+                 klass = Notice)
+    klass.where(id: instance_ids).each do |instance|
+      redact(instance, field_or_fields)
+      instance.save
     end
   end
 
@@ -25,17 +27,17 @@ class InstanceRedactor
 
   attr_reader :redactors
 
-  def redact_field(notice, field, text)
+  def redact_field(instance, field, text)
     new_text = redactors.inject(text) do |result, redactor|
       redactor.redact(result)
     end
 
-    notice.send(:"#{field}=", new_text)
+    instance.send(:"#{field}=", new_text)
   end
 
-  def update_original(notice, field, text)
-    return unless notice.send(:"#{field}_original").blank?
-    notice.send(:"#{field}_original=", text)
+  def update_original(instance, field, text)
+    return unless instance.send(:"#{field}_original").blank?
+    instance.send(:"#{field}_original=", text)
   end
 
   class ContentRedactor
