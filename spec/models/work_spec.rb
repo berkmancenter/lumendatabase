@@ -10,23 +10,23 @@ RSpec.describe Work, type: :model do
   end
 
   context '.unknown' do
-    it "provides an unknown work" do
+    it 'provides an unknown work' do
       work = Work.unknown
 
       expect(work.kind).to eq 'unknown'
       expect(work.description).to eq Work::UNKNOWN_WORK_DESCRIPTION
     end
 
-    it "caches the unknown work" do
-      work_1 = Work.unknown
-      work_2 = Work.unknown
+    it 'caches the unknown work' do
+      work1 = Work.unknown
+      work2 = Work.unknown
 
-      expect(work_1).to eq work_2
+      expect(work1).to eq work2
     end
   end
 
   context '#infringing_urls' do
-    it "does not create duplicate infringing_urls" do
+    it 'does not create duplicate infringing_urls' do
       existing_infringing_url = create(
         :infringing_url, url: 'http://www.example.com/infringe'
       )
@@ -44,7 +44,7 @@ RSpec.describe Work, type: :model do
   end
 
   context '#copyrighted_urls' do
-    it "does not create duplicate copyrighted_urls" do
+    it 'does not create duplicate copyrighted_urls' do
       existing_copyrighted_url = create(
         :copyrighted_url, url: 'http://www.example.com/copyrighted'
       )
@@ -63,14 +63,14 @@ RSpec.describe Work, type: :model do
   end
 
   context '#kind' do
-    it "auto classifies before saving if kind is not set" do
+    it 'auto classifies before saving if kind is not set' do
       work = build(:work)
 
       work.save
       expect(work.kind).to eq 'Unspecified'
     end
 
-    it "does not auto classify if kind is set" do
+    it 'does not auto classify if kind is set' do
       expect_any_instance_of(DeterminesWorkKind).not_to receive(:kind)
       work = build(:work, kind: 'foo')
 
@@ -78,27 +78,31 @@ RSpec.describe Work, type: :model do
     end
   end
 
-  it "validates infringing urls correctly when multiple are used at once" do
-    notice = notice_with_works_attributes([
-      { infringing_urls_attributes: [{ url: "this is not a url" }] },
-      { infringing_urls_attributes: [{ url: "this is also not a url" }] }
-    ])
+  it 'validates infringing urls correctly when multiple are used at once' do
+    notice = notice_with_works_attributes(
+      [
+        { infringing_urls_attributes: [{ url: 'this is not a url' }] },
+        { infringing_urls_attributes: [{ url: 'this is also not a url' }] }
+      ]
+    )
 
     expect(notice).not_to be_valid
     expect(notice.errors.messages).to eq(
-      { :"works.infringing_urls" => ["is invalid"] }
+      'works.infringing_urls': ['is invalid']
     )
   end
 
-  it "validates copyrighted urls correctly when multiple are used at once" do
-    notice = notice_with_works_attributes([
-      { copyrighted_urls_attributes: [{ url: "this is not a url" }] },
-      { copyrighted_urls_attributes: [{ url: "this is also not a url" }] }
-    ])
+  it 'validates copyrighted urls correctly when multiple are used at once' do
+    notice = notice_with_works_attributes(
+      [
+        { copyrighted_urls_attributes: [{ url: 'this is not a url' }] },
+        { copyrighted_urls_attributes: [{ url: 'this is also not a url' }] }
+      ]
+    )
 
     expect(notice).not_to be_valid
     expect(notice.errors.messages).to eq(
-      { :"works.copyrighted_urls" => ["is invalid"] }
+      'works.copyrighted_urls': ['is invalid']
     )
   end
 

@@ -12,7 +12,9 @@ class Work < ActiveRecord::Base
 
   accepts_nested_attributes_for :infringing_urls,
                                 :copyrighted_urls,
-                                :reject_if => proc { |attributes| attributes['url'].blank? }
+                                reject_if: proc { |attributes|
+                                  attributes['url'].blank?
+                                }
   validates_associated :infringing_urls, :copyrighted_urls
   validates :kind, length: { maximum: 255 }
 
@@ -71,6 +73,6 @@ class Work < ActiveRecord::Base
   end
 
   before_save on: :create do
-    self.description_original = description if self.description_original.nil?
+    self.description_original = description if description_original.nil?
   end
 end
