@@ -36,7 +36,11 @@ feature 'notice submission' do
     curb = post_api('/notices', parameters)
 
     expect(curb.response_code).to eq 201
-    expect(Notice.last.title).to eq 'A superduper title'
+
+    notice = Notice.last
+
+    expect(notice.title).to eq 'A superduper title'
+    expect(notice.recipient.kind).to eq 'individual'
   end
 
   scenario 'submitting a notice with token in header', js: true do
