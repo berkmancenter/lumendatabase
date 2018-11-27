@@ -4,6 +4,7 @@ class Work < ActiveRecord::Base
   include ValidatesAutomatically
 
   UNKNOWN_WORK_DESCRIPTION = 'Unknown work'.freeze
+  REDACTABLE_FIELDS = %w[description].freeze
 
   has_and_belongs_to_many :notices
   has_and_belongs_to_many :infringing_urls
@@ -57,12 +58,16 @@ class Work < ActiveRecord::Base
     where(attributes).first || create!(attributes)
   end
 
-  # Code below is to run a basic classifier for work kinds. Disabled due to
-  # confusion caused by mis-classified works.
+  def auto_redact
+    InstanceRedactor.new.redact(self, REDACTABLE_FIELDS)
+  end
+
   before_save do
-    if kind.blank?
-      self.kind = 'Unspecified' # DeterminesWorkKind.new(self).kind
-    end
+    auto_redact
+
+    # DeterminesWorkKind is intended for use here but disabled due to confusion
+    # caused by mis-classified works.
+    self.kind = 'Unspecified' if kind.blank?
   end
 
   before_save on: :create do

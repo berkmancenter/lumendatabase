@@ -102,6 +102,30 @@ RSpec.describe Work, type: :model do
     )
   end
 
+  context 'redaction' do
+    it 'redacts phone numbers with auto_redact' do
+      content = '(617) 867-5309'
+      test_redaction(content)
+    end
+
+    it 'redacts emails with auto_redact' do
+      content = 'me@example.com'
+      test_redaction(content)
+    end
+
+    it 'redacts SSNs with auto_redact' do
+      content = '123-45-6789'
+      test_redaction(content)
+    end
+
+    it 'redacts automatically on save' do
+      params = { description: 'Test' }
+      work = Work.new(params)
+      expect(work).to receive(:auto_redact)
+      work.save
+    end
+  end
+
   private
 
   def notice_with_works_attributes(attributes)
@@ -112,5 +136,21 @@ RSpec.describe Work, type: :model do
         entity_attributes: { name: 'Recipient' }
       }]
     )
+  end
+
+  def work_for_redaction_testing(redact_me)
+    params = { description: "Test if we redact #{redact_me}" }
+    work = Work.new(params)
+    work.auto_redact
+    work.save
+    work.reload
+    work
+  end
+
+  def test_redaction(content)
+    work = work_for_redaction_testing(content)
+
+    expect(work.description).not_to include content
+    expect(work.description_original).to include content
   end
 end
