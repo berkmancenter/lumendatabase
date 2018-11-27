@@ -6,8 +6,8 @@ ActionResponder = Struct.new(:context, :abstract_model, :object)
 class PostResponder < ActionResponder
   def handle(params)
     if params[:selected_text].present?
-      redactor = RedactsNotices.new([
-        RedactsNotices::RedactsContent.new(params[:selected_text])
+      redactor = InstanceRedactor.new([
+        InstanceRedactor::ContentRedactor.new(params[:selected_text])
                                     ])
 
       review_required_ids = Notice.where(review_required: true).pluck(:id)

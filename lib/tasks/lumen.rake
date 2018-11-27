@@ -424,7 +424,7 @@ where notices.id in (
       notices.find_in_batches do |group|
         group.each do |notice|
           next unless notice.sender.present?
-          redactor = RedactsNotices::RedactsEntityName.new(notice.sender.name)
+          redactor = InstanceRedactor::EntityNameRedactor.new(notice.sender.name)
           notice.works.each do |work|
             work.update_attributes(
               description: redactor.redact(work.description)
@@ -465,7 +465,7 @@ where notices.id in (
         notices.find_in_batches do |group|
           group.each do |notice|
             next unless notice.sender.present?
-            redactor = RedactsNotices::RedactsEntityName.new(notice.sender.name)
+            redactor = InstanceRedactor::EntityNameRedactor.new(notice.sender.name)
             notice.works.each do |work|
               work.update_attributes(
                 description: redactor.redact(work.description))

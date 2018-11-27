@@ -161,9 +161,9 @@ describe "RedactNoticeProc" do
       it "redacts this and all next notices" do
         params[:selected_text] = "Sensitive thing"
         params[:next_notices]  = %w( 2 3 4 )
-        redactor = expect_new(RedactsNotices,
+        redactor = expect_new(InstanceRedactor,
                               [
-                                expect_new(RedactsNotices::RedactsContent,
+                                expect_new(InstanceRedactor::ContentRedactor,
                                            'Sensitive thing')
                               ])
         review_required_ids = [@object.id] + redactable_notices.map(&:id)

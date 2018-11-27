@@ -1,7 +1,7 @@
-class RedactsNotices
-  def initialize(redactors = [RedactsPhoneNumbers.new,
-                              RedactsSSNs.new,
-                              RedactsEmail.new])
+class InstanceRedactor
+  def initialize(redactors = [PhoneNumberRedactor.new,
+                              SSNRedactor.new,
+                              EmailRedactor.new])
     @redactors = redactors
   end
 
@@ -38,7 +38,7 @@ class RedactsNotices
     notice.send(:"#{field}_original=", text)
   end
 
-  class RedactsContent
+  class ContentRedactor
     STOP_WORDS = %w[
       a about above across after again against all almost alone along already
       also although always among an and another any anybody anyone anything
@@ -90,9 +90,9 @@ class RedactsNotices
     end
   end
 
-  class RedactsPhoneNumbers
+  class PhoneNumberRedactor
     def redact(text)
-      redactor = RedactsContent.new(
+      redactor = ContentRedactor.new(
         /(\(?\d{3}\)?.?)?     # optional area code
          (\d{3}[^\d]?\d{4})|  # phone number, optional single-char separator
          (\d+[\d ]{10,16}\d+) # turkish phone number
@@ -103,9 +103,9 @@ class RedactsNotices
     end
   end
 
-  class RedactsSSNs
+  class SSNRedactor
     def redact(text)
-      redactor = RedactsContent.new(
+      redactor = ContentRedactor.new(
         /\b(\d{3})\D?(\d{2})\D?(\d{4})\b/x
       )
 
@@ -113,9 +113,9 @@ class RedactsNotices
     end
   end
 
-  class RedactsEmail
+  class EmailRedactor
     def redact(text)
-      redactor = RedactsContent.new(
+      redactor = ContentRedactor.new(
         /\S+@\S+\.\S+[^.\s]/i
       )
 
@@ -123,7 +123,7 @@ class RedactsNotices
     end
   end
 
-  class RedactsEntityName
+  class EntityNameRedactor
     def initialize(name)
       match = name.gsub(/[-*+?\d]/, ' ').strip.split(/\s+/)
       separator = (name =~ /[a-z]/mi ? '[^a-z]' : '\s')
@@ -133,7 +133,7 @@ class RedactsNotices
 
     def redact(text)
       return text if @regex_base.blank?
-      redactor = RedactsContent.new(@regex)
+      redactor = ContentRedactor.new(@regex)
 
       redactor.redact(text)
     end
