@@ -52,6 +52,9 @@ class Ability
     can :access, :original_files
   end
 
+  # Note that this only covers Notice, because it governs use of the admin
+  # interface, and redaction of other models in the admin has not been
+  # implemented.
   def grant_redact
     can :edit, Notice
     can :redact_notice, Notice
