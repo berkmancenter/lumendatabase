@@ -58,6 +58,7 @@ end
 
 group :development do
   gem 'binding_of_caller'
+  gem 'bullet'
   gem 'foreman'
 end
 

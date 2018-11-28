@@ -66,6 +66,9 @@ GEM
       mocha (~> 0.13.2)
     buftok (0.2.0)
     builder (3.2.3)
+    bullet (5.9.0)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.11)
     byebug (9.0.5)
     cancancan (1.15.0)
     capybara (2.14.3)
@@ -390,6 +393,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.4)
+    uniform_notifier (1.12.1)
     vcr (4.0.0)
     warden (1.2.6)
       rack (>= 1.0)
@@ -415,6 +419,7 @@ DEPENDENCIES
   bootstrap-datepicker-rails
   bourbon
   bourne
+  bullet
   cancancan
   coffee-rails
   country_select
