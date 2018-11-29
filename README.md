@@ -67,6 +67,22 @@ Use rubocop and leave the code at least as clean as you found it. If you make
 linting-only changes, it's considerate to your code reviewer to keep them in
 their own commit.
 
+Profiling:
+* [Skylight](https://www.skylight.io/app/applications/utm46ElcSDtw/recent/5m/endpoints)
+  * track page rendering time, count allocations, find possibly dodgy SQL
+  * analytics to help you find the problem areas
+  * login required
+  * runs in prod
+* [bullet](https://github.com/flyerhzm/bullet)
+  * find N+1 queries and unused eager loading
+  * runs in dev
+  * logs to `log/bullet.log`
+* [oink](https://github.com/noahd1/oink)
+  * memory usage, allocations
+  * more specific than Skylight as to which objects are being created where
+  * runs in dev by default; can run anywhere by setting `ENV[LUMEN_USE_OINK]` (ok to run in production)
+  * logs to `log/oink.log`
+
 Ephemera
 ========
 
