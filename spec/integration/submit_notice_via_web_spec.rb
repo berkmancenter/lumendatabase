@@ -134,10 +134,12 @@ feature 'notice submission' do
         fill_in 'City', with: 'Recipient City'
         fill_in 'State', with: 'MA'
         select 'United States', from: 'Country'
+        select 'organization', from: 'Recipient Type'
       end
 
       within('section.sender') do
         fill_in 'Name', with: 'Sender the first'
+        select 'organization', from: 'Sender Type'
       end
     end
 
@@ -152,6 +154,12 @@ feature 'notice submission' do
 
       expect(page).to have_content 'Sender the first'
     end
+
+    notice = Notice.last
+
+    expect(notice.recipient.kind).to eq('organization')
+    expect(notice.sender.kind).to eq('organization')
+    expect(notice.submitter.kind).to eq('individual')
   end
 
   scenario 'entity addresses are partially private' do

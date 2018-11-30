@@ -387,4 +387,13 @@ describe DMCA, type: :model do
       expect(notice.published).to be false
     end
   end
+
+  context '#entity_notice_roles' do
+    it 'sets the default kind of entities' do
+      notice = create(:dmca, role_names: %w[sender principal])
+
+      expect(notice.principal.kind).to eq('individual')
+      expect(notice.sender.kind).to eq('individual')
+    end
+  end
 end
