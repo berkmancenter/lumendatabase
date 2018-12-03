@@ -26,6 +26,7 @@ gem 'loofah', '>= 2.2.3'
 gem 'mime-types', '2.99.3'
 gem 'minitest'
 gem 'neat'
+gem 'oink'
 gem 'paperclip', '~> 5'
 gem 'pg', '0.20.0'
 gem 'rack', '>= 1.6.11'
@@ -58,6 +59,7 @@ end
 
 group :development do
   gem 'binding_of_caller'
+  gem 'bullet'
   gem 'foreman'
 end
 
