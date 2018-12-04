@@ -30,9 +30,6 @@ class SearchesModels
                                   .search(search_definition, type: '')
     search_response.limit(@per_page)
 
-    # @instances = search_response
-    #              .results
-    #              .map { |r| NoticeSearchResult.new(get_model_class(r._source).new || Notice.new, r._source, r[:highlight].presence || []) }
     search_response
   end
 
