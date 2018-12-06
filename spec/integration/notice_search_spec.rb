@@ -88,6 +88,24 @@ feature "Searching Notices", type: :feature do
     )
   end
 
+  scenario 'caching respects pagination', cache: true do
+    # Create enough notices to force pagination of results. The concern here
+    # is that caching a search result page might inadvertently cause all pages
+    # of a search to match the first viewed page - we want to make sure that
+    # doesn't happen.
+    create_list(:dmca, 15, title: 'paginate me')
+    index_changed_instances
+
+    submit_search 'paginate me'
+
+    first_page = page.body
+
+    find('.next a').click
+
+    second_page = page.body
+    expect(first_page).not_to eq second_page
+  end
+
   scenario "displays search terms", search: true do
     create(:dmca, title: "The Lion King on Youtube")
     index_changed_instances
