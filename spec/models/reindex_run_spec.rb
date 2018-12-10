@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe ReindexRun, type: :model do
-  it "tracks run information when no exceptions are thrown" do
+  it 'tracks run information when no exceptions are thrown' do
     reindex_run = create(:reindex_run)
     expect(ReindexRun).to receive(:create!).and_return(reindex_run)
     now = Time.now
@@ -17,15 +17,17 @@ describe ReindexRun, type: :model do
     expect(reindex_run.updated_at.to_s).to eq now.utc.to_s
   end
 
-  it "does not track run information when exceptions are thrown" do
-    expect(ReindexRun).not_to receive(:create!).with(entity_count: 0, notice_count: 0)
+  it 'does not track run information when exceptions are thrown' do
+    expect(ReindexRun)
+      .not_to receive(:create!)
+      .with(entity_count: 0, notice_count: 0)
     allow(Notice).to receive(:where).and_raise(StandardError)
 
     described_class.index_changed_model_instances
   end
 
-  context ".last_run" do
-    it "equals the last run" do
+  context '.last_run' do
+    it 'equals the last run' do
       earliest_run = create(:reindex_run)
       latest_run = Timecop.travel(1.hour) { create(:reindex_run) }
 
@@ -33,8 +35,8 @@ describe ReindexRun, type: :model do
     end
   end
 
-  context "entities" do
-    it "only reindexes changed entities" do
+  context 'entities' do
+    it 'only reindexes changed entities' do
       create(:reindex_run)
 
       old_entity = Timecop.travel(1.hour.ago) { create(:entity, name: 'Old') }
@@ -47,8 +49,8 @@ describe ReindexRun, type: :model do
     end
   end
 
-  context "notices" do
-    it "only reindexes changed notices" do
+  context 'notices' do
+    it 'only reindexes changed notices' do
       create(:reindex_run)
 
       old_entity = Timecop.travel(1.hour.ago) { create(:dmca, title: 'Old') }

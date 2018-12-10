@@ -2,11 +2,11 @@ require 'rails_helper'
 require 'yaml'
 require 'support/contain_link'
 
-feature "Searching Notices", type: :feature do
+feature 'Searching Notices', type: :feature do
   include SearchHelpers
   include ContainLink
 
-  scenario "displays the results" do
+  scenario 'displays the results' do
     create_list(:dmca, 5, title: 'Boy howdy')
     index_changed_instances
 
@@ -83,8 +83,9 @@ feature "Searching Notices", type: :feature do
 
     submit_search 'foo'
 
-    expect(page).not_to have_css('li.excerpt',
-      text:'<strong>foo</strong> and <em>bar</em>'
+    expect(page).not_to have_css(
+      'li.excerpt',
+      text: '<strong>foo</strong> and <em>bar</em>'
     )
   end
 
@@ -106,8 +107,8 @@ feature "Searching Notices", type: :feature do
     expect(first_page).not_to eq second_page
   end
 
-  scenario "displays search terms", search: true do
-    create(:dmca, title: "The Lion King on Youtube")
+  scenario 'displays search terms', search: true do
+    create(:dmca, title: 'The Lion King on Youtube')
     index_changed_instances
 
     submit_search 'awesome blossom'
@@ -115,12 +116,12 @@ feature "Searching Notices", type: :feature do
     expect(page).to have_css("input#search[value='awesome blossom']")
   end
 
-  scenario "for full-text on a single model", search: true do
-    notice = create(:dmca, title: "The Lion King on Youtube")
+  scenario 'for full-text on a single model', search: true do
+    notice = create(:dmca, title: 'The Lion King on Youtube')
     trademark = create(:trademark, title: "Coke - it's the King thing")
     index_changed_instances
 
-    within_search_results_for("king") do
+    within_search_results_for('king') do
       expect(page).to have_n_results(2)
       expect(page).to have_content(notice.title)
       expect(page).to have_content(trademark.title)
@@ -128,11 +129,11 @@ feature "Searching Notices", type: :feature do
     end
   end
 
-  scenario "based on action taken", search: true do
+  scenario 'based on action taken', search: true do
     notices = [
       create(:dmca, action_taken: 'No'),
       create(:dmca, action_taken: 'Yes'),
-      create(:dmca, action_taken: 'Partial'),
+      create(:dmca, action_taken: 'Partial')
     ]
     index_changed_instances
 
@@ -144,9 +145,9 @@ feature "Searching Notices", type: :feature do
     end
   end
 
-  scenario "paginates properly", search: true do
+  scenario 'paginates properly', search: true do
     3.times do
-      create(:dmca, title: "The Lion King on Youtube")
+      create(:dmca, title: 'The Lion King on Youtube')
     end
     index_changed_instances
 
@@ -159,47 +160,47 @@ feature "Searching Notices", type: :feature do
     end
   end
 
-  scenario "it does not include rescinded notices", search: true do
-    notice = create(:dmca, title: "arbitrary", rescinded: true)
+  scenario 'it does not include rescinded notices', search: true do
+    notice = create(:dmca, title: 'arbitrary', rescinded: true)
     index_changed_instances
 
-    expect_search_to_not_find("arbitrary", notice)
+    expect_search_to_not_find('arbitrary', notice)
   end
 
-  scenario "it does not include spam notices", search: true do
-    notice = create(:dmca, title: "arbitrary", spam: true)
+  scenario 'it does not include spam notices', search: true do
+    notice = create(:dmca, title: 'arbitrary', spam: true)
     index_changed_instances
 
-    expect_search_to_not_find("arbitrary", notice)
+    expect_search_to_not_find('arbitrary', notice)
   end
 
-  scenario "it does not include hidden notices", search: true do
-    notice = create(:dmca, title: "arbitrary", hidden: true)
+  scenario 'it does not include hidden notices', search: true do
+    notice = create(:dmca, title: 'arbitrary', hidden: true)
     index_changed_instances
 
-    expect_search_to_not_find("arbitrary", notice)
+    expect_search_to_not_find('arbitrary', notice)
   end
 
-  scenario "it does not include unpublished notices", search: true do
-    notice = create(:dmca, title: "fanciest pants", published: false)
-    found_notice = create(:dmca, title: "fancy pants")
+  scenario 'it does not include unpublished notices', search: true do
+    notice = create(:dmca, title: 'fanciest pants', published: false)
+    found_notice = create(:dmca, title: 'fancy pants')
     index_changed_instances
 
-    within_search_results_for("pants") do
+    within_search_results_for('pants') do
       expect(page).to have_n_results(1)
       expect(page).to have_content(found_notice.title)
     end
 
-    expect_search_to_not_find("fanciest pants", notice)
+    expect_search_to_not_find('fanciest pants', notice)
   end
 
-  context "within associated models" do
-    scenario "for topic names", search: true do
-      topic = create(:topic, name: "Lion King")
+  context 'within associated models' do
+    scenario 'for topic names', search: true do
+      topic = create(:topic, name: 'Lion King')
       notice = create(:dmca, topics: [topic])
       index_changed_instances
 
-      within_search_results_for("king") do
+      within_search_results_for('king') do
         expect(page).to have_n_results(1)
         expect(page).to have_content(notice.title)
         expect(page).to have_content(topic.name)
@@ -208,19 +209,19 @@ feature "Searching Notices", type: :feature do
       end
     end
 
-    scenario "for tags", search: true do
+    scenario 'for tags', search: true do
       notice = create(:dmca, tag_list: 'foo, bar')
       index_changed_instances
 
-      within_search_results_for("bar") do
+      within_search_results_for('bar') do
         expect(page).to have_n_results(1)
         expect(page).to have_content(notice.title)
-        expect(page.html).to have_excerpt("bar")
+        expect(page.html).to have_excerpt('bar')
       end
     end
 
-    scenario "for entities", search: true do
-      notice = create(:dmca, role_names: %w( sender principal recipient))
+    scenario 'for entities', search: true do
+      notice = create(:dmca, role_names: %w[sender principal recipient])
       index_changed_instances
 
       within_search_results_for(notice.recipient_name) do
@@ -245,19 +246,19 @@ feature "Searching Notices", type: :feature do
       end
     end
 
-    scenario "for works", search: true do
+    scenario 'for works', search: true do
       work = create(
-        :work, description: "An arbitrary description"
+        :work, description: 'An arbitrary description'
       )
 
       notice = create(:dmca, works: [work])
       index_changed_instances
 
-      within_search_results_for("arbitrary") do
+      within_search_results_for('arbitrary') do
         expect(page).to have_n_results(1)
         expect(page).to have_content(notice.title)
         expect(page).to have_content(work.description)
-        expect(page.html).to have_excerpt("arbitrary", "An", "description")
+        expect(page.html).to have_excerpt('arbitrary', 'An', 'description')
       end
     end
 
@@ -309,7 +310,7 @@ feature "Searching Notices", type: :feature do
       end
     end
 
-    scenario "for urls associated through works", search: true do
+    scenario 'for urls associated through works', search: true do
       work = create(
         :work,
         infringing_urls: [
@@ -337,54 +338,54 @@ feature "Searching Notices", type: :feature do
     end
   end
 
-  context "changes to associated models" do
-    scenario "a topic is created", search: true do
+  context 'changes to associated models' do
+    scenario 'a topic is created', search: true do
       notice = create(:dmca)
-      notice.topics.create!(name: "arbitrary")
+      notice.topics.create!(name: 'arbitrary')
       index_changed_instances
 
-      within_search_results_for("arbitrary") do
+      within_search_results_for('arbitrary') do
         expect(page).to have_n_results(1)
         expect(page).to have_content(notice.title)
       end
     end
 
-    scenario "a topic is destroyed", search: true do
-      topic = create(:topic, name: "arbitrary")
+    scenario 'a topic is destroyed', search: true do
+      topic = create(:topic, name: 'arbitrary')
       notice = create(:dmca, topics: [topic])
       topic.destroy
       index_changed_instances
 
-      expect_search_to_not_find("arbitrary", notice)
+      expect_search_to_not_find('arbitrary', notice)
     end
 
-    scenario "a topic updates its name", search: true do
-      topic = create(:topic, name: "something")
+    scenario 'a topic updates its name', search: true do
+      topic = create(:topic, name: 'something')
       notice = create(:dmca, topics: [topic])
-      topic.update_attributes!(name: "arbitrary")
+      topic.update_attributes!(name: 'arbitrary')
       index_changed_instances
 
-      within_search_results_for("arbitrary") do
+      within_search_results_for('arbitrary') do
         expect(page).to have_n_results(1)
         expect(page).to have_content(notice.title)
       end
     end
   end
 
-  scenario "advanced search on multiple fields", search: true do
-    create_notice_with_entities("Jim & Jon's", "Jim", "Jon")
-    create_notice_with_entities("Jim & Dan's", "Jim", "Dan")
-    create_notice_with_entities("Dan & Jon's", "Dan", "Jon")
+  scenario 'advanced search on multiple fields', search: true do
+    create_notice_with_entities("Jim & Jon's", 'Jim', 'Jon')
+    create_notice_with_entities("Jim & Dan's", 'Jim', 'Dan')
+    create_notice_with_entities("Dan & Jon's", 'Dan', 'Jon')
     index_changed_instances
 
-    search_for(sender_name: "Jim", recipient_name: "Jon")
+    search_for(sender_name: 'Jim', recipient_name: 'Jon')
 
     expect(page).to have_content("Jim & Jon's")
     expect(page).to have_no_content("Jim & Dan's")
     expect(page).to have_no_content("Dan & Jon's")
   end
 
-  scenario "searching with a blank parameter", search: true do
+  scenario 'searching with a blank parameter', search: true do
     expect { submit_search('') }.not_to raise_error
   end
 
