@@ -8,12 +8,16 @@
 </section>
 
 <% cache "topic_#{@topic.id}_notices" do %>
-  <% notices = construct_recent_notices %>
+  <% notices = recent_notice_metadata %>
   <% if notices.any? %>
     <section class="topic-notices">
       <h4>Recent Notices</h4>
       <ol>
-        <%= render notices %>
+        <% notices.each do |notice| %>
+          <li class="notice">
+            <%= link_to notice.title, notice_path(notice.id) %>
+          </li>
+        <% end %>
       </ol>
     </section>
   <% end %>
