@@ -367,7 +367,7 @@ namespace :lumen do
       [Notice, Entity].each do |klass|
         ids = klass.pluck(:id)
         ids.each do |id|
-          if ReindexRun.is_indexed?(klass, id)
+          if ReindexRun.indexed?(klass, id)
             puts "Skipping #{klass}, #{id}"
           else
             puts "Indexing #{klass}, #{id}"
