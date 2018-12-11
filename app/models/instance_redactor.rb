@@ -32,6 +32,7 @@ class InstanceRedactor
       redactor.redact(result)
     end
 
+    return unless new_text != text
     instance.send(:"#{field}=", new_text)
   end
 

@@ -150,6 +150,11 @@ class NoticesController < ApplicationController
     end
   end
 
+  # In theory the calls to fetch and delete cause memory leaks per
+  # https://tenderlovemaking.com/2014/06/02/yagni-methods-are-killing-me.html ,
+  # but with benchmarking on localhost I'm unable to find a meaningful memory
+  # usage difference between this version and a version that avoids these calls.
+  # --ay, 11 December 2018
   def get_notice_type(params)
     type_string = params.fetch(:type, 'DMCA')
     type_string = 'DMCA' if type_string == 'Dmca'

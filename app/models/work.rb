@@ -70,9 +70,10 @@ class Work < ActiveRecord::Base
     # DeterminesWorkKind is intended for use here but disabled due to confusion
     # caused by mis-classified works.
     self.kind = 'Unspecified' if kind.blank?
-  end
 
-  before_save on: :create do
-    self.description_original = description if description_original.nil?
+    # Force associated notices to be reindexed if the description has been
+    # updated (presumably redacted). This will keep redacted text out of the
+    # Elasticsearch index.
+    notices.update_all(updated_at: Time.now) if description_changed?
   end
 end

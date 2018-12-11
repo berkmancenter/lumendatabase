@@ -261,6 +261,54 @@ feature "Searching Notices", type: :feature do
       end
     end
 
+    scenario 'for redacted works', search: true do
+      # Sensitive content should neither display nor be searchable.
+      work1 = create(
+        :work, description: 'My SSN is not 123-45-6789'
+      )
+      work2 = create(
+        :work, description: 'My phone number is not (123) 456-7890'
+      )
+      work3 = create(
+        :work, description: 'My email address is not me@example.com'
+      )
+      notice = create(:dmca, works: [work1, work2, work3])
+      index_changed_instances
+
+      within_search_results_for('My SSN') do
+        expect(page).to have_n_results(1)
+        expect(page).to have_content(notice.title)
+        expect(page).to have_content('[REDACTED]')
+        expect(page).not_to have_content('123-45-6789')
+      end
+
+      within_search_results_for('123-45-6789') do
+        expect(page).to have_n_results(0)
+      end
+
+      within_search_results_for('My phone number') do
+        expect(page).to have_n_results(1)
+        expect(page).to have_content(notice.title)
+        expect(page).to have_content('[REDACTED]')
+        expect(page).not_to have_content('(123) 456-7890')
+      end
+
+      within_search_results_for('(123) 456-7890') do
+        expect(page).to have_n_results(0)
+      end
+
+      within_search_results_for('My email') do
+        expect(page).to have_n_results(1)
+        expect(page).to have_content(notice.title)
+        expect(page).to have_content('[REDACTED]')
+        expect(page).not_to have_content('me@example.com')
+      end
+
+      within_search_results_for('me@example.com') do
+        expect(page).to have_n_results(0)
+      end
+    end
+
     scenario "for urls associated through works", search: true do
       work = create(
         :work,

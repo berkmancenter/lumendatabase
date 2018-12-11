@@ -381,6 +381,31 @@ namespace :lumen do
     end
   end
 
+  desc 'Redact and reindex works'
+  task redact_and_reindex_works: :environment do
+    # This is a one-time task to redact sensitive information from all existing
+    # work descriptions. We only look at works before a certain date (shortly
+    # after our deploy date for this feature) because anything after that date
+    # will be auto_redacted as part of the save process.
+    works = Work.where('updated_at < (?)', Date.new(2018, 12, 31)).limit(1000)
+    works.each do |work|
+      # Make sure that updated_at changes, so we don't re-redact this work.
+      work.touch
+      work.save # calls auto_redact
+    end
+
+    # Works aren't directly indexed in ES; they're indexed as columns on Notice.
+    # Therefore we need to reindex the associated notices in order to update
+    # Elasticsearch entries. Changing the updated_at column on the associated
+    # notices will force them to update the next time
+    # index_changed_model_instances runs. This also keeps all reindexing inside
+    # that task, so this task can't step on its toes.
+    notices = Notice.joins(:works)
+                    .where('works.id IN (?)', works.pluck(:id))
+                    .distinct
+    notices.update_all(updated_at: Time.now)
+  end
+
   desc 'Publish notices whose publication delay has expired'
   task publish_embargoed: :environment do
     Notice.where(published: false).each do |notice|
