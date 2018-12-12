@@ -387,11 +387,15 @@ namespace :lumen do
     # work descriptions. We only look at works before a certain date (shortly
     # after our deploy date for this feature) because anything after that date
     # will be auto_redacted as part of the save process.
-    works = Work.where('updated_at < (?)', Date.new(2018, 12, 31)).limit(1000)
+    works = Work.where('updated_at < (?)', Date.new(2018, 12, 21))
+                .order(:id)
+                .limit(100_000)
+    updated_works = []
     works.each do |work|
       # Make sure that updated_at changes, so we don't re-redact this work.
       work.touch
       work.save # calls auto_redact
+      updated_works << work.id if work.description.include? 'REDACTED'
     end
 
     # Works aren't directly indexed in ES; they're indexed as columns on Notice.
@@ -401,7 +405,7 @@ namespace :lumen do
     # index_changed_model_instances runs. This also keeps all reindexing inside
     # that task, so this task can't step on its toes.
     notices = Notice.joins(:works)
-                    .where('works.id IN (?)', works.pluck(:id))
+                    .where('works.id IN (?)', updated_works)
                     .distinct
     notices.update_all(updated_at: Time.now)
   end
