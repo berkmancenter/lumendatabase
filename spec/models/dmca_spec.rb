@@ -91,11 +91,11 @@ describe DMCA, type: :model do
   end
 
   context '#auto_redact' do
-    it 'calls RedactsNotices#redact on itself' do
+    it 'calls InstanceRedactor#redact on itself' do
       notice = DMCA.new
-      redactor = RedactsNotices.new
+      redactor = InstanceRedactor.new
       expect(redactor).to receive(:redact).with(notice)
-      expect(RedactsNotices).to receive(:new).and_return(redactor)
+      expect(InstanceRedactor).to receive(:new).and_return(redactor)
 
       notice.auto_redact
     end

@@ -247,7 +247,7 @@ class Notice < ActiveRecord::Base
   end
 
   def auto_redact
-    RedactsNotices.new.redact(self)
+    InstanceRedactor.new.redact(self)
   end
 
   def mark_for_review

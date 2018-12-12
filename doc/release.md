@@ -5,6 +5,8 @@ Maintenance windows are Wednesday and Saturday nights (after 5pm Eastern).
 ## Special instructions
 If any deploys have special instructions, write them here, with a date and PR number. When that PR has been deployed, you can erase the special instructions.
 
+PR #512 - add cron job for work redaction rake task, running every 2 hours with lockrun to avoid duplicating db queries.
+
 ## Hotfix
 * Write code, code-review, and merge into `dev` via the normal process.
 * Give Adam a heads-up: what you're doing, what it fixes, why it needs to be pushed out ASAP.

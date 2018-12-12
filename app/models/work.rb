@@ -4,6 +4,7 @@ class Work < ActiveRecord::Base
   include ValidatesAutomatically
 
   UNKNOWN_WORK_DESCRIPTION = 'Unknown work'.freeze
+  REDACTABLE_FIELDS = %w[description].freeze
 
   has_and_belongs_to_many :notices
   has_and_belongs_to_many :infringing_urls
@@ -11,7 +12,9 @@ class Work < ActiveRecord::Base
 
   accepts_nested_attributes_for :infringing_urls,
                                 :copyrighted_urls,
-                                :reject_if => proc { |attributes| attributes['url'].blank? }
+                                reject_if: proc { |attributes|
+                                  attributes['url'].blank?
+                                }
   validates_associated :infringing_urls, :copyrighted_urls
   validates :kind, length: { maximum: 255 }
 
@@ -57,15 +60,20 @@ class Work < ActiveRecord::Base
     where(attributes).first || create!(attributes)
   end
 
-  # Code below is to run a basic classifier for work kinds. Disabled due to
-  # confusion caused by mis-classified works.
-  before_save do
-    if kind.blank?
-      self.kind = 'Unspecified' # DeterminesWorkKind.new(self).kind
-    end
+  def auto_redact
+    InstanceRedactor.new.redact(self, REDACTABLE_FIELDS)
   end
 
-  before_save on: :create do
-    self.description_original = description if self.description_original.nil?
+  before_save do
+    auto_redact
+
+    # DeterminesWorkKind is intended for use here but disabled due to confusion
+    # caused by mis-classified works.
+    self.kind = 'Unspecified' if kind.blank?
+
+    # Force associated notices to be reindexed if the description has been
+    # updated (presumably redacted). This will keep redacted text out of the
+    # Elasticsearch index.
+    notices.update_all(updated_at: Time.now) if description_changed?
   end
 end
