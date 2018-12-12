@@ -390,24 +390,18 @@ namespace :lumen do
     works = Work.where('updated_at < (?)', Date.new(2018, 12, 21))
                 .order(:id)
                 .limit(100_000)
-    updated_works = []
     works.each do |work|
       # Make sure that updated_at changes, so we don't re-redact this work.
       work.touch
       work.save # calls auto_redact
-      updated_works << work.id if work.description.include? 'REDACTED'
     end
 
     # Works aren't directly indexed in ES; they're indexed as columns on Notice.
     # Therefore we need to reindex the associated notices in order to update
     # Elasticsearch entries. Changing the updated_at column on the associated
     # notices will force them to update the next time
-    # index_changed_model_instances runs. This also keeps all reindexing inside
-    # that task, so this task can't step on its toes.
-    notices = Notice.joins(:works)
-                    .where('works.id IN (?)', updated_works)
-                    .distinct
-    notices.update_all(updated_at: Time.now)
+    # index_changed_model_instances runs. This will happen automatically as
+    # part of the before_save callback on Work.
   end
 
   desc 'Publish notices whose publication delay has expired'
