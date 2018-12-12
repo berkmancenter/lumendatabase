@@ -10,7 +10,7 @@ class Ability
       can_view_full_version = true
 
       can_view_full_version = false if user.notice_viewer_views_limit && user.notice_viewer_viewed_notices >= user.notice_viewer_views_limit
-      can_view_full_version = false if user.notice_viewer_time_limit && Date.now > user.notice_viewer_time_limit
+      can_view_full_version = false if user.notice_viewer_time_limit && Time.now > user.notice_viewer_time_limit
 
       can :view_full_version, Notice if can_view_full_version
     end
