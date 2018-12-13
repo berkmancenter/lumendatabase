@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
 
   skip_before_action :verify_authenticity_token
 
+  after_filter :store_action
   after_action :include_auth_cookie
 
   private
@@ -68,5 +69,16 @@ class ApplicationController < ActionController::Base
 
   def include_auth_cookie
     cookies[:lumen_authenticated] = (current_user.present? ? 1 : 0)
+  end
+
+  def store_action
+    skip_paths = ['/users/sign_in', '/users/sign_up', '/users/password/new',
+                  '/users/password/edit', '/users/confirmation',
+                  '/users/sign_out']
+
+    return if !request.get? || skip_paths.include?(request.path) ||
+              request.xhr?
+
+    store_location_for(:user, request.fullpath)
   end
 end
