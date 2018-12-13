@@ -271,21 +271,4 @@ FactoryGirl.define do
   factory :role do
     name 'test_role'
   end
-
-  factory :dmca_counter_notice do
-    attach_list_of_works true
-    list_removed_in_error true
-    perjury_risk_acknowledged true
-    consent_to_be_served true
-
-    jurisdiction 'I live in the United States'
-
-    trait :in_us do
-      jurisdiction 'I live in the United States'
-    end
-
-    trait :outside_us do
-      jurisdiction 'I live outside the United States'
-    end
-  end
 end
