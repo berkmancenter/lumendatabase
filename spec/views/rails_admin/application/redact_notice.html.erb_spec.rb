@@ -22,12 +22,12 @@ describe 'rails_admin/application/redact_notice.html.erb' do
 
     render
 
-    expect(rendered).to have_words("Time in queue: about 2 hours")
+    expect(rendered).to have_words('Time in queue: about 2 hours')
   end
 
   it 'displays notice id, and entity names' do
     notice = build_stubbed(
-      :dmca, role_names: %w( submitter recipient sender )
+      :dmca, role_names: %w[submitter recipient sender]
     )
     assign(:object, notice)
     allow(notice).to receive(:sender_name).and_return('sender name')
@@ -49,7 +49,7 @@ describe 'rails_admin/application/redact_notice.html.erb' do
       body_original: 'Original'
     )
     assign(:object, notice)
-    assign(:redactable_fields, %i( body ))
+    assign(:redactable_fields, %i[body])
 
     render
 
@@ -78,7 +78,7 @@ describe 'rails_admin/application/redact_notice.html.erb' do
     expect(rendered).to have_css('input#notice_review_required')
   end
 
-  context "buttons and links" do
+  context 'buttons and links' do
     before do
       assign(:object, build_stubbed(:dmca))
       assign(:redactable_fields, [])

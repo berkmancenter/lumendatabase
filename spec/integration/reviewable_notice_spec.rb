@@ -1,15 +1,15 @@
 require 'rails_helper'
 
-feature "Publishing high risk notices" do
+feature 'Publishing high risk notices' do
   include NoticeActions
 
-  let(:harmless_text) { "Some harmless text" }
+  let(:harmless_text) { 'Some harmless text' }
 
-  scenario "A non-US notice with Body text" do
+  scenario 'A non-US notice with Body text' do
     create_non_us_risk_trigger
 
     submit_notice_from('Spain') do
-      fill_in "Body", with: harmless_text
+      fill_in 'Body', with: harmless_text
     end
 
     open_recent_notice
@@ -18,11 +18,11 @@ feature "Publishing high risk notices" do
     end
   end
 
-  scenario "A US notice with Body text" do
+  scenario 'A US notice with Body text' do
     create_non_us_risk_trigger
 
     submit_notice_from('United States') do
-      fill_in "Body", with: harmless_text
+      fill_in 'Body', with: harmless_text
     end
 
     open_recent_notice
@@ -45,7 +45,7 @@ feature "Publishing high risk notices" do
   def submit_notice_from(country)
     submit_recent_notice do
       within('section.recipient') do
-        select country, from: "Country"
+        select country, from: 'Country'
       end
 
       yield if block_given?

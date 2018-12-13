@@ -251,9 +251,11 @@ describe 'notices/show.html.erb' do
 
     notice.file_uploads.each do |file_upload|
       expect(rendered).to have_css(
-        "ol.attachments .#{file_upload.file_type.downcase}")
+        "ol.attachments .#{file_upload.file_type.downcase}"
+      )
       expect(rendered).to have_css(
-        "ol.attachments a[href=\"#{file_upload.url}\"]")
+        "ol.attachments a[href=\"#{file_upload.url}\"]"
+      )
     end
   end
 

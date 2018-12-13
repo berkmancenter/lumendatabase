@@ -81,7 +81,7 @@ feature 'Fielded searches of Notices' do
 
     scenario 'by newest date_received', search: true, js: true do
       search_on_page = FieldedSearchOnPage.new
-      search_on_page.set_sort_order('date_received desc')
+      search_on_page.define_sort_order('date_received desc')
 
       expect(page).to have_sort_order_selection_of('Newest')
       search_on_page.within_results do
@@ -92,7 +92,7 @@ feature 'Fielded searches of Notices' do
 
     scenario 'by oldest date_received', search: true, js: true do
       search_on_page = FieldedSearchOnPage.new
-      search_on_page.set_sort_order('date_received asc')
+      search_on_page.define_sort_order('date_received asc')
 
       expect(page).to have_sort_order_selection_of('Oldest')
       search_on_page.within_results do
