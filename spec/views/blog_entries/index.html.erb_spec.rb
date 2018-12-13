@@ -7,8 +7,8 @@ describe 'blog_entries/index.html.erb' do
     render
 
     blog_entries.each do |blog_entry|
-      expect(rendered).to have_content(blog_entry.author)
-      expect(rendered).to have_content(blog_entry.published_at.to_s(:simple))
+      expect(rendered).to have_words(blog_entry.author)
+      expect(rendered).to have_words(blog_entry.published_at.to_s(:simple))
     end
   end
 
@@ -30,7 +30,7 @@ describe 'blog_entries/index.html.erb' do
     render
 
     blog_entries.each do |blog_entry|
-      expect(rendered).to have_content(blog_entry.abstract)
+      expect(rendered).to have_words(blog_entry.abstract)
     end
   end
 

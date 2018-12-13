@@ -7,7 +7,7 @@ feature 'notice submission' do
   scenario 'non signed-in user cannot submit notices' do
     visit '/notices/new?type=DMCA'
 
-    expect(page).to have_content('Direct submission to Lumen is no longer available. If you are interested in sharing with Lumen copies of takedown notices you have sent or received, please contact Lumen.')
+    expect(page).to have_words('Direct submission to Lumen is no longer available. If you are interested in sharing with Lumen copies of takedown notices you have sent or received, please contact Lumen.')
   end
 
   scenario 'submitting a notice with title' do
@@ -34,7 +34,7 @@ feature 'notice submission' do
 
     open_recent_notice
 
-    expect(page).to have_content('Action taken: Yes')
+    expect(page).to have_words('Action taken: Yes')
   end
 
   scenario 'submitting a notice with a jurisdiction' do
@@ -55,11 +55,11 @@ feature 'notice submission' do
     open_recent_notice
 
     within('.recipient .date') do
-      expect(page).to have_content('May 05, 2013')
+      expect(page).to have_words('May 05, 2013')
     end
 
     within('.sender .date') do
-      expect(page).to have_content('May 04, 2013')
+      expect(page).to have_words('May 04, 2013')
     end
   end
 
@@ -103,7 +103,7 @@ feature 'notice submission' do
     open_recent_notice
 
     within('#tags') do
-      expect(page).to have_content 'tag_1'
+      expect(page).to have_words 'tag_1'
     end
   end
 
@@ -120,8 +120,8 @@ feature 'notice submission' do
     open_recent_notice
 
     within('#topics') do
-      expect(page).to have_content 'Topic 1'
-      expect(page).to have_content 'Topic 3'
+      expect(page).to have_words 'Topic 1'
+      expect(page).to have_words 'Topic 3'
     end
   end
 
@@ -146,13 +146,13 @@ feature 'notice submission' do
     open_recent_notice
 
     within('#entities') do
-      expect(page).to have_content 'Recipient the first'
-      expect(page).to have_content '[Private]'
-      expect(page).to have_content 'Recipient City'
-      expect(page).to have_content 'MA'
-      expect(page).to have_content 'US'
+      expect(page).to have_words 'Recipient the first'
+      expect(page).to have_words '[Private]'
+      expect(page).to have_words 'Recipient City'
+      expect(page).to have_words 'MA'
+      expect(page).to have_words 'US'
 
-      expect(page).to have_content 'Sender the first'
+      expect(page).to have_words 'Sender the first'
     end
 
     notice = Notice.last
@@ -209,9 +209,9 @@ feature 'notice submission' do
     open_recent_notice
 
     within('#works') do
-      expect(page).to have_content 'http://www.example.com/original_work.pdf'
-      expect(page).to have_content 'movie'
-      expect(page).to have_content 'A series of videos and still images'
+      expect(page).to have_words 'http://www.example.com/original_work.pdf'
+      expect(page).to have_words 'movie'
+      expect(page).to have_words 'A series of videos and still images'
       expect(page).to have_css(
         %{.infringing_url:contains("http://example.com/infringing_url1")}
       )
@@ -225,7 +225,7 @@ feature 'notice submission' do
 
     open_recent_notice
 
-    expect(page).to have_content 'Sent via: Arbitrary source'
+    expect(page).to have_words 'Sent via: Arbitrary source'
   end
 
   scenario 'submitting a notice with a subject' do
@@ -235,7 +235,7 @@ feature 'notice submission' do
 
     open_recent_notice
 
-    expect(page).to have_content 'Re: Some subject'
+    expect(page).to have_words 'Re: Some subject'
   end
 
   scenario 'a form articulates its required fields correctly' do
@@ -274,7 +274,7 @@ feature 'notice submission' do
       sign_in(create(:user, :submitter))
       visit '/notices/new?type=Counternotice'
 
-      expect(page).to have_content 'Provide us with information about the DMCA counternotice'
+      expect(page).to have_words 'Provide us with information about the DMCA counternotice'
       expect(page).to have_css '#notice_counternotice_for_id'
       expect(page).not_to have_css '#notice_action_taken'
       expect(page).not_to have_css 'textarea#notice_body'
@@ -287,7 +287,7 @@ feature 'notice submission' do
       sign_in(create(:user, :submitter))
       visit '/notices/new?type=CourtOrder'
 
-      expect(page).to have_content 'Provide us with information about the Court Order'
+      expect(page).to have_words 'Provide us with information about the Court Order'
       expect(page).to have_css '#notice_action_taken'
       expect(page).to have_css '#notice_subject'
       expect(page).to have_css '#notice_topic_ids'
@@ -306,7 +306,7 @@ feature 'notice submission' do
       sign_in(create(:user, :submitter))
       visit '/notices/new?type=DataProtection'
 
-      expect(page).to have_content 'Provide us with information about the Data Protection takedown notice'
+      expect(page).to have_words 'Provide us with information about the Data Protection takedown notice'
       expect(page).to have_css '#notice_action_taken'
       expect(page).not_to have_css '#notice_subject'
       expect(page).not_to have_css '#notice_topic_ids'
@@ -325,7 +325,7 @@ feature 'notice submission' do
       sign_in(create(:user, :submitter))
       visit '/notices/new?type=Defamation'
 
-      expect(page).to have_content 'Provide us with information about the Defamation takedown notice'
+      expect(page).to have_words 'Provide us with information about the Defamation takedown notice'
       expect(page).to have_css '#notice_action_taken'
       expect(page).to have_css '#notice_subject'
       expect(page).to have_css '#notice_topic_ids'
@@ -344,7 +344,7 @@ feature 'notice submission' do
       sign_in(create(:user, :submitter))
       visit '/notices/new?type=DMCA'
 
-      expect(page).to have_content 'Provide us with information about the DMCA takedown notice'
+      expect(page).to have_words 'Provide us with information about the DMCA takedown notice'
       expect(page).to have_css '#notice_action_taken'
       expect(page).to have_css '#notice_subject'
       expect(page).to have_css '#notice_topic_ids'
@@ -363,7 +363,7 @@ feature 'notice submission' do
       sign_in(create(:user, :submitter))
       visit '/notices/new?type=GovernmentRequest'
 
-      expect(page).to have_content 'Provide us with information about the Government Request'
+      expect(page).to have_words 'Provide us with information about the Government Request'
       expect(page).to have_css '#notice_action_taken'
       expect(page).to have_css '#notice_subject'
       expect(page).to have_css '#notice_topic_ids'
@@ -382,7 +382,7 @@ feature 'notice submission' do
       sign_in(create(:user, :submitter))
       visit '/notices/new?type=LawEnforcementRequest'
 
-      expect(page).to have_content 'Provide us with information about the Law Enforcement Request'
+      expect(page).to have_words 'Provide us with information about the Law Enforcement Request'
       expect(page).to have_css '#notice_action_taken'
       expect(page).to have_css '#notice_subject'
       expect(page).to have_css '#notice_topic_ids'
@@ -401,7 +401,7 @@ feature 'notice submission' do
       sign_in(create(:user, :submitter))
       visit '/notices/new?type=Other'
 
-      expect(page).to have_content 'Provide us with information about the notice'
+      expect(page).to have_words 'Provide us with information about the notice'
       expect(page).to have_css '#notice_action_taken'
       expect(page).to have_css '#notice_subject'
       expect(page).to have_css '#notice_topic_ids'
@@ -420,7 +420,7 @@ feature 'notice submission' do
       sign_in(create(:user, :submitter))
       visit '/notices/new?type=PrivateInformation'
 
-      expect(page).to have_content 'Provide us with information about the Private Information notice'
+      expect(page).to have_words 'Provide us with information about the Private Information notice'
       expect(page).to have_css '#notice_action_taken'
       expect(page).to have_css '#notice_subject'
       expect(page).to have_css '#notice_topic_ids'
@@ -439,7 +439,7 @@ feature 'notice submission' do
       sign_in(create(:user, :submitter))
       visit '/notices/new?type=Trademark'
 
-      expect(page).to have_content 'Provide us with information about the Trademark takedown notice'
+      expect(page).to have_words 'Provide us with information about the Trademark takedown notice'
       expect(page).to have_css '#notice_action_taken'
       expect(page).to have_css '#notice_subject'
       expect(page).to have_css '#notice_topic_ids'

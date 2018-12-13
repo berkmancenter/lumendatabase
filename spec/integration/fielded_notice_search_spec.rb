@@ -17,7 +17,7 @@ feature 'Fielded searches of Notices' do
         search_on_page.parameterized_search_for(field.parameter, generator.query)
 
         search_on_page.within_results do
-          expect(page).to have_content(generator.matched_notice.title)
+          expect(page).to have_words(generator.matched_notice.title)
           expect(page).to have_no_content(generator.unmatched_notice.title)
         end
       end
@@ -37,7 +37,7 @@ feature 'Fielded searches of Notices' do
         search_on_page.run_search
 
         search_on_page.within_results do
-          expect(page).to have_content(generator.matched_notice.title)
+          expect(page).to have_words(generator.matched_notice.title)
           expect(page).to have_no_content(generator.unmatched_notice.title)
         end
       end
@@ -59,7 +59,7 @@ feature 'Fielded searches of Notices' do
     search_on_page.run_search
 
     search_on_page.within_results do
-      expect(page).to have_content(inside_search.title)
+      expect(page).to have_words(inside_search.title)
       expect(page).to have_no_content(outside_search.title)
     end
 

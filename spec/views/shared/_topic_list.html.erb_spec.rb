@@ -16,6 +16,6 @@ describe 'shared/_topic_list.html.erb' do
 
     render 'shared/topic_list', topics: topics
 
-    expect(rendered).to have_content(/^#{topics.map(&:name).join(', ')}$/)
+    expect(rendered).to have_words(topics.map(&:name).join(', ').to_s)
   end
 end

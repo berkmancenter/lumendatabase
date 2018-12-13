@@ -22,7 +22,7 @@ describe 'rails_admin/application/redact_notice.html.erb' do
 
     render
 
-    expect(rendered).to have_content("Time in queue: about 2 hours")
+    expect(rendered).to have_words("Time in queue: about 2 hours")
   end
 
   it 'displays notice id, and entity names' do
@@ -30,13 +30,16 @@ describe 'rails_admin/application/redact_notice.html.erb' do
       :dmca, role_names: %w( submitter recipient sender )
     )
     assign(:object, notice)
+    allow(notice).to receive(:sender_name).and_return('sender name')
+    allow(notice).to receive(:recipient_name).and_return('recipient name')
+    allow(notice).to receive(:submitter_name).and_return('submitter name')
 
     render
 
     expect(rendered).to have_content(notice.id)
-    expect(rendered).to have_content(notice.submitter_name)
-    expect(rendered).to have_content(notice.recipient_name)
-    expect(rendered).to have_content(notice.sender_name)
+    expect(rendered).to have_words(notice.submitter_name)
+    expect(rendered).to have_words(notice.recipient_name)
+    expect(rendered).to have_words(notice.sender_name)
   end
 
   it 'shows redactable_fields alongside originals' do

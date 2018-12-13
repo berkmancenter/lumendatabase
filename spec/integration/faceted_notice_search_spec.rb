@@ -36,7 +36,7 @@ feature "Faceted search of Notices", search: true do
           expect(page).to have_active_facet_dropdown(facet_type)
           expect(page).to have_active_facet(facet_type, facet)
           expect(page).to have_n_results 1
-          expect(page).to have_content(inside_facet.title)
+          expect(page).to have_words(inside_facet.title)
         end
 
         expect(page).to have_css("input#search[value='king']")
@@ -62,7 +62,7 @@ feature "Faceted search of Notices", search: true do
       within_faceted_search_results_for("title", :date_received_facet, facet) do
         expect(page).to have_active_facet_dropdown(:date_received_facet)
         expect(page).to have_n_results 1
-        expect(page).to have_content(inside_facet.title)
+        expect(page).to have_words(inside_facet.title)
       end
     end
   end
@@ -82,7 +82,7 @@ feature "Faceted search of Notices", search: true do
 
       expect(page).to have_active_facet_dropdown(:date_received_facet)
       expect(page).to have_n_results 1
-      expect(page).to have_content(notice.title)
+      expect(page).to have_words(notice.title)
     end
   end
 

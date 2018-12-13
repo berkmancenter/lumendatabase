@@ -14,7 +14,7 @@ feature "Publishing high risk notices" do
 
     open_recent_notice
     within('.notice-body') do
-      expect(page).to have_content Notice::UNDER_REVIEW_VALUE
+      expect(page).to have_words Notice::UNDER_REVIEW_VALUE
     end
   end
 
@@ -27,7 +27,7 @@ feature "Publishing high risk notices" do
 
     open_recent_notice
     within('.notice-body') do
-      expect(page).to have_content harmless_text
+      expect(page).to have_words harmless_text
     end
   end
 

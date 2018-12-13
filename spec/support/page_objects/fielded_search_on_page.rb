@@ -92,10 +92,10 @@ class FieldedSearchOnPage < PageObject
   private
 
   def advanced_search_visible?
-    first('.container.advanced-search')
+    first('.container.advanced-search', minimum: 0)
   end
 
   def sort_order_visible?
-    first('.sort-order ol.dropdown-menu')
+    first('.sort-order ol.dropdown-menu', minimum: 0)
   end
 end

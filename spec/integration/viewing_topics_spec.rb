@@ -12,7 +12,7 @@ feature 'Topics' do
     visit "/topics/#{@topic.id}"
 
     within('section.topic-notices') do
-      expect(page).to have_content Notice.first.title
+      expect(page).to have_words Notice.first.title
     end
   end
 
