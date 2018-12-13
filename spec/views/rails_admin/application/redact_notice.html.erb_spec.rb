@@ -22,21 +22,24 @@ describe 'rails_admin/application/redact_notice.html.erb' do
 
     render
 
-    expect(rendered).to have_content("Time in queue: about 2 hours")
+    expect(rendered).to have_words('Time in queue: about 2 hours')
   end
 
   it 'displays notice id, and entity names' do
     notice = build_stubbed(
-      :dmca, role_names: %w( submitter recipient sender )
+      :dmca, role_names: %w[submitter recipient sender]
     )
     assign(:object, notice)
+    allow(notice).to receive(:sender_name).and_return('sender name')
+    allow(notice).to receive(:recipient_name).and_return('recipient name')
+    allow(notice).to receive(:submitter_name).and_return('submitter name')
 
     render
 
     expect(rendered).to have_content(notice.id)
-    expect(rendered).to have_content(notice.submitter_name)
-    expect(rendered).to have_content(notice.recipient_name)
-    expect(rendered).to have_content(notice.sender_name)
+    expect(rendered).to have_words(notice.submitter_name)
+    expect(rendered).to have_words(notice.recipient_name)
+    expect(rendered).to have_words(notice.sender_name)
   end
 
   it 'shows redactable_fields alongside originals' do
@@ -46,7 +49,7 @@ describe 'rails_admin/application/redact_notice.html.erb' do
       body_original: 'Original'
     )
     assign(:object, notice)
-    assign(:redactable_fields, %i( body ))
+    assign(:redactable_fields, %i[body])
 
     render
 
@@ -75,7 +78,7 @@ describe 'rails_admin/application/redact_notice.html.erb' do
     expect(rendered).to have_css('input#notice_review_required')
   end
 
-  context "buttons and links" do
+  context 'buttons and links' do
     before do
       assign(:object, build_stubbed(:dmca))
       assign(:redactable_fields, [])

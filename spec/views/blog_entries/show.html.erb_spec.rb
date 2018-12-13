@@ -6,7 +6,7 @@ describe 'blog_entries/show.html.erb' do
 
     render
 
-    expect(rendered).to have_content(blog_entry.title)
+    expect(rendered).to have_words(blog_entry.title)
   end
 
   it "shows the entry's publishing info" do
@@ -14,8 +14,8 @@ describe 'blog_entries/show.html.erb' do
 
     render
 
-    expect(rendered).to have_content(blog_entry.author)
-    expect(rendered).to have_content(blog_entry.published_at.to_s(:simple))
+    expect(rendered).to have_words(blog_entry.author)
+    expect(rendered).to have_words(blog_entry.published_at.to_s(:simple))
   end
 
   it "shows the entry's html content" do
@@ -26,7 +26,7 @@ describe 'blog_entries/show.html.erb' do
     expect(rendered).to include(blog_entry.content_html)
   end
 
-  it "assigns the correct imagery class" do
+  it 'assigns the correct imagery class' do
     blog_entry = assign_blog_entry(image: 'rain')
 
     render

@@ -82,7 +82,7 @@ group :test do
   gem 'elasticsearch-extensions'
   gem 'fakeweb'
   gem 'launchy'
-  gem 'poltergeist', '~> 1.10'
+  gem 'poltergeist'
   gem 'shoulda-matchers', '~> 3.1', '>= 3.1.1'
   gem 'simplecov', require: false
   gem 'timecop'

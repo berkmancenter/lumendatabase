@@ -204,7 +204,7 @@ describe 'notices/show.html.erb' do
 
     render
 
-    expect(rendered).to have_content('Sent via: Arbitrary source')
+    expect(rendered).to have_words('Sent via: Arbitrary source')
   end
 
   Notice::VALID_ACTIONS.each do |action|
@@ -213,7 +213,7 @@ describe 'notices/show.html.erb' do
 
       render
 
-      expect(rendered).to have_content("Action taken: #{action}")
+      expect(rendered).to have_words("Action taken: #{action}")
     end
   end
 
@@ -222,7 +222,7 @@ describe 'notices/show.html.erb' do
 
     render
 
-    expect(rendered).to have_content('Sent via: Unknown')
+    expect(rendered).to have_words('Sent via: Unknown')
   end
 
   it "displays the notice's subject" do
@@ -230,7 +230,7 @@ describe 'notices/show.html.erb' do
 
     render
 
-    expect(rendered).to have_content('Re: Some subject')
+    expect(rendered).to have_words('Re: Some subject')
   end
 
   it 'does not link to the notices original' do
@@ -251,9 +251,11 @@ describe 'notices/show.html.erb' do
 
     notice.file_uploads.each do |file_upload|
       expect(rendered).to have_css(
-        "ol.attachments .#{file_upload.file_type.downcase}")
+        "ol.attachments .#{file_upload.file_type.downcase}"
+      )
       expect(rendered).to have_css(
-        "ol.attachments a[href=\"#{file_upload.url}\"]")
+        "ol.attachments a[href=\"#{file_upload.url}\"]"
+      )
     end
   end
 
@@ -262,7 +264,7 @@ describe 'notices/show.html.erb' do
 
     render
 
-    expect(rendered).not_to have_content('Supporting Documents')
+    expect(rendered).not_to have_words('Supporting Documents')
     expect(rendered).not_to have_css('.attachments')
   end
 

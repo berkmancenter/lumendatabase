@@ -24,7 +24,7 @@ feature 'Redactable fields' do
       end
 
       open_recent_notice
-      expect(page).to have_content(redacted_text)
+      expect(page).to have_words(redacted_text)
       expect(page).to have_no_content(original_text)
     end
 

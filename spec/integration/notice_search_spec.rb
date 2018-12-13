@@ -62,7 +62,7 @@ feature 'Searching Notices', type: :feature do
     expect(page).to have_css(
       '.result .date-received', text: notice.date_received.to_s(:simple)
     )
-    expect(page).to have_content(on_behalf_of)
+    expect(page).to have_words(on_behalf_of)
     notice.topics.each do |topic|
       expect(page).to have_css('.result .topic', text: topic.name)
     end
@@ -74,7 +74,7 @@ feature 'Searching Notices', type: :feature do
 
     submit_search 'foo'
 
-    expect(page).to have_content('foo bar baz')
+    expect(page).to have_words('foo bar baz')
   end
 
   scenario 'sanitizes excerpts' do
@@ -123,8 +123,8 @@ feature 'Searching Notices', type: :feature do
 
     within_search_results_for('king') do
       expect(page).to have_n_results(2)
-      expect(page).to have_content(notice.title)
-      expect(page).to have_content(trademark.title)
+      expect(page).to have_words(notice.title)
+      expect(page).to have_words(trademark.title)
       expect(page.html).to have_excerpt('King', 'The Lion', 'on Youtube')
     end
   end
@@ -141,7 +141,7 @@ feature 'Searching Notices', type: :feature do
       search_for(action_taken: notice.action_taken)
 
       expect(page).to have_n_results(1)
-      expect(page).to have_content(notice.title)
+      expect(page).to have_words(notice.title)
     end
   end
 
@@ -188,7 +188,7 @@ feature 'Searching Notices', type: :feature do
 
     within_search_results_for('pants') do
       expect(page).to have_n_results(1)
-      expect(page).to have_content(found_notice.title)
+      expect(page).to have_words(found_notice.title)
     end
 
     expect_search_to_not_find('fanciest pants', notice)
@@ -202,8 +202,8 @@ feature 'Searching Notices', type: :feature do
 
       within_search_results_for('king') do
         expect(page).to have_n_results(1)
-        expect(page).to have_content(notice.title)
-        expect(page).to have_content(topic.name)
+        expect(page).to have_words(notice.title)
+        expect(page).to have_words(topic.name)
         expect(page).to contain_link(topic_path(topic))
         expect(page.html).to have_excerpt('King', 'Lion')
       end
@@ -215,7 +215,7 @@ feature 'Searching Notices', type: :feature do
 
       within_search_results_for('bar') do
         expect(page).to have_n_results(1)
-        expect(page).to have_content(notice.title)
+        expect(page).to have_words(notice.title)
         expect(page.html).to have_excerpt('bar')
       end
     end
@@ -226,22 +226,22 @@ feature 'Searching Notices', type: :feature do
 
       within_search_results_for(notice.recipient_name) do
         expect(page).to have_n_results(1)
-        expect(page).to have_content(notice.title)
-        expect(page).to have_content(notice.recipient_name)
+        expect(page).to have_words(notice.title)
+        expect(page).to have_words(notice.recipient_name)
         expect(page.html).to have_excerpt('Entity')
       end
 
       within_search_results_for(notice.sender_name) do
         expect(page).to have_n_results(1)
-        expect(page).to have_content(notice.title)
-        expect(page).to have_content(notice.sender_name)
+        expect(page).to have_words(notice.title)
+        expect(page).to have_words(notice.sender_name)
         expect(page.html).to have_excerpt('Entity')
       end
 
       within_search_results_for(notice.principal_name) do
         # note: principal name not shown in results
         expect(page).to have_n_results(1)
-        expect(page).to have_content(notice.title)
+        expect(page).to have_words(notice.title)
         expect(page.html).to have_excerpt('Entity')
       end
     end
@@ -256,8 +256,8 @@ feature 'Searching Notices', type: :feature do
 
       within_search_results_for('arbitrary') do
         expect(page).to have_n_results(1)
-        expect(page).to have_content(notice.title)
-        expect(page).to have_content(work.description)
+        expect(page).to have_words(notice.title)
+        expect(page).to have_words(work.description)
         expect(page.html).to have_excerpt('arbitrary', 'An', 'description')
       end
     end
@@ -278,9 +278,9 @@ feature 'Searching Notices', type: :feature do
 
       within_search_results_for('My SSN') do
         expect(page).to have_n_results(1)
-        expect(page).to have_content(notice.title)
-        expect(page).to have_content('[REDACTED]')
-        expect(page).not_to have_content('123-45-6789')
+        expect(page).to have_words(notice.title)
+        expect(page).to have_words('[REDACTED]')
+        expect(page).not_to have_words('123-45-6789')
       end
 
       within_search_results_for('123-45-6789') do
@@ -289,9 +289,9 @@ feature 'Searching Notices', type: :feature do
 
       within_search_results_for('My phone number') do
         expect(page).to have_n_results(1)
-        expect(page).to have_content(notice.title)
-        expect(page).to have_content('[REDACTED]')
-        expect(page).not_to have_content('(123) 456-7890')
+        expect(page).to have_words(notice.title)
+        expect(page).to have_words('[REDACTED]')
+        expect(page).not_to have_words('(123) 456-7890')
       end
 
       within_search_results_for('(123) 456-7890') do
@@ -300,9 +300,9 @@ feature 'Searching Notices', type: :feature do
 
       within_search_results_for('My email') do
         expect(page).to have_n_results(1)
-        expect(page).to have_content(notice.title)
-        expect(page).to have_content('[REDACTED]')
-        expect(page).not_to have_content('me@example.com')
+        expect(page).to have_words(notice.title)
+        expect(page).to have_words('[REDACTED]')
+        expect(page).not_to have_words('me@example.com')
       end
 
       within_search_results_for('me@example.com') do
@@ -326,13 +326,13 @@ feature 'Searching Notices', type: :feature do
 
       within_search_results_for('infringing_url') do
         expect(page).to have_n_results(1)
-        expect(page).to have_content(notice.title)
+        expect(page).to have_words(notice.title)
         expect(page.html).to have_excerpt('infringing_url')
       end
 
       within_search_results_for('copyrighted_url') do
         expect(page).to have_n_results(1)
-        expect(page).to have_content(notice.title)
+        expect(page).to have_words(notice.title)
         expect(page.html).to have_excerpt('copyrighted_url')
       end
     end
@@ -346,7 +346,7 @@ feature 'Searching Notices', type: :feature do
 
       within_search_results_for('arbitrary') do
         expect(page).to have_n_results(1)
-        expect(page).to have_content(notice.title)
+        expect(page).to have_words(notice.title)
       end
     end
 
@@ -367,7 +367,7 @@ feature 'Searching Notices', type: :feature do
 
       within_search_results_for('arbitrary') do
         expect(page).to have_n_results(1)
-        expect(page).to have_content(notice.title)
+        expect(page).to have_words(notice.title)
       end
     end
   end
@@ -380,7 +380,7 @@ feature 'Searching Notices', type: :feature do
 
     search_for(sender_name: 'Jim', recipient_name: 'Jon')
 
-    expect(page).to have_content("Jim & Jon's")
+    expect(page).to have_words("Jim & Jon's")
     expect(page).to have_no_content("Jim & Dan's")
     expect(page).to have_no_content("Dan & Jon's")
   end
