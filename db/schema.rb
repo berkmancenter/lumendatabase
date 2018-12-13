@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181123130119) do
+ActiveRecord::Schema.define(version: 20181213152656) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -271,10 +271,10 @@ ActiveRecord::Schema.define(version: 20181123130119) do
   create_table "token_urls", force: :cascade do |t|
     t.string   "email"
     t.string   "token"
-    t.integer  "notice_id"
+    t.integer  "notice_id",                       null: false
     t.integer  "user_id"
     t.datetime "expiration_date"
-    t.boolean  "valid_forever"
+    t.boolean  "valid_forever",   default: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -323,10 +323,10 @@ ActiveRecord::Schema.define(version: 20181123130119) do
     t.datetime "updated_at"
     t.integer  "publication_delay",                        default: 0,  null: false
     t.boolean  "can_generate_permanent_notice_token_urls"
-    t.boolean  "limit_notice_api_response"
-    t.integer  "notice_viewer_views_limit",                default: 1
-    t.integer  "notice_viewer_viewed_notices",             default: 0
+    t.integer  "notice_viewer_views_limit"
+    t.integer  "notice_viewer_viewed_notices",             default: 0,  null: false
     t.datetime "notice_viewer_time_limit"
+    t.boolean  "limit_notice_api_response"
   end
 
   add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree
