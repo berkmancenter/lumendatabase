@@ -1,6 +1,7 @@
 require 'rails_admin/config/actions/redact_queue'
 require 'rails_admin/config/actions/redact_notice'
 require 'rails_admin/config/actions/pdf_requests'
+require 'rails_admin/config/fields/types/datetime_timezoned'
 
 RailsAdmin.config do |config|
   config.parent_controller = '::ApplicationController'
