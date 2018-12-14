@@ -11,9 +11,10 @@ class TokenUrl < ActiveRecord::Base
   validates :email,
             allow_blank: true,
             format: { with: URI::MailTo::EMAIL_REGEXP }
+  validates :notice, presence: true
 
   def self.validate_token(token, notice)
-    return false if token.nil?
+    return false if token.nil? || notice.nil?
     return false unless (token_url = TokenUrl.find_by(token: token))
     return false if !token_url[:valid_forever] &&
                     (!token_url[:expiration_date].nil? &&
