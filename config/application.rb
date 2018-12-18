@@ -20,11 +20,6 @@ module Chill
     config.active_record.default_timezone = :utc
     I18n.config.enforce_available_locales = true
 
-    lumen_config = YAML.load_file("#{Rails.root}/config/lumen.yml")
-    lumen_config.keys.collect do |k|
-      Chill::Application.config.send("#{k}=", lumen_config[k])
-    end
-
     config.generators do |generate|
       generate.test_framework :rspec
       generate.helper false
@@ -99,5 +94,10 @@ module Chill
       timestamp = datetime.strftime '%Y-%m-%d %H:%M:%S (%Z)'
       "#{timestamp} #{severity}: #{progname} #{msg}\n"
     end
+
+    # Mailer settings
+    Chill::Application.config.default_sender = ENV['DEFAULT_SENDER'] || 'no-reply@example.com'
+    Chill::Application.config.return_path = ENV['RETURN_PATH'] || 'user@example.com'
+    Chill::Application.config.site_host = ENV['SITE_HOST'] || 'example.com'
   end
 end

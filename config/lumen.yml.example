@@ -1,4 +1,0 @@
-# Mailer settings
-default_sender: no_reply@example.com
-return_path: user@example.com
-site_host: example.com
