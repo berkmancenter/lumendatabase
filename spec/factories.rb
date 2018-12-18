@@ -187,6 +187,10 @@ FactoryGirl.define do
     password 'secretsauce'
     password_confirmation 'secretsauce'
 
+    trait :notice_viewer do
+      roles { [Role.notice_viewer] }
+    end
+
     trait :submitter do
       roles { [Role.submitter] }
     end

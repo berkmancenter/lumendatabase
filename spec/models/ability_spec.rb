@@ -47,6 +47,20 @@ describe Ability do
     end
   end
 
+  context "a notice viewer" do
+    subject { Ability.new(build(:user, :notice_viewer)) }
+
+    it_behaves_like 'a non-admin'
+
+    it "can't generate new notice token urls" do
+      expect(subject.can? :generate_permanent_notice_token_urls, Notice).to be false
+    end
+
+    it "can see full notice urls" do
+      expect(subject.can? :view_full_version, Notice).to be true
+    end
+  end
+
   context "a submitter" do
     subject { Ability.new(build(:user, :submitter)) }
 

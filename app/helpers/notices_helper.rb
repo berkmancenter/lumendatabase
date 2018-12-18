@@ -62,7 +62,7 @@ module NoticesHelper
   def can_see_full_notice_version?(notice)
     return true if can?(:view_full_version, notice)
 
-    TokenUrl.validate_token(params[:access_token], notice)
+    TokenUrl.valid?(params[:access_token], notice)
   end
 
   def permanent_url_full_notice(notice)

@@ -13,16 +13,22 @@ class TokenUrl < ActiveRecord::Base
             format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :notice, presence: true
 
-  def self.validate_token(token, notice)
-    return false if token.nil? || notice.nil?
-    return false unless (token_url = TokenUrl.find_by(token: token))
-    return false if !token_url[:valid_forever] &&
-                    (!token_url[:expiration_date].nil? &&
-                     token_url[:expiration_date] < Time.now
-                    )
-    return false if token_url.notice != notice
+  def self.valid?(token, notice)
+    valid_token_and_notice?(token, notice) &&
+      (token_url = TokenUrl.find_by(token: token)) &&
+      valid_time?(token_url) &&
+      token_url.notice == notice
+  end
 
-    true
+  def self.valid_time?(token_url)
+    token_url[:valid_forever] ||
+      token_url[:expiration_date].nil? ||
+      (!token_url[:expiration_date].nil? &&
+      token_url[:expiration_date] > Time.now)
+  end
+
+  def self.valid_token_and_notice?(token, notice)
+    !token.nil? && !notice.nil?
   end
 
   private

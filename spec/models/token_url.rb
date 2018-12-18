@@ -20,15 +20,15 @@ describe TokenUrl, type: :model do
     end
   end
 
-  context '.validate_token' do
+  context '.valid?' do
     it 'validates successfully when the token exists in the database' do
-      result = TokenUrl.validate_token(token_url.token, notice)
+      result = TokenUrl.valid?(token_url.token, notice)
 
       expect(result).to eq(true)
     end
 
     it 'validates unsuccessfully when the token doesn\'t exist in the database' do
-      result = TokenUrl.validate_token('NOT_A_TOKEN', notice)
+      result = TokenUrl.valid?('NOT_A_TOKEN', notice)
 
       expect(result).to eq(false)
     end
@@ -36,7 +36,7 @@ describe TokenUrl, type: :model do
     it 'validates unsuccessfully when the notice given doesn\'t match' do
       notice_2 = create(:dmca)
 
-      result = TokenUrl.validate_token(token_url.token, notice_2)
+      result = TokenUrl.valid?(token_url.token, notice_2)
 
       expect(result).to eq(false)
     end
@@ -49,7 +49,7 @@ describe TokenUrl, type: :model do
         expiration_date: DateTime.yesterday
       )
 
-      result = TokenUrl.validate_token(token_url.token, notice)
+      result = TokenUrl.valid?(token_url.token, notice)
 
       expect(result).to eq(false)
     end
@@ -62,7 +62,7 @@ describe TokenUrl, type: :model do
         expiration_date: DateTime.tomorrow
       )
 
-      result = TokenUrl.validate_token(token_url.token, notice)
+      result = TokenUrl.valid?(token_url.token, notice)
 
       expect(result).to eq(true)
     end
@@ -76,17 +76,17 @@ describe TokenUrl, type: :model do
         valid_forever: true
       )
 
-      result = TokenUrl.validate_token(token_url.token, notice)
+      result = TokenUrl.valid?(token_url.token, notice)
 
       expect(result).to eq(true)
     end
 
     it 'validates unsuccessfully when the token or notice is nil' do
-      result = TokenUrl.validate_token(token_url.token, nil)
+      result = TokenUrl.valid?(token_url.token, nil)
 
       expect(result).to eq(false)
 
-      result = TokenUrl.validate_token(nil, notice)
+      result = TokenUrl.valid?(nil, notice)
 
       expect(result).to eq(false)
     end

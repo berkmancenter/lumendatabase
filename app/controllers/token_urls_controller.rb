@@ -15,9 +15,7 @@ class TokenUrlsController < ApplicationController
 
       if @token_url.save
         TokenUrlsMailer.send_new_url_confirmation(
-          token_url_params[:email],
-          @token_url,
-          @notice
+          token_url_params[:email], @token_url, @notice
         ).deliver_later
 
         redirect_to(
