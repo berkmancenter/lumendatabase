@@ -14,8 +14,9 @@ class TokenUrl < ActiveRecord::Base
   validates :notice, presence: true
 
   def self.valid?(token, notice)
-    valid_token_and_notice?(token, notice) &&
-      (token_url = TokenUrl.find_by(token: token)) &&
+    token_url = TokenUrl.find_by(token: token)
+
+    valid_token_url_and_notice?(token_url, notice) &&
       valid_time?(token_url) &&
       token_url.notice == notice
   end
@@ -27,8 +28,8 @@ class TokenUrl < ActiveRecord::Base
       token_url[:expiration_date] > Time.now)
   end
 
-  def self.valid_token_and_notice?(token, notice)
-    !token.nil? && !notice.nil?
+  def self.valid_token_and_notice?(token_url, notice)
+    !token_url.nil? && !notice.nil?
   end
 
   private
