@@ -29,7 +29,6 @@ rerun.txt
 tags
 vendor/bundler_gems
 config/database.yml
-config/lumen.yml
 .idea/*
 .byebug_history
 .rubocop.yml
