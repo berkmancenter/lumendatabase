@@ -96,8 +96,8 @@ module Chill
     end
 
     # Mailer settings
-    Chill::Application.config.default_sender = ENV['DEFAULT_SENDER'] || 'no-reply@example.com'
-    Chill::Application.config.return_path = ENV['RETURN_PATH'] || 'user@example.com'
-    Chill::Application.config.site_host = ENV['SITE_HOST'] || 'example.com'
+    config.default_sender = ENV['DEFAULT_SENDER'] || 'no-reply@example.com'
+    config.return_path = ENV['RETURN_PATH'] || 'user@example.com'
+    config.site_host = ENV['SITE_HOST'] || 'example.com'
   end
 end
