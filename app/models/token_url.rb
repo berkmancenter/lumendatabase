@@ -28,7 +28,7 @@ class TokenUrl < ActiveRecord::Base
       token_url[:expiration_date] > Time.now)
   end
 
-  def self.valid_token_and_notice?(token_url, notice)
+  def self.valid_token_url_and_notice?(token_url, notice)
     !token_url.nil? && !notice.nil?
   end
 
