@@ -61,11 +61,11 @@ class Work < ActiveRecord::Base
   end
 
   def infringing_urls_counted_by_domain
-    count_by_domain(infringing_urls)
+    @infringing_urls_counted_by_domain  ||= count_by_domain(infringing_urls)
   end
 
   def copyrighted_urls_counted_by_domain
-    count_by_domain(copyrighted_urls)
+    @copyrighted_urls_counted_by_domain ||= count_by_domain(copyrighted_urls)
   end
 
   def count_by_domain(urls)
