@@ -40,10 +40,7 @@ class TokenUrlsController < ApplicationController
   def generate_permanent
     @notice = Notice.find(params[:id])
     if cannot?(:generate_permanent_notice_token_urls, @notice)
-      redirect_to(
-        notice_path(@notice),
-        alert: 'Not authorized'
-      )
+      redirect_to(notice_path(@notice), alert: 'Not authorized')
 
       return
     end
