@@ -6,6 +6,13 @@
 
 /* Success, error & notice boxes for messages and errors. */
 // div.error, div.notice, div.success, #flash_failure, #flash_success, #flash_notice {
+
+#flash {
+  > div {
+    padding: 10px 20px;
+  }
+}
+
 div#flash_alert {
   margin-bottom: .75em;
   margin-bottom: .75rem;

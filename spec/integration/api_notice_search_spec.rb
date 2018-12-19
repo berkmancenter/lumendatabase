@@ -134,61 +134,15 @@ feature "Searching for Notices via the API" do
 
   context Trademark do
     scenario "has model-specific metadata", js: true, search: true do
-      params = {
-        notice: {
-          title: "A title",
-          type: "Trademark",
-          subject: "Lion King Trademark Notification",
-          date_sent: "2013-05-22",
-          date_received: "2013-05-23",
-          mark_registration_number: '1337',
-          works_attributes: [
-            {
-              description: "The Lion King on YouTube",
-              infringing_urls_attributes: [
-                { url: "http://youtube.com/bad_url_3" },
-                { url: "http://youtube.com/bad_url_2" },
-                { url: "http://youtube.com/bad_url_1" }
-              ]
-            }
-          ],
-          entity_notice_roles_attributes: [
-            {
-              name: "recipient",
-              entity_attributes: {
-                name: "Google",
-                kind: "organization",
-                address_line_1: "1600 Amphitheatre Parkway",
-                city: "Mountain View",
-                state: "CA",
-                zip: "94043",
-                country_code: "US"
-              }
-            },
-            {
-              name: "sender",
-              entity_attributes: {
-                name: "Joe Lawyer",
-                kind: "individual",
-                address_line_1: "1234 Anystreet St.",
-                city: "Anytown",
-                state: "CA",
-                zip: "94044",
-                country_code: "US"
-              }
-            }
-          ]
-        }
-      }
-
+      params = trademark_params(false)
       notice = Notice.new(params[:notice])
       notice.save
       index_changed_instances
 
       marks = notice.works.map do |work|
         {
-          'description'=> work.description,
-          'infringing_urls' => work.infringing_urls.map(&:url)
+          'description' => work.description,
+          'infringing_urls' => work.infringing_urls_counted_by_domain.as_json
         }
       end
 
@@ -205,6 +159,47 @@ feature "Searching for Notices via the API" do
         expect(json_item['marks'].first['infringing_urls'].sort
               ).to eq(marks.first['infringing_urls'].sort)
         expect(json_item).to have_key('mark_registration_number').with_value('1337')
+      end
+
+      marks = notice.works.map do |work|
+        {
+          'description' => work.description,
+          'infringing_urls' => work.infringing_urls.map(&:url)
+        }
+      end
+
+      user = create(:user)
+
+      expect_api_search_to_find("king", { authentication_token: user.authentication_token }) do |json|
+        json_item = json['notices'].first
+        expect(json_item).to have_key('marks').with_value(marks)
+        expect(json_item).not_to have_key('works')
+        expect(json_item).to have_key('mark_registration_number').with_value('1337')
+      end
+
+      # Check if authorized users get full notice urls
+      notice.destroy!
+      params = trademark_params(true)
+      notice = Notice.new(params[:notice])
+      notice.save
+      index_changed_instances
+
+      user = create(:user, :researcher)
+
+      marks = notice.works.map do |work|
+        {
+          'description' => work.description,
+          'infringing_urls' => work.infringing_urls.map(&:url)
+        }
+      end
+
+      expect_api_search_to_find('king', authentication_token: user.authentication_token) do |json|
+        json_item = json['notices'].first
+        expect(
+          json_item['marks'].first['infringing_urls'].sort
+        ).to eq(
+          marks.first['infringing_urls'].sort
+        )
       end
     end
   end
@@ -376,5 +371,62 @@ feature "Searching for Notices via the API" do
 
   def last_notice_id(json)
     json['notices'].last['id']
+  end
+
+  def trademark_params(with_full_urls)
+    urls = if with_full_urls
+             [
+               { url: 'http://youtube.com/bad_url_3' },
+               { url: 'http://youtube.com/bad_url_2' },
+               { url: 'http://youtube.com/bad_url_1' }
+             ]
+           else
+             [
+               { domain: 'youtube.com', count: 3 }
+             ]
+           end
+
+    {
+      notice: {
+        title: 'A title',
+        type: 'Trademark',
+        subject: 'Lion King Trademark Notification',
+        date_sent: '2013-05-22',
+        date_received: '2013-05-23',
+        mark_registration_number: '1337',
+        works_attributes: [
+          {
+            description: 'The Lion King on YouTube',
+            infringing_urls_attributes: urls
+          }
+        ],
+        entity_notice_roles_attributes: [
+          {
+            name: 'recipient',
+            entity_attributes: {
+              name: 'Google',
+              kind: 'organization',
+              address_line_1: '1600 Amphitheatre Parkway',
+              city: 'Mountain View',
+              state: 'CA',
+              zip: '94043',
+              country_code: 'US'
+            }
+          },
+          {
+            name: 'sender',
+            entity_attributes: {
+              name: 'Joe Lawyer',
+              kind: 'individual',
+              address_line_1: '1234 Anystreet St.',
+              city: 'Anytown',
+              state: 'CA',
+              zip: '94044',
+              country_code: 'US'
+            }
+          }
+        ]
+      }
+    }
   end
 end
