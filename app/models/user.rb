@@ -10,7 +10,7 @@ class User < ActiveRecord::Base
   has_many :token_urls, dependent: :destroy
   accepts_nested_attributes_for :entity
 
-  def has_role?(role)
+  def role?(role)
     roles.include?(role)
   end
 

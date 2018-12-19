@@ -4,7 +4,7 @@ class Ability
   def initialize(user)
     return unless user
 
-    if user.has_role?(Role.notice_viewer)
+    if user.role?(Role.notice_viewer)
       grant_permanent_notice_url_generation(user)
 
       can_view_full_version = true
@@ -15,21 +15,21 @@ class Ability
       can :view_full_version, Notice if can_view_full_version
     end
 
-    can :submit, Notice if user.has_role?(Role.submitter)
+    can :submit, Notice if user.role?(Role.submitter)
 
-    if user.has_role?(Role.redactor)
+    if user.role?(Role.redactor)
       grant_admin_access
       grant_redact
     end
 
-    if user.has_role?(Role.publisher)
+    if user.role?(Role.publisher)
       grant_admin_access
       grant_redact
 
       can :publish, Notice
     end
 
-    if user.has_role?(Role.admin)
+    if user.role?(Role.admin)
       grant_admin_access
       grant_redact
       grant_permanent_notice_url_generation(user)
@@ -47,7 +47,7 @@ class Ability
       can :view_full_version, Notice
     end
 
-    if user.has_role?(Role.super_admin)
+    if user.role?(Role.super_admin)
       grant_permanent_notice_url_generation(user)
       grant_full_notice_api_response(user)
 
@@ -55,7 +55,7 @@ class Ability
       can :view_full_version, Notice
     end
 
-    if user.has_role?(Role.researcher)
+    if user.role?(Role.researcher)
       grant_full_notice_api_response(user)
 
       can :read, Notice

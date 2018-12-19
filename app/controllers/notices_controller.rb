@@ -164,7 +164,7 @@ class NoticesController < ApplicationController
     return false unless request.headers['HTTP_X_AUTHENTICATION_TOKEN']
     User.find_by_authentication_token(
       request.headers['HTTP_X_AUTHENTICATION_TOKEN']
-    ).has_role?(Role.researcher)
+    ).role?(Role.researcher)
   end
 
   def build_entity_notice_roles(model_class)
@@ -251,7 +251,7 @@ class NoticesController < ApplicationController
 
   def process_notice_viewer_request
     # Only notice viewers
-    return unless current_user.has_role?(Role.notice_viewer)
+    return unless current_user.role?(Role.notice_viewer)
     # Only when the views limit is set for a user
     return unless current_user.notice_viewer_views_limit.present?
     # No need to update the counter when the limit is reached

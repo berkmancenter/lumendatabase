@@ -3,7 +3,7 @@ require 'spec_helper'
 describe User, type: :model do
   it { is_expected.to have_and_belong_to_many :roles }
 
-  context "#has_role?" do
+  context "#role?" do
     it "returns true when the user has the given role" do
       user = create(:user, roles: [Role.redactor, Role.publisher])
 
