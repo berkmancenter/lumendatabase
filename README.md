@@ -90,6 +90,7 @@ Profiling:
 - `RAILS_LOG_LEVEL` - logging level
 - `WEB_CONCURRENCY` - number of Unicorn workers
 - `WEB_TIMEOUT` - Unicorn timeout
+- `MAILER_DELIVERY_METHOD` - mailer delivery method
 - `DEFAULT_SENDER` - default mailer sender
 - `RETURN_PATH` - default mailer return path
 - `SITE_HOST` - site host, used in mailer templates
