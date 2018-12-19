@@ -9,6 +9,7 @@ class TokenUrlsController < ApplicationController
 
   def create
     @token_url = TokenUrl.new(token_url_params)
+    @notice = Notice.where(id: token_url_params[:notice_id]).first
 
     if valid_to_submit[:status]
       @token_url[:expiration_date] = Time.now + 24.hours
@@ -24,6 +25,8 @@ class TokenUrlsController < ApplicationController
                   'your email address.'
         )
       else
+        puts @token_url.errors.full_messages.join('<br>').html_safe.inspect
+        
         redirect_to(
           request_access_notice_path(@notice),
           alert: @token_url.errors.full_messages.join('<br>').html_safe
@@ -72,7 +75,7 @@ class TokenUrlsController < ApplicationController
   end
 
   def valid_to_submit
-    unless (@notice = Notice.find(token_url_params[:notice_id]))
+    if @notice.nil?
       return {
         status: false,
         why: 'Notice not found.'
