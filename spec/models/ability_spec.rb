@@ -69,6 +69,10 @@ describe Ability do
     it "can submit to the API" do
       expect(subject.can? :submit, Notice).to be true
     end
+
+    it "can't generate new notice token urls" do
+      expect(subject.can? :generate_permanent_notice_token_urls, Notice).to be false
+    end
   end
 
   context "a redactor" do
@@ -84,6 +88,10 @@ describe Ability do
     it "cannot rescind" do
       expect(subject.can? :rescind, notice).to be_falsey
     end
+
+    it "can't generate new notice token urls" do
+      expect(subject.can? :generate_permanent_notice_token_urls, Notice).to be false
+    end
   end
 
   context "a publisher" do
@@ -98,6 +106,10 @@ describe Ability do
 
     it "cannot rescind" do
       expect(subject.can? :rescind, notice).to be_falsey
+    end
+
+    it "can't generate new notice token urls" do
+      expect(subject.can? :generate_permanent_notice_token_urls, Notice).to be false
     end
   end
 
@@ -126,6 +138,10 @@ describe Ability do
       expect(subject.can? :edit, user).to be_falsey
       expect(subject.can? :edit, role).to be_falsey
     end
+
+    it "can generate new notice token urls" do
+      expect(subject.can? :generate_permanent_notice_token_urls, Notice).to be true
+    end
   end
 
   context "a super admin" do
@@ -139,6 +155,7 @@ describe Ability do
       expect(subject.can? :manage, blog_entry).to be true
       expect(subject.can? :manage, user).to be true
       expect(subject.can? :manage, role).to be true
+      expect(subject.can? :generate_permanent_notice_token_urls, Notice).to be true
     end
   end
 

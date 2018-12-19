@@ -5,7 +5,9 @@ class Ability
     return unless user
 
     if user.role?(Role.notice_viewer)
-      grant_permanent_notice_url_generation(user)
+      if user.can_generate_permanent_notice_token_urls
+        can :generate_permanent_notice_token_urls, Notice
+      end
 
       can_view_full_version = true
 
@@ -32,7 +34,6 @@ class Ability
     if user.role?(Role.admin)
       grant_admin_access
       grant_redact
-      grant_permanent_notice_url_generation(user)
       grant_full_notice_api_response(user)
 
       can :edit, :all
@@ -45,10 +46,10 @@ class Ability
 
       can :pdf_requests, :all
       can :view_full_version, Notice
+      can :generate_permanent_notice_token_urls, Notice
     end
 
     if user.role?(Role.super_admin)
-      grant_permanent_notice_url_generation(user)
       grant_full_notice_api_response(user)
 
       can :manage, :all
@@ -77,12 +78,6 @@ class Ability
     can :edit, Notice
     can :redact_notice, Notice
     can :redact_queue, Notice
-  end
-
-  def grant_permanent_notice_url_generation(user)
-    return unless user.can_generate_permanent_notice_token_urls
-
-    can :generate_permanent_notice_token_urls, Notice
   end
 
   def grant_full_notice_api_response(user)

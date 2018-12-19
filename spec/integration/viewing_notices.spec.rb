@@ -59,6 +59,7 @@ feature 'Viewing notices' do
   def check_full_works_urls
     within('#works') do
       expect(page).to have_content 'http://www.example.com/original_work.pdf'
+      expect(page).not_to have_content 'example.com - 1 URL'
       expect(page).to have_content 'A series of videos and still images'
       expect(page).to have_css(
         %{.infringing_url:contains("http://example.com/infringing_url1")}
@@ -69,6 +70,7 @@ feature 'Viewing notices' do
   def check_limited_works_urls
     within('#works') do
       expect(page).to have_content 'example.com - 1 URL'
+      expect(page).not_to have_content 'http://www.example.com/original_work.pdf'
       expect(page).to have_content 'A series of videos and still images'
     end
   end
