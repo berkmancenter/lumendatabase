@@ -20,8 +20,8 @@ class TokenUrlsController < ApplicationController
 
         redirect_to(
           request_access_notice_path(@notice),
-          notice: 'A new single-use link has been generated and sent you to ' \
-                  'your email address'
+          notice: 'A new single-use link has been generated and sent to ' \
+                  'your email address.'
         )
       else
         redirect_to(
@@ -51,8 +51,8 @@ class TokenUrlsController < ApplicationController
     if @token_url.save
       redirect_to(
         notice_path(@notice),
-        notice: 'Permanent URL for this notice has been created, you can ' \
-                'view it below'
+        notice: 'A permanent URL for this notice has been created. ' \
+                'You can view it below.'
       )
     else
       redirect_to(
@@ -89,8 +89,9 @@ class TokenUrlsController < ApplicationController
     if TokenUrl.where(email: token_url_params[:email]).any?
       return {
         status: false,
-        why: 'This email address has been used already, use a different ' \
-             'address or contact our team to get a researcher account.'
+        why: 'This email address has been used already. Use a different ' \
+             'email or contact our team at team@lumendatabase.org to get ' \
+             'a researcher account.'
       }
     end
 
