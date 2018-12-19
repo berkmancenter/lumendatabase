@@ -2,8 +2,7 @@ class TokenUrlsController < ApplicationController
   include Recaptcha::ClientHelper
 
   def new
-    return unless (@notice = Notice.find(params[:id]))
-
+    @notice = Notice.find(params[:id])
     @token_url = TokenUrl.new
   end
 
@@ -39,8 +38,15 @@ class TokenUrlsController < ApplicationController
   end
 
   def generate_permanent
-    return unless (@notice = Notice.find(params[:id]))
-    return if cannot?(:generate_permanent_notice_token_urls, @notice)
+    @notice = Notice.find(params[:id])
+    if cannot?(:generate_permanent_notice_token_urls, @notice)
+      redirect_to(
+        notice_path(@notice),
+        alert: 'Not authorized'
+      )
+
+      return
+    end
 
     @token_url = TokenUrl.new(
       user: current_user,
