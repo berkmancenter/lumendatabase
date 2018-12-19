@@ -25,8 +25,6 @@ class TokenUrlsController < ApplicationController
                   'your email address.'
         )
       else
-        puts @token_url.errors.full_messages.join('<br>').html_safe.inspect
-        
         redirect_to(
           request_access_notice_path(@notice),
           alert: @token_url.errors.full_messages.join('<br>').html_safe
