@@ -104,6 +104,7 @@ Profiling:
 - `TWITTER_OAUTH_TOKEN_SECRET` - Twitter integration OAuth token secret key
 - `RECAPTCHA_SITE_KEY` - reCAPTCHA public key
 - `RECAPTCHA_SECRET_KEY` - reCAPTCHA private key
+- `BROWSER_VALIDATIONS` - enable user browser form validations
 - `BATCH_SIZE` - batch size of model items indexed during each run of Elasticsearch re-indexing
 - `SEARCH_SLEEP` - used in specs only, time out of Elasticsearch searches
 - `RACK_ENV` - Rack environment
