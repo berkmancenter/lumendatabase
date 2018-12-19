@@ -16,15 +16,7 @@ class TokenUrlsController < ApplicationController
       @token_url[:expiration_date] = Time.now + 24.hours
 
       if @token_url.save
-        TokenUrlsMailer.send_new_url_confirmation(
-          token_url_params[:email], @token_url, @notice
-        ).deliver_later
-
-        redirect_to(
-          request_access_notice_path(@notice),
-          notice: 'A new single-use link has been generated and sent to ' \
-                  'your email address.'
-        )
+        run_post_create_actions
       else
         redirect_to(
           request_access_notice_path(@notice),
@@ -37,6 +29,18 @@ class TokenUrlsController < ApplicationController
         alert: valid_to_submit[:why]
       )
     end
+  end
+
+  def run_post_create_actions
+    TokenUrlsMailer.send_new_url_confirmation(
+      token_url_params[:email], @token_url, @notice
+    ).deliver_later
+
+    redirect_to(
+      request_access_notice_path(@notice),
+      notice: 'A new single-use link has been generated and sent to ' \
+              'your email address.'
+    )
   end
 
   def generate_permanent
