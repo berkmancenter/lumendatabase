@@ -7,6 +7,8 @@ class TokenUrlsController < ApplicationController
   end
 
   def create
+    # Replace everything between + and @
+    token_url_params[:email].gsub!(/(\+.*?)(?=@)/, '')
     @token_url = TokenUrl.new(token_url_params)
     @notice = Notice.where(id: token_url_params[:notice_id]).first
 

@@ -32,22 +32,39 @@ describe TokenUrlsController do
       expect(TokenUrl.first.notice).to eq notice
       expect(TokenUrl.first.email).to eq 'user@example.com'
     end
-  end
 
-  it 'fails to create a new token url when illegal params are provided' do
-    allow(controller).to receive(:verify_recaptcha).and_return(true)
+    it 'fails to create a new token url when illegal params are provided' do
+      allow(controller).to receive(:verify_recaptcha).and_return(true)
 
-    notice = create(:dmca)
+      notice = create(:dmca)
 
-    params = {
-      token_url: {
-        email: 'user@example.com',
-        notice_idX: notice.id
+      params = {
+        token_url: {
+          email: 'user@example.com',
+          notice_idX: notice.id
+        }
       }
-    }
 
-    expect {
+      expect {
+        post :create, params
+      }.to raise_error(ActionController::UnpermittedParameters)
+    end
+
+    it 'creates a new token and strips out the email part between "+" and "@"' do
+      allow(controller).to receive(:verify_recaptcha).and_return(true)
+
+      notice = create(:dmca)
+
+      params = {
+        token_url: {
+          email: 'user+123456@example.com',
+          notice_id: notice.id
+        }
+      }
+
       post :create, params
-    }.to raise_error(ActionController::UnpermittedParameters)
+
+      expect(TokenUrl.first.email).to eq 'user@example.com'
+    end
   end
 end
