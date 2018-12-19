@@ -253,7 +253,7 @@ class NoticesController < ApplicationController
     # Only notice viewers
     return unless current_user.has_role?(Role.notice_viewer)
     # Only when the views limit is set for a user
-    return unless current_user.notice_viewer_views_limit
+    return unless current_user.notice_viewer_views_limit.present?
     # No need to update the counter when the limit is reached
     return if current_user.notice_viewer_viewed_notices >= current_user.notice_viewer_views_limit
 
