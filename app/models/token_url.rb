@@ -16,12 +16,9 @@ class TokenUrl < ActiveRecord::Base
   def self.valid?(token, notice)
     token_url = TokenUrl.find_by(token: token)
 
-    [
-      token_url.present?,
-      notice.present?,
-      valid_time?(token_url),
+    [token_url.present?, notice.present?].all? &&
+      valid_time?(token_url) &&
       token_url.notice == notice
-    ].all?
   end
 
   def self.valid_time?(token_url)
