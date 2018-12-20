@@ -43,6 +43,7 @@ gem 'simple_form'
 gem 'skylight'
 gem 'spork-rails', git: 'https://github.com/sporkrb/spork-rails'
 gem 'stackprof'
+gem 'turnout'
 gem 'twitter'
 gem 'twitter-text'
 
