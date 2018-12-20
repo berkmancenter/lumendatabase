@@ -95,7 +95,6 @@ class Notice < ActiveRecord::Base
   has_many :file_uploads
   has_many :infringing_urls, through: :works
   has_many :copyrighted_urls, through: :works
-  has_many :token_urls, dependent: :destroy
   has_and_belongs_to_many :relevant_questions
 
   has_and_belongs_to_many :works

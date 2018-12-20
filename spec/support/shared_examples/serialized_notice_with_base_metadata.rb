@@ -35,7 +35,6 @@ end
 def with_a_serialized_notice(factory_name = :dmca)
   notice = build_notice(factory_name)
   serializer = described_class.new(notice, root: factory_name)
-  allow(serializer).to receive(:current_user).and_return(true)
   yield notice, serializer.as_json[factory_name]
 end
 

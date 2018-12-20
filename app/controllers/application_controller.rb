@@ -14,12 +14,6 @@ class ApplicationController < ActionController::Base
   after_filter :store_action
   after_action :include_auth_cookie
 
-  if Rails.env.staging? || Rails.env.production?
-    rescue_from ActiveRecord::RecordNotFound do |exception|
-      resource_not_found(exception)
-    end
-  end
-
   private
 
   def meta_hash_for(results)
@@ -86,21 +80,5 @@ class ApplicationController < ActionController::Base
               request.xhr?
 
     store_location_for(:user, request.fullpath)
-  end
-
-  def resource_not_found(exception)
-    logger.error(exception)
-
-    respond_to do |format|
-      format.html do
-        render file: 'public/404',
-               status: :not_found,
-               layout: false
-      end
-      format.json do
-        render json: 'Not Found',
-               status: :not_found
-      end
-    end
   end
 end

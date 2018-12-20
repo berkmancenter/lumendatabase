@@ -1,7 +1,6 @@
 require 'rails_admin/config/actions/redact_queue'
 require 'rails_admin/config/actions/redact_notice'
 require 'rails_admin/config/actions/pdf_requests'
-require 'rails_admin/config/fields/types/datetime_timezoned'
 
 RailsAdmin.config do |config|
   config.parent_controller = '::ApplicationController'
@@ -84,7 +83,6 @@ RailsAdmin.config do |config|
       show do
         configure(:infringing_urls) { hide }
         configure(:copyrighted_urls) { hide }
-        configure(:token_urls) { hide }
       end
 
       edit do
@@ -113,8 +111,7 @@ RailsAdmin.config do |config|
                        :related_blog_entries,
                        :blog_topic_assignments,
                        :infringing_urls,
-                       :copyrighted_urls,
-                       :token_urls
+                       :copyrighted_urls
 
         configure :review_required do
           visible do
@@ -250,39 +247,6 @@ RailsAdmin.config do |config|
       configure :entity do
         nested_form false
       end
-      configure(:token_urls) { hide }
-    end
-  end
-
-  config.model 'TokenUrl' do
-    configure :url do
-      formatted_value do
-        url = "#{Chill::Application.config.site_host}/notices/#{bindings[:object].notice_id}?access_token=#{bindings[:object].token}"
-        %(<a href="#{url}">Token url</a>).html_safe
-      end
-      visible false
-    end
-
-    list do
-      field :url
-      field :email
-      field :user
-      field :notice
-      field :expiration_date
-      field :valid_forever
-      field :created_at
-    end
-
-    edit do
-      field :email do
-        required false
-      end
-      field :user
-      field :notice do
-        required true
-      end
-      field :expiration_date
-      field :valid_forever
     end
   end
 end
