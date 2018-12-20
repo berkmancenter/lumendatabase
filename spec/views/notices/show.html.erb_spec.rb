@@ -180,11 +180,6 @@ describe 'notices/show.html.erb' do
     notice.save
 
     assign(:notice, notice)
-    allow(controller).to receive(:current_user).and_return(create(:user, :admin))
-    ability = Object.new
-    ability.extend(CanCan::Ability)
-    controller.stub(:current_ability) { ability }
-    ability.can :view_full_version, Notice
 
     render
 
@@ -201,23 +196,6 @@ describe 'notices/show.html.erb' do
         expect(rendered).to have_css("#work_#{work.id} li.infringing_url",
                                      text: url.url)
       end
-    end
-
-    allow(controller).to receive(:current_user).and_return(nil)
-    ability.cannot :view_full_version, Notice
-
-    render
-
-    notice.works.each do |work|
-      expect(rendered).to have_css( "#work_#{work.id} .description", text: work.description )
-
-      uri = URI.parse(work.copyrighted_urls.first.url)
-      domain = uri.host
-      expect(rendered).to have_css( "#work_#{work.id} li.copyrighted_url", text: domain + ' - 3 URLs' )
-
-      uri = URI.parse(work.infringing_urls.first.url)
-      domain = uri.host
-      expect(rendered).to have_css( "#work_#{work.id} li.infringing_url", text: domain + ' - 3 URLs' )
     end
   end
 

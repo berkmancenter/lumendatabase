@@ -94,10 +94,5 @@ module Chill
       timestamp = datetime.strftime '%Y-%m-%d %H:%M:%S (%Z)'
       "#{timestamp} #{severity}: #{progname} #{msg}\n"
     end
-
-    # Mailer settings
-    config.default_sender = ENV['DEFAULT_SENDER'] || 'no-reply@example.com'
-    config.return_path = ENV['RETURN_PATH'] || 'user@example.com'
-    config.site_host = ENV['SITE_HOST'] || 'example.com'
   end
 end

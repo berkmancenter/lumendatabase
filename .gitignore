@@ -29,6 +29,7 @@ rerun.txt
 tags
 vendor/bundler_gems
 config/database.yml
+config/elasticsearch.yml
 .idea/*
 .byebug_history
 .rubocop.yml
