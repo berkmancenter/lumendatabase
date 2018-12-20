@@ -85,31 +85,6 @@ Profiling:
   * runs in dev by default; can run anywhere by setting `ENV[LUMEN_USE_OINK]` (ok to run in production)
   * logs to `log/oink.log`
 
-## Environment variables
-
-- `RAILS_LOG_LEVEL` - logging level
-- `WEB_CONCURRENCY` - number of Unicorn workers
-- `WEB_TIMEOUT` - Unicorn timeout
-- `MAILER_DELIVERY_METHOD` - mailer delivery method
-- `DEFAULT_SENDER` - default mailer sender
-- `RETURN_PATH` - default mailer return path
-- `SITE_HOST` - site host, used in mailer templates
-- `SMTP_ADDRESS` - SMTP server address
-- `SMTP_DOMAIN` - SMTP server domain
-- `SMTP_USERNAME` - SMTP server username
-- `SMTP_PASSWORD` - SMTP server password
-- `SMTP_PORT` - SMTP server port
-- `TWITTER_CONSUMER_KEY`  - Twitter integration public key
-- `TWITTER_CONSUMER_SECRET`  - Twitter integration private key
-- `TWITTER_OAUTH_TOKEN` - Twitter integration OAuth token
-- `TWITTER_OAUTH_TOKEN_SECRET` - Twitter integration OAuth token secret key
-- `RECAPTCHA_SITE_KEY` - reCAPTCHA public key
-- `RECAPTCHA_SECRET_KEY` - reCAPTCHA private key
-- `BROWSER_VALIDATIONS` - enable user browser form validations
-- `BATCH_SIZE` - batch size of model items indexed during each run of Elasticsearch re-indexing
-- `SEARCH_SLEEP` - used in specs only, time out of Elasticsearch searches
-- `RACK_ENV` - Rack environment
-
 Ephemera
 ========
 

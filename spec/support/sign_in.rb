@@ -6,10 +6,6 @@ RSpec.configure do |config|
     login_as(user, scope: :user)
   end
 
-  def sign_out
-    logout
-  end
-
   config.after :each do
     Warden.test_reset!
   end

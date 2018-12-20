@@ -31,7 +31,7 @@ class Rack::Attack
     if u.nil?
       Rails.logger.warn "[rack-attack] token: #{token}, user: NOT FOUND" unless token.nil?
       false
-    elsif !u.role?(Role.researcher) && !u.role?(Role.submitter)
+    elsif !u.has_role?(Role.researcher) && !u.has_role?(Role.submitter)
       Rails.logger.warn "[rack-attack] token: #{token}, email: #{u.email}, user: MISSING ROLE"
       false
     else

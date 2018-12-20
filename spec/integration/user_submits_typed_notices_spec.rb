@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'support/sign_in'
 
 feature 'typed notice submissions' do
   scenario 'Non signed-in user cannot see new notice forms' do
@@ -29,8 +28,6 @@ feature 'typed notice submissions' do
     end
 
     submission.submit
-
-    sign_out
 
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
@@ -68,30 +65,13 @@ feature 'typed notice submissions' do
 
     submission.submit
 
-    sign_out
-
-    visit '/'
-
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
     expect(page).to have_words('Defamation notice to Recipient')
 
     within('#works') do
-      expect(page).to have_content('URLs of Allegedly Defamatory Material')
-      expect(page).to have_content('example.com - 1 URL')
-    end
-
-    sign_in(create(:user, :admin))
-
-    visit '/'
-
-    within('#recent-notices li:nth-child(1)') { find('a').click }
-
-    expect(page).to have_content("Defamation notice to Recipient")
-
-    within("#works") do
-      expect(page).to have_content('URLs of Allegedly Defamatory Material')
-      expect(page).to have_content('http://example.com/defamatory_url1')
+      expect(page).to have_words('URLs of Allegedly Defamatory Material')
+      expect(page).to have_words('http://example.com/defamatory_url1')
     end
 
     within('.notice-body') do
@@ -120,27 +100,15 @@ feature 'typed notice submissions' do
 
     submission.submit
 
-    sign_out
-
-    visit '/'
-
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
     expect(page).to have_words('Data Protection notice to Recipient')
 
-    within("#works") do
-      expect(page).to have_content('Location of Some of the Material Requested for Removal')
-      expect(page).to have_content('example.com - 1 URL')
-    end
-
-    sign_in(create(:user, :admin))
-
-    visit '/'
-
-    within('#recent-notices li:nth-child(1)') { find('a').click }
-
-    within("#works") do
-      expect(page).to have_content('http://example.com/defamatory_url1')
+    within('#works') do
+      expect(page).to have_words(
+        'Location of Some of the Material Requested for Removal'
+      )
+      expect(page).to have_words('http://example.com/defamatory_url1')
     end
   end
 
@@ -166,33 +134,19 @@ feature 'typed notice submissions' do
 
     submission.submit
 
-    sign_out
-
-    visit '/'
-
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
     expect(page).to have_words('Court Order notice to Recipient')
 
-    within('.notice-body') do
-      expect(page).to have_content('Explanation of Court Order')
-      expect(page).to have_content("I guess they don't like me")
-      expect(page).to have_content('USC foo bar 21')
-    end
-
     within('#works') do
-      expect(page).to have_content('Targeted URLs')
-      expect(page).to have_content('example.com - 1 URL')
+      expect(page).to have_words('Targeted URLs')
+      expect(page).to have_words('http://example.com/targeted_url')
     end
 
-    sign_in(create(:user, :admin))
-
-    visit '/'
-
-    within('#recent-notices li:nth-child(1)') { find('a').click }
-
-    within("#works") do
-      expect(page).to have_content('http://example.com/targeted_url')
+    within('.notice-body') do
+      expect(page).to have_words('Explanation of Court Order')
+      expect(page).to have_words("I guess they don't like me")
+      expect(page).to have_words('USC foo bar 21')
     end
   end
 
@@ -205,7 +159,7 @@ feature 'typed notice submissions' do
     submission.fill_in_form_with(
       'Subject of Enforcement Request' => 'My Tiny Tim fansite', # works.description
       'URL of original work' => 'http://example.com/original_object1', # copyrighted_urls
-      'URL mentioned in request' => 'http://example2.com/offending_url1', # infringing_urls
+      'URL mentioned in request' => 'http://example.com/offending_url1', # infringing_urls
       'Explanation of Law Enforcement Request' => "I don't get it. He made sick music.", #notice.body
       'Relevant laws or regulations' => 'USC foo bar 21'
     )
@@ -221,20 +175,16 @@ feature 'typed notice submissions' do
 
     submission.submit
 
-    sign_out
-
-    visit '/'
-
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
     expect(page).to have_words('Law Enforcement Request notice to Recipient')
 
     within('#works') do
-      expect(page).to have_content('URLs mentioned in request')
-      expect(page).to have_content('example.com - 1 URL')
-      expect(page).to have_content('URLs of original work')
-      expect(page).to have_content('example2.com - 1 URL')
-      expect(page).to have_content('My Tiny Tim fansite')
+      expect(page).to have_words('URLs mentioned in request')
+      expect(page).to have_words('http://example.com/offending_url1')
+      expect(page).to have_words('URLs of original work')
+      expect(page).to have_words('http://example.com/original_object1')
+      expect(page).to have_words('My Tiny Tim fansite')
     end
 
     within('.notice-body') do
@@ -246,17 +196,6 @@ feature 'typed notice submissions' do
 
     within('#entities') do
       expect(page).to have_words('Principal')
-    end
-
-    sign_in(create(:user, :admin))
-
-    visit '/'
-
-    within('#recent-notices li:nth-child(1)') { find('a').click }
-
-    within("#works") do
-      expect(page).to have_content('http://example2.com/offending_url1')
-      expect(page).to have_content('http://example.com/original_object1')
     end
   end
 
@@ -281,34 +220,20 @@ feature 'typed notice submissions' do
 
     submission.submit
 
-    sign_out
-
-    visit '/'
-
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
     expect(page).to have_words('Private Information notice to Recipient')
 
-    within('.notice-body') do
-      expect(page).to have_content('Explanation of complaint')
-      expect(page).to have_content('I am in witness protection')
-    end
-
     within('#works') do
-      expect(page).to have_content('URLs with private information')
-      expect(page).to have_content('example.com - 1 URL')
-      expect(page).to have_content('URLs of original work')
-      expect(page).to have_content('These URLs disclose my existence')
+      expect(page).to have_words('URLs with private information')
+      expect(page).to have_words('http://example.com/offending_url1')
+      expect(page).to have_words('URLs of original work')
+      expect(page).to have_words('These URLs disclose my existence')
     end
 
-    visit '/'
-
-    sign_in(create(:user, :admin))
-
-    within('#recent-notices li:nth-child(1)') { find('a').click }
-
-    within("#works") do
-      expect(page).to have_content('http://example.com/offending_url1')
+    within('.notice-body') do
+      expect(page).to have_words('Explanation of complaint')
+      expect(page).to have_words('I am in witness protection')
     end
   end
 
@@ -319,7 +244,7 @@ feature 'typed notice submissions' do
     submission.fill_in_form_with(
       'Complaint' => 'These URLs are a serious problem', # works.description
       'Original Work URL' => 'http://example.com/original_object1', # copyrighted_urls
-      'Problematic URL' => 'http://example2.com/offending_url1', # infringing_urls
+      'Problematic URL' => 'http://example.com/offending_url1', # infringing_urls
       'Explanation of Complaint' => 'I am complaining', # notice.body
     )
 
@@ -332,36 +257,21 @@ feature 'typed notice submissions' do
 
     submission.submit
 
-    sign_out
-
-    visit '/'
-
     within('#recent-notices li:nth-child(1)') { find('a').click }
 
     expect(page).to have_words('Other notice to Recipient')
 
-    within('.notice-body') do
-      expect(page).to have_content('Explanation of complaint')
-      expect(page).to have_content('I am complaining')
-    end
-
     within('#works') do
-      expect(page).to have_content('Problematic URLs')
-      expect(page).to have_content('example.com - 1 URL')
-      expect(page).to have_content('URLs of original work')
-      expect(page).to have_content('example2.com - 1 URL')
-      expect(page).to have_content('These URLs are a serious problem')
+      expect(page).to have_words('Problematic URLs')
+      expect(page).to have_words('http://example.com/offending_url1')
+      expect(page).to have_words('URLs of original work')
+      expect(page).to have_words('http://example.com/original_object1')
+      expect(page).to have_words('These URLs are a serious problem')
     end
 
-    sign_in(create(:user, :admin))
-
-    visit '/'
-
-    within('#recent-notices li:nth-child(1)') { find('a').click }
-
-    within("#works") do
-      expect(page).to have_content('http://example2.com/offending_url1')
-      expect(page).to have_content('http://example.com/original_object1')
+    within('.notice-body') do
+      expect(page).to have_words('Explanation of complaint')
+      expect(page).to have_words('I am complaining')
     end
   end
 

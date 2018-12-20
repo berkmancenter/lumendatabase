@@ -8,16 +8,6 @@
     </div>
   <% end %>
 
-  <% if can?(:generate_permanent_notice_token_urls, @notice) %>
-    <div class="notice-permanent-url">
-      <% if permanent_url_full_notice(@notice) %>
-        Permanent URL to the full version of this notice: <%= link_to permanent_url_full_notice(@notice), permanent_url_full_notice(@notice) %>
-      <% else %>
-        <%= link_to 'Generate a permanent URL to the full version of this notice', generate_permanent_full_url_notice_path(@notice), method: :post %>
-      <% end %>
-    </div>
-  <% end %>
-
   <% cache(@notice) do %>
     <%= content_tag('section', class: 'first-time-visitor', style: 'display: none;', 'data-content': first_time_visitor_content) do %>
       <div class="first-time-visitor-content">

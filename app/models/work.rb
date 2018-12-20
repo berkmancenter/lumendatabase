@@ -60,39 +60,6 @@ class Work < ActiveRecord::Base
     where(attributes).first || create!(attributes)
   end
 
-  def infringing_urls_counted_by_domain
-    @infringing_urls_counted_by_domain  ||= count_by_domain(infringing_urls)
-  end
-
-  def copyrighted_urls_counted_by_domain
-    @copyrighted_urls_counted_by_domain ||= count_by_domain(copyrighted_urls)
-  end
-
-  def count_by_domain(urls)
-    counted_urls = {}
-
-    urls.each do |url|
-      uri = Addressable::URI.parse(url.url)
-
-      # get just domain
-      domain = uri.host
-
-      if counted_urls[domain].nil?
-        counted_urls[domain] = {
-          domain: domain,
-          count: 1
-        }
-      else
-        counted_urls[domain][:count] += 1
-      end
-    end
-
-    counted_urls
-      .values
-      .sort_by! { |url| url[:count] }
-      .reverse!
-  end
-
   def auto_redact
     InstanceRedactor.new.redact(self, REDACTABLE_FIELDS)
   end

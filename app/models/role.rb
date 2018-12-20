@@ -1,13 +1,12 @@
 class Role < ActiveRecord::Base
-  NAMES = %w[
+  NAMES = %w(
     submitter
     redactor
     publisher
     admin
     super_admin
     researcher
-    notice_viewer
-  ].freeze
+  )
 
   NAMES.each do |name|
     # Define a lazy, class-level reader for each role we support. This
@@ -20,4 +19,5 @@ class Role < ActiveRecord::Base
   def self.default
     redactor
   end
+
 end
