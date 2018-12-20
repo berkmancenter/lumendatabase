@@ -1,0 +1,30 @@
+<%# Displays the right-hand column of the top of a notice form.
+    Required: form
+    Optional: body (default: true),
+              label (default: 'Explanation'),
+              request_collection (default: nil),
+              mark_reg (default: false)
+    body, if false, will suppress display the body section.
+    #%>
+<% body = true if local_assigns[:body].nil? %>
+<% label = 'Body' if local_assigns[:label].nil? %>
+<% request_collection = nil if local_assigns[:request_collection].nil? %>
+<% mark_reg = nil if local_assigns[:mark_reg].nil? %>
+<div class="body-wrapper right attach">
+  <% if body %>
+    <%= form.input :body, label: label %>
+  <% end %>
+  <% if request_collection.present? %>
+    <%= form.input :request_type, collection: request_collection %>
+  <% end %>
+  <% if mark_reg %>
+    <%= form.input :mark_registration_number, label: "Registration Number" %>
+  <% end %>
+  <p>Any file you attach to this notice will be viewable by the public in the form in which you have attached it. It will not be reviewed by Lumen staff prior to being available to download.</p>
+  <%= form.simple_fields_for(:file_uploads) do |file_uploads_form| %>
+    <div id="file_uploads_inputs">
+      <%= file_uploads_form.input :file, label: 'Attach file' %>
+    </div>
+    <a href="javascript:void(0);" id="add-another" class="button">Attach another</a>
+  <% end %>
+</div>

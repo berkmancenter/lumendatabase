@@ -102,7 +102,7 @@ describe 'notices/new.html.erb' do
 
     render
 
-    expect(rendered).to have_content('Original Work URL')
+    expect(rendered).to have_words('Original Work URL')
   end
 
   it 'should require infringing urls' do
@@ -160,7 +160,7 @@ describe 'notices/new.html.erb' do
 
     render
 
-    expect(rendered).to have_content('Allegedly Infringing URL *')
+    expect(rendered).to have_words('Allegedly Infringing URL *')
   end
 
   Notice.type_models.each do |model|

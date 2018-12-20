@@ -43,15 +43,6 @@ feature 'Page titles' do
     expect(page).to have_heading('Topics')
   end
 
-  scenario "Actions" do
-    visit '/'
-    click_on 'Actions'
-    click_on 'Create DMCA Counter Notice'
-
-    expect(page).to have_exact_title('Create DMCA Counter-Notification :: Lumen')
-    expect(page).to have_heading('Create DMCA Counter-Notification')
-  end
-
   scenario "Notice" do
     notice = create(:dmca)
 

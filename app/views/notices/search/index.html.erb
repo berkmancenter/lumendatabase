@@ -1,43 +1,43 @@
 <%= title 'Search' %>
 <%= cache(@searcher.cache_key) do %>
-<% response = @searcher.search -%>
-
-<section class="search-results">
-  <header>
-    <%= form_tag(notices_search_index_path, method: :get, id: 'facets-form') do %>
-      <% if response.response['aggregations'] %>
-        <ol class="results-facets">
-          <% Notice::FILTERABLE_FIELDS.each do |filterable_field| %>
-            <%= render filterable_field, results: response.response['aggregations'] %>
-          <% end %>
-        </ol>
+  <section class="search-results">
+    <header>
+      <%= form_tag(notices_search_index_path, method: :get, id: 'facets-form') do %>
+        <% if @searchdata.response['aggregations'] %>
+          <ol class="results-facets">
+            <% Notice::FILTERABLE_FIELDS.each do |filterable_field| %>
+              <%= render filterable_field, results: @searchdata.response['aggregations'] %>
+            <% end %>
+          </ol>
+        <% end %>
+        <%= hidden_field_tag(:sort_by, params[:sort_by], class: 'sort_by_field') %>
       <% end %>
-      <%= hidden_field_tag(:sort_by, params[:sort_by], class: 'sort_by_field') %>
-    <% end %>
-    <div class="results-context">
-      Filtering results using the above drop-down menus will change the listed results but not the listed totals in the drop-down menus.
-    </div>
-    <div class="result-stats">
-      <span class="total-entries">Found <%= response.results.total %> results</span>
-      <div class="dropdown sort-order">
-        Sort by: <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><%= sort_order_label(params[:sort_by]) %></a>
-        <ol class="dropdown-menu" role="menu">
-          <% Notice::SORTINGS.each do |sorting| %>
-            <li class="facet">
-            <%=
-              link_to(
-                sorting.label, '#', 'data-value' => sorting.key,
-                'data-label' => sorting.label
-              ) %>
-            </li>
-          <% end %>
-        </ol>
+      <div class="results-context">
+        Filtering results using the above drop-down menus will change the listed results but not the listed totals in the drop-down menus.
       </div>
-    </div>
-  </header>
-  <ol class="results-list">
-    <%= render partial: 'result', collection: @searcher.instances %>
-  </ol>
-  <%= paginate response.results, left: 9, right: 2, current_page: @searcher.page.to_i %>
-</section>
+      <div class="result-stats">
+        <span class="total-entries">Found <%= @searchdata.results.total %> results</span>
+        <div class="dropdown sort-order">
+          Sort by: <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><%= sort_order_label(params[:sort_by]) %></a>
+          <% cache 'sortings' do %>
+            <ol class="dropdown-menu" role="menu">
+              <% Notice::SORTINGS.each do |sorting| %>
+                <li class="facet">
+                <%=
+                  link_to(
+                    sorting.label, '#', 'data-value': sorting.key,
+                    'data-label': sorting.label
+                  ) %>
+                </li>
+              <% end %>
+            </ol>
+          <% end %>
+        </div>
+      </div>
+    </header>
+    <ol class="results-list">
+      <%= render partial: 'result', collection: @wrapped_instances %>
+    </ol>
+    <%= paginate @searchdata.results, left: 9, right: 2, current_page: @searcher.page.to_i %>
+  </section>
 <% end %>

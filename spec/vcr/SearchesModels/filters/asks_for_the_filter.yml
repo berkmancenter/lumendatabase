@@ -1,0 +1,33 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: http://127.0.0.1:9250/chill_application_test_notice/_search?size=10
+    body:
+      encoding: UTF-8
+      string: '{"query":{"bool":{"must":[{"match":{"spam":{"query":false,"operator":"AND"}}},{"match":{"hidden":{"query":false,"operator":"AND"}}},{"match":{"published":{"query":true,"operator":"AND"}}},{"match":{"rescinded":{"query":false,"operator":"AND"}}}],"filter":[{"term":{"sender_name_facet":"Sender
+        name"}}]}},"aggregations":{"sender_name_facet":{"terms":{"field":"sender_name_facet"}}},"highlight":{"pre_tags":"\u003cem\u003e","post_tags":"\u003c/em\u003e","fields":{"title":{"type":"plain","require_field_match":false},"tag_list":{"type":"plain","require_field_match":false},"topics.name":{"type":"plain","require_field_match":false},"sender_name":{"type":"plain","require_field_match":false},"recipient_name":{"type":"plain","require_field_match":false},"works.description":{"type":"plain","require_field_match":false},"works.infringing_urls.url":{"type":"plain","require_field_match":false},"works.copyrighted_urls.url":{"type":"plain","require_field_match":false}}},"size":10,"from":0}'
+    headers:
+      Content-Type:
+      - application/json
+      User-Agent:
+      - Faraday v0.9.2
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Content-Length:
+      - '186'
+    body:
+      encoding: ASCII-8BIT
+      string: '{"took":10,"timed_out":false,"_shards":{"total":5,"successful":5,"skipped":0,"failed":0},"hits":{"total":0,"max_score":null,"hits":[]},"aggregations":{"sender_name_facet":{"doc_count_error_upper_bound":0,"sum_other_doc_count":0,"buckets":[]}}}'
+    http_version: 
+  recorded_at: Fri, 02 Nov 2018 14:29:33 GMT
+recorded_with: VCR 4.0.0

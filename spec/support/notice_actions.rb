@@ -1,56 +1,59 @@
 require 'support/sign_in'
 
 module NoticeActions
-  def submit_recent_notice(title = "A title")
-    sign_in( create(:user, :submitter) )
+  def submit_recent_notice(title = 'A title')
+    sign_in(create(:user, :submitter))
 
-    visit "/notices/new?type=DMCA"
+    visit '/notices/new?type=DMCA'
 
-    fill_in "Title", with: title
-    fill_in "Date received", with: Time.now
+    fill_in 'Title', with: title
+    fill_in 'Date received', with: Time.now
 
     within('section.recipient') do
-      fill_in "Name", with: "Recipient the first"
+      fill_in 'Name', with: 'Recipient the first'
     end
     within('section.sender') do
-      fill_in "Name", with: "Sender the first"
+      fill_in 'Name', with: 'Sender the first'
     end
     within('section.principal') do
-      fill_in "Name", with: "Principal the first"
+      fill_in 'Name', with: 'Principal the first'
     end
     within('section.submitter') do
-      fill_in "Name", with: "Submitter the first"
+      fill_in 'Name', with: 'Submitter the first'
     end
 
     fill_in 'Work URL', with: 'http://www.example.com/original_work.pdf'
     fill_in 'Kind of Work', with: 'movie'
     fill_in 'Description', with: 'A series of videos and still images'
-    fill_in 'Infringing URL', with: "http://example.com/infringing_url1"
+    fill_in 'Infringing URL', with: 'http://example.com/infringing_url1'
 
     yield if block_given?
 
-    click_on "Submit"
+    click_on 'Submit'
   end
 
   def open_recent_notice
     within('#recent-notices li:nth-child(1)') { find('a').click }
   end
 
-  def attach_notice(content = "Some content")
-    with_file(content) { |file| attach_file "Attach Notice", file.path }
+  def attach_notice(content: 'Some content')
+    with_file(content) { |file| attach_file 'Attach file', file.path }
   end
 
-  def add_supporting_document(content = "Some content")
+  def add_document
     @field_index ||= 0
-    @field_index  += 1
 
-    click_on "Attach another"
+    if @field_index > 0
+      click_on 'Attach another'
+      sleep 0.2
+    end
 
     field_name = "notice_file_uploads_attributes_#{@field_index}_file"
 
-    with_file(content) do |file|
+    with_file('some content') do |file|
       attach_file field_name, file.path
     end
+    @field_index += 1
   end
 
   def with_file(content)

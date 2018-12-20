@@ -9,7 +9,7 @@ addFileUploadInput = (field, parent, updateContainer) ->
 
   updateContainer(newContainer, nextId, nextName)
 
-  newContainer.insertAfter(container)
+  newContainer.appendTo($('#file_uploads_inputs'))
 
 $('.new_notice select').each ->
   $(this).select2
@@ -26,11 +26,8 @@ $('.attach #add-another').click ->
   parent = $(this).parent()
 
   addFileUploadInput 'file', parent, (newContainer, nextId, nextName) ->
-    newContainer.find('input').attr('id', nextId).attr('name', nextName)
-    newContainer.find('label').attr('for', nextId).html('Other Documents')
-
-  addFileUploadInput 'kind', parent, (newContainer, nextId, nextName) ->
-    newContainer.find('input').attr('id', nextId).attr('name', nextName).attr('value', 'supporting')
+    newContainer.find('input').attr('id', nextId).attr('name', nextName).val('')
+    newContainer.find('label').attr('for', nextId).html('Additional document')
 
 $(document).on 'click', '.add-another-url', ->
   anchor = $(this)
@@ -49,7 +46,6 @@ $(document).on 'click', '.remove-url', ->
   if $('#notice_url_count').length > 0
     $('#notice_url_count').val(section.find('.input.url').length)
 
-
 toggleReportNoticePanels = ->
   $list = $('.notices-list ul')
   $info = $('.info-panel')
@@ -62,5 +58,3 @@ toggleReportNoticePanels = ->
       $info.find("[data-id='#{id}']").addClass('active').siblings().removeClass('active')
 
 toggleReportNoticePanels()
-
-

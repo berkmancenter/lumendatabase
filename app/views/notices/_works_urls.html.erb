@@ -1,19 +1,47 @@
-<% if show_original %>
-  <div class="row">
-    <span class="label original-title"><%= original_title %></span>
-    <ol class="list original-urls">
-      <%# Don't do code style changes here, it's intentional to avoid additional spaces in the response %>
-      <% work.copyrighted_urls.each do |url| %><%= content_tag_for(:li, url) do %><%= url.url %><% end %><% end %>
-    </ol>
-  </div>
-<% end %>
+<% if can_see_full_notice_version?(@notice) %>
+  <% if show_original %>
+    <div class="row">
+      <span class="label original-title"><%= original_title %></span>
+      <ol class="list original-urls">
+        <% # Don't do code style changes here, it's intentional to avoid additional spaces in the response %>
+        <% work.copyrighted_urls.each do |url| %><%= content_tag_for(:li, url) do %><%= url.url %><% end %><% end %>
+      </ol>
+    </div>
+  <% end %>
 
-<% if show_infringing %>
-  <div class="row">
-    <span class="label infringing-title"><%= infringing_title %></span>
-    <ol class="list infringing-urls">
-      <%# Don't do code style changes here, it's intentional to avoid additional spaces in the response %>
-      <% work.infringing_urls.each do |url| %><%= content_tag_for(:li, url) do %><%= url.url %><% end %><% end %>
-    </ol>
-  </div>
+  <% if show_infringing %>
+    <div class="row">
+      <span class="label infringing-title"><%= infringing_title %></span>
+      <ol class="list infringing-urls">
+        <% # Don't do code style changes here, it's intentional to avoid additional spaces in the response %>
+        <% work.infringing_urls.each do |url| %><%= content_tag_for(:li, url) do %><%= url.url %><% end %><% end %>
+      </ol>
+    </div>
+  <% end %>
+<% else %>
+  <% if show_original %>
+    <div class="row">
+      <span class="label original-title"><%= original_title %></span>
+      <ol class="list original-urls">
+        <% # Don't do code style changes here, it's intentional to avoid additional spaces in the response %>
+        <% work.copyrighted_urls_counted_by_domain.each do |domain| %><li class="copyrighted_url"><%= domain[:domain] %> - <%= domain[:count] %> <%= 'URL'.pluralize(domain[:count]) %></li><% end %>
+      </ol>
+    </div>
+  <% end %>
+
+  <% if show_infringing %>
+    <div class="row">
+      <span class="label infringing-title"><%= infringing_title %></span>
+      <ol class="list infringing-urls">
+        <% # Don't do code style changes here, it's intentional to avoid additional spaces in the response %>
+        <% work.infringing_urls_counted_by_domain.each do |domain| %><li class="infringing_url"><%= domain[:domain] %> - <%= domain[:count] %> <%= 'URL'.pluralize(domain[:count]) %></li><% end %>
+      </ol>
+    </div>
+  <% end %>
+
+  <% if show_original || show_infringing %>
+    <div class="row">
+      <p><%= link_to 'Click here', request_access_notice_path(@notice) %> to request access and see full URLs.</p>
+    </div>
+  <% end %>
 <% end %>

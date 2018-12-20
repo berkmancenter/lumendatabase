@@ -2,10 +2,9 @@ require_relative '../page_object'
 
 class FieldedSearchOnPage < PageObject
   def open_advanced_search
-    unless advanced_search_visible?
-      sleep ENV["SEARCH_SLEEP"].to_i if ENV["SEARCH_SLEEP"]
-      find("a#toggle-advanced-search").click
-    end
+    return if advanced_search_visible?
+    sleep ENV['SEARCH_SLEEP'].to_i if ENV['SEARCH_SLEEP']
+    find('a#toggle-advanced-search').click
   end
 
   def add_more
@@ -42,15 +41,14 @@ class FieldedSearchOnPage < PageObject
     end
   end
 
-  def set_sort_order(sort_order)
+  def define_sort_order(sort_order)
     open_sort_order_menu
     find("a[data-value='#{sort_order}']").click
   end
 
   def open_sort_order_menu
-    unless sort_order_visible?
-      find(".sort-order a.dropdown-toggle").click
-    end
+    return if sort_order_visible?
+    find('.sort-order a.dropdown-toggle').click
   end
 
   def change_field(from, to)
@@ -63,26 +61,30 @@ class FieldedSearchOnPage < PageObject
     open_advanced_search
 
     within(".field-group.#{field}") do
-      find(".remove-group").click
+      find('.remove-group').click
     end
   end
 
   def run_search(wait_for_index = true)
-    wait_for_index and sleep((ENV["SEARCH_SLEEP"] && ENV["SEARCH_SLEEP"].to_i) || 1)
+    if wait_for_index
+      sleep((ENV['SEARCH_SLEEP'] && ENV['SEARCH_SLEEP'].to_i) || 1)
+    end
 
     find('.advanced-search .resubmit .button').click
   end
 
   def visit_search_page(wait_for_index = false)
-    wait_for_index and sleep((ENV["SEARCH_SLEEP"] && ENV["SEARCH_SLEEP"].to_i) || 1)
+    if wait_for_index
+      sleep((ENV['SEARCH_SLEEP'] && ENV['SEARCH_SLEEP'].to_i) || 1)
+    end
 
     visit '/notices/search'
   end
 
   def parameterized_search_for(field, term)
-    sleep (ENV["SEARCH_SLEEP"] && ENV["SEARCH_SLEEP"].to_i) || 1
+    sleep((ENV['SEARCH_SLEEP'] && ENV['SEARCH_SLEEP'].to_i) || 1)
 
-    visit "/notices/search?#{field}=#{URI.escape(term)}"
+    visit "/notices/search?#{field}=#{CGI.escape(term)}"
   end
 
   def within_results(&block)
@@ -92,10 +94,10 @@ class FieldedSearchOnPage < PageObject
   private
 
   def advanced_search_visible?
-    first('.container.advanced-search')
+    first('.container.advanced-search', minimum: 0)
   end
 
   def sort_order_visible?
-    first('.sort-order ol.dropdown-menu')
+    first('.sort-order ol.dropdown-menu', minimum: 0)
   end
 end

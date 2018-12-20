@@ -5,10 +5,7 @@ Maintenance windows are Wednesday and Saturday nights (after 5pm Eastern).
 ## Special instructions
 If any deploys have special instructions, write them here, with a date and PR number. When that PR has been deployed, you can erase the special instructions.
 
-* 16 August 2018/PR #470: requires cron job update (see https://github.com/berkmancenter/lumendatabase/pull/470)
-* 29 August 2018/PR #482: crontabs on enyos, percy, and flutie will need to be edited so to run rake lumen:* tasks rather than rake chillingeffects:* tasks. https://github.com/berkmancenter/lumendatabase/pull/482
-* Move bin/init-env.sh to .env (cat bin/init-env.sh >> .env; vi .env; : ; %s/export\s//g ; remove first line; exit, save)
-* Remove these instructions
+PR #512 - add cron job for work redaction rake task, running every 2 hours with lockrun to avoid duplicating db queries.
 
 ## Hotfix
 * Write code, code-review, and merge into `dev` via the normal process.
@@ -47,13 +44,13 @@ If any deploys have special instructions, write them here, with a date and PR nu
 * `sudo -su chill-prod` (enyos) or `sudo -su chill-dev` (flutie) or `sudo -su chill-api` (percy)
 * cd into the directory where chill files live (look under `/web/<servername>`)
 * `cp .env ../` (as a precaution)
-* `git checkout <branch>`
 * `git checkout db/schema.rb`
+* `git checkout <branch>`
   * This will differ from the version-controlled one as running db:migrate will change its datestamp
   * You don't want merge conflicts
-* `git pull origin <branch>`
-  * Servers have correct default branches set so this is just `git pull` unless you need a different branch
+* `git pull`
 * `bundle install`
+  * This will throw an error if the user doesn't have write permissions on the home directory inferred by bundler (probably the one specified in /etc/passwd/), but it probably works anyway.
 * `cp ../.env .`
 * `rake db:migrate`
   - If this throws a `PG::ConnectionBad:` and asks something like "Is the server running locally and accepting connections on Unix domain socket "/var/run/postgresql/.s.PGSQL.5432"?", use `RAILS_ENV=production rake db:migrate`

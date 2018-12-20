@@ -1,18 +1,18 @@
 require 'rails_helper'
 require 'support/contain_link'
 
-feature "User authorization" do
+feature 'User authorization' do
   include ContainLink
 
-  scenario "A non logged-in user is redirected to sign in" do
+  scenario 'A non logged-in user is redirected to sign in' do
     user = AdminOnPage.new(create(:user))
 
     user.visit_admin
 
-    expect(page).to have_text("You are not authorized to access this page.")
+    expect(page).to have_text('You are not authorized to access this page.')
   end
 
-  scenario "Submitters- cannot access admin" do
+  scenario 'Submitters - cannot access admin' do
     page_objects = [
       AdminOnPage.new(create(:user)),
       AdminOnPage.new(create(:user, :submitter))
@@ -25,7 +25,7 @@ feature "User authorization" do
     end
   end
 
-  scenario "Redactors+ are able to access admin" do
+  scenario 'Redactors+ are able to access admin' do
     page_objects = [
       AdminOnPage.new(create(:user, :redactor)),
       AdminOnPage.new(create(:user, :publisher)),
@@ -40,7 +40,7 @@ feature "User authorization" do
     end
   end
 
-  scenario "All levels can edit notices" do
+  scenario 'All levels can edit notices' do
     notice = create(:dmca)
     page_objects = [
       AdminOnPage.new(create(:user, :redactor)),
@@ -56,7 +56,7 @@ feature "User authorization" do
     end
   end
 
-  scenario "Redactors cannot publish (admin)" do
+  scenario 'Redactors cannot publish (admin)' do
     page_object = AdminOnPage.new(create(:user, :redactor))
     notice = create(:dmca, review_required: true)
 
@@ -65,7 +65,7 @@ feature "User authorization" do
     expect(page).to have_no_css('input#notice_review_required')
   end
 
-  scenario "Publishers+ can publish (admin)" do
+  scenario 'Publishers+ can publish (admin)' do
     notice = create(:dmca, review_required: true)
     page_objects = [
       AdminOnPage.new(create(:user, :publisher)),
@@ -80,7 +80,7 @@ feature "User authorization" do
     end
   end
 
-  scenario "Redactors cannot publish (redact tool)" do
+  scenario 'Redactors cannot publish (redact tool)' do
     notice = create(:dmca, review_required: true)
     page_object = AdminOnPage.new(create(:user, :redactor))
 
@@ -89,7 +89,7 @@ feature "User authorization" do
     expect(page).to have_no_css('input#notice_review_required')
   end
 
-  scenario "Publishers+ can publish (redact tool)" do
+  scenario 'Publishers+ can publish (redact tool)' do
     notice = create(:dmca, review_required: true)
     page_objects = [
       AdminOnPage.new(create(:user, :publisher)),
@@ -104,7 +104,7 @@ feature "User authorization" do
     end
   end
 
-  scenario "Redactors and Publishers cannot create/delete notices" do
+  scenario 'Redactors and Publishers cannot create/delete notices' do
     notice = create(:dmca)
     page_objects = [
       AdminOnPage.new(create(:user, :redactor)),
@@ -122,7 +122,7 @@ feature "User authorization" do
     end
   end
 
-  scenario "Redactors and Publishers cannot edit site data" do
+  scenario 'Redactors and Publishers cannot edit site data' do
     site_data = [
       create(:topic),
       create(:relevant_question),
@@ -146,7 +146,7 @@ feature "User authorization" do
     end
   end
 
-  scenario "Redactors and Publishers cannot rescind notices" do
+  scenario 'Redactors and Publishers cannot rescind notices' do
     notice = create(:dmca)
     page_objects = [
       AdminOnPage.new(create(:user, :redactor)),
@@ -160,8 +160,9 @@ feature "User authorization" do
     end
   end
 
-  scenario "Admins and Super admins can edit site data" do
+  scenario 'Admins and Super admins can edit site data' do
     topic = create(:topic)
+    topic.save
     page_objects = [
       AdminOnPage.new(create(:user, :admin)),
       AdminOnPage.new(create(:user, :super_admin))
@@ -174,7 +175,7 @@ feature "User authorization" do
     end
   end
 
-  scenario "Admins and Super admins can rescind notices" do
+  scenario 'Admins and Super admins can rescind notices' do
     notice = create(:dmca)
     page_objects = [
       AdminOnPage.new(create(:user, :admin)),
@@ -188,7 +189,7 @@ feature "User authorization" do
     end
   end
 
-  scenario "Admins cannot edit Users or Access levels" do
+  scenario 'Admins cannot edit Users or Access levels' do
     site_data = [
       create(:user),
       create(:role)
@@ -203,25 +204,25 @@ feature "User authorization" do
     end
   end
 
-  scenario "Super admins can edit other Users" do
+  scenario 'Super admins can edit other Users' do
     obj = AdminOnPage.new(create(:user, :super_admin))
     other_user = create(:user)
 
-    obj.sign_in_and_edit(other_user, user_email: "new-email@example.com")
+    obj.sign_in_and_edit(other_user, user_email: 'new-email@example.com')
 
-    expect(other_user.reload.email).to eq "new-email@example.com"
+    expect(other_user.reload.email).to eq 'new-email@example.com'
   end
 
-  scenario "Super admins can edit Roles" do
+  scenario 'Super admins can edit Roles' do
     obj = AdminOnPage.new(create(:user, :super_admin))
-    role = create(:role, name: "some_name")
+    role = create(:role, name: 'some_name')
 
-    obj.sign_in_and_edit(role, Name: "another_name")
+    obj.sign_in_and_edit(role, Name: 'another_name')
 
-    expect(role.reload.name).to eq "another_name"
+    expect(role.reload.name).to eq 'another_name'
   end
 
-  scenario "Visibility of notice administation links" do
+  scenario 'Visibility of notice administation links' do
     notice = create(:dmca)
     admin_path = rails_admin.show_path(model_name: 'dmca', id: notice.id)
 
@@ -236,8 +237,29 @@ feature "User authorization" do
 
     expect(page).to contain_link(admin_path)
 
-    click_on "Edit in Admin"
+    click_on 'Edit in Admin'
 
     expect(obj).to be_in_admin
+  end
+
+  scenario 'Users are redirected to pre-sign-in page after login' do
+    notice = create(:dmca)
+    notice_url = notice_url(notice)
+    create(
+      :user,
+      email: 'someone@example.com',
+      password: 'somepassword',
+      password_confirmation: 'somepassword'
+    )
+
+    visit notice_url
+
+    visit new_user_session_path
+
+    fill_in 'Email', with: 'someone@example.com'
+    fill_in 'Password', with: 'somepassword'
+    click_button 'Log in'
+
+    expect(current_url).to eq(notice_url)
   end
 end

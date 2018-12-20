@@ -12,7 +12,7 @@ h2 { font-size: 1.73333em; line-height: 36.0938px; margin: 15.4688px 0px; }
 img { margin: 0px; }
 ol { list-style-position: outside; margin-bottom: 10.3125px; padding-left: 20.625px; }
 ol li { line-height: 20.625px; }
-nav.main-nav { background: none repeat scroll 0% 0% rgb(66, 94, 138); height: 37px; }
+nav.main-nav { background: none repeat scroll 0% 0% #019CE0; height: 37px; }
 footer.main { background: none repeat scroll 0% 0% rgb(247, 249, 251); color: rgb(137, 148, 160); font-size: 13px; font-weight: 500; }
 footer.main div.inner-wrapper { max-width: 1100px; margin: 0px auto; padding: 0px; }
 footer.main span,footer.main nav { float: left; }

@@ -1,5 +1,4 @@
 class PrivateInformation < Notice
-
   define_elasticsearch_mapping
 
   def self.model_name

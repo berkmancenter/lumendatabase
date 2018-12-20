@@ -6,9 +6,9 @@ ActionResponder = Struct.new(:context, :abstract_model, :object)
 class PostResponder < ActionResponder
   def handle(params)
     if params[:selected_text].present?
-      redactor = RedactsNotices.new([
-        RedactsNotices::RedactsContent.new(params[:selected_text])
-                                    ])
+      redactor = InstanceRedactor.new(
+        [InstanceRedactor::ContentRedactor.new(params[:selected_text])]
+      )
 
       review_required_ids = Notice.where(review_required: true).pluck(:id)
 
@@ -21,9 +21,11 @@ class PostResponder < ActionResponder
   private
 
   def redirect_to_current(params)
-    context.redirect_to(context.redact_notice_path(
-      abstract_model, object.id, next_notices: params[:next_notices]
-    ))
+    context.redirect_to(
+      context.redact_notice_path(
+        abstract_model, object.id, next_notices: params[:next_notices]
+      )
+    )
   end
 end
 
@@ -59,7 +61,7 @@ class PutResponder < ActionResponder
   end
 
   def respond_json
-    context.render json: { id: object.id.to_s, label: "Redact notice" }
+    context.render json: { id: object.id.to_s, label: 'Redact notice' }
   end
 
   def handle_error
@@ -69,13 +71,15 @@ class PutResponder < ActionResponder
   def save_and_next(params)
     next_notice, *next_notices = params[:next_notices]
 
-    context.redirect_to(context.redact_notice_path(
-      abstract_model, next_notice, next_notices: next_notices
-    ))
+    context.redirect_to(
+      context.redact_notice_path(
+        abstract_model, next_notice, next_notices: next_notices
+      )
+    )
   end
 end
 
-RedactNoticeProc = Proc.new do
+RedactNoticeProc = proc do
   if request.post?
     post_responder = PostResponder.new(self, @abstract_model, @object)
     post_responder.handle(params)
@@ -99,7 +103,7 @@ RedactNoticeProc = Proc.new do
 
     respond_to do |format|
       format.html { render @action.template_name }
-      format.js   { render @action.template_name, :layout => false }
+      format.js   { render @action.template_name, layout: false }
     end
   end
 end
@@ -112,7 +116,7 @@ module RailsAdmin
         register_instance_option(:link_icon) { 'icon-adjust' }
         register_instance_option(:action_name) { :redact_notice }
         register_instance_option(:member) { true }
-        register_instance_option(:http_methods) { %i( get post put ) }
+        register_instance_option(:http_methods) { %i[get post put] }
         register_instance_option(:controller) { RedactNoticeProc }
         register_instance_option :visible? do
           bindings && (object = bindings[:object]) &&

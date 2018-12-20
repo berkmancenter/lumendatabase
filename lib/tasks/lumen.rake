@@ -146,7 +146,7 @@ namespace :lumen do
   end
 
   desc 'Index notices by csv'
-  task :index_notices_by_csv, [:input_csv, :id_column] => :environment do |t, args|
+  task :index_notices_by_csv, %i[input_csv id_column] => :environment do |_t, args|
     index_notices_by_csv args[:input_csv], args[:id_column]
   end
 
@@ -186,7 +186,7 @@ namespace :lumen do
   end
 
   desc 'Recreate elasticsearch index for notices with a given recipient entity_id'
-  task :index_notices_by_entity_id, [:entity_id] => :environment do |t, args|
+  task :index_notices_by_entity_id, [:entity_id] => :environment do |_t, args|
     begin
       batch_size = (ENV['BATCH_SIZE'] || 192).to_i
 
@@ -209,11 +209,11 @@ namespace :lumen do
   end
 
   desc 'Recreate elasticsearch index for notices of a given date'
-  task :index_notices_by_date, [:date] => :environment do |t, args|
+  task :index_notices_by_date, [:date] => :environment do |_t, args|
     begin
       batch_size = (ENV['BATCH_SIZE'] || 192).to_i
 
-      notices = Notice.where("created_at::date = '#{args[ :date ]}'")
+      notices = Notice.where("created_at::date = '#{args[:date]}'")
       Rails.logger.info "index_notices date: #{args[:date]}, total: #{notices.count}"
 
       count = 0
@@ -232,7 +232,7 @@ namespace :lumen do
   end
 
   desc 'Recreate elasticsearch index for notices of a given month'
-  task :index_notices_by_month, [:month, :year] => :environment do |t, args|
+  task :index_notices_by_month, [:month, :year] => :environment do |_t, args|
     begin
       batch_size = (ENV['BATCH_SIZE'] || 192).to_i
 
@@ -255,7 +255,7 @@ namespace :lumen do
   end
 
   desc 'Recreate elasticsearch index for notices of a given year'
-  task :index_notices_by_year, [:year] => :environment do |t, args|
+  task :index_notices_by_year, [:year] => :environment do |_t, args|
     begin
       batch_size = (ENV['BATCH_SIZE'] || 192).to_i
 
@@ -336,7 +336,7 @@ namespace :lumen do
 
   desc 'Assign titles to untitled notices'
   task title_untitled_notices: :environment do
-    # Similar to SubmitNotice model
+    # Similar to NoticeSubmissionInitializer model
     def generic_title(notice)
       if notice.recipient_name.present?
         "#{notice.class.label} notice to #{notice.recipient_name}"
@@ -364,7 +364,7 @@ namespace :lumen do
   end
 
   desc 'Hide notices by submission_id'
-  task :hide_notices_by_sid, [:input_csv, :sid_column] => :environment do |t, args|
+  task :hide_notices_by_sid, %i[input_csv sid_column] => :environment do |_t, args|
     hide_notices_by_sid args[:input_csv], args[:sid_column]
   end
 
@@ -405,7 +405,7 @@ namespace :lumen do
   end
 
   desc 'Change incorrect notice type'
-  task :change_incorrect_notice_type, [:input_csv] => :environment do |t, args|
+  task :change_incorrect_notice_type, [:input_csv] => :environment do |_t, args|
     incorrect_ids_file = args[:input_csv] || Rails.root.join('tmp', 'incorrect_ids.csv')
     incorrect_notice_ids = []
     incorrect_notice_id_type = {}
@@ -448,7 +448,7 @@ namespace :lumen do
       [Notice, Entity].each do |klass|
         ids = klass.pluck(:id)
         ids.each do |id|
-          if ReindexRun.is_indexed?(klass, id)
+          if ReindexRun.indexed?(klass, id)
             puts "Skipping #{klass}, #{id}"
           else
             puts "Indexing #{klass}, #{id}"
@@ -462,11 +462,32 @@ namespace :lumen do
     end
   end
 
+  desc 'Redact and reindex works'
+  task redact_and_reindex_works: :environment do
+    # This is a one-time task to redact sensitive information from all existing
+    # work descriptions. We only look at works before a certain date (shortly
+    # after our deploy date for this feature) because anything after that date
+    # will be auto_redacted as part of the save process.
+    works = Work.where('updated_at < (?)', Date.new(2018, 12, 21))
+                .order(:id)
+                .limit(100_000)
+    works.each do |work|
+      # Make sure that updated_at changes, so we don't re-redact this work.
+      work.touch
+      work.save # calls auto_redact
+    end
+
+    # Works aren't directly indexed in ES; they're indexed as columns on Notice.
+    # Therefore we need to reindex the associated notices in order to update
+    # Elasticsearch entries. Changing the updated_at column on the associated
+    # notices will force them to update the next time
+    # index_changed_model_instances runs. This will happen automatically as
+    # part of the before_save callback on Work.
+  end
+
   desc 'Publish notices whose publication delay has expired'
   task publish_embargoed: :environment do
-    Notice.where(published: false).each do |notice|
-      notice.set_published!
-    end
+    Notice.where(published: false).each(&:set_published!)
   end
 
   def with_file_name
@@ -479,7 +500,7 @@ namespace :lumen do
 
   desc 'Assign blank action_taken to Google notices'
   task blank_action_taken: :environment do
-    ActiveRecord::Base.connection.execute %Q{
+    ActiveRecord::Base.connection.execute %{
 update notices
 set action_taken = '',
   updated_at = now()
@@ -492,10 +513,10 @@ where notices.id in (
   end
 
   desc 'Redact content in a single notice by id'
-  task :redact_lr_legalother_single, [:notice_id] => :environment do |t, args|
+  task :redact_lr_legalother_single, [:notice_id] => :environment do |_t, args|
     begin
       notices = Notice.includes(
-        works: [:infringing_urls, :copyrighted_urls]
+        works: %i[infringing_urls copyrighted_urls]
       ).where(
         id: args[:notice_id]
       )
@@ -505,7 +526,7 @@ where notices.id in (
       notices.find_in_batches do |group|
         group.each do |notice|
           next unless notice.sender.present?
-          redactor = RedactsNotices::RedactsEntityName.new(notice.sender.name)
+          redactor = InstanceRedactor::EntityNameRedactor.new(notice.sender.name)
           notice.works.each do |work|
             work.update_attributes(
               description: redactor.redact(work.description)
@@ -531,7 +552,7 @@ where notices.id in (
       total = entities.count
       entities.each.with_index(1) do |e, i|
         notices = e.notices.includes(
-          works: [:infringing_urls, :copyrighted_urls]
+          works: %i[infringing_urls copyrighted_urls]
         ).where(
           entity_notice_roles: { name: 'recipient' }
         ).where(
@@ -546,10 +567,11 @@ where notices.id in (
         notices.find_in_batches do |group|
           group.each do |notice|
             next unless notice.sender.present?
-            redactor = RedactsNotices::RedactsEntityName.new(notice.sender.name)
+            redactor = InstanceRedactor::EntityNameRedactor.new(notice.sender.name)
             notice.works.each do |work|
               work.update_attributes(
-                description: redactor.redact(work.description))
+                description: redactor.redact(work.description)
+              )
               work.infringing_urls.each do |iu|
                 iu.update_attributes(url: redactor.redact(iu.url))
               end
@@ -587,7 +609,7 @@ where notices.id in (
   end
 
   desc "Given a work, for every notice having that work: replace the notice's work with a new blank work"
-  task :blank_work_notices_works, [:work_id] => :environment do |t, args|
+  task :blank_work_notices_works, [:work_id] => :environment do |_t, args|
     blank_work_notices_works args[:work_id]
   end
 
@@ -617,7 +639,7 @@ where notices.id in (
 
   desc 'Remove kinds from Google notices'
   task remove_google_kinds: :environment do
-    ActiveRecord::Base.connection.execute %Q{
+    ActiveRecord::Base.connection.execute %{
 update works
 set kind = 'Unspecified'
 where works.id in (
@@ -664,7 +686,7 @@ where works.id in (
                                           'google, inc', 'google inc',
                                           'google inc.'])
                             .pluck(:id)
-    google_entities - [1]
+    google_entities.delete(1)
     EntityNoticeRole.where(entity_id: google_entities).update_all(entity_id: 1)
   end
 
@@ -679,7 +701,7 @@ where works.id in (
                                            'TWITTER, INC.', 'twitter.com',
                                            'Twitter Trust and Safety'])
                              .pluck(:id)
-    twitter_entities - [447_642]
+    twitter_entities.delete(447_642)
     EntityNoticeRole.where(entity_id: twitter_entities)
                     .update_all(entity_id: 447_642)
   end

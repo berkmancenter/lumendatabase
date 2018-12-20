@@ -2,7 +2,9 @@
 
 <div class="inner-padding">
   <h1>Which type of demand would you like to report?</h1>
-  <b>To help us serve you better, we ask that you submit only notices you have received, not items you have heard about second-hand, and that you add only information whose accuracy you can verify. We may mask additional identifying information before making the notice publicly viewable.</b> 
+  <p>
+    <b>To help us serve you better, we ask that you submit only notices you have received, not items you have heard about second-hand, and that you add only information whose accuracy you can verify. We may mask additional identifying information before making the notice publicly viewable.</b>
+  </p>
   <section class="notices-list">
     <ul>
       <% Notice.type_models.each do |model| %>
@@ -26,15 +28,6 @@
               class: "button"
             )
           %>
-          <% if model.name == "DMCA" %>
-          <%= 
-            link_to(
-              "Create DMCA Counter Notice", 
-              new_counter_notice_path, 
-              class: "button"
-            ) 
-          %>
-          <% end %>
         </div>
       </div>
     <% end %>

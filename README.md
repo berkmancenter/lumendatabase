@@ -25,6 +25,8 @@ Requirements:
 
 Setup:
 
+By default the app will try to connect to Elasticsearch on `http://localhost:9200`. If you want to use a different host set the `ELASTICSEARCH_URL` environment variable.
+
     $ bundle install
     $ cp config/database.yml.example config/database.yml
       (edit database.yml as you wish)
@@ -67,6 +69,47 @@ Use rubocop and leave the code at least as clean as you found it. If you make
 linting-only changes, it's considerate to your code reviewer to keep them in
 their own commit.
 
+Profiling:
+* [Skylight](https://www.skylight.io/app/applications/utm46ElcSDtw/recent/5m/endpoints)
+  * track page rendering time, count allocations, find possibly dodgy SQL
+  * analytics to help you find the problem areas
+  * login required
+  * runs in prod
+* [bullet](https://github.com/flyerhzm/bullet)
+  * find N+1 queries and unused eager loading
+  * runs in dev
+  * logs to `log/bullet.log`
+* [oink](https://github.com/noahd1/oink)
+  * memory usage, allocations
+  * more specific than Skylight as to which objects are being created where
+  * runs in dev by default; can run anywhere by setting `ENV[LUMEN_USE_OINK]` (ok to run in production)
+  * logs to `log/oink.log`
+
+## Environment variables
+
+- `RAILS_LOG_LEVEL` - logging level
+- `WEB_CONCURRENCY` - number of Unicorn workers
+- `WEB_TIMEOUT` - Unicorn timeout
+- `MAILER_DELIVERY_METHOD` - mailer delivery method
+- `DEFAULT_SENDER` - default mailer sender
+- `RETURN_PATH` - default mailer return path
+- `SITE_HOST` - site host, used in mailer templates
+- `SMTP_ADDRESS` - SMTP server address
+- `SMTP_DOMAIN` - SMTP server domain
+- `SMTP_USERNAME` - SMTP server username
+- `SMTP_PASSWORD` - SMTP server password
+- `SMTP_PORT` - SMTP server port
+- `TWITTER_CONSUMER_KEY`  - Twitter integration public key
+- `TWITTER_CONSUMER_SECRET`  - Twitter integration private key
+- `TWITTER_OAUTH_TOKEN` - Twitter integration OAuth token
+- `TWITTER_OAUTH_TOKEN_SECRET` - Twitter integration OAuth token secret key
+- `RECAPTCHA_SITE_KEY` - reCAPTCHA public key
+- `RECAPTCHA_SECRET_KEY` - reCAPTCHA private key
+- `BROWSER_VALIDATIONS` - enable user browser form validations
+- `BATCH_SIZE` - batch size of model items indexed during each run of Elasticsearch re-indexing
+- `SEARCH_SLEEP` - used in specs only, time out of Elasticsearch searches
+- `RACK_ENV` - Rack environment
+
 Ephemera
 ========
 
@@ -98,4 +141,4 @@ Copyright (c) 2016 President and Fellows of Harvard College
 Performance Monitoring
 ======================
 
-[View performance data on Skylight](https://www.skylight.io/app/applications/utm46ElcSDtw)
+[View performance data on Skylight](https://oss.skylight.io/app/applications/utm46ElcSDtw/recent/6h/endpoints)

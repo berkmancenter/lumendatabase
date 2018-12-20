@@ -11,60 +11,27 @@ class NoticesController < ApplicationController
     model_class = get_notice_type(params)
     @notice = model_class.new
     build_entity_notice_roles(model_class)
-    @notice.file_uploads.build(kind: 'original')
+    @notice.file_uploads.build(kind: 'supporting')
     build_works(@notice)
   end
 
   def create
-    submission = SubmitNotice.new(
-      get_notice_type(params[:notice]),
-      notice_params
-    )
-
     respond_to do |format|
       format.json do
-        (head :unauthorized and return) if cannot?(:submit, Notice)
-
-        if submission.submit(current_user)
-          head :created, location: submission.notice
-        else
-          render json: submission.errors, status: :unprocessable_entity
-        end
+        return unless authorized_to_create?
+        create_respond_json
       end
 
-      format.html do
-        if submission.submit(current_user)
-          redirect_to :root, notice: 'Notice created!'
-        else
-          @notice = submission.notice
-          render :new
-        end
-      end
+      format.html { create_respond_html }
     end
   end
 
   def show
     return unless (@notice = Notice.find(params[:id]))
-    respond_to do |format|
-      format.html do
-        if @notice.rescinded?
-          render :rescinded
-        elsif @notice.hidden || @notice.spam || !@notice.published
-          render file: 'public/404_unavailable',
-                 formats: [:html],
-                 status: :not_found,
-                 layout: false
-        else
-          render :show
-        end
-      end
 
-      format.json do
-        serializer = researcher? ? NoticeSerializerProxy : LimitedNoticeSerializerProxy
-        render json: @notice,
-               serializer: serializer,
-               root: json_root_for(@notice.class)
-      end
+    respond_to do |format|
+      show_html format
+      show_json format
     end
   end
 
@@ -97,12 +64,19 @@ class NoticesController < ApplicationController
 
   private
 
+  # These parameters will be added to the Notice instance during the delayed
+  # job outside of the request/response loop. Skylight reveals that adding
+  # infringing_urls is slow, particularly if the number is large, and involves
+  # repeated SQL queries. Tracking down those queries is much harder than
+  # delegating the job to a place where it won't annoy users.
+  DELAYED_PARAMS = %i[works_attributes].freeze
+
   def json_root_for(klass)
     klass.to_s.tableize.singularize
   end
 
   def notice_params
-    params.require(:notice).permit(
+    params.require(:notice).except(:type).permit(
       :title,
       :subject,
       :body,
@@ -147,15 +121,20 @@ class NoticesController < ApplicationController
 
   def resolve_layout
     case action_name
-    when "show"
-      "search"
-    when "url_input"
+    when 'show'
+      'search'
+    when 'url_input'
       false
     else
-      "application"
+      'application'
     end
   end
 
+  # In theory the calls to fetch and delete cause memory leaks per
+  # https://tenderlovemaking.com/2014/06/02/yagni-methods-are-killing-me.html ,
+  # but with benchmarking on localhost I'm unable to find a meaningful memory
+  # usage difference between this version and a version that avoids these calls.
+  # --ay, 11 December 2018
   def get_notice_type(params)
     type_string = params.fetch(:type, 'DMCA')
     type_string = 'DMCA' if type_string == 'Dmca'
@@ -185,7 +164,7 @@ class NoticesController < ApplicationController
     return false unless request.headers['HTTP_X_AUTHENTICATION_TOKEN']
     User.find_by_authentication_token(
       request.headers['HTTP_X_AUTHENTICATION_TOKEN']
-    ).has_role?(Role.researcher)
+    ).role?(Role.researcher)
   end
 
   def build_entity_notice_roles(model_class)
@@ -200,6 +179,117 @@ class NoticesController < ApplicationController
     notice.works.build do |w|
       w.copyrighted_urls.build
       w.infringing_urls.build
+    end
+  end
+
+  def authorized_to_create?
+    if cannot?(:submit, Notice)
+      head :unauthorized
+      false
+    else
+      true
+    end
+  end
+
+  def preliminary_submission
+    NoticeSubmissionInitializer.new(
+      get_notice_type(params[:notice]),
+      initial_params
+    )
+  end
+
+  # initial_params are used to create the notice instance. final_params are
+  # used to update it in the delayed job.
+  def initial_params
+    notice_params.except(*DELAYED_PARAMS)
+  end
+
+  def final_params
+    notice_params.slice(*DELAYED_PARAMS)
+  end
+
+  def finalize(notice)
+    NoticeSubmissionFinalizer.new(notice, final_params).finalize
+  end
+
+  def create_respond_json
+    submission = preliminary_submission
+
+    if submission.submit(current_user)
+      finalize(submission.notice)
+      head :created, location: submission.notice
+    else
+      render json: submission.errors, status: :unprocessable_entity
+    end
+  end
+
+  def create_respond_html
+    submission = preliminary_submission
+
+    if submission.submit(current_user)
+      finalize(submission.notice)
+      redirect_to :root, notice: 'Notice created!'
+    else
+      @notice = submission.notice
+      render :new
+    end
+  end
+
+  def json_errors(notice)
+    if notice.present?
+      notice.errors
+    else
+      msg = 'You are not authorized to do that, or you are missing required ' \
+            'parameters'.freeze
+      { errors: msg }
+    end
+  end
+
+  def run_show_callbacks
+    process_notice_viewer_request unless current_user.nil?
+  end
+
+  def process_notice_viewer_request
+    # Only notice viewers
+    return unless current_user.role?(Role.notice_viewer)
+    # Only when the views limit is set for a user
+    return unless current_user.notice_viewer_views_limit.present?
+    # No need to update the counter when the limit is reached
+    return if current_user.notice_viewer_viewed_notices >= current_user.notice_viewer_views_limit
+
+    current_user.increment!(:notice_viewer_viewed_notices)
+  end
+
+  def show_html(format)
+    format.html do
+      show_render_html
+    end
+  end
+
+  def show_json(format)
+    format.json do
+      render json: @notice,
+             serializer: NoticeSerializerProxy,
+             root: json_root_for(@notice.class)
+    end
+  end
+
+  def show_render_html
+    if @notice.rescinded?
+      render :rescinded
+    elsif @notice.hidden
+      render file: 'public/404_hidden',
+             formats: [:html],
+             status: :not_found,
+             layout: false
+    elsif @notice.spam || !@notice.published
+      render file: 'public/404_unavailable',
+             formats: [:html],
+             status: :not_found,
+             layout: false
+    else
+      render :show
+      run_show_callbacks
     end
   end
 end

@@ -17,7 +17,7 @@ feature 'Fielded searches of Notices' do
         search_on_page.parameterized_search_for(field.parameter, generator.query)
 
         search_on_page.within_results do
-          expect(page).to have_content(generator.matched_notice.title)
+          expect(page).to have_words(generator.matched_notice.title)
           expect(page).to have_no_content(generator.unmatched_notice.title)
         end
       end
@@ -37,7 +37,7 @@ feature 'Fielded searches of Notices' do
         search_on_page.run_search
 
         search_on_page.within_results do
-          expect(page).to have_content(generator.matched_notice.title)
+          expect(page).to have_words(generator.matched_notice.title)
           expect(page).to have_no_content(generator.unmatched_notice.title)
         end
       end
@@ -59,7 +59,7 @@ feature 'Fielded searches of Notices' do
     search_on_page.run_search
 
     search_on_page.within_results do
-      expect(page).to have_content(inside_search.title)
+      expect(page).to have_words(inside_search.title)
       expect(page).to have_no_content(outside_search.title)
     end
 
@@ -81,7 +81,7 @@ feature 'Fielded searches of Notices' do
 
     scenario 'by newest date_received', search: true, js: true do
       search_on_page = FieldedSearchOnPage.new
-      search_on_page.set_sort_order('date_received desc')
+      search_on_page.define_sort_order('date_received desc')
 
       expect(page).to have_sort_order_selection_of('Newest')
       search_on_page.within_results do
@@ -92,7 +92,7 @@ feature 'Fielded searches of Notices' do
 
     scenario 'by oldest date_received', search: true, js: true do
       search_on_page = FieldedSearchOnPage.new
-      search_on_page.set_sort_order('date_received asc')
+      search_on_page.define_sort_order('date_received asc')
 
       expect(page).to have_sort_order_selection_of('Oldest')
       search_on_page.within_results do
@@ -122,7 +122,7 @@ feature 'Fielded searches of Notices' do
 
       search_on_page.add_fielded_search_for(title_field, 'lion')
 
-      sleep 0.2
+      expect(page).to have_css(".field-group.#{title_field.parameter}")
 
       open_and_select_facet(:sender_name_facet, notice.sender_name)
 
@@ -263,9 +263,8 @@ feature 'Fielded searches of Notices' do
         search_on_page = FieldedSearchOnPage.new
         Notice::SEARCHABLE_FIELDS.each do |field|
           search_on_page.add_fielded_search_for(field, 'test')
+          expect(page).to have_css(".field-group.#{field.parameter}")
         end
-
-        sleep 0.2
 
         search_on_page.within_fielded_searches do
           expect(page).to have_no_css('#duplicate-field')
@@ -276,6 +275,7 @@ feature 'Fielded searches of Notices' do
         search_on_page = FieldedSearchOnPage.new
         Notice::SEARCHABLE_FIELDS.each do |field|
           search_on_page.add_fielded_search_for(field, 'test')
+          expect(page).to have_css(".field-group.#{field.parameter}")
         end
 
         search_on_page.remove_fielded_search_for(:title)

@@ -29,16 +29,46 @@ describe NoticesController do
         expect(response).to be_successful
         expect(response).to render_template(:rescinded)
       end
+
+      it 'renders the unavailable template if the notice is spam' do
+        stub_find_notice(build(:dmca, spam: true))
+
+        get :show, id: 1
+
+        expect(response.status).to eq(404)
+        expect(response).to render_template(file: '404_unavailable.html')
+      end
+
+      it 'renders the unavailable template if the notice is unpublished' do
+        stub_find_notice(build(:dmca, published: false))
+
+        get :show, id: 1
+
+        expect(response.status).to eq(404)
+        expect(response).to render_template(file: '404_unavailable.html')
+      end
+
+      it 'renders the hidden template if the notice is hidden' do
+        stub_find_notice(build(:dmca, hidden: true))
+
+        get :show, id: 1
+
+        expect(response.status).to eq(404)
+        expect(response).to render_template(file: '404_hidden.html')
+      end
     end
 
     context 'as JSON' do
       Notice.type_models.each do |model_class|
         it "returns a serialized notice for #{model_class}" do
           notice = stub_find_notice(model_class.new)
+
           serializer_class = model_class.active_model_serializer || NoticeSerializer
           serialized = serializer_class.new(notice)
-          expect(serializer_class).to receive(:new)
-            .with(notice, anything)
+
+          allow(serialized).to receive(:current_user).and_return(nil)
+          expect(serializer_class).to receive(:new).
+            with(notice, anything)
             .and_return(serialized)
 
           get :show, id: 1, format: :json
@@ -114,11 +144,84 @@ describe NoticesController do
         notice.save
         stub_find_notice(notice)
 
-        request.env['HTTP_AUTHENTICATION_TOKEN'] = user.authentication_token
         get :show, id: 1, format: :json
 
         json = JSON.parse(response.body)['dmca']['works'][0]['infringing_urls'][0]
+        expect(json).to have_key('count')
+        expect(json).to have_key('domain')
+
+        get :show, id: 1, authentication_token: user.authentication_token, format: :json
+
+        json = JSON.parse(response.body)["dmca"]["works"][0]["infringing_urls"][0]
         expect(json).to have_key('url_original')
+      end
+    end
+
+    context 'by notice_viewer' do
+      let(:notice) { build(:dmca) }
+      let(:user) do
+        build(
+          :user,
+          :notice_viewer
+        )
+      end
+
+      it 'increases the notice counter for the user when the viewing limit is set and viewing html' do
+        expect(Notice).to receive(:find).with('42').and_return(notice)
+
+        user.notice_viewer_views_limit = 1
+        allow(controller).to receive(:current_user).and_return(user)
+
+        get :show, id: 42
+
+        expect(user.notice_viewer_viewed_notices).to eq 1
+      end
+
+      it 'won\'t increase the notice counter for the user when the viewing limit is set and viewing json' do
+        expect(Notice).to receive(:find).with('42').and_return(notice)
+
+        user.notice_viewer_views_limit = 1
+        allow(controller).to receive(:current_user).and_return(user)
+
+        get :show, id: 42, format: :json
+
+        expect(user.notice_viewer_viewed_notices).to eq 0
+      end
+
+      it 'won\'t increase the notice counter for the user when the viewing limit is nil or 0' do
+        expect(Notice).to receive(:find).twice.with('42').and_return(notice)
+
+        user.notice_viewer_views_limit = nil
+        allow(controller).to receive(:current_user).and_return(user)
+
+        get :show, id: 42, format: :json
+
+        expect(user.notice_viewer_viewed_notices).to eq 0
+
+        user.notice_viewer_views_limit = 0
+
+        get :show, id: 42, format: :json
+
+        expect(user.notice_viewer_viewed_notices).to eq 0
+      end
+
+      it 'increases the notice counter for the user when the viewing limit is set until the limit is reached' do
+        expect(Notice).to receive(:find).with('42').exactly(3).times.and_return(notice)
+
+        user.notice_viewer_views_limit = 2
+        allow(controller).to receive(:current_user).and_return(user)
+
+        get :show, id: 42
+
+        expect(user.notice_viewer_viewed_notices).to eq 1
+
+        get :show, id: 42
+
+        expect(user.notice_viewer_viewed_notices).to eq 2
+
+        get :show, id: 42
+
+        expect(user.notice_viewer_viewed_notices).to eq 2
       end
     end
 
@@ -131,12 +234,12 @@ describe NoticesController do
   context '#create' do
     context 'format-independent logic' do
       before do
-        @submit_notice = double('SubmitNotice').as_null_object
+        @submit_notice = double('NoticeSubmissionInitializer').as_null_object
         @notice_params = HashWithIndifferentAccess.new(title: 'A title')
       end
 
       it 'initializes a DMCA by default from params' do
-        expect(SubmitNotice).to receive(:new)
+        expect(NoticeSubmissionInitializer).to receive(:new)
           .with(DMCA, @notice_params)
           .and_return(@submit_notice)
 
@@ -144,7 +247,7 @@ describe NoticesController do
       end
 
       it 'uses the type param to instantiate the correct class' do
-        expect(SubmitNotice).to receive(:new)
+        expect(NoticeSubmissionInitializer).to receive(:new)
           .with(Trademark, @notice_params)
           .and_return(@submit_notice)
 
@@ -154,7 +257,7 @@ describe NoticesController do
       it 'defaults to DMCA if the type is missing or invalid' do
         invalid_types = ['', 'FlimFlam', 'Object', 'User', 'Hash']
 
-        expect(SubmitNotice).to receive(:new)
+        expect(NoticeSubmissionInitializer).to receive(:new)
           .exactly(5).times
           .with(DMCA, @notice_params)
           .and_return(@submit_notice)
@@ -162,6 +265,50 @@ describe NoticesController do
         invalid_types.each do |invalid_type|
           post :create, notice: @notice_params.merge(type: invalid_type)
         end
+      end
+
+      it 'has the expected delayed parameters' do
+        expect(NoticesController::DELAYED_PARAMS).to eq %i[works_attributes]
+      end
+
+      it 'initializes NoticeSubmissionInitializer without delayed parameters' do
+        stub_submit_notice
+
+        params = @notice_params
+        params[:works_attributes] = [{
+          description: 'The model of a modern major-general',
+          kind: 'polymath',
+          infringing_urls_attributes: ['https://url.one', 'https://url.two'],
+          copyrighted_urls_attributes: ['https://url.three']
+        }]
+
+        expect(NoticeSubmissionInitializer).to receive(:new)
+          .with(anything, params.except(:works_attributes))
+
+        post :create, notice: params
+      end
+
+      it 'initializes NoticeSubmissionFinalizer with delayed parameters' do
+        submit_notice = stub_submit_notice
+        finalizer = stub_finalize_notice
+
+        notice = build_stubbed(:dmca)
+
+        allow(submit_notice).to receive(:notice).and_return(notice)
+        allow(finalizer).to receive(:finalize).and_return(notice)
+
+        params = @notice_params
+        params[:works_attributes] = [{
+          description: 'The model of a modern major-general',
+          kind: 'polymath',
+          infringing_urls_attributes: ['https://url.one', 'https://url.two'],
+          copyrighted_urls_attributes: ['https://url.three']
+        }]
+
+        expect(NoticeSubmissionFinalizer).to receive(:new)
+          .with(anything, hash_including(:works_attributes))
+
+        post :create, notice: params
       end
     end
 
@@ -205,7 +352,9 @@ describe NoticesController do
       it 'returns a proper Location header when saved successfully' do
         notice = build_stubbed(:dmca)
         submit_notice = stub_submit_notice
+        finalizer = stub_finalize_notice
         allow(submit_notice).to receive(:notice).and_return(notice)
+        allow(finalizer).to receive(:finalize).and_return(notice)
 
         post_create :json
 
@@ -239,9 +388,17 @@ describe NoticesController do
     private
 
     def stub_submit_notice
-      SubmitNotice.new(DMCA, {}).tap do |submit_notice|
+      NoticeSubmissionInitializer.new(DMCA, {}).tap do |submit_notice|
         allow(submit_notice).to receive(:submit).and_return(true)
-        allow(SubmitNotice).to receive(:new).and_return(submit_notice)
+        allow(NoticeSubmissionInitializer).to receive(:new).and_return(submit_notice)
+      end
+    end
+
+    def stub_finalize_notice
+      NoticeSubmissionFinalizer.new(DMCA, {}).tap do |finalizer|
+        allow(NoticeSubmissionFinalizer)
+          .to receive(:new)
+          .and_return(finalizer)
       end
     end
 
