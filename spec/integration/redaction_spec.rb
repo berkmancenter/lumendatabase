@@ -1,34 +1,34 @@
 require 'rails_helper'
 require 'support/sign_in'
 
-feature "Redactable fields" do
+feature 'Redactable fields' do
   include NoticeActions
 
   Notice::REDACTABLE_FIELDS.each do |field|
     scenario "#{field} is automatically redacted of phone numbers" do
-      original_text = <<-EOT
+      original_text = <<-BODY
         Please contact my laywer at (123) 456-7890 or, if
         you prefer I can be reached at 098-765-4321. In
         case it's useful, my mother's phone number is
         234.234.2345.
-      EOT
-      redacted_text = <<-EOT
+      BODY
+      redacted_text = <<-BODY
         Please contact my laywer at [REDACTED] or, if
         you prefer I can be reached at [REDACTED]. In
         case it's useful, my mother's phone number is
         [REDACTED].
-      EOT
+      BODY
 
       submit_recent_notice do
         fill_in "notice_#{field}", with: original_text
       end
 
       open_recent_notice
-      expect(page).to have_content(redacted_text)
+      expect(page).to have_words(redacted_text)
       expect(page).to have_no_content(original_text)
     end
 
-    context "Manual redaction" do
+    context 'Manual redaction' do
       scenario "Redacting selected text in #{field}", js: true do
         visit_redact_notice
         redactable_field = RedactableFieldOnPage.new(field)
@@ -50,7 +50,7 @@ feature "Redactable fields" do
         )
       end
 
-      scenario "Publishing after review" do
+      scenario 'Publishing after review' do
         notice = visit_redact_notice
 
         uncheck 'Review required'

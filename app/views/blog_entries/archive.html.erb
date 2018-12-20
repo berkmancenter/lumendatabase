@@ -1,37 +1,39 @@
-<% title 'Blog Archive' %>
+<% cache 'blog_archive' do %>
+  <% title 'Blog Archive' %>
 
-<section class="posts">
-  <%= render @blog_entries %>
-</section>
+  <section class="posts">
+    <%= render @blog_entries %>
+  </section>
 
-<aside class="sidebar">
-  <h4>What we're reading</h4>
-  <ol>
-    <% @we_are_reading.each do |blog_entry| %>
-      <li><%= link_to(blog_entry.title, blog_entry.url) %></li>
-    <% end %>
-  </ol>
-</aside>
-
-<% if blog_search_engine_configured? %>
-  <aside class="sidebar blog-search">
-    <h4>Search the Blog</h4>
-    <script>
-      (function() {
-        var cx = '<%= Chill::Application.config.google_custom_blog_search_id %>';
-        var gcse = document.createElement('script');
-        gcse.type = 'text/javascript';
-        gcse.async = true;
-        gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
-            '//www.google.com/cse/cse.js?cx=' + cx;
-        var s = document.getElementsByTagName('script')[0];
-        s.parentNode.insertBefore(gcse, s);
-      })();
-    </script>
-    <gcse:search></gcse:search>
+  <aside class="sidebar">
+    <h4>What we're reading</h4>
+    <ol>
+      <% @we_are_reading.each do |blog_entry| %>
+        <li><%= link_to(blog_entry.title, blog_entry.url) %></li>
+      <% end %>
+    </ol>
   </aside>
-<% end %>
 
-<section class="pagination-container">
-  <%= paginate @blog_entries, outer_window: 0 %>
-</section>
+  <% if blog_search_engine_configured? %>
+    <aside class="sidebar blog-search">
+      <h4>Search the Blog</h4>
+      <script>
+        (function() {
+          var cx = '<%= Chill::Application.config.google_custom_blog_search_id %>';
+          var gcse = document.createElement('script');
+          gcse.type = 'text/javascript';
+          gcse.async = true;
+          gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+              '//www.google.com/cse/cse.js?cx=' + cx;
+          var s = document.getElementsByTagName('script')[0];
+          s.parentNode.insertBefore(gcse, s);
+        })();
+      </script>
+      <gcse:search></gcse:search>
+    </aside>
+  <% end %>
+
+  <section class="pagination-container">
+    <%= paginate @blog_entries, outer_window: 0 %>
+  </section>
+<% end %>

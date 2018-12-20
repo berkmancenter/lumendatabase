@@ -1,9 +1,0 @@
-development: &default
-  host: 'http://localhost:9200'
-
-test:
-  host: 'http://localhost:9250'
-staging:
-  <<: *default
-production:
-  <<: *default

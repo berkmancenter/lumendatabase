@@ -1,0 +1,31 @@
+<% label = local_assigns[:label] || @notice.class.label %>
+<% step_number = 3 %>
+<%= form.simple_fields_for(:entity_notice_roles) do |roles_form| %>
+  <% role = roles_form.object.name %>
+  <%# don't titleize the role until after the following line or it will break the css selector %>
+  <section class="role <%= role.downcase %>">
+    <% role = role.titleize %>
+    <h4><span>Step <%= step_number %>.</span> <%= role %> of the Notice</h4>
+    <p>Enter information about the <b><%= role %></b> of the <%= label %>.</p>
+    <%= roles_form.input :name, as: :hidden %>
+    <%= roles_form.simple_fields_for(:entity) do |entity_form| %>
+      <div class="body-wrapper left required">
+        <%= entity_form.input :name, label: "Name" %>
+        <%= entity_form.input :kind,
+          label: "#{role} Type", prompt: nil, collection: Entity::KINDS %>
+      </div>
+      <div class="body-wrapper right optional">
+        <%= entity_form.input :address_line_1, label: "Address Line 1" %>
+        <%= entity_form.input :address_line_2, label: "Address Line 2" %>
+        <%= entity_form.input :city, label: "City" %>
+        <%= entity_form.input :state, label: "State", label_html: { class: 'half-width' }, maxlength: "2" %>
+        <%= entity_form.input :zip, label: "Zip Code", label_html: { class: 'half-width' } %>
+        <%= entity_form.input :country_code, collection: iso_countries, label: "Country" %>
+        <%= entity_form.input :phone, label: "Phone" %>
+        <%= entity_form.input :email, label: "Email" %>
+        <%= entity_form.input :url, label: "#{role} URL" %>
+      </div>
+    <% end %>
+  </section>
+  <% step_number += 1 %>
+<% end %>

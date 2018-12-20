@@ -1,23 +1,28 @@
 ENV['RAILS_ENV'] ||= 'test'
 
-require File.expand_path('../../config/environment', __FILE__)
+require File.expand_path('../config/environment', __dir__)
 
 # Prevent database truncation if the environment is production
-abort("The Rails environment is running in production mode!") if Rails.env.production?
+if Rails.env.production?
+  abort('The Rails environment is running in production mode!')
+end
 
 require 'rubygems'
 require 'rspec/rails'
 require 'capybara/poltergeist'
+require 'capybara/rspec'
 
-Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
+Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
 Capybara.register_driver :poltergeist do |app|
-  Capybara::Poltergeist::Driver.new(app, {
-    phantomjs_logger: File.open("#{Rails.root}/log/test_phantomjs.log", "a")
-  })
+  Capybara::Poltergeist::Driver.new(
+    app,
+    phantomjs_logger: File.open("#{Rails.root}/log/test_phantomjs.log", 'a')
+  )
 end
 
 Capybara.javascript_driver = :poltergeist
+Capybara.server = :webrick
 
 ActiveRecord::Migration.maintain_test_schema!
 
@@ -34,25 +39,24 @@ RSpec.configure do |config|
 
   # Filter lines from Rails gems in backtraces.
   config.filter_rails_from_backtrace!
+
+  # Enables --only-failures.
+  config.example_status_persistence_file_path = 'rspec_examples.txt'
 end
 
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
     # Choose a test framework:
     with.test_framework :rspec
-    #with.test_framework :minitest
-    #with.test_framework :minitest_4
-    #ith.test_framework :test_unit
+    # with.test_framework :minitest
+    # with.test_framework :minitest_4
+    # with.test_framework :test_unit
 
     # Choose one or more libraries:
     with.library :active_record
     with.library :active_model
     with.library :action_controller
     # Or, choose the following (which implies all of the above):
-    #with.library :rails
+    # with.library :rails
   end
-end
-
-if ENV['LOG_ELASTICSEARCH'] == 'true'
-  Elasticsearch::Model.client = Elasticsearch::Client.new log: true, trace: true
 end

@@ -7,11 +7,11 @@ RSpec::Matchers.define :have_heading do |heading|
   failure_message do |_|
     message = "expected page to have heading #{heading}"
 
-    if element = @page.first('h2')
-      message << ", actual heading was #{element.text}."
-    else
-      message << ", no element found."
-    end
+    message << if (element = @page.first('h2', minimum: 0)).present?
+                 ", actual heading was #{element.text}."
+               else
+                 ', no element found.'
+               end
 
     message
   end

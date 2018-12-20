@@ -10,23 +10,23 @@ RSpec.describe Work, type: :model do
   end
 
   context '.unknown' do
-    it "provides an unknown work" do
+    it 'provides an unknown work' do
       work = Work.unknown
 
       expect(work.kind).to eq 'unknown'
       expect(work.description).to eq Work::UNKNOWN_WORK_DESCRIPTION
     end
 
-    it "caches the unknown work" do
-      work_1 = Work.unknown
-      work_2 = Work.unknown
+    it 'caches the unknown work' do
+      work1 = Work.unknown
+      work2 = Work.unknown
 
-      expect(work_1).to eq work_2
+      expect(work1).to eq work2
     end
   end
 
   context '#infringing_urls' do
-    it "does not create duplicate infringing_urls" do
+    it 'does not create duplicate infringing_urls' do
       existing_infringing_url = create(
         :infringing_url, url: 'http://www.example.com/infringe'
       )
@@ -44,7 +44,7 @@ RSpec.describe Work, type: :model do
   end
 
   context '#copyrighted_urls' do
-    it "does not create duplicate copyrighted_urls" do
+    it 'does not create duplicate copyrighted_urls' do
       existing_copyrighted_url = create(
         :copyrighted_url, url: 'http://www.example.com/copyrighted'
       )
@@ -63,14 +63,14 @@ RSpec.describe Work, type: :model do
   end
 
   context '#kind' do
-    it "auto classifies before saving if kind is not set" do
+    it 'auto classifies before saving if kind is not set' do
       work = build(:work)
 
       work.save
       expect(work.kind).to eq 'Unspecified'
     end
 
-    it "does not auto classify if kind is set" do
+    it 'does not auto classify if kind is set' do
       expect_any_instance_of(DeterminesWorkKind).not_to receive(:kind)
       work = build(:work, kind: 'foo')
 
@@ -78,28 +78,56 @@ RSpec.describe Work, type: :model do
     end
   end
 
-  it "validates infringing urls correctly when multiple are used at once" do
-    notice = notice_with_works_attributes([
-      { infringing_urls_attributes: [{ url: "this is not a url" }] },
-      { infringing_urls_attributes: [{ url: "this is also not a url" }] }
-    ])
+  it 'validates infringing urls correctly when multiple are used at once' do
+    notice = notice_with_works_attributes(
+      [
+        { infringing_urls_attributes: [{ url: 'this is not a url' }] },
+        { infringing_urls_attributes: [{ url: 'this is also not a url' }] }
+      ]
+    )
 
     expect(notice).not_to be_valid
     expect(notice.errors.messages).to eq(
-      { :"works.infringing_urls" => ["is invalid"] }
+      'works.infringing_urls': ['is invalid']
     )
   end
 
-  it "validates copyrighted urls correctly when multiple are used at once" do
-    notice = notice_with_works_attributes([
-      { copyrighted_urls_attributes: [{ url: "this is not a url" }] },
-      { copyrighted_urls_attributes: [{ url: "this is also not a url" }] }
-    ])
+  it 'validates copyrighted urls correctly when multiple are used at once' do
+    notice = notice_with_works_attributes(
+      [
+        { copyrighted_urls_attributes: [{ url: 'this is not a url' }] },
+        { copyrighted_urls_attributes: [{ url: 'this is also not a url' }] }
+      ]
+    )
 
     expect(notice).not_to be_valid
     expect(notice.errors.messages).to eq(
-      { :"works.copyrighted_urls" => ["is invalid"] }
+      'works.copyrighted_urls': ['is invalid']
     )
+  end
+
+  context 'redaction' do
+    it 'redacts phone numbers with auto_redact' do
+      content = '(617) 867-5309'
+      test_redaction(content)
+    end
+
+    it 'redacts emails with auto_redact' do
+      content = 'me@example.com'
+      test_redaction(content)
+    end
+
+    it 'redacts SSNs with auto_redact' do
+      content = '123-45-6789'
+      test_redaction(content)
+    end
+
+    it 'redacts automatically on save' do
+      params = { description: 'Test' }
+      work = Work.new(params)
+      expect(work).to receive(:auto_redact)
+      work.save
+    end
   end
 
   private
@@ -112,5 +140,21 @@ RSpec.describe Work, type: :model do
         entity_attributes: { name: 'Recipient' }
       }]
     )
+  end
+
+  def work_for_redaction_testing(redact_me)
+    params = { description: "Test if we redact #{redact_me}" }
+    work = Work.new(params)
+    work.auto_redact
+    work.save
+    work.reload
+    work
+  end
+
+  def test_redaction(content)
+    work = work_for_redaction_testing(content)
+
+    expect(work.description).not_to include content
+    expect(work.description_original).to include content
   end
 end

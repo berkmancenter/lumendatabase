@@ -8,10 +8,10 @@ class Notice < ActiveRecord::Base
 
   extend RecentScope
 
-  HIGHLIGHTS = %i(
+  HIGHLIGHTS = %i[
     title tag_list topics.name sender_name recipient_name
     works.description works.infringing_urls.url works.copyrighted_urls.url
-  )
+  ].freeze
 
   SEARCHABLE_FIELDS = [
     TermSearch.new(:term, :_all, 'All Fields'),
@@ -25,8 +25,8 @@ class Notice < ActiveRecord::Base
     TermSearch.new(:submitter_name, :submitter_name, 'Submitter Name'),
     TermSearch.new(:submitter_country_code, :submitter_country_code, 'Submitter Country'),
     TermSearch.new(:works, 'works.description', 'Works Descriptions'),
-    TermSearch.new(:action_taken, :action_taken, 'Action taken'),
-  ]
+    TermSearch.new(:action_taken, :action_taken, 'Action taken')
+  ].freeze
 
   FILTERABLE_FIELDS = [
     TermFilter.new(:topic_facet, 'Topic'),
@@ -40,39 +40,46 @@ class Notice < ActiveRecord::Base
     TermFilter.new(:submitter_country_code_facet, 'Submitter Country'),
     UnspecifiedTermFilter.new(:action_taken_facet, 'Action taken'),
     DateRangeFilter.new(:date_received_facet, :date_received, 'Date')
-  ]
+  ].freeze
 
   SORTINGS = [
     Sorting.new('relevancy desc', [:_score, :desc], 'Most Relevant'),
     Sorting.new('relevancy asc', [:_score, :asc], 'Least Relevant'),
-    Sorting.new('date_received desc', [:date_received, :desc],  'Newest'),
-    Sorting.new('date_received asc', [:date_received, :asc],  'Oldest'),
-  ]
+    Sorting.new('date_received desc', [:date_received, :desc], 'Newest'),
+    Sorting.new('date_received asc', [:date_received, :asc], 'Oldest')
+  ].freeze
 
-  REDACTABLE_FIELDS = %i( body )
+  REDACTABLE_FIELDS = %i[body].freeze
   PER_PAGE = 10
 
-  UNDER_REVIEW_VALUE = 'Under review'
-  RANGE_SEPARATOR = '..'
+  UNDER_REVIEW_VALUE = 'Under review'.freeze
+  RANGE_SEPARATOR = '..'.freeze
 
-  DEFAULT_ENTITY_NOTICE_ROLES = %w|recipient sender|
+  # Base entity notice roles allow us to define additional roles on subclasses
+  # without having to keep track of what they are on notice. As long as
+  # subclasses define DEFAULT_ENTITY_NOTICE_ROLES =
+  # BASE_ENTITY_NOTICE_ROLES | local_roles, the OR will preserve all elements
+  # of both.
+  BASE_ENTITY_NOTICE_ROLES = %w[submitter].freeze
+  DEFAULT_ENTITY_NOTICE_ROLES = (BASE_ENTITY_NOTICE_ROLES |
+                                 %w[recipient sender]).freeze
 
-  VALID_ACTIONS = %w( Yes No Partial Unspecified )
+  VALID_ACTIONS = %w[Yes No Partial Unspecified].freeze
 
-  OTHER_TOPIC = "Uncategorized"
+  OTHER_TOPIC = 'Uncategorized'.freeze
 
   TYPES_TO_TOPICS = {
-    'DMCA'                  => "Copyright",
-    'Counternotice'         => "Copyright",
-    'Trademark'             => "Trademark",
-    'Defamation'            => "Defamation",
-    'CourtOrder'            => "Court Orders",
-    'LawEnforcementRequest' => "Law Enforcement Requests",
-    'PrivateInformation'    => "Right of Publicity",
-    'DataProtection'        => "EU - Right to Be Forgotten",
-    'GovernmentRequest'     => "Government Requests",
+    'DMCA'                  => 'Copyright',
+    'Counternotice'         => 'Copyright',
+    'Trademark'             => 'Trademark',
+    'Defamation'            => 'Defamation',
+    'CourtOrder'            => 'Court Orders',
+    'LawEnforcementRequest' => 'Law Enforcement Requests',
+    'PrivateInformation'    => 'Right of Publicity',
+    'DataProtection'        => 'EU - Right to Be Forgotten',
+    'GovernmentRequest'     => 'Government Requests',
     'Other'                 => OTHER_TOPIC
-  }
+  }.freeze
 
   TYPES = TYPES_TO_TOPICS.keys
   TOPICS = TYPES_TO_TOPICS.values
@@ -88,6 +95,7 @@ class Notice < ActiveRecord::Base
   has_many :file_uploads
   has_many :infringing_urls, through: :works
   has_many :copyrighted_urls, through: :works
+  has_many :token_urls, dependent: :destroy
   has_and_belongs_to_many :relevant_questions
 
   has_and_belongs_to_many :works
@@ -126,18 +134,22 @@ class Notice < ActiveRecord::Base
   accepts_nested_attributes_for :file_uploads,
     reject_if: ->(attributes) { [attributes['file'], attributes[:pdf_request_fulfilled]].all?(&:blank?) }
 
-  accepts_nested_attributes_for :entity_notice_roles, :allow_destroy => true
+  accepts_nested_attributes_for :entity_notice_roles, allow_destroy: true
 
-  accepts_nested_attributes_for :works, :allow_destroy => true
+  accepts_nested_attributes_for :works, allow_destroy: true
 
   delegate :country_code, to: :recipient, allow_nil: true
 
-  %i( sender principal recipient submitter attorney ).each do |entity|
+  %i[sender principal recipient submitter attorney] .each do |entity|
     delegate :name, :country_code, to: entity, prefix: true, allow_nil: true
   end
 
   after_create :set_published!, if: :submitter
-  after_destroy :remove_from_index
+  # This may fail in the dev environment if you don't have ES up and running,
+  # but is works in other envs.
+  after_destroy do
+    __elasticsearch__.delete_document ignore: 404
+  end
 
   define_elasticsearch_mapping
 
@@ -146,7 +158,7 @@ class Notice < ActiveRecord::Base
   end
 
   def self.type_models
-    ( TYPES - ['Counternotice'] ).map(&:constantize)
+    (TYPES - ['Counternotice']).map(&:constantize).freeze
   end
 
   def self.available_for_review
@@ -163,14 +175,15 @@ class Notice < ActiveRecord::Base
   end
 
   def self.in_topics(topics)
-    joins(topic_assignments: :topic).
-      where('topics.id' => topics).uniq
+    joins(topic_assignments: :topic)
+      .where('topics.id' => topics)
+      .uniq
   end
 
   def self.submitted_by(submitters)
-    joins(entity_notice_roles: :entity).
-      where('entity_notice_roles.name' => :submitter).
-      where('entities.id' => submitters)
+    joins(entity_notice_roles: :entity)
+      .where('entity_notice_roles.name' => :submitter)
+      .where('entities.id' => submitters)
   end
 
   def self.add_default_filter(search)
@@ -193,12 +206,10 @@ class Notice < ActiveRecord::Base
   end
 
   def self.find_unpublished(notice_id)
-    begin
-      self.where(spam: false, hidden: false, published: false).find(notice_id)
-      return true
-    rescue
-      return false
-    end
+    self.where(spam: false, hidden: false, published: false).find(notice_id)
+    true
+  rescue
+    false
   end
 
   def active_model_serializer
@@ -207,14 +218,6 @@ class Notice < ActiveRecord::Base
     else
       super
     end
-  end
-
-  def all_relevant_questions(limit = 15)
-    (relevant_questions | topic_relevant_questions).sample(limit)
-  end
-
-  def related_blog_entries(limit = 5)
-    super.published.limit(limit)
   end
 
   def other_entity_notice_roles
@@ -245,15 +248,11 @@ class Notice < ActiveRecord::Base
   end
 
   def auto_redact
-    RedactsNotices.new.redact(self)
+    InstanceRedactor.new.redact(self)
   end
 
   def mark_for_review
     update_column(:review_required, RiskAssessment.new(self).high_risk?)
-  end
-
-  def copy_id_to_submission_id
-    update_column(:submission_id, id)
   end
 
   def redacted(field)
@@ -265,10 +264,10 @@ class Notice < ActiveRecord::Base
   end
 
   def next_requiring_review
-    self.class.
-      where('id > ? and review_required = ?', id, true).
-      order('id asc').
-      first
+    self.class
+      .where('id > ? and review_required = ?', id, true)
+      .order('id asc')
+      .first
   end
 
   def tag_list
@@ -281,11 +280,11 @@ class Notice < ActiveRecord::Base
 
   def tag_list=(tag_list_value = '')
     unless tag_list_value.nil?
-      if tag_list_value.respond_to?(:each)
-        tag_list_value = tag_list_value.flatten.map{|tag|tag.downcase}
-      else
-        tag_list_value = tag_list_value.downcase
-      end
+      tag_list_value = if tag_list_value.respond_to?(:each)
+                         tag_list_value.flatten.map(&:downcase)
+                       else
+                         tag_list_value.downcase
+                       end
     end
 
     super(tag_list_value)
@@ -300,9 +299,8 @@ class Notice < ActiveRecord::Base
   end
 
   def on_behalf_of_principal?
-    if sender_name.present?
-      principal_name.present? && principal_name != sender_name
-    end
+    return unless sender_name.present?
+    principal_name.present? && principal_name != sender_name
   end
 
   def publication_delay
@@ -324,7 +322,7 @@ class Notice < ActiveRecord::Base
 
   def notice_topic_map
     topic = TYPES_TO_TOPICS.key?(self.type) ? TYPES_TO_TOPICS[self.type] : OTHER_TOPIC
-    return Topic.find_or_create_by(name: topic)
+    Topic.find_or_create_by(name: topic)
   end
 
   def hide_identities?
@@ -360,9 +358,5 @@ class Notice < ActiveRecord::Base
 
   def attorneys
     entity_notice_roles.attorneys.map(&:entity)
-  end
-
-  def remove_from_index
-    self.index.remove self
   end
 end

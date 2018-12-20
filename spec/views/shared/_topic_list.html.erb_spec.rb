@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe 'shared/_topic_list.html.erb' do
-  it "includes links to each topic by name" do
+  it 'includes links to each topic by name' do
     topics = build_stubbed_list(:topic, 3)
 
     render 'shared/topic_list', topics: topics
@@ -11,11 +11,11 @@ describe 'shared/_topic_list.html.erb' do
     end
   end
 
-  it "builds the comma-separated list correctly" do
+  it 'builds the comma-separated list correctly' do
     topics = build_stubbed_list(:topic, 3)
 
     render 'shared/topic_list', topics: topics
 
-    expect(rendered).to have_content(/^#{topics.map(&:name).join(', ')}$/)
+    expect(rendered).to have_words(topics.map(&:name).join(', ').to_s)
   end
 end

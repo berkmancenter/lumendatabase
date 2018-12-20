@@ -11,7 +11,14 @@ class ApplicationController < ActionController::Base
 
   skip_before_action :verify_authenticity_token
 
+  after_filter :store_action
   after_action :include_auth_cookie
+
+  if Rails.env.staging? || Rails.env.production?
+    rescue_from ActiveRecord::RecordNotFound do |exception|
+      resource_not_found(exception)
+    end
+  end
 
   private
 
@@ -68,5 +75,32 @@ class ApplicationController < ActionController::Base
 
   def include_auth_cookie
     cookies[:lumen_authenticated] = (current_user.present? ? 1 : 0)
+  end
+
+  def store_action
+    skip_paths = ['/users/sign_in', '/users/sign_up', '/users/password/new',
+                  '/users/password/edit', '/users/confirmation',
+                  '/users/sign_out']
+
+    return if !request.get? || skip_paths.include?(request.path) ||
+              request.xhr?
+
+    store_location_for(:user, request.fullpath)
+  end
+
+  def resource_not_found(exception)
+    logger.error(exception)
+
+    respond_to do |format|
+      format.html do
+        render file: 'public/404',
+               status: :not_found,
+               layout: false
+      end
+      format.json do
+        render json: 'Not Found',
+               status: :not_found
+      end
+    end
   end
 end

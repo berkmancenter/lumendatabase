@@ -7,10 +7,11 @@ class User < ActiveRecord::Base
 
   has_one :entity
   has_and_belongs_to_many :roles
+  has_many :token_urls, dependent: :destroy
   accepts_nested_attributes_for :entity
 
-  def has_role?(role)
-    self.roles.include?(role)
+  def role?(role)
+    roles.include?(role)
   end
 
   def ensure_authentication_token

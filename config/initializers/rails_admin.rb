@@ -1,6 +1,7 @@
 require 'rails_admin/config/actions/redact_queue'
 require 'rails_admin/config/actions/redact_notice'
 require 'rails_admin/config/actions/pdf_requests'
+require 'rails_admin/config/fields/types/datetime_timezoned'
 
 RailsAdmin.config do |config|
   config.parent_controller = '::ApplicationController'
@@ -50,6 +51,10 @@ RailsAdmin.config do |config|
     config.model notice_type do
       label { abstract_model.model.label }
       list do
+        # SELECT COUNT is slow when the number of instances is large; let's
+        # avoid calling it for Notice and its subclasses.
+        limited_pagination true
+
         field :id
         field :title
         field(:date_sent)     { label 'Sent' }
@@ -79,12 +84,18 @@ RailsAdmin.config do |config|
       show do
         configure(:infringing_urls) { hide }
         configure(:copyrighted_urls) { hide }
+        configure(:token_urls) { hide }
       end
 
       edit do
+        # This dramatically speeds up the admin page.
+        configure :works do
+          nested_form false
+        end
+
         configure :action_taken, :enum do
           enum do
-            ['Yes', 'No', 'Partial', 'Unspecified']
+            %w[Yes No Partial Unspecified]
           end
           default_value 'Unspecified'
         end
@@ -93,18 +104,17 @@ RailsAdmin.config do |config|
           hide
         end
         configure :reset_type, :enum do
-          label "Type"
+          label 'Type'
           required true
         end
-        configure(:topic_assignments) { hide }
-        configure(:topic_relevant_questions) { hide }
 
-        configure(:related_blog_entries) { hide }
-
-        configure(:blog_topic_assignments) { hide }
-        configure(:entities) { hide }
-        configure(:infringing_urls) { hide }
-        configure(:copyrighted_urls) { hide }
+        exclude_fields :topic_assignments,
+                       :topic_relevant_questions,
+                       :related_blog_entries,
+                       :blog_topic_assignments,
+                       :infringing_urls,
+                       :copyrighted_urls,
+                       :token_urls
 
         configure :review_required do
           visible do
@@ -135,6 +145,8 @@ RailsAdmin.config do |config|
       end
     end
     edit do
+      # exclude_fields :notices might be a better performance option than hide,
+      # but it prevents topics with null ancestries from being saved.
       configure(:notices) { hide }
       configure(:topic_assignments) { hide }
 
@@ -151,12 +163,16 @@ RailsAdmin.config do |config|
   config.model 'EntityNoticeRole' do
     edit do
       configure(:notice) { hide }
+      configure :entity do
+        nested_form false
+      end
     end
   end
 
   config.model 'Entity' do
     list do
-      configure(:notices) { hide }
+      # See exclude_fields comment for Topic.
+      exclude_fields :notices
       configure(:entity_notice_roles) { hide }
       configure :parent do
         formatted_value do
@@ -168,7 +184,7 @@ RailsAdmin.config do |config|
     edit do
       configure :kind, :enum do
         enum do
-          ['individual', 'organization']
+          %w[individual organization]
         end
         default_value 'organization'
       end
@@ -191,7 +207,7 @@ RailsAdmin.config do |config|
 
   config.model 'Work' do
     object_label_method { :custom_work_label }
-    
+
     edit do
       configure(:notices) { hide }
     end
@@ -200,11 +216,11 @@ RailsAdmin.config do |config|
       configure(:copyrighted_urls) { hide }
       configure(:infringing_urls) { hide }
     end
+
     nested do
       configure(:infringing_urls) { hide }
       configure(:copyrighted_urls) { hide }
     end
-
   end
 
   config.model 'InfringingUrl' do
@@ -215,18 +231,17 @@ RailsAdmin.config do |config|
     edit do
       configure :kind, :enum do
         enum do
-          ['original', 'supporting']
+          %w[original supporting]
         end
       end
     end
   end
 
   config.model 'ReindexRun' do
-
   end
 
   def custom_work_label
-    %Q|#{self.id}: #{self.description && self.description[0,30]}...|
+    %Q(#{self.id}: #{self.description && self.description[0,30]}...)
   end
 
   config.model 'User' do
@@ -235,6 +250,39 @@ RailsAdmin.config do |config|
       configure :entity do
         nested_form false
       end
+      configure(:token_urls) { hide }
+    end
+  end
+
+  config.model 'TokenUrl' do
+    configure :url do
+      formatted_value do
+        url = "#{Chill::Application.config.site_host}/notices/#{bindings[:object].notice_id}?access_token=#{bindings[:object].token}"
+        %(<a href="#{url}">Token url</a>).html_safe
+      end
+      visible false
+    end
+
+    list do
+      field :url
+      field :email
+      field :user
+      field :notice
+      field :expiration_date
+      field :valid_forever
+      field :created_at
+    end
+
+    edit do
+      field :email do
+        required false
+      end
+      field :user
+      field :notice do
+        required true
+      end
+      field :expiration_date
+      field :valid_forever
     end
   end
 end

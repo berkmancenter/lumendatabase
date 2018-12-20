@@ -8,5 +8,4 @@ class PageObject
       end
     end
   end
-
 end

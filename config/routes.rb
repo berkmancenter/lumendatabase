@@ -15,10 +15,10 @@ Chill::Application.routes.draw do
     end
     member do
       put :request_pdf
+      get :request_access, to: 'token_urls#new'
+      post :generate_permanent_full_url, to: 'token_urls#generate_permanent'
     end
   end
-
-  resources :counter_notices, only: %i[new create]
 
   namespace :entities do
     resources :search, only: [:index]
@@ -56,6 +56,8 @@ Chill::Application.routes.draw do
   match '/:recipient_name(/:topics)' => 'notices/search#index',
         constraints: { recipient_name: /Twitter|Google/i },
         via: %i[get post]
+
+  resources :token_urls, only: :create
 
   root to: 'home#index'
 end

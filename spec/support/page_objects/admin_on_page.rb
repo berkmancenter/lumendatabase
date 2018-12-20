@@ -28,10 +28,10 @@ class AdminOnPage < PageObject
   def edit(resource, edits = {})
     visit "#{model_path(resource)}/#{resource.id}/edit"
 
-    if edits.present?
-      edits.each { |k,v| fill_in k, with: v }
-      click_on 'Save'
-    end
+    return unless edits.present?
+
+    edits.each { |k, v| fill_in k, with: v }
+    click_on 'Save'
   end
 
   def redact(notice)

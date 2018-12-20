@@ -16,7 +16,8 @@ class OriginalFilesController < ApplicationController
 
   def path_params
     url_params = params[:file_path].split('/').reject { |x| x == '..' }
-    File.join([Rails.root, 'paperclip', 'file_uploads', 'files', url_params].flatten)
+    File.join([Rails.root, 'paperclip', 'file_uploads', 'files',
+               url_params].flatten)
   end
 
   def viewing_allowed?
@@ -28,6 +29,7 @@ class OriginalFilesController < ApplicationController
   end
 
   def params_match?
-    @upload && file_path && file_path == @upload.file.path && File.file?(file_path)
+    @upload && file_path && file_path ==
+      @upload.file.path && File.file?(file_path)
   end
 end

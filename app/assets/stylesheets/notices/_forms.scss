@@ -25,6 +25,7 @@ section.notice-new {
     div.body-wrapper {
       float: left;
       width: 50%;
+      padding-right: 5%;
 
       @include media($mobile) {
         float: none;
@@ -78,7 +79,7 @@ section.notice-new {
 // Form
 //************************************************************************//
 $long-label-width: $form-label-width + 55px;
-form.new_notice, form.new_counter_notice {
+form.new_notice {
   div {
     @include clearfix;
   }
@@ -87,6 +88,12 @@ form.new_notice, form.new_counter_notice {
     position: relative;
     margin-bottom: 10px;
     clear: left;
+  }
+
+  // Increase margin below file kind dropdown so there is visual separation
+  // between each upload's pair of inputs.
+  div.input.notice_file_uploads_kind {
+    margin-bottom: 34px;
   }
 
   span.radio{
@@ -107,7 +114,6 @@ form.new_notice, form.new_counter_notice {
     top: 1px;
     width: $form-label-width;
     z-index: 1;
-
 
     &.boolean, &.collection_radio_buttons {
       width: auto;
@@ -136,6 +142,19 @@ form.new_notice, form.new_counter_notice {
       width: auto;
       border-radius: $form-border-radius $form-border-radius 0 0;
     }
+
+    // The 'state' and 'zip code' inputs are unreadably narrow unless we
+    // shrink the label.
+    &.half-width {
+      width: $form-label-width / 2;
+    }
+  }
+
+  .input.select label {
+    border: solid $form-border-color;
+    border-width: 1px;
+    box-shadow: inset 0 1px 0 hsla(0, 0%, 100%, 0.5);
+    border-radius: $form-border-radius 0 0 $form-border-radius;
   }
 
   .select2 {
@@ -146,7 +165,7 @@ form.new_notice, form.new_counter_notice {
 
   .select2-selection {
     border-radius: 0;
-    height: 32px;
+    height: 34px;
   }
 
   input {
@@ -164,6 +183,10 @@ form.new_notice, form.new_counter_notice {
       color: #999;
       font-weight: 300;
     }
+  }
+
+  input[type="file"] {
+    height: 34px;
   }
 
   #{$all-text-inputs} {
@@ -208,14 +231,6 @@ form.new_notice, form.new_counter_notice {
       width: calc(50% - #{$base-padding});
     }
   }
-}
-
-form.new_counter_notice {
-
-  section.important-terms{
-    padding-top: 0;
-  }
-
 }
 
 // Float some fields left

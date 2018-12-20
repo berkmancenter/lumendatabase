@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe SearchesModels, type: :model do
+describe SearchesModels, type: :model, vcr: true do
   context 'visible_qualifiers' do
     it 'delegates to the @model_class' do
       expected = { expected_key: :expected_value }
@@ -57,17 +57,27 @@ describe SearchesModels, type: :model do
   end
 
   context '.cache_key' do
-    it 'uses md5 hashing for uniqueness' do
-      expect(Digest::MD5).to receive(:hexdigest)
-      searcher = described_class.new
-      searcher.cache_key
+    it 'is the same for different instances of the same search' do
+      params = { utf8: '✓', term: 'lion', sort_by: '',
+                 controller: 'notices/search', action: 'index' }
+
+      searcher1 = described_class.new(params)
+      searcher2 = described_class.new(params)
+
+      expect(searcher1.cache_key).to eq searcher2.cache_key
     end
 
-    it 'has a consistent length' do
-      [{}, { foo: 1, bar: 2 }, { bleep: 22, beef: 312, brap: 333 }].each do |params|
-        searcher = described_class.new(params)
-        expect(searcher.cache_key.length).to eq 46
-      end
+    it 'is different for different pages of the same search' do
+      params = { utf8: '✓', term: 'lion', sort_by: '',
+                 controller: 'notices/search', action: 'index' }
+      params2 = params.dup
+      params2[:page] = '2'
+
+      searcher_page1 = described_class.new(params)
+
+      searcher_page2 = described_class.new(params2)
+
+      expect(searcher_page1.cache_key).not_to eq searcher_page2.cache_key
     end
   end
 
