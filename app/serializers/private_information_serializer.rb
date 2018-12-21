@@ -1,5 +1,4 @@
 class PrivateInformationSerializer < NoticeSerializer
-
   private
 
   def attributes
@@ -11,5 +10,4 @@ class PrivateInformationSerializer < NoticeSerializer
     end
     attributes
   end
-
 end
