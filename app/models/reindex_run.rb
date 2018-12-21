@@ -42,13 +42,13 @@ class ReindexRun < ActiveRecord::Base
     count
   end
 
-  private
-
   def apply_metadata(metadata)
     attrs = metadata.map { |k, v| ["#{k.name.downcase}_count", v] }.to_h
     attrs[updated_at] = Time.now
     update_attributes(attrs)
   end
+
+  private
 
   def last_run_time
     @last_run_time ||= begin
