@@ -29,6 +29,6 @@ class Defamation < Notice
   end
 
   def hide_identities?
-    recipient_name =~ REDACTION_REGEX
+    (recipient_name =~ REDACTION_REGEX).present?
   end
 end
