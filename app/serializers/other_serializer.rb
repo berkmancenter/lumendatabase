@@ -1,5 +1,4 @@
 class OtherSerializer < NoticeSerializer
-
   private
 
   def attributes
@@ -12,5 +11,4 @@ class OtherSerializer < NoticeSerializer
     end
     attributes
   end
-
 end

@@ -17,5 +17,4 @@ class LawEnforcementRequestSerializer < NoticeSerializer
     end
     attributes
   end
-
 end

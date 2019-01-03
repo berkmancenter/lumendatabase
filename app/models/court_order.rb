@@ -15,7 +15,7 @@ class CourtOrder < Notice
   end
 
   def laws_referenced
-    tag_ids = self.taggings.where(context: 'regulations').pluck(:tag_id)
+    tag_ids = taggings.where(context: 'regulations').pluck(:tag_id)
     ActsAsTaggableOn::Tag.find(tag_ids)
   end
 end

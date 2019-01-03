@@ -5,6 +5,9 @@ describe DMCA, type: :model do
     @notice_topics = create_list(:notice_topic, 8)
   end
 
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Validations ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   it { is_expected.to validate_presence_of :works }
   it { is_expected.to validate_presence_of :entity_notice_roles }
   it {
@@ -20,6 +23,9 @@ describe DMCA, type: :model do
     it { is_expected.to validate_length_of(:title).is_at_most(255) }
   end
 
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Model definition ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   it { is_expected.to have_many :file_uploads }
   it { is_expected.to have_many(:entity_notice_roles).dependent(:destroy) }
   it { is_expected.to have_and_belong_to_many :works }
@@ -40,10 +46,30 @@ describe DMCA, type: :model do
     expect(notice.action_taken).to be_nil
   end
 
+  it 'has the expected partial path' do
+    notice = create(:dmca)
+    expect(notice.to_partial_path).to eq 'notices/notice'
+  end
+
+  it 'has the right model name' do
+    expect(described_class.model_name).to eq 'Notice'
+  end
+
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Misc contexts ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   context 'entity notice roles' do
     it 'has the expected entity notice roles' do
       expected = %w[recipient sender principal submitter]
-      expect(described_class::DEFAULT_ENTITY_NOTICE_ROLES).to match_array expected
+      expect(described_class::DEFAULT_ENTITY_NOTICE_ROLES)
+        .to match_array expected
+    end
+
+    it 'sets the default kind of entities' do
+      notice = create(:dmca, role_names: %w[sender principal])
+
+      expect(notice.principal.kind).to eq('individual')
+      expect(notice.sender.kind).to eq('individual')
     end
 
     context 'with entities' do
@@ -76,6 +102,78 @@ describe DMCA, type: :model do
     end
   end
 
+  context '.in_topics' do
+    it 'returns notices in the given topics' do
+      _single = create(:dmca) # not to be found
+      topics = create_list(:topic, 3)
+      expected_notices = [
+        create(:dmca, topics: topics),
+        create(:dmca, topics: topics)
+      ]
+
+      notices = DMCA.in_topics(topics)
+
+      expect(notices).to match_array(expected_notices)
+    end
+  end
+
+  context '.submitted_by' do
+    it 'returns the notices submitted by the given submitters' do
+      create(:dmca) # not to be found
+      expected_notices = create_list(:dmca, 3, role_names: %w[submitter])
+      submitters = expected_notices.map(&:submitter)
+
+      notices = DMCA.submitted_by(submitters)
+
+      expect(notices).to match_array(expected_notices)
+    end
+  end
+
+  context '.find_visible' do
+    it 'finds notices which are not spam or hidden' do
+      notice = create(:dmca, spam: false)
+      spam_notice = create(:dmca, spam: true)
+      hidden_notice = create(:dmca, hidden: true)
+
+      expect(Notice.find_visible(notice.id)).to eq notice
+      expect { Notice.find_visible(spam_notice.id) }.to raise_error(
+        ActiveRecord::RecordNotFound
+      )
+      expect { Notice.find_visible(hidden_notice.id) }.to raise_error(
+        ActiveRecord::RecordNotFound
+      )
+    end
+  end
+
+  context '#on_behalf_of_principal?' do
+    it 'returns true when principal is present and differs from sender' do
+      notice = create(:dmca, role_names: %w[sender principal])
+      notice.sender.update_attributes(name: 'The Sender')
+      notice.principal.update_attributes(name: 'The Principal')
+
+      expect(notice).to be_on_behalf_of_principal
+    end
+
+    it 'returns false when principal is not present' do
+      notice = create(:dmca, role_names: %w[sender principal])
+      notice.sender.update_attributes(name: 'The Sender')
+      notice.principal.update_attributes(name: '')
+
+      expect(notice).not_to be_on_behalf_of_principal
+    end
+
+    it 'returns false when principal is same as sender' do
+      notice = create(:dmca, role_names: %w[sender principal])
+      notice.sender.update_attributes(name: 'The Sender')
+      notice.principal.update_attributes(name: 'The Sender')
+
+      expect(notice).not_to be_on_behalf_of_principal
+    end
+  end
+
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Redaction ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   context '#redacted' do
     it "returns '#{DMCA::UNDER_REVIEW_VALUE}' when review is required" do
       notice = DMCA.new(review_required: true, body: 'A value')
@@ -101,6 +199,9 @@ describe DMCA, type: :model do
     end
   end
 
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Review ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   context '#mark_for_review' do
     it 'Sets review_required to true if risk is assessed as high' do
       notice = create(:dmca, review_required: false)
@@ -186,33 +287,9 @@ describe DMCA, type: :model do
     end
   end
 
-  context '.in_topics' do
-    it 'returns notices in the given topics' do
-      _single = create(:dmca) # not to be found
-      topics = create_list(:topic, 3)
-      expected_notices = [
-        create(:dmca, topics: topics),
-        create(:dmca, topics: topics)
-      ]
-
-      notices = DMCA.in_topics(topics)
-
-      expect(notices).to match_array(expected_notices)
-    end
-  end
-
-  context '.submitted_by' do
-    it 'returns the notices submitted by the given submitters' do
-      create(:dmca) # not to be found
-      expected_notices = create_list(:dmca, 3, role_names: %w[submitter])
-      submitters = expected_notices.map(&:submitter)
-
-      notices = DMCA.submitted_by(submitters)
-
-      expect(notices).to match_array(expected_notices)
-    end
-  end
-
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ File attachments ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   context '#supporting_documents' do
     it "returns file uploads of kind 'supporting'" do
       file_uploads = [
@@ -249,48 +326,9 @@ describe DMCA, type: :model do
     end
   end
 
-  context '.find_visible' do
-    it 'finds notices which are not spam or hidden' do
-      notice = create(:dmca, spam: false)
-      spam_notice = create(:dmca, spam: true)
-      hidden_notice = create(:dmca, hidden: true)
-
-      expect(Notice.find_visible(notice.id)).to eq notice
-      expect { Notice.find_visible(spam_notice.id) }.to raise_error(
-        ActiveRecord::RecordNotFound
-      )
-      expect { Notice.find_visible(hidden_notice.id) }.to raise_error(
-        ActiveRecord::RecordNotFound
-      )
-    end
-  end
-
-  context '#on_behalf_of_principal?' do
-    it 'returns true when principal is present and differs from sender' do
-      notice = create(:dmca, role_names: %w[sender principal])
-      notice.sender.update_attributes(name: 'The Sender')
-      notice.principal.update_attributes(name: 'The Principal')
-
-      expect(notice).to be_on_behalf_of_principal
-    end
-
-    it 'returns false when principal is not present' do
-      notice = create(:dmca, role_names: %w[sender principal])
-      notice.sender.update_attributes(name: 'The Sender')
-      notice.principal.update_attributes(name: '')
-
-      expect(notice).not_to be_on_behalf_of_principal
-    end
-
-    it 'returns false when principal is same as sender' do
-      notice = create(:dmca, role_names: %w[sender principal])
-      notice.sender.update_attributes(name: 'The Sender')
-      notice.principal.update_attributes(name: 'The Sender')
-
-      expect(notice).not_to be_on_behalf_of_principal
-    end
-  end
-
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~ Publication workflows ~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   context '#publication_delay' do
     it "returns 0 if submitter doesn't respond" do
       notice = create(:dmca)
@@ -385,15 +423,6 @@ describe DMCA, type: :model do
 
       expect(notice.submitter).to be_an(Entity)
       expect(notice.published).to be false
-    end
-  end
-
-  context '#entity_notice_roles' do
-    it 'sets the default kind of entities' do
-      notice = create(:dmca, role_names: %w[sender principal])
-
-      expect(notice.principal.kind).to eq('individual')
-      expect(notice.sender.kind).to eq('individual')
     end
   end
 end
