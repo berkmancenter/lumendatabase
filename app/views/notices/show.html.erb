@@ -119,9 +119,16 @@
             <ol class="attachments">
               <% @notice.supporting_documents.each do |document| %>
                 <li class="<%= document.file_type.downcase %>">
-                  <%= link_to(document.url) do %>
-                    <span>Supporting <%= document.file_type %></span>
-                    <span class="download">Download</span>
+                  <% if can_see_full_notice_version?(@notice) %>
+                    <%= link_to(document.url) do %>
+                      <span>Supporting <%= document.file_type %></span>
+                      <span class="download">Download</span>
+                    <% end %>
+                  <% else %>
+                    <%= link_to(request_access_notice_path(@notice)) do %>
+                      <span>Supporting <%= document.file_type %></span>
+                      <span class="download">Click to get access to this file</span>
+                    <% end %>
                   <% end %>
                 </li>
               <% end %>
