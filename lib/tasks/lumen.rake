@@ -682,4 +682,22 @@ where works.id in (
           "find . -type d -empty -delete 2>> #{__dir__}/../../log/safer_cache_clear.log"
     system(cmd)
   end
+
+  # We have special maintenance start & end tasks so that we can toggle the
+  # RAILS_SERVE_STATIC_FILES env as part of the process; we normally want this
+  # to be false (it's Apache's responsibility), but it must be true for turnout
+  # to find its stylesheets.
+  desc 'maintenance start'
+  task maintenance_start: :environment do
+    ENV['RAILS_SERVE_STATIC_FILES'] = 'true'
+    Rake::Task['maintenance:start'].invoke
+    system('touch tmp/restart.txt')
+  end
+
+  desc 'maintenance end'
+  task maintenance_end: :environment do
+    ENV['RAILS_SERVE_STATIC_FILES'] = nil
+    Rake::Task['maintenance:end'].invoke
+    system('touch tmp/restart.txt')
+  end
 end
