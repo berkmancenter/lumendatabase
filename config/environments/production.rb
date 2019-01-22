@@ -12,8 +12,10 @@ Chill::Application.configure do
   config.consider_all_requests_local       = false
   config.action_controller.perform_caching = true
 
-  # Disable Rails's static files server (Apache or nginx will already do this)
-  config.serve_static_files = false
+  # In general we want to disable Rails's static files server (Apache or nginx
+  # will already do this), but when turnout is enabled we need to be able to
+  # serve the stylesheet and logo.
+  config.serve_static_files = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
   # Compress JavaScripts and CSS
   config.assets.compress = true
