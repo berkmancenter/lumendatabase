@@ -314,16 +314,33 @@ feature 'Searching Notices', type: :feature do
       work = create(
         :work,
         infringing_urls: [
-          create(:infringing_url, url: 'http://example.com/infringing_url')
+          create(:infringing_url, url: 'http://example1.com/infringing_url')
         ],
         copyrighted_urls: [
-          create(:copyrighted_url, url: 'http://example.com/copyrighted_url')
+          create(:copyrighted_url, url: 'http://example2.com/copyrighted_url')
         ]
       )
 
       notice = create(:dmca, works: [work])
       index_changed_instances
 
+      # Redacted for users with no access
+      within_search_results_for('infringing_url') do
+        expect(page).to have_n_results(1)
+        expect(page).to have_words(notice.title)
+        expect(page.html).to have_content('http://example1.com/[REDACTED]')
+      end
+
+      within_search_results_for('copyrighted_url') do
+        expect(page).to have_n_results(1)
+        expect(page).to have_words(notice.title)
+        expect(page.html).to have_content('http://example2.com/[REDACTED]')
+      end
+
+      user = create(:user, :admin)
+      sign_in(user)
+
+      # Not redacted for users with access
       within_search_results_for('infringing_url') do
         expect(page).to have_n_results(1)
         expect(page).to have_words(notice.title)

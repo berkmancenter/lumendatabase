@@ -19,10 +19,18 @@
     </div>
     <div class="date-submitted">Reported to Lumen: <%= date_submitted(result) %></div>
     <ol class="excerpt">
-      <% result.highlight.each do |highlight_elem| %>
-        <li class="excerpt">
-          <%= sanitize(highlight_elem, tags: ['em']) %>
-        </li>
+      <% if can?(:view_full_version, Notice) %>
+        <% result.highlight.each do |highlight_elem| %>
+          <li class="excerpt">
+            <%= sanitize(highlight_elem, tags: ['em']) %>
+          </li>
+        <% end %>
+      <% else %>
+        <% result.highlight.each do |highlight_elem| %>
+          <li class="excerpt">
+            <%= sanitize(with_redacted_urls(highlight_elem), tags: ['em']) %>
+          </li>
+        <% end %>
       <% end %>
     </ol>
     <div class="topic">

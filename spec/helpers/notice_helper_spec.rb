@@ -41,7 +41,7 @@ describe NoticesHelper do
     end
   end
 
-  context 'permanent_url_full_notice' do
+  context '#permanent_url_full_notice' do
     let(:notice) { create(:dmca) }
     let(:user) { create(:user) }
 
