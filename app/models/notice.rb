@@ -8,6 +8,9 @@ class Notice < ActiveRecord::Base
 
   extend RecentScope
 
+  before_save :set_topics
+  after_update :set_documents_requesters_notifications
+
   HIGHLIGHTS = %i[
     title tag_list topics.name sender_name recipient_name
     works.description works.infringing_urls.url works.copyrighted_urls.url
@@ -331,13 +334,13 @@ class Notice < ActiveRecord::Base
     false
   end
 
-  before_save do
-    notice_type = self.type
-    topic = self.notice_topic_map
+  def set_topics
+    topic = notice_topic_map
+    topics << topic unless topics.include?(topic)
+  end
 
-    unless self.topics.include?(topic)
-      self.topics << topic
-    end
+  def set_documents_requesters_notifications
+    DocumentsUpdateNotificationNotice.create(notice: self) if file_uploads.any?(&:changed?)
   end
 
   private

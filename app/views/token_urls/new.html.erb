@@ -10,6 +10,7 @@
 
       <div class="form-inputs">
         <%= f.input :email, label: 'Email address', required: true %>
+        <%= f.input :documents_notification, as: :boolean, inline_label: 'Select to get a notification when new notice documents are added (or when exisiting notice documents are updated)', label: false %>
 
         <%= recaptcha_tags %>
       </div>

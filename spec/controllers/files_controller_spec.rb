@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe OriginalFilesController do
+describe FilesController do
   describe 'GET #show' do
     let(:upload) { create(:file_upload) }
     it 'returns not found without valid params' do
