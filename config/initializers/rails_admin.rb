@@ -283,6 +283,7 @@ RailsAdmin.config do |config|
       end
       field :expiration_date
       field :valid_forever
+      field :documents_notification
     end
   end
 end

@@ -1,5 +1,5 @@
 Chill::Application.routes.draw do
-  get "file_uploads/files/:id/*file_path", to: 'original_files#show'
+  get 'file_uploads/files/:id/*file_path', to: 'files#show'
 
   devise_for :users
 
@@ -57,7 +57,11 @@ Chill::Application.routes.draw do
         constraints: { recipient_name: /Twitter|Google/i },
         via: %i[get post]
 
-  resources :token_urls, only: :create
+  resources :token_urls, only: :create do
+    member do
+      get :disable_documents_notification
+    end
+  end
 
   root to: 'home#index'
 end

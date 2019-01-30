@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181219103831) do
+ActiveRecord::Schema.define(version: 20190201205654) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +55,12 @@ ActiveRecord::Schema.define(version: 20181219103831) do
 
   add_index "copyrighted_urls_works", ["copyrighted_url_id"], name: "index_copyrighted_urls_works_on_copyrighted_url_id", using: :btree
   add_index "copyrighted_urls_works", ["work_id"], name: "index_copyrighted_urls_works_on_work_id", using: :btree
+
+  create_table "documents_update_notification_notices", force: :cascade do |t|
+    t.integer  "notice_id",  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "entities", force: :cascade do |t|
     t.string   "name",                                  null: false
@@ -271,14 +277,16 @@ ActiveRecord::Schema.define(version: 20181219103831) do
   create_table "token_urls", force: :cascade do |t|
     t.string   "email"
     t.string   "token"
-    t.integer  "notice_id",                       null: false
+    t.integer  "notice_id",                              null: false
     t.integer  "user_id"
     t.datetime "expiration_date"
-    t.boolean  "valid_forever",   default: false
+    t.boolean  "valid_forever",          default: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "documents_notification"
   end
 
+  add_index "token_urls", ["documents_notification"], name: "index_token_urls_on_documents_notification", using: :btree
   add_index "token_urls", ["email"], name: "index_token_urls_on_email", using: :btree
   add_index "token_urls", ["notice_id"], name: "index_token_urls_on_notice_id", using: :btree
   add_index "token_urls", ["token"], name: "index_token_urls_on_token", using: :btree
@@ -323,7 +331,7 @@ ActiveRecord::Schema.define(version: 20181219103831) do
     t.datetime "updated_at"
     t.integer  "publication_delay",                        default: 0,     null: false
     t.boolean  "can_generate_permanent_notice_token_urls", default: false, null: false
-    t.integer  "notice_viewer_views_limit"
+    t.integer  "notice_viewer_views_limit",                default: 1
     t.integer  "notice_viewer_viewed_notices",             default: 0,     null: false
     t.datetime "notice_viewer_time_limit"
     t.boolean  "limit_notice_api_response",                default: false, null: false

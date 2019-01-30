@@ -7,7 +7,7 @@ class TokenUrlsController < ApplicationController
   end
 
   def create
-    # Replace everything between + and @
+    # Remove everything between + and @
     token_url_params[:email].gsub!(/(\+.*?)(?=@)/, '')
     @token_url = TokenUrl.new(token_url_params)
     @notice = Notice.where(id: token_url_params[:notice_id]).first
@@ -72,12 +72,26 @@ class TokenUrlsController < ApplicationController
     end
   end
 
+  def disable_documents_notification
+    token_url = TokenUrl.find_by_id(params[:id])
+    errors = disable_documents_notification_errors(token_url)
+
+    return redirect_to(root_path, alert: errors) if errors.present?
+
+    token_url.update_attribute(:documents_notification, false)
+    redirect_to(
+      root_path,
+      notice: 'Documents notification has been disabled.'
+    )
+  end
+
   private
 
   def token_url_params
     params.require(:token_url).permit(
       :email,
-      :notice_id
+      :notice_id,
+      :documents_notification
     )
   end
 
@@ -108,5 +122,10 @@ class TokenUrlsController < ApplicationController
     {
       status: true
     }
+  end
+
+  def disable_documents_notification_errors(token_url)
+    return 'Token url was not found.' if token_url.nil?
+    return 'Wrong token provided.' unless token_url.token == params[:token]
   end
 end

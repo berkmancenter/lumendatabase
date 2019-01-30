@@ -1,3 +1,5 @@
+require 'full_notice_access'
+
 class NoticesController < ApplicationController
   layout :resolve_layout
 
@@ -5,7 +7,6 @@ class NoticesController < ApplicationController
 
   def new
     (render :submission_disabled and return) if cannot?(:submit, Notice)
-
     (render :select_type and return) if params[:type].blank?
 
     model_class = get_notice_type(params)
