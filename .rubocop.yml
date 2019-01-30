@@ -1,3 +1,7 @@
+AllCops:
+  Exclude:
+    - '**/*.html.erb'
+
 Style/FrozenStringLiteralComment:
   Enabled: false
 

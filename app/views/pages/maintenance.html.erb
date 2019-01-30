@@ -4,7 +4,7 @@
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta charset="utf-8">
   <meta name='ROBOTS' content='NOODP' />
-  <title>Lumen - Server Error</title>
+  <title>Lumen - Maintenance</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="/error_style.css" rel="stylesheet" type="text/css">
 </head>
@@ -14,19 +14,22 @@
     <section class="home-search-form">
       <h1><img alt="Lumen Logo" src="/logo_2x.png" height="82" width="340"></h1>
     </section>
-
-      <div class="site-news">
-        <section>
-          <h2>Temporary Server Error</h2>
+    <div class="site-news">
+      <section>
+        <h2>Down for Maintenance</h2>
+        <% if reason.present? %>
+          <%= reason %>
+        <% else %>
           <p>
-            Lumen is currently unavailable.  We apologize for the inconvenience; please check back later.
+            Lumen is down for maintenance. It should be back shortly.
           </p>
-        </section>
-      </div>
+        <% end %>
+      </section>
+    </div>
   </section>
   <footer class="main">
     <div class="inner-wrapper">
-      <span>© 2015 Lumen</span>
+      <span>© 2019 Lumen</span>
     </div>
   </footer>
 </body>
