@@ -9,10 +9,7 @@ class RiskAssessment
     risk_triggers.each do |trigger|
       trigger_risky = trigger.risky?(notice)
 
-      if trigger_risky && trigger.force_not_risky_assessment?
-        risky = false
-        break
-      end
+      return false if trigger_risky && trigger.force_not_risky_assessment?
 
       risky = true if trigger_risky
     end
