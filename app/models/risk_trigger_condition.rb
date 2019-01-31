@@ -1,20 +1,12 @@
 class RiskTriggerCondition < ActiveRecord::Base
-  ALLOWED_FIELDS = %w[
-    title subject source tag_list language jurisdiction_list action_taken body
-    type
-    submitter.name submitter.kind submitter.address_line_1
-    submitter.address_line_2 submitter.city submitter.state submitter.zip
-    submitter.country_code submitter.phone submitter.email submitter.url
-    recipient.name recipient.kind recipient.address_line_1
-    recipient.address_line_2 recipient.city recipient.state recipient.zip
-    recipient.country_code recipient.phone recipient.email recipient.url
-    principal.name principal.kind principal.address_line_1
-    principal.address_line_2 principal.city principal.state principal.zip
-    principal.country_code principal.phone principal.email principal.url
-    sender.name sender.kind sender.address_line_1
-    sender.address_line_2 sender.city sender.state sender.zip
-    sender.country_code sender.phone sender.email sender.url
-  ].freeze
+  ALLOWED_FIELDS = (
+    Notice.attribute_names.map { |field| 'notice.' + field } +
+    Entity.attribute_names.map do |field|
+      %w[submitter recipient principal sender].map do |entity|
+        entity + '.' + field
+      end
+    end.flatten
+  ).freeze
 
   ALLOWED_MATCHING_TYPES = %w[exact broad].freeze
 
@@ -27,7 +19,8 @@ class RiskTriggerCondition < ActiveRecord::Base
   def risky?(notice)
     field_present?(notice) && condition_matches?(notice)
   rescue NoMethodError => ex
-    Rails.logger.warn "Invalid risk trigger condition (#{id}): #{ex}"
+    Rails.logger.warn 'Invalid risk trigger condition (trigger condition ' \
+                      "id:#{id}, notice id: #{notice.id}): #{ex}"
     false
   end
 
@@ -48,7 +41,7 @@ class RiskTriggerCondition < ActiveRecord::Base
   end
 
   def notice_field_value(notice)
-    field.split('.').inject(notice, :send)
+    field.gsub('notice.', '').split('.').inject(notice, :send)
   end
 
   def match_exact(notice_field_value)

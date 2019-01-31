@@ -254,7 +254,7 @@ RailsAdmin.config do |config|
     edit do
       configure :field, :enum do
         enum do
-          RiskTriggerCondition::ALLOWED_FIELDS
+          RiskTriggerCondition::ALLOWED_FIELDS.sort
         end
       end
       configure :matching_type, :enum do
