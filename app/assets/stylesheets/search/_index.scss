@@ -25,16 +25,36 @@ section.search-results {
       margin-left: 0;
     }
 
-    &.open .dropdown-menu {
-      display: block;
-    }
-
     .dropdown-menu {
       @extend %dropdown-menu;
       margin-left: 32px;
 
       a {
         color: lighten($base-font-color, 5%);
+      }
+    }
+
+    &::after {
+      height: 0;
+      width: 0;
+      border-color: transparent;
+      border-style: solid;
+      border-width: 4px;
+      border-top-color: $base-font-color-2;
+      position: absolute;
+      content: "";
+      right: -12px;
+      top: calc(50% - 2px);
+    }
+
+    &.open {
+      .dropdown-menu {
+        display: block;
+      }
+
+      &::after {
+        border-top: none;
+        border-bottom-color: $base-font-color-2;
       }
     }
   }
@@ -203,4 +223,3 @@ ol.results-list {
     }
   }
 }
-
