@@ -45,8 +45,8 @@ class Notice < ActiveRecord::Base
   SORTINGS = [
     Sorting.new('relevancy desc', [:_score, :desc], 'Most Relevant'),
     Sorting.new('relevancy asc', [:_score, :asc], 'Least Relevant'),
-    Sorting.new('date_received desc', [:date_received, :desc], 'Date - newest'),
-    Sorting.new('date_received asc', [:date_received, :asc], 'Date - oldest'),
+    Sorting.new('date_received desc', [:date_received, :desc], 'Date Received - newest'),
+    Sorting.new('date_received asc', [:date_received, :asc], 'Date Received - oldest'),
     Sorting.new('created_at desc', [:created_at, :desc], 'Reported to Lumen - newest'),
     Sorting.new('created_at asc', [:created_at, :asc], 'Reported to Lumen - oldest')
   ].freeze
