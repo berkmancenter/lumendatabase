@@ -19,19 +19,17 @@
         <span class="total-entries">Found <%= @searchdata.results.total %> results</span>
         <div class="dropdown sort-order">
           Sort by: <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><%= sort_order_label(params[:sort_by]) %></a>
-          <% cache 'sortings' do %>
-            <ol class="dropdown-menu" role="menu">
-              <% Notice::SORTINGS.each do |sorting| %>
-                <li class="facet">
-                <%=
-                  link_to(
-                    sorting.label, '#', 'data-value': sorting.key,
-                    'data-label': sorting.label
-                  ) %>
-                </li>
-              <% end %>
-            </ol>
-          <% end %>
+          <ol class="dropdown-menu" role="menu">
+            <% Notice::SORTINGS.each do |sorting| %>
+              <li class="facet">
+              <%=
+                link_to(
+                  sorting.label, '#', 'data-value': sorting.key,
+                  'data-label': sorting.label
+                ) %>
+              </li>
+            <% end %>
+          </ol>
         </div>
       </div>
     </header>
