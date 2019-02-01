@@ -19,6 +19,10 @@ module NoticesHelper
     display_date_field(notice, :date_received)
   end
 
+  def date_submitted(notice)
+    display_date_field(notice, :created_at)
+  end
+
   def subject(notice)
     if notice.subject.present?
       notice.subject

@@ -84,7 +84,7 @@ feature 'Fielded searches of Notices' do
       search_on_page = FieldedSearchOnPage.new
       search_on_page.define_sort_order('date_received desc')
 
-      expect(page).to have_sort_order_selection_of('Date - newest')
+      expect(page).to have_sort_order_selection_of('Date Received - newest')
       search_on_page.within_results do
         expect(page).to have_first_notice_of(@notice_new_received)
         expect(page).to have_last_notice_of(@notice_old_received)
@@ -95,7 +95,7 @@ feature 'Fielded searches of Notices' do
       search_on_page = FieldedSearchOnPage.new
       search_on_page.define_sort_order('date_received asc')
 
-      expect(page).to have_sort_order_selection_of('Date - oldest')
+      expect(page).to have_sort_order_selection_of('Date Received - oldest')
       search_on_page.within_results do
         expect(page).to have_first_notice_of(@notice_old_received)
         expect(page).to have_last_notice_of(@notice_new_received)

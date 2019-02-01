@@ -1,7 +1,7 @@
 <%= content_tag_for(:li, result, class: "result") do %>
   <h3 class="title"><%= link_to result.title, notice_path(result.id) %></h3>
   <div class="metadata">
-    <div class="date-received"><%= date_received(result) %></div>
+    <div class="date-received">Date Received: <%= date_received(result) %></div>
     <div class="sender-receiver">
       <% if result.on_behalf_of_principal? %>
         <%= on_behalf_of(result.sender_name, result.principal_name) %>
@@ -17,6 +17,7 @@
         <%= link_to(result.recipient_name, faceted_search_path(recipient_name: result.recipient_name), class: 'receiver' )%>
       <% end %>
     </div>
+    <div class="date-submitted">Reported to Lumen: <%= date_submitted(result) %></div>
     <ol class="excerpt">
       <% result.highlight.each do |highlight_elem| %>
         <li class="excerpt">
