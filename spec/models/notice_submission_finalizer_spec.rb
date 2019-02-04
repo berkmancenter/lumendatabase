@@ -37,21 +37,30 @@ describe NoticeSubmissionFinalizer, type: :model do
   def works_attributes
     [{
       description: 'The Avengers',
-      infringing_urls_attributes: [
-        { url: 'http://youtube.com/bad_url_1' },
-        { url: 'http://youtube.com/bad_url_2' },
-        { url: 'http://youtube.com/bad_url_3' }
-      ]
+      infringing_urls_attributes: infringing_urls_attributes
     }]
+  end
+
+  def infringing_urls_attributes
+    [
+      { url: 'http://youtube.com/bad_url_1' },
+      { url: 'http://youtube.com/bad_url_2' },
+      { url: 'http://youtube.com/bad_url_3' }
+    ]
   end
 
   # The works_attributes will not be *equal*, because the submitted notice
   # works will contain ids and timestamps. We'll just check the part we set.
   def work_matches(work)
     same_description = (work.description == works_attributes[0][:description])
-    same_urls = (infringing_urls(work) ==
-                 works_attributes[0][:infringing_urls_attributes])
-    same_description && same_urls
+
+    work_urls = work.infringing_urls.map { |x| x[:url_original] }
+    same_urls = infringing_urls_attributes.all? do |url|
+      work_urls.include? url[:url]
+    end
+    test_bijection = (work_urls.length ==
+                      infringing_urls_attributes.length)
+    test_bijection && same_description && same_urls
   end
 
   def infringing_urls(work)
