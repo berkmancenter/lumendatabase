@@ -389,6 +389,43 @@ feature 'Searching Notices', type: :feature do
     expect { submit_search('') }.not_to raise_error
   end
 
+  scenario 'cache does not break date filter', cache: true do
+    last_year = Time.at(
+      Time.now.beginning_of_day - 12.months
+    ).to_datetime.to_s(:simple)
+    last_month = Time.at(
+      Time.now.beginning_of_day - 1.month
+    ).to_datetime.to_s(:simple)
+
+    create(:dmca, title: 'Ancient History', date_received: 100.days.ago)
+    create(:dmca, title: 'Modern History', date_received: 1.day.ago)
+    index_changed_instances
+
+    search_for(term: 'history')
+    expect(
+      find('a', text: "Since #{last_year}").find('span').text
+    ).to eq '2 Results'
+    expect(
+      find('a', text: "Since #{last_month}").find('span').text
+    ).to eq '1 Results'
+
+    search_for(term: 'ancient')
+    expect(
+      find('a', text: "Since #{last_year}").find('span').text
+    ).to eq '1 Results'
+    expect(
+      find('a', text: "Since #{last_month}").find('span').text
+    ).to eq '0 Results'
+
+    search_for(term: 'modern')
+    expect(
+      find('a', text: "Since #{last_year}").find('span').text
+    ).to eq '1 Results'
+    expect(
+      find('a', text: "Since #{last_month}").find('span').text
+    ).to eq '1 Results'
+  end
+
   private
 
   def expect_search_to_not_find(term, notice)
