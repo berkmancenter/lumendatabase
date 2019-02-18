@@ -241,10 +241,9 @@ ActiveRecord::Schema.define(version: 20190122151538) do
   add_index "risk_trigger_conditions", ["risk_trigger_id"], name: "index_risk_trigger_conditions_on_risk_trigger_id", using: :btree
 
   create_table "risk_triggers", force: :cascade do |t|
-    t.string  "name",                                       null: false
-    t.string  "matching_type",                              null: false
-    t.string  "comment"
-    t.boolean "force_not_risky_assessment", default: false, null: false
+    t.string "name",          null: false
+    t.string "matching_type", null: false
+    t.string "comment"
   end
 
   create_table "roles", force: :cascade do |t|

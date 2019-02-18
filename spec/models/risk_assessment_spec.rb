@@ -10,7 +10,6 @@ describe RiskAssessment, type: :model do
     notice = double("Notice")
     expect(trigger_1).to receive(:risky?).with(notice).and_return(false)
     expect(trigger_2).to receive(:risky?).with(notice).and_return(true)
-    expect(trigger_2).to receive(:force_not_risky_assessment?).and_return(false)
 
     assessment = RiskAssessment.new(notice)
 

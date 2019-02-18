@@ -109,57 +109,6 @@ feature 'Publishing high risk notices' do
     end
   end
 
-  scenario 'A notice checked against two triggers when of the of triggers is force_not_risky_assessment is not risky' do
-    condition1 = create_condition('notice.title', 'risky1', false, 'exact')
-    create_trigger('Risky stuff', 'all', [condition1], false)
-
-    condition2 = create_condition('notice.source', 'risky2', false, 'exact')
-    create_trigger('Risky stuff', 'all', [condition2], true)
-
-    submit_notice_from('United States') do
-      fill_in 'Title', with: 'risky1'
-      fill_in 'Sent via', with: 'risky2'
-      fill_in 'Body', with: harmless_text
-    end
-
-    open_recent_notice
-    within('.notice-body') do
-      expect(page).to have_words harmless_text
-    end
-  end
-
-  scenario 'A defamation notice submitted by Google is not risky even when some other risk triggers are risky' do
-    condition = create_condition('notice.title', 'risky1', false, 'exact')
-    create_trigger('Risky stuff', 'all', [condition])
-
-    sign_in(create(:user, :submitter))
-
-    visit '/notices/new?type=Defamation'
-
-    fill_in 'Title', with: title
-    fill_in 'Legal Complaint', with: harmless_text
-    within('section.recipient') do
-      fill_in 'Name', with: 'Recipient the first'
-    end
-    within('section.sender') do
-      fill_in 'Name', with: 'Sender the first'
-    end
-    within('section.submitter') do
-      fill_in 'Name', with: 'Submitter the first'
-    end
-    within('section.recipient') do
-      select 'United States', from: 'Country'
-    end
-    fill_in 'Allegedly Defamatory URL', with: 'http://www.example.com/original_work.pdf'
-
-    click_on 'Submit'
-
-    open_recent_notice
-    within('.notice-body') do
-      expect(page).to have_words harmless_text
-    end
-  end
-
   private
 
   def create_non_us_risk_trigger
@@ -176,12 +125,11 @@ feature 'Publishing high risk notices' do
     )
   end
 
-  def create_trigger(name, matching_type, conditions, force_not_risky_assessment = false)
+  def create_trigger(name, matching_type, conditions)
     RiskTrigger.create!(
       name: name,
       matching_type: matching_type,
-      risk_trigger_conditions: conditions,
-      force_not_risky_assessment: force_not_risky_assessment
+      risk_trigger_conditions: conditions
     )
   end
 

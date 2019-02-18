@@ -4,17 +4,7 @@ class RiskAssessment
   end
 
   def high_risk?
-    risky = false
-
-    risk_triggers.each do |trigger|
-      trigger_risky = trigger.risky?(notice)
-
-      return false if trigger_risky && trigger.force_not_risky_assessment?
-
-      risky = true if trigger_risky
-    end
-
-    risky
+    risk_triggers.any? { |trigger| trigger.risky?(notice) }
   end
 
   private
