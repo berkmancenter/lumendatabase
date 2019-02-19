@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180815162606) do
+ActiveRecord::Schema.define(version: 20190122151538) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -229,11 +229,21 @@ ActiveRecord::Schema.define(version: 20180815162606) do
   add_index "relevant_questions_topics", ["relevant_question_id"], name: "index_relevant_questions_topics_on_relevant_question_id", using: :btree
   add_index "relevant_questions_topics", ["topic_id"], name: "index_relevant_questions_topics_on_topic_id", using: :btree
 
-  create_table "risk_triggers", force: :cascade do |t|
-    t.string  "field"
-    t.string  "condition_field"
-    t.string  "condition_value"
+  create_table "risk_trigger_conditions", force: :cascade do |t|
+    t.string  "field",           null: false
+    t.string  "value",           null: false
     t.boolean "negated"
+    t.string  "type"
+    t.string  "matching_type"
+    t.integer "risk_trigger_id"
+  end
+
+  add_index "risk_trigger_conditions", ["risk_trigger_id"], name: "index_risk_trigger_conditions_on_risk_trigger_id", using: :btree
+
+  create_table "risk_triggers", force: :cascade do |t|
+    t.string "name",          null: false
+    t.string "matching_type", null: false
+    t.string "comment"
   end
 
   create_table "roles", force: :cascade do |t|

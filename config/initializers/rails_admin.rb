@@ -249,4 +249,29 @@ RailsAdmin.config do |config|
       end
     end
   end
+
+  config.model 'RiskTriggerCondition' do
+    edit do
+      configure :field, :enum do
+        enum do
+          RiskTriggerCondition::ALLOWED_FIELDS.sort
+        end
+      end
+      configure :matching_type, :enum do
+        enum do
+          RiskTriggerCondition::ALLOWED_MATCHING_TYPES
+        end
+      end
+    end
+  end
+
+  config.model 'RiskTrigger' do
+    edit do
+      configure :matching_type, :enum do
+        enum do
+          RiskTrigger::ALLOWED_MATCHING_TYPES
+        end
+      end
+    end
+  end
 end
