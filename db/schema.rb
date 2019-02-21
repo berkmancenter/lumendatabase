@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190122151538) do
+ActiveRecord::Schema.define(version: 20190221190850) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +55,12 @@ ActiveRecord::Schema.define(version: 20190122151538) do
 
   add_index "copyrighted_urls_works", ["copyrighted_url_id"], name: "index_copyrighted_urls_works_on_copyrighted_url_id", using: :btree
   add_index "copyrighted_urls_works", ["work_id"], name: "index_copyrighted_urls_works_on_work_id", using: :btree
+
+  create_table "documents_update_notification_notices", force: :cascade do |t|
+    t.integer  "notice_id",  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "entities", force: :cascade do |t|
     t.string   "name",                                  null: false
@@ -233,7 +239,6 @@ ActiveRecord::Schema.define(version: 20190122151538) do
     t.string  "field",           null: false
     t.string  "value",           null: false
     t.boolean "negated"
-    t.string  "type"
     t.string  "matching_type"
     t.integer "risk_trigger_id"
   end
@@ -241,9 +246,10 @@ ActiveRecord::Schema.define(version: 20190122151538) do
   add_index "risk_trigger_conditions", ["risk_trigger_id"], name: "index_risk_trigger_conditions_on_risk_trigger_id", using: :btree
 
   create_table "risk_triggers", force: :cascade do |t|
-    t.string "name",          null: false
-    t.string "matching_type", null: false
-    t.string "comment"
+    t.string  "name",                                       null: false
+    t.string  "matching_type",                              null: false
+    t.string  "comment"
+    t.boolean "force_not_risky_assessment", default: false, null: false
   end
 
   create_table "roles", force: :cascade do |t|
@@ -278,6 +284,24 @@ ActiveRecord::Schema.define(version: 20190122151538) do
 
   add_index "tags", ["name"], name: "index_tags_on_name", unique: true, using: :btree
 
+  create_table "token_urls", force: :cascade do |t|
+    t.string   "email"
+    t.string   "token"
+    t.integer  "notice_id",                              null: false
+    t.integer  "user_id"
+    t.datetime "expiration_date"
+    t.boolean  "valid_forever",          default: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.boolean  "documents_notification"
+  end
+
+  add_index "token_urls", ["documents_notification"], name: "index_token_urls_on_documents_notification", using: :btree
+  add_index "token_urls", ["email"], name: "index_token_urls_on_email", using: :btree
+  add_index "token_urls", ["notice_id"], name: "index_token_urls_on_notice_id", using: :btree
+  add_index "token_urls", ["token"], name: "index_token_urls_on_token", using: :btree
+  add_index "token_urls", ["user_id"], name: "index_token_urls_on_user_id", using: :btree
+
   create_table "topic_assignments", force: :cascade do |t|
     t.integer "topic_id"
     t.integer "notice_id"
@@ -308,14 +332,19 @@ ActiveRecord::Schema.define(version: 20190122151538) do
   add_index "topics", ["ancestry"], name: "index_topics_on_ancestry", using: :btree
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                  default: "", null: false
-    t.string   "encrypted_password",     default: "", null: false
+    t.string   "email",                                    default: "",    null: false
+    t.string   "encrypted_password",                       default: "",    null: false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.string   "authentication_token"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "publication_delay",      default: 0,  null: false
+    t.integer  "publication_delay",                        default: 0,     null: false
+    t.boolean  "can_generate_permanent_notice_token_urls", default: false, null: false
+    t.integer  "notice_viewer_views_limit",                default: 1
+    t.integer  "notice_viewer_viewed_notices",             default: 0,     null: false
+    t.datetime "notice_viewer_time_limit"
+    t.boolean  "limit_notice_api_response",                default: false, null: false
   end
 
   add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree
