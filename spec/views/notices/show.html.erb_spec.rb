@@ -181,10 +181,7 @@ describe 'notices/show.html.erb' do
 
     assign(:notice, notice)
     allow(controller).to receive(:current_user).and_return(create(:user, :admin))
-    ability = Object.new
-    ability.extend(CanCan::Ability)
-    controller.stub(:current_ability) { ability }
-    ability.can :view_full_version, Notice
+    @ability.can :view_full_version, Notice
 
     render
 
@@ -204,7 +201,7 @@ describe 'notices/show.html.erb' do
     end
 
     allow(controller).to receive(:current_user).and_return(nil)
-    ability.cannot :view_full_version, Notice
+    @ability.cannot :view_full_version, Notice
 
     render
 
@@ -399,7 +396,24 @@ describe 'notices/show.html.erb' do
     expect(rendered).not_to have_link(original.url)
   end
 
-  it 'shows links to supporting documents' do
+  it 'shows links to the access request form instead of supporting documents for users with no access' do
+    notice = create(:dmca, :with_pdf, :with_image, :with_document)
+    assign(:notice, notice)
+
+    render
+
+    notice.file_uploads.each do |file_upload|
+      expect(rendered).to have_css(
+        "ol.attachments .#{file_upload.file_type.downcase}"
+      )
+      expect(rendered).to have_css(
+        "ol.attachments a[href=\"#{request_access_notice_path(notice)}\"]"
+      )
+    end
+  end
+
+  it 'shows links to supporting documents for users with access' do
+    @ability.can :view_full_version, Notice
     notice = create(:dmca, :with_pdf, :with_image, :with_document)
     assign(:notice, notice)
 

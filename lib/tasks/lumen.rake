@@ -700,4 +700,24 @@ where works.id in (
     Rake::Task['maintenance:end'].invoke
     system('touch tmp/restart.txt')
   end
+
+  desc 'Send notifications about file uploads updates'
+  task send_file_uploads_notifications: :environment do
+    DocumentsUpdateNotificationNotice.all.each do |doc_notification|
+      TokenUrl.where(
+        notice: doc_notification.notice,
+        documents_notification: true
+      ).each do |token_url|
+        next unless token_url.email.present?
+
+        TokenUrlsMailer.notice_file_uploads_updates_notification(
+          token_url.email, token_url, doc_notification.notice
+        ).deliver_later
+
+        token_url.update_attribute(:expiration_date, Time.now + 24.hours)
+      end
+    end
+
+    DocumentsUpdateNotificationNotice.delete_all
+  end
 end
