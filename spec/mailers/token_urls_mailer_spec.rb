@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe TokenUrlsMailer, type: :mailer do
-  describe '.send_new_url_confirmation' do
+  describe '#send_new_url_confirmation' do
     let(:notice) { build(:dmca) }
     let(:token_url) { build(:token_url) }
     let(:mail) { described_class.send_new_url_confirmation('user@example.com', token_url, notice).deliver_now }

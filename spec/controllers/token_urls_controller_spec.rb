@@ -29,8 +29,8 @@ describe TokenUrlsController do
 
       post :create, params
 
-      expect(TokenUrl.first.notice).to eq notice
-      expect(TokenUrl.first.email).to eq 'user@example.com'
+      expect(TokenUrl.last.notice).to eq notice
+      expect(TokenUrl.last.email).to eq 'user@example.com'
     end
 
     it 'fails to create a new token url when illegal params are provided' do
@@ -64,7 +64,35 @@ describe TokenUrlsController do
 
       post :create, params
 
-      expect(TokenUrl.first.email).to eq 'user@example.com'
+      expect(TokenUrl.last.email).to eq 'user@example.com'
+    end
+
+    it 'disables a documents notification' do
+      notice = create(:dmca)
+      token_url = create(:token_url, notice: notice, documents_notification: true)
+
+      params = {
+        id: token_url.id,
+        token: token_url.token
+      }
+
+      get :disable_documents_notification, params
+
+      expect(TokenUrl.last.documents_notification).to eq(false)
+    end
+
+    it 'won\'t disable a documents notification with a wrong token' do
+      notice = create(:dmca)
+      token_url = create(:token_url, notice: notice, documents_notification: true)
+
+      params = {
+        id: token_url.id,
+        token: 'hohoho'
+      }
+
+      get :disable_documents_notification, params
+
+      expect(TokenUrl.last.documents_notification).to eq(true)
     end
   end
 end

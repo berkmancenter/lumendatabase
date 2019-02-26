@@ -10,4 +10,16 @@ class TokenUrlsMailer < ApplicationMailer
       subject: subject
     )
   end
+
+  def notice_file_uploads_updates_notification(recipient, token_url, notice)
+    @token_url = token_url
+    @notice = notice
+
+    subject = "Documents updates for #{@notice.title}"
+
+    mail(
+      to: recipient,
+      subject: subject
+    )
+  end
 end

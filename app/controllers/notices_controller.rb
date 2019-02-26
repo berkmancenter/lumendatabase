@@ -1,5 +1,3 @@
-require 'full_notice_access'
-
 class NoticesController < ApplicationController
   layout :resolve_layout
 

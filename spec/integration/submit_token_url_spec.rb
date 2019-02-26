@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'token url submission' do
   let(:notice) { create(:dmca) }
 
-  scenario 'submit successfully', js: true do
+  scenario 'submits successfully', js: true do
     visit request_access_notice_path(notice)
 
     expect_correct_title
@@ -35,6 +35,13 @@ feature 'token url submission' do
     submit('hohoho')
 
     expect(page).to have_content 'Email is invalid'
+  end
+
+  scenario 'will contain all the form fields', js: true do
+    visit request_access_notice_path(notice)
+
+    expect(page).to have_content 'Email address'
+    expect(page).to have_content 'Select to get a notification when new notice documents are added (or when exisiting notice documents are updated)'
   end
 
   private

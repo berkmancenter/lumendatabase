@@ -20,6 +20,8 @@ class FileUpload < ActiveRecord::Base
   do_not_validate_attachment_file_type :file
 
   before_save :rename_file, if: ->(instance) { instance.file_name.present? }
+  after_save :set_documents_requesters_notifications
+
   delegate :url, to: :file
 
   def file_type
@@ -39,5 +41,11 @@ class FileUpload < ActiveRecord::Base
   def rename_file
     self.file_file_name = file_name.gsub(/[^a-z\d\.\- ]/i, '_')
     true
+  end
+
+  def set_documents_requesters_notifications
+    return unless notice && kind.include?('supporting') && (new_record? || changed?)
+
+    DocumentsUpdateNotificationNotice.create(notice: notice)
   end
 end

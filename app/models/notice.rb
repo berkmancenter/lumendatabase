@@ -8,9 +8,6 @@ class Notice < ActiveRecord::Base
 
   extend RecentScope
 
-  before_save :set_topics
-  after_update :set_documents_requesters_notifications
-
   HIGHLIGHTS = %i[
     title tag_list topics.name sender_name recipient_name
     works.description works.infringing_urls.url works.copyrighted_urls.url
@@ -100,6 +97,7 @@ class Notice < ActiveRecord::Base
   has_many :copyrighted_urls, through: :works
   has_many :token_urls, dependent: :destroy
   has_and_belongs_to_many :relevant_questions
+  has_one :documents_update_notification_notice
 
   has_and_belongs_to_many :works
 
@@ -147,6 +145,7 @@ class Notice < ActiveRecord::Base
     delegate :name, :country_code, to: entity, prefix: true, allow_nil: true
   end
 
+  before_save :set_topics
   after_create :set_published!, if: :submitter
   # This may fail in the dev environment if you don't have ES up and running,
   # but is works in other envs.
@@ -335,10 +334,6 @@ class Notice < ActiveRecord::Base
   def set_topics
     topic = notice_topic_map
     topics << topic unless topics.include?(topic)
-  end
-
-  def set_documents_requesters_notifications
-    DocumentsUpdateNotificationNotice.create(notice: self) if file_uploads.any?(&:changed?)
   end
 
   private
