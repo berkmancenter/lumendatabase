@@ -45,7 +45,6 @@ describe NoticesHelper do
   def create_token_url
     create(
       :token_url,
-      email: 'user@example.com',
       notice: notice,
       user: user,
       valid_forever: true
