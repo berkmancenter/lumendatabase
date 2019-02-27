@@ -41,7 +41,7 @@ feature 'token url submission' do
     visit request_access_notice_path(notice)
 
     expect(page).to have_content 'Email address'
-    expect(page).to have_content 'Select to get a notification when new notice documents are added (or when exisiting notice documents are updated)'
+    expect(page).to have_content 'Select to get a notification when new notice documents are added (or when existing notice documents are updated)'
   end
 
   private
