@@ -120,7 +120,7 @@
               <% @notice.supporting_documents.each do |document| %>
                 <li class="<%= document.file_type.downcase %>">
                   <% if can_see_full_notice_version?(@notice) %>
-                    <%= link_to(document.url, target: '_blank') do %>
+                    <%= link_to(supporting_document_url(document.url), target: '_blank') do %>
                       <span>Supporting <%= document.file_type %></span>
                       <span class="download">Download</span>
                     <% end %>
