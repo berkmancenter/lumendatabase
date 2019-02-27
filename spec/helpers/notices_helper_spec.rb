@@ -16,13 +16,7 @@ describe NoticesHelper do
     end
 
     it 'returns a proper url when a token url is found' do
-      token_url = create(
-        :token_url,
-        email: 'user@example.com',
-        notice: notice,
-        user: user,
-        valid_forever: true
-      )
+      token_url = create_token_url
 
       allow_any_instance_of(NoticesHelper).to receive(:current_user).and_return(user)
 
@@ -34,5 +28,27 @@ describe NoticesHelper do
                              host: Chill::Application.config.site_host
                            ))
     end
+
+    it 'returns false when current_user is nil' do
+      create_token_url
+
+      allow_any_instance_of(NoticesHelper).to receive(:current_user).and_return(nil)
+
+      result = permanent_url_full_notice(notice)
+
+      expect(result).to eq(false)
+    end
+  end
+
+  private
+
+  def create_token_url
+    create(
+      :token_url,
+      email: 'user@example.com',
+      notice: notice,
+      user: user,
+      valid_forever: true
+    )
   end
 end

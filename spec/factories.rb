@@ -277,6 +277,7 @@ FactoryGirl.define do
   end
 
   factory :token_url do
+    email 'user@example.com'
     notice { build(:dmca) }
   end
 end

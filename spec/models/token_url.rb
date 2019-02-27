@@ -9,7 +9,6 @@ describe TokenUrl, type: :model do
   let(:token_url) do
     create(
       :token_url,
-      email: 'user@example.com',
       notice: notice
     )
   end
@@ -44,7 +43,6 @@ describe TokenUrl, type: :model do
     it 'validates unsuccessfully when the token has expired' do
       token_url = create(
         :token_url,
-        email: 'user@example.com',
         notice: notice,
         expiration_date: DateTime.yesterday
       )
@@ -57,7 +55,6 @@ describe TokenUrl, type: :model do
     it 'validates successfully when the token hasn\'t expired' do
       token_url = create(
         :token_url,
-        email: 'user@example.com',
         notice: notice,
         expiration_date: DateTime.tomorrow
       )
@@ -70,7 +67,6 @@ describe TokenUrl, type: :model do
     it 'validates successfully when the token has expired, but the valid_forever flag is set' do
       token_url = create(
         :token_url,
-        email: 'user@example.com',
         notice: notice,
         expiration_date: DateTime.yesterday,
         valid_forever: true
