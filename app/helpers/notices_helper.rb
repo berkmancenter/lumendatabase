@@ -81,6 +81,10 @@ module NoticesHelper
     redacted_text
   end
 
+  def supporting_document_url(url)
+    url + (params[:access_token] ? "&access_token=#{params[:access_token]}" : '')
+  end
+
   private
 
   def display_date_field(record, field)
