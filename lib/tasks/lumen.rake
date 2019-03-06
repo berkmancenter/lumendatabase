@@ -703,12 +703,24 @@ where works.id in (
 
   desc 'Send notifications about file uploads updates'
   task send_file_uploads_notifications: :environment do
+    date_time_task = proc { "[#{Time.now.strftime("%d/%m/%Y %H:%M:%S")}] [rake send_file_uploads_notifications]" }
+
+    puts "#{date_time_task.call} Starting a new task run"
+
+    if DocumentsUpdateNotificationNotice.all.empty?
+      puts "#{date_time_task.call} No scheduled notifications, nothing to process"
+    end
+
     DocumentsUpdateNotificationNotice.all.each do |doc_notification|
+      puts "#{date_time_task.call} Starting processing notice ##{doc_notification.notice.id}"
+
       TokenUrl.where(
         notice: doc_notification.notice,
         documents_notification: true
       ).each do |token_url|
         next unless token_url.email.present?
+
+        puts "#{date_time_task.call} Sending a notification about notice ##{doc_notification.notice.id} to #{token_url.email}"
 
         TokenUrlsMailer.notice_file_uploads_updates_notification(
           token_url.email, token_url, doc_notification.notice
@@ -716,8 +728,12 @@ where works.id in (
 
         token_url.update_attribute(:expiration_date, Time.now + 24.hours)
       end
+
+      puts "#{date_time_task.call} Finishing processing notice ##{doc_notification.notice.id}"
     end
 
     DocumentsUpdateNotificationNotice.delete_all
+
+    puts "#{date_time_task.call} Finishing the task"
   end
 end
