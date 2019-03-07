@@ -1,8 +1,6 @@
-Elasticsearch Indexing
-======================
+# Elasticsearch Indexing
 
-Incremental
-===========
+## Incremental
 
 Elasticsearch indexing happens out-of-process, meaning you must keep the index
 up to date by periodically running `ReindexRun.index_changed_model_instances`.
@@ -24,8 +22,7 @@ timing information that you can parse by comparing the `updated_at` and
 You should ensure that no more than one of the incremental indexers tasks is
 running at once via a `lockrun`-like cron harness.
 
-Recreating the elasticsearch index
-==================================
+## Recreating the elasticsearch index
 
 You can either remove all ReindexRun rows, or - preferably - use the
 `lumen::recreate_elasticsearch_index` rake task after disabling the
@@ -38,3 +35,9 @@ It should only be necessary to recreate the elasticsearch index when:
 * There's a problem with elasticsearch and you've got a corrupted index
 * You change the index mapping
 * You're setting things up for the first time
+
+## Customizing the index names
+
+`app/models/entity.rb` and `app/models/searchability.rb` define the index names for `Entity` and `Notice` respectively. You do not need to do anything about this.
+
+However, if you would like to customize index names (e.g. to allow for multiple instances or zero-downtime upgrades), you can set the environment variable `ES_INDEX_SUFFIX`. Your specified string will be added to the end of the index name.

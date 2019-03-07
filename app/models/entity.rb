@@ -33,7 +33,8 @@ class Entity < ActiveRecord::Base
 
   index_name [Rails.application.engine_name,
               Rails.env,
-              self.name.demodulize.downcase].join('_')
+              name.demodulize.downcase,
+              ENV['ES_INDEX_SUFFIX']].compact.join('_')
 
   def as_indexed_json(_options)
     out = as_json
