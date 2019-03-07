@@ -41,5 +41,3 @@ It should only be necessary to recreate the elasticsearch index when:
 `app/models/entity.rb` and `app/models/searchability.rb` define the index names for `Entity` and `Notice` respectively. You do not need to do anything about this.
 
 However, if you would like to customize index names (e.g. to allow for multiple instances or zero-downtime upgrades), you can set the environment variable `ES_INDEX_SUFFIX`. Your specified string will be added to the end of the index name.
-
-The server will need to be restarted for changes to take effect.
