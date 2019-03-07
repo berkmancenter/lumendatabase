@@ -56,6 +56,12 @@ ActiveRecord::Schema.define(version: 20190221190850) do
   add_index "copyrighted_urls_works", ["copyrighted_url_id"], name: "index_copyrighted_urls_works_on_copyrighted_url_id", using: :btree
   add_index "copyrighted_urls_works", ["work_id"], name: "index_copyrighted_urls_works_on_work_id", using: :btree
 
+  create_table "documents_update_notification_notices", force: :cascade do |t|
+    t.integer  "notice_id",  null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "entities", force: :cascade do |t|
     t.string   "name",                                  null: false
     t.string   "kind",           default: "individual", null: false
@@ -280,14 +286,16 @@ ActiveRecord::Schema.define(version: 20190221190850) do
   create_table "token_urls", force: :cascade do |t|
     t.string   "email"
     t.string   "token"
-    t.integer  "notice_id",                       null: false
+    t.integer  "notice_id",                              null: false
     t.integer  "user_id"
     t.datetime "expiration_date"
-    t.boolean  "valid_forever",   default: false
+    t.boolean  "valid_forever",          default: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "documents_notification"
   end
 
+  add_index "token_urls", ["documents_notification"], name: "index_token_urls_on_documents_notification", using: :btree
   add_index "token_urls", ["email"], name: "index_token_urls_on_email", using: :btree
   add_index "token_urls", ["notice_id"], name: "index_token_urls_on_notice_id", using: :btree
   add_index "token_urls", ["token"], name: "index_token_urls_on_token", using: :btree
