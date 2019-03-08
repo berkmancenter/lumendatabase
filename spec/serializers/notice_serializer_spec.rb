@@ -5,14 +5,15 @@ describe NoticeSerializer do
 
   it 'includes works' do
     with_a_serialized_notice do |notice, json|
-      expect(json[:works].map { |w| w['description'] }).to eq(notice.works.map(&:description))
+      expect(json[:works].map { |w| w[:description] }).to eq(notice.works.map(&:description))
     end
   end
 
   %i|infringing_urls copyrighted_urls|.each do |url_relation|
     it "includes #{url_relation}" do
       with_a_serialized_notice do |notice, json|
-        relation_json = json[:works].first[url_relation.to_s].map{|u| u['url']}
+        $stdout.puts json
+        relation_json = json[:works].first[url_relation.to_sym].map{|u| u[:url]}
         expect(relation_json).to eq(
           notice.works.first.send(url_relation).map(&:url)
         )

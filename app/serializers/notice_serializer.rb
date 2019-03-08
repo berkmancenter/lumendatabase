@@ -3,20 +3,12 @@ class NoticeSerializer < ActiveModel::Serializer
              :topics, :sender_name, :principal_name, :recipient_name, :works,
              :tags, :jurisdictions, :action_taken, :language
 
+  has_many :works
+
   # TODO: serialize additional entities
 
   def topics
     object.topics.map(&:name)
-  end
-
-  def works
-    object.works.as_json(
-      only: [:description],
-      include: {
-        infringing_urls: { only: %i[url url_original] },
-        copyrighted_urls: { only: %i[url url_original] }
-      }
-    )
   end
 
   def tags
