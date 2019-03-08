@@ -2,8 +2,11 @@
   <div class="row">
     <span class="label original-title"><%= original_title %></span>
     <ol class="list original-urls">
-      <%# Don't do code style changes here, it's intentional to avoid additional spaces in the response %>
-      <% work.copyrighted_urls.each do |url| %><%= content_tag_for(:li, url) do %><%= url.url %><% end %><% end.empty? %>No copyrighted URLs were submitted.<% end %>
+      <% if work.copyrighted_urls.each do |url| %>
+        <%= content_tag_for(:li, url) do %><%= url.url %><% end %>
+      <% end.empty? %>
+        No copyrighted URLs were submitted.
+      <% end %>
     </ol>
   </div>
 <% end %>
@@ -12,8 +15,11 @@
   <div class="row">
     <span class="label infringing-title"><%= infringing_title %></span>
     <ol class="list infringing-urls">
-      <%# Don't do code style changes here, it's intentional to avoid additional spaces in the response %>
-      <% work.infringing_urls.each do |url| %><%= content_tag_for(:li, url) do %><%= url.url %><% end %><% end.empty? %>No infringing URLs were submitted.<% end %>
+      <% if work.infringing_urls.each do |url| %>
+        <%= content_tag_for(:li, url) do %><%= url.url %><% end %>
+      <% end.empty? %>
+        No infringing URLs were submitted.
+      <% end %>
     </ol>
   </div>
 <% end %>
