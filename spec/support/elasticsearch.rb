@@ -30,7 +30,7 @@ RSpec.configure do |config|
   # the connection pool. (This may be a multithreading issue, with Capybara
   # and webrick running in different threads; in theory the connection pool
   # handling should be threadsafe but in practice maybe it isn't.)
-  config.before :all, type: :feature do
+  config.before :all, type: :integration do
     searchable_models.each do |model|
       begin
         model.__elasticsearch__.client.transport.reload_connections!
