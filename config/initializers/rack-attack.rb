@@ -45,16 +45,29 @@ class Rack::Attack
     req.ip if req.env['HTTP_ACCEPT'] == 'application/json' || req.env['CONTENT_TYPE'] == 'application/json' || req.path.include?('json')
   end
 
-  throttle('request limit', limit: 10, period: 1.minute) do |req|
+  throttle('request limit', limit: 6, period: 1.minute) do |req|
     Rails.logger.debug "[rack-attack] request limit ip: #{req.ip}, content_type: #{req.content_type}"
     req.ip
   end
 
-  throttle('request limit', limit: 30, period: 1.hour) do |req|
+  throttle('request limit', limit: 15, period: 10.minutes) do |req|
     Rails.logger.debug "[rack-attack] request limit ip: #{req.ip}, content_type: #{req.content_type}"
     req.ip
   end
 
+  # After 3 blocked requests in 10 minutes, block all requests from that IP for
+  # a week.
+  Rack::Attack.blacklist('bot farms') do |req|
+    Rack::Attack::Fail2Ban.filter("botfarm-#{req.ip}",
+                                  maxretry: 3,
+                                  findtime: 10.minutes,
+                                  bantime: 1.week) do
+      # The count for the IP is incremented if the return value is truthy. Bots
+      # hit all over the site, so we actually just want to count them every
+      # time.
+      true
+    end
+  end
   self.throttled_response = lambda do |_env|
     [
       429, # status
