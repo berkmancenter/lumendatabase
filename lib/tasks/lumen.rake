@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rake'
 require 'blog_importer'
 require 'question_importer'
@@ -672,6 +674,48 @@ where works.id in (
           "find . -type f -amin +60 -delete 2>> #{__dir__}/../../log/safer_cache_clear.log && " \
           "find . -type d -empty -delete 2>> #{__dir__}/../../log/safer_cache_clear.log"
     system(cmd)
+  end
+
+  # One of our major users periodically fetches recent court order documents to
+  # use in his research; this makes that easier for him.
+  desc 'generate report of recent court order attachments'
+  task generate_court_order_report: :environment do
+    # Ensure directories exist.
+    magic_dir = 'free_as_in_kittens'
+    dir = Rails.root.join('public', magic_dir)
+    Dir.mkdir(dir) unless Dir.exist?(dir)
+
+    working_dir = Rails.root.join('public', magic_dir, 'working')
+    Dir.mkdir(working_dir) unless Dir.exist?(working_dir)
+
+    # Fetch files and write them to the target directory.
+    files = FileUpload.where(
+      notice: CourtOrder.where('created_at > ?', 1.week.ago)
+    )
+    files.each do |f|
+      # The first two params ensure the filename is useful; the third ensures
+      # it is unique.
+      name = "#{f.notice_id}_#{f.file_file_name}_#{f.id}"
+      File.write(File.join(working_dir, name), f.file)
+    end
+
+    # Make archive.
+    filename = Date.today.iso8601
+    system("tar -czvf #{File.join(dir, filename)}.tar.gz #{working_dir}")
+    Dir.rmdir(working_dir)
+
+    # Write HTML page allowing file access.
+    html = <<-HEREDOC
+      <html>
+        <head></head>
+        <body>
+          Latest archive:
+          <a href="/#{magic_dir}/#{filename}.tar.gz">#{filename}.tar.gz</a>
+          </body>
+      </html>
+    HEREDOC
+
+    File.write(File.join(dir, 'index.html'), html)
   end
 
   # We have special maintenance start & end tasks so that we can toggle the
