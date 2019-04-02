@@ -45,12 +45,12 @@ class Rack::Attack
     req.ip if req.env['HTTP_ACCEPT'] == 'application/json' || req.env['CONTENT_TYPE'] == 'application/json' || req.path.include?('json')
   end
 
-  throttle('request limit', limit: 10, period: 1.minute) do |req|
+  throttle('request limit', limit: 6, period: 1.minute) do |req|
     Rails.logger.debug "[rack-attack] request limit ip: #{req.ip}, content_type: #{req.content_type}"
     req.ip
   end
 
-  throttle('request limit', limit: 30, period: 1.hour) do |req|
+  throttle('request limit', limit: 15, period: 10.minutes) do |req|
     Rails.logger.debug "[rack-attack] request limit ip: #{req.ip}, content_type: #{req.content_type}"
     req.ip
   end
