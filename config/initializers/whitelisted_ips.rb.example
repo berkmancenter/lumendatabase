@@ -1,0 +1,7 @@
+# Copy this to whitelisted_ips.rb in this directory and fill in any IPs you
+# want to whitelist. The file whitelisted_ips.rb is gitignored to protect
+# researchers' privacy.
+module WhitelistedIps
+  IPS = [
+  ]
+end
