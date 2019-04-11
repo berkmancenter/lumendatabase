@@ -10,7 +10,7 @@ class Rack::Attack
     # IP addresses of known legitimate researchers who might otherwise be
     # caught up in rate limits.
     if defined? WhitelistedIps::IPS
-      WhitelistedIps::IPS.include? req.ip
+      WhitelistedIps::IPS.map { |iprange| iprange.include? req.ip }.any?
     else
       false
     end
