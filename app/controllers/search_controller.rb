@@ -92,7 +92,7 @@ class SearchController < ApplicationController
   # Deep pagination is expensive for the CPU, so don't let anonymous users
   # do it.
   def restrict_deep_pagination
-    return if (user_signed_in? || params[:page].to_i < 10)
+    return if pagination_allowed?
 
     render 'shared/_error',
            status: :unauthorized,
@@ -102,5 +102,11 @@ class SearchController < ApplicationController
                       '<a href="https://lumendatabase.org/pages/researchers#key">Request ' \
                       'a research account key</a>.'.html_safe
            }
+  end
+
+  def pagination_allowed?
+    [user_signed_in?,
+     params[:page].to_i < 11,
+     request.format.json?].any?
   end
 end
