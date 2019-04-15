@@ -51,6 +51,7 @@ group :development do
   gem 'derailed'
   gem 'foreman'
   gem 'memory_profiler'
+  gem 'rack-mini-profiler'
 end
 
 group :development, :test do
