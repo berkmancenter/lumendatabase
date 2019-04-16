@@ -663,16 +663,17 @@ where works.id in (
   # These errors showed up in our logs per
   # https://cyber.harvard.edu/projectmanagement/issues/14130 .
   # This command, instead of rm -rfing the entire cache directory, finds all
-  # files and directories last accessed more than one day ago and deletes
+  # files and directories last accessed more than one hour ago and deletes
   # them. This should preserve two things we actually want to preserve:
   # 1) cached fragments in active use;
   # 2) directories and files just created as part of the cache key check and
   # atomic file write process linked above.
-  # While we still run the cron every 20 minutes, the atime is significantly
+  # While we still run the cron every 20 minutes, the atime is somewhat longer
   # longer than this. Why? Because we're finding that there are big CPU spikes
   # every 20 minutes as we rebuild the cache. However, the expiry time for
   # fragments is generally longer than 20 minutes, and Notice content rarely
   # changes, so let's allow content to stick around longer.
+  # (Not _too_ long, though, or we run out of disk space.)
   desc 'safer cache clear'
   task safer_cache_clear: :environment do
     # Go to cache dir;
@@ -683,7 +684,7 @@ where works.id in (
     # configuration.)
     cmd = "cd #{__dir__}/../../tmp/cache && " \
           "touch #{__dir__}/../../log/safer_cache_clear.log &&" \
-          "find . -type f -atime +1` -delete 2>> #{__dir__}/../../log/safer_cache_clear.log && " \
+          "find . -type f -amin +60` -delete 2>> #{__dir__}/../../log/safer_cache_clear.log && " \
           "find . -type d -empty -delete 2>> #{__dir__}/../../log/safer_cache_clear.log"
     system(cmd)
   end
