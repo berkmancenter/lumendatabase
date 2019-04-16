@@ -6,6 +6,16 @@ class Rack::Attack
     ['127.0.0.1', '::1'].include? req.ip
   end
 
+  whitelist('allow from special IPs') do |req|
+    # IP addresses of known legitimate researchers who might otherwise be
+    # caught up in rate limits.
+    if defined? WhitelistedIps::IPS
+      WhitelistedIps::IPS.map { |iprange| iprange.include? req.ip }.any?
+    else
+      false
+    end
+  end
+
   whitelist('allow unlimited requests from API users') do |req|
     token = nil
 

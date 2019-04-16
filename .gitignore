@@ -35,3 +35,4 @@ config/elasticsearch.yml
 .rubocop.yml
 rspec_examples.txt
 .reek.yml
+whitelisted_ips.rb
