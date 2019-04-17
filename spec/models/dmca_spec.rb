@@ -34,6 +34,7 @@ describe DMCA, type: :model do
   it { is_expected.to have_many(:topic_assignments).dependent(:destroy) }
   it { is_expected.to have_many(:topics).through(:topic_assignments) }
   it { is_expected.to have_and_belong_to_many :relevant_questions }
+  it { is_expected.to have_one :documents_update_notification_notice }
 
   it_behaves_like 'an object with a recent scope'
   it_behaves_like 'an object tagged in the context of',

@@ -1,0 +1,14 @@
+Hi,
+
+You are getting this notification because documents have been updated for this notice: <%= @notice.title %>.
+
+This is a single-use link: <%= notice_url(@notice, access_token: @token_url.token, host: Chill::Application.config.site_host) %>.
+
+Using this link you can download the documents.
+
+Be aware that you can use it for the next 24 hours only.
+
+To disable notifications about document updates click here: <%= disable_documents_notification_token_url_url(@token_url, host: Chill::Application.config.site_host, token: @token_url.token) %>.
+
+Thank you,
+Lumen Database team

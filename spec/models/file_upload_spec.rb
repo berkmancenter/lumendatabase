@@ -63,6 +63,26 @@ describe FileUpload, type: :model do
     end
   end
 
+  context '#set_documents_requesters_notifications' do
+    it 'sets a documents requesters notification when a new supporting file upload is created' do
+      notice = create(:dmca)
+      create(:file_upload, kind: 'supporting', notice: notice)
+
+      expect(DocumentsUpdateNotificationNotice.where(notice: notice).count).to eq(1)
+    end
+
+    it 'sets a documents requesters notification when a supporting file upload is updated' do
+      notice = create(:dmca)
+      file_upload = create(:file_upload, kind: 'original', notice: notice)
+
+      expect(DocumentsUpdateNotificationNotice.where(notice: notice).count).to eq(0)
+
+      file_upload.update_attribute('kind', 'supporting')
+
+      expect(DocumentsUpdateNotificationNotice.where(notice: notice).count).to eq(1)
+    end
+  end
+
   private
 
   def for_each_mime_type(mime_types, &block)

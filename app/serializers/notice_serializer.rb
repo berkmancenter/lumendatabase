@@ -21,13 +21,23 @@ class NoticeSerializer < ActiveModel::Serializer
   # use hash operations on it within the hooks supported by
   # active-model-serializer.
   def works
-    base_works = object.works.as_json(
-      only: [:description],
-      include: {
-        infringing_urls: { only: %i[url url_original] },
-        copyrighted_urls: { only: %i[url url_original] }
-      }
-    )
+    if current_user && Ability.new(scope).can?(:view_full_version_api, object)
+      base_works = object.works.as_json(
+        only: [:description],
+        include: {
+          infringing_urls: { only: %i[url url_original] },
+          copyrighted_urls: { only: %i[url url_original] }
+        }
+      )
+    else
+      base_works = object.works.map do |work|
+        {
+          description: work.description,
+          infringing_urls: work.infringing_urls_counted_by_domain,
+          copyrighted_urls: work.copyrighted_urls_counted_by_domain
+        }
+      end.as_json
+    end
     cleaned_works(base_works)
   end
 

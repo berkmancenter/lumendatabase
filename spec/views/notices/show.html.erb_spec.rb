@@ -179,24 +179,7 @@ describe 'notices/show.html.erb' do
     notice = Notice.new(params[:notice])
     notice.save
 
-    assign(:notice, notice)
-
-    render
-
-    notice.works.each do |work|
-      expect(rendered).to have_css("#work_#{work.id} .description",
-                                   text: work.description)
-
-      work.copyrighted_urls.each do |url|
-        expect(rendered).to have_css("#work_#{work.id} li.copyrighted_url",
-                                     text: url.url)
-      end
-
-      work.infringing_urls.each do |url|
-        expect(rendered).to have_css("#work_#{work.id} li.infringing_url",
-                                     text: url.url)
-      end
-    end
+    have_works(notice, true, true)
   end
 
   it 'displays a warning about infringing urls when expected but absent' do
@@ -249,21 +232,9 @@ describe 'notices/show.html.erb' do
     notice = Notice.new(params[:notice])
     notice.save
 
-    assign(:notice, notice)
+    have_works(notice, true, false)
 
-    render
-
-    notice.works.each do |work|
-      expect(rendered).to have_css("#work_#{work.id} .description",
-                                   text: work.description)
-
-      work.copyrighted_urls.each do |url|
-        expect(rendered).to have_css("#work_#{work.id} li.copyrighted_url",
-                                     text: url.url)
-      end
-
-      expect(rendered).to have_text 'No infringing URLs were submitted.'
-    end
+    expect(rendered).to have_text 'No infringing URLs were submitted.'
   end
 
   it 'displays a warning about copyrighted urls when expected but absent' do
@@ -316,21 +287,9 @@ describe 'notices/show.html.erb' do
     notice = Notice.new(params[:notice])
     notice.save
 
-    assign(:notice, notice)
+    have_works(notice, false, true)
 
-    render
-
-    notice.works.each do |work|
-      expect(rendered).to have_css("#work_#{work.id} .description",
-                                   text: work.description)
-
-      work.infringing_urls.each do |url|
-        expect(rendered).to have_css("#work_#{work.id} li.infringing_url",
-                                     text: url.url)
-      end
-
-      expect(rendered).to have_text 'No copyrighted URLs were submitted.'
-    end
+    expect(rendered).to have_text 'No copyrighted URLs were submitted.'
   end
 
   it 'displays the notice source' do
@@ -377,7 +336,24 @@ describe 'notices/show.html.erb' do
     expect(rendered).not_to have_link(original.url)
   end
 
-  it 'shows links to supporting documents' do
+  it 'shows links to the access request form instead of supporting documents for users with no access' do
+    notice = create(:dmca, :with_pdf, :with_image, :with_document)
+    assign(:notice, notice)
+
+    render
+
+    notice.file_uploads.each do |file_upload|
+      expect(rendered).to have_css(
+        "ol.attachments .#{file_upload.file_type.downcase}"
+      )
+      expect(rendered).to have_css(
+        "ol.attachments a[href=\"#{request_access_notice_path(notice)}\"]"
+      )
+    end
+  end
+
+  it 'shows links to supporting documents for users with access' do
+    @ability.can :view_full_version, Notice
     notice = create(:dmca, :with_pdf, :with_image, :with_document)
     assign(:notice, notice)
 
@@ -432,5 +408,53 @@ describe 'notices/show.html.erb' do
       "a[href='#{faceted_search_path(facet => value)}']",
       text: value
     )
+  end
+
+  def have_works(notice, with_copyrighted, with_infringing)
+    assign(:notice, notice)
+    allow(controller).to receive(:current_user).and_return(create(:user, :admin))
+    @ability.can :view_full_version, Notice
+
+    render
+
+    notice.works.each do |work|
+      expect(rendered).to have_css("#work_#{work.id} .description",
+                                   text: work.description)
+
+      if with_copyrighted
+        work.copyrighted_urls.each do |url|
+          expect(rendered).to have_css("#work_#{work.id} li.copyrighted_url",
+                                       text: url.url)
+        end
+      end
+
+      if with_infringing
+        work.infringing_urls.each do |url|
+          expect(rendered).to have_css("#work_#{work.id} li.infringing_url",
+                                       text: url.url)
+        end
+      end
+    end
+
+    allow(controller).to receive(:current_user).and_return(nil)
+    @ability.cannot :view_full_version, Notice
+
+    render
+
+    notice.works.each do |work|
+      expect(rendered).to have_css( "#work_#{work.id} .description", text: work.description )
+
+      if with_copyrighted
+        uri = URI.parse(work.copyrighted_urls.first.url)
+        domain = uri.host
+        expect(rendered).to have_css( "#work_#{work.id} li.copyrighted_url", text: domain + ' - 3 URLs' )
+      end
+
+      if with_infringing
+        uri = URI.parse(work.infringing_urls.first.url)
+        domain = uri.host
+        expect(rendered).to have_css( "#work_#{work.id} li.infringing_url", text: domain + ' - 3 URLs' )
+      end
+    end
   end
 end

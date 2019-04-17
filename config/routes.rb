@@ -1,5 +1,5 @@
 Chill::Application.routes.draw do
-  get "file_uploads/files/:id/*file_path", to: 'original_files#show'
+  get 'file_uploads/files/:id/*file_path', to: 'files#show'
 
   devise_for :users
 
@@ -15,6 +15,8 @@ Chill::Application.routes.draw do
     end
     member do
       put :request_pdf
+      get :request_access, to: 'token_urls#new'
+      post :generate_permanent_full_url, to: 'token_urls#generate_permanent'
     end
   end
 
@@ -54,6 +56,12 @@ Chill::Application.routes.draw do
   match '/:recipient_name(/:topics)' => 'notices/search#index',
         constraints: { recipient_name: /Twitter|Google/i },
         via: %i[get post]
+
+  resources :token_urls, only: :create do
+    member do
+      get :disable_documents_notification
+    end
+  end
 
   root to: 'home#index'
 end
