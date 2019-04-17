@@ -8,7 +8,7 @@
       <%= link_to "Legal", page_path("legal") %>
       <%= link_to "Researchers", page_path("researchers") %>
       <% if user_signed_in? %>
-        <% if current_user.has_role?(Role.admin) %>
+        <% if current_user.role?(Role.admin) %>
           <%= link_to "Admin", rails_admin_path %>
         <% end %>
         <%= link_to "Sign Out", destroy_user_session_path %>
