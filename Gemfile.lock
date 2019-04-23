@@ -454,7 +454,6 @@ DEPENDENCIES
   lograge
   loofah (>= 2.2.3)
   mime-types (= 2.99.3)
-  minitest
   neat
   oink
   paperclip (~> 5)
