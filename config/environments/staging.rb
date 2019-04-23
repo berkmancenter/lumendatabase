@@ -1,3 +1,5 @@
+require 'recipient_interceptor'
+
 Mail.register_interceptor RecipientInterceptor.new(ENV['EMAIL_RECIPIENTS'])
 require Rails.root.join('config/initializers/smtp')
 Chill::Application.configure do
