@@ -39,15 +39,12 @@ gem 'rails_admin_tag_list'
 gem 'recaptcha'
 gem 'recipient_interceptor', require: false
 gem 'redcarpet'
-gem 'ruby-progressbar'
 gem 'select2-rails', '~> 4.0', '>= 4.0.3'
 gem 'simple_form'
 gem 'skylight'
 gem 'spork-rails', git: 'https://github.com/sporkrb/spork-rails'
 gem 'stackprof'
 gem 'turnout'
-gem 'twitter'
-gem 'twitter-text'
 
 # These need to go last or tests fail.
 gem 'elasticsearch-model'
