@@ -1,3 +1,5 @@
+require 'html2md'
+
 class BlogImporter
 
   def initialize(csv_file)

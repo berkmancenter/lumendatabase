@@ -266,16 +266,12 @@ namespace :lumen do
 
     begin
       untitled_notices = Notice.where(title: 'Untitled')
-      p = ProgressBar.create(
-        title: 'Renaming',
-        total: untitled_notices.count,
-        format: '%t: %B %P%% %E %c/%C %R/s'
-      )
 
+      $stdout.puts "Renaming #{untitled_notices.count} notices..."
       untitled_notices.each do |notice|
         new_title = generic_title(notice)
         notice.update_attribute(:title, new_title)
-        p.increment
+        $stdout.puts '.'
       end
     rescue => e
       $stderr.warn "Titling did not succeed because: #{e.inspect}"
@@ -334,12 +330,8 @@ namespace :lumen do
     end
 
     incorrect_notices = Notice.where(id: incorrect_notice_ids)
-    p = ProgressBar.create(
-      type: 'Reassigning',
-      total: incorrect_notices.count,
-      format: '%t: %B %P%% %E %c/%C %R/s'
-    )
 
+    $stdout.puts "Changing #{incorrect_notices.count} notices..."
     incorrect_notices.each do |notice|
       old_type = notice.class.name.constantize
       new_type = incorrect_notice_id_type[notice.id].constantize
@@ -352,18 +344,14 @@ namespace :lumen do
       notice.topic_assignments.delete_all
       notice.touch
       notice.save!
-      p.increment
+      $stdout.puts '.'
     end
   end
 
   desc 'Index non-indexed models'
   task index_non_indexed: :environment do
     begin
-      p = ProgressBar.create(
-        title: 'Objects',
-        total: (Notice.count + Entity.count),
-        format: '%t: %B %P%% %E %c/%C %R/s'
-      )
+      $stdout.puts "Indexing #{Notice.count + Entity.count} instances..."
       [Notice, Entity].each do |klass|
         ids = klass.pluck(:id)
         ids.each do |id|
@@ -373,7 +361,7 @@ namespace :lumen do
             puts "Indexing #{klass}, #{id}"
             klass.find(id).__elasticsearch__.index_document
           end
-          p.increment
+          $stdout.puts '.'
         end
       end
     rescue => e
@@ -478,11 +466,8 @@ where notices.id in (
           type: 'Defamation'
         )
 
-        p = ProgressBar.create(
-          title: "updating #{e.name} (#{i} of #{total})",
-          total: [notices.count, 1].max,
-          format: '%t: %b %p%% %e %c/%c %r/s'
-        )
+        $stdout.puts "Redacting #{[notices.count, 1].max} notice(s)..."
+
         notices.find_in_batches do |group|
           group.each do |notice|
             next unless notice.sender.present?
@@ -497,7 +482,7 @@ where notices.id in (
               work.copyrighted_urls.each do |cu|
                 cu.update_attributes(url: redactor.redact(cu.url))
               end
-              p.increment
+              $stdout.puts '.'
             end
           end
         end
