@@ -6,7 +6,6 @@ gem 'acts-as-taggable-on'
 gem 'addressable'
 gem 'ancestry'
 gem 'bootstrap-datepicker-rails'
-gem 'bourbon'
 gem 'cancancan'
 gem 'country_select'
 gem 'coveralls', require: false
@@ -25,7 +24,6 @@ gem 'kaminari', '0.14.1'
 gem 'lograge'
 gem 'loofah', '>= 2.2.3'
 gem 'mime-types'
-gem 'neat'
 gem 'oink'
 gem 'paperclip', '~> 5'
 gem 'pg', '0.20.0'
@@ -47,13 +45,6 @@ gem 'turnout'
 gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
 
-group :assets do
-  gem 'coffee-rails'
-  gem 'sass-rails'
-  gem 'therubyracer'
-  gem 'uglifier'
-end
-
 group :development do
   gem 'binding_of_caller'
   gem 'bullet'
@@ -71,6 +62,15 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'ruby-prof'
   gem 'sham_rack'
+end
+
+group :development, :test, :assets do
+  gem 'bourbon'
+  gem 'coffee-rails'
+  gem 'neat'
+  gem 'sass-rails'
+  gem 'therubyracer'
+  gem 'uglifier'
 end
 
 group :test do
