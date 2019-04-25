@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Rack::Attack
   # Always allow requests from localhost
   # (blacklist & throttles are skipped)
@@ -47,15 +49,16 @@ class Rack::Attack
 
   throttle('request limit', limit: 10, period: 1.minute) do |req|
     Rails.logger.debug "[rack-attack] request limit ip: #{req.ip}, content_type: #{req.content_type}"
-    req.ip
+    req.ip if req.path.include? 'notices'
   end
 
   throttle('request limit', limit: 30, period: 1.hour) do |req|
     Rails.logger.debug "[rack-attack] request limit ip: #{req.ip}, content_type: #{req.content_type}"
-    req.ip
+    req.ip if req.path.include? 'notices'
   end
 
   self.throttled_response = lambda do |_env|
+    Rails.logger.info "[rack-attack] 429 issued for #{_env['rack.attack.match_discriminator']}"
     [
       429, # status
       { 'Content-Type' => 'text/plain' }, # headers
