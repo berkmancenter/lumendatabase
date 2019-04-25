@@ -52,11 +52,11 @@ class BlogEntry < ActiveRecord::Base
   end
 
   def content_html
-    Markdown.render(content.to_s)
+    MarkdownParser.render(content.to_s)
   end
 
   def abstract_html
-    Markdown.render(abstract.to_s)
+    MarkdownParser.render(abstract.to_s)
   end
 
   # https://github.com/sferik/rails_admin/wiki/Enumeration

@@ -5,4 +5,6 @@ extensions = {
   disable_indented_code_blocks: true
 }
 
-Markdown = Redcarpet::Markdown.new(renderer, extensions)
+# Don't call this Markdown or you'll get loud, frequent warnings about its
+# collision with the Markdown constant previously defined inside Redcarpet.
+MarkdownParser = Redcarpet::Markdown.new(renderer, extensions)

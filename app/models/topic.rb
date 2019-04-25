@@ -24,7 +24,7 @@ class Topic < ActiveRecord::Base
   after_update { TopicIndexQueuer.for(self.id) }
 
   def description_html
-    Markdown.render(description.to_s)
+    MarkdownParser.render(description.to_s)
   end
 
 end
