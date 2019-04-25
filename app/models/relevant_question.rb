@@ -5,7 +5,7 @@ class RelevantQuestion < ActiveRecord::Base
   include ValidatesAutomatically
 
   def answer_html
-    Markdown.render(answer.to_s)
+    MarkdownParser.render(answer.to_s)
   end
 
 end

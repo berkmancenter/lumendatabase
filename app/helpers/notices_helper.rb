@@ -44,7 +44,7 @@ module NoticesHelper
   end
 
   def first_time_visitor_content
-    Markdown.render(t('first_time_visitor'))
+    MarkdownParser.render(t('first_time_visitor'))
   end
 
   def label_for_url_input(url_type, notice)
