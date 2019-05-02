@@ -57,6 +57,8 @@ April 2019
 * `rake db:migrate`
   - If this throws a `PG::ConnectionBad:` and asks something like "Is the server running locally and accepting connections on Unix domain socket "/var/run/postgresql/.s.PGSQL.5432"?", use `RAILS_ENV=production rake db:migrate`
 * `rake assets:clobber`
-* `rake assets:precompile`
+* `RAILS_ENV=development rake assets:precompile`
+  * This MUST specify the development environment, because bourbon is not loaded in production to save on memory.
+  * Prod will still be able to find the precompiled assets.
 * `rake lumen:maintenance_end`
   * This includes the `touch tmp/restart.txt` command, which tells Passenger to restart its listener.
