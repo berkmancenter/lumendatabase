@@ -50,6 +50,7 @@ group :development do
   gem 'bullet'
   gem 'derailed'
   gem 'foreman'
+  gem 'memory_profiler'
 end
 
 group :development, :test do
