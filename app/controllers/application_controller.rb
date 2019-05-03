@@ -1,7 +1,12 @@
+# frozen_string_literal: true
+
 class ApplicationController < ActionController::Base
   layout :layout_by_resource
 
+  # This causes the sign out link to not be displayed -- somehow user_signed_in?
+  # no longer fires correctly. wat.
   before_filter :authenticate_user_from_token!
+  before_filter :set_profiler_auth
 
   rescue_from CanCan::AccessDenied do |ex|
     logger.warn "Unauthorized attempt to #{ex.action} #{ex.subject}"
@@ -65,6 +70,14 @@ class ApplicationController < ActionController::Base
 
     return unless user
     sign_in user, store: false
+  end
+
+  def set_profiler_auth
+    if current_user&.role? Role.super_admin
+      Rack::MiniProfiler.authorize_request
+    else
+      Rack::MiniProfiler.deauthorize_request
+    end
   end
 
   def authentication_token

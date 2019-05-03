@@ -202,8 +202,6 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
-    memoizable (0.4.2)
-      thread_safe (~> 0.3, >= 0.3.1)
     memory_profiler (0.9.13)
     metaclass (0.0.1)
     method_source (0.8.2)
@@ -256,7 +254,7 @@ GEM
       rack (>= 0.4)
     rack-attack (4.3.0)
       rack
-    rack-mini-profiler (1.0.2)
+    rack-mini-profiler (0.9.9.2)
       rack (>= 1.2.0)
     rack-pjax (1.0.0)
       nokogiri (~> 1.5)
@@ -462,7 +460,6 @@ DEPENDENCIES
   loofah (>= 2.2.3)
   memory_profiler
   mime-types
-  minitest
   neat
   oink
   paperclip (~> 5)
@@ -474,7 +471,7 @@ DEPENDENCIES
   pry-rails
   rack (>= 1.6.11)
   rack-attack
-  rack-mini-profiler
+  rack-mini-profiler (~> 0.9.9)
   rack-test
   rails (~> 4.2.11)
   rails_admin

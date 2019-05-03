@@ -29,6 +29,7 @@ gem 'paperclip', '~> 5'
 gem 'pg', '0.20.0'
 gem 'rack', '>= 1.6.11'
 gem 'rack-attack'
+gem 'rack-mini-profiler', '~> 0.9.9'
 gem 'rails', '~> 4.2.11'
 gem 'rails_admin'
 gem 'rails_admin_tag_list'
@@ -51,7 +52,6 @@ group :development do
   gem 'derailed'
   gem 'foreman'
   gem 'memory_profiler'
-  gem 'rack-mini-profiler'
 end
 
 group :development, :test do
