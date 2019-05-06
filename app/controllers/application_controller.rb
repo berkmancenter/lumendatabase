@@ -3,8 +3,6 @@
 class ApplicationController < ActionController::Base
   layout :layout_by_resource
 
-  # This causes the sign out link to not be displayed -- somehow user_signed_in?
-  # no longer fires correctly. wat.
   before_filter :authenticate_user_from_token!
   before_filter :set_profiler_auth
 
