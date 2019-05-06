@@ -701,8 +701,8 @@ where works.id in (
 
     # Make archive.
     filename = Date.today.iso8601
-    system("tar -czvf #{File.join(dir, filename)}.tar.gz #{working_dir}")
-    Dir.rmdir(working_dir)
+    system("tar -czvf #{File.join(dir, filename)}.tar.gz -C #{working_dir} .")
+    system("rm -r #{working_dir}")
 
     # Write HTML page allowing file access.
     html = <<-HEREDOC
