@@ -695,7 +695,7 @@ where works.id in (
     files.each do |f|
       # The first two params ensure the filename is useful; the third ensures
       # it is unique.
-      name = "#{f.notice_id}_#{f.file_file_name}_#{f.id}"
+      name = "#{f.notice_id}_#{f.id}_#{f.file_file_name}"
       File.write(File.join(working_dir, name), f.file)
     end
 
