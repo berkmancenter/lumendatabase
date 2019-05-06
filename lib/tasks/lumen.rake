@@ -696,7 +696,7 @@ where works.id in (
       # The first two params ensure the filename is useful; the third ensures
       # it is unique.
       name = "#{f.notice_id}_#{f.id}_#{f.file_file_name}"
-      File.write(File.join(working_dir, name), f.file)
+      system("cp #{f.file.path} #{File.join(working_dir, name)}")
     end
 
     # Make archive.
