@@ -44,6 +44,8 @@ RSpec.configure do |config|
   config.example_status_persistence_file_path = 'rspec_examples.txt'
 end
 
+RSpec::Mocks.configuration.allow_message_expectations_on_nil = true
+
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
     # Choose a test framework:

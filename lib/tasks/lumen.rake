@@ -669,7 +669,7 @@ where works.id in (
     # configuration.)
     cmd = "cd #{__dir__}/../../tmp/cache && " \
           "touch #{__dir__}/../../log/safer_cache_clear.log &&" \
-          "find . -type f -amin +60` -delete 2>> #{__dir__}/../../log/safer_cache_clear.log && " \
+          "find . -type f -amin +60 -delete 2>> #{__dir__}/../../log/safer_cache_clear.log && " \
           "find . -type d -empty -delete 2>> #{__dir__}/../../log/safer_cache_clear.log"
     system(cmd)
   end

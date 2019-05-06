@@ -254,6 +254,8 @@ GEM
       rack (>= 0.4)
     rack-attack (4.3.0)
       rack
+    rack-mini-profiler (0.9.9.2)
+      rack (>= 1.2.0)
     rack-pjax (1.0.0)
       nokogiri (~> 1.5)
       rack (>= 1.1)
@@ -456,6 +458,7 @@ DEPENDENCIES
   launchy
   lograge
   loofah (>= 2.2.3)
+  memory_profiler
   mime-types
   neat
   oink
@@ -468,6 +471,7 @@ DEPENDENCIES
   pry-rails
   rack (>= 1.6.11)
   rack-attack
+  rack-mini-profiler (~> 0.9.9)
   rack-test
   rails (~> 4.2.11)
   rails_admin

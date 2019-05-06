@@ -5,10 +5,8 @@ describe 'shared/_footer.html.erb' do
 
   context 'signed in' do
     it 'gives a link to the admin for admin users' do
-      allow(controller).to receive_messages(user_signed_in?: true)
-      allow(controller.current_user).to receive(:role?)
-        .with(Role.admin)
-        .and_return(true)
+      allow(view).to receive(:user_signed_in?) { true }
+      allow(view).to receive(:can?).with(:access, :rails_admin) { true }
 
       render
 
@@ -16,10 +14,8 @@ describe 'shared/_footer.html.erb' do
     end
 
     it 'does not give a link to the admin for non-admin users' do
-      allow(controller).to receive_messages(user_signed_in?: true)
-      allow(controller.current_user).to receive(:role?)
-        .with(Role.admin)
-        .and_return(false)
+      allow(view).to receive(:user_signed_in?) { true }
+      allow(view).to receive(:can?).with(:access, :rails_admin) { false }
 
       render
 
@@ -27,11 +23,11 @@ describe 'shared/_footer.html.erb' do
     end
 
     it 'gives a link to sign out' do
-      allow(controller).to receive_messages(user_signed_in?: true)
+      allow(view).to receive(:user_signed_in?) { true }
 
       # It doesn't matter what we return here, but we do need to define the
       # behavior or the spec will fail when the template tries to call
-      # current_user.has_role?
+      # current_user.role? .
       allow(controller.current_user).to receive(:role?)
         .with(Role.admin)
         .and_return(false)
@@ -53,6 +49,7 @@ describe 'shared/_footer.html.erb' do
 
   context 'signed out' do
     it 'gives a link to sign in' do
+      allow(view).to receive(:user_signed_in?) { false }
       render
 
       expect(rendered).to have_css('a', text: 'Sign In')
