@@ -159,13 +159,6 @@ class NoticesController < ApplicationController
     end
   end
 
-  def researcher?
-    return false unless request.headers['HTTP_X_AUTHENTICATION_TOKEN']
-    User.find_by_authentication_token(
-      request.headers['HTTP_X_AUTHENTICATION_TOKEN']
-    ).role?(Role.researcher)
-  end
-
   def build_entity_notice_roles(model_class)
     model_class::DEFAULT_ENTITY_NOTICE_ROLES.each do |role|
       @notice.entity_notice_roles.build(name: role).build_entity(
