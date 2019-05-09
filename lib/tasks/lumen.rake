@@ -778,8 +778,8 @@ where works.id in (
     files.each do |f|
       # The first two params ensure the filename is useful; the third ensures
       # it is unique.
-      name = "#{f.notice_id}_#{f.id}_#{f.file_file_name}"
-      system("cp #{f.file.path} #{File.join(working_dir, name)}")
+      name = "#{f.notice_id}_#{f.id}_#{f.file_file_name}".gsub(/\s+/, "")
+      system("cp #{Shellwords.escape(f.file.path)} #{File.join(working_dir, name)}")
     end
 
     # Make archive.

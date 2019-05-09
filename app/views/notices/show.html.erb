@@ -18,7 +18,7 @@
     </div>
   <% end %>
 
-  <% cache(@notice) do %>
+  <% cache(truncatable_cache_key(@notice.cache_key, can_see_full_notice_version?(@notice))) do %>
     <%= content_tag('section', class: 'first-time-visitor', style: 'display: none;', 'data-content': first_time_visitor_content) do %>
       <div class="first-time-visitor-content">
         <p id="hide-first-time-visitor-content"><a href="#">Close</a></p>
