@@ -1,0 +1,11 @@
+# Copy this to whitelisted_ips.rb in this directory and fill in any IPs and
+# ranges you want to whitelist. The file whitelisted_ips.rb is gitignored to
+# protect researchers' privacy.
+module WhitelistedIps
+  individuals = [
+    # list of individual IPs to whitelist, like '127.0.0.1'
+  ]
+  IPS = [
+    # list of ranges of ips to whitelist, like IPAddr.new('140.247.218.0/25')
+  ]
+end

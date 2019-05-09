@@ -1,0 +1,14 @@
+Hi,
+
+this is a single-use link you requested on the Lumen Database website: <%= notice_url(@notice, access_token: @token_url.token, host: Chill::Application.config.site_host) %>.
+
+Using this link you can see full details of <%= notice_url(@notice, host: Chill::Application.config.site_host) %>.
+
+Be aware that you can use it for the next 24 hours only.
+
+<% if @token_url.documents_notification %>
+To disable notifications about document updates click here: <%= disable_documents_notification_token_url_url(@token_url, host: Chill::Application.config.site_host, token: @token_url.token) %>.
+
+<% end %>
+Thank you,
+Lumen Database team

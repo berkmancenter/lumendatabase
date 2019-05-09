@@ -48,6 +48,14 @@ Chill::Application.configure do
 
   config.action_mailer.default_url_options = { host: 'localhost:3000' }
 
+  # Use mailcatcher, it's dead simple
+  config.action_mailer.delivery_method = (ENV['MAILER_DELIVERY_METHOD'] || :test).to_sym
+  config.action_mailer.smtp_settings = {
+    address: ENV['SMTP_ADDRESS'] || 'localhost',
+    port: ENV['SMTP_PORT'] || 1025,
+    openssl_verify_mode: ENV['SMTP_VERIFY_MODE'] || 'none'
+  }
+
   #begin
     # Set up rate limiting
    # config.require "custom_limiter"

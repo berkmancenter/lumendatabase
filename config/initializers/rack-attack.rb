@@ -1,9 +1,21 @@
+# frozen_string_literal: true
+
 class Rack::Attack
   # Always allow requests from localhost
   # (blacklist & throttles are skipped)
   whitelist('allow from localhost') do |req|
     # Requests are allowed if the return value is truthy.
     ['127.0.0.1', '::1'].include? req.ip
+  end
+
+  whitelist('allow from special IPs') do |req|
+    # IP addresses of known legitimate researchers who might otherwise be
+    # caught up in rate limits.
+    if defined? WhitelistedIps::IPS
+      WhitelistedIps::IPS.map { |iprange| iprange.include? req.ip }.any?
+    else
+      false
+    end
   end
 
   whitelist('allow unlimited requests from API users') do |req|
@@ -31,7 +43,7 @@ class Rack::Attack
     if u.nil?
       Rails.logger.warn "[rack-attack] token: #{token}, user: NOT FOUND" unless token.nil?
       false
-    elsif !u.has_role?(Role.researcher) && !u.has_role?(Role.submitter)
+    elsif !u.role?(Role.researcher) && !u.role?(Role.submitter)
       Rails.logger.warn "[rack-attack] token: #{token}, email: #{u.email}, user: MISSING ROLE"
       false
     else
@@ -45,12 +57,18 @@ class Rack::Attack
     req.ip if req.env['HTTP_ACCEPT'] == 'application/json' || req.env['CONTENT_TYPE'] == 'application/json' || req.path.include?('json')
   end
 
-  throttle('request limit', limit: 200, period: 5.minutes) do |req|
+  throttle('request limit', limit: 10, period: 1.minute) do |req|
     Rails.logger.debug "[rack-attack] request limit ip: #{req.ip}, content_type: #{req.content_type}"
-    req.ip
+    req.ip if req.path.include? 'notices'
+  end
+
+  throttle('request limit', limit: 30, period: 1.hour) do |req|
+    Rails.logger.debug "[rack-attack] request limit ip: #{req.ip}, content_type: #{req.content_type}"
+    req.ip if req.path.include? 'notices'
   end
 
   self.throttled_response = lambda do |_env|
+    Rails.logger.info "[rack-attack] 429 issued for #{_env['rack.attack.match_discriminator']}"
     [
       429, # status
       { 'Content-Type' => 'text/plain' }, # headers

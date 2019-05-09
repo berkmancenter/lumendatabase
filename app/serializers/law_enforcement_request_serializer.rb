@@ -11,11 +11,10 @@ class LawEnforcementRequestSerializer < NoticeSerializer
     attributes = super
     swap_keys(attributes, :body, :explanation)
     attributes[:works].each do |work|
-      swap_keys(work, 'description', :subject_of_enforcement_request)
-      swap_keys(work, :copyrighted_urls, :original_work_urls)
-      swap_keys(work, :infringing_urls, :urls_in_request)
+      swap_keys(work, 'description', 'subject_of_enforcement_request')
+      swap_keys(work, 'copyrighted_urls', 'original_work_urls')
+      swap_keys(work, 'infringing_urls', 'urls_in_request')
     end
     attributes
   end
-
 end

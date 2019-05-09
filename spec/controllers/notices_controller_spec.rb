@@ -62,10 +62,13 @@ describe NoticesController do
       Notice.type_models.each do |model_class|
         it "returns a serialized notice for #{model_class}" do
           notice = stub_find_notice(model_class.new)
+
           serializer_class = model_class.active_model_serializer || NoticeSerializer
           serialized = serializer_class.new(notice)
-          expect(serializer_class).to receive(:new)
-            .with(notice, anything)
+
+          allow(serialized).to receive(:current_user).and_return(nil)
+          expect(serializer_class).to receive(:new).
+            with(notice, anything)
             .and_return(serialized)
 
           get :show, id: 1, format: :json
@@ -141,11 +144,84 @@ describe NoticesController do
         notice.save
         stub_find_notice(notice)
 
-        request.env['HTTP_AUTHENTICATION_TOKEN'] = user.authentication_token
         get :show, id: 1, format: :json
 
         json = JSON.parse(response.body)['dmca']['works'][0]['infringing_urls'][0]
+        expect(json).to have_key('count')
+        expect(json).to have_key('domain')
+
+        get :show, id: 1, authentication_token: user.authentication_token, format: :json
+
+        json = JSON.parse(response.body)["dmca"]["works"][0]["infringing_urls"][0]
         expect(json).to have_key('url_original')
+      end
+    end
+
+    context 'by notice_viewer' do
+      let(:notice) { build(:dmca) }
+      let(:user) do
+        build(
+          :user,
+          :notice_viewer
+        )
+      end
+
+      it 'increases the notice counter for the user when the viewing limit is set and viewing html' do
+        expect(Notice).to receive(:find).with('42').and_return(notice)
+
+        user.notice_viewer_views_limit = 1
+        allow(controller).to receive(:current_user).and_return(user)
+
+        get :show, id: 42
+
+        expect(user.notice_viewer_viewed_notices).to eq 1
+      end
+
+      it 'won\'t increase the notice counter for the user when the viewing limit is set and viewing json' do
+        expect(Notice).to receive(:find).with('42').and_return(notice)
+
+        user.notice_viewer_views_limit = 1
+        allow(controller).to receive(:current_user).and_return(user)
+
+        get :show, id: 42, format: :json
+
+        expect(user.notice_viewer_viewed_notices).to eq 0
+      end
+
+      it 'won\'t increase the notice counter for the user when the viewing limit is nil or 0' do
+        expect(Notice).to receive(:find).twice.with('42').and_return(notice)
+
+        user.notice_viewer_views_limit = nil
+        allow(controller).to receive(:current_user).and_return(user)
+
+        get :show, id: 42, format: :json
+
+        expect(user.notice_viewer_viewed_notices).to eq 0
+
+        user.notice_viewer_views_limit = 0
+
+        get :show, id: 42, format: :json
+
+        expect(user.notice_viewer_viewed_notices).to eq 0
+      end
+
+      it 'increases the notice counter for the user when the viewing limit is set until the limit is reached' do
+        expect(Notice).to receive(:find).with('42').exactly(3).times.and_return(notice)
+
+        user.notice_viewer_views_limit = 2
+        allow(controller).to receive(:current_user).and_return(user)
+
+        get :show, id: 42
+
+        expect(user.notice_viewer_viewed_notices).to eq 1
+
+        get :show, id: 42
+
+        expect(user.notice_viewer_viewed_notices).to eq 2
+
+        get :show, id: 42
+
+        expect(user.notice_viewer_viewed_notices).to eq 2
       end
     end
 

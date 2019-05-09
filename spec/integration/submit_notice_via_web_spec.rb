@@ -1,5 +1,6 @@
 require 'rails_helper'
 require 'support/sign_in'
+require 'support/notice_actions'
 
 feature 'notice submission' do
   include NoticeActions
@@ -199,19 +200,41 @@ feature 'notice submission' do
     expect(InfringingUrl.count).to eq 1
   end
 
-  scenario 'submitting a notice with works' do
+  scenario "submitting a notice with works" do
+    user = create(:user, :submitter)
+
+    sign_in(user)
+
     submit_recent_notice do
       fill_in 'Work URL', with: 'http://www.example.com/original_work.pdf'
       fill_in 'Description', with: 'A series of videos and still images'
       fill_in 'Infringing URL', with: 'http://example.com/infringing_url1'
     end
 
+    sign_out
+
+    visit '/'
+
     open_recent_notice
 
     within('#works') do
-      expect(page).to have_words 'http://www.example.com/original_work.pdf'
-      expect(page).to have_words 'movie'
-      expect(page).to have_words 'A series of videos and still images'
+      expect(page).to have_content 'example.com - 1 URL'
+      expect(page).to have_content 'movie'
+      expect(page).to have_content 'A series of videos and still images'
+    end
+
+    user = create(:user, :super_admin)
+
+    sign_in(user)
+
+    visit '/'
+
+    open_recent_notice
+
+    within('#works') do
+      expect(page).to have_content 'http://www.example.com/original_work.pdf'
+      expect(page).to have_content 'movie'
+      expect(page).to have_content 'A series of videos and still images'
       expect(page).to have_css(
         %{.infringing_url:contains("http://example.com/infringing_url1")}
       )
@@ -249,7 +272,7 @@ feature 'notice submission' do
     end
   end
 
-  scenario 'submitting a notice without required fields present' do
+  scenario "submitting a notice without required fields present" do
     sign_in(create(:user, :submitter))
 
     visit '/notices/new?type=DMCA'

@@ -17,11 +17,7 @@
   <% cache( 'lumendatabase-tweets', expires_in: 5.minutes ) { %>
     <section class="tweets">
       <h2>@lumendatabase on twitter</h2>
-      <% @tweet_news.each do |tweet| %>
-        <ol>
-          <li><%= auto_link(tweet.text).html_safe %></li>
-        </ol>
-      <% end %>
+      <a class="twitter-timeline" data-height="380" href="https://twitter.com/lumendatabase?ref_src=twsrc%5Etfw">Tweets by lumendatabase</a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
     </section>
   <% } %>
   <section class="news-snippets">

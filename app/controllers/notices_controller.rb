@@ -5,7 +5,6 @@ class NoticesController < ApplicationController
 
   def new
     (render :submission_disabled and return) if cannot?(:submit, Notice)
-
     (render :select_type and return) if params[:type].blank?
 
     model_class = get_notice_type(params)
@@ -28,30 +27,10 @@ class NoticesController < ApplicationController
 
   def show
     return unless (@notice = Notice.find(params[:id]))
-    respond_to do |format|
-      format.html do
-        if @notice.rescinded?
-          render :rescinded
-        elsif @notice.hidden
-          render file: 'public/404_hidden',
-                 formats: [:html],
-                 status: :not_found,
-                 layout: false
-        elsif @notice.spam || !@notice.published
-          render file: 'public/404_unavailable',
-                 formats: [:html],
-                 status: :not_found,
-                 layout: false
-        else
-          render :show
-        end
-      end
 
-      format.json do
-        render json: @notice,
-               serializer: NoticeSerializerProxy,
-               root: json_root_for(@notice.class)
-      end
+    respond_to do |format|
+      show_html format
+      show_json format
     end
   end
 
@@ -180,13 +159,6 @@ class NoticesController < ApplicationController
     end
   end
 
-  def researcher?
-    return false unless request.headers['HTTP_X_AUTHENTICATION_TOKEN']
-    User.find_by_authentication_token(
-      request.headers['HTTP_X_AUTHENTICATION_TOKEN']
-    ).has_role?(Role.researcher)
-  end
-
   def build_entity_notice_roles(model_class)
     model_class::DEFAULT_ENTITY_NOTICE_ROLES.each do |role|
       @notice.entity_notice_roles.build(name: role).build_entity(
@@ -262,6 +234,54 @@ class NoticesController < ApplicationController
       msg = 'You are not authorized to do that, or you are missing required ' \
             'parameters'.freeze
       { errors: msg }
+    end
+  end
+
+  def run_show_callbacks
+    process_notice_viewer_request unless current_user.nil?
+  end
+
+  def process_notice_viewer_request
+    # Only notice viewers
+    return unless current_user.role?(Role.notice_viewer)
+    # Only when the views limit is set for a user
+    return unless current_user.notice_viewer_views_limit.present?
+    # No need to update the counter when the limit is reached
+    return if current_user.notice_viewer_viewed_notices >= current_user.notice_viewer_views_limit
+
+    current_user.increment!(:notice_viewer_viewed_notices)
+  end
+
+  def show_html(format)
+    format.html do
+      show_render_html
+    end
+  end
+
+  def show_json(format)
+    format.json do
+      render json: @notice,
+             serializer: NoticeSerializerProxy,
+             root: json_root_for(@notice.class)
+    end
+  end
+
+  def show_render_html
+    if @notice.rescinded?
+      render :rescinded
+    elsif @notice.hidden
+      render file: 'public/404_hidden',
+             formats: [:html],
+             status: :not_found,
+             layout: false
+    elsif @notice.spam || !@notice.published
+      render file: 'public/404_unavailable',
+             formats: [:html],
+             status: :not_found,
+             layout: false
+    else
+      render :show
+      run_show_callbacks
     end
   end
 end

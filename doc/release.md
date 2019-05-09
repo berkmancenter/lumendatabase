@@ -5,7 +5,11 @@ Maintenance windows are Wednesday and Saturday nights (after 5pm Eastern).
 ## Special instructions
 If any deploys have special instructions, write them here, with a date and PR number. When that PR has been deployed, you can erase the special instructions.
 
-PR #512 - add cron job for work redaction rake task, running every 2 hours with lockrun to avoid duplicating db queries.
+April 2019
+- remove Twitter env variables
+- Add cron job to run `lumen:generate_court_order_report` once per week
+- Add cron job to delete court order reports that are > 3 weeks old
+- add USER_CRON_EMAIL env
 
 ## Hotfix
 * Write code, code-review, and merge into `dev` via the normal process.
@@ -43,6 +47,7 @@ PR #512 - add cron job for work redaction rake task, running every 2 hours with 
 * Log in to the relevant server (`psh <servername>`)
 * `sudo -su chill-prod` (enyos) or `sudo -su chill-dev` (flutie) or `sudo -su chill-api` (percy)
 * cd into the directory where chill files live (look under `/web/<servername>`)
+* `rake lumen:maintenance_start`
 * `cp .env ../` (as a precaution)
 * `git checkout db/schema.rb`
 * `git checkout <branch>`
@@ -55,6 +60,8 @@ PR #512 - add cron job for work redaction rake task, running every 2 hours with 
 * `rake db:migrate`
   - If this throws a `PG::ConnectionBad:` and asks something like "Is the server running locally and accepting connections on Unix domain socket "/var/run/postgresql/.s.PGSQL.5432"?", use `RAILS_ENV=production rake db:migrate`
 * `rake assets:clobber`
-* `rake assets:precompile`
-* `touch tmp/restart.txt`
-  * This tells Passenger to restart its listener
+* `RAILS_ENV=development rake assets:precompile`
+  * This MUST specify the development environment, because bourbon is not loaded in production to save on memory.
+  * Prod will still be able to find the precompiled assets.
+* `rake lumen:maintenance_end`
+  * This includes the `touch tmp/restart.txt` command, which tells Passenger to restart its listener.
