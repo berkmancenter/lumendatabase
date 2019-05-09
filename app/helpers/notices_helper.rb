@@ -125,4 +125,12 @@ module NoticesHelper
       valid_forever: true
     )
   end
+
+  def truncatable_cache_key(key, can_see_full)
+    if can_see_full
+      "untruncated_#{key}"
+    else
+      key
+    end
+  end
 end
