@@ -14,16 +14,17 @@ The main [Lumen Database instance](https://www.lumendatabase.org/) has an API th
 Development
 ===========
 
-Requirements:
+#### Requirements
 
 * ruby 2.3.3
 * PostgreSQL 9.6
 * Elasticsearch 5.6.x
 * Java Runtime Environment (OpenJDK works fine)
 * Piwik Tracking
+* Mail server (SMTP, Sendmail)
 * phantomjs (used only by test runner)
 
-Setup:
+#### Setup
 
 By default the app will try to connect to Elasticsearch on `http://localhost:9200`. If you want to use a different host set the `ELASTICSEARCH_URL` environment variable.
 
@@ -33,11 +34,11 @@ By default the app will try to connect to Elasticsearch on `http://localhost:920
       (ensure PostgreSQL and Elasticsearch are running)
     $ rake db:setup
 
-Running the app:
+#### Running the app
 
     $ rails s
 
-Viewing the app:
+#### Viewing the app
 
     $BROWSER 'http://localhost:3000'
 
@@ -47,14 +48,14 @@ You can customize behavior during seeding (db:setup) with a couple environment v
   instead of the default 500
 * `SKIP_FAKE_DATA=1` will skip generating fake seed data entirely.
 
-Admin login:
+#### Admin login
 
     Username: admin@lumendatabase.org
     Password: password
 
 If you seeded your database with an older version of `seeds.rb`, your username may be admin@chillingeffects.org.
 
-Running Tests:
+#### Running Tests
 
     $ bundle exec rspec spec/
 
@@ -63,13 +64,14 @@ find it more convenient to `bundle exec rspec spec/ --exclude-pattern="spec/inte
 
 If `elasticsearch` isn't on your $PATH, set `ENV['TEST_CLUSTER_COMMAND']=/path/to/elasticsearch`, and make sure permissions are set correctly for your test suite to run it.
 
-Linting:
+#### Linting
 
 Use rubocop and leave the code at least as clean as you found it. If you make
 linting-only changes, it's considerate to your code reviewer to keep them in
 their own commit.
 
-Profiling:
+####  Profiling
+
 * [Skylight](https://www.skylight.io/app/applications/utm46ElcSDtw/recent/5m/endpoints)
   * track page rendering time, count allocations, find possibly dodgy SQL
   * analytics to help you find the problem areas
@@ -84,6 +86,31 @@ Profiling:
   * more specific than Skylight as to which objects are being created where
   * runs in dev by default; can run anywhere by setting `ENV[LUMEN_USE_OINK]` (ok to run in production)
   * logs to `log/oink.log`
+
+#### Environment variables
+
+- `RAILS_LOG_LEVEL` - logging level
+- `WEB_CONCURRENCY` - number of Unicorn workers
+- `WEB_TIMEOUT` - Unicorn timeout
+- `MAILER_DELIVERY_METHOD` - mailer delivery method
+- `DEFAULT_SENDER` - default mailer sender
+- `RETURN_PATH` - default mailer return path
+- `SITE_HOST` - site host, used in mailer templates
+- `SMTP_ADDRESS` - SMTP server address
+- `SMTP_DOMAIN` - SMTP server domain
+- `SMTP_USERNAME` - SMTP server username
+- `SMTP_PASSWORD` - SMTP server password
+- `SMTP_PORT` - SMTP server port
+- `RECAPTCHA_SITE_KEY` - reCAPTCHA public key
+- `RECAPTCHA_SECRET_KEY` - reCAPTCHA private key
+- `BROWSER_VALIDATIONS` - enable user browser form validations
+- `BATCH_SIZE` - batch size of model items indexed during each run of Elasticsearch re-indexing
+- `SEARCH_SLEEP` - used in specs only, time out of Elasticsearch searches
+- `RACK_ENV` - Rack environment
+
+#### Email setup
+
+The application requires a mail server, in development it's best to use a local SMTP server that will catch all outgoing emails. [Mailcatcher](https://mailcatcher.me) is a good option.
 
 Ephemera
 ========

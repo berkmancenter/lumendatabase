@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 class ApplicationController < ActionController::Base
   layout :layout_by_resource
 
   before_filter :authenticate_user_from_token!
+  before_filter :set_profiler_auth
 
   rescue_from CanCan::AccessDenied do |ex|
     logger.warn "Unauthorized attempt to #{ex.action} #{ex.subject}"
@@ -13,6 +16,12 @@ class ApplicationController < ActionController::Base
 
   after_filter :store_action
   after_action :include_auth_cookie
+
+  if Rails.env.staging? || Rails.env.production?
+    rescue_from ActiveRecord::RecordNotFound do |exception|
+      resource_not_found(exception)
+    end
+  end
 
   private
 
@@ -61,6 +70,14 @@ class ApplicationController < ActionController::Base
     sign_in user, store: false
   end
 
+  def set_profiler_auth
+    if current_user&.role? Role.super_admin
+      Rack::MiniProfiler.authorize_request
+    else
+      Rack::MiniProfiler.deauthorize_request
+    end
+  end
+
   def authentication_token
     key = 'authentication_token'
 
@@ -80,5 +97,21 @@ class ApplicationController < ActionController::Base
               request.xhr?
 
     store_location_for(:user, request.fullpath)
+  end
+
+  def resource_not_found(exception)
+    logger.error(exception)
+
+    respond_to do |format|
+      format.html do
+        render file: 'public/404',
+               status: :not_found,
+               layout: false
+      end
+      format.json do
+        render json: 'Not Found',
+               status: :not_found
+      end
+    end
   end
 end

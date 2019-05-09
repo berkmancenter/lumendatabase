@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rake'
 require 'ingestor'
 require 'blog_importer'
@@ -347,16 +349,12 @@ namespace :lumen do
 
     begin
       untitled_notices = Notice.where(title: 'Untitled')
-      p = ProgressBar.create(
-        title: 'Renaming',
-        total: untitled_notices.count,
-        format: '%t: %B %P%% %E %c/%C %R/s'
-      )
 
+      $stdout.puts "Renaming #{untitled_notices.count} notices..."
       untitled_notices.each do |notice|
         new_title = generic_title(notice)
         notice.update_attribute(:title, new_title)
-        p.increment
+        $stdout.puts '.'
       end
     rescue => e
       $stderr.warn "Titling did not succeed because: #{e.inspect}"
@@ -415,12 +413,8 @@ namespace :lumen do
     end
 
     incorrect_notices = Notice.where(id: incorrect_notice_ids)
-    p = ProgressBar.create(
-      type: 'Reassigning',
-      total: incorrect_notices.count,
-      format: '%t: %B %P%% %E %c/%C %R/s'
-    )
 
+    $stdout.puts "Changing #{incorrect_notices.count} notices..."
     incorrect_notices.each do |notice|
       old_type = notice.class.name.constantize
       new_type = incorrect_notice_id_type[notice.id].constantize
@@ -433,18 +427,14 @@ namespace :lumen do
       notice.topic_assignments.delete_all
       notice.touch
       notice.save!
-      p.increment
+      $stdout.puts '.'
     end
   end
 
   desc 'Index non-indexed models'
   task index_non_indexed: :environment do
     begin
-      p = ProgressBar.create(
-        title: 'Objects',
-        total: (Notice.count + Entity.count),
-        format: '%t: %B %P%% %E %c/%C %R/s'
-      )
+      $stdout.puts "Indexing #{Notice.count + Entity.count} instances..."
       [Notice, Entity].each do |klass|
         ids = klass.pluck(:id)
         ids.each do |id|
@@ -454,7 +444,7 @@ namespace :lumen do
             puts "Indexing #{klass}, #{id}"
             klass.find(id).__elasticsearch__.index_document
           end
-          p.increment
+          $stdout.puts '.'
         end
       end
     rescue => e
@@ -559,11 +549,8 @@ where notices.id in (
           type: 'Defamation'
         )
 
-        p = ProgressBar.create(
-          title: "updating #{e.name} (#{i} of #{total})",
-          total: [notices.count, 1].max,
-          format: '%t: %b %p%% %e %c/%c %r/s'
-        )
+        $stdout.puts "Redacting #{[notices.count, 1].max} notice(s)..."
+
         notices.find_in_batches do |group|
           group.each do |notice|
             next unless notice.sender.present?
@@ -578,7 +565,7 @@ where notices.id in (
               work.copyrighted_urls.each do |cu|
                 cu.update_attributes(url: redactor.redact(cu.url))
               end
-              p.increment
+              $stdout.puts '.'
             end
           end
         end
@@ -744,23 +731,134 @@ where works.id in (
   # These errors showed up in our logs per
   # https://cyber.harvard.edu/projectmanagement/issues/14130 .
   # This command, instead of rm -rfing the entire cache directory, finds all
-  # files and directories last accessed more than 20 minutes ago and deletes
+  # files and directories last accessed more than one hour ago and deletes
   # them. This should preserve two things we actually want to preserve:
   # 1) cached fragments in active use;
   # 2) directories and files just created as part of the cache key check and
   # atomic file write process linked above.
+  # While we still run the cron every 20 minutes, the atime is somewhat longer
+  # longer than this. Why? Because we're finding that there are big CPU spikes
+  # every 20 minutes as we rebuild the cache. However, the expiry time for
+  # fragments is generally longer than 20 minutes, and Notice content rarely
+  # changes, so let's allow content to stick around longer.
+  # (Not _too_ long, though, or we run out of disk space.)
   desc 'safer cache clear'
   task safer_cache_clear: :environment do
     # Go to cache dir;
-    # clear out any files more than 20 minutes old;
+    # clear out any files more than a day old;
     # remove empty directories;
     # dump stderr to logfiles so it stops emailing us.
     # (Everything in log/ should get autorotated on prod based on its logrotate
     # configuration.)
     cmd = "cd #{__dir__}/../../tmp/cache && " \
           "touch #{__dir__}/../../log/safer_cache_clear.log &&" \
-          "find . -type f -amin +20 -delete 2>> #{__dir__}/../../log/safer_cache_clear.log && " \
+          "find . -type f -amin +60 -delete 2>> #{__dir__}/../../log/safer_cache_clear.log && " \
           "find . -type d -empty -delete 2>> #{__dir__}/../../log/safer_cache_clear.log"
     system(cmd)
+  end
+
+  # One of our major users periodically fetches recent court order documents to
+  # use in his research; this makes that easier for him.
+  desc 'generate report of recent court order attachments'
+  task generate_court_order_report: :environment do
+    # Ensure directories exist.
+    Rails.logger.info '[rake] Generating court order attachments report'
+
+    magic_dir = ENV['USER_CRON_MAGIC_DIR'] || 'usercron'
+    dir = Rails.root.join('public', magic_dir)
+    Dir.mkdir(dir) unless Dir.exist?(dir)
+
+    working_dir = Rails.root.join('public', magic_dir, 'working')
+    Dir.mkdir(working_dir) unless Dir.exist?(working_dir)
+
+    # Fetch files and write them to the target directory.
+    files = FileUpload.where(
+      notice: CourtOrder.where('created_at > ?', 1.week.ago)
+    )
+    files.each do |f|
+      # The first two params ensure the filename is useful; the third ensures
+      # it is unique.
+      name = "#{f.notice_id}_#{f.id}_#{f.file_file_name}"
+      system("cp #{f.file.path} #{File.join(working_dir, name)}")
+    end
+
+    # Make archive.
+    Rails.logger.info '[rake] Making court order reports archive'
+    filename = Date.today.iso8601
+    system("tar -czvf #{File.join(dir, filename)}.tar.gz -C #{working_dir} .")
+    system("rm -r #{working_dir}")
+
+    # Email user.
+    email = ENV['USER_CRON_EMAIL']
+    unless (email && defined? SMTP_SETTINGS)
+      Rails.logger.warn '[rake] Missing email or SMTP_SETTINGS; not emailing court order report'
+      exit
+    end
+
+    Rails.logger.info '[rake] Sending court order report email'
+    mailtext = <<~HEREDOC
+      Subject: Latest email archive from Lumen
+
+      The latest archive of Lumen court order files can be found at
+      #{ Chill::Application.config.site_host}/#{magic_dir}/#{filename}.tar.gz.
+    HEREDOC
+
+    Net::SMTP.start(SMTP_SETTINGS[:address]) do |smtp|
+      smtp.send_message mailtext, 'no-reply@lumendatabase.org', email
+    end
+  end
+
+  # We have special maintenance start & end tasks so that we can toggle the
+  # RAILS_SERVE_STATIC_FILES env as part of the process; we normally want this
+  # to be false (it's Apache's responsibility), but it must be true for turnout
+  # to find its stylesheets.
+  desc 'maintenance start'
+  task maintenance_start: :environment do
+    ENV['RAILS_SERVE_STATIC_FILES'] = 'true'
+    Rake::Task['maintenance:start'].invoke
+    system('touch tmp/restart.txt')
+  end
+
+  desc 'maintenance end'
+  task maintenance_end: :environment do
+    ENV['RAILS_SERVE_STATIC_FILES'] = nil
+    Rake::Task['maintenance:end'].invoke
+    system('touch tmp/restart.txt')
+  end
+
+  desc 'Send notifications about file uploads updates'
+  task send_file_uploads_notifications: :environment do
+    date_time_task = proc { "[#{Time.now.strftime("%d/%m/%Y %H:%M:%S")}] [rake send_file_uploads_notifications]" }
+
+    puts "#{date_time_task.call} Starting a new task run"
+
+    if DocumentsUpdateNotificationNotice.all.empty?
+      puts "#{date_time_task.call} No scheduled notifications, nothing to process"
+    end
+
+    DocumentsUpdateNotificationNotice.all.each do |doc_notification|
+      puts "#{date_time_task.call} Starting processing notice ##{doc_notification.notice.id}"
+
+      TokenUrl.where(
+        notice: doc_notification.notice,
+        documents_notification: true
+      ).each do |token_url|
+        next unless token_url.email.present?
+
+        puts "#{date_time_task.call} Sending a notification about notice ##{doc_notification.notice.id} to #{token_url.email}"
+
+        TokenUrlsMailer.notice_file_uploads_updates_notification(
+          token_url.email, token_url, doc_notification.notice
+        ).deliver_later
+
+        token_url.update_attribute(:expiration_date, Time.now + 24.hours)
+      end
+
+      puts "#{date_time_task.call} Finishing processing notice ##{doc_notification.notice.id}"
+    end
+
+    DocumentsUpdateNotificationNotice.delete_all
+
+    puts "#{date_time_task.call} Finishing the task"
   end
 end

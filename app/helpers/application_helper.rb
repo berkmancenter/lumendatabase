@@ -1,6 +1,4 @@
 module ApplicationHelper
-  include Twitter::Autolink
-  
   def available_topics
     Topic.ordered
   end
@@ -34,5 +32,11 @@ module ApplicationHelper
 
   def active_advanced_search_parameters?
     Notice::SEARCHABLE_FIELDS.find { |field| params[field.parameter] }.present?
+  end
+
+  def can_see_full_notice_version?(notice)
+    return true if can?(:view_full_version, notice)
+
+    TokenUrl.valid?(params[:access_token], notice)
   end
 end

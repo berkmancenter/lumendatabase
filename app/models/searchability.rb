@@ -5,7 +5,10 @@ module Searchability
 
   module ClassMethods
     def define_elasticsearch_mapping(exclusions = {})
-      index_name [Rails.application.engine_name, Rails.env, 'notice'].join('_')
+      index_name [Rails.application.engine_name,
+                  Rails.env,
+                  'notice',
+                  ENV['ES_INDEX_SUFFIX']].compact.join('_')
       document_type 'notice'
 
       settings do

@@ -45,8 +45,10 @@ class Notice < ActiveRecord::Base
   SORTINGS = [
     Sorting.new('relevancy desc', [:_score, :desc], 'Most Relevant'),
     Sorting.new('relevancy asc', [:_score, :asc], 'Least Relevant'),
-    Sorting.new('date_received desc', [:date_received, :desc], 'Newest'),
-    Sorting.new('date_received asc', [:date_received, :asc], 'Oldest')
+    Sorting.new('date_received desc', [:date_received, :desc], 'Date Received - newest'),
+    Sorting.new('date_received asc', [:date_received, :asc], 'Date Received - oldest'),
+    Sorting.new('created_at desc', [:created_at, :desc], 'Reported to Lumen - newest'),
+    Sorting.new('created_at asc', [:created_at, :asc], 'Reported to Lumen - oldest')
   ].freeze
 
   REDACTABLE_FIELDS = %i[body].freeze
@@ -95,7 +97,9 @@ class Notice < ActiveRecord::Base
   has_many :file_uploads
   has_many :infringing_urls, through: :works
   has_many :copyrighted_urls, through: :works
+  has_many :token_urls, dependent: :destroy
   has_and_belongs_to_many :relevant_questions
+  has_one :documents_update_notification_notice
 
   has_and_belongs_to_many :works
 
@@ -143,6 +147,7 @@ class Notice < ActiveRecord::Base
     delegate :name, :country_code, to: entity, prefix: true, allow_nil: true
   end
 
+  before_save :set_topics
   after_create :set_published!, if: :submitter
   # This may fail in the dev environment if you don't have ES up and running,
   # but is works in other envs.
@@ -328,13 +333,9 @@ class Notice < ActiveRecord::Base
     false
   end
 
-  before_save do
-    notice_type = self.type
-    topic = self.notice_topic_map
-
-    unless self.topics.include?(topic)
-      self.topics << topic
-    end
+  def set_topics
+    topic = notice_topic_map
+    topics << topic unless topics.include?(topic)
   end
 
   private

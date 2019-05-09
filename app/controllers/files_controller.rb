@@ -1,10 +1,15 @@
-class OriginalFilesController < ApplicationController
+class FilesController < ApplicationController
+  include ApplicationHelper
+
   def show
     @upload = FileUpload.where(id: params[:id]).first
     if params_match? && viewing_allowed?
       render text: File.read(file_path), content_type: @upload.file_content_type
     else
-      head :not_found
+      redirect_to(
+        root_path,
+        alert: 'You are not allowed to download this document.'
+      )
     end
   end
 
@@ -21,11 +26,17 @@ class OriginalFilesController < ApplicationController
   end
 
   def viewing_allowed?
-    if @upload.kind == 'original'
-      can?(:access, :original_files)
-    else
-      true
-    end
+    return false if @upload.nil? || @upload.notice.nil?
+    return true if can_see_full_notice_version?(@upload.notice) &&
+                   general_files_access?
+
+    false
+  end
+
+  def general_files_access?
+    @upload.kind != 'original' ||
+      (@upload.kind == 'original' &&
+      can?(:access, :original_files))
   end
 
   def params_match?

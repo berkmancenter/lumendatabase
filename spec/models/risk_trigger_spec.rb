@@ -1,50 +1,73 @@
 require 'spec_helper'
 
 describe RiskTrigger, type: :model do
-  it "sees a risky notice as risky" do
-    notice = double("Notice", country_code: 'Spain', body: "nonempty", submitter: nil)
+  it { is_expected.to validate_presence_of :name }
+  it { is_expected.to validate_presence_of :matching_type }
+  it { is_expected.to validate_inclusion_of(:matching_type).in_array(RiskTrigger::ALLOWED_MATCHING_TYPES) }
+  it { is_expected.to have_many(:risk_trigger_conditions) }
 
-    expect(example_trigger).to be_risky(notice)
-  end
-
-  it "uses negated to reverse the comparison" do
-    notice = double("Notice", country_code: 'Spain', body: "nonempty", submitter: nil)
-    trigger = example_trigger
-    trigger.negated = false
+  it 'sees a not risky notice when a trigger has no conditions' do
+    notice = double('Notice')
+    trigger = RiskTrigger.new(name: 'No risk no fun')
 
     expect(trigger).not_to be_risky(notice)
   end
 
-  it "sees a safe notice as safe" do
-    notice_1 = double("Notice", country_code: 'United States', body: "nonempty", submitter: nil)
-    notice_2 = double("Notice", country_code: 'Spain', body: nil, submitter: nil)
+  it 'sees a risky notice when a trigger has a single risky condition for both all and any matching types' do
+    notice = double('Notice', title: 'So risky')
+    trigger_all = RiskTrigger.new(name: 'No risk no fun', matching_type: 'all')
+    trigger_any = RiskTrigger.new(name: 'Some risk is fun', matching_type: 'any')
+    condition = create_condition('title', 'risky', false, 'broad')
 
-    expect(example_trigger).not_to be_risky(notice_1)
-    expect(example_trigger).not_to be_risky(notice_2)
+    trigger_all.risk_trigger_conditions = [condition]
+    expect(trigger_all).to be_risky(notice)
+
+    trigger_any.risk_trigger_conditions = [condition]
+    expect(trigger_any).to be_risky(notice)
   end
 
-  it "ignores Google defamation notices" do
-    notice = double('Notice', country_code: 'Spain', body: 'nonempty', type: 'Defamation')
-    allow(notice).to receive_message_chain(:submitter, :email => 'google@lumendatabase.org')
+  it 'sees a risky notice when a trigger has two risky conditions for both all and any matching types' do
+    notice = double('Notice', title: 'So risky', body: 'So risky too')
+    trigger_all = RiskTrigger.new(name: 'No risk no fun', matching_type: 'all')
+    trigger_any = RiskTrigger.new(name: 'Some risk is fun', matching_type: 'any')
+    condition1 = create_condition('title', 'risky', false, 'broad')
+    condition2 = create_condition('body', 'risky', false, 'broad')
 
-    expect(example_trigger).not_to be_risky(notice)
+    trigger_all.risk_trigger_conditions = [condition1, condition2]
+    expect(trigger_all).to be_risky(notice)
+
+    trigger_any.risk_trigger_conditions = [condition1, condition2]
+    expect(trigger_any).to be_risky(notice)
   end
 
-  it "gracefully handles non-existent notice attributes" do
-    invalid_trigger =RiskTrigger.new(
-      field: :i_dont_exist,
-      condition_field: :either_do_i,
-    )
+  it 'sees a not risky notice when a trigger has two risky conditions and the all matching type and only matched' do
+    notice = double('Notice', title: 'So risky', body: 'Well, I\'m not')
+    trigger = RiskTrigger.new(name: 'No risk no fun', matching_type: 'all')
+    condition1 = create_condition('title', 'risky', false, 'broad')
+    condition2 = create_condition('body', 'risky', false, 'broad')
 
-    expect(invalid_trigger).not_to be_risky(Notice.new)
+    trigger.risk_trigger_conditions = [condition1, condition2]
+    expect(trigger).not_to be_risky(notice)
   end
 
-  def example_trigger
-    RiskTrigger.new(
-      field: :body,
-      condition_field: :country_code,
-      condition_value: 'United States',
-      negated: true
+  it 'sees a risky notice when a trigger has two risky conditions and the any matching type and only matched' do
+    notice = double('Notice', title: 'So risky', body: 'Well, I\'m not')
+    trigger = RiskTrigger.new(name: 'No risk no fun', matching_type: 'any')
+    condition1 = create_condition('title', 'risky', false, 'broad')
+    condition2 = create_condition('body', 'risky', false, 'broad')
+
+    trigger.risk_trigger_conditions = [condition1, condition2]
+    expect(trigger).to be_risky(notice)
+  end
+
+  private
+
+  def create_condition(field, value, negated, matching_type)
+    RiskTriggerCondition.new(
+      field: field,
+      value: value,
+      negated: negated,
+      matching_type: matching_type
     )
   end
 end

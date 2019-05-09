@@ -4,6 +4,6 @@ class RescindedNoticeSerializer < ActiveModel::Serializer
   attributes :id, :title, :body
 
   def body
-    "Notice Rescinded"
+    'Notice Rescinded'
   end
 end

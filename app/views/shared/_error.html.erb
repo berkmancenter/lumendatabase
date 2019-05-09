@@ -1,0 +1,18 @@
+<% title 'Error' %>
+
+<div class='high_voltage-pages'>
+  <section class="main-inner">
+    <% if defined? message %>
+      <p>
+        <%= message %>
+      </p>
+    <% else %>
+      <p>
+        The URL you are attempting to reach cannot be found. We apologize for the inconvenience.
+      </p>
+      <p>
+        Many older Lumen URLS (.cgi, .xml, etc) have changed.  Please explore the site starting at our <a href="/">homepage</a>.
+      </p>
+    <% end %>
+  </section>
+</div>

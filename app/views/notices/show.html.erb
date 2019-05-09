@@ -8,6 +8,16 @@
     </div>
   <% end %>
 
+  <% if can?(:generate_permanent_notice_token_urls, @notice) %>
+    <div class="notice-permanent-url">
+      <% if permanent_url_full_notice(@notice) %>
+        Permanent URL to the full version of this notice: <%= link_to permanent_url_full_notice(@notice), permanent_url_full_notice(@notice) %>
+      <% else %>
+        <%= link_to 'Generate a permanent URL to the full version of this notice', generate_permanent_full_url_notice_path(@notice), method: :post %>
+      <% end %>
+    </div>
+  <% end %>
+
   <% cache(@notice) do %>
     <%= content_tag('section', class: 'first-time-visitor', style: 'display: none;', 'data-content': first_time_visitor_content) do %>
       <div class="first-time-visitor-content">
@@ -109,9 +119,16 @@
             <ol class="attachments">
               <% @notice.supporting_documents.each do |document| %>
                 <li class="<%= document.file_type.downcase %>">
-                  <%= link_to(document.url) do %>
-                    <span>Supporting <%= document.file_type %></span>
-                    <span class="download">Download</span>
+                  <% if can_see_full_notice_version?(@notice) %>
+                    <%= link_to(supporting_document_url(document.url), target: '_blank') do %>
+                      <span>Supporting <%= document.file_type %></span>
+                      <span class="download">Download</span>
+                    <% end %>
+                  <% else %>
+                    <%= link_to(request_access_notice_path(@notice)) do %>
+                      <span>Supporting <%= document.file_type %></span>
+                      <span class="download">Click here to get access to this file</span>
+                    <% end %>
                   <% end %>
                 </li>
               <% end %>
