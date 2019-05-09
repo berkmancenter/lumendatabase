@@ -35,4 +35,4 @@ config/database.yml
 rspec_examples.txt
 .reek.yml
 whitelisted_ips.rb
-free_as_in_kittens/
+public/usercron/

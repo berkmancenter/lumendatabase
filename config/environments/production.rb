@@ -76,7 +76,6 @@ Chill::Application.configure do
   config.action_mailer.default_url_options = {
     host: (ENV['EMAIL_DOMAIN'] || 'lumendatabase.org')
   }
-  config.action_mailer.default_url_options = { host: (ENV['EMAIL_DOMAIN'] || 'chillingeffects.org') }
 
   config.lograge.enabled = true
 end

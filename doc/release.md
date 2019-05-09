@@ -8,6 +8,8 @@ If any deploys have special instructions, write them here, with a date and PR nu
 April 2019
 - remove Twitter env variables
 - Add cron job to run `lumen:generate_court_order_report` once per week
+- Add cron job to delete court order reports that are > 3 weeks old
+- add USER_CRON_EMAIL env
 
 ## Hotfix
 * Write code, code-review, and merge into `dev` via the normal process.

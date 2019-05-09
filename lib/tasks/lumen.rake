@@ -681,7 +681,9 @@ where works.id in (
   desc 'generate report of recent court order attachments'
   task generate_court_order_report: :environment do
     # Ensure directories exist.
-    magic_dir = 'free_as_in_kittens'
+    Rails.logger.info '[rake] Generating court order attachments report'
+
+    magic_dir = ENV['USER_CRON_MAGIC_DIR'] || 'usercron'
     dir = Rails.root.join('public', magic_dir)
     Dir.mkdir(dir) unless Dir.exist?(dir)
 
@@ -700,22 +702,29 @@ where works.id in (
     end
 
     # Make archive.
+    Rails.logger.info '[rake] Making court order reports archive'
     filename = Date.today.iso8601
     system("tar -czvf #{File.join(dir, filename)}.tar.gz -C #{working_dir} .")
     system("rm -r #{working_dir}")
 
-    # Write HTML page allowing file access.
-    html = <<-HEREDOC
-      <html>
-        <head></head>
-        <body>
-          Latest archive:
-          <a href="/#{magic_dir}/#{filename}.tar.gz">#{filename}.tar.gz</a>
-          </body>
-      </html>
+    # Email user.
+    email = ENV['USER_CRON_EMAIL']
+    unless (email && defined? SMTP_SETTINGS)
+      Rails.logger.warn '[rake] Missing email or SMTP_SETTINGS; not emailing court order report'
+      exit
+    end
+
+    Rails.logger.info '[rake] Sending court order report email'
+    mailtext = <<~HEREDOC
+      Subject: Latest email archive from Lumen
+
+      The latest archive of Lumen court order files can be found at
+      #{ Chill::Application.config.site_host}/#{magic_dir}/#{filename}.tar.gz.
     HEREDOC
 
-    File.write(File.join(dir, 'index.html'), html)
+    Net::SMTP.start(SMTP_SETTINGS[:address]) do |smtp|
+      smtp.send_message mailtext, 'no-reply@lumendatabase.org', email
+    end
   end
 
   # We have special maintenance start & end tasks so that we can toggle the
