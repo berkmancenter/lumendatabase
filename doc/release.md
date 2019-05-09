@@ -5,12 +5,6 @@ Maintenance windows are Wednesday and Saturday nights (after 5pm Eastern).
 ## Special instructions
 If any deploys have special instructions, write them here, with a date and PR number. When that PR has been deployed, you can erase the special instructions.
 
-April 2019
-- remove Twitter env variables
-- Add cron job to run `lumen:generate_court_order_report` once per week
-- Add cron job to delete court order reports that are > 3 weeks old
-- add USER_CRON_EMAIL env
-
 ## Hotfix
 * Write code, code-review, and merge into `dev` via the normal process.
 * Give Adam a heads-up: what you're doing, what it fixes, why it needs to be pushed out ASAP.
@@ -31,13 +25,20 @@ April 2019
 * Before a major release, contact Adam and make plans for any testing and stakeholder communication that need to happen. Follow those plans before following anything below.
 * Rectify `dev-legacy`:
   * Merge `dev` into `dev-legacy`
+  * Bundle install
+  * rake db:migrate
   * Make sure the tests pass
 * Rectify `master`:
   * Merge `dev` into `master`
+  * Bundle install
+  * rake db:migrate
   * Make sure the tests pass
 * Rectify `master-legacy`:
   * Merge `master` into `master-legacy`
+  * Bundle install
+  * rake db:migrate
   * Make sure the tests pass
+* Push `dev-legacy`, `master`, and `master-legacy` to github
 * Deploy `master-legacy` to the dev server (flutie)
   * If anything fails at this stage, fix it before moving on! And ensure that fixes end up in `dev`, `dev-legacy`, and `master-legacy`, with tests passing.
 * Deploy `master-legacy` to the prod server (enyos)
