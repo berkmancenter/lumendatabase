@@ -343,10 +343,11 @@ describe NoticesController do
       it 'returns unauthorized if one cannot submit' do
         stub_submit_notice
         @ability.cannot(:submit, Notice)
-
+        response_body = { documentation_link: Rails.configuration.x.api_documentation_link }.to_json
         post_create :json
 
         expect(response.status).to eq 401
+        expect(response.body).to eq response_body 
       end
 
       it 'returns a proper Location header when saved successfully' do

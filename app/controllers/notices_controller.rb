@@ -17,7 +17,11 @@ class NoticesController < ApplicationController
   def create
     respond_to do |format|
       format.json do
-        return unless authorized_to_create?
+        unless authorized_to_create?
+          self.status = :unauthorized
+          self.response_body = { documentation_link: Rails.configuration.x.api_documentation_link }.to_json
+          return
+        end
         create_respond_json
       end
 
@@ -176,7 +180,6 @@ class NoticesController < ApplicationController
 
   def authorized_to_create?
     if cannot?(:submit, Notice)
-      head :unauthorized
       false
     else
       true
