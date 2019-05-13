@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class GovernmentRequest < Notice
   DEFAULT_ENTITY_NOTICE_ROLES = (BASE_ENTITY_NOTICE_ROLES |
                                 %w[recipient sender principal submitter]).freeze

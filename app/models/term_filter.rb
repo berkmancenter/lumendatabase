@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class TermFilter
 
   attr_reader :title, :parameter

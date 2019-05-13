@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Trademark < Notice
   define_elasticsearch_mapping
 

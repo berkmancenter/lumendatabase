@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SearchesModels
   attr_accessor :sort_by
   attr_reader :instances, :page
