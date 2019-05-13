@@ -45,14 +45,11 @@ class SearchController < ApplicationController
     )
   end
 
-  # Find the instance in the database corresponding to the given elasticsearch
-  # result and enrich it with search-related metadata for display. Return the
-  # enriched instance (or nil, if no Notice was found).
-  def augment_instance(result)
-    instance = self.class::SEARCHED_MODEL.where(id: result._source[:id])
+  # Enrich the activerecord object with search-related metadata for display.
+  # Return the enriched instance (or nil, if none was found).
+  def augment_instance(instance)
     return unless instance.present?
-
-    instance = instance.first
+    result = @ids_to_results[instance.id]
 
     class << instance
       attr_accessor :_score, :highlight
@@ -72,9 +69,9 @@ class SearchController < ApplicationController
   end
 
   def wrap_instances
-    @searchdata.results
-               .map { |r| augment_instance(r) }
-               .compact
+    @ids_to_results = @searchdata.results.map { |r| [r._source[:id], r] }.to_h
+    instances = self.class::SEARCHED_MODEL.where(id: @ids_to_results.keys)
+    instances.map { |r| augment_instance(r) }
   end
 
   # Elasticsearch cannot return more than 20_000 results in production (2000
