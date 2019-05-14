@@ -177,7 +177,7 @@ class SearchesModels
   end
 
   def search_definition
-    @search_definition ||= {'_source': ['score', 'id']}
+    @search_definition ||= {'_source': ['score', 'id', 'title']}
   end
 
   def setup_aggregations
