@@ -104,6 +104,9 @@ class TokenUrlsController < ApplicationController
     end
 
     unless verify_recaptcha(model: @token_url)
+      logger.error('Captcha verification fail')
+      logger.error(@token_url&.[](:base).inspect)
+      logger.error(params.inspect)
       return {
         status: false,
         why: 'Captcha verification failed, please try again.'
