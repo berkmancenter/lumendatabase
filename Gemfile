@@ -33,7 +33,10 @@ gem 'rack-mini-profiler', '~> 0.9.9'
 gem 'rails', '~> 4.2.11'
 gem 'rails_admin'
 gem 'rails_admin_tag_list'
-gem 'recaptcha'
+# Monkeypatched temporarily for debugging purposes
+gem 'recaptcha',
+    git: 'https://github.com/berkmancenter/recaptcha',
+    branch: 'v4.14.0_plus_logging'
 gem 'recipient_interceptor', require: false
 gem 'redcarpet'
 gem 'select2-rails', '~> 4.0', '>= 4.0.3'
