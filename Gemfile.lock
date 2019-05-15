@@ -1,12 +1,4 @@
 GIT
-  remote: https://github.com/berkmancenter/recaptcha
-  revision: f754c052b428a6ec5c6bb07239b6b0b69a8dc69e
-  branch: v4.14.0_plus_logging
-  specs:
-    recaptcha (4.14.0)
-      json
-
-GIT
   remote: https://github.com/sporkrb/spork-rails
   revision: 0dd45e59d3237b4c8f9efc215b46d9c07072a95e
   specs:
@@ -312,6 +304,8 @@ GEM
     rb-fsevent (0.10.3)
     rb-inotify (0.10.0)
       ffi (~> 1.0)
+    recaptcha (4.14.0)
+      json
     recipient_interceptor (0.1.1)
       mail
     redcarpet (3.4.0)
@@ -482,7 +476,7 @@ DEPENDENCIES
   rails (~> 4.2.11)
   rails_admin
   rails_admin_tag_list
-  recaptcha!
+  recaptcha
   recipient_interceptor
   redcarpet
   rspec-collection_matchers (~> 1.1, >= 1.1.2)
