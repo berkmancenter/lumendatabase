@@ -11,6 +11,7 @@ class TokenUrlsController < ApplicationController
     token_url_params[:email].gsub!(/(\+.*?)(?=@)/, '')
     @token_url = TokenUrl.new(token_url_params)
     @notice = Notice.where(id: token_url_params[:notice_id]).first
+    valid_to_submit = validate
 
     if valid_to_submit[:status]
       @token_url[:expiration_date] = Time.now + 24.hours
@@ -95,7 +96,7 @@ class TokenUrlsController < ApplicationController
     )
   end
 
-  def valid_to_submit
+  def validate
     if @notice.nil?
       return {
         status: false,
