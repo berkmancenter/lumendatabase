@@ -94,5 +94,25 @@ describe TokenUrlsController do
 
       expect(TokenUrl.last.documents_notification).to eq(true)
     end
+
+    it 'won\'t call the validate method twice' do
+      allow(controller).to receive(:verify_recaptcha).and_return(true)
+      allow(controller).to receive(:validate).and_return(
+        status: false,
+        why: 'Captcha verification failed, please try again.'
+      )
+      expect(controller).to receive(:validate).once
+
+      notice = create(:dmca)
+
+      params = {
+        token_url: {
+          email: 'user@example.com',
+          notice_id: notice.id
+        }
+      }
+
+      post :create, params
+    end
   end
 end

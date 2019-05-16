@@ -33,6 +33,7 @@ gem 'rack-mini-profiler', '~> 0.9.9'
 gem 'rails', '~> 4.2.11'
 gem 'rails_admin'
 gem 'rails_admin_tag_list'
+# Monkeypatched temporarily for debugging purposes
 gem 'recaptcha'
 gem 'recipient_interceptor', require: false
 gem 'redcarpet'
