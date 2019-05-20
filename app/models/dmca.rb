@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DMCA < Notice
   define_elasticsearch_mapping
 

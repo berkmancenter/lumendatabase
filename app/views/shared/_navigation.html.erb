@@ -8,10 +8,9 @@
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Topics</a>
         <div id="dropdown-topics" class="dropdown-menu" role="menu">
           <ol>
-            <% topic_roots.each do |root| %>
-              <% cache(root) do %>
-                <%= render "shared/topic_dropdown", topic: root %>
-              <% end %>
+            <% cache('dropdown-topics') do %>
+              <%= render partial: 'shared/topic_dropdown', collection: topic_roots,
+                  as: :topic %>
             <% end %>
           </ol>
         </div>

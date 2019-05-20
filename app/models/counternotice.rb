@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Counternotice < Notice
   define_elasticsearch_mapping
 

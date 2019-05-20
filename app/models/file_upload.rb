@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'validates_automatically'
 
 class FileUpload < ActiveRecord::Base

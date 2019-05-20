@@ -94,7 +94,8 @@ module Chill
       timestamp = datetime.strftime '%Y-%m-%d %H:%M:%S (%Z)'
       "#{timestamp} #{severity}: #{progname} #{msg}\n"
     end
-
+    # Configuration settings
+    config.x.api_documentation_link = "https://github.com/berkmancenter/lumendatabase/wiki/Lumen-API-Documentation"
     # Mailer settings
     config.default_sender = ENV['DEFAULT_SENDER'] || 'no-reply@example.com'
     config.return_path = ENV['RETURN_PATH'] || 'user@example.com'
