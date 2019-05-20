@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'validates_automatically'
 require 'hierarchical_relationships'
 require 'entity_index_queuer'

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LawEnforcementRequest < Notice
   DEFAULT_ENTITY_NOTICE_ROLES = (BASE_ENTITY_NOTICE_ROLES |
                                 %w[recipient sender principal]).freeze

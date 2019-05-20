@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SearchesModels
   attr_accessor :sort_by
   attr_reader :instances, :page
@@ -175,7 +177,7 @@ class SearchesModels
   end
 
   def search_definition
-    @search_definition ||= {}
+    @search_definition ||= {'_source': ['score', 'id', 'title']}
   end
 
   def setup_aggregations

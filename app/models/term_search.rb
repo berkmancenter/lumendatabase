@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class TermSearch
 
   attr_reader :parameter, :title, :field

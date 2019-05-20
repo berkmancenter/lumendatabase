@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'language'
 require 'recent_scope'
 require 'validates_automatically'
