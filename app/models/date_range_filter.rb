@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DateRangeFilter
 
   attr_reader :title, :parameter
