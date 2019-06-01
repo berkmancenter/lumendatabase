@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Fielded searches of Notices' do
+feature 'Fielded searches of Notices', elasticsearch: true do
   include SearchHelpers
 
   ADVANCED_SEARCH_FIELDS = Notice::SEARCHABLE_FIELDS.reject do |field|

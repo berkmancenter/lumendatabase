@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'rails_admin/application/redact_queue.html.erb' do
+describe 'rails_admin/application/redact_queue.html.erb', elasticsearch: true do
   before do
     # in the view spec context, the default url for the form_tag is not
     # a valid route for some reason. there's no testable behavior there
