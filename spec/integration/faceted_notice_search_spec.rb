@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Faceted search of Notices', search: true do
+feature 'Faceted search of Notices', elasticsearch: true do
   include SearchHelpers
 
   context 'filtering with a full-text search term' do
