@@ -48,7 +48,6 @@ gem 'elasticsearch-model'
 gem 'elasticsearch-rails'
 
 group :development do
-  gem 'binding_of_caller'
   gem 'bullet'
   gem 'derailed'
   gem 'foreman'
@@ -77,7 +76,6 @@ group :development, :test, :assets do
 end
 
 group :test do
-  gem 'bourne', require: false
   gem 'curb'
   gem 'database_cleaner'
   gem 'elasticsearch-extensions'
