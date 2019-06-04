@@ -790,7 +790,7 @@ class CourtOrderReporter
     # The first two params ensure the filename is useful; the third ensures
     # it is unique.
     name = "#{f.notice_id}_#{f.id}_#{f.file_file_name}".gsub(/\s+/, "")
-    system("cp #{Shellwords.escape(f.file.path)} #{File.join(@working_dir, name)}")
+    system("cp #{Shellwords.escape(f.file.path)} '#{File.join(@working_dir, name)}'")
   end
 
   def notify_about_unredacted_files(f)
