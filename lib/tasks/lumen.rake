@@ -692,7 +692,8 @@ where works.id in (
 
     # Fetch files and write them to the target directory.
     files = FileUpload.where(
-      notice: CourtOrder.where('created_at > ?', 1.week.ago)
+      notice: CourtOrder.where('created_at > ?', 1.week.ago),
+      kind: 'supporting'
     )
     files.each do |f|
       # The first two params ensure the filename is useful; the third ensures
