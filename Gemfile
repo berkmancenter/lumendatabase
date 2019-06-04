@@ -7,7 +7,11 @@ gem 'addressable'
 gem 'ancestry'
 gem 'bootstrap-datepicker-rails'
 gem 'cancancan'
-gem 'country_select'
+# country_select has breaking changes in 2.x:
+# https://github.com/stefanpenner/country_select/blob/master/UPGRADING.md
+# It also removes CountrySelect::ISO_COUNTRIES_FOR_SELECT in 1.3, which is a
+# breaking change for us.
+gem 'country_select', '~> 1.2.0'
 gem 'coveralls', require: false
 gem 'date_validator'
 gem 'devise'
@@ -15,7 +19,6 @@ gem 'dotenv-rails'
 gem 'flutie'
 gem 'high_voltage'
 gem 'html2md', require: false
-gem 'jquery-placeholder-rails'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 # kaminari is locked because we've monkeypatched it to work around
@@ -28,7 +31,8 @@ gem 'oink'
 gem 'paperclip', '~> 5'
 gem 'pg', '0.20.0'
 gem 'rack', '>= 1.6.11'
-gem 'rack-attack'
+# rack-attack 5 has breaking changes that we should deal with later.
+gem 'rack-attack', '~> 4.0'
 gem 'rack-mini-profiler'
 gem 'rails', '~> 4.2.11'
 gem 'rails_admin'
@@ -44,13 +48,12 @@ gem 'stackprof'
 gem 'turnout'
 
 # These need to go last or tests fail.
-gem 'elasticsearch-model'
-gem 'elasticsearch-rails'
+gem 'elasticsearch-model', '~> 5.0'
+gem 'elasticsearch-rails', '~> 5.0'
 
 group :development do
   gem 'bullet'
   gem 'derailed'
-  gem 'foreman'
   gem 'memory_profiler'
 end
 
@@ -80,7 +83,6 @@ group :test do
   gem 'database_cleaner'
   gem 'elasticsearch-extensions'
   gem 'fakeweb'
-  gem 'launchy'
   gem 'poltergeist'
   gem 'rack-test', require: 'rack/test'
   gem 'shoulda-matchers', '~> 3.1', '>= 3.1.1'
