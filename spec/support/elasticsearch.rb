@@ -19,18 +19,15 @@ RSpec.configure do |config|
   # port 9250 so as not to interfere with development/production clusters.
   # This may throw a warning that the cluster is already running, but you can
   # ignore that.
-  config.before :suite do
-    if Elasticsearch::Extensions::Test::Cluster.running?(on: es_port)
-      Elasticsearch::Extensions::Test::Cluster.stop(**es_options)
-    end
-    Elasticsearch::Extensions::Test::Cluster.start(**es_options)
+  config.before :all, elasticsearch: true do
+    Elasticsearch::Extensions::Test::Cluster.start(**es_options) unless Elasticsearch::Extensions::Test::Cluster.running?(on: es_port)
   end
 
   # Reload connections periodically to avoid test failures due to exhausting
   # the connection pool. (This may be a multithreading issue, with Capybara
   # and webrick running in different threads; in theory the connection pool
   # handling should be threadsafe but in practice maybe it isn't.)
-  config.before :all, type: :integration do
+  config.before :all, type: :integration, elasticsearch: true do
     searchable_models.each do |model|
       begin
         model.__elasticsearch__.client.transport.reload_connections!
@@ -45,7 +42,7 @@ RSpec.configure do |config|
   # prior tests, which will be reindexed when you refresh the index.
   # The rescue blocks suppress noisy but irrelevant error messages.
   %i[feature controller view].each do |type|
-    config.before :each, type: type do
+    config.before :each, type: type, elasticsearch: true do
       searchable_models.each do |model|
         begin
           model.__elasticsearch__.client.delete_by_query(
@@ -63,7 +60,9 @@ RSpec.configure do |config|
 
   # Stop elasticsearch cluster after test run
   config.after :suite do
-    Elasticsearch::Extensions::Test::Cluster.stop(**es_options)
+    if Elasticsearch::Extensions::Test::Cluster.running?(on: es_port)
+      Elasticsearch::Extensions::Test::Cluster.stop(**es_options)
+    end
   end
 end
 

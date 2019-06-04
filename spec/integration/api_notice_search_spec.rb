@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature "Searching for Notices via the API" do
+feature "Searching for Notices via the API", elasticsearch: true do
   include CurbHelpers
   include SearchHelpers
 
