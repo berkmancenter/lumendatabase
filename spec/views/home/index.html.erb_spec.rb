@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'home/index.html.erb', elasticsearch: true do
+describe 'home/index.html.erb' do
   let(:notices) { build_stubbed_list(:dmca, 3, date_received: 1.hour.ago) }
   let(:blog_entries) { build_stubbed_list(:blog_entry, 3) }
 

@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'base64'
 
-feature 'notice submission', elasticsearch: true do
+feature 'notice submission' do
   include CurbHelpers
 
   scenario 'submitting as an unauthenticated user', js: true do

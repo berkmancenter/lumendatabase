@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature "The Blog", elasticsearch: true do
+feature "The Blog" do
   scenario "A user reads a blog entry" do
     blog_entry = create(:blog_entry, :published, :with_content)
 

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Page titles', elasticsearch: true do
+feature 'Page titles' do
   scenario "Home" do
     visit '/'
 

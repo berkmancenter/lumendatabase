@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Topics', elasticsearch: true do
+feature 'Topics' do
   include SearchHelpers
 
   before :each do

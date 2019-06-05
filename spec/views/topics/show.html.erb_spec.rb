@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe 'topics/show.html.erb', elasticsearch: true do
+describe 'topics/show.html.erb' do
   it "shows the topic's name" do
     assign(:topic, build(:topic, name: 'The Name'))
     assign(:notices, [])

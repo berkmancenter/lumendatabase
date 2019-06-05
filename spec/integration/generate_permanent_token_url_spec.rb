@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'permanent token url generation', elasticsearch: true do
+feature 'permanent token url generation' do
   let(:notice) { create(:dmca) }
 
   scenario 'user with access can see the generation link and can generate successfully', js: true do
