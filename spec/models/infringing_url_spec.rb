@@ -21,7 +21,7 @@ describe InfringingUrl, type: :model do
   context "performance" do
     it "runs method in less than specified time" do
       start_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
-      InfringingUrl.get_approximate_url_count
+      InfringingUrl.get_approximate_count
       end_time = Process.clock_gettime(Process::CLOCK_MONOTONIC)
       expect(end_time - start_time).to be <= 1.0
     end
