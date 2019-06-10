@@ -192,6 +192,10 @@ class Notice < ActiveRecord::Base
       .where('entities.id' => submitters)
   end
 
+  def self.in_given_range(start_date, end_date)
+    where('created_at BETWEEN ? AND ?', start_date, end_date).order(:created_at)
+  end
+
   def self.add_default_filter(search)
     { rescinded: false, spam: false, hidden: false, published: true }.each do |field, value|
       filter = TermFilter.new(field)
