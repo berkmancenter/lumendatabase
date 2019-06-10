@@ -186,10 +186,10 @@ class Notice < ActiveRecord::Base
       .uniq
   end
 
-  def self.submitted_by(submitters)
+  def self.by_role(enitites_involved, role)
     joins(entity_notice_roles: :entity)
-      .where('entity_notice_roles.name' => :submitter)
-      .where('entities.id' => submitters)
+      .where('entity_notice_roles.name' => role)
+      .where('entities.id' => enitites_involved)
   end
 
   def self.add_default_filter(search)

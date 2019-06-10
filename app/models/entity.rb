@@ -4,6 +4,7 @@ require 'validates_automatically'
 require 'hierarchical_relationships'
 require 'entity_index_queuer'
 require 'default_name_original'
+require 'elasticsearch/model'
 
 class Entity < ActiveRecord::Base
   include ValidatesAutomatically
@@ -70,5 +71,9 @@ class Entity < ActiveRecord::Base
     submitter_ids = EntityNoticeRole.submitters.map(&:entity_id)
 
     where(id: submitter_ids)
+  end
+
+  def self.by_name(name)
+    self.__elasticsearch__.search(name).to_a
   end
 end
