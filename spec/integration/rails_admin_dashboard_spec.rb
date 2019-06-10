@@ -25,7 +25,6 @@ feature 'Rails admin dashboard' do
 
   scenario 'it can delete notices' do
     notice = create(:dmca)
-    notice.save
     orig_id = notice.id
     sign_in(create(:user, :super_admin))
     visit '/admin/notice'
@@ -34,5 +33,13 @@ feature 'Rails admin dashboard' do
 
     expect(current_path).to eq '/admin/notice'
     expect(Notice.where(id: orig_id)).to eq []
+  end
+
+  scenario 'token url links are clickable' do
+    token_url = create(:token_url)
+    sign_in(create(:user, :super_admin))
+    visit '/admin/token_url'
+    find('.token_url_row .url_field a').click
+    expect(page.status_code).to be(200)
   end
 end

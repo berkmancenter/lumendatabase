@@ -258,7 +258,7 @@ RailsAdmin.config do |config|
     configure :url do
       formatted_value do
         url = "#{Chill::Application.config.site_host}/notices/#{bindings[:object].notice_id}?access_token=#{bindings[:object].token}"
-        %(<a href="#{url}">Token url</a>).html_safe
+        %(<a href="//#{url}">#{bindings[:object].token}</a>).html_safe
       end
       visible false
     end
