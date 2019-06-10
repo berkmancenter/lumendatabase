@@ -16,7 +16,7 @@ feature 'Rails admin dashboard' do
   end
 
   scenario 'it does not display the model counts' do
-    within('.content') do
+    within('#block-tables .content') do
       expect(page).to have_no_css('.bar')
       expect(page).to have_no_content('Notice')
       expect(page).to have_no_content('Infringing url')

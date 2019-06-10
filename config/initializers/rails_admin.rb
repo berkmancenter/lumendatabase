@@ -10,7 +10,7 @@ RailsAdmin.config do |config|
 
   config.current_user_method { current_user }
 
-  config.authorize_with :cancan
+  config.authorize_with :cancancan
 
   config.audit_with :history, 'User'
   config.audit_with :history, 'Role'
