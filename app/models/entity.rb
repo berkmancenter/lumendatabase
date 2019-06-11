@@ -74,6 +74,6 @@ class Entity < ActiveRecord::Base
   end
 
   def self.by_name(name)
-    self.__elasticsearch__.search(name).to_a
+    self.search(name).to_a
   end
 end
