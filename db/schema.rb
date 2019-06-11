@@ -11,16 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190503161701) do
+ActiveRecord::Schema.define(version: 20190611100439) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
-
-  create_table "ar_internal_metadata", primary_key: "key", force: :cascade do |t|
-    t.string   "value"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
 
   create_table "blog_entries", force: :cascade do |t|
     t.integer  "user_id"
@@ -66,6 +60,13 @@ ActiveRecord::Schema.define(version: 20190503161701) do
     t.integer  "notice_id",  null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "domain_counts", force: :cascade do |t|
+    t.string   "domain_name"
+    t.integer  "count",       default: 0
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
   create_table "entities", force: :cascade do |t|
@@ -183,11 +184,9 @@ ActiveRecord::Schema.define(version: 20190503161701) do
 
   add_index "notices", ["created_at"], name: "index_notices_on_created_at", using: :btree
   add_index "notices", ["original_notice_id"], name: "index_notices_on_original_notice_id", using: :btree
-  add_index "notices", ["published"], name: "index_notices_on_published", using: :btree
   add_index "notices", ["reviewer_id"], name: "index_notices_on_reviewer_id", using: :btree
   add_index "notices", ["submission_id"], name: "index_notices_on_submission_id", using: :btree
   add_index "notices", ["type"], name: "index_notices_on_type", using: :btree
-  add_index "notices", ["updated_at"], name: "index_notices_on_updated_at", using: :btree
 
   create_table "notices_relevant_questions", force: :cascade do |t|
     t.integer "notice_id"
@@ -254,9 +253,10 @@ ActiveRecord::Schema.define(version: 20190503161701) do
   add_index "risk_trigger_conditions", ["risk_trigger_id"], name: "index_risk_trigger_conditions_on_risk_trigger_id", using: :btree
 
   create_table "risk_triggers", force: :cascade do |t|
-    t.string "name",          null: false
-    t.string "matching_type", null: false
-    t.string "comment"
+    t.string  "name",                                       null: false
+    t.string  "matching_type",                              null: false
+    t.string  "comment"
+    t.boolean "force_not_risky_assessment", default: false, null: false
   end
 
   create_table "roles", force: :cascade do |t|
@@ -281,15 +281,8 @@ ActiveRecord::Schema.define(version: 20190503161701) do
     t.datetime "created_at"
   end
 
-  add_index "taggings", ["context"], name: "index_taggings_on_context", using: :btree
   add_index "taggings", ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true, using: :btree
-  add_index "taggings", ["tag_id"], name: "index_taggings_on_tag_id", using: :btree
   add_index "taggings", ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context", using: :btree
-  add_index "taggings", ["taggable_id", "taggable_type", "tagger_id", "context"], name: "taggings_idy", using: :btree
-  add_index "taggings", ["taggable_id"], name: "index_taggings_on_taggable_id", using: :btree
-  add_index "taggings", ["taggable_type"], name: "index_taggings_on_taggable_type", using: :btree
-  add_index "taggings", ["tagger_id", "tagger_type"], name: "index_taggings_on_tagger_id_and_tagger_type", using: :btree
-  add_index "taggings", ["tagger_id"], name: "index_taggings_on_tagger_id", using: :btree
 
   create_table "tags", force: :cascade do |t|
     t.string  "name"

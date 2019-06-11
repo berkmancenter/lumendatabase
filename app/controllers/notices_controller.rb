@@ -12,6 +12,7 @@ class NoticesController < ApplicationController
     build_entity_notice_roles(model_class)
     @notice.file_uploads.build(kind: 'supporting')
     build_works(@notice)
+    update_domain_count(@notice)
   end
 
   def create
@@ -175,6 +176,19 @@ class NoticesController < ApplicationController
     notice.works.build do |w|
       w.copyrighted_urls.build
       w.infringing_urls.build
+    end
+  end
+
+  def update_domain_count(notice)
+    urls = Array.new
+    notice.infringing_urls.each do |url|
+      uri = Addressable::URI.parse(url.url)
+      unless uri.domain.nil?
+        urls << uri.domain
+      end
+    end
+    urls.uniq.each do |domain|
+      DomainCount.update_count(domain)
     end
   end
 
