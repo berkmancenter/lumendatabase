@@ -1,8 +1,8 @@
 class DomainCount < ActiveRecord::Base
 	def self.update_count(domain)
-		if self.find_by_domain_name(domain).nil?
-			self.new(domain_count: domain).save
+		if find_by_domain_name(domain).nil?
+			new(domain_name: domain).save
 		end
-		self.find_by_domain_name(domain).increment!(:count)
+		find_by_domain_name(domain).increment!(:count)
 	end
 end

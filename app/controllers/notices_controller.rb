@@ -12,7 +12,6 @@ class NoticesController < ApplicationController
     build_entity_notice_roles(model_class)
     @notice.file_uploads.build(kind: 'supporting')
     build_works(@notice)
-    update_domain_count(@notice)
   end
 
   def create

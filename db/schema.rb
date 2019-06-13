@@ -184,9 +184,11 @@ ActiveRecord::Schema.define(version: 20190611100439) do
 
   add_index "notices", ["created_at"], name: "index_notices_on_created_at", using: :btree
   add_index "notices", ["original_notice_id"], name: "index_notices_on_original_notice_id", using: :btree
+  add_index "notices", ["published"], name: "index_notices_on_published", using: :btree
   add_index "notices", ["reviewer_id"], name: "index_notices_on_reviewer_id", using: :btree
   add_index "notices", ["submission_id"], name: "index_notices_on_submission_id", using: :btree
   add_index "notices", ["type"], name: "index_notices_on_type", using: :btree
+  add_index "notices", ["updated_at"], name: "index_notices_on_updated_at", using: :btree
 
   create_table "notices_relevant_questions", force: :cascade do |t|
     t.integer "notice_id"
@@ -253,10 +255,9 @@ ActiveRecord::Schema.define(version: 20190611100439) do
   add_index "risk_trigger_conditions", ["risk_trigger_id"], name: "index_risk_trigger_conditions_on_risk_trigger_id", using: :btree
 
   create_table "risk_triggers", force: :cascade do |t|
-    t.string  "name",                                       null: false
-    t.string  "matching_type",                              null: false
-    t.string  "comment"
-    t.boolean "force_not_risky_assessment", default: false, null: false
+    t.string "name",          null: false
+    t.string "matching_type", null: false
+    t.string "comment"
   end
 
   create_table "roles", force: :cascade do |t|
