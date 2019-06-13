@@ -16,6 +16,7 @@ Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
 RSpec.configure do |config|
   config.order = 'random'
+  config.include Rails.application.routes.url_helpers
 
   # If you need to see the order your specs are running in (i.e. to debug
   # order-dependent test failures), uncomment the following. But you may find
