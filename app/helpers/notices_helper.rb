@@ -133,4 +133,8 @@ module NoticesHelper
       key
     end
   end
+
+  def give_domains_from_urls(domains_list)
+    domains_list.map{ |x| Addressable::URI.parse(x).domain }.uniq
+  end
 end
