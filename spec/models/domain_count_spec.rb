@@ -9,8 +9,8 @@ RSpec.describe DomainCount, type: :model do
         end
 
         it 'creates a new domain if the domain is not existant' do
-            DomainCount.update_count('google.com')
-            expect(DomainCount.find_by_domain_name(['google.com'])).not_to be_nil
+            DomainCount.update_count(['google.com'])
+            expect(DomainCount.find_by_domain_name('google.com')).not_to be_nil
         end
   end
 end
