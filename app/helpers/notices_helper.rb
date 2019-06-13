@@ -134,7 +134,7 @@ module NoticesHelper
     end
   end
 
-  def give_domains_from_urls(domains_list)
-    domains_list.map{ |x| Addressable::URI.parse(x).domain }.uniq
+  def give_domains_from_urls(infringing_urls_list)
+    infringing_urls_list.map{ |x| Addressable::URI.parse(x.url).domain }.uniq
   end
 end
