@@ -82,7 +82,7 @@ class Rack::Attack
   end
 
   self.throttled_response = lambda do |_env|
-    Rails.logger.info "[rack-attack] 429 issued for #{_env['rack.attack.match_discriminator']}"
+    Rails.logger.warn "[rack-attack] 429 issued for #{_env['rack.attack.match_discriminator']}"
     [
       429, # status
       { 'Content-Type' => 'text/plain' }, # headers
