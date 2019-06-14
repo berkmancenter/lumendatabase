@@ -73,6 +73,6 @@ class Entity < ActiveRecord::Base
   end
 
   def self.by_name(name)
-    self.search(name).to_a
+    self.search(name)
   end
 end
