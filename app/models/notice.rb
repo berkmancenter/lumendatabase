@@ -186,7 +186,7 @@ class Notice < ActiveRecord::Base
       .uniq
   end
 
-  def self.by_role(enitites_involved, role)
+  def self.by_role(entities_involved, role="submitter")
     joins(entity_notice_roles: :entity)
       .where('entity_notice_roles.name' => role)
       .where('entities.id' => enitites_involved)
