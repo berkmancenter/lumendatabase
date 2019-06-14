@@ -56,5 +56,12 @@ describe Entity, type: :model do
     end
   end
 
+  context 'searching by name works fine' do
+    it "finds an entity even if partial name of the entity is supplied" do
+      entity = create(:entity)
+      expect(Entity.by_name("name").results.total).to be >= 1
+    end
+  end
+
   it_behaves_like 'an object with hierarchical relationships'
 end
