@@ -4,7 +4,6 @@ require 'validates_automatically'
 require 'hierarchical_relationships'
 require 'entity_index_queuer'
 require 'default_name_original'
-require 'elasticsearch/model'
 
 class Entity < ActiveRecord::Base
   include ValidatesAutomatically
