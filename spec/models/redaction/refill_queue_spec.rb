@@ -49,7 +49,7 @@ describe Redaction::RefillQueue do
       queue = new_queue
       refill = Redaction::RefillQueue.new(
         notice_scopes: {
-          submitted_by: [notice.submitter.id]
+          by_role: [notice.submitter.id]
         }
       )
 

@@ -189,7 +189,7 @@ class Notice < ActiveRecord::Base
   def self.by_role(entities_involved, role="submitter")
     joins(entity_notice_roles: :entity)
       .where('entity_notice_roles.name' => role)
-      .where('entities.id' => enitites_involved)
+      .where('entities.id' => entities_involved)
   end
 
   def self.add_default_filter(search)
