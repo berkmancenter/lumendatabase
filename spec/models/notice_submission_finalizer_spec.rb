@@ -32,6 +32,25 @@ describe NoticeSubmissionFinalizer, type: :model do
     expect(notice.submission_id).to eq notice.id
   end
 
+  it 'increases the count of domains involved in the notice' do
+    notice = build(:dmca)
+    notice.save
+    
+    counter_map = {}
+    distinct_domains = infringing_urls_attributes.map{ |x| Addressable::URI.parse(x[:url]).domain }.uniq
+    distinct_domains.each do |domain|
+      counter_map[domain] = return_count(DomainCount.find_by_domain_name(domain))
+    end
+
+    NoticeSubmissionFinalizer.new(
+      notice, works_attributes: works_attributes
+    ).finalize
+
+    distinct_domains.each do |domain|
+      expect(return_count(DomainCount.find_by_domain_name(domain)) - counter_map[domain]).to eq(1)
+    end
+  end
+
   private
 
   def works_attributes
@@ -70,4 +89,10 @@ describe NoticeSubmissionFinalizer, type: :model do
     end
     retval
   end
+
+  def return_count(domain_instance)
+    return 0 if domain_instance.nil?
+    domain_instance.count
+  end
+
 end
