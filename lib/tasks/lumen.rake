@@ -5,6 +5,8 @@ require 'blog_importer'
 require 'question_importer'
 require 'collapses_topics'
 require 'csv'
+require '#{Rails.root}/app/helpers/notices_helper'
+include 'NoticesHelper'
 
 namespace :lumen do
   desc 'Delete elasticsearch index'
@@ -254,6 +256,20 @@ namespace :lumen do
       Rails.logger.error "Reindexing did not succeed because: #{e.inspect}"
     end
   end
+
+  desc 'Populate domain_counts table'
+  task populate_domain_count: :environment do
+    Notice.all.each do |notice|
+      give_domains_from_urls(notice.infringing_urls).each do |domain|
+        instance = DomainCount.find_by_domain_name(domain)
+        if instance.nil?
+          instance = DomainCount.new(domain_name: domain)
+          instance.save
+        end
+        instance.increment!(:count)
+      end
+    end
+  end 
 
   desc 'Assign titles to untitled notices'
   task title_untitled_notices: :environment do
