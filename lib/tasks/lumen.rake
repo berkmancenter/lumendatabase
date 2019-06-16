@@ -259,17 +259,24 @@ namespace :lumen do
 
   desc 'Populate domain_counts table'
   task populate_domain_count: :environment do
+
+    def give_domains_from_urls(infringing_urls_list)
+      infringing_urls_list.map{ |x| Addressable::URI.parse(x.url).domain }.uniq
+    end
+
+    domain_count_map = {}
     Notice.all.each do |notice|
       give_domains_from_urls(notice.infringing_urls).each do |domain|
-        instance = DomainCount.find_by_domain_name(domain)
-        if instance.nil?
-          instance = DomainCount.new(domain_name: domain)
-          instance.save
+        unless domain_count_map.key?(domain)
+          domain_count_map[domain] = 0
         end
-        instance.increment!(:count)
+        domain_count_map[domain] += 1
       end
     end
-  end 
+    domain_count_map.each do |key, val|
+      DomainCount.new(domain_name: key, count: val).save
+    end
+  end
 
   desc 'Assign titles to untitled notices'
   task title_untitled_notices: :environment do
