@@ -5,8 +5,6 @@ require 'blog_importer'
 require 'question_importer'
 require 'collapses_topics'
 require 'csv'
-require '#{Rails.root}/app/helpers/notices_helper'
-include 'NoticesHelper'
 
 namespace :lumen do
   desc 'Delete elasticsearch index'
