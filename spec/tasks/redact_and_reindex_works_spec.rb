@@ -3,7 +3,7 @@ require 'rails_helper'
 describe 'rake lumen:redact_and_reindex_works', type: :task, search: true do
   it 'redacts the works' do
     w = sensitive_work
-    expect(Work.where(description: '123-45-6789').present?).to be true
+    expect(Work.where(description: '012-34-5678').present?).to be true
     task.execute
 
     w.reload
@@ -26,7 +26,7 @@ describe 'rake lumen:redact_and_reindex_works', type: :task, search: true do
     # Use update_columns because it doesn't trigger the before_save callback -
     # we want to make sure this isn't auto-redacted.
     w.update_columns(
-      description: '123-45-6789',      # triggers SSN validation
+      description: '012-34-5678',      # triggers SSN validation
       updated_at: Date.new(2008, 1, 1) # before the rake task's limit
     )
     w
