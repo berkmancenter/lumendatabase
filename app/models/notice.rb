@@ -218,6 +218,10 @@ class Notice < ActiveRecord::Base
     false
   end
 
+  def self.get_approximate_count
+    ActiveRecord::Base.connection.execute("SELECT reltuples FROM pg_class WHERE relname = 'notices'").getvalue(0, 0).to_i
+  end
+
   def active_model_serializer
     if rescinded?
       RescindedNoticeSerializer
