@@ -4,7 +4,6 @@
 # cycle.
 class NoticeSubmissionFinalizer
   delegate :errors, to: :notice
-  include NoticesHelper
 
   def initialize(notice, parameters)
     @notice = notice
@@ -22,4 +21,9 @@ class NoticeSubmissionFinalizer
 
   attr_reader :parameters
   attr_accessor :notice
+
+  def give_domains_from_urls(infringing_urls_list)
+    infringing_urls_list.map{ |x| Addressable::URI.parse(x.url).domain }.uniq
+  end
+  
 end
