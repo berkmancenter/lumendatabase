@@ -57,10 +57,11 @@ describe Entity, type: :model do
   end
 
   context 'searching by name works fine' do
-    it "finds an entity even if partial name of the entity is supplied" do
+    it "finds an entity even if partial name of the entity is supplied provided factory has name as a substring in entity name" do
       entity = create(:entity)
-      entity.save
-      expect(Entity.by_name("name").results.total).to be >= 1
+      if entity.name.include? "name"
+        expect(Entity.by_name("name").results.total).to be >= 1
+      end
     end
   end
 
