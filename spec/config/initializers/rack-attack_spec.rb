@@ -24,7 +24,6 @@ describe Rack::Attack do
       it 'blocks requests' do
         (limit + 1).times do |i|
           get '/topics.json', {}, 'REMOTE_ADDR' => '1.2.3.5'
-          puts 'hey' if i > limit
           expect(last_response.status).to eq(429) if i > limit
         end
       end
@@ -37,7 +36,7 @@ describe Rack::Attack do
     context 'number of requests is lower than the limit', cache: true do
       it 'allows requests' do
         limit.times do |i|
-          get notice_path(notice.id), {}, 'REMOTE_ADDR' => '1.2.3.9'
+          get "/notices/#{notice.id}", {}, 'REMOTE_ADDR' => '1.2.3.9'
           expect(last_response.status).to eq(200) if i == limit
         end
       end
@@ -46,7 +45,7 @@ describe Rack::Attack do
     context 'number of requests is higher than the limit', cache: true do
       it 'blocks requests' do
         (limit + 1).times do |i|
-          get notice_path(notice.id), {}, 'REMOTE_ADDR' => '1.2.4.7'
+          get "/notices/#{notice.id}", {}, 'REMOTE_ADDR' => '1.2.4.7'
           expect(last_response.status).to eq(200) if i > limit
         end
       end
@@ -57,7 +56,7 @@ describe Rack::Attack do
         u = create(:user, :researcher)
         sign_in u
         (limit + 1).times do |i|
-          get notice_path(notice.id), {}, 'REMOTE_ADDR' => '1.2.3.10'
+          get "/notices/#{notice.id}", {}, 'REMOTE_ADDR' => '1.2.3.10'
           expect(last_response.status).to eq(200) if i > limit
         end
       end
@@ -66,7 +65,7 @@ describe Rack::Attack do
         u = create(:user, :admin)
         sign_in u
         (limit + 1).times do |i|
-          get notice_path(notice.id), {}, 'REMOTE_ADDR' => '1.2.3.11'
+          get "/notices/#{notice.id}", {}, 'REMOTE_ADDR' => '1.2.3.11'
           expect(last_response.status).to eq(200) if i > limit
         end
       end
@@ -75,7 +74,7 @@ describe Rack::Attack do
         u = create(:user, :super_admin)
         sign_in u
         (limit + 1).times do |i|
-          get notice_path(notice.id), {}, 'REMOTE_ADDR' => '1.2.3.12'
+          get "/notices/#{notice.id}", {}, 'REMOTE_ADDR' => '1.2.3.12'
           expect(last_response.status).to eq(200) if i > limit
         end
       end
@@ -84,7 +83,7 @@ describe Rack::Attack do
         u = create(:user)
         sign_in u
         (limit + 1).times do |i|
-          get notice_path(notice.id), {}, 'REMOTE_ADDR' => '1.2.3.13'
+          get "/notices/#{notice.id}", {}, 'REMOTE_ADDR' => '1.2.3.13'
           expect(last_response.status).to eq(429) if i > limit
         end
       end
