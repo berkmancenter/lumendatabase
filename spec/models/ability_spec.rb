@@ -5,7 +5,7 @@ shared_examples 'a non-admin' do
   it "cannot access admin" do
     expect(subject.can? :read, notice).to be_falsey
     expect(subject.can? :access, :rails_admin).to be_falsey
-    expect(subject.can? :dashboard, nil).to be_falsey
+    expect(subject.can? :read, :dashboard).to be_falsey
   end
 end
 
@@ -14,7 +14,7 @@ shared_examples 'an admin' do
   it "can access admin" do
     expect(subject.can? :read, notice).to be true
     expect(subject.can? :access, :rails_admin).to be true
-    expect(subject.can? :dashboard, nil).to be true
+    expect(subject.can? :read, :dashboard).to be true
   end
 end
 

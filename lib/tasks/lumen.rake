@@ -761,51 +761,8 @@ where works.id in (
   # use in his research; this makes that easier for him.
   desc 'generate report of recent court order attachments'
   task generate_court_order_report: :environment do
-    # Ensure directories exist.
-    Rails.logger.info '[rake] Generating court order attachments report'
-
-    magic_dir = ENV['USER_CRON_MAGIC_DIR'] || 'usercron'
-    dir = Rails.root.join('public', magic_dir)
-    Dir.mkdir(dir) unless Dir.exist?(dir)
-
-    working_dir = Rails.root.join('public', magic_dir, 'working')
-    Dir.mkdir(working_dir) unless Dir.exist?(working_dir)
-
-    # Fetch files and write them to the target directory.
-    files = FileUpload.where(
-      notice: CourtOrder.where('created_at > ?', 1.week.ago)
-    )
-    files.each do |f|
-      # The first two params ensure the filename is useful; the third ensures
-      # it is unique.
-      name = "#{f.notice_id}_#{f.id}_#{f.file_file_name}".gsub(/\s+/, "")
-      system("cp #{Shellwords.escape(f.file.path)} #{File.join(working_dir, name)}")
-    end
-
-    # Make archive.
-    Rails.logger.info '[rake] Making court order reports archive'
-    filename = Date.today.iso8601
-    system("tar -czvf #{File.join(dir, filename)}.tar.gz -C #{working_dir} .")
-    system("rm -r #{working_dir}")
-
-    # Email user.
-    email = ENV['USER_CRON_EMAIL']
-    unless (email && defined? SMTP_SETTINGS)
-      Rails.logger.warn '[rake] Missing email or SMTP_SETTINGS; not emailing court order report'
-      exit
-    end
-
-    Rails.logger.info '[rake] Sending court order report email'
-    mailtext = <<~HEREDOC
-      Subject: Latest email archive from Lumen
-
-      The latest archive of Lumen court order files can be found at
-      #{ Chill::Application.config.site_host}/#{magic_dir}/#{filename}.tar.gz.
-    HEREDOC
-
-    Net::SMTP.start(SMTP_SETTINGS[:address]) do |smtp|
-      smtp.send_message mailtext, 'no-reply@lumendatabase.org', email
-    end
+    reporter = CourtOrderReporter.new
+    reporter.report
   end
 
   # We have special maintenance start & end tasks so that we can toggle the
@@ -860,5 +817,94 @@ where works.id in (
     DocumentsUpdateNotificationNotice.delete_all
 
     puts "#{date_time_task.call} Finishing the task"
+  end
+end
+
+class CourtOrderReporter
+  def report
+    setup_directories
+    initialize_info_file
+    fetch_files
+    write_files
+    make_archive
+    email_user
+  end
+
+  def setup_directories
+    Rails.logger.info '[rake] Generating court order attachments report'
+
+    @magic_dir = ENV['USER_CRON_MAGIC_DIR'] || 'usercron'
+    @base_dir = Rails.root.join('public', @magic_dir)
+    Dir.mkdir(@base_dir) unless Dir.exist?(@base_dir)
+
+    @working_dir = Rails.root.join('public', @magic_dir, 'working')
+    Dir.mkdir(@working_dir) unless Dir.exist?(@working_dir)
+  end
+
+  def initialize_info_file
+    @info_filepath = File.join(@working_dir, 'info.txt')
+    info_header = <<~HEREDOC
+      The following notices (if any) have attached files which must be reviewed
+      by Lumen staff before they can be released:
+    HEREDOC
+
+    File.write(@info_filepath, info_header)
+  end
+
+  def fetch_files
+    @files = FileUpload.where(
+      notice: CourtOrder.where('created_at > ?', 1.week.ago),
+    )
+  end
+
+  def write_files
+    @files.each do |f|
+      if f.kind == 'supporting'
+        copy_file_to_archive(f)
+      else
+        notify_about_unredacted_files(f)
+      end
+    end
+  end
+
+  def copy_file_to_archive(f)
+    # The first and third params ensure the filename is useful; the second
+    # ensures it is unique. Stripping spaces and punctuation prevents problems
+    # with invalid filenames.
+    evil = /[\s$'"#=\[\]!><|;{}()*?~&\\]/
+    name = "#{f.notice_id}_#{f.id}_#{f.file_file_name}".gsub(evil, '')
+    system("cp #{Shellwords.escape(f.file.path)} '#{File.join(@working_dir, name)}'")
+  end
+
+  def notify_about_unredacted_files(f)
+    return if f.notice.file_uploads.where(kind: 'supporting').present?
+    File.write(@info_filepath, app.notice_url(f.notice), mode: 'a')
+  end
+
+  def make_archive
+    Rails.logger.info '[rake] Making court order reports archive'
+    @archive_filename = Date.today.iso8601
+    system("tar -czvf #{File.join(@base_dir, @archive_filename)}.tar.gz -C #{@working_dir} .")
+    system("rm -r #{@working_dir}")
+  end
+
+  def email_user
+    email = ENV['USER_CRON_EMAIL']
+    unless (email && defined? SMTP_SETTINGS)
+      Rails.logger.warn '[rake] Missing email or SMTP_SETTINGS; not emailing court order report'
+      exit
+    end
+
+    Rails.logger.info '[rake] Sending court order report email'
+    mailtext = <<~HEREDOC
+      Subject: Latest email archive from Lumen
+
+      The latest archive of Lumen court order files can be found at
+      #{ Chill::Application.config.site_host}/#{@magic_dir}/#{@archive_filename}.tar.gz.
+    HEREDOC
+
+    Net::SMTP.start(SMTP_SETTINGS[:address]) do |smtp|
+      smtp.send_message mailtext, 'no-reply@lumendatabase.org', email
+    end
   end
 end

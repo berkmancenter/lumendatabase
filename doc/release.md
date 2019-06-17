@@ -66,3 +66,4 @@ If any deploys have special instructions, write them here, with a date and PR nu
   * Prod will still be able to find the precompiled assets.
 * `rake lumen:maintenance_end`
   * This includes the `touch tmp/restart.txt` command, which tells Passenger to restart its listener.
+* Update `CHANGELOG.md` per [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).

@@ -66,7 +66,7 @@ class Ability
   def grant_admin_access
     can :read, :all
     can :access, :rails_admin
-    can :dashboard
+    can :read, :dashboard
     can :search, Entity
     can :access, :original_files
   end

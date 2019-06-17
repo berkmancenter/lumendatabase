@@ -52,6 +52,20 @@ class Rack::Attack
     end
   end
 
+  # This logic prevents rackattack from throttling web requests from
+  # researchers and admins. They may still be throttled by the proxy for
+  # excessive use, as the proxy does not know that they are logged in.
+  whitelist('allow unlimited requests from permissioned users') do |req|
+    u = user_from_request(req)
+    if u.nil?
+      false
+    elsif (u.roles & [Role.researcher, Role.admin, Role.super_admin]).present?
+      true
+    else
+      false
+    end
+  end
+
   throttle('api limit', limit: 5, period: 24.hours) do |req|
     Rails.logger.debug "[rack-attack] api limit ip: #{req.ip}, req.env['HTTP_ACCEPT']: #{req.env['HTTP_ACCEPT']}, content_type: #{req.content_type}"
     req.ip if req.env['HTTP_ACCEPT'] == 'application/json' || req.env['CONTENT_TYPE'] == 'application/json' || req.path.include?('json')
@@ -68,11 +82,19 @@ class Rack::Attack
   end
 
   self.throttled_response = lambda do |_env|
-    Rails.logger.info "[rack-attack] 429 issued for #{_env['rack.attack.match_discriminator']}"
+    Rails.logger.warn "[rack-attack] 429 issued for #{_env['rack.attack.match_discriminator']}"
     [
       429, # status
       { 'Content-Type' => 'text/plain' }, # headers
       ['Oops, you were browsing a little faster than we can keep up with. Please wait at least five minutes and try your request again. If you need to make more requests than our limit, please wait five minutes and then visit https://lumendatabase.org/pages/researchers#key to request a research account key.']
     ] # body
   end
+end
+
+def user_from_request(req)
+  User.find(req.session['warden.user.user.key'][0][0])
+rescue ActiveRecord::RecordNotFound  # no user with that ID exists
+  nil
+rescue NoMethodError  # [] is not defined on NilClass
+  nil
 end
