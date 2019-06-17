@@ -787,9 +787,11 @@ class CourtOrderReporter
   end
 
   def copy_file_to_archive(f)
-    # The first two params ensure the filename is useful; the third ensures
-    # it is unique.
-    name = "#{f.notice_id}_#{f.id}_#{f.file_file_name}".gsub(/\s+/, "")
+    # The first and third params ensure the filename is useful; the second
+    # ensures it is unique. Stripping spaces and punctuation prevents problems
+    # with invalid filenames.
+    evil = /[\s$'"#=\[\]!><|;{}()*?~&\\]/
+    name = "#{f.notice_id}_#{f.id}_#{f.file_file_name}".gsub(evil, '')
     system("cp #{Shellwords.escape(f.file.path)} '#{File.join(@working_dir, name)}'")
   end
 
