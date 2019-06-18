@@ -51,21 +51,28 @@ describe NoticeSubmissionFinalizer, type: :model do
     end
   end
 
+  it 'handles large url attributes list efficiently' do
+    notice = create(:dmca)
+    NoticeSubmissionFinalizer.new(
+      notice, works_attributes: works_attributes(1000)
+    ).finalize
+  end
+  
   private
 
-  def works_attributes
+  def works_attributes(number_of_urls = 3)
     [{
       description: 'The Avengers',
-      infringing_urls_attributes: infringing_urls_attributes
+      infringing_urls_attributes: infringing_urls_attributes(number_of_urls)
     }]
   end
 
-  def infringing_urls_attributes
-    [
-      { url: 'http://youtube.com/bad_url_1' },
-      { url: 'http://youtube.com/bad_url_2' },
-      { url: 'http://youtube.com/bad_url_3' }
-    ]
+  def infringing_urls_attributes(number_of_urls = 3)
+    url_list = []
+    for i in 1..number_of_urls + 1
+      url_list.push({ url: 'http://youtube.com/bad_url_' + i.to_s })
+    end
+    url_list
   end
 
   # The works_attributes will not be *equal*, because the submitted notice
@@ -91,8 +98,7 @@ describe NoticeSubmissionFinalizer, type: :model do
   end
 
   def return_count(domain_instance)
-    return 0 if domain_instance.nil?
-    domain_instance.count
+    domain_instance.nil? ? 0 : domain_instance.count
   end
 
 end
