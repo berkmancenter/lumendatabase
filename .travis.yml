@@ -37,7 +37,7 @@ before_install:
       phantomjs -v
 
 env:
-  - TEST_CLUSTER_COMMAND=elasticsearch-5.6.4/bin/elasticsearch
+  - TEST_CLUSTER_COMMAND=elasticsearch-5.6.4/bin/elasticsearch SEARCH_SLEEP=1.5
 
 before_script:
   - psql -c 'create database chill_test;' -U postgres
