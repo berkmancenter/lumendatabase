@@ -37,7 +37,7 @@ describe NoticeSubmissionFinalizer, type: :model do
     notice.save
     
     counter_map = {}
-    distinct_domains = infringing_urls_attributes.map{ |x| Addressable::URI.parse(x[:url]).domain }.uniq
+    distinct_domains = infringing_urls_attributes.map{ |x| x[:url].start_with? "http" ? Addressable::URI.parse(x[:url]).domain : PublicSuffix.domain(x[:url]) }.uniq
     distinct_domains.each do |domain|
       counter_map[domain] = return_count(DomainCount.find_by_domain_name(domain))
     end
@@ -99,6 +99,10 @@ describe NoticeSubmissionFinalizer, type: :model do
 
   def return_count(domain_instance)
     domain_instance.nil? ? 0 : domain_instance.count
+  end
+
+  def extract_domain(url)
+    url.start_with? "http" ? Addressable::URI.parse(url).domain : PublicSuffix.domain(url)
   end
 
 end
