@@ -263,12 +263,14 @@ namespace :lumen do
     end
 
     domain_count_map = {}
-    Notice.all.each do |notice|
-      give_domains_from_urls(notice.infringing_urls).each do |domain|
-        unless domain_count_map.key?(domain)
-          domain_count_map[domain] = 0
+    Notice.find_in_batches do |notices|
+      notices.each do |notice|
+        give_domains_from_urls(notice.infringing_urls).each do |domain|
+          unless domain_count_map.key?(domain)
+            domain_count_map[domain] = 0
+          end
+          domain_count_map[domain] += 1
         end
-        domain_count_map[domain] += 1
       end
     end
     domain_count_map.each do |key, val|
