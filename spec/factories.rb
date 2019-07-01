@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   sequence(:email) { |n| "user_#{n}@example.com" }
 
   sequence(:url) { |n| "http://example.com/url_#{n}" }
@@ -22,19 +22,19 @@ FactoryGirl.define do
   end
 
   factory :topic_manager do
-    name 'A name'
+    name { 'A name' }
   end
 
   factory :dmca do
     sequence(:id) { |n| n }
-    title 'A title'
-    date_received Time.now
-    date_sent Time.now
+    title { 'A title' }
+    date_received { Time.now }
+    date_sent { Time.now }
 
     works { build_list(:work, 1) }
 
-    ignore do
-      role_names ['agent']
+    transient do
+      role_names { ['recipient'] }
     end
 
     after :build do |notice, evaluator|
@@ -45,7 +45,7 @@ FactoryGirl.define do
     end
 
     trait :with_body do
-      body 'A body'
+      body { 'A body' }
     end
 
     trait :with_tags do
@@ -79,19 +79,19 @@ FactoryGirl.define do
     end
 
     trait :with_facet_data do
-      language 'en'
-      action_taken 'Yes'
+      language { 'en' }
+      action_taken { 'Yes' }
       with_tags
       with_jurisdictions
       with_topics
-      role_names %w[sender principal recipient]
-      date_received Time.now
+      role_names { %w[sender principal recipient] }
+      date_received { Time.now }
     end
 
     trait :redactable do
-      body 'Some [REDACTED] body'
-      body_original 'Some sensitive body'
-      review_required true
+      body { 'Some [REDACTED] body' }
+      body_original { 'Some sensitive body' }
+      review_required { true }
     end
 
     trait :with_original do
@@ -134,11 +134,11 @@ FactoryGirl.define do
   end
 
   factory :file_upload do
-    ignore do
-      content 'Content'
+    transient do
+      content { 'Content' }
     end
 
-    kind 'original'
+    kind { 'original' }
 
     file do
       Tempfile.open('factory_file') do |fh|
@@ -153,21 +153,21 @@ FactoryGirl.define do
   factory :entity_notice_role do
     entity
     association(:notice, factory: :dmca)
-    name 'principal'
+    name { 'principal' }
   end
 
   factory :entity do
     sequence(:name) { |n| "Entity name #{n}" }
-    kind 'individual'
-    address_line_1 'Address 1'
-    address_line_2 'Address 2'
-    city 'City'
-    state 'State'
-    zip '01222'
-    country_code 'US'
-    phone '555-555-1212'
-    email 'foo@example.com'
-    url 'http://www.example.com'
+    kind { 'individual' }
+    address_line_1 { 'Address 1' }
+    address_line_2 { 'Address 2' }
+    city { 'City' }
+    state { 'State' }
+    zip { '01222' }
+    country_code { 'US' }
+    phone { '555-555-1212' }
+    email { 'foo@example.com' }
+    url { 'http://www.example.com' }
 
     trait :with_children do
       after(:create) do |instance|
@@ -184,8 +184,8 @@ FactoryGirl.define do
 
   factory :user do
     email
-    password 'secretsauce'
-    password_confirmation 'secretsauce'
+    password { 'secretsauce' }
+    password_confirmation { 'secretsauce' }
 
     trait :notice_viewer do
       roles { [Role.notice_viewer] }
@@ -221,12 +221,12 @@ FactoryGirl.define do
   end
 
   factory :relevant_question do
-    question 'What is the meaning of life?'
-    answer '42'
+    question { 'What is the meaning of life?' }
+    answer { '42' }
   end
 
   factory :work do
-    description 'Something copyrighted'
+    description { 'Something copyrighted' }
 
     trait :with_infringing_urls do
       after(:build) do |work|
@@ -252,32 +252,32 @@ FactoryGirl.define do
   end
 
   factory :blog_entry do
-    title 'Blog title'
-    author 'John Smith'
+    title { 'Blog title' }
+    author { 'John Smith' }
 
     trait :published do
-      published_at 5.days.ago
+      published_at { 5.days.ago }
     end
 
     trait :archive do
-      archive true
+      archive { true }
     end
 
     trait :with_abstract do
-      abstract "Some summary of the post's content"
+      abstract { "Some summary of the post's content" }
     end
 
     trait :with_content do
-      content 'Some *markdown* content'
+      content { 'Some *markdown* content' }
     end
   end
 
   factory :role do
-    name 'test_role'
+    name { 'test_role' }
   end
 
   factory :token_url do
-    email 'user@example.com'
+    email { 'user@example.com' }
     notice { build(:dmca) }
   end
 end

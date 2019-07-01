@@ -1,6 +1,4 @@
 class FieldedSearchNoticeGenerator
-  include FactoryGirl::Syntax::Methods
-
   attr_reader :query, :matched_notice, :unmatched_notice
 
   def self.for(field)
@@ -14,8 +12,8 @@ class FieldedSearchNoticeGenerator
   def initialize(field)
     @field = field
     @query = "Something Specific"
-    @matched_notice = create(:dmca, title: "To Be Found")
-    @unmatched_notice = create(:dmca, title: "Not To Be Found")
+    @matched_notice = FactoryBot.create(:dmca, title: "To Be Found")
+    @unmatched_notice = FactoryBot.create(:dmca, title: "Not To Be Found")
   end
 
   def for_title
@@ -40,15 +38,15 @@ class FieldedSearchNoticeGenerator
   end
 
   def for_submitter_country_code
-    matched_notice.entity_notice_roles = [build(
+    matched_notice.entity_notice_roles = [FactoryBot.build(
       :entity_notice_role, name: 'submitter',
       notice: matched_notice,
-      entity: build(:entity, country_code: query)
+      entity: FactoryBot.build(:entity, country_code: query)
     )]
-    unmatched_notice.entity_notice_roles = [build(
+    unmatched_notice.entity_notice_roles = [FactoryBot.build(
       :entity_notice_role, name: 'submitter',
       notice: unmatched_notice,
-      entity: build(:entity, country_code: "N/A")
+      entity: FactoryBot.build(:entity, country_code: "N/A")
     )]
   end
 
@@ -63,13 +61,13 @@ class FieldedSearchNoticeGenerator
   end
 
   def for_topics
-    matched_notice.topics = [build(:topic, name: query)]
-    unmatched_notice.topics = [build(:topic, name: "N/A")]
+    matched_notice.topics = [FactoryBot.build(:topic, name: query)]
+    unmatched_notice.topics = [FactoryBot.build(:topic, name: "N/A")]
   end
 
   def for_works
-    matched_notice.works = [build(:work, description: query)]
-    unmatched_notice.works = [build(:work, description: "N/A")]
+    matched_notice.works = [FactoryBot.build(:work, description: query)]
+    unmatched_notice.works = [FactoryBot.build(:work, description: "N/A")]
   end
 
   def for_action_taken
@@ -82,15 +80,15 @@ class FieldedSearchNoticeGenerator
   private
 
   def for_role_name(role_name)
-    matched_notice.entity_notice_roles = [build(
+    matched_notice.entity_notice_roles = [FactoryBot.build(
       :entity_notice_role, name: role_name,
       notice: matched_notice,
-      entity: build(:entity, name: query)
+      entity: FactoryBot.build(:entity, name: query)
     )]
-    unmatched_notice.entity_notice_roles = [build(
+    unmatched_notice.entity_notice_roles = [FactoryBot.build(
       :entity_notice_role, name: role_name,
       notice: unmatched_notice,
-      entity: build(:entity, name: "N/A")
+      entity: FactoryBot.build(:entity, name: "N/A")
     )]
   end
 end

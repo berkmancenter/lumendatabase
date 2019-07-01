@@ -93,14 +93,6 @@ describe DMCA, type: :model do
         end
       end
     end
-
-    context 'without notice roles' do
-      it 'returns nil for recipient and sender' do
-        notice = create(:dmca)
-        expect(notice.recipient).to be_nil
-        expect(notice.sender).to be_nil
-      end
-    end
   end
 
   context '.in_topics' do
