@@ -44,7 +44,7 @@ RSpec.configure do |config|
   # Deleting the index alone doesn't suffice; you'll be left with content from
   # prior tests, which will be reindexed when you refresh the index.
   # The rescue blocks suppress noisy but irrelevant error messages.
-  %i[feature controller view].each do |type|
+  %i[feature controller view integration].each do |type|
     config.before :each, type: type do
       searchable_models.each do |model|
         begin

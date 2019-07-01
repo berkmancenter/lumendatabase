@@ -17,6 +17,7 @@ feature 'Faceted search of Notices', search: true do
       it "on #{facet_type}", js: true, search: true do
         _outside_facet = create(:dmca, title: 'King of New York')
         inside_facet = create(:dmca, :with_facet_data, title: 'Lion King two')
+        inside_facet.entities.update_all(country_code: 'BH')
         index_changed_instances
 
         within_search_results_for('king') do
@@ -27,6 +28,8 @@ feature 'Faceted search of Notices', search: true do
                   inside_facet.topics.first.name
                 elsif facet_type == :tag_list_facet
                   inside_facet.tags.first
+                elsif facet_type == :country_code_facet
+                  'BH'
                 else
                   inside_facet.send(facet_type.to_s.gsub(/_facet/, '').to_sym)
                 end
