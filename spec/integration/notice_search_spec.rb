@@ -459,21 +459,17 @@ feature 'Searching Notices', type: :feature do
 
   def create_notice_with_entities(title, sender_name, recipient_name)
     sender = Entity.find_or_create_by(name: sender_name)
-    recipient = Entity.find_or_create_by(name: recipient_name)
 
-    create(:dmca, title: title).tap do |notice|
+    dmca = create(:dmca, title: title).tap do |notice|
       create(
         :entity_notice_role,
         name: 'sender',
         notice: notice,
         entity: sender
       )
-      create(
-        :entity_notice_role,
-        name: 'recipient',
-        notice: notice,
-        entity: recipient
-      )
     end
+    # A recipient is created by the factory as it's necessary to validate the
+    # notice. We need to switch the notice to our preferred recipient.
+    dmca.recipient.update_attributes(name: recipient_name)
   end
 end
