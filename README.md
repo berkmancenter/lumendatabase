@@ -42,7 +42,7 @@ By default the app will try to connect to Elasticsearch on `http://localhost:920
 
     $BROWSER 'http://localhost:3000'
 
-You can customize behavior during seeding (db:setup) with a couple environment variables:
+You can customize behavior during seeding (db:setup) with a couple of environment variables:
 
 * `NOTICE_COUNT=10` will generate 10 (or any number you pass it) notices
   instead of the default 500
@@ -89,24 +89,61 @@ their own commit.
 
 #### Environment variables
 
-- `RAILS_LOG_LEVEL` - logging level
-- `WEB_CONCURRENCY` - number of Unicorn workers
-- `WEB_TIMEOUT` - Unicorn timeout
-- `MAILER_DELIVERY_METHOD` - mailer delivery method
+Here are all the environment variables which Lumen recognizes. Find them in the code for documentation.
+
+Environment variables should be set in `.env` and are managed by the `dotenv` gem. `.env` is not version-controlled so you can safely write secrets to it (but will also need to set these on all servers).
+
+Unless setting an environment variable on the command line in the context of a command-line process, environment variables should ONLY be set in `.env`.
+
+Most of these are optional and have sensible defaults (which may vary by environment).
+
+- `BATCH_SIZE` - batch size of model items indexed during each run of Elasticsearch re-indexing
+- `BUNDLE_GEMFILE`
+- `BROWSER_VALIDATIONS` - enable user html5 browser form validations
 - `DEFAULT_SENDER` - default mailer sender
+- `ELASTICSEARCH_URL`
+- `EMAIL_DOMAIN`
+- `ES_INDEX_SUFFIX` - can be used to specify a suffix for the name of elasticsearch indexes
+- `FILE_NAME` - name of csv file to import as blog entries
+- `from` - a date formatted `'%Y-%m-%d'` for use in recreating elasticsearch indexes after said date
+- `GOOGLE_CUSTOM_BLOG_SEARCH_ID`
+- `IMPORT_NAME`
+- `LOG_ELASTICSEARCH` - only used in tests
+- `LUMEN_USE_OINK`
+- `MAILER_DELIVERY_METHOD`
+- `NOTICE_COUNT` - how many fake notices to create when seeding the db
+- `RACK_ENV` - don't use this; it's overridden by `RAILS_ENV`
+- `RAILS_ENV`
+- `RAILS_LOG_LEVEL`
+- `RAILS_SERVE_STATIC_FILES` - if present (with any value) will enable rails to serve static files
+- `RECAPTCHA_SITE_KEY` - reCAPTCHA public key
+- `RECAPTCHA_SECRET_KEY` - reCAPTCHA private key
 - `RETURN_PATH` - default mailer return path
+- `SEARCH_SLEEP` - used in specs only, time out of Elasticsearch searches
+- `SECRET_KEY_BASE` - the Rails secret token; _required in prod_
 - `SITE_HOST` - site host, used in mailer templates
+- `SKIP_FAKE_DATA` - don't generate fake data when seeding the database
 - `SMTP_ADDRESS` - SMTP server address
 - `SMTP_DOMAIN` - SMTP server domain
 - `SMTP_USERNAME` - SMTP server username
 - `SMTP_PASSWORD` - SMTP server password
 - `SMTP_PORT` - SMTP server port
-- `RECAPTCHA_SITE_KEY` - reCAPTCHA public key
-- `RECAPTCHA_SECRET_KEY` - reCAPTCHA private key
-- `BROWSER_VALIDATIONS` - enable user browser form validations
-- `BATCH_SIZE` - batch size of model items indexed during each run of Elasticsearch re-indexing
-- `SEARCH_SLEEP` - used in specs only, time out of Elasticsearch searches
-- `RACK_ENV` - Rack environment
+- `SMTP_VERIFY_MODE`
+- `TABLES_USING_NAIVE_COUNTS` - prevents Kaminari from doing slow/full counts of the specified tables
+- `TEST_CLUSTER_COMMAND`
+- `USER_CRON_EMAIL` - for use in sending reports of court order files
+- `USER_CRON_MAGIC_DIR`
+- `WEB_CONCURRENCY` - number of Unicorn workers
+- `WEB_TIMEOUT` - Unicorn timeout
+- The following are used only for imports from oldchill:
+  - `BASE_DIRECTORY`
+  - `MYSQL_DATABASE`
+  - `MYSQL_HOST`
+  - `MYSQL_USERNAME`
+  - `MYSQL_PASSWORD`
+  - `MYSQL_PORT`
+  - `RESTART_SEQUENCE_WITH` - for compatibility between oldchill imports and new Lumen notices. Should not ever be needed at this point, nor have any effect in production.
+  - `WHERE`
 
 #### Email setup
 
