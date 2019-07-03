@@ -4,6 +4,8 @@
 # takedown request of a particular class with, effectively, a form letter (e.g.
 # a generic response to law enforcement requests from a given jurisdiction).
 class Placeholder < Notice
+  DEFAULT_ENTITY_NOTICE_ROLES = %w[submitter].freeze
+
   def self.model_name
     Notice.model_name
   end

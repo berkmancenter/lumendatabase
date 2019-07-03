@@ -83,7 +83,7 @@ class Notice < ApplicationRecord
     'LawEnforcementRequest' => 'Law Enforcement Requests',
     'PrivateInformation'    => 'Right of Publicity',
     'Trademark'             => 'Trademark',
-    'Other'                 => OTHER_TOPIC
+    'Other'                 => OTHER_TOPIC,
     'Placeholder'           => OTHER_TOPIC
   }.freeze
 
