@@ -27,7 +27,7 @@ class NoticeSubmissionFinalizer
   end
 
   def extract_domain(url)
-    url.start_with? "http" ? Addressable::URI.parse(url).domain : PublicSuffix.domain(url)
+    Addressable::URI.parse(url).domain
   end
   
 end
