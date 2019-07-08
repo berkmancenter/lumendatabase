@@ -746,7 +746,7 @@ class CourtOrderReporter
     fetch_files
     write_files
     make_archive
-    email_user
+    email_users
   end
 
   def setup_directories
@@ -811,26 +811,42 @@ class CourtOrderReporter
     Rails.logger.info '[rake] Making court order reports archive'
     @archive_filename = Date.today.iso8601
     system("tar -czvf #{File.join(@base_dir, @archive_filename)}.tar.gz -C #{@working_dir} .")
-    #system("rm -r #{@working_dir}")
+    system("rm -r #{@working_dir}")
   end
 
-  def email_user
-    email = ENV['USER_CRON_EMAIL']
-    unless (email && defined? SMTP_SETTINGS)
+  def email_users
+    unless (emails && defined? SMTP_SETTINGS)
       Rails.logger.warn '[rake] Missing email or SMTP_SETTINGS; not emailing court order report'
       exit
     end
 
     Rails.logger.info '[rake] Sending court order report email'
-    mailtext = <<~HEREDOC
-      Subject: Latest email archive from Lumen
 
-      The latest archive of Lumen court order files can be found at
-      #{ Chill::Application.config.site_host}/#{@magic_dir}/#{@archive_filename}.tar.gz.
-    HEREDOC
+    emails.each do |email|
+      email_single_user(email)
+    end
+  end
 
+  def emails
+    @emails ||= begin
+      JSON.parse ENV['USER_CRON_EMAIL']   # list of emails
+    rescue JSON::ParserError
+      [ENV['USER_CRON_EMAIL']]            # single-email string, as 1-item list
+    end
+  end
+
+  def email_single_user(email)
     Net::SMTP.start(SMTP_SETTINGS[:address]) do |smtp|
       smtp.send_message mailtext, 'no-reply@lumendatabase.org', email
     end
+  end
+
+  def mailtext
+    @mailtext ||= <<~HEREDOC
+        Subject: Latest email archive from Lumen
+
+        The latest archive of Lumen court order files can be found at
+        #{Chill::Application.config.site_host}/#{@magic_dir}/#{@archive_filename}.tar.gz.
+    HEREDOC
   end
 end
