@@ -20,22 +20,22 @@ describe 'rake lumen:generate_court_order_report', type: :task do
   it 'sends a single email' do
     ENV['USER_CRON_EMAIL'] = 'foo@example.com'
     stub_smtp
-    task.execute
-    expect(@fake_smtp).to have_received(:send_message)
+    expect(@fake_smtp).to receive(:send_message)
       .with(anything, anything, 'foo@example.com')
       .once
+    task.execute
   end
 
   it 'sends emails to a list' do
     ENV['USER_CRON_EMAIL'] = '["foo@example.com", "bar@example.com"]'
     stub_smtp
-    task.execute
-    expect(@fake_smtp).to have_received(:send_message)
+    expect(@fake_smtp).to receive(:send_message)
       .with(anything, anything, 'foo@example.com')
       .once
-    expect(@fake_smtp).to have_received(:send_message)
+    expect(@fake_smtp).to receive(:send_message)
       .with(anything, anything, 'bar@example.com')
       .once
+    task.execute
   end
 
   # SMTP may or may not be configured on the machines this test will run on,
