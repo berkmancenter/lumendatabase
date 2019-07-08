@@ -797,14 +797,21 @@ class CourtOrderReporter
 
   def notify_about_unredacted_files(f)
     return if f.notice.file_uploads.where(kind: 'supporting').present?
-    File.write(@info_filepath, app.notice_url(f.notice), mode: 'a')
+    File.write(
+      @info_filepath,
+      Rails.application.routes.url_helpers.notice_url(
+        f.notice,
+        host: Rails.application.config.action_mailer.default_url_options[:host]
+      ),
+      mode: 'a'
+    )
   end
 
   def make_archive
     Rails.logger.info '[rake] Making court order reports archive'
     @archive_filename = Date.today.iso8601
     system("tar -czvf #{File.join(@base_dir, @archive_filename)}.tar.gz -C #{@working_dir} .")
-    system("rm -r #{@working_dir}")
+    #system("rm -r #{@working_dir}")
   end
 
   def email_user
