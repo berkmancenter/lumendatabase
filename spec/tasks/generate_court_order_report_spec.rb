@@ -4,17 +4,15 @@ describe 'rake lumen:generate_court_order_report', type: :task do
   before :all do
     create(:court_order, :with_document)
     @cached_user_cron_email = ENV['USER_CRON_EMAIL']
-    @cached_smtp = if defined? SMTP_SETTINGS
-                     SMTP_SETTINGS
-                   else
-                     nil
-                   end
-    SMTP_SETTINGS = { address: 'test@example.com' }
+  end
+
+  before(:each) do
+    stub_const('SMTP_SETTINGS', { address: 'test@example.com' })
   end
 
   after :all do
     ENV['USER_CRON_EMAIL'] = @cached_user_cron_email
-    SMTP_SETTINGS = @cached_smtp if @cached_smtp
+    CourtOrder.destroy_all
   end
 
   it 'sends a single email' do
@@ -22,7 +20,6 @@ describe 'rake lumen:generate_court_order_report', type: :task do
     stub_smtp
     expect(@fake_smtp).to receive(:send_message)
       .with(anything, anything, 'foo@example.com')
-      .once
     task.execute
   end
 
@@ -31,10 +28,8 @@ describe 'rake lumen:generate_court_order_report', type: :task do
     stub_smtp
     expect(@fake_smtp).to receive(:send_message)
       .with(anything, anything, 'foo@example.com')
-      .once
     expect(@fake_smtp).to receive(:send_message)
       .with(anything, anything, 'bar@example.com')
-      .once
     task.execute
   end
 
