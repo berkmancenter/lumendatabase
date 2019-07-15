@@ -354,7 +354,7 @@ namespace :lumen do
   task index_non_indexed: :environment do
     begin
       $stdout.puts "Indexing #{Notice.count + Entity.count} instances..."
-      [Notice, Entity].each do |klass|
+      [Notice, Entity, DomainCount].each do |klass|
         ids = klass.pluck(:id)
         ids.each do |id|
           if ReindexRun.indexed?(klass, id)
