@@ -19,6 +19,6 @@ class DomainCount < ActiveRecord::Base
     elsif PublicSuffix.valid?(domain_query)
       domain_query = PublicSuffix.parse(domain_query).domain
     end
-    self.search(domain_query)
+    DomainCount.where("domain_name like ?", "%#{domain_query}%").sum(:count)
   end
 end
