@@ -19,7 +19,6 @@ class DomainCount < ActiveRecord::Base
     elsif PublicSuffix.valid?(domain_query)
       domain_query = PublicSuffix.parse(domain_query).domain
     end
-    puts "Here"
     self.search(domain_query)
   end
 end
