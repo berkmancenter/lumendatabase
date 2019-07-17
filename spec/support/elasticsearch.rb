@@ -13,17 +13,17 @@ RSpec.configure do |config|
     es_options[:command] = ENV['TEST_CLUSTER_COMMAND']
   end
 
-  searchable_models = [Notice, Entity, DomainCount]
+  searchable_models = [Notice, Entity]
 
   # Start an in-memory Elasticsearch cluster for integration tests. Runs on
   # port 9250 so as not to interfere with development/production clusters.
   # This may throw a warning that the cluster is already running, but you can
   # ignore that.
   config.before :suite do
-    # if Elasticsearch::Extensions::Test::Cluster.running?(on: es_port)
-    #   Elasticsearch::Extensions::Test::Cluster.stop(**es_options)
-    # end
-    # Elasticsearch::Extensions::Test::Cluster.start(**es_options)
+    if Elasticsearch::Extensions::Test::Cluster.running?(on: es_port)
+      Elasticsearch::Extensions::Test::Cluster.stop(**es_options)
+    end
+    Elasticsearch::Extensions::Test::Cluster.start(**es_options)
   end
 
   # Reload connections periodically to avoid test failures due to exhausting
