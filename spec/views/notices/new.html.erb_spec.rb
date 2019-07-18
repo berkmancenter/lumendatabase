@@ -204,12 +204,6 @@ describe 'notices/new.html.erb' do
         text: third_topic.name
       )
     end
-
-    private
-
-    def have_nth_option(n, value)
-      have_css("option:nth-child(#{n})", text: value)
-    end
   end
 
   context 'step headings' do

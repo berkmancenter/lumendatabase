@@ -1,5 +1,21 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [19.07](https://github.com/berkmancenter/lumendatabase/releases/tag/2019.07) - 2019-07-01
+### Added
+* Compresses http responses
+* `get_approximate_count` method on `Notice` and `InfringingUrl` (uses postgres reltuples)
+* Whitelists logged-in users using the web interface (if they would not be throttled using the API)
+
+### Changed
+* Updates numerous dependencies
+* Refactors court order reporting cron job
+* Only includes notices of type supporting in this cron job
+
+### Fixed
+* Bug with captcha validation in notice requests (pushed out before this release as a hotfix)
+* Broken link in admin site
+* Strips special characters from cron job filenames to suppress annoying warning emails to admins
+
 ## [19.05](https://github.com/berkmancenter/lumendatabase/releases/tag/2019.05) - 2019-05-20
 
 ### Added
