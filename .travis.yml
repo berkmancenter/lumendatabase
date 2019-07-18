@@ -9,6 +9,7 @@ addons:
   postgresql: "9.6"
 
 services:
+  - xvfb
   - postgresql
   # We don't start elasticsearch here; instead we download it later and run it
   # directly in order to enable the test cluster to start up. See
@@ -20,7 +21,6 @@ cache:
 
 before_install:
   - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
   - wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.6.4.tar.gz
   - tar -xvf elasticsearch-5.6.4.tar.gz
 

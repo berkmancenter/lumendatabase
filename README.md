@@ -131,7 +131,7 @@ Most of these are optional and have sensible defaults (which may vary by environ
 - `SMTP_VERIFY_MODE`
 - `TABLES_USING_NAIVE_COUNTS` - prevents Kaminari from doing slow/full counts of the specified tables
 - `TEST_CLUSTER_COMMAND`
-- `USER_CRON_EMAIL` - for use in sending reports of court order files
+- `USER_CRON_EMAIL` - for use in sending reports of court order files; can be a string or a list (in a JSON.parse-able format)
 - `USER_CRON_MAGIC_DIR`
 - `WEB_CONCURRENCY` - number of Unicorn workers
 - `WEB_TIMEOUT` - Unicorn timeout

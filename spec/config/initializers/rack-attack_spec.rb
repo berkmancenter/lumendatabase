@@ -9,7 +9,7 @@ describe Rack::Attack do
   end
 
   describe 'throttling excessive API requests by IP address', cache: true do
-    let(:limit) { 5 }
+    let(:limit) { 1 }
 
     context 'number of requests is lower than the limit' do
       it 'allows requests' do
@@ -31,7 +31,7 @@ describe Rack::Attack do
   end
 
   describe 'throttling excessive HTTP responses by IP address' do
-    let(:limit) { 10 }
+    let(:limit) { 1 }
 
     context 'number of requests is lower than the limit', cache: true do
       it 'allows requests' do
