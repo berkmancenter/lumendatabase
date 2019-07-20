@@ -16,11 +16,12 @@ RSpec.describe DomainCount, type: :model do
 
   context 'domain count search works fine', type: :model do
     it 'searches for the domain with partial name' do
-      DomainCount.new(domain_name: 'twitter.com').save
-      expect(DomainCount.return_count_for_domain('twitter.com').results.total).to eq(1)
-      expect(DomainCount.return_count_for_domain('https://twitter.com').results.total).to eq(1)
-      expect(DomainCount.return_count_for_domain('www.twitter.com').results.total).to eq(1)
-      expect(DomainCount.return_count_for_domain('https://www.twitter.com').results.total).to eq(1)
+      DomainCount.new({ domain_name: 'twitter.com', count: 1}).save
+      expect(DomainCount.return_count_for_domain('twitter')).to eq(1)
+      expect(DomainCount.return_count_for_domain('twitter.com')).to eq(1)
+      expect(DomainCount.return_count_for_domain('https://twitter.com')).to eq(1)
+      expect(DomainCount.return_count_for_domain('www.twitter.com')).to eq(1)
+      expect(DomainCount.return_count_for_domain('https://www.twitter.com')).to eq(1)
     end
   end
 end

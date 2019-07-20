@@ -23,11 +23,11 @@ class NoticeSubmissionFinalizer
   attr_accessor :notice
 
   def give_domains_from_urls(infringing_urls_list)
-    infringing_urls_list.map{ |x| extract_domain(x.url) }.uniq
+    infringing_urls_list.map{ |x| extract_domain(x.url) }.uniq.compact
   end
 
   def extract_domain(url)
     Addressable::URI.parse(url).domain
   end
-  
+
 end
