@@ -14,8 +14,8 @@ class DomainCount < ActiveRecord::Base
 
   def self.return_count_for_domain(domain_query)
     if domain_query.starts_with?('http')
-      uri = Addressable:URI.parse(domain_query)
-      domain_query = uri.host.nil? ? domain_query : uri.host
+      uri = Addressable::URI.parse(domain_query)
+      domain_query = uri.domain.nil? ? domain_query : uri.domain
     elsif PublicSuffix.valid?(domain_query)
       domain_query = PublicSuffix.parse(domain_query).domain
     end
