@@ -1,4 +1,8 @@
 FactoryGirl.define do
+  factory :domain_count do
+    domain_name "example.com"
+    count 0
+  end
   sequence(:email) { |n| "user_#{n}@example.com" }
 
   sequence(:url) { |n| "http://example.com/url_#{n}" }
