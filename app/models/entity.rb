@@ -71,4 +71,8 @@ class Entity < ActiveRecord::Base
 
     where(id: submitter_ids)
   end
+
+  def self.by_name(name)
+    self.search(name)
+  end
 end
