@@ -5,6 +5,7 @@ require 'blog_importer'
 require 'question_importer'
 require 'collapses_topics'
 require 'csv'
+require 'stopwords'
 
 namespace :lumen do
   desc 'Delete elasticsearch index'
@@ -736,6 +737,35 @@ where works.id in (
     DocumentsUpdateNotificationNotice.delete_all
 
     puts "#{date_time_task.call} Finishing the task"
+  end
+
+  desc 'Precomputation for word cloud'
+  task sampling_and_weight_calculation: :environment do
+    sample_count = 100
+    total_notices = Notice.get_approximate_count
+    word_frequency = Hash.new
+    filter = Stopwords::Snowball::Filter.new "en"
+    Notice::TYPES.each do |type|
+      topic_count = type.constantize.count
+      puts "Hello #{topic_count}"
+      sub_sample_size = ((topic_count * 1.0 / total_notices) * sample_count).to_int
+      puts "Hell #{sub_sample_size}"
+      notices = type.constantize.where(id: sub_sample_size.times.map{ Random.rand(1..topic_count)}).pluck(:body_original)
+      notices.each do |text|
+        if text.present?
+          filter.filter(text.split).each do |word|
+            if word_frequency.has_key?(word)
+              word_frequency[word] += 1
+            else
+              word_frequency[word] = 1
+            end 
+          end
+        end
+      end
+    end
+    puts word_frequency
+    #ids = sample_count.times.map{ Random.rand(1..total_notices) }.uniq
+    #puts ids.size
   end
 end
 
