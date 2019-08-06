@@ -1,0 +1,25 @@
+<div class="wrapper">
+	<%= render partial: 'sidebar', locals: { sidebar_links: @sidebar_links, sidebar_items: @sidebar_items, current_opt: "infringing url's" } %>
+	<div class="main-panel">
+		<%= render partial: 'stat_navbar', locals: { navbar_list: @navbar_list } %>
+		<div class="content">
+
+			<div class="row">
+				<div class="col-md-6">
+					<%=render partial: 'number_of', locals: { display_title: "Total number of URL's", display_subtitle: "Approximate number of infringing URL's reported on Lumen", display_count: @urls_count } %>
+				</div>
+				<div class="col-md-6">
+					<%=render partial: 'number_of', locals: { display_title: "Average number of URL's", display_subtitle: "This denotes the average number of URL's per notice", display_count: @average_count } %>
+				</div>	
+			</div>
+
+			<div class="row">
+				<%=render partial: 'line_graph', locals: { display_title: "Date-wise notices", display_subtitle: "Select date range from the menu below to get notices submitted in that range", data: @date_line_graph } %>
+			</div>
+
+			<div class="row">
+				<%=render partial: 'line_graph', locals: { display_title: "URL's per notice", display_subtitle: "Average number of URL's per notice in selected date range", data: @date_line_graph } %>
+			</div>	
+		</div>
+	</div>
+</div>

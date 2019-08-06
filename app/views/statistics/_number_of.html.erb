@@ -1,0 +1,12 @@
+<div class="card">
+  <%=render partial: 'header', locals: { display_title: display_title, display_subtitle: display_subtitle } %>
+  <div class="content">
+    <div class="value"><%= display_count %></div>
+    <div class="footer">
+      <hr>
+      <div class="stats">
+        <i class="fa fa-clock-o"></i> Last updated time
+      </div>
+    </div>
+  </div>
+</div>

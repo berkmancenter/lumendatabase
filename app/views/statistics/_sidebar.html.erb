@@ -1,0 +1,19 @@
+<div class="sidebar">
+  <div class="sidebar-wrapper">
+    <div class="logo">
+      <div class="simple-text">
+          Lumen Dashboard
+      </div>
+    </div>
+
+    <ul class="nav">
+      <%= sidebar_items.zip(sidebar_links).each do |item, link| %>
+        <%= content_tag(:li, :class => ("active" if current_opt == item)) do %>
+          <%= link_to link do %>
+            <p><%=item%></p>
+          <% end %> 
+        <% end.join.html_safe %>
+      <% end %>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,51 @@
+<div class="wrapper">
+	<%= render partial: 'sidebar', locals: { sidebar_links: @sidebar_links, sidebar_items: @sidebar_items, current_opt: "notices" } %>
+	<div class="main-panel">
+		<%= render partial: 'stat_navbar', locals: { navbar_list: @navbar_list } %>
+		<div class="content">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-md-6">
+						<%=render partial: 'number_of', locals: { display_title: "Total number of notices", display_subtitle: "Number of notices reported on Lumen till date", display_count: @notices_count } %>
+					</div>
+					<div class="col-md-6">
+						<%=render partial: 'number_of', locals: { display_title: "Average number of notices", display_subtitle: "This denotes the average number of notices per entity", display_count: @average_count } %>
+					</div>	
+				</div>
+
+				<div class="row">
+					<%=render partial: 'line_graph', locals: { display_title: "Date-wise notices", display_subtitle: "Select date range from the menu below to get notices submitted in that range", data: @date_line_graph } %>
+				</div>	
+
+				<div class="row">
+					<div class="col-md-6">
+						<div class="card">
+							<%=render partial: 'header', locals: { display_title: "Domain wise notice distribution", subdomain: "Select deselect domains to get number of notices" } %>
+							<div class="content"> 
+								<!-- Pie chart using chartkick comes here -->
+								<!-- Footer comes here I assume -->
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-md-6">
+						<%=render partial: 'header', locals: { display_title: "Notices involving a particular Domain", display_subtitle: "Select deselect domains to get number of notices" } %>
+					</div>
+					<div class="content">
+						<select class="form-control form-control-lg">
+							<% @notice_topics.each do |topic| %>
+								<option><%=topic %></option>
+							<% end %>
+						</select>
+						<div class="value domain-wise-value">
+              34,567,867
+            </div>
+					</div>
+				</div>
+
+			</div>	
+		</div>
+	</div>
+</div>	

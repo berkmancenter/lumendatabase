@@ -1,0 +1,15 @@
+<nav class="navbar navbar-default navbar-fixed">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <ul class="nav navbar-nav">
+        <%= navbar_list.zip(navbar_link).each do |item, link| %>
+          <%= content_tag(:li) do %>
+            <%= link_to link do %>
+              <p><%=item%></p>
+            <% end %> 
+          <% end.join.html_safe %>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</nav>
