@@ -31,6 +31,8 @@ Chill::Application.routes.draw do
   get '/original_notice_id/:id', to: 'original_notice_ids#show'
 
   get '/original_news_id/:id', to: 'original_news_ids#show'
+  get '/statistics/notices', to: 'statistics#statistics_notices'
+  get '/statistics/infringing-urls', to: 'statistics#infringing_urls'
 
   resources :topics, only: [:show]
 

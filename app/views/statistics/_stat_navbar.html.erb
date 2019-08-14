@@ -2,12 +2,12 @@
   <div class="container-fluid">
     <div class="navbar-header">
       <ul class="nav navbar-nav">
-        <%= navbar_list.zip(navbar_link).each do |item, link| %>
+        <% navbar_list.zip(navbar_link).each do |item, link| %>
           <%= content_tag(:li) do %>
             <%= link_to link do %>
               <p><%=item%></p>
             <% end %> 
-          <% end.join.html_safe %>
+          <% end %>
         <% end %>
       </ul>
     </div>
