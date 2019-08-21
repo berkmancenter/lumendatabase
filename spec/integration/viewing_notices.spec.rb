@@ -56,6 +56,14 @@ feature 'Viewing notices' do
     check_full_works_urls
   end
 
+  scenario 'as an anonymous user viewing whitelisted notice' do
+    ENV['WHITELISTED_NOTICES_FULL'] = "1234,#{Notice.last.id}"
+
+    visit notice_url(Notice.last)
+
+    check_full_works_urls
+  end
+
   def check_full_works_urls
     within('#works') do
       expect(page).to have_content 'http://www.example.com/original_work.pdf'
