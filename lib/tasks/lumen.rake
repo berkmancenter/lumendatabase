@@ -762,9 +762,7 @@ where works.id in (
         notice_type_subsample = get_notice_subsample(type, sample_size, buckets, i, topic_count)
         notice_type_subsample.each do |text|
           next unless text.present?
-          filter.filter(text.split).each do |word|
-            word_frequency[word] += 1
-          end
+          filter.filter(text.split).each { |word| word_frequency[word] += 1 }
         end
       end
     end
