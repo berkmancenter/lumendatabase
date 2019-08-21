@@ -739,33 +739,37 @@ where works.id in (
     puts "#{date_time_task.call} Finishing the task"
   end
 
+  def get_notice_subsample(type, sample_size, buckets, i, topic_count)
+    type.constantize.limit((sample_size.to_f / buckets).ceil).offset(i * (topic_count / buckets)).pluck(:body_original)
+  end
+
+  def calculate_sample_size(type, buckets, sample_count, total_notices, topic_count)
+    offset_val = topic_count / buckets
+    s_size = ((topic_count * 1.0 / total_notices) * sample_count).ceil
+  end
+
   desc 'Precomputation for word cloud'
   task sampling_and_weight_calculation: :environment do
-    sample_count = 100
+    sample_count = ENV.fetch('WORD_CLOUD_SAMPLE_SIZE', 100)
     buckets = 5
     total_notices = Notice.get_approximate_count
-    word_frequency = Hash.new
+    word_frequency = Hash.new(0)
     filter = Stopwords::Snowball::Filter.new "en"
     Notice::TYPES.each do |type|
       topic_count = type.constantize.count
-      offset_val = topic_count / buckets
-      sample_size = ((topic_count * 1.0 / total_notices) * sample_count).ceil
+      sample_size = calculate_sample_size(type, buckets, sample_count, total_notices, topic_count)
       for i in 0..buckets - 1 do
-        notice_type_subsample = type.constantize.limit((sample_size.to_f / buckets).ceil).offset(i * (topic_count / buckets)).pluck(:body_original)
+        notice_type_subsample = get_notice_subsample(type, sample_size, buckets, i, topic_count)
         notice_type_subsample.each do |text|
-          if text.present?
-            filter.filter(text.split).each do |word|
-              if word_frequency.has_key?(word)
-                word_frequency[word] += 1
-              else
-                word_frequency[word] = 1
-              end
-            end
+          next unless text.present?
+          filter.filter(text.split).each do |word|
+            word_frequency[word] += 1
           end
         end
       end
     end
   end
+
 end
 
 class CourtOrderReporter
