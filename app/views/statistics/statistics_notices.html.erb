@@ -27,25 +27,24 @@
 							</div>
 						</div>
 					</div>
-				</div>
 
-				<div class="row">
 					<div class="col-md-6">
-						<%=render partial: 'header', locals: { display_title: "Notices involving a particular Domain", display_subtitle: "Select deselect domains to get number of notices" } %>
-					</div>
-					<div class="content">
-						<select class="form-control form-control-lg">
-							<% @notice_topics.each do |topic| %>
-								<option><%=topic %></option>
-							<% end %>
-						</select>
-						<div class="value domain-wise-value">
-              34,567,867
-            </div>
+						<div class="card">
+							<%=render partial: 'header', locals: { display_title: "Notices involving a particular Domain", display_subtitle: "Select deselect domains to get number of notices" } %>
+							<div class="content">
+								<select class="form-control form-control-lg">
+									<% @notice_topics.each do |topic| %>
+										<option><%=topic %></option>
+									<% end %>
+								</select>
+								<div class="value domain-wise-value">
+					  			34,567,867
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
-
 			</div>	
 		</div>
 	</div>
-</div>	
+</div>
