@@ -1,5 +1,5 @@
 class StatisticsController < ApplicationController
-	layout false
+	layout 'statistics'
 	before_action :set_commons
 	def statistics_notices
 		@notices_count = Notice.get_approximate_count
@@ -25,11 +25,11 @@ class StatisticsController < ApplicationController
 
 	def sidebar_items
 		[
-		 "NOTICES",
-		 "INFRINGING URL'S",
-		 "ENTITIES",
-		 "VISITORS BY COUNTRY",
-		 "WORD CLOUD"
+		 "notices",
+		 "infringing url's",
+		 "entities",
+		 "visitors by country",
+		 "word cloud"
 		]
 	end
 
@@ -45,13 +45,21 @@ class StatisticsController < ApplicationController
 
 	def navbar_link
 		[
-
+			"/statistics/notices",
+			"/statistics/notices",
+			"/statistics/notices",
+			"/statistics/notices",
+			"/statistics/notices"
 		]
 	end
 
 	def navbar_list
 		[
-
+			"Topics",
+			"Blog",
+			"About",
+			"Research",
+			"Dashboard"
 		]
 	end
 end
