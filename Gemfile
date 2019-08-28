@@ -48,7 +48,8 @@ gem 'skylight'
 gem 'stackprof'
 gem 'turnout'
 gem 'public_suffix', '~> 3.0', '>= 3.0.3'
-
+gem 'chartkick'
+gem 'groupdate'
 # These need to go last or tests fail.
 gem 'elasticsearch-model', '~> 5.0'
 gem 'elasticsearch-rails', '~> 5.0'

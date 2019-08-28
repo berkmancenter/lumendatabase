@@ -18,4 +18,6 @@
 //= require select2
 //= require bootstrap-datepicker/core
 //= require jquery-placeholder
+//= require chartkick
+//= require Chart.bundle
 //= require_tree .

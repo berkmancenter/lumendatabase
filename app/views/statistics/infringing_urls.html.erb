@@ -14,11 +14,11 @@
 			</div>
 
 			<div class="row">
-				<%=render partial: 'line_graph', locals: { display_title: "Date-wise notices", display_subtitle: "Select date range from the menu below to get notices submitted in that range", data: @date_line_graph } %>
+				<%=render partial: 'line_graph', locals: { display_title: "Date-wise notices", display_subtitle: "Select date range from the menu below to get notices submitted in that range", type: "urls" } %>
 			</div>
 
 			<div class="row">
-				<%=render partial: 'line_graph', locals: { display_title: "URL's per notice", display_subtitle: "Average number of URL's per notice in selected date range", data: @date_line_graph } %>
+				<%=render partial: 'line_graph', locals: { display_title: "URL's per notice", display_subtitle: "Average number of URL's per notice in selected date range", type: "urls" } %>
 			</div>	
 		</div>
 	</div>

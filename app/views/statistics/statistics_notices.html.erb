@@ -10,11 +10,11 @@
 					</div>
 					<div class="col-md-6">
 						<%=render partial: 'number_of', locals: { display_title: "Average number of notices", display_subtitle: "This denotes the average number of notices per entity", display_count: @average_count } %>
-					</div>	
+					</div>
 				</div>
 
 				<div class="row">
-					<%=render partial: 'line_graph', locals: { display_title: "Date-wise notices", display_subtitle: "Select date range from the menu below to get notices submitted in that range", data: @date_line_graph } %>
+					<%=render partial: 'line_graph', locals: { display_title: "Date-wise notices", display_subtitle: "Select date range from the menu below to get notices submitted in that range", type: "notices" } %>
 				</div>	
 
 				<div class="row">
@@ -24,6 +24,7 @@
 							<div class="content"> 
 								<!-- Pie chart using chartkick comes here -->
 								<!-- Footer comes here I assume -->
+								<%= pie_chart statistics_pie_chart_path %>
 							</div>
 						</div>
 					</div>

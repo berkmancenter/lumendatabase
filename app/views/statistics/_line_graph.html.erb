@@ -1,11 +1,16 @@
 <div class="col-md-12">
   <div class="card ">
-    <%=render partial: 'header', locals: { display_title: "Date-wise URL's", display_subtitle: "Select date range from the menu below to get URL's submitted in that range" } %>
+    <%=render partial: 'header', locals: { display_title: display_title, display_subtitle: display_subtitle } %>
     <div class="content">
         <!-- Graph will come here-->
+        <% if type == "notices" %>
+          <%= line_chart statistics_datewise_notices_path, colors: ["#019CE0", "#019CE0"], library: { color: "#019CE0", drawBorder: false, display: false }%>
+        <% elsif type == "urls" %>
+          <%= line_chart statistics_datewise_urls_path, colors: ["#019CE0", "#019CE0"], library: { color: "#019CE0", drawBorder: false, display: false } %>
+        <% end %>
       <div class="footer">
-        Start Date: <input id="startDate" width="276"/>
-        End Date: <input id="endDate" width="276">
+        <!-- Start Date: <input id="startDate" width="276"/>
+        End Date: <input id="endDate" width="276"> -->
         <hr>
         <div class="stats">
           <i class="fa fa-check"></i> Data information certified

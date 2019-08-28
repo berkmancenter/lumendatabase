@@ -76,6 +76,7 @@ GEM
       rack-test (>= 0.6.3)
       regexp_parser (~> 1.2)
       xpath (~> 3.2)
+    chartkick (3.2.1)
     climate_control (0.2.0)
     cliver (0.3.2)
     coderay (1.1.2)
@@ -156,6 +157,8 @@ GEM
     get_process_mem (0.2.3)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
+    groupdate (4.1.2)
+      activesupport (>= 4.2)
     haml (5.1.1)
       temple (>= 0.8.0)
       tilt
@@ -407,6 +410,7 @@ DEPENDENCIES
   bourbon
   bullet
   cancancan
+  chartkick
   coffee-rails
   country_select (~> 1.2.0)
   coveralls
@@ -422,6 +426,7 @@ DEPENDENCIES
   factory_bot_rails
   fakeweb
   flutie
+  groupdate
   high_voltage
   html2md
   jquery-placeholder-rails

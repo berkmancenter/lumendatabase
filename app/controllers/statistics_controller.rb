@@ -14,6 +14,20 @@ class StatisticsController < ApplicationController
 		@date_line_graph = {}
 	end
 
+	def datewise_notices
+		render json: Notice.group_by_year(:created_at).count
+	end
+
+	def pie_chart
+		domain_count = Hash.new
+		Notice::TYPES.each { |type| domain_count[type] = type.constantize.count }
+		render json: domain_count.to_json 
+	end
+
+	def datewise_urls
+		render json: InfringingUrl.group_by_year(:created_at).count
+	end
+	
 	private
 
 	def set_commons

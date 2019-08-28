@@ -20,6 +20,12 @@ Chill::Application.routes.draw do
     end
   end
 
+  namespace :statistics do
+    get "datewise-notices"
+    get "pie-chart"
+    get "datewise-urls"
+  end
+
   namespace :entities do
     resources :search, only: [:index]
   end
