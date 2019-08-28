@@ -1,0 +1,21 @@
+<div class="wrapper">
+	<%= render partial: 'sidebar', locals: { sidebar_links: @sidebar_links, sidebar_items: @sidebar_items, current_opt: "notices" } %>
+  <div class="main-panel">
+    <%= render partial: 'stat_navbar', locals: { navbar_list: @navbar_list, navbar_link: @navbar_link } %>
+    <div class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12">
+            <%=render partial: 'number_of', locals: { display_title: "Total number of unique entities", display_subtitle: "Number of notices reported on Lumen till date", display_count: @unique_entities } %>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
