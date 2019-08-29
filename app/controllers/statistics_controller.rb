@@ -10,7 +10,7 @@ class StatisticsController < ApplicationController
 
   def infringing_urls
     @urls_count = InfringingUrl.get_approximate_count
-    @average_count = @urls_count / ([1, Notice.get_approximate_count].max)
+    @average_count = (@urls_count / ([1, Notice.get_approximate_count].max).to_f).ceil
   end
 
 	def entities
@@ -43,7 +43,7 @@ class StatisticsController < ApplicationController
 	def sidebar_items
 		[
 		 "notices",
-	 "infringing urls",
+	 	 "infringing urls",
 		 "entities",
 		 "visitors by country",
 		 "word cloud"
