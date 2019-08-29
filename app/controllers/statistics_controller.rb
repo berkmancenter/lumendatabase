@@ -1,7 +1,8 @@
 class StatisticsController < ApplicationController
   layout 'statistics'
   before_action :set_commons
-  def statistics_notices
+
+  def notices
     @notices_count = Notice.get_approximate_count
     @average_count = @notices_count / ([1, Entity.count].max)
     @notice_topics = Notice::TYPES
@@ -22,14 +23,14 @@ class StatisticsController < ApplicationController
 		render json: Notice.group_by_year(:created_at).count
 	end
 
+	def datewise_urls
+		render json: InfringingUrl.group_by_year(:created_at).count
+	end
+
 	def pie_chart
 		domain_count = Hash.new
 		Notice::TYPES.each { |type| domain_count[type] = type.constantize.count }
 		render json: domain_count.to_json 
-	end
-
-	def datewise_urls
-		render json: InfringingUrl.group_by_year(:created_at).count
 	end
 
 	private
@@ -39,11 +40,17 @@ class StatisticsController < ApplicationController
 		@sidebar_links = sidebar_links
 		@navbar_list = navbar_list
 		@navbar_link = navbar_link
-	end
+ 	end
 
-  def datewise_urls
-    render json: InfringingUrl.group_by_year(:created_at).count
-  end
+	def sidebar_items
+		[
+		 "notices",
+		 "infringing urls",
+		 "entities",
+		 "visitors by country",
+		 "word cloud"
+		]
+	end
 
 	def sidebar_links
 	  [

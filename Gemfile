@@ -11,12 +11,14 @@ gem 'cancancan'
 # https://github.com/stefanpenner/country_select/blob/master/UPGRADING.md
 # It also removes CountrySelect::ISO_COUNTRIES_FOR_SELECT in 1.3, which is a
 # breaking change for us.
+gem 'chartkick'
 gem 'country_select', '~> 1.2.0'
 gem 'coveralls', require: false
 gem 'date_validator'
 gem 'devise'
 gem 'dotenv-rails'
 gem 'flutie'
+gem 'groupdate'
 gem 'high_voltage'
 gem 'html2md', require: false
 gem 'jquery-placeholder-rails'
@@ -48,8 +50,7 @@ gem 'skylight'
 gem 'stackprof'
 gem 'turnout'
 gem 'public_suffix', '~> 3.0', '>= 3.0.3'
-gem 'chartkick'
-gem 'groupdate'
+
 # These need to go last or tests fail.
 gem 'elasticsearch-model', '~> 5.0'
 gem 'elasticsearch-rails', '~> 5.0'
