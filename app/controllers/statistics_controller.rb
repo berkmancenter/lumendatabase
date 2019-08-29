@@ -6,13 +6,11 @@ class StatisticsController < ApplicationController
     @notices_count = Notice.get_approximate_count
     @average_count = @notices_count / ([1, Entity.count].max)
     @notice_topics = Notice::TYPES
-    @date_line_graph = {}
   end
 
   def infringing_urls
     @urls_count = InfringingUrl.get_approximate_count
     @average_count = @urls_count / ([1, Notice.get_approximate_count].max)
-    @date_line_graph = {}
   end
 
 	def entities
@@ -45,7 +43,7 @@ class StatisticsController < ApplicationController
 	def sidebar_items
 		[
 		 "notices",
-		 "infringing urls",
+	 "infringing urls",
 		 "entities",
 		 "visitors by country",
 		 "word cloud"
