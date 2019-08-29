@@ -6,10 +6,10 @@
 			<div class="container-fluid">
 				<div class="row">
 					<div class="col-md-6">
-						<%=render partial: 'number_of', locals: { display_title: "Total number of URL's", display_subtitle: "Approximate number of infringing URL's reported on Lumen", display_count: @urls_count } %>
+						<%=render partial: 'number_of', locals: { display_title: "Total number of URLs", display_subtitle: "Approximate number of infringing URLs reported on Lumen", display_count: @urls_count } %>
 					</div>
 					<div class="col-md-6">
-						<%=render partial: 'number_of', locals: { display_title: "Average number of URL's", display_subtitle: "This denotes the average number of URL's per notice", display_count: @average_count } %>
+						<%=render partial: 'number_of', locals: { display_title: "Average number of URLs", display_subtitle: "This denotes the average number of URLs per notice", display_count: @average_count } %>
 					</div>	
 				</div>
 
@@ -18,7 +18,7 @@
 				</div>
 
 				<div class="row">
-					<%=render partial: 'line_graph', locals: { display_title: "URL's per notice", display_subtitle: "Average number of URL's per notice in selected date range", type: "urls" } %>
+					<%=render partial: 'line_graph', locals: { display_title: "URLs per notice", display_subtitle: "Average number of URLs per notice in selected date range", type: "urls" } %>
 				</div>
 			</div>	
 		</div>
