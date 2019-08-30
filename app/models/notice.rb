@@ -219,8 +219,12 @@ class Notice < ActiveRecord::Base
     false
   end
 
+  def self.convert_to_int(x)
+    x.to_f.to_i
+  end
+
   def self.get_approximate_count
-    ActiveRecord::Base.connection.execute("SELECT reltuples FROM pg_class WHERE relname = 'notices'").getvalue(0, 0).to_i
+    self.convert_to_int(ActiveRecord::Base.connection.execute("SELECT reltuples FROM pg_class WHERE relname = 'notices'").getvalue(0, 0))
   end
 
   def active_model_serializer
