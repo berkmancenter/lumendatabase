@@ -14,15 +14,17 @@
 				</div>
 
 				<div class="row">
-					<%=render partial: 'line_graph', locals: { display_title: "Date-wise notices", display_subtitle: "Select date range from the menu below to get notices submitted in that range", type: "notices" } %>
+					<%=render partial: 'line_graph', locals: { display_title: "Date-wise notices", display_subtitle: "Select date range from the menu below to get notices submitted in that range", type: "notices" }, cached: true %>
 				</div>	
 
 				<div class="row">
 					<div class="col-md-6">
 						<div class="card">
 							<%=render partial: 'header', locals: { display_title: "Domain wise notice distribution", display_subtitle: "Select deselect domains to get number of notices" } %>
-							<div class="content"> 
-								<%= pie_chart statistics_pie_chart_path %>
+							<div class="content">
+							<% cache 'pie_chart' do %> 
+								<%=pie_chart statistics_pie_chart_path %>
+							<% end %>
 							</div>
 						</div>
 					</div>
