@@ -56,6 +56,12 @@ describe DMCA, type: :model do
     expect(described_class.model_name).to eq 'Notice'
   end
 
+  it 'handles large values efficiently' do
+    expect(Notice.convert_to_int(3.49477e+09)).to eq(3494770000)
+    expect(Notice.convert_to_int(4.55453e+07)).to eq(45545300)
+    expect(Notice.convert_to_int(500)).to eq(500)
+  end
+
   # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Misc contexts ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
