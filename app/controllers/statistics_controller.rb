@@ -22,7 +22,14 @@ class StatisticsController < ApplicationController
 	end
 
 	def datewise_urls
-		render json: InfringingUrl.group_by_year(:created_at).count
+		@total_urls = InfringingUrl.get_approximate_count
+		sample_count = [ENV.fetch('URLS_GRAPH_SAMPLE_SIZE', 100000), @total_urls].min
+		sample_urls = url_sampling(sample_count)
+		tt = sample_urls.group_by_year { |u| u }
+		tt.each do |key, val|
+			tt[key] = val.count * [1, @total_urls / sample_count].max
+		end
+		render json: tt
 	end
 
 	def pie_chart
@@ -76,6 +83,15 @@ class StatisticsController < ApplicationController
 	  	"Research",
 	  	"Dashboard"
 	  ]
+	end
+
+	def url_sampling(sample_count)
+		buckets = 10
+		urls_arr = []
+		for i in 0..buckets - 1 do 
+			urls_arr.push(*InfringingUrl.limit(sample_count / buckets).offset(i * (@total_urls / buckets)).pluck(:created_at))
+		end
+		urls_arr
 	end
 end
 

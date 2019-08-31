@@ -9,12 +9,12 @@
 						<%=render partial: 'number_of', locals: { display_title: "Total number of URLs", display_subtitle: "Approximate number of infringing URLs reported on Lumen", display_count: @urls_count } %>
 					</div>
 					<div class="col-md-6">
-						<%=render partial: 'number_of', locals: { display_title: "Average number of URLs", display_subtitle: "This denotes the average number of URLs per notice", display_count: @average_count } %>
+						<%=render partial: 'number_of', locals: { display_title: "Average number of URLs", display_subtitle: "This denotes the average number of URLs per notice", display_count: @average_count, cached: true } %>
 					</div>	
 				</div>
 
 				<div class="row">
-					<%=render partial: 'line_graph', locals: { display_title: "Date-wise notices", display_subtitle: "Select date range from the menu below to get notices submitted in that range", type: "urls" } %>
+					<%=render partial: 'line_graph', locals: { display_title: "Date-wise urls", display_subtitle: "Shows the number of urls reported to Lumen year-wise", type: "urls" } %>
 				</div>
 
 				<div class="row">

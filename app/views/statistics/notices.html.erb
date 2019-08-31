@@ -31,7 +31,7 @@
 
 					<div class="col-md-6">
 						<div class="card">
-							<%=render partial: 'header', locals: { display_title: "Notices involving a particular Domain", display_subtitle: "Select deselect domains to get number of notices" } %>
+							<%=render partial: 'header', locals: { display_title: "Notices involving a particular Domain", display_subtitle: "Shows the number of notices reported to Lumen year-wise" } %>
 							<div class="content">
 								<select class="form-control form-control-lg">
 									<% @notice_topics.each do |topic| %>
