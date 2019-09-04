@@ -25,11 +25,11 @@ class StatisticsController < ApplicationController
 		@total_urls = InfringingUrl.get_approximate_count
 		sample_count = [ENV.fetch('URLS_GRAPH_SAMPLE_SIZE', 100000), @total_urls].min
 		sample_urls = url_sampling(sample_count)
-		tt = sample_urls.group_by_year { |u| u }
-		tt.each do |key, val|
-			tt[key] = val.count * [1, @total_urls / sample_count].max
+		grouped_urls = sample_urls.group_by_year { |group| group }
+		grouped_urls.each do |key, val|
+			grouped_urls[key] = val.count * [1, @total_urls / sample_count].max
 		end
-		render json: tt
+		render json: grouped_urls
 	end
 
 	def pie_chart

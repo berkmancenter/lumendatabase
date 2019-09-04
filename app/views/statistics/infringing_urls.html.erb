@@ -9,16 +9,20 @@
 						<%=render partial: 'number_of', locals: { display_title: "Total number of URLs", display_subtitle: "Approximate number of infringing URLs reported on Lumen", display_count: @urls_count } %>
 					</div>
 					<div class="col-md-6">
-						<%=render partial: 'number_of', locals: { display_title: "Average number of URLs", display_subtitle: "This denotes the average number of URLs per notice", display_count: @average_count, cached: true } %>
+						  <%=render partial: 'number_of', locals: { display_title: "Average number of URLs", display_subtitle: "This denotes the average number of URLs per notice", display_count: @average_count } %>
 					</div>	
 				</div>
 
 				<div class="row">
-					<%=render partial: 'line_graph', locals: { display_title: "Date-wise urls", display_subtitle: "Shows the number of urls reported to Lumen year-wise", type: "urls" } %>
+          <% cache 'url_chart' do %>
+					  <%=render partial: 'line_graph', locals: { display_title: "Date-wise urls", display_subtitle: "Shows the number of urls reported to Lumen year-wise", type: "urls" } %>
+          <% end %>
 				</div>
 
 				<div class="row">
-					<%=render partial: 'line_graph', locals: { display_title: "URLs per notice", display_subtitle: "Average number of URLs per notice in selected date range", type: "urls" } %>
+          <% cache 'url_chart_ratio' do %>
+					  <%=render partial: 'line_graph', locals: { display_title: "URLs per notice", display_subtitle: "Average number of URLs per notice in selected date range", type: "urls" } %>
+          <% end %>
 				</div>
 			</div>	
 		</div>
