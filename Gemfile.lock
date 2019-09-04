@@ -205,7 +205,7 @@ GEM
       bourbon (>= 2.1)
       sass (>= 3.2)
     nested_form (0.3.2)
-    nokogiri (1.10.3)
+    nokogiri (1.10.4)
       mini_portile2 (~> 2.4.0)
     oink (0.10.1)
       activerecord
