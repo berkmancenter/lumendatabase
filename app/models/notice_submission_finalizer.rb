@@ -14,10 +14,20 @@ class NoticeSubmissionFinalizer
     parameters[:submission_id] = notice.id
     notice.works.delete(NoticeSubmissionInitializer::PLACEHOLDER_WORKS)
     notice.update_attributes(parameters)
+    DomainCount.update_count(give_domains_from_urls(notice.infringing_urls))
   end
 
   private
 
   attr_reader :parameters
   attr_accessor :notice
+
+  def give_domains_from_urls(infringing_urls_list)
+    infringing_urls_list.map{ |x| extract_domain(x.url) }.uniq.compact
+  end
+
+  def extract_domain(url)
+    Addressable::URI.parse(url).domain
+  end
+
 end
