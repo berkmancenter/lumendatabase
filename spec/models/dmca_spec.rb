@@ -116,7 +116,7 @@ describe DMCA, type: :model do
       expected_notices = create_list(:dmca, 3, role_names: %w[submitter])
       submitters = expected_notices.map(&:submitter)
 
-      notices = DMCA.submitted_by(submitters)
+      notices = DMCA.by_role(submitters, 'submitter')
 
       expect(notices).to match_array(expected_notices)
     end
