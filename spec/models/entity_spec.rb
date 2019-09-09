@@ -56,13 +56,5 @@ describe Entity, type: :model do
     end
   end
 
-  context 'searching by name works fine' do
-    it "finds an entity even if partial name of the entity is supplied provided factory has name as a substring in entity name" do
-      entity = Entity.new({ name: "Name search" })
-      entity.save
-      expect(Entity.by_name("name").results.total).to be >= 1
-    end
-  end
-
   it_behaves_like 'an object with hierarchical relationships'
 end
