@@ -186,11 +186,10 @@ class Notice < ActiveRecord::Base
       .uniq
   end
 
-  #role can take any string value from EntityNoticeRole::ROLE. For invalid role values a nill set would be returned
-  def self.by_role(entities_involved, role="submitter")
+  def self.submitted_by(submitters)
     joins(entity_notice_roles: :entity)
-      .where('entity_notice_roles.name' => role)
-      .where('entities.id' => entities_involved)
+      .where('entity_notice_roles.name' => :submitter)
+      .where('entities.id' => submitters)
   end
 
   def self.add_default_filter(search)

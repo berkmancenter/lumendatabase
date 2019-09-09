@@ -49,7 +49,6 @@ gem 'simple_form'
 gem 'skylight'
 gem 'stackprof'
 gem 'turnout'
-gem 'public_suffix', '~> 3.0', '>= 3.0.3'
 
 # These need to go last or tests fail.
 gem 'elasticsearch-model', '~> 5.0'

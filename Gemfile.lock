@@ -444,7 +444,6 @@ DEPENDENCIES
   pry (~> 0.10.4)
   pry-byebug
   pry-rails
-  public_suffix (~> 3.0, >= 3.0.3)
   rack (>= 1.6.11)
   rack-attack (~> 4.0)
   rack-mini-profiler

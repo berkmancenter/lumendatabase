@@ -32,49 +32,21 @@ describe NoticeSubmissionFinalizer, type: :model do
     expect(notice.submission_id).to eq notice.id
   end
 
-  it 'increases the count of domains involved in the notice' do
-    notice = build(:dmca)
-    notice.save
-    
-    counter_map = {}
-    distinct_domains = infringing_urls_attributes.map { 
-      |x| x[:url].start_with?("http") ? Addressable::URI.parse(x[:url]).domain : PublicSuffix.domain(x[:url]) 
-    }.uniq
-    distinct_domains.each do |domain|
-      counter_map[domain] = return_count(DomainCount.find_by_domain_name(domain))
-    end
-
-    NoticeSubmissionFinalizer.new(
-      notice, works_attributes: works_attributes
-    ).finalize
-
-    distinct_domains.each do |domain|
-      expect(return_count(DomainCount.find_by_domain_name(domain)) - counter_map[domain]).to eq(1)
-    end
-  end
-
-  it 'handles large url attributes list efficiently' do
-    notice = create(:dmca)
-    NoticeSubmissionFinalizer.new(
-      notice, works_attributes: works_attributes(1000)
-    ).finalize
-  end
-  
   private
 
-  def works_attributes(number_of_urls = 3)
+  def works_attributes
     [{
       description: 'The Avengers',
-      infringing_urls_attributes: infringing_urls_attributes(number_of_urls)
+      infringing_urls_attributes: infringing_urls_attributes
     }]
   end
 
-  def infringing_urls_attributes(number_of_urls = 3)
-    url_list = []
-    for i in 1..number_of_urls + 1
-      url_list.push({ url: 'http://youtube.com/bad_url_' + i.to_s })
-    end
-    url_list
+  def infringing_urls_attributes
+    [
+      { url: 'http://youtube.com/bad_url_1' },
+      { url: 'http://youtube.com/bad_url_2' },
+      { url: 'http://youtube.com/bad_url_3' }
+    ]
   end
 
   # The works_attributes will not be *equal*, because the submitted notice
@@ -97,9 +69,5 @@ describe NoticeSubmissionFinalizer, type: :model do
       retval << { url: url.url_original }
     end
     retval
-  end
-
-  def return_count(domain_instance)
-    domain_instance.nil? ? 0 : domain_instance.count
   end
 end
