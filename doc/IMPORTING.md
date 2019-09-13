@@ -76,20 +76,3 @@ understand importing is to walk through the `Ingester::Legacy#import` method,
 which will bring you into the `Ingester::Legacy#import_row` method.  Attributes
 are assigned through the `Ingestor::Legacy::AttributeMapper` class, which also
 determines which importer to use through the `Ingester::ImportDispatcher` class.
-
-Blog Imports
-============
-
-Export the blog table as a CSV file from MySQL, and then run the rake task
-`lumen::import_blog_entries`. Set the blog entry CSV file via
-ENV['FILE_NAME'], and it probably makes sense to clear out the seed blog
-entries before running this. See `spec/support/example_files/blog_export.csv`
-for an example export file, which should be directly from MySQL.
-
-Question to Notice relations
-============================
-
-These can be imported by exporting the lumen legacy table that links
-notices and questions as CSV from mysql.  Then, pass that CSV file to the rake
-task `lumen::import_questions` via ENV['FILE_NAME']. See the
-QuestionImporter specs for information on the file format.

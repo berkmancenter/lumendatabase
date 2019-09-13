@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 require 'rake'
-require 'blog_importer'
-require 'question_importer'
 require 'collapses_topics'
 require 'csv'
 
@@ -11,22 +9,6 @@ namespace :lumen do
   task delete_search_index: :environment do
     Notice.__elasticsearch__.delete_index!
     sleep 5
-  end
-
-  desc 'Import blog entries'
-  task import_blog_entries: :environment do
-    with_file_name do |file_name|
-      importer = BlogImporter.new(file_name)
-      importer.import
-    end
-  end
-
-  desc 'Import questions'
-  task import_questions: :environment do
-    with_file_name do |file_name|
-      importer = QuestionImporter.new(file_name)
-      importer.import
-    end
   end
 
   desc 'Post-migration cleanup'

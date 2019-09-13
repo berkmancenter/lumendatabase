@@ -19,7 +19,6 @@ gem 'devise'
 gem 'dotenv-rails'
 gem 'flutie'
 gem 'high_voltage'
-gem 'html2md', require: false
 gem 'jquery-placeholder-rails'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
