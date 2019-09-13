@@ -22,9 +22,7 @@ gem 'high_voltage'
 gem 'jquery-placeholder-rails'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
-# kaminari is locked because we've monkeypatched it to work around
-# slow postgres table counts on large tables.
-gem 'kaminari', '0.14.1'
+gem 'kaminari'
 gem 'lograge'
 gem 'mime-types'
 gem 'oink'
