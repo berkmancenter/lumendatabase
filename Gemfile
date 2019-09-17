@@ -6,6 +6,7 @@ gem 'activerecord-import'
 gem 'acts-as-taggable-on'
 gem 'addressable'
 gem 'ancestry'
+gem 'bootsnap'
 gem 'bootstrap-datepicker-rails'
 gem 'cancancan'
 # country_select has breaking changes in 2.x:
@@ -26,17 +27,15 @@ gem 'kaminari'
 gem 'lograge'
 gem 'mime-types'
 gem 'oink'
+# Pinned because the next step is migrating to ActiveStorage.
 gem 'paperclip', '~> 5'
-# Version 1 is not compatible with rails < 5.1.5.
-gem 'pg', '~> 0.21.0'
+gem 'pg', '~> 1.1.4'
 gem 'rack'
 gem 'rack-attack'
 gem 'rack-mini-profiler', require: false
-gem 'rails', '~> 5.1.0'
+gem 'rails', '~> 5.2.0'
 gem 'rails_admin'
-# Updating this will install its dependency sassc, which we have removed due
-# to deprecation and replaced with sass-rails.
-gem 'rails_admin_tag_list', '0.2.0'
+gem 'rails_admin_tag_list', git: 'https://github.com/berkmancenter/rails_admin_tag_list'
 gem 'recaptcha'
 gem 'recipient_interceptor', require: false
 gem 'record_tag_helper', '~> 1.0'
@@ -47,7 +46,8 @@ gem 'skylight'
 gem 'stackprof'
 gem 'turnout'
 
-# These need to go last or tests fail.
+# These need to go last or tests fail. Their versions need to be pinned
+# because there are breaking changes in 6.
 gem 'elasticsearch-model', '~> 5.0'
 gem 'elasticsearch-rails', '~> 5.0'
 
