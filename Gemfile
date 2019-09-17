@@ -32,7 +32,7 @@ gem 'pg', '~> 0.21.0'
 gem 'rack'
 gem 'rack-attack'
 gem 'rack-mini-profiler', require: false
-gem 'rails', '~> 5.0.0'
+gem 'rails', '~> 5.1.0'
 gem 'rails_admin'
 # Updating this will install its dependency sassc, which we have removed due
 # to deprecation and replaced with sass-rails.

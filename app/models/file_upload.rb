@@ -46,7 +46,7 @@ class FileUpload < ApplicationRecord
   end
 
   def set_documents_requesters_notifications
-    return unless notice && kind.include?('supporting') && (new_record? || changed?)
+    return unless notice && kind.include?('supporting') && (new_record? || saved_changes?)
 
     DocumentsUpdateNotificationNotice.create(notice: notice)
   end

@@ -237,7 +237,7 @@ describe NoticesController do
     context 'format-independent logic' do
       before do
         @submit_notice = double('NoticeSubmissionInitializer').as_null_object
-        @notice_params = HashWithIndifferentAccess.new(title: 'A title')
+        @notice_params = ActiveSupport::HashWithIndifferentAccess.new(title: 'A title')
       end
 
       it 'initializes a DMCA by default from params' do
