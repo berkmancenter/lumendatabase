@@ -27,7 +27,7 @@ class ReindexRun < ApplicationRecord
 
   # The offset is needed to get the run previous to the current one.
   def last_run
-    self.class.order('created_at').offset(1).last
+    self.class.order('created_at').second_to_last
   end
 
   def index_model_for(model)

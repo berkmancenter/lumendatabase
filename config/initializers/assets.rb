@@ -12,3 +12,6 @@ Rails.application.config.assets.precompile += %w( rails_admin/rails_admin.css
 
 # Add additional assets to the asset load path
 # Rails.application.config.assets.paths << Emoji.images_path
+
+# In case of node
+# Rails.application.config.assets.paths << Rails.root.join('node_modules')
