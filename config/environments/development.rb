@@ -31,6 +31,14 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
+  # Use mailcatcher, it's dead simple
+  config.action_mailer.delivery_method = (ENV['MAILER_DELIVERY_METHOD'] || :test).to_sym
+  config.action_mailer.smtp_settings = {
+    address: ENV['SMTP_ADDRESS'] || 'localhost',
+    port: ENV['SMTP_PORT'] || 1025,
+    openssl_verify_mode: ENV['SMTP_VERIFY_MODE'] || 'none'
+  }
+
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 

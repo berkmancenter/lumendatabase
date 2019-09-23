@@ -63,7 +63,6 @@ Rails.application.configure do
   # config.action_mailer.raise_delivery_errors = false
 
   config.action_mailer.delivery_method = (ENV['MAILER_DELIVERY_METHOD'] || :smtp).to_sym
-  config.action_mailer.smtp_settings = SMTP_SETTINGS
   config.action_mailer.default_url_options = {
       host: (ENV['EMAIL_DOMAIN'] || 'lumendatabase.org')
     }
