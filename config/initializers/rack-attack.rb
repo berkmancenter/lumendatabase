@@ -1,82 +1,48 @@
 # frozen_string_literal: true
 
 class Rack::Attack
-  # Always allow requests from localhost
-  # (blacklist & throttles are skipped)
   whitelist('allow from localhost') do |req|
-    # Requests are allowed if the return value is truthy.
-    ['127.0.0.1', '::1'].include? req.ip
+    req.localhost?
   end
 
-  whitelist('allow from special IPs') do |req|
-    # IP addresses of known legitimate researchers who might otherwise be
-    # caught up in rate limits.
-    if defined? WhitelistedIps::IPS
-      WhitelistedIps::IPS.map { |iprange| iprange.include? req.ip }.any?
-    else
-      false
-    end
+  whitelist('allow unlimited post requests from API submitters') do |req|
+    req.post? && req.submitter?
   end
 
-  whitelist('allow unlimited requests from API users') do |req|
-    token = nil
-
-    req_params = 'action_dispatch.request.request_parameters'.freeze
-    auth_token = 'authentication_token'.freeze
-
-    if req.env.key?('HTTP_X_AUTHENTICATION_TOKEN')
-      Rails.logger.info "[rack-attack] Authentication Token in header: #{req.env['HTTP_X_AUTHENTICATION_TOKEN']}"
-      token = req.env['HTTP_X_AUTHENTICATION_TOKEN']
-    elsif req.params[auth_token].present?
-      Rails.logger.info "[rack-attack] Authentication Token in params: #{req.params[auth_token]}"
-      token = req.params[auth_token]
-    elsif req.post? &&
-          req.env.key?(req_params) &&
-          req.env[req_params][auth_token].present?
-      # warn on deprecated token placement
-      Rails.logger.warn "[rack-attack] Authentication Token in JSON POST data: #{req.env[req_params][auth_token]}"
-      token = req.env[req_params][auth_token]
-    end
-
-    u = User.find_by_authentication_token(token)
-
-    if u.nil?
-      Rails.logger.warn "[rack-attack] token: #{token}, user: NOT FOUND" unless token.nil?
-      false
-    elsif !u.role?(Role.researcher) && !u.role?(Role.submitter)
-      Rails.logger.warn "[rack-attack] token: #{token}, email: #{u.email}, user: MISSING ROLE"
-      false
-    else
-      Rails.logger.info "[rack-attack] email: #{u.email}, user: OK"
-      true
-    end
+  whitelist('allow unlimited requests from admins') do |req|
+    req.admin?
   end
 
-  # This logic prevents rackattack from throttling web requests from
-  # researchers and admins. They may still be throttled by the proxy for
-  # excessive use, as the proxy does not know that they are logged in.
-  whitelist('allow unlimited requests from permissioned users') do |req|
-    u = user_from_request(req)
-    if u.nil?
-      false
-    elsif (u.roles & [Role.researcher, Role.admin, Role.super_admin]).present?
-      true
-    else
-      false
-    end
+  throttle('permissioned API limit', limit: 60, period: 1.minute) do |req|
+    next unless authenticated?
+
+    Rails.logger.debug "[rack-attack] permissioned api limit ip: #{req.ip}"
+
+    req.discriminator
   end
 
-  throttle('api limit', limit: 5, period: 24.hours) do |req|
+  # Heavily throttle API users without tokens (but allow for trial exploration).
+  throttle('unauthed api limit', limit: 5, period: 24.hours) do |req|
+    next if authenticated?
+
     Rails.logger.debug "[rack-attack] api limit ip: #{req.ip}, req.env['HTTP_ACCEPT']: #{req.env['HTTP_ACCEPT']}, content_type: #{req.content_type}"
     req.ip if req.env['HTTP_ACCEPT'] == 'application/json' || req.env['CONTENT_TYPE'] == 'application/json' || req.path.include?('json')
   end
 
-  throttle('request limit', limit: 10, period: 1.minute) do |req|
+  # Allow people to hit up to 10 notices in a minute (i.e. do a search and open
+  # all results in tabs); that's a normal human usage pattern.
+  throttle('unauthed request limit', limit: 10, period: 1.minute) do |req|
+    next if authenticated?
+
     Rails.logger.debug "[rack-attack] request limit ip: #{req.ip}, content_type: #{req.content_type}"
     req.ip if req.path.include? 'notices'
   end
 
-  throttle('request limit', limit: 30, period: 1.hour) do |req|
+  # But don't let that 10/minute continue indefinitely; that's more like a
+  # script.
+  throttle('unauthed request limit', limit: 30, period: 1.hour) do |req|
+    next if authenticated?
+
     Rails.logger.debug "[rack-attack] request limit ip: #{req.ip}, content_type: #{req.content_type}"
     req.ip if req.path.include? 'notices'
   end
@@ -91,10 +57,88 @@ class Rack::Attack
   end
 end
 
-def user_from_request(req)
-  User.find(req.session['warden.user.user.key'][0][0])
-rescue ActiveRecord::RecordNotFound  # no user with that ID exists
-  nil
-rescue NoMethodError  # [] is not defined on NilClass
-  nil
+class Rack::Attack::Request < ::Rack::Request
+  LUMEN_REQ_PARAMS = 'action_dispatch.request.request_parameters'.freeze
+  LUMEN_AUTH_TOKEN = 'authentication_token'.freeze
+  LUMEN_HEADER = 'HTTP_X_AUTHENTICATION_TOKEN'.freeze
+
+  def localhost?
+    ['127.0.0.1', '::1'].include? ip
+  end
+
+  def admin?
+    return false unless user
+    (user.roles.include? Role.admin) || (user.roles.include? Role.super_admin)
+  end
+
+  def submitter?
+    return false unless user
+
+    user.roles.include? Role.submitter
+  end
+
+  def authenticated?
+    !!user || special_ip?
+  end
+
+  def token
+    @token ||= if env.key?(LUMEN_HEADER)
+                 Rails.logger.info "[rack-attack] Authentication Token in header: #{env['HTTP_X_AUTHENTICATION_TOKEN']}"
+                 env[header]
+               elsif params[LUMEN_AUTH_TOKEN].present?
+                 Rails.logger.info "[rack-attack] Authentication Token in params: #{params[LUMEN_AUTH_TOKEN]}"
+                 params[LUMEN_AUTH_TOKEN]
+               elsif post? &&
+                     env.key?(LUMEN_REQ_PARAMS) &&
+                     env[LUMEN_REQ_PARAMS][LUMEN_AUTH_TOKEN].present?
+                 # warn (logs, not user) on deprecated token placement
+                 Rails.logger.warn "[rack-attack] Authentication Token in JSON POST data: #{env[LUMEN_REQ_PARAMS][LUMEN_AUTH_TOKEN]}"
+                 env[LUMEN_REQ_PARAMS][LUMEN_AUTH_TOKEN]
+               else
+                 nil
+               end
+  end
+
+  # Used by the throttle to calculate the number of hits from a distinct
+  # entity. Should only be used when authenticated? is true; it is the caller's
+  # responsibility to check. This function is here because authenticated users
+  # are not guaranteed to be logged in (they may be behind special IPs) but
+  # are also not guaranteed to come from a single computer (they may be running
+  # processes using auth tokens on multiple computers), so we want to use
+  # user ID when present but IP when not.
+  # This is used only by the 'permissioned API limit' throttle and thus makes
+  # no attempt to be general. If the request object needs to provide
+  # discriminators in more cases, this (and its implicit relationship to
+  # `authenticated?` need to be reconsidered).
+  def discriminator
+    user&.id || ip
+  end
+
+  private
+
+  def user
+    @user ||= user_from_session || user_from_token
+  end
+
+  def user_from_session
+    User.find(self.session['warden.user.user.key'][0][0])
+  rescue ActiveRecord::RecordNotFound  # no user with that ID exists
+    nil
+  rescue NoMethodError  # [] is not defined on NilClass
+    nil
+  end
+
+  def user_from_token
+    User.find_by_authentication_token(token)
+  end
+
+  # IP addresses of known legitimate researchers who might otherwise be
+  # caught up in low rate limits.
+  def special_ip?
+    if defined? WhitelistedIps::IPS
+      WhitelistedIps::IPS.map { |iprange| iprange.include? ip }.any?
+    else
+      false
+    end
+  end
 end
