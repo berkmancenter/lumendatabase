@@ -1,5 +1,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [19.10](https://github.com/berkmancenter/lumendatabase/releases/tag/2019.09) - 2019-10-04
+### Changed
+* Enforced previously soft limits on API token use.
+
+### Yanked
+* 19.09 -- something in that was breaking notice submission
+
 ## [19.09](https://github.com/berkmancenter/lumendatabase/releases/tag/2019.09) - 2019-09-06
 ### Added
 * Back-end work to support a future statistics dashboard.
