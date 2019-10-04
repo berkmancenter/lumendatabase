@@ -1,92 +1,184 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe Rack::Attack do
-  include Rack::Test::Methods
+describe Rack::Attack, type: :request do
+  # Online you'll find suggestions to include Rack::Test::Methods here and use
+  # last_response in testing rack-attack. I'm not doing so as I have found
+  # last_response.status to be unreliable; it doesn't yield identical values
+  # with invocations that I would expect to point to identical objects.
+  # I think the challenge is that the throttles are defined on app load, which
+  # means that instances of Rack::Attack::Throttle already exist, and have
+  # :limit attributes, so overwriting limit in the tests has no effect;
+  # you have to directly stub out the calls to the throttles, which we do below.
   let(:notice) { create(:dmca) }
+  let(:statuses) { [] }
+  let(:limit) { 1 }
 
-  def app
-    Rails.application
+  # Rack::Attack defines its own cache, so it isn't controlled by the
+  # cache: true option in spec_helper. Also its cache doesn't have a `clear`
+  # method, so tests pollute one another. Let's just blow away and reinitialize
+  # the cache store between tests.
+  before(:each) do
+    Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
   end
 
-  describe 'throttling excessive API requests by IP address', cache: true do
-    let(:limit) { 1 }
-
+  describe 'get requests by authenticated users' do
     context 'number of requests is lower than the limit' do
-      it 'allows requests' do
+      it 'allows requests to /notice' do
+        stub_authentication
+
         limit.times do |i|
-          get '/topics.json', {}, 'REMOTE_ADDR' => '1.2.3.4'
-          expect(last_response.status).to eq(200) if i == limit
+          get "/notices/#{notice.id}"
+          statuses << response.status
         end
+        expect(statuses).to eq([200])
+      end
+
+      it 'allows requests to .json' do
+        stub_authentication
+
+        limit.times do |i|
+          get '/topics.json'
+          statuses << response.status
+        end
+        expect(statuses).to eq([200])
+      end
+
+      it 'allows requests to faceted_search', search: true do
+        stub_authentication
+
+        limit.times do |i|
+          get '/faceted_search?term=batman'
+          statuses << response.status
+        end
+        expect(statuses).to eq([200])
       end
     end
 
-    context 'number of requests is higher than the limit', cache: true do
-      it 'blocks requests' do
+    context 'number of requests is higher than the limit' do
+      it 'blocks requests to notices' do
+        stub_authentication
+
         (limit + 1).times do |i|
-          get '/topics.json', {}, 'REMOTE_ADDR' => '1.2.3.5'
-          expect(last_response.status).to eq(429) if i > limit
+          get "/notices/#{notice.id}"
+          statuses << response.status
         end
+        expect(statuses).to eq([200, 429])
       end
+
+      it 'blocks requests to .json' do
+        stub_authentication
+
+        (limit + 1).times do |i|
+          get '/topics.json'
+          statuses << response.status
+        end
+        expect(statuses).to eq([200, 429])
+      end
+    end
+
+    it 'blocks requests to faceted_search', search: true do
+      stub_authentication
+
+      (limit + 1).times do |i|
+        get '/faceted_search?term=batman'
+        statuses << response.status
+      end
+      expect(statuses).to eq([200, 429])
     end
   end
 
-  describe 'throttling excessive HTTP responses by IP address' do
-    let(:limit) { 1 }
+  describe 'get requests by unauthenticated users' do
+    context 'number of requests is lower than the limit' do
+      it 'allows requests to /notices' do
+        stub_nonauthentication
 
-    context 'number of requests is lower than the limit', cache: true do
-      it 'allows requests' do
         limit.times do |i|
-          get "/notices/#{notice.id}", {}, 'REMOTE_ADDR' => '1.2.3.9'
-          expect(last_response.status).to eq(200) if i == limit
+          get "/notices/#{notice.id}"
+          statuses << response.status
         end
+        expect(statuses).to eq([200])
+      end
+
+      it 'allows requests to .json' do
+        stub_nonauthentication
+
+        limit.times do |i|
+          get '/topics.json'
+          statuses << response.status
+        end
+        expect(statuses).to eq([200])
+      end
+
+      it 'allows requests to faceted_search', search: true do
+        stub_authentication
+
+        limit.times do |i|
+          get '/faceted_search?term=batman'
+          statuses << response.status
+        end
+        expect(statuses).to eq([200])
       end
     end
 
-    context 'number of requests is higher than the limit', cache: true do
-      it 'blocks requests' do
+    context 'number of requests is higher than the limit' do
+      it 'blocks requests to /notices' do
+        stub_nonauthentication
+
         (limit + 1).times do |i|
-          get "/notices/#{notice.id}", {}, 'REMOTE_ADDR' => '1.2.4.7'
-          expect(last_response.status).to eq(200) if i > limit
+          get "/notices/#{notice.id}"
+          statuses << response.status
         end
+        expect(statuses).to eq([200, 429])
+      end
+
+      it 'blocks requests to .json' do
+        stub_nonauthentication
+
+        (limit + 1).times do |i|
+          get '/topics.json'
+          statuses << response.status
+        end
+        expect(statuses).to eq([200, 429])
       end
     end
 
-    context 'when user is logged in' do
-      it 'lets researchers have access' do
-        u = create(:user, :researcher)
-        sign_in u
-        (limit + 1).times do |i|
-          get "/notices/#{notice.id}", {}, 'REMOTE_ADDR' => '1.2.3.10'
-          expect(last_response.status).to eq(200) if i > limit
-        end
-      end
+    it 'blocks requests to faceted_search', search: true do
+      stub_authentication
 
-      it 'lets admins have access' do
-        u = create(:user, :admin)
-        sign_in u
-        (limit + 1).times do |i|
-          get "/notices/#{notice.id}", {}, 'REMOTE_ADDR' => '1.2.3.11'
-          expect(last_response.status).to eq(200) if i > limit
-        end
+      (limit + 1).times do |i|
+        get '/faceted_search?term=batman'
+        statuses << response.status
       end
-
-      it 'lets super_admins have access' do
-        u = create(:user, :super_admin)
-        sign_in u
-        (limit + 1).times do |i|
-          get "/notices/#{notice.id}", {}, 'REMOTE_ADDR' => '1.2.3.12'
-          expect(last_response.status).to eq(200) if i > limit
-        end
-      end
-
-      it 'does not let non-permissioned users have access' do
-        u = create(:user)
-        sign_in u
-        (limit + 1).times do |i|
-          get "/notices/#{notice.id}", {}, 'REMOTE_ADDR' => '1.2.3.13'
-          expect(last_response.status).to eq(429) if i > limit
-        end
-      end
+      expect(statuses).to eq([200, 429])
     end
+  end
+
+  def isolate
+    allow_any_instance_of(Rack::Attack::Throttle).to receive(:limit).and_return(limit)
+    allow_any_instance_of(Rack::Attack::Request).to receive(:localhost?).and_return(false)
+    allow_any_instance_of(Rack::Attack::Request).to receive(:ip).and_return("1.2.3.#{line}")
+  end
+
+  def stub_authentication
+    isolate
+    allow_any_instance_of(Rack::Attack::Request).to receive(:authenticated?).and_return(true)
+    allow_any_instance_of(Rack::Attack::Request).to receive(:discriminator).and_return('yo')
+  end
+
+  def stub_nonauthentication
+    isolate
+    allow_any_instance_of(Rack::Attack::Request).to receive(:authenticated?).and_return(false)
+  end
+
+  # This finds the line number of the example in this file which ultimately
+  # called this function. This allows for each example to have a distinct IP
+  # address, so that they don't interfere with one another by writing the same
+  # cache key.
+  # Today I learned that caller_locations exists and provides a fun stacktrace.
+  def line
+    caller_locations.select { |loc| loc.path.include? 'rack-attack_spec' }
+                    .reject { |loc| loc.label.include? 'stub_' }
+                    .first
+                    .lineno
   end
 end
