@@ -1,0 +1,11 @@
+# Copy this to safelisted_ips.rb in this directory and fill in any IPs and
+# ranges you want to safelist. The file safelisted_ips.rb is gitignored to
+# protect researchers' privacy.
+module SafelistedIps
+  individuals = [
+    # list of individual IPs to safelist, like '127.0.0.1'
+  ]
+  IPS = [
+    # list of ranges of ips to safelist, like IPAddr.new('140.247.218.0/25')
+  ]
+end

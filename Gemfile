@@ -32,8 +32,7 @@ gem 'paperclip', '~> 5'
 # Version 1 is not compatible with rails < 5.1.5.
 gem 'pg', '~> 0.21.0'
 gem 'rack'
-# rack-attack 5 has breaking changes that we should deal with later.
-gem 'rack-attack', '~> 4.0'
+gem 'rack-attack'
 gem 'rack-mini-profiler'
 gem 'rails', '~> 4.2.11'
 gem 'rails_admin'
