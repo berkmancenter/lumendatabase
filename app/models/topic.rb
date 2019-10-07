@@ -2,7 +2,7 @@ require 'validates_automatically'
 require 'hierarchical_relationships'
 require 'topic_index_queuer'
 
-class Topic < ActiveRecord::Base
+class Topic < ApplicationRecord
   include ValidatesAutomatically
   include HierarchicalRelationships
 

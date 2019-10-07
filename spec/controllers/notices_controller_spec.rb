@@ -6,7 +6,7 @@ describe NoticesController do
       notice = Notice.new
       expect(Notice).to receive(:find).with('42').and_return(notice)
 
-      get :show, id: 42
+      get :show, params: { id: 42 }
 
       expect(assigns(:notice)).to eq notice
     end
@@ -15,7 +15,7 @@ describe NoticesController do
       it 'renders the show template' do
         stub_find_notice
 
-        get :show, id: 1
+        get :show, params: { id: 1 }
 
         expect(response).to be_successful
         expect(response).to render_template(:show)
@@ -24,7 +24,7 @@ describe NoticesController do
       it 'renders the rescinded template if the notice is rescinded' do
         stub_find_notice(build(:dmca, rescinded: true))
 
-        get :show, id: 1
+        get :show, params: { id: 1 }
 
         expect(response).to be_successful
         expect(response).to render_template(:rescinded)
@@ -33,7 +33,7 @@ describe NoticesController do
       it 'renders the unavailable template if the notice is spam' do
         stub_find_notice(build(:dmca, spam: true))
 
-        get :show, id: 1
+        get :show, params: { id: 1 }
 
         expect(response.status).to eq(404)
         expect(response).to render_template(file: '404_unavailable.html')
@@ -51,7 +51,7 @@ describe NoticesController do
       it 'renders the hidden template if the notice is hidden' do
         stub_find_notice(build(:dmca, hidden: true))
 
-        get :show, id: 1
+        get :show, params: { id: 1 }
 
         expect(response.status).to eq(404)
         expect(response).to render_template(file: '404_hidden.html')
@@ -71,7 +71,7 @@ describe NoticesController do
             with(notice, anything)
             .and_return(serialized)
 
-          get :show, id: 1, format: :json
+          get :show, params: { id: 1, format: :json }
 
           json = JSON.parse(response.body)[model_class.to_s.tableize.singularize]
           expect(json).to have_key('id').with_value(notice.id)
@@ -84,7 +84,7 @@ describe NoticesController do
         notice = build(:dmca, rescinded: true)
         stub_find_notice(notice)
 
-        get :show, id: 1, format: :json
+        get :show, params: { id: 1, format: :json }
 
         json = JSON.parse(response.body)['dmca']
         expect(json).to have_key('id').with_value(notice.id)
@@ -144,13 +144,15 @@ describe NoticesController do
         notice.save
         stub_find_notice(notice)
 
-        get :show, id: 1, format: :json
+        get :show, params: { id: 1, format: :json }
 
         json = JSON.parse(response.body)['dmca']['works'][0]['infringing_urls'][0]
         expect(json).to have_key('count')
         expect(json).to have_key('domain')
 
-        get :show, id: 1, authentication_token: user.authentication_token, format: :json
+        get :show, params: {
+          id: 1, authentication_token: user.authentication_token, format: :json
+        }
 
         json = JSON.parse(response.body)["dmca"]["works"][0]["infringing_urls"][0]
         expect(json).to have_key('url_original')
@@ -172,23 +174,23 @@ describe NoticesController do
         user.notice_viewer_views_limit = 1
         allow(controller).to receive(:current_user).and_return(user)
 
-        get :show, id: 42
+        get :show, params: { id: 42 }
 
         expect(user.notice_viewer_viewed_notices).to eq 1
       end
 
-      it 'won\'t increase the notice counter for the user when the viewing limit is set and viewing json' do
+      it "won't increase the notice counter for the user when the viewing limit is set and viewing json" do
         expect(Notice).to receive(:find).with('42').and_return(notice)
 
         user.notice_viewer_views_limit = 1
         allow(controller).to receive(:current_user).and_return(user)
 
-        get :show, id: 42, format: :json
+        get :show, params: { id: 42, format: :json }
 
         expect(user.notice_viewer_viewed_notices).to eq 0
       end
 
-      it 'won\'t increase the notice counter for the user when the viewing limit is nil or 0' do
+      it "won't increase the notice counter for the user when the viewing limit is nil or 0" do
         expect(Notice).to receive(:find).twice.with('42').and_return(notice)
 
         user.notice_viewer_views_limit = nil
@@ -347,7 +349,7 @@ describe NoticesController do
         post_create :json
 
         expect(response.status).to eq 401
-        expect(response.body).to eq response_body 
+        expect(response.body).to eq response_body
       end
 
       it 'returns a proper Location header when saved successfully' do

@@ -1,4 +1,4 @@
-class ReindexRun < ActiveRecord::Base
+class ReindexRun < ApplicationRecord
   REINDEXED_MODELS = [Notice, Entity].freeze
 
   def self.index_changed_model_instances

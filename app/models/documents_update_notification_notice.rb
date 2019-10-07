@@ -1,6 +1,6 @@
 require 'validates_automatically'
 
-class DocumentsUpdateNotificationNotice < ActiveRecord::Base
+class DocumentsUpdateNotificationNotice < ApplicationRecord
   include ValidatesAutomatically
 
   belongs_to :notice

@@ -1,6 +1,6 @@
 require 'validates_automatically'
 
-class EntityNoticeRole < ActiveRecord::Base
+class EntityNoticeRole < ApplicationRecord
   include ValidatesAutomatically
 
   validates :name, length: { maximum: 255 }

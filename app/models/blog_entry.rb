@@ -1,7 +1,7 @@
 require 'recent_scope'
 require 'validates_automatically'
 
-class BlogEntry < ActiveRecord::Base
+class BlogEntry < ApplicationRecord
   extend RecentScope
   include ValidatesAutomatically
 

@@ -7,8 +7,8 @@
 # - item_searcher
 # They may also define html_responder.
 class SearchController < ApplicationController
-  before_filter :prevent_impossible_pagination
-  before_filter :restrict_deep_pagination
+  before_action :prevent_impossible_pagination
+  before_action :restrict_deep_pagination
 
   layout 'search'
 

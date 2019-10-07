@@ -2,7 +2,7 @@
 
 require 'validates_automatically'
 
-class FileUpload < ActiveRecord::Base
+class FileUpload < ApplicationRecord
   include ValidatesAutomatically
 
   attr_accessor :file_name

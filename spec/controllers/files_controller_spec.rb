@@ -4,7 +4,7 @@ describe FilesController do
   describe 'GET #show' do
     let(:upload) { create(:file_upload) }
     it 'returns not found without valid params' do
-      get 'show', id: upload.id, file_path: %w[a b c]
+      get 'show', params: { id: upload.id, file_path: %w[a b c] }
       expect(response).not_to be_success
     end
 

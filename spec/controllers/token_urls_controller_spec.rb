@@ -36,6 +36,8 @@ describe TokenUrlsController do
     it 'fails to create a new token url when illegal params are provided' do
       allow(controller).to receive(:verify_recaptcha).and_return(true)
 
+      orig_count = TokenUrl.count
+
       notice = create(:dmca)
 
       params = {
@@ -46,8 +48,9 @@ describe TokenUrlsController do
       }
 
       expect {
-        post :create, params
-      }.to raise_error(ActionController::UnpermittedParameters)
+        post :create, params: params
+      }.to raise_error(ActionController::UrlGenerationError)
+      expect(TokenUrl.count).to eq orig_count
     end
 
     it 'creates a new token and strips out the email part between "+" and "@"' do

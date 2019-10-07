@@ -6,7 +6,7 @@ describe Entities::SearchController, type: :controller do
       searcher = SearchesModels.new
       allow_any_instance_of(SearchesModels).to receive(:new).and_return(searcher)
 
-      get :index, { term: 'foo' }, format: :json
+      get :index, params: { term: 'foo', format: :json }
     end
   end
 end

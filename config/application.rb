@@ -1,22 +1,14 @@
-require File.expand_path('boot', __dir__)
+require_relative 'boot'
+require_relative '../lib/middleware/catch_json_parsing_errors'
 
-# Pick the frameworks you want:
-require 'active_record/railtie'
-require 'action_controller/railtie'
-require 'action_mailer/railtie'
-# require "active_resource/railtie"
-require 'sprockets/railtie'
-# require "rails/test_unit/railtie"
+require 'rails/all'
 
-if defined?(Bundler)
-  # If you precompile assets before deploying to production, use this line
-  Bundler.require(*Rails.groups(assets: %w[development test]))
-  # If you want your assets lazily compiled in production, use this line
-  # Bundler.require(:default, :assets, Rails.env)
-end
+Bundler.require(:default, Rails.env)
 
 module Chill
   class Application < Rails::Application
+    #config.load_defaults 5.1
+
     config.active_record.default_timezone = :utc
     I18n.config.enforce_available_locales = true
 
@@ -53,9 +45,6 @@ module Chill
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = 'utf-8'
 
-    # Configure sensitive parameters which will be filtered from the log file.
-    config.filter_parameters += [:password]
-
     # Enable escaping HTML in JSON.
     config.active_support.escape_html_entities_in_json = true
 
@@ -75,18 +64,13 @@ module Chill
     config.assets.initialize_on_precompile = false
 
     # Enable compression of HTTP responses for increased efficiency
-    config.middleware.use Rack::Deflater
+    config.middleware.insert_after ActionDispatch::Static, Rack::Deflater
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
 
-    config.middleware.insert_before ActionDispatch::ParamsParser, 'CatchJsonParsingErrors'
+    config.middleware.use CatchJsonParsingErrors
     config.middleware.use Rack::Attack
-    # Active Record suppresses errors raised within
-    # `after_rollback`/`after_commit` callbacks, but these errors will
-    # propagate in later versions of AR. Setting this to true allows the error
-    # to propagate, so that we can find it.
-    config.active_record.raise_in_transactional_callbacks = true
     config.middleware.use StackProf::Middleware, enabled: false,
                                                  mode: :cpu,
                                                  interval: 1000,

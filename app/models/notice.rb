@@ -4,7 +4,7 @@ require 'language'
 require 'recent_scope'
 require 'validates_automatically'
 
-class Notice < ActiveRecord::Base
+class Notice < ApplicationRecord
   include Searchability
   include Elasticsearch::Model
 

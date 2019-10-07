@@ -32,7 +32,7 @@ By default the app will try to connect to Elasticsearch on `http://localhost:920
     $ cp config/database.yml.example config/database.yml
       (edit database.yml as you wish)
       (ensure PostgreSQL and Elasticsearch are running)
-    $ rake db:setup
+    $ rails db:setup
 
 #### Running the app
 

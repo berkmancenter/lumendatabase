@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'rake'
 
-feature "Publishing notices via rake task" do
+feature "Publishing notices via rails task" do
   def notice_statuses
     Notice.all.map{|n| [n.publication_delay, n.published]}.sort_by(&:first)
   end

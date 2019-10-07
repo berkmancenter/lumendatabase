@@ -1,4 +1,4 @@
-Chill::Application.routes.draw do
+Rails.application.routes.draw do
   get 'file_uploads/files/:id/*file_path', to: 'files#show'
 
   devise_for :users

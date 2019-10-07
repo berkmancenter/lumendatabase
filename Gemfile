@@ -31,14 +31,15 @@ gem 'paperclip', '~> 5'
 gem 'pg', '~> 0.21.0'
 gem 'rack'
 gem 'rack-attack'
-gem 'rack-mini-profiler'
-gem 'rails', '~> 4.2.11'
+gem 'rack-mini-profiler', require: false
+gem 'rails', '~> 5.0.0'
 gem 'rails_admin'
 # Updating this will install its dependency sassc, which we have removed due
 # to deprecation and replaced with sass-rails.
 gem 'rails_admin_tag_list', '0.2.0'
 gem 'recaptcha'
 gem 'recipient_interceptor', require: false
+gem 'record_tag_helper', '~> 1.0'
 gem 'redcarpet'
 gem 'select2-rails', '~> 4.0', '>= 4.0.3'
 gem 'simple_form'
@@ -84,9 +85,9 @@ group :test do
   gem 'fakeweb'
   gem 'poltergeist'
   gem 'rack-test', require: 'rack/test'
+  gem 'rails-controller-testing'
   gem 'shoulda-matchers', '~> 3.1', '>= 3.1.1'
   gem 'simplecov', require: false
-  gem 'spork-rails', git: 'https://github.com/sporkrb/spork-rails'
   gem 'timecop'
   gem 'vcr'
   gem 'webmock'

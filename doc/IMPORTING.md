@@ -30,7 +30,7 @@ very low.
 Incremental imports from MySQL
 ==============================
 
-The rake task `lumen:import_new_notices_via_mysql` will look for the
+The rails task `lumen:import_new_notices_via_mysql` will look for the
 maximum `original_notice_id`, and then import notices from the legacy system
 with a NoticeID higher than that value.  This allow us to import periodically
 via a cron job, and works very similarly to how importing is described above
@@ -38,20 +38,20 @@ via a cron job, and works very similarly to how importing is described above
 Custom legacy imports
 =====================
 
-The rake task `lumen:import_notices_via_mysql` accepts a "WHERE"
+The rails task `lumen:import_notices_via_mysql` accepts a "WHERE"
 fragment via ENV that is used in the class
 `Ingestor::Legacy::RecordSource::Mysql` to define a set of notices to import
 from the legacy system.  You can customize and re-run imports by creating
 relevant WHERE fragments, and then running the importer in a persistent
 terminal session (say, screen or tmux). An example:
 
-    BASE_DIRECTORY=/path/to/chill/docs/images/notices/ IMPORT_NAME=youtube-reimport WHERE="tNotice.NoticeID > 1500000 and tNotice.NoticeID < 1538474" rake lumen:import_notices_via_mysql
+    BASE_DIRECTORY=/path/to/chill/docs/images/notices/ IMPORT_NAME=youtube-reimport WHERE="tNotice.NoticeID > 1500000 and tNotice.NoticeID < 1538474" rails lumen:import_notices_via_mysql
 
 will import notices with NoticeID > 1500000 and less than 1538474. Remember
 that the importer will skip legacy notice IDs that it's already seen, so if you
 want to re-import notices you should delete them from the new system first.
 
-WHERE fragments passed to this rake task should allow you to easily.
+WHERE fragments passed to this rails task should allow you to easily.
 
 Writing new legacy file importers
 =================================
