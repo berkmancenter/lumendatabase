@@ -32,12 +32,6 @@ feature "Searching Entities" do
     end
   end
 
-  scenario 'searching by name works fine even with substrings', search: true do
-    entity = create(:entity, name: 'Name search')
-    index_changed_instances
-    expect(Entity.by_name('name').results.total).to eq 1
-  end
-
   def expect_entity_api_search_to_find(term, options = {})
     with_curb_get_for_json(
       "entities/search.json",
