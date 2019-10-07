@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+# Pinned due to development difficulties with AMS 0.9/0.10.
 gem 'active_model_serializers', '~> 0.8.3'
 gem 'activerecord-import'
 gem 'acts-as-taggable-on'
@@ -26,19 +27,20 @@ gem 'jquery-ui-rails'
 # slow postgres table counts on large tables.
 gem 'kaminari', '0.14.1'
 gem 'lograge'
-gem 'loofah', '>= 2.2.3'
 gem 'mime-types'
 gem 'oink'
 gem 'paperclip', '~> 5'
-gem 'pg', '0.20.0'
-gem 'rack', '>= 1.6.11'
+# Version 1 is not compatible with rails < 5.1.5.
+gem 'pg', '~> 0.21.0'
+gem 'rack'
 # rack-attack 5 has breaking changes that we should deal with later.
 gem 'rack-attack', '~> 4.0'
 gem 'rack-mini-profiler'
 gem 'rails', '~> 4.2.11'
 gem 'rails_admin'
-gem 'rails_admin_tag_list'
-# Monkeypatched temporarily for debugging purposes
+# Updating this will install its dependency sassc, which we have removed due
+# to deprecation and replaced with sass-rails.
+gem 'rails_admin_tag_list', '0.2.0'
 gem 'recaptcha'
 gem 'recipient_interceptor', require: false
 gem 'redcarpet'
@@ -59,7 +61,7 @@ group :development do
 end
 
 group :development, :test do
-  gem "factory_bot_rails"
+  gem 'factory_bot_rails'
   gem 'phantomjs'
   gem 'pry', '~> 0.10.4'
   gem 'pry-byebug'

@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe 'Customized kaminari counting' do
   it 'counts for configured tables' do
+    skip 'This will be refactored when we upgrade kaminari'
+
     table_name = 'a_table'
     dummy = Dummy.new(table_name)
     execute_double = stub_execute(dummy)
@@ -14,6 +16,8 @@ describe 'Customized kaminari counting' do
   end
 
   it 'does not count for unconfigured tables' do
+    skip 'This will be refactored when we upgrade kaminari'
+
     table_name = 'a_table'
     different_table_name = 'some_other_table_name'
 
@@ -54,4 +58,3 @@ describe 'Customized kaminari counting' do
     end
   end
 end
-
