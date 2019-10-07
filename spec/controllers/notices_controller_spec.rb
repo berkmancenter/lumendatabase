@@ -42,7 +42,7 @@ describe NoticesController do
       it 'renders the unavailable template if the notice is unpublished' do
         stub_find_notice(build(:dmca, published: false))
 
-        get :show, id: 1
+        get :show, params: { id: 1 }
 
         expect(response.status).to eq(404)
         expect(response).to render_template(file: '404_unavailable.html')
@@ -196,13 +196,13 @@ describe NoticesController do
         user.notice_viewer_views_limit = nil
         allow(controller).to receive(:current_user).and_return(user)
 
-        get :show, id: 42, format: :json
+        get :show, params: { id: 42, format: :json }
 
         expect(user.notice_viewer_viewed_notices).to eq 0
 
         user.notice_viewer_views_limit = 0
 
-        get :show, id: 42, format: :json
+        get :show, params: { id: 42, format: :json }
 
         expect(user.notice_viewer_viewed_notices).to eq 0
       end
@@ -213,15 +213,15 @@ describe NoticesController do
         user.notice_viewer_views_limit = 2
         allow(controller).to receive(:current_user).and_return(user)
 
-        get :show, id: 42
+        get :show, params: { id: 42 }
 
         expect(user.notice_viewer_viewed_notices).to eq 1
 
-        get :show, id: 42
+        get :show, params: { id: 42 }
 
         expect(user.notice_viewer_viewed_notices).to eq 2
 
-        get :show, id: 42
+        get :show, params: { id: 42 }
 
         expect(user.notice_viewer_viewed_notices).to eq 2
       end
@@ -245,7 +245,7 @@ describe NoticesController do
           .with(DMCA, @notice_params)
           .and_return(@submit_notice)
 
-        post :create, notice: @notice_params
+        post :create, params: { notice: @notice_params }
       end
 
       it 'uses the type param to instantiate the correct class' do
@@ -253,7 +253,9 @@ describe NoticesController do
           .with(Trademark, @notice_params)
           .and_return(@submit_notice)
 
-        post :create, notice: @notice_params.merge(type: 'trademark')
+        post :create, params: {
+          notice: @notice_params.merge(type: 'trademark')
+        }
       end
 
       it 'defaults to DMCA if the type is missing or invalid' do
@@ -265,7 +267,9 @@ describe NoticesController do
           .and_return(@submit_notice)
 
         invalid_types.each do |invalid_type|
-          post :create, notice: @notice_params.merge(type: invalid_type)
+          post :create, params: {
+            notice: @notice_params.merge(type: invalid_type)
+          }
         end
       end
 
@@ -287,7 +291,7 @@ describe NoticesController do
         expect(NoticeSubmissionInitializer).to receive(:new)
           .with(anything, params.except(:works_attributes))
 
-        post :create, notice: params
+        post :create, params: { notice: params }
       end
 
       it 'initializes NoticeSubmissionFinalizer with delayed parameters' do
@@ -310,7 +314,7 @@ describe NoticesController do
         expect(NoticeSubmissionFinalizer).to receive(:new)
           .with(anything, hash_including(:works_attributes))
 
-        post :create, notice: params
+        post :create, params: { notice: params }
       end
     end
 
@@ -406,7 +410,7 @@ describe NoticesController do
     end
 
     def post_create(format = :html)
-      post :create, notice: { title: 'A title' }, format: format
+      post :create, params: { notice: { title: 'A title' }, format: format }
     end
 
     def mock_errors(model, field_errors = {})

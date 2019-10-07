@@ -58,6 +58,7 @@ RSpec.configure do |config|
   config.before :each do
     stub_request(:any, 'https://platform.twitter.com/widgets.js')
   end
+  #config.raise_errors_for_deprecations!
 end
 
 RSpec::Mocks.configuration.allow_message_expectations_on_nil = true

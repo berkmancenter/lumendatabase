@@ -183,7 +183,7 @@ class Notice < ApplicationRecord
   def self.in_topics(topics)
     joins(topic_assignments: :topic)
       .where('topics.id' => topics)
-      .uniq
+      .distinct
   end
 
   def self.submitted_by(submitters)

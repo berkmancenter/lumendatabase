@@ -141,7 +141,7 @@ class NoticesController < ApplicationController
   # usage difference between this version and a version that avoids these calls.
   # --ay, 11 December 2018
   def get_notice_type(params)
-    type_string = params.fetch(:type, 'DMCA')
+    type_string = params.values.fetch(:type, 'DMCA')
     type_string = 'DMCA' if type_string == 'Dmca'
 
     notice_type = type_string.classify.constantize
