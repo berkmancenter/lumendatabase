@@ -64,11 +64,7 @@ class Rack::Attack::Request
   end
 
   def user_from_session
-    User.find(self.session['warden.user.user.key'][0][0])
-  rescue ActiveRecord::RecordNotFound  # no user with that ID exists
-    nil
-  rescue NoMethodError  # [] is not defined on NilClass
-    nil
+    env['warden'].user
   end
 
   def user_from_token
