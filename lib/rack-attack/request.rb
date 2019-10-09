@@ -27,7 +27,7 @@ class Rack::Attack::Request
   def token
     @token ||= if env.key?(LUMEN_HEADER)
                  Rails.logger.info "[rack-attack] Authentication Token in header: #{env['HTTP_X_AUTHENTICATION_TOKEN']}"
-                 env[header]
+                 env[LUMEN_HEADER]
                elsif params[LUMEN_AUTH_TOKEN].present?
                  Rails.logger.info "[rack-attack] Authentication Token in params: #{params[LUMEN_AUTH_TOKEN]}"
                  params[LUMEN_AUTH_TOKEN]
