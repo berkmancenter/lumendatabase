@@ -1,6 +1,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
-## [19.10](https://github.com/berkmancenter/lumendatabase/releases/tag/2019.09) - 2019-10-04
+## [19.10a](https://github.com/berkmancenter/lumendatabase/releases/tag/2019.10a) - 2019-10-10
+### Fixed
+* Bug in lib/rack-attack/request.rb#token which was preventing data submission.
+
+## [19.10](https://github.com/berkmancenter/lumendatabase/releases/tag/2019.10) - 2019-10-04
 ### Changed
 * Enforced previously soft limits on API token use.
 
