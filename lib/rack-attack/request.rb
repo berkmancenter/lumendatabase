@@ -27,7 +27,7 @@ class Rack::Attack::Request
   def token
     @token ||= if env.key?(LUMEN_HEADER)
                  Rails.logger.info "[rack-attack] Authentication Token in header: #{env['HTTP_X_AUTHENTICATION_TOKEN']}"
-                 env[header]
+                 env[LUMEN_HEADER]
                elsif params[LUMEN_AUTH_TOKEN].present?
                  Rails.logger.info "[rack-attack] Authentication Token in params: #{params[LUMEN_AUTH_TOKEN]}"
                  params[LUMEN_AUTH_TOKEN]
@@ -64,11 +64,7 @@ class Rack::Attack::Request
   end
 
   def user_from_session
-    User.find(self.session['warden.user.user.key'][0][0])
-  rescue ActiveRecord::RecordNotFound  # no user with that ID exists
-    nil
-  rescue NoMethodError  # [] is not defined on NilClass
-    nil
+    env['warden'].user
   end
 
   def user_from_token
