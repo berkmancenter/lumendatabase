@@ -24,28 +24,30 @@
 
 <a id="database"><h2>What content can I find in the database, and where does it come from?</h2></a>
 
-<p>Since its founding in 2001, the Lumen project (formerly the Chilling Effects Clearinghouse) has collected almost 4 million requests to remove material from the World Wide Web. Today, this archive is an indispensable resource for anyone seeking to understand the global ecosystem of requests to remove content from the Internet. The complaints, indexed by topic and stored in our searchable database, include DMCA takedown notices submitted to the database by the individual senders or recipients, as well as notices received by Internet providers and hosts such as Google, Twitter, Reddit, Wikipedia, Wordpress, and others.  Aggregating all of these different requests to remove material facilitates the research, study and mapping of the Internet's removal request landscape.  Further, it allows members of the public to see the origin and nature of content removals, and make their own evaluations of them.</p>
+<p>Since its founding in 2001, the Lumen project (formerly the Chilling Effects Clearinghouse) has collected almost 11 million requests to remove material from the World Wide Web. Today, this archive is an indispensable resource for anyone seeking to understand the global ecosystem of requests to remove content from the Internet. The complaints in Lumen's database include DMCA takedown notices submitted to the database by the individual senders or recipients, as well as other types of requests or demands for removal, such as court orders received by Internet providers and hosts such as Google, Twitter, Medium, Wikipedia, Wordpress, DuckDuckGo, and others.  Aggregating all of these different requests to remove material facilitates the research, study and mapping of the Internet's removal request landscape by journalists, NGOs, policy-makers, and academics.</p>
 
 <a id="notices"><h2>Where do the notices come from?</h2></a>
 
-<p>Notice submissions to the Lumen database generally come from two types of sources.</p>
-<p>Individual users can submit requests to remove material they have sent or received, including cease and desist letters and other takedown notices they have received or sent, including, but by no means limited to, DMCA notices</p>
-<p>Businesses that receive notices (like Google, Twitter, Wordpress, Reddit and others) have partnered with Lumen to automatically send us all of the removal requests they receive.  For more information about these bulk notice submitters' submissions to Lumen, please refer to each company's own website and information pages.</p>
+<p>Submissions to the Lumen database generally come from either the original recipients or the senders of the notice or removal request.</p>
+<p>Businesses that receive removal requests (like Google, Twitter, Wordpress,  and others), or that send such requests (like CounterfeitTech), have partnered with Lumen to automatically send us some or all of the removal requests they receive or send.  For more information about these companies' submissions to Lumen, please refer to each company's own website and information pages.</p>
 
 
 <a id="missing"><h2>A notice or work contains "[redacted]" – what is missing?</h2></a>
 
 <p>Lumen staff make a good faith effort to review and redact any potentially sensitive notices that the project receives in order to remove sensitive or personal information from the text of notices. Such information might include phone numbers, email addresses, or allegedly defamatory content. Further, an individual or company submitting a notice directly to the Lumen database may have decided not to share with Lumen, or to keep private, certain pieces of information in the notice. Finally, Lumen runs automated processes to remove certain sensitive information from notices and descriptions of their associated works where possible.</p>
-<p>Please note that for DMCA notices, Lumen does <b>not</b> redact the name of the rightsholder making the request or the URL(s) of the material complained of. Without the location of the complained-of material and the complainant, the notices are meaningless from a public transparency or research perspective, to say nothing of offering no insight as to possible misuse of takedown notices as a vehicle for censorship.</p>
+<p>Please note that for DMCA notices, Lumen does <b>not</b> typically redact the name of the rightsholder making the request or the URL(s) of the material complained of. Without the location of the complained-of material and the complainant, the notices are meaningless from a transparency or research perspective, to say nothing of offering no insight as to possible misuse of takedown notices as a vehicle for censorship.</p>
+
+<p>
+  When a company shares copies of court orders it has received with us, Lumen typically displays those orders in the form in which they have been shared with Lumen and further, makes a good faith effort to do so in accordance with the applicable law of the jurisdiction from which the order emerged.  United States court orders, unless sealed, are public documents.
+</p>
 
 <a id="clearinghouse"><h2>Who is Lumen for?</h2></a>
 
-<p>Lumen is designed for use by lay Internet users curious about a notice they may have encountered, as well Internet and legal researchers studying larger trends about free expression and content removal online.  If you have further ideas about how to use the database, or suggestions about this FAQ, email us at team@lumendatabase.org with the subject line "A Suggestion for Researcher FAQs."</p>
+<p>Lumen is designed for casual use by lay Internet users curious about a notice they may have encountered, as well as for more in-depth and focused use by journalists, NGOs, policy-makers, and legal researchers studying larger trends about content removal online.  If you are interested in conducting journalistic, academic, legal, or policy-focused research of your own on, or have further ideas about we might improve the database and its interfaces, email us at team@lumendatabase.org.</p>
 
 <a id="documentation"><h2>How does it work?</h2></a>
 
-</p>We are excited that you're interested in conducting research using our database of cease and desist notices, and pleased to be able to offer you a powerful new user interface.  Most users will find that the web interface will suffice for browsing and discovery within the database.  However, for those that need to access larger swaths of data for use or reuse in various applications, we offer our new API.  Read on for further information.<p>
-
+<p>Most users will find that the web interface will suffice for browsing and discovery within the database.  However, for those that need to access larger swaths of data for use or reuse in various applications, we offer our API.  Read on for further information.<p>
 
 </section>
 
@@ -217,7 +219,7 @@ curl -H "Accept: application/json" -H "Content-type: application/json" 'https://
 
 <a id="bulk_download"><h2>Downloading Results in Bulk</h2></a>
 
-In order to better manage its resources, Lumen limits requests to its API. For those interested in unlimited access to the database through the API, please see  <a href="#key">"Getting an API key."</a>
+In order to better manage its resources, Lumen limits requests to its API as well as use of the web-based user interface. For those interested in less restricted access to the database through the API, please see  <a href="#key">"Getting an API key."</a>
 
 <a id="api_terms"><h2>API Terms of Use</h2></a>
 The terms of use for the API are available by clicking <a href="/pages/api_terms">here</a>.
