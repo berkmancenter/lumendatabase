@@ -13,6 +13,9 @@
 # ignore stack prof output
 /prof
 
+# Ignore rvm config (may vary between environments).
+.rvmrc
+
 # Ignore all logfiles and tempfiles.
 log/*
 tmp/
