@@ -41,14 +41,14 @@ describe TopicsController do
       get :index, format: :json
 
       json = JSON.parse(response.body)['topics']
-      expect(json.first).to have_key('id').with_value(parent_topic.id)
-      expect(json.first).to have_key('name').with_value(parent_topic.name)
-      expect(json.first).to have_key('parent_id').with_value(nil)
+      expect(json).to include(
+        {"id"=>parent_topic.id, "name"=>parent_topic.name, "parent_id"=>nil}
+      )
 
-      expect(json.last).to have_key('id').with_value(child_topic.id)
-      expect(json.last).to have_key('name').with_value(child_topic.name)
-      expect(json.last).to have_key('parent_id')
-        .with_value(child_topic.parent_id)
+      expect(json).to include(
+        {"id"=>child_topic.id, "name"=>child_topic.name,
+         "parent_id"=>child_topic.parent_id}
+      )
     end
   end
 end

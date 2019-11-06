@@ -16,7 +16,7 @@ Development
 
 #### Requirements
 
-* ruby 2.3.3
+* ruby 2.5.5
 * PostgreSQL 9.6
 * Elasticsearch 5.6.x
 * Java Runtime Environment (OpenJDK works fine)

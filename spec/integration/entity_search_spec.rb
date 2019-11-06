@@ -33,7 +33,6 @@ feature "Searching Entities" do
   end
 
   def expect_entity_api_search_to_find(term, options = {})
-    sleep (ENV["SEARCH_SLEEP"] && ENV["SEARCH_SLEEP"].to_i) || 1
     with_curb_get_for_json(
       "entities/search.json",
       options.merge(term: term)) do |curb|
