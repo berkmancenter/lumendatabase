@@ -107,7 +107,7 @@ describe NoticesHelper do
   it 'handles bogus URL types' do
     dmca = create(:dmca)
     expect { helper.label_for_url_input(:party_time_urls, dmca) }
-      .to raise_error
+      .to raise_error(RuntimeError)
   end
 
   context 'permanent_url_full_notice' do

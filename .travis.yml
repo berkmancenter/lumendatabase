@@ -1,6 +1,6 @@
 language: ruby
 
-rvm: 2.3.3
+rvm: 2.5.5
 
 addons:
   apt:
