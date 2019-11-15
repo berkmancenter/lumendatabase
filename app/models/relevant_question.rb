@@ -1,6 +1,6 @@
 require 'validates_automatically'
 
-class RelevantQuestion < ActiveRecord::Base
+class RelevantQuestion < ApplicationRecord
   has_and_belongs_to_many :topics
   include ValidatesAutomatically
 

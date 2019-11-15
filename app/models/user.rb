@@ -1,4 +1,4 @@
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   devise :database_authenticatable,
          :recoverable,           # New users are given a temp password to reset
          :validatable            # Ensures confirmation of Password on reset

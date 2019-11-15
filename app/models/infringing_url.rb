@@ -1,7 +1,7 @@
 require 'validates_automatically'
 require 'default_url_original'
 
-class InfringingUrl < ActiveRecord::Base
+class InfringingUrl < ApplicationRecord
   include ValidatesAutomatically
   include DefaultUrlOriginal
 

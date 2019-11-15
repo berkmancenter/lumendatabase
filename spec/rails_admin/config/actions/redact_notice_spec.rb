@@ -1,6 +1,10 @@
 require 'spec_helper'
 require 'rails_admin/config/actions/redact_notice'
 
+# The `should_receive`s here should be removed to eliminate the deprecation
+# warning, but converting them to expect syntax is hard (things that work
+# differently: finding the subjects which receive a given message, capturing
+# and carrying over :some_path).
 describe 'RedactNoticeProc' do
   include RailsAdminActionContext
 

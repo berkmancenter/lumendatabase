@@ -1,7 +1,7 @@
 require 'validates_automatically'
 require 'default_url_original'
 
-class CopyrightedUrl < ActiveRecord::Base
+class CopyrightedUrl < ApplicationRecord
   include ValidatesAutomatically
   include DefaultUrlOriginal
 

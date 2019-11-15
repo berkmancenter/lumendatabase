@@ -24,7 +24,8 @@ module Redaction
         relation = relation.send(scope, argument) if argument.present?
       end
 
-      relation.limit(queue.available_space).update_all(reviewer_id: queue.user)
+      relation.limit(queue.available_space)
+              .update_all(reviewer_id: queue.user.id)
     end
 
     def root_key

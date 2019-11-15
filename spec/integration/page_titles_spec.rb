@@ -15,23 +15,6 @@ feature 'Page titles' do
     expect(page).to have_exact_title('Search :: Lumen')
   end
 
-  scenario "Blog" do
-    blog_entry = create(:blog_entry, :published)
-
-    visit '/'
-    click_on 'Blog'
-
-    # index
-    expect(page).to have_exact_title('Blog :: Lumen')
-    expect(page).to have_heading('Blog')
-
-    click_on blog_entry.title
-
-    # show
-    expect(page).to have_exact_title("#{blog_entry.title} :: Blog :: Lumen")
-    expect(page).to have_heading('Blog')
-  end
-
   scenario "Topics", search: true do
     topic = create(:topic)
 

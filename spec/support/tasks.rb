@@ -6,10 +6,10 @@ require 'rake'
 #
 # 1) describe "foo:bar" do ... end
 #
-# 2) describe "rake foo:bar" do ... end
+# 2) describe "rails foo:bar" do ... end
 #
-# Favor including "rake "-prefix as in the 2nd example above as it produces
-# doc output that makes it clear a rake task is under test and how it is
+# Favor including "rails "-prefix as in the 2nd example above as it produces
+# doc output that makes it clear a rails task is under test and how it is
 # invoked.
 module TaskExampleGroup
   extend ActiveSupport::Concern

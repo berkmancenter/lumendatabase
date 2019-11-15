@@ -2,7 +2,7 @@
 
 require 'validates_automatically'
 
-class FileUpload < ActiveRecord::Base
+class FileUpload < ApplicationRecord
   include ValidatesAutomatically
 
   attr_accessor :file_name
@@ -46,7 +46,7 @@ class FileUpload < ActiveRecord::Base
   end
 
   def set_documents_requesters_notifications
-    return unless notice && kind.include?('supporting') && (new_record? || changed?)
+    return unless notice && kind.include?('supporting') && (new_record? || saved_changes?)
 
     DocumentsUpdateNotificationNotice.create(notice: notice)
   end

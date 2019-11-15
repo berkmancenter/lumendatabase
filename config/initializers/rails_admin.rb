@@ -213,6 +213,7 @@ RailsAdmin.config do |config|
     end
 
     list do
+      limited_pagination true
       configure(:copyrighted_urls) { hide }
       configure(:infringing_urls) { hide }
     end
@@ -225,6 +226,10 @@ RailsAdmin.config do |config|
 
   config.model 'InfringingUrl' do
     object_label_method { :url }
+
+    list do
+      limited_pagination true
+    end
   end
 
   config.model 'FileUpload' do
