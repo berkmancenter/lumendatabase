@@ -72,7 +72,7 @@ describe NoticeSubmissionInitializer, type: :model do
       end
 
       it "can handle Rails' form-style parameters" do
-        parameters = HashWithIndifferentAccess.new(
+        parameters = ActiveSupport::HashWithIndifferentAccess.new(
           '0' => { name: 'recipient', entity_attributes: { name: 'Google' } }
         )
         submit_notice = submit_with_roles_attributes(DMCA, parameters)

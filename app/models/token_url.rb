@@ -1,6 +1,6 @@
 require 'validates_automatically'
 
-class TokenUrl < ActiveRecord::Base
+class TokenUrl < ApplicationRecord
   include ValidatesAutomatically
 
   before_create :generate_token

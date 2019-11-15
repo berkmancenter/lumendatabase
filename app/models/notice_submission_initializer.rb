@@ -107,6 +107,7 @@ class NoticeSubmissionInitializer
   # already. Curse you, Rails for making me type-check.
   def flatten_param(param)
     case param
+    when ActionController::Parameters then param.values
     when Hash  then param.values
     when Array then param
     else []

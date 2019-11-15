@@ -10,7 +10,10 @@ feature 'permanent token url generation' do
 
     visit notice_path(notice)
 
-    find('#hide-first-time-visitor-content').click
+    if page.has_selector?('#hide-first-time-visitor-content', visible: true)
+      find('#hide-first-time-visitor-content').click
+    end
+
     click_on 'Generate a permanent URL to the full version of this notice'
 
     expect(page).to have_content 'A permanent URL for this notice has been created'

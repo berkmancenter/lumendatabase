@@ -1,12 +1,6 @@
 require 'rails_helper'
 
 describe 'shared/_navigation.html.erb' do
-  it 'shows a link to read the blog' do
-    render
-
-    expect(rendered).to contain_link(blog_entries_path)
-  end
-
   it 'shows a link to research' do
     render
 

@@ -10,8 +10,8 @@ then retrieve these model instances in batches (controlled by the value of
 ENV['BATCH_SIZE'], with a default of 100) and send each of them to
 elasticsearch.
 
-The easiest way to reindex is to run the rake task
-`lumen::index_changed_model_instances` via cron. Every five minutes
+The easiest way to reindex is to run the rails task
+`lumen:index_changed_model_instances` via cron. Every five minutes
 would probably be a good starting point.
 
 Please see the ReindexRun part of the admin for information about indexing
@@ -25,7 +25,7 @@ running at once via a `lockrun`-like cron harness.
 ## Recreating the elasticsearch index
 
 You can either remove all ReindexRun rows, or - preferably - use the
-`lumen::recreate_elasticsearch_index` rake task after disabling the
+`lumen:recreate_elasticsearch_index` rails task after disabling the
 cron job you set up to run the incremental indexing. This also uses
 ENV['BATCH_SIZE'] to set how many items will be indexed per loop, ensuring we
 don't use too much RAM at once.

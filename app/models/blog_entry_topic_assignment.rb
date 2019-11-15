@@ -1,6 +1,6 @@
 require 'topic_assigner'
 
-class BlogEntryTopicAssignment < ActiveRecord::Base
+class BlogEntryTopicAssignment < ApplicationRecord
   extend TopicAssigner
 
   assigns_topic_to :blog_entry

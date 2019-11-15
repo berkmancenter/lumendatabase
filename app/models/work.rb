@@ -2,7 +2,7 @@
 
 require 'validates_automatically'
 
-class Work < ActiveRecord::Base
+class Work < ApplicationRecord
   include ValidatesAutomatically
 
   UNKNOWN_WORK_DESCRIPTION = 'Unknown work'.freeze

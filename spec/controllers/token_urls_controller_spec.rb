@@ -6,7 +6,7 @@ describe TokenUrlsController do
       notice = Notice.new
       expect(Notice).to receive(:find).with('1').and_return(notice)
 
-      get :new, id: 1
+      get :new, params: { id: 1 }
 
       expect(response).to be_successful
       expect(assigns(:notice)).to eq notice
@@ -27,7 +27,7 @@ describe TokenUrlsController do
         }
       }
 
-      post :create, params
+      post :create, params: params
 
       expect(TokenUrl.last.notice).to eq notice
       expect(TokenUrl.last.email).to eq 'user@example.com'
@@ -35,6 +35,8 @@ describe TokenUrlsController do
 
     it 'fails to create a new token url when illegal params are provided' do
       allow(controller).to receive(:verify_recaptcha).and_return(true)
+
+      orig_count = TokenUrl.count
 
       notice = create(:dmca)
 
@@ -46,8 +48,9 @@ describe TokenUrlsController do
       }
 
       expect {
-        post :create, params
-      }.to raise_error(ActionController::UnpermittedParameters)
+        post :create, params: params
+      }.to raise_error(ActionController::UrlGenerationError)
+      expect(TokenUrl.count).to eq orig_count
     end
 
     it 'creates a new token and strips out the email part between "+" and "@"' do
@@ -62,7 +65,7 @@ describe TokenUrlsController do
         }
       }
 
-      post :create, params
+      post :create, params: params
 
       expect(TokenUrl.last.email).to eq 'user@example.com'
     end
@@ -76,12 +79,12 @@ describe TokenUrlsController do
         token: token_url.token
       }
 
-      get :disable_documents_notification, params
+      get :disable_documents_notification, params: params
 
       expect(TokenUrl.last.documents_notification).to eq(false)
     end
 
-    it 'won\'t disable a documents notification with a wrong token' do
+    it "won't disable a documents notification with a wrong token" do
       notice = create(:dmca)
       token_url = create(:token_url, notice: notice, documents_notification: true)
 
@@ -90,12 +93,12 @@ describe TokenUrlsController do
         token: 'hohoho'
       }
 
-      get :disable_documents_notification, params
+      get :disable_documents_notification, params: params
 
       expect(TokenUrl.last.documents_notification).to eq(true)
     end
 
-    it 'won\'t call the validate method twice' do
+    it "won't call the validate method twice" do
       allow(controller).to receive(:verify_recaptcha).and_return(true)
       allow(controller).to receive(:validate).and_return(
         status: false,
@@ -112,7 +115,7 @@ describe TokenUrlsController do
         }
       }
 
-      post :create, params
+      post :create, params: params
     end
   end
 end

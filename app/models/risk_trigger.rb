@@ -1,4 +1,4 @@
-class RiskTrigger < ActiveRecord::Base
+class RiskTrigger < ApplicationRecord
   ALLOWED_MATCHING_TYPES = %w[any all].freeze
 
   has_many :risk_trigger_conditions, dependent: :destroy

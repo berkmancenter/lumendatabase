@@ -13,6 +13,9 @@
 # ignore stack prof output
 /prof
 
+# Ignore rvm config (may vary between environments).
+.rvmrc
+
 # Ignore all logfiles and tempfiles.
 log/*
 tmp/
@@ -35,4 +38,5 @@ config/database.yml
 rspec_examples.txt
 .reek.yml
 whitelisted_ips.rb
+safelisted_ips.rb
 public/usercron/

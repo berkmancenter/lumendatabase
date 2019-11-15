@@ -2,9 +2,10 @@
 
 class ApplicationController < ActionController::Base
   layout :layout_by_resource
+  protect_from_forgery with: :exception
 
-  before_filter :authenticate_user_from_token!
-  before_filter :set_profiler_auth
+  before_action :authenticate_user_from_token!
+  before_action :set_profiler_auth
 
   rescue_from CanCan::AccessDenied do |ex|
     logger.warn "Unauthorized attempt to #{ex.action} #{ex.subject}"
@@ -14,7 +15,7 @@ class ApplicationController < ActionController::Base
 
   skip_before_action :verify_authenticity_token
 
-  after_filter :store_action
+  after_action :store_action
   after_action :include_auth_cookie
 
   if Rails.env.staging? || Rails.env.production?

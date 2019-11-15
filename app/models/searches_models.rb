@@ -36,7 +36,7 @@ class SearchesModels
   end
 
   def cache_key
-    @cache_key ||= "search-result-#{Digest::MD5.hexdigest(@params.to_param)}"
+    @cache_key ||= "search-result-#{Digest::MD5.hexdigest(@params.values.to_s)}"
   end
 
   def visible_qualifiers

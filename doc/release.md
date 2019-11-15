@@ -26,17 +26,17 @@ If any deploys have special instructions, write them here, with a date and PR nu
 * Rectify `dev-legacy`:
   * Merge `dev` into `dev-legacy`
   * Bundle install
-  * rake db:migrate
+  * rails db:migrate
   * Make sure the tests pass
 * Rectify `master`:
   * Merge `dev` into `master`
   * Bundle install
-  * rake db:migrate
+  * rails db:migrate
   * Make sure the tests pass
 * Rectify `master-legacy`:
   * Merge `master` into `master-legacy`
   * Bundle install
-  * rake db:migrate
+  * rails db:migrate
   * Make sure the tests pass
 * Push `dev-legacy`, `master`, and `master-legacy` to github
 * Deploy `master-legacy` to the dev server (flutie)
@@ -48,7 +48,7 @@ If any deploys have special instructions, write them here, with a date and PR nu
 * Log in to the relevant server (`psh <servername>`)
 * `sudo -su chill-prod` (enyos) or `sudo -su chill-dev` (flutie) or `sudo -su chill-api` (percy)
 * cd into the directory where chill files live (look under `/web/<servername>`)
-* `rake lumen:maintenance_start`
+* `rails lumen:maintenance_start`
 * `cp .env ../` (as a precaution)
 * `git checkout db/schema.rb`
 * `git checkout <branch>`
@@ -58,13 +58,13 @@ If any deploys have special instructions, write them here, with a date and PR nu
 * `bundle install`
   * This will throw an error if the user doesn't have write permissions on the home directory inferred by bundler (probably the one specified in /etc/passwd/), but it probably works anyway.
 * `cp ../.env .`
-* `rake db:migrate`
-  - If this throws a `PG::ConnectionBad:` and asks something like "Is the server running locally and accepting connections on Unix domain socket "/var/run/postgresql/.s.PGSQL.5432"?", use `RAILS_ENV=production rake db:migrate`
-* `rake assets:clobber`
-* `RAILS_ENV=development rake assets:precompile`
+* `rails db:migrate`
+  - If this throws a `PG::ConnectionBad:` and asks something like "Is the server running locally and accepting connections on Unix domain socket "/var/run/postgresql/.s.PGSQL.5432"?", use `RAILS_ENV=production rails db:migrate`
+* `rails assets:clobber`
+* `RAILS_ENV=development rails assets:precompile`
   * This MUST specify the development environment, because bourbon is not loaded in production to save on memory.
   * Prod will still be able to find the precompiled assets.
-* `rake lumen:maintenance_end`
+* `rails lumen:maintenance_end`
   * This includes the `touch tmp/restart.txt` command, which tells Passenger to restart its listener.
 * Update `CHANGELOG.md` per [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 

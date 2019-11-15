@@ -8,4 +8,6 @@ if Rails.env.staging? || Rails.env.production?
     port: ENV['SMTP_PORT'],
     user_name: ENV['SMTP_USERNAME']
   } unless defined?( SMTP_SETTINGS )
+
+  Rails.application.config.action_mailer.smtp_settings = SMTP_SETTINGS
 end

@@ -38,6 +38,6 @@ describe 'rake lumen:generate_court_order_report', type: :task do
   def stub_smtp
     @fake_smtp = double('Net::STMP.new')
     allow(@fake_smtp).to receive(:send_message)
-    Net::SMTP.stub(:start).and_yield @fake_smtp
+    allow(Net::SMTP).to receive(:start).and_yield @fake_smtp
   end
 end

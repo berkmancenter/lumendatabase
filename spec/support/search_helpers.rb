@@ -39,7 +39,10 @@ module SearchHelpers
     open_dropdown_for_facet(facet)
 
     within("ol.#{facet}") do
-      find('a', text: /#{facet_value}/).click
+      # The gsub converts newlines to spaces as they can break the regex.
+      # normalize_ws ensures that it doesn't matter if we did this.
+      find('a', text: /#{facet_value.gsub(/[\r\n]+/, ' ')}/,
+           normalize_ws: true, visible: false).click
     end
   end
 

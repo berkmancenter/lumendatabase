@@ -1,6 +1,6 @@
 require 'topic_assigner'
 
-class TopicAssignment < ActiveRecord::Base
+class TopicAssignment < ApplicationRecord
   extend TopicAssigner
 
   assigns_topic_to :notice, touch: true
