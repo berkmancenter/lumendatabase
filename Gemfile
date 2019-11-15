@@ -32,7 +32,7 @@ gem 'paperclip', '~> 5'
 gem 'pg', '~> 1.1.4'
 gem 'rack'
 gem 'rack-attack'
-gem 'rack-mini-profiler', require: false
+gem 'rack-mini-profiler'
 gem 'rails', '~> 5.2.0'
 gem 'rails_admin'
 gem 'rails_admin_tag_list', git: 'https://github.com/berkmancenter/rails_admin_tag_list'
