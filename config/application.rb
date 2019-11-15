@@ -63,9 +63,6 @@ module Chill
     config.assets.enabled = true
     config.assets.initialize_on_precompile = false
 
-    # Enable compression of HTTP responses for increased efficiency
-    config.middleware.insert_after ActionDispatch::Static, Rack::Deflater
-
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
 
