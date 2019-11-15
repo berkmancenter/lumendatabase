@@ -14,7 +14,7 @@ describe Notices::SearchController do
 
   scenario 'deep pagination allowed with json', search: true do
     get :index, params: { page: 100, term: 'batman', format: :json }
-    expect(response).to have_http_status :success
+    expect(response).to be_successful
   end
 
   scenario 'deep pagination not allowed with html', search: true do
@@ -24,13 +24,13 @@ describe Notices::SearchController do
 
   scenario 'shallow pagination allowed with html', search: true do
     get :index, params: { page: 10, term: 'batman' }
-    expect(response).to have_http_status :success
+    expect(response).to be_successful
   end
 
   scenario 'deep pagination allowed for signed-in users', search: true do
     allow_any_instance_of(SearchController).to receive(:user_signed_in?)
                                            .and_return(true)
     get :index, params: { page: 100, term: 'batman' }
-    expect(response).to have_http_status :success
+    expect(response).to be_successful
   end
 end
