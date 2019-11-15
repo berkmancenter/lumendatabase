@@ -35,7 +35,6 @@ feature "Searching Entities" do
   scenario 'searching by name works fine even with substrings', search: true do
     entity = create(:entity, name: 'Name search')
     index_changed_instances
-    sleep 0.5 # required for indexing to complete/avoid intermittent failures
     expect(Entity.by_name('name').results.total).to eq 1
   end
 
