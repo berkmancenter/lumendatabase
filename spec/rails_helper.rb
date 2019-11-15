@@ -1,6 +1,11 @@
 ENV['RAILS_ENV'] ||= 'test'
 
-require File.expand_path('../config/environment', __dir__)
+# Prevent things in config/environment from being reloaded if they have
+# already been loaded in a previous test. HTTP_ERRORS is chosen at
+# random from things initialized in that directory.
+unless defined? HTTP_ERRORS
+  require File.expand_path('../config/environment', __dir__)
+end
 
 # Prevent database truncation if the environment is production
 if Rails.env.production?
@@ -53,6 +58,7 @@ RSpec.configure do |config|
   config.before :each do
     stub_request(:any, 'https://platform.twitter.com/widgets.js')
   end
+  #config.raise_errors_for_deprecations!
 end
 
 RSpec::Mocks.configuration.allow_message_expectations_on_nil = true

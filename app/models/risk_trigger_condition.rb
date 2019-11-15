@@ -1,4 +1,4 @@
-class RiskTriggerCondition < ActiveRecord::Base
+class RiskTriggerCondition < ApplicationRecord
   ALLOWED_FIELDS = (
     Notice.attribute_names.map { |field| 'notice.' + field } +
     Entity.attribute_names.map do |field|

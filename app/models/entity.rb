@@ -5,7 +5,7 @@ require 'hierarchical_relationships'
 require 'entity_index_queuer'
 require 'default_name_original'
 
-class Entity < ActiveRecord::Base
+class Entity < ApplicationRecord
   include ValidatesAutomatically
   include HierarchicalRelationships
   include DefaultNameOriginal

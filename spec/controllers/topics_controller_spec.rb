@@ -6,7 +6,7 @@ describe TopicsController do
       topic = double('Topic').as_null_object
       expect(Topic).to receive(:find).with('42').and_return(topic)
 
-      get :show, id: 42
+      get :show, params: { id: 42 }
 
       expect(assigns(:topic)).to eq topic
       expect(response).to be_successful

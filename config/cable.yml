@@ -1,0 +1,16 @@
+# This file was automatically added by rails app:update. NO WORK HAS BEEN DONE
+# TO CONFIGURE PRODUCTION TO SUPPORT ACTIONCABLE.
+# Rails will work fine in an environment without redis, even when running in
+# production mode, since we aren't using any ActionCable features.
+# However, building ActionCable into the app will require plans for server
+# configuration and deployment.
+development:
+  adapter: async
+
+test:
+  adapter: async
+
+production:
+  adapter: redis
+  url: <%= ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" } %>
+  channel_prefix: chill_production

@@ -3,6 +3,8 @@ require 'rails_helper'
 describe 'rake lumen:send_file_uploads_notifications', type: :task do
   let(:notice) { create(:dmca) }
 
+  before(:each) { DocumentsUpdateNotificationNotice.destroy_all }
+
   it 'sends file uploads notifications to a single user' do
     create_token_with_enabled_notifications
 
@@ -33,7 +35,7 @@ describe 'rake lumen:send_file_uploads_notifications', type: :task do
     expect(emails.map(&:subject).uniq).to eq(["Documents updates for #{ notice.title }"])
   end
 
-  it 'won\'t send duplicate notifications when the trigger has been run multiple times' do
+  it "won't send duplicate notifications when the trigger has been run multiple times" do
     create_token_with_enabled_notifications
 
     trigger_notification
@@ -42,7 +44,7 @@ describe 'rake lumen:send_file_uploads_notifications', type: :task do
     expect_to_deliver_specific_number_of_emails(1)
   end
 
-  it 'won\'t send notifications again on the next task run' do
+  it "won't send notifications again on the next task run" do
     create_token_with_enabled_notifications
 
     trigger_notification
@@ -51,7 +53,7 @@ describe 'rake lumen:send_file_uploads_notifications', type: :task do
     expect_to_deliver_specific_number_of_emails(0)
   end
 
-  it 'won\'t send file uploads notifications for token urls with the document notification setting disabled' do
+  it "won't send file uploads notifications for token urls with the document notification setting disabled" do
     create_token_with_enabled_notifications
 
     create(

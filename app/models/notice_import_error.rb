@@ -1,6 +1,6 @@
 require 'validates_automatically'
 
-class NoticeImportError < ActiveRecord::Base
+class NoticeImportError < ApplicationRecord
   include ValidatesAutomatically
 
 end

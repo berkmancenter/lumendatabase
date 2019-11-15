@@ -42,7 +42,7 @@ env:
 before_script:
   - psql -c 'create database chill_test;' -U postgres
   - cp config/database.yml.travis config/database.yml
-  - bundle exec rake db:schema:load RAILS_ENV=test
+  - bundle exec rails db:schema:load RAILS_ENV=test
   - mkdir -p tmp/cache
 
 script:

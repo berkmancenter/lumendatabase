@@ -17,15 +17,15 @@ def json?(req)
 end
 
 class Rack::Attack
-  whitelist('allow from localhost') do |req|
+  safelist('allow from localhost') do |req|
     req.localhost?
   end
 
-  whitelist('allow unlimited post requests from API submitters') do |req|
+  safelist('allow unlimited post requests from API submitters') do |req|
     req.post? && req.submitter?
   end
 
-  whitelist('allow unlimited requests from admins') do |req|
+  safelist('allow unlimited requests from admins') do |req|
     req.admin?
   end
 

@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe 'shared/_footer.html.erb' do
-  include Devise::TestHelpers
+  include Devise::Test::ControllerHelpers
 
   context 'signed in' do
     it 'gives a link to the admin for admin users' do

@@ -39,7 +39,7 @@ module Notices::SearchHelper
   end
 
   def unspecified_identifiers(parameter)
-    @unspecified_identifiers ||= HashWithIndifferentAccess.new do |hash, key|
+    @unspecified_identifiers ||= ActiveSupport::HashWithIndifferentAccess.new do |hash, key|
       hash[key] = UnspecifiedTermFilter.unspecified_identifier(key)
     end
     @unspecified_identifiers[parameter]

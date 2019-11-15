@@ -1,4 +1,4 @@
-class ReindexRun < ActiveRecord::Base
+class ReindexRun < ApplicationRecord
   REINDEXED_MODELS = [Notice, Entity].freeze
 
   def self.index_changed_model_instances
@@ -27,7 +27,7 @@ class ReindexRun < ActiveRecord::Base
 
   # The offset is needed to get the run previous to the current one.
   def last_run
-    self.class.order('created_at').offset(1).last
+    self.class.order('created_at').second_to_last
   end
 
   def index_model_for(model)

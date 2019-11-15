@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 require 'rake'
-require 'blog_importer'
-require 'question_importer'
 require 'collapses_topics'
 require 'csv'
 
@@ -11,22 +9,6 @@ namespace :lumen do
   task delete_search_index: :environment do
     Notice.__elasticsearch__.delete_index!
     sleep 5
-  end
-
-  desc 'Import blog entries'
-  task import_blog_entries: :environment do
-    with_file_name do |file_name|
-      importer = BlogImporter.new(file_name)
-      importer.import
-    end
-  end
-
-  desc 'Import questions'
-  task import_questions: :environment do
-    with_file_name do |file_name|
-      importer = QuestionImporter.new(file_name)
-      importer.import
-    end
   end
 
   desc 'Post-migration cleanup'
@@ -704,7 +686,7 @@ where works.id in (
 
   desc 'Send notifications about file uploads updates'
   task send_file_uploads_notifications: :environment do
-    date_time_task = proc { "[#{Time.now.strftime("%d/%m/%Y %H:%M:%S")}] [rake send_file_uploads_notifications]" }
+    date_time_task = proc { "[#{Time.now.strftime("%d/%m/%Y %H:%M:%S")}] [rails send_file_uploads_notifications]" }
 
     puts "#{date_time_task.call} Starting a new task run"
 
@@ -725,7 +707,7 @@ where works.id in (
 
         TokenUrlsMailer.notice_file_uploads_updates_notification(
           token_url.email, token_url, doc_notification.notice
-        ).deliver_later
+        ).deliver_now
 
         token_url.update_attribute(:expiration_date, Time.now + 24.hours)
       end

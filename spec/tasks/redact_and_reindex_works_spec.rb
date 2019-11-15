@@ -27,7 +27,7 @@ describe 'rake lumen:redact_and_reindex_works', type: :task, search: true do
     # we want to make sure this isn't auto-redacted.
     w.update_columns(
       description: '012-34-5678',      # triggers SSN validation
-      updated_at: Date.new(2008, 1, 1) # before the rake task's limit
+      updated_at: Date.new(2008, 1, 1) # before the rails task's limit
     )
     w
   end

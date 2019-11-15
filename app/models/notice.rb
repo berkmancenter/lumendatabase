@@ -4,7 +4,7 @@ require 'language'
 require 'recent_scope'
 require 'validates_automatically'
 
-class Notice < ActiveRecord::Base
+class Notice < ApplicationRecord
   include Searchability
   include Elasticsearch::Model
 
@@ -97,13 +97,14 @@ class Notice < ActiveRecord::Base
   has_many :entity_notice_roles, dependent: :destroy, inverse_of: :notice
   has_many :entities, through: :entity_notice_roles
   has_many :file_uploads
+
+  has_and_belongs_to_many :works
+
   has_many :infringing_urls, through: :works
   has_many :copyrighted_urls, through: :works
   has_many :token_urls, dependent: :destroy
   has_and_belongs_to_many :relevant_questions
   has_one :documents_update_notification_notice
-
-  has_and_belongs_to_many :works
 
   validates_inclusion_of :action_taken, in: VALID_ACTIONS, allow_blank: true
   validates_inclusion_of :language, in: Language.codes, allow_blank: true
@@ -183,7 +184,7 @@ class Notice < ActiveRecord::Base
   def self.in_topics(topics)
     joins(topic_assignments: :topic)
       .where('topics.id' => topics)
-      .uniq
+      .distinct
   end
 
   def self.submitted_by(submitters)

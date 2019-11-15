@@ -27,7 +27,7 @@ feature 'Faceted search of Notices', search: true do
         facet = if facet_type == :topic_facet
                   inside_facet.topics.first.name
                 elsif facet_type == :tag_list_facet
-                  inside_facet.tags.first
+                  inside_facet.tags.first.name
                 elsif facet_type == :country_code_facet
                   'BH'
                 else
