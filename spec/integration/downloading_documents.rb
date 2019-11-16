@@ -36,7 +36,7 @@ feature 'Downloading documents' do
     expect_download
   end
 
-  scenario 'won\'t download a document for a guest user with an expired access token', js: true do
+  scenario "won't download a document for a guest user with an expired access token", js: true do
     token_url = create(
       :token_url,
       notice: notice,
@@ -48,7 +48,7 @@ feature 'Downloading documents' do
     expect_no_download
   end
 
-  scenario 'won\'t download a document for a logged-in user with no access', js: true do
+  scenario "won't download a document for a logged-in user with no access", js: true do
     sign_in(create(:user, :researcher))
 
     visit notice.file_uploads.first.url
@@ -56,7 +56,7 @@ feature 'Downloading documents' do
     expect_no_download
   end
 
-  scenario 'won\'t download a document for a guest user', js: true do
+  scenario "won't download a document for a guest user", js: true do
     visit notice.file_uploads.first.url
 
     expect_no_download
@@ -70,7 +70,7 @@ feature 'Downloading documents' do
     expect(page).to have_content('Documents notification has been disabled.')
   end
 
-  scenario 'won\'t disable a document notification for a user with a wrong token', js: true do
+  scenario "won't disable a document notification for a user with a wrong token", js: true do
     visit disable_documents_notification_token_url_path(token_url, token: 'hacky-token')
 
     expect(TokenUrl.last.documents_notification).to eq(true)
@@ -78,7 +78,7 @@ feature 'Downloading documents' do
     expect(page).to have_content('Wrong token provided.')
   end
 
-  scenario 'won\'t disable a document notification for a non-exisiting token url', js: true do
+  scenario "won't disable a document notification for a non-exisiting token url", js: true do
     token_url.destroy
 
     visit disable_documents_notification_token_url_path(token_url, token: 'hohoho')
@@ -91,6 +91,7 @@ feature 'Downloading documents' do
 
   def expect_download
     expect(page.response_headers['Content-Type']).to include('application/pdf')
+    expect(page.status_code).to be 200
   end
 
   def expect_no_download
