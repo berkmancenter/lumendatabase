@@ -4,7 +4,7 @@ class FilesController < ApplicationController
   def show
     @upload = FileUpload.where(id: params[:id]).first
     if params_match? && viewing_allowed?
-      render text: File.read(file_path), content_type: @upload.file_content_type
+      render plain: File.read(file_path), content_type: @upload.file_content_type
     else
       redirect_to(
         root_path,
