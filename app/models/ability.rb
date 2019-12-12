@@ -47,6 +47,7 @@ class Ability
       can :pdf_requests, :all
       can :view_full_version, Notice
       can :generate_permanent_notice_token_urls, Notice
+      can [:index, :show, :create, :update, :read, :manage], 'Cms::Site'
     end
 
     if user.role?(Role.super_admin)
