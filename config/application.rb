@@ -2,6 +2,8 @@ require_relative 'boot'
 require_relative '../lib/middleware/catch_json_parsing_errors'
 
 require 'rails/all'
+require 'active_storage/engine'
+
 
 Bundler.require(:default, Rails.env)
 

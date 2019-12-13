@@ -3,13 +3,13 @@
 # Paperclip, so ActiveStorage configuration is irrelevant.
 # It is kept around to simplify that future migration.
 
-# test:
-#   service: Disk
-#   root: <%= Rails.root.join("tmp/storage") %>
-#
-# local:
-#   service: Disk
-#   root: <%= Rails.root.join("storage") %>
+test:
+  service: Disk
+  root: <%= Rails.root.join("tmp/storage") %>
+
+local:
+  service: Disk
+  root: <%= Rails.root.join("storage") %>
 
 # Use rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)
 # amazon:
