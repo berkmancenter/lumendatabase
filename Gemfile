@@ -73,7 +73,7 @@ group :development, :test, :assets do
   gem 'bourbon'
   gem 'coffee-rails'
   gem 'neat'
-  gem 'sass-rails'
+  gem 'sassc-rails'
   gem 'therubyracer'
   gem 'uglifier'
 end

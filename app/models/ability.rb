@@ -36,8 +36,8 @@ class Ability
       grant_redact
       grant_full_notice_api_response(user)
 
-      can :edit, :all
-      cannot :edit, [User, Role]
+      can :update, :all
+      cannot :update, [User, Role]
 
       can :publish, Notice
       can :rescind, Notice
@@ -75,7 +75,7 @@ class Ability
   # interface, and redaction of other models in the admin has not been
   # implemented.
   def grant_redact
-    can :edit, Notice
+    can :update, Notice
     can :redact_notice, Notice
     can :redact_queue, Notice
   end
