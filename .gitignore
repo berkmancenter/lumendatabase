@@ -42,3 +42,4 @@ safelisted_ips.rb
 public/usercron/
 .ssh/*
 config/skylight.yml
+storage/
