@@ -1,5 +1,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [20.01](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.01) - 2020-01-08
+### Changed
+* Upgrade rails_admin from 1.4 to 2.0
+  * This had been blocked by the Rails upgrade
+  * Should result in a noticeable speedup.
+
 ## [19.11a2](https://github.com/berkmancenter/lumendatabase/releases/tag/2019.11a) - 2019-11-18
 ### Fixed
 * Fixes bug which prevented files from being downloaded
