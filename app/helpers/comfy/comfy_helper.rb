@@ -17,10 +17,21 @@ module Comfy::ComfyHelper
   end
 
   def fragment_title(page)
-    page.fragments.find_by_identifier('title').content
+    if (title = page.fragments.find_by_identifier('title').content).empty?
+      title = '(No title)'
+    end
+    # This can't return an empty string. Since we use the title to construct
+    # links to the blog post, there must be something to click on.
+    title
   end
 
   def fragment_content(page)
     page.fragments.find_by_identifier('content').content
+  end
+
+  def fragment_abstract(page)
+    page.fragments.find_by_identifier('abstract').content
+  rescue NoMethodError
+    nil
   end
 end
