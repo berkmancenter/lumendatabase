@@ -1,3 +1,9 @@
+<%# If invoked via the layout in the CMS, @cms_page will be supplied.
+    If invoked via the archive page, this is rendering a collection of
+    blog_entries, and it's important NOT to use the @cms_page variable, as that
+    will represent the archive page! %>
+<% entry = defined?(blog_entry) ? blog_entry : @cms_page %>
+
 <div class="metadata">
-  <span class="author"><%= cms_fragment_render(:author, @cms_page) %></span> on <%= blog_date(@cms_page) %>
+  <span class="author"><%= cms_fragment_render(:author, entry) %></span> on <%= blog_date(entry) %>
 </div>
