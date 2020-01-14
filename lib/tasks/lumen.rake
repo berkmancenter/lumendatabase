@@ -719,6 +719,71 @@ where works.id in (
 
     puts "#{date_time_task.call} Finishing the task"
   end
+
+  desc 'Migrate BlogEntries to CMS'
+  task migrate_blog_entries_to_cms: :environment do
+    site = Comfy::Cms::Site.find_by_identifier('lumen_cms')
+    layout = Comfy::Cms::Layout.find_by_label('blawg')
+    parent = Comfy::Cms::Page.find_by_label('blog_entries')
+
+    unless site && layout && parent
+      $stdout.puts 'lumen_cms Site, blawg Layout, and blog_entries Page must be defined before running this task'
+      exit
+    end
+
+    count = 0
+    BlogEntry.all.each do |entry|
+      next if Comfy::Cms::Page.find_by_slug(entry.id).present?
+      page = Comfy::Cms::Page.create(
+        slug: entry.id,
+        label: entry.title,
+        created_at: entry.created_at,
+        updated_at: Time.now,
+        is_published: true,
+        site: site,
+        layout: layout,
+        parent: parent
+      )
+
+      Comfy::Cms::Fragment.create(
+        record: page,
+        identifier: 'author',
+        tag: 'text',
+        content: entry.author
+      )
+
+      Comfy::Cms::Fragment.create(
+        record: page,
+        identifier: 'title',
+        tag: 'text',
+        content: entry.title
+      )
+
+      Comfy::Cms::Fragment.create(
+        record: page,
+        identifier: 'abstract',
+        tag: 'wysiwyg',
+        content: entry.abstract
+      )
+
+      Comfy::Cms::Fragment.create(
+        record: page,
+        identifier: 'image',
+        tag: 'text',
+        content: entry.image
+      )
+
+      Comfy::Cms::Fragment.create(
+        record: page,
+        identifier: 'content',
+        tag: 'wysiwyg',
+        content: entry.content_html
+      )
+      count += 1
+    end
+
+    $stdout.puts "#{count} pages created"
+  end
 end
 
 class CourtOrderReporter
