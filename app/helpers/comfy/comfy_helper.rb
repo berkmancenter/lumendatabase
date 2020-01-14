@@ -1,6 +1,4 @@
 module Comfy::ComfyHelper
-  include Comfy::Paginate
-
   def blog_date(cms_page)
     cms_page.created_at.strftime('%B %-d, %Y')
   # If this is being used to preview a page not yet created, the created_at
