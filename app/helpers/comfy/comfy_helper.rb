@@ -9,7 +9,9 @@ module Comfy::ComfyHelper
 
   def blog_posts(cms_site)
     blog_parent = cms_site.pages.where(label: 'blog_entries').first
-    scope = blog_parent.children.published
+    scope = Comfy::Cms::Page.where(parent: blog_parent)
+                            .order('created_at DESC')
+                            .published
     Kaminari.paginate_array(scope.to_a, total_count: scope.count)
             .page(params[:page]).per(10)
   end
