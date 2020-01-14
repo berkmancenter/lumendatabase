@@ -5,8 +5,8 @@ module CmsDeviseAuth
       raise CanCan::AccessDenied
     else
       scope = Devise::Mapping.find_scope!(:user)
-      session["#{scope}_return_to"] = new_cms_admin_site_path
-      redirect_to admin_sign_in_path
+      session["#{scope}_return_to"] = comfy_admin_cms_path
+      redirect_to new_user_session_path
     end
   end
 end
