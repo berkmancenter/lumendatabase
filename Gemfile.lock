@@ -100,7 +100,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.12.2)
-    comfortable_mexican_sofa (2.0.18)
+    comfortable_mexican_sofa (2.0.19)
       active_link_to (>= 1.0.0)
       comfy_bootstrap_form (>= 4.0.0)
       haml-rails (>= 1.0.0)
@@ -111,7 +111,7 @@ GEM
       rails (>= 5.2.0)
       rails-i18n (>= 5.0.0)
       sassc-rails (>= 2.0.0)
-    comfy_bootstrap_form (4.0.7)
+    comfy_bootstrap_form (4.0.8)
       rails (>= 5.0.0)
     concurrent-ruby (1.1.5)
     country_select (1.2.0)
@@ -250,7 +250,7 @@ GEM
       mime-types-data (~> 3.2015)
     mime-types-data (3.2019.0904)
     mimemagic (0.3.3)
-    mini_magick (4.9.5)
+    mini_magick (4.10.1)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
     minitest (5.13.0)

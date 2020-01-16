@@ -3,6 +3,7 @@
 require 'rake'
 require 'collapses_topics'
 require 'csv'
+require 'comfy/blog_post_factory'
 
 namespace :lumen do
   desc 'Delete elasticsearch index'
@@ -734,55 +735,21 @@ where works.id in (
     count = 0
     BlogEntry.all.each do |entry|
       next if Comfy::Cms::Page.find_by_slug(entry.id).present?
-      page = Comfy::Cms::Page.create(
-        slug: entry.id,
-        label: entry.title,
-        created_at: entry.created_at,
-        updated_at: Time.now,
-        is_published: true,
-        site: site,
-        layout: layout,
-        parent: parent
-      )
-
-      Comfy::Cms::Fragment.create(
-        record: page,
-        identifier: 'author',
-        tag: 'text',
-        content: entry.author
-      )
-
-      Comfy::Cms::Fragment.create(
-        record: page,
-        identifier: 'title',
-        tag: 'text',
-        content: entry.title
-      )
-
-      Comfy::Cms::Fragment.create(
-        record: page,
-        identifier: 'abstract',
-        tag: 'wysiwyg',
-        content: entry.abstract
-      )
-
-      Comfy::Cms::Fragment.create(
-        record: page,
-        identifier: 'image',
-        tag: 'text',
-        content: entry.image
-      )
-
-      Comfy::Cms::Fragment.create(
-        record: page,
-        identifier: 'content',
-        tag: 'wysiwyg',
-        content: entry.content_html
-      )
+      BlogPostFactory.new(site, layout, parent, entry: entry).manufacture
       count += 1
     end
 
     $stdout.puts "#{count} pages created"
+  end
+
+  desc 'Set up CMS'
+  task set_up_cms: :environment do
+    if Comfy::Cms::Site.first.present?
+      puts 'CMS already set up'
+      exit
+    end
+    Comfy::Cms::Site.create!(identifier: 'lumen_cms')
+    Rake::Task['comfy:cms_seeds:import'].invoke('lumen_cms', 'lumen_cms')
   end
 end
 
