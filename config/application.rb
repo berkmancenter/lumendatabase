@@ -7,6 +7,9 @@ Bundler.require(:default, Rails.env)
 
 module Chill
   class Application < Rails::Application
+    # Ensuring that ActiveStorage routes are loaded before Comfy's globbing
+    # route. Without this file serving routes are inaccessible.
+    config.railties_order = [ActiveStorage::Engine, :main_app, :all]
     #config.load_defaults 5.1
 
     config.active_record.default_timezone = :utc

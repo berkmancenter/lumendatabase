@@ -1,0 +1,16 @@
+[attributes]
+label: Default Seed Layout
+
+[content]
+<html>
+  <body>
+    {{ cms:file header, as: image }}
+    {{ cms:markdown content }}
+  </body>
+</html>
+
+[js]
+// default js
+
+[css]
+body{color: red}
