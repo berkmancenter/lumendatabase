@@ -64,7 +64,7 @@ class BlogPostFactory
     entry.title = "page_#{@seed}"
     entry.created_at = @seed.days.ago
     entry.author = 'John Rock'
-    entry.abstract_html = "abstract #{@seed}"
+    entry.abstract_html = "<p>abstract #{@seed}</p>"
     entry.image = 'overcast'
     entry.content_html = "<p>content #{@seed}</p>"
     entry
