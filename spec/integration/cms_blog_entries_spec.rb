@@ -92,6 +92,15 @@ feature 'CMS blog entries' do
       expect(page.body).to include fragment_content(post, 'title')
       expect(page.body).to include blog_date(post)
     end
+
+    it 'displays formatted html' do
+      BlogPostFactory.new(@site, @layout, @blog).manufacture
+      post = @blog.children.first
+      expect(fragment_content(post, 'abstract')).to include('<p>')
+
+      visit @blog.url
+      expect(page.body).not_to include '&lt;p&gt;'
+    end
   end
 
   context 'post' do
@@ -105,6 +114,15 @@ feature 'CMS blog entries' do
       expect(page.body).to include(fragment_content(post, 'author'))
       expect(page.body).to include(fragment_content(post, 'title'))
       expect(page.body).to include(blog_date(post))
+    end
+
+    it 'displays formatted html' do
+      BlogPostFactory.new(@site, @layout, @blog).manufacture
+      post = @blog.children.first
+      expect(fragment_content(post, 'content')).to include('<p>')
+
+      visit post.url
+      expect(page.body).not_to include '&lt;p&gt;'
     end
   end
 
