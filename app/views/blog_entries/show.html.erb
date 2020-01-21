@@ -3,7 +3,7 @@
 <article class="post">
   <div class="imagery <%= @blog_entry.image %>"></div>
   <div class="content">
-    <h3 class="title"><%= @blog_entry.title %></h1>
+    <h3 class="title"><%= @blog_entry.title %></h3>
     <%= render 'metadata', blog_entry: @blog_entry %>
     <%= raw @blog_entry.content_html %>
   </div>
