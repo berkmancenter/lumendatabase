@@ -6,7 +6,7 @@ feature 'CMS blog entries' do
 
   before :all do
     Comfy::Cms::Site.create!(identifier: 'lumen_cms', hostname: 'localhost')
-    Rake::Task['comfy:cms_seeds:import'].invoke('lumen_cms', 'lumen_cms')
+    Rake::Task['comfy:cms_seeds:import'].execute(from: 'lumen_cms', to: 'lumen_cms')
     @site = Comfy::Cms::Site.first
     @layout = Comfy::Cms::Layout.find_by_label('blawg')
     @blog = Comfy::Cms::Page.find_by_label('blog_entries')
