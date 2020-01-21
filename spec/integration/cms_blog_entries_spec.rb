@@ -5,9 +5,9 @@ feature 'CMS blog entries' do
   include Comfy::ComfyHelper
 
   before :all do
-    Comfy::Cms::Site.create!(identifier: 'lumen_cms', hostname: 'localhost')
+    @site = Comfy::Cms::Site.find_or_create_by(identifier: 'lumen_cms')
+    @site.update(hostname: 'localhost')
     Rake::Task['comfy:cms_seeds:import'].execute(from: 'lumen_cms', to: 'lumen_cms')
-    @site = Comfy::Cms::Site.first
     @layout = Comfy::Cms::Layout.find_by_label('blawg')
     @blog = Comfy::Cms::Page.find_by_label('blog_entries')
   end
