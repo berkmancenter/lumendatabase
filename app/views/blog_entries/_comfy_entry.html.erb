@@ -1,0 +1,11 @@
+<article class="post-item">
+  <h3 class="title">
+    <% if blog_entry.full_path.present? %>
+      <%= link_to(fragment_title(blog_entry), "/cms#{blog_entry.full_path}") %>
+    <% end %>
+  </h3>
+  <%= render 'blog_entries/comfy_metadata', blog_entry: blog_entry %>
+  <a class="snippet" href="<%= blog_entry.full_path %>">
+    <%= fragment_abstract(blog_entry) %>
+  </a>
+</article>

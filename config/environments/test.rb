@@ -48,4 +48,6 @@ Rails.application.configure do
   # Don't cache anything in tests - this can cause data persistence between
   # test runs, resulting in random failures.
   config.cache_store = :null_store
+
+  config.active_storage.service = :test
 end

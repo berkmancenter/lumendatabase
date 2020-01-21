@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,366 +10,486 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190912163343) do
+ActiveRecord::Schema.define(version: 2019_12_13_152854) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "ar_internal_metadata", primary_key: "key", force: :cascade do |t|
-    t.string   "value"
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.bigint "byte_size", null: false
+    t.string "checksum", null: false
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "blog_entries", id: :serial, force: :cascade do |t|
+    t.integer "user_id"
+    t.string "author", null: false
+    t.string "title", null: false
+    t.text "abstract"
+    t.text "content"
+    t.datetime "published_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string "image"
+    t.integer "original_news_id"
+    t.string "url", limit: 1024
+    t.boolean "archive", default: false
+  end
+
+  create_table "blog_entry_topic_assignments", id: :serial, force: :cascade do |t|
+    t.integer "blog_entry_id"
+    t.integer "topic_id"
+    t.index ["blog_entry_id"], name: "index_blog_entry_topic_assignments_on_blog_entry_id"
+    t.index ["topic_id"], name: "index_blog_entry_topic_assignments_on_topic_id"
+  end
+
+  create_table "comfy_cms_categories", force: :cascade do |t|
+    t.integer "site_id", null: false
+    t.string "label", null: false
+    t.string "categorized_type", null: false
+    t.index ["site_id", "categorized_type", "label"], name: "index_cms_categories_on_site_id_and_cat_type_and_label", unique: true
+  end
+
+  create_table "comfy_cms_categorizations", force: :cascade do |t|
+    t.integer "category_id", null: false
+    t.string "categorized_type", null: false
+    t.integer "categorized_id", null: false
+    t.index ["category_id", "categorized_type", "categorized_id"], name: "index_cms_categorizations_on_cat_id_and_catd_type_and_catd_id", unique: true
+  end
+
+  create_table "comfy_cms_files", force: :cascade do |t|
+    t.integer "site_id", null: false
+    t.string "label", default: "", null: false
+    t.text "description"
+    t.integer "position", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["site_id", "position"], name: "index_comfy_cms_files_on_site_id_and_position"
+  end
+
+  create_table "comfy_cms_fragments", force: :cascade do |t|
+    t.string "record_type"
+    t.bigint "record_id"
+    t.string "identifier", null: false
+    t.string "tag", default: "text", null: false
+    t.text "content"
+    t.boolean "boolean", default: false, null: false
+    t.datetime "datetime"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["boolean"], name: "index_comfy_cms_fragments_on_boolean"
+    t.index ["datetime"], name: "index_comfy_cms_fragments_on_datetime"
+    t.index ["identifier"], name: "index_comfy_cms_fragments_on_identifier"
+    t.index ["record_type", "record_id"], name: "index_comfy_cms_fragments_on_record_type_and_record_id"
+  end
+
+  create_table "comfy_cms_layouts", force: :cascade do |t|
+    t.integer "site_id", null: false
+    t.integer "parent_id"
+    t.string "app_layout"
+    t.string "label", null: false
+    t.string "identifier", null: false
+    t.text "content"
+    t.text "css"
+    t.text "js"
+    t.integer "position", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["parent_id", "position"], name: "index_comfy_cms_layouts_on_parent_id_and_position"
+    t.index ["site_id", "identifier"], name: "index_comfy_cms_layouts_on_site_id_and_identifier", unique: true
+  end
+
+  create_table "comfy_cms_pages", force: :cascade do |t|
+    t.integer "site_id", null: false
+    t.integer "layout_id"
+    t.integer "parent_id"
+    t.integer "target_page_id"
+    t.string "label", null: false
+    t.string "slug"
+    t.string "full_path", null: false
+    t.text "content_cache"
+    t.integer "position", default: 0, null: false
+    t.integer "children_count", default: 0, null: false
+    t.boolean "is_published", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["is_published"], name: "index_comfy_cms_pages_on_is_published"
+    t.index ["parent_id", "position"], name: "index_comfy_cms_pages_on_parent_id_and_position"
+    t.index ["site_id", "full_path"], name: "index_comfy_cms_pages_on_site_id_and_full_path"
+  end
+
+  create_table "comfy_cms_revisions", force: :cascade do |t|
+    t.string "record_type", null: false
+    t.integer "record_id", null: false
+    t.text "data"
+    t.datetime "created_at"
+    t.index ["record_type", "record_id", "created_at"], name: "index_cms_revisions_on_rtype_and_rid_and_created_at"
+  end
+
+  create_table "comfy_cms_sites", force: :cascade do |t|
+    t.string "label", null: false
+    t.string "identifier", null: false
+    t.string "hostname", null: false
+    t.string "path"
+    t.string "locale", default: "en", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["hostname"], name: "index_comfy_cms_sites_on_hostname"
+  end
+
+  create_table "comfy_cms_snippets", force: :cascade do |t|
+    t.integer "site_id", null: false
+    t.string "label", null: false
+    t.string "identifier", null: false
+    t.text "content"
+    t.integer "position", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["site_id", "identifier"], name: "index_comfy_cms_snippets_on_site_id_and_identifier", unique: true
+    t.index ["site_id", "position"], name: "index_comfy_cms_snippets_on_site_id_and_position"
+  end
+
+  create_table "comfy_cms_translations", force: :cascade do |t|
+    t.string "locale", null: false
+    t.integer "page_id", null: false
+    t.integer "layout_id"
+    t.string "label", null: false
+    t.text "content_cache"
+    t.boolean "is_published", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["is_published"], name: "index_comfy_cms_translations_on_is_published"
+    t.index ["locale"], name: "index_comfy_cms_translations_on_locale"
+    t.index ["page_id"], name: "index_comfy_cms_translations_on_page_id"
+  end
+
+  create_table "copyrighted_urls", id: :serial, force: :cascade do |t|
+    t.string "url_original", limit: 8192, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string "url", limit: 8192
+    t.index ["url_original"], name: "index_copyrighted_urls_on_url_original", unique: true
+  end
+
+  create_table "copyrighted_urls_works", id: false, force: :cascade do |t|
+    t.integer "copyrighted_url_id", null: false
+    t.integer "work_id", null: false
+    t.index ["copyrighted_url_id"], name: "index_copyrighted_urls_works_on_copyrighted_url_id"
+    t.index ["work_id"], name: "index_copyrighted_urls_works_on_work_id"
+  end
+
+  create_table "documents_update_notification_notices", id: :serial, force: :cascade do |t|
+    t.integer "notice_id", null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "domain_counts", id: :serial, force: :cascade do |t|
+    t.string "domain_name"
+    t.integer "count", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "blog_entries", force: :cascade do |t|
-    t.integer  "user_id"
-    t.string   "author",                                        null: false
-    t.string   "title",                                         null: false
-    t.text     "abstract"
-    t.text     "content"
-    t.datetime "published_at"
+  create_table "entities", id: :serial, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "kind", default: "individual", null: false
+    t.string "address_line_1", default: ""
+    t.string "address_line_2", default: ""
+    t.string "state", default: ""
+    t.string "country_code", default: ""
+    t.string "phone", default: ""
+    t.string "email", default: ""
+    t.string "url", default: ""
+    t.string "ancestry"
+    t.string "city", default: ""
+    t.string "zip", default: ""
+    t.integer "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "image"
-    t.integer  "original_news_id"
-    t.string   "url",              limit: 1024
-    t.boolean  "archive",                       default: false
+    t.string "name_original"
+    t.index ["address_line_1"], name: "index_entities_on_address_line_1"
+    t.index ["ancestry"], name: "index_entities_on_ancestry"
+    t.index ["city"], name: "index_entities_on_city"
+    t.index ["country_code"], name: "index_entities_on_country_code"
+    t.index ["email"], name: "index_entities_on_email"
+    t.index ["name", "address_line_1", "city", "state", "zip", "country_code", "phone", "email"], name: "unique_entity_attribute_index", unique: true
+    t.index ["name"], name: "index_entities_on_name"
+    t.index ["phone"], name: "index_entities_on_phone"
+    t.index ["state"], name: "index_entities_on_state"
+    t.index ["updated_at"], name: "index_entities_on_updated_at"
+    t.index ["user_id"], name: "index_entities_on_user_id"
+    t.index ["zip"], name: "index_entities_on_zip"
   end
 
-  create_table "blog_entry_topic_assignments", force: :cascade do |t|
-    t.integer "blog_entry_id"
-    t.integer "topic_id"
-  end
-
-  add_index "blog_entry_topic_assignments", ["blog_entry_id"], name: "index_blog_entry_topic_assignments_on_blog_entry_id", using: :btree
-  add_index "blog_entry_topic_assignments", ["topic_id"], name: "index_blog_entry_topic_assignments_on_topic_id", using: :btree
-
-  create_table "copyrighted_urls", force: :cascade do |t|
-    t.string   "url_original", limit: 8192, null: false
+  create_table "entity_notice_roles", id: :serial, force: :cascade do |t|
+    t.integer "entity_id", null: false
+    t.integer "notice_id", null: false
+    t.string "name", null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "url",          limit: 8192
+    t.index ["entity_id"], name: "index_entity_notice_roles_on_entity_id"
+    t.index ["notice_id"], name: "index_entity_notice_roles_on_notice_id"
   end
 
-  add_index "copyrighted_urls", ["url_original"], name: "index_copyrighted_urls_on_url_original", unique: true, using: :btree
-
-  create_table "copyrighted_urls_works", id: false, force: :cascade do |t|
-    t.integer "copyrighted_url_id", null: false
-    t.integer "work_id",            null: false
-  end
-
-  add_index "copyrighted_urls_works", ["copyrighted_url_id"], name: "index_copyrighted_urls_works_on_copyrighted_url_id", using: :btree
-  add_index "copyrighted_urls_works", ["work_id"], name: "index_copyrighted_urls_works_on_work_id", using: :btree
-
-  create_table "documents_update_notification_notices", force: :cascade do |t|
-    t.integer  "notice_id",  null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "entities", force: :cascade do |t|
-    t.string   "name",                                  null: false
-    t.string   "kind",           default: "individual", null: false
-    t.string   "address_line_1", default: ""
-    t.string   "address_line_2", default: ""
-    t.string   "state",          default: ""
-    t.string   "country_code",   default: ""
-    t.string   "phone",          default: ""
-    t.string   "email",          default: ""
-    t.string   "url",            default: ""
-    t.string   "ancestry"
-    t.string   "city",           default: ""
-    t.string   "zip",            default: ""
-    t.integer  "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "name_original"
-  end
-
-  add_index "entities", ["address_line_1"], name: "index_entities_on_address_line_1", using: :btree
-  add_index "entities", ["ancestry"], name: "index_entities_on_ancestry", using: :btree
-  add_index "entities", ["city"], name: "index_entities_on_city", using: :btree
-  add_index "entities", ["country_code"], name: "index_entities_on_country_code", using: :btree
-  add_index "entities", ["email"], name: "index_entities_on_email", using: :btree
-  add_index "entities", ["name", "address_line_1", "city", "state", "zip", "country_code", "phone", "email"], name: "unique_entity_attribute_index", unique: true, using: :btree
-  add_index "entities", ["name"], name: "index_entities_on_name", using: :btree
-  add_index "entities", ["phone"], name: "index_entities_on_phone", using: :btree
-  add_index "entities", ["state"], name: "index_entities_on_state", using: :btree
-  add_index "entities", ["updated_at"], name: "index_entities_on_updated_at", using: :btree
-  add_index "entities", ["user_id"], name: "index_entities_on_user_id", using: :btree
-  add_index "entities", ["zip"], name: "index_entities_on_zip", using: :btree
-
-  create_table "entity_notice_roles", force: :cascade do |t|
-    t.integer  "entity_id",  null: false
-    t.integer  "notice_id",  null: false
-    t.string   "name",       null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "entity_notice_roles", ["entity_id"], name: "index_entity_notice_roles_on_entity_id", using: :btree
-  add_index "entity_notice_roles", ["notice_id"], name: "index_entity_notice_roles_on_notice_id", using: :btree
-
-  create_table "file_uploads", force: :cascade do |t|
-    t.integer  "notice_id"
-    t.string   "kind"
-    t.string   "file_file_name"
-    t.string   "file_content_type"
-    t.integer  "file_file_size"
+  create_table "file_uploads", id: :serial, force: :cascade do |t|
+    t.integer "notice_id"
+    t.string "kind"
+    t.string "file_file_name"
+    t.string "file_content_type"
+    t.integer "file_file_size"
     t.datetime "file_updated_at"
-    t.boolean  "pdf_requested"
-    t.boolean  "pdf_request_fulfilled", default: false
+    t.boolean "pdf_requested"
+    t.boolean "pdf_request_fulfilled", default: false
+    t.index ["notice_id"], name: "index_file_uploads_on_notice_id"
   end
 
-  add_index "file_uploads", ["notice_id"], name: "index_file_uploads_on_notice_id", using: :btree
-
-  create_table "infringing_urls", id: :bigserial, force: :cascade do |t|
-    t.string   "url_original", limit: 8192, null: false
+  create_table "infringing_urls", force: :cascade do |t|
+    t.string "url_original", limit: 8192, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "url",          limit: 8192
+    t.string "url", limit: 8192
+    t.index ["url_original"], name: "index_infringing_urls_on_url_original", unique: true
   end
-
-  add_index "infringing_urls", ["url_original"], name: "index_infringing_urls_on_url_original", unique: true, using: :btree
 
   create_table "infringing_urls_works", id: false, force: :cascade do |t|
-    t.integer "infringing_url_id", limit: 8, null: false
-    t.integer "work_id",                     null: false
+    t.bigint "infringing_url_id", null: false
+    t.integer "work_id", null: false
+    t.index ["infringing_url_id"], name: "index_infringing_urls_works_on_infringing_url_id"
+    t.index ["work_id"], name: "index_infringing_urls_works_on_work_id"
   end
 
-  add_index "infringing_urls_works", ["infringing_url_id"], name: "index_infringing_urls_works_on_infringing_url_id", using: :btree
-  add_index "infringing_urls_works", ["work_id"], name: "index_infringing_urls_works_on_work_id", using: :btree
-
-  create_table "notice_import_errors", force: :cascade do |t|
-    t.integer  "original_notice_id"
-    t.string   "file_list",          limit: 2048
-    t.string   "message",            limit: 16384
-    t.string   "stacktrace",         limit: 2048
-    t.string   "import_set_name",    limit: 1024
+  create_table "notice_import_errors", id: :serial, force: :cascade do |t|
+    t.integer "original_notice_id"
+    t.string "file_list", limit: 2048
+    t.string "message", limit: 16384
+    t.string "stacktrace", limit: 2048
+    t.string "import_set_name", limit: 1024
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  create_table "notices", force: :cascade do |t|
-    t.string   "title"
-    t.text     "body"
+  create_table "notices", id: :serial, force: :cascade do |t|
+    t.string "title"
+    t.text "body"
     t.datetime "date_received"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "source"
-    t.string   "subject"
-    t.boolean  "review_required"
-    t.text     "body_original"
+    t.string "source"
+    t.string "subject"
+    t.boolean "review_required"
+    t.text "body_original"
     t.datetime "date_sent"
-    t.integer  "reviewer_id"
-    t.string   "language"
-    t.boolean  "rescinded",                default: false, null: false
-    t.string   "action_taken"
-    t.string   "type"
-    t.integer  "original_notice_id"
-    t.boolean  "spam",                     default: false
-    t.boolean  "hidden",                   default: false
-    t.string   "request_type"
-    t.integer  "submission_id"
-    t.string   "mark_registration_number"
-    t.boolean  "published",                default: true,  null: false
-    t.integer  "url_count"
-    t.boolean  "webform",                  default: false
-    t.text     "notes"
-    t.integer  "counternotice_for_id"
-    t.integer  "counternotice_for_sid"
+    t.integer "reviewer_id"
+    t.string "language"
+    t.boolean "rescinded", default: false, null: false
+    t.string "action_taken"
+    t.string "type"
+    t.integer "original_notice_id"
+    t.boolean "spam", default: false
+    t.boolean "hidden", default: false
+    t.string "request_type"
+    t.integer "submission_id"
+    t.string "mark_registration_number"
+    t.boolean "published", default: true, null: false
+    t.integer "url_count"
+    t.boolean "webform", default: false
+    t.text "notes"
+    t.integer "counternotice_for_id"
+    t.integer "counternotice_for_sid"
+    t.index ["created_at"], name: "index_notices_on_created_at"
+    t.index ["original_notice_id"], name: "index_notices_on_original_notice_id"
+    t.index ["published"], name: "index_notices_on_published"
+    t.index ["reviewer_id"], name: "index_notices_on_reviewer_id"
+    t.index ["submission_id"], name: "index_notices_on_submission_id"
+    t.index ["type"], name: "index_notices_on_type"
+    t.index ["updated_at"], name: "index_notices_on_updated_at"
   end
 
-  add_index "notices", ["created_at"], name: "index_notices_on_created_at", using: :btree
-  add_index "notices", ["original_notice_id"], name: "index_notices_on_original_notice_id", using: :btree
-  add_index "notices", ["published"], name: "index_notices_on_published", using: :btree
-  add_index "notices", ["reviewer_id"], name: "index_notices_on_reviewer_id", using: :btree
-  add_index "notices", ["submission_id"], name: "index_notices_on_submission_id", using: :btree
-  add_index "notices", ["type"], name: "index_notices_on_type", using: :btree
-  add_index "notices", ["updated_at"], name: "index_notices_on_updated_at", using: :btree
-
-  create_table "notices_relevant_questions", force: :cascade do |t|
+  create_table "notices_relevant_questions", id: :serial, force: :cascade do |t|
     t.integer "notice_id"
     t.integer "relevant_question_id"
+    t.index ["notice_id"], name: "index_notices_relevant_questions_on_notice_id"
+    t.index ["relevant_question_id"], name: "index_notices_relevant_questions_on_relevant_question_id"
   end
-
-  add_index "notices_relevant_questions", ["notice_id"], name: "index_notices_relevant_questions_on_notice_id", using: :btree
-  add_index "notices_relevant_questions", ["relevant_question_id"], name: "index_notices_relevant_questions_on_relevant_question_id", using: :btree
 
   create_table "notices_works", id: false, force: :cascade do |t|
     t.integer "notice_id"
     t.integer "work_id"
+    t.index ["notice_id"], name: "index_notices_works_on_notice_id"
+    t.index ["work_id"], name: "index_notices_works_on_work_id"
   end
 
-  add_index "notices_works", ["notice_id"], name: "index_notices_works_on_notice_id", using: :btree
-  add_index "notices_works", ["work_id"], name: "index_notices_works_on_work_id", using: :btree
-
-  create_table "rails_admin_histories", force: :cascade do |t|
-    t.text     "message"
-    t.string   "username"
-    t.integer  "item"
-    t.string   "table"
-    t.integer  "month",      limit: 2
-    t.integer  "year",       limit: 8
+  create_table "rails_admin_histories", id: :serial, force: :cascade do |t|
+    t.text "message"
+    t.string "username"
+    t.integer "item"
+    t.string "table"
+    t.integer "month", limit: 2
+    t.bigint "year"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["item"], name: "index_rails_admin_histories_on_item"
+    t.index ["month"], name: "index_rails_admin_histories_on_month"
+    t.index ["table"], name: "index_rails_admin_histories_on_table"
+    t.index ["year"], name: "index_rails_admin_histories_on_year"
   end
 
-  add_index "rails_admin_histories", ["item"], name: "index_rails_admin_histories_on_item", using: :btree
-  add_index "rails_admin_histories", ["month"], name: "index_rails_admin_histories_on_month", using: :btree
-  add_index "rails_admin_histories", ["table"], name: "index_rails_admin_histories_on_table", using: :btree
-  add_index "rails_admin_histories", ["year"], name: "index_rails_admin_histories_on_year", using: :btree
-
-  create_table "reindex_runs", force: :cascade do |t|
-    t.integer  "entity_count", default: 0
-    t.integer  "notice_count", default: 0
+  create_table "reindex_runs", id: :serial, force: :cascade do |t|
+    t.integer "entity_count", default: 0
+    t.integer "notice_count", default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["created_at"], name: "index_reindex_runs_on_created_at"
   end
 
-  add_index "reindex_runs", ["created_at"], name: "index_reindex_runs_on_created_at", using: :btree
-
-  create_table "relevant_questions", force: :cascade do |t|
+  create_table "relevant_questions", id: :serial, force: :cascade do |t|
     t.text "question", null: false
-    t.text "answer",   null: false
+    t.text "answer", null: false
   end
 
-  create_table "relevant_questions_topics", force: :cascade do |t|
+  create_table "relevant_questions_topics", id: :serial, force: :cascade do |t|
     t.integer "topic_id"
     t.integer "relevant_question_id"
+    t.index ["relevant_question_id"], name: "index_relevant_questions_topics_on_relevant_question_id"
+    t.index ["topic_id"], name: "index_relevant_questions_topics_on_topic_id"
   end
 
-  add_index "relevant_questions_topics", ["relevant_question_id"], name: "index_relevant_questions_topics_on_relevant_question_id", using: :btree
-  add_index "relevant_questions_topics", ["topic_id"], name: "index_relevant_questions_topics_on_topic_id", using: :btree
-
-  create_table "risk_trigger_conditions", force: :cascade do |t|
-    t.string  "field",           null: false
-    t.string  "value",           null: false
+  create_table "risk_trigger_conditions", id: :serial, force: :cascade do |t|
+    t.string "field", null: false
+    t.string "value", null: false
     t.boolean "negated"
-    t.string  "matching_type"
+    t.string "matching_type"
     t.integer "risk_trigger_id"
+    t.index ["risk_trigger_id"], name: "index_risk_trigger_conditions_on_risk_trigger_id"
   end
 
-  add_index "risk_trigger_conditions", ["risk_trigger_id"], name: "index_risk_trigger_conditions_on_risk_trigger_id", using: :btree
-
-  create_table "risk_triggers", force: :cascade do |t|
-    t.string "name",          null: false
+  create_table "risk_triggers", id: :serial, force: :cascade do |t|
+    t.string "name", null: false
     t.string "matching_type", null: false
     t.string "comment"
   end
 
-  create_table "roles", force: :cascade do |t|
+  create_table "roles", id: :serial, force: :cascade do |t|
     t.string "name", null: false
   end
 
-  create_table "roles_users", force: :cascade do |t|
+  create_table "roles_users", id: :serial, force: :cascade do |t|
     t.integer "role_id"
     t.integer "user_id"
+    t.index ["role_id"], name: "index_roles_users_on_role_id"
+    t.index ["user_id"], name: "index_roles_users_on_user_id"
   end
 
-  add_index "roles_users", ["role_id"], name: "index_roles_users_on_role_id", using: :btree
-  add_index "roles_users", ["user_id"], name: "index_roles_users_on_user_id", using: :btree
-
-  create_table "taggings", force: :cascade do |t|
-    t.integer  "tag_id"
-    t.integer  "taggable_id"
-    t.string   "taggable_type"
-    t.integer  "tagger_id"
-    t.string   "tagger_type"
-    t.string   "context",       limit: 128
+  create_table "taggings", id: :serial, force: :cascade do |t|
+    t.integer "tag_id"
+    t.integer "taggable_id"
+    t.string "taggable_type"
+    t.integer "tagger_id"
+    t.string "tagger_type"
+    t.string "context", limit: 128
     t.datetime "created_at"
+    t.index ["context"], name: "index_taggings_on_context"
+    t.index ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true
+    t.index ["tag_id"], name: "index_taggings_on_tag_id"
+    t.index ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context"
+    t.index ["taggable_id", "taggable_type", "tagger_id", "context"], name: "taggings_idy"
+    t.index ["taggable_id"], name: "index_taggings_on_taggable_id"
+    t.index ["taggable_type"], name: "index_taggings_on_taggable_type"
+    t.index ["tagger_id", "tagger_type"], name: "index_taggings_on_tagger_id_and_tagger_type"
+    t.index ["tagger_id"], name: "index_taggings_on_tagger_id"
   end
 
-  add_index "taggings", ["context"], name: "index_taggings_on_context", using: :btree
-  add_index "taggings", ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true, using: :btree
-  add_index "taggings", ["tag_id"], name: "index_taggings_on_tag_id", using: :btree
-  add_index "taggings", ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context", using: :btree
-  add_index "taggings", ["taggable_id", "taggable_type", "tagger_id", "context"], name: "taggings_idy", using: :btree
-  add_index "taggings", ["taggable_id"], name: "index_taggings_on_taggable_id", using: :btree
-  add_index "taggings", ["taggable_type"], name: "index_taggings_on_taggable_type", using: :btree
-  add_index "taggings", ["tagger_id", "tagger_type"], name: "index_taggings_on_tagger_id_and_tagger_type", using: :btree
-  add_index "taggings", ["tagger_id"], name: "index_taggings_on_tagger_id", using: :btree
-
-  create_table "tags", force: :cascade do |t|
-    t.string  "name"
+  create_table "tags", id: :serial, force: :cascade do |t|
+    t.string "name"
     t.integer "taggings_count", default: 0
+    t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
-  add_index "tags", ["name"], name: "index_tags_on_name", unique: true, using: :btree
-
-  create_table "token_urls", force: :cascade do |t|
-    t.string   "email"
-    t.string   "token"
-    t.integer  "notice_id",                              null: false
-    t.integer  "user_id"
+  create_table "token_urls", id: :serial, force: :cascade do |t|
+    t.string "email"
+    t.string "token"
+    t.integer "notice_id", null: false
+    t.integer "user_id"
     t.datetime "expiration_date"
-    t.boolean  "valid_forever",          default: false
+    t.boolean "valid_forever", default: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "documents_notification"
+    t.boolean "documents_notification"
+    t.index ["documents_notification"], name: "index_token_urls_on_documents_notification"
+    t.index ["email"], name: "index_token_urls_on_email"
+    t.index ["notice_id"], name: "index_token_urls_on_notice_id"
+    t.index ["token"], name: "index_token_urls_on_token"
+    t.index ["user_id"], name: "index_token_urls_on_user_id"
   end
 
-  add_index "token_urls", ["documents_notification"], name: "index_token_urls_on_documents_notification", using: :btree
-  add_index "token_urls", ["email"], name: "index_token_urls_on_email", using: :btree
-  add_index "token_urls", ["notice_id"], name: "index_token_urls_on_notice_id", using: :btree
-  add_index "token_urls", ["token"], name: "index_token_urls_on_token", using: :btree
-  add_index "token_urls", ["user_id"], name: "index_token_urls_on_user_id", using: :btree
-
-  create_table "topic_assignments", force: :cascade do |t|
+  create_table "topic_assignments", id: :serial, force: :cascade do |t|
     t.integer "topic_id"
     t.integer "notice_id"
+    t.index ["notice_id"], name: "index_topics_notices_on_notice_id"
+    t.index ["topic_id"], name: "index_topics_notices_on_topic_id"
   end
 
-  add_index "topic_assignments", ["notice_id"], name: "index_topics_notices_on_notice_id", using: :btree
-  add_index "topic_assignments", ["topic_id"], name: "index_topics_notices_on_topic_id", using: :btree
-
-  create_table "topic_managers", force: :cascade do |t|
+  create_table "topic_managers", id: :serial, force: :cascade do |t|
     t.string "name", null: false
   end
 
-  create_table "topic_managers_topics", force: :cascade do |t|
+  create_table "topic_managers_topics", id: :serial, force: :cascade do |t|
     t.integer "topic_id"
     t.integer "topic_manager_id"
+    t.index ["topic_id"], name: "index_topic_managers_topics_on_topic_id"
+    t.index ["topic_manager_id"], name: "index_topic_managers_topics_on_topic_manager_id"
   end
 
-  add_index "topic_managers_topics", ["topic_id"], name: "index_topic_managers_topics_on_topic_id", using: :btree
-  add_index "topic_managers_topics", ["topic_manager_id"], name: "index_topic_managers_topics_on_topic_manager_id", using: :btree
-
-  create_table "topics", force: :cascade do |t|
-    t.string  "name",                              null: false
-    t.text    "description",          default: ""
-    t.string  "ancestry"
+  create_table "topics", id: :serial, force: :cascade do |t|
+    t.string "name", null: false
+    t.text "description", default: ""
+    t.string "ancestry"
     t.integer "original_category_id"
+    t.index ["ancestry"], name: "index_topics_on_ancestry"
   end
 
-  add_index "topics", ["ancestry"], name: "index_topics_on_ancestry", using: :btree
-
-  create_table "users", force: :cascade do |t|
-    t.string   "email",                                    default: "",    null: false
-    t.string   "encrypted_password",                       default: "",    null: false
-    t.string   "reset_password_token"
+  create_table "users", id: :serial, force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
-    t.string   "authentication_token"
+    t.string "authentication_token"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "publication_delay",                        default: 0,     null: false
-    t.boolean  "can_generate_permanent_notice_token_urls", default: false, null: false
-    t.integer  "notice_viewer_views_limit",                default: 1
-    t.integer  "notice_viewer_viewed_notices",             default: 0,     null: false
+    t.integer "publication_delay", default: 0, null: false
+    t.boolean "can_generate_permanent_notice_token_urls", default: false, null: false
+    t.integer "notice_viewer_views_limit", default: 1
+    t.integer "notice_viewer_viewed_notices", default: 0, null: false
     t.datetime "notice_viewer_time_limit"
-    t.boolean  "limit_notice_api_response",                default: false, null: false
+    t.boolean "limit_notice_api_response", default: false, null: false
+    t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_index "users", ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree
-  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
-  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
-
-  create_table "works", force: :cascade do |t|
-    t.text     "description"
+  create_table "works", id: :serial, force: :cascade do |t|
+    t.text "description"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "kind"
-    t.text     "description_original"
+    t.string "kind"
+    t.text "description_original"
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
 end

@@ -1,0 +1,23 @@
+[attributes]
+---
+label: blawg
+app_layout: application
+position: 2
+
+[content]
+<article class="post">
+  <div class="imagery {{ cms:text image }}"></div>
+  <div class="content">
+    <h3 class="title">{{ cms:text title }}</h3>
+    {{ cms:partial "blog_entries/comfy_metadata" }}
+
+    {{ cms:wysiwyg content }}
+  </div>
+</article>
+
+{{ cms:text author, render: false }}
+{{ cms:text abstract, render: false }}
+[js]
+
+[css]
+

@@ -64,4 +64,8 @@ Rails.application.routes.draw do
   end
 
   root to: 'home#index'
+
+  comfy_route :cms_admin, path: "/cms_admin"
+  # Ensure that this route is defined last
+  comfy_route :cms, path: "/cms"
 end
