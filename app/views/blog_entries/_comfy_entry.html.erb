@@ -6,6 +6,6 @@
   </h3>
   <%= render 'blog_entries/comfy_metadata', blog_entry: blog_entry %>
   <a class="snippet" href="<%= blog_entry.full_path %>">
-    <%= fragment_abstract(blog_entry) %>
+    <%= raw fragment_abstract(blog_entry) %>
   </a>
 </article>
