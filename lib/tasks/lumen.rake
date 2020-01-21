@@ -4,6 +4,7 @@ require 'rake'
 require 'ingestor'
 require 'collapses_topics'
 require 'csv'
+require 'comfy/blog_post_factory'
 
 namespace :lumen do
   desc 'Delete elasticsearch index'
@@ -799,6 +800,37 @@ where works.id in (
     DocumentsUpdateNotificationNotice.delete_all
 
     puts "#{date_time_task.call} Finishing the task"
+  end
+
+  desc 'Migrate BlogEntries to CMS'
+  task migrate_blog_entries_to_cms: :environment do
+    site = Comfy::Cms::Site.find_by_identifier('lumen_cms')
+    layout = Comfy::Cms::Layout.find_by_label('blawg')
+    parent = Comfy::Cms::Page.find_by_label('blog_entries')
+
+    unless site && layout && parent
+      $stdout.puts 'lumen_cms Site, blawg Layout, and blog_entries Page must be defined before running this task'
+      exit
+    end
+
+    count = 0
+    BlogEntry.all.each do |entry|
+      next if Comfy::Cms::Page.find_by_slug(entry.id).present?
+      BlogPostFactory.new(site, layout, parent, entry: entry).manufacture
+      count += 1
+    end
+
+    $stdout.puts "#{count} pages created"
+  end
+
+  desc 'Set up CMS'
+  task set_up_cms: :environment do
+    if Comfy::Cms::Site.first.present?
+      puts 'CMS already set up'
+      exit
+    end
+    Comfy::Cms::Site.create!(identifier: 'lumen_cms')
+    Rake::Task['comfy:cms_seeds:import'].invoke('lumen_cms', 'lumen_cms')
   end
 end
 

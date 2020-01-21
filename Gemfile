@@ -9,6 +9,7 @@ gem 'ancestry'
 gem 'bootsnap'
 gem 'bootstrap-datepicker-rails'
 gem 'cancancan'
+gem 'comfortable_mexican_sofa'
 # country_select has breaking changes in 2.x:
 # https://github.com/stefanpenner/country_select/blob/master/UPGRADING.md
 # It also removes CountrySelect::ISO_COUNTRIES_FOR_SELECT in 1.3, which is a
