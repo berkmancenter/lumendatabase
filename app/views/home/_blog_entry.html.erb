@@ -1,4 +1,4 @@
 <%= content_tag_for(:li, blog_entry) do %>
-  <%= link_to(blog_entry.title, blog_entry_path(blog_entry)) %>
-  <span class="metadata"><%= blog_entry.author %> on <%= published_at(blog_entry) %></span>
+  <%= link_to(cms_fragment_content('title', blog_entry), "/cms#{blog_entry.full_path}") %>
+  <span class="metadata"><%= cms_fragment_render(:author, blog_entry) %> on <%= blog_date(blog_entry) %>
 <% end %>

@@ -8,6 +8,9 @@ class HomeController < ApplicationController
     @notices = Rails.cache.fetch(
       'newest_notices', expires_in: 1.hour
     ) { Notice.visible.recent }
-    @blog_entries = BlogEntry.recent_posts
+    @blog_entries = Comfy::Cms::Page.find_by_label('blog_entries')
+                                    .children
+                                    .last(5)
+                                    .reverse
   end
 end

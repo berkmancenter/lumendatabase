@@ -721,78 +721,6 @@ where works.id in (
     puts "#{date_time_task.call} Finishing the task"
   end
 
-  desc 'Retain OriginalNewsId URLs in CMS'
-  task migrate_original_news_id_redirects: :environment do
-    # Find Site & Layout. ------------------------------------------------------
-    site = Comfy::Cms::Site.find_by_identifier('lumen_cms')
-    layout = Comfy::Cms::Layout.first
-
-    unless site.present? && layout.present?
-      $stdout.puts 'lumen_cms Site, and any Layout, must be defined before running this task'
-      exit
-    end
-
-    # Find or create parent for namespacing. -----------------------------------
-    parent = if (page = Comfy::Cms::Page.find_by_slug('original_news_id')).present?
-               page
-             else
-               Comfy::Cms::Page.create(
-                 site: site,
-                 layout: layout,
-                 label: 'original news ID parent',
-                 slug: 'original_news_id',
-                 is_published: false
-               )
-            end
-
-    # Create pages to preserve redirects. --------------------------------------
-    count = 0
-    BlogEntry.where.not(original_news_id: nil).each do |entry|
-      next if Comfy::Cms::Page.where(
-          parent: parent,
-          slug: entry.original_news_id
-        ).present?
-
-      unless Comfy::Cms::Page.find_by_slug(entry.id)
-        puts 'Must migrate blog entries before running this task'
-        raise
-      end
-
-      Comfy::Cms::Page.create(
-        site: site,
-        layout: layout,
-        parent: parent,
-        label: "redirect_#{entry.original_news_id}",
-        slug: entry.original_news_id,
-        target_page: Comfy::Cms::Page.find_by_slug(entry.id)
-      )
-      count += 1
-    end
-
-    $stdout.puts "#{count} pages created"
-  end
-
-  desc 'Migrate BlogEntries to CMS'
-  task migrate_blog_entries_to_cms: :environment do
-    site = Comfy::Cms::Site.find_by_identifier('lumen_cms')
-    layout = Comfy::Cms::Layout.find_by_label('blawg')
-    parent = Comfy::Cms::Page.find_by_label('blog_entries')
-
-    unless site.present? && layout.present? && parent.present?
-      $stdout.puts 'lumen_cms Site, blawg Layout, and blog_entries Page must be defined before running this task'
-      exit
-    end
-
-    count = 0
-    BlogEntry.all.each do |entry|
-      next if Comfy::Cms::Page.find_by_slug(entry.id).present?
-      BlogPostFactory.new(site, layout, parent, entry: entry).manufacture
-      count += 1
-    end
-
-    $stdout.puts "#{count} pages created"
-  end
-
   desc 'Set up CMS'
   task set_up_cms: :environment do
     if Comfy::Cms::Site.first.present?
@@ -802,6 +730,11 @@ where works.id in (
     Comfy::Cms::Site.create!(identifier: 'lumen_cms')
     Rake::Task['comfy:cms_seeds:import'].invoke('lumen_cms', 'lumen_cms')
   end
+
+  # There were also earlier tasks to migrate BlogEntry content to the CMS, but
+  # they were removed upon removal of the BlogEntry model, after having been
+  # run to migrate production content. They were last available in commit
+  # b45018d.
 end
 
 class CourtOrderReporter

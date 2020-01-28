@@ -42,7 +42,6 @@ class Ability
       can :publish, Notice
       can :rescind, Notice
       can :create, Notice
-      can :create, BlogEntry
 
       can :pdf_requests, :all
       can :view_full_version, Notice

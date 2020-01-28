@@ -38,10 +38,7 @@ Rails.application.routes.draw do
     resources :topics, only: [:index]
   end
 
-  resources :blog_entries, only: %i[index show archive]
-  get 'blog_feed', to: 'blog_entries#feed'
   get 'notices_feed', to: 'notices#feed'
-  get 'blog_archive', to: 'blog_entries#archive'
 
   match :faceted_search,
         controller: 'notices/search',
