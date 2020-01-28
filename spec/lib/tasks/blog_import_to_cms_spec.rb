@@ -13,8 +13,12 @@ describe 'lumen:migrate_blog_entries_to_cms', type: :request do
       image: 'overcast',
       content: 'content goes here'
     )
-    Rake::Task['lumen:set_up_cms'].invoke
-    Rake::Task['lumen:migrate_blog_entries_to_cms'].invoke
+    Rake::Task['lumen:set_up_cms'].execute
+    Rake::Task['lumen:migrate_blog_entries_to_cms'].execute
+  end
+
+  after(:all) do
+    BlogEntry.destroy_all
   end
 
   let(:blog_parent) { Comfy::Cms::Page.find_by_label('blog_entries') }
