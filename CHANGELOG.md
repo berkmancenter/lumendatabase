@@ -1,5 +1,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [20.01a](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.01a) - 2020-01-21
+### Added
+* We have a CMS! (Comfortable-Mexican-Sofa)
+* Rake tasks to stand up the CMS and migrate blog content
+
 ## [20.01](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.01) - 2020-01-08
 ### Changed
 * Upgrade rails_admin from 1.4 to 2.0
