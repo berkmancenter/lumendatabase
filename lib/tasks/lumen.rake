@@ -753,6 +753,11 @@ where works.id in (
           slug: entry.original_news_id
         ).present?
 
+      unless Comfy::Cms::Page.find_by_slug(entry.id)
+        puts 'Must migrate blog entries before running this task'
+        raise
+      end
+
       Comfy::Cms::Page.create(
         site: site,
         layout: layout,
