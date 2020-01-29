@@ -42,18 +42,6 @@ feature 'Page titles' do
     expect(page).to have_exact_title('Sign In :: Lumen')
   end
 
-  context "Pages" do
-    %w( About Privacy Legal Researchers ).each do |area|
-      scenario area do
-        visit '/'
-        click_on area
-
-        expect(page).to have_exact_title("#{area} :: Lumen")
-        expect(page).to have_heading(area)
-      end
-    end
-  end
-
   private
 
   def have_exact_title(expected_title)

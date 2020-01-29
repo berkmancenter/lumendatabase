@@ -198,7 +198,6 @@ GEM
     hashdiff (1.0.0)
     hashie (3.6.0)
     heapy (0.1.4)
-    high_voltage (3.1.2)
     hodel_3000_compliant_logger (0.1.1)
     html2haml (2.2.0)
       erubis (~> 2.7.0)
@@ -503,7 +502,6 @@ DEPENDENCIES
   factory_bot_rails
   fakeweb
   flutie
-  high_voltage
   jquery-placeholder-rails
   jquery-rails
   jquery-ui-rails

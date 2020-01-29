@@ -14,24 +14,20 @@ feature 'home page' do
 
     visit root_path
 
-    links = page.all('li a').map { |a| a['href'] }
-
     Notice.visible.recent.each do |n|
-      # Somehow the have_link syntax isn't working here. ¯\_(ツ)_/¯
-      expect(links).to include(notice_path n.id)
+      expect(page).to have_selector(:css, "a[href='#{notice_path(n.id)}']")
     end
 
     Notice.first(5).each do |n|
-      expect(links).not_to include(notice_path n.id)
+      expect(page).not_to have_selector(:css, "a[href='#{notice_path(n.id)}']")
     end
 
     Notice.where(published: false).each do |n|
-      expect(links).not_to include(notice_path n.id)
+      expect(page).not_to have_selector(:css, "a[href='#{notice_path(n.id)}']")
     end
   end
 
   it 'displays recent blog entries' do
-    visit root_path
     site = Comfy::Cms::Site.find_by_identifier('lumen_cms')
     layout = Comfy::Cms::Layout.find_by_label('blawg')
     blog = Comfy::Cms::Page.find_by_label('blog_entries')
@@ -39,12 +35,14 @@ feature 'home page' do
       BlogPostFactory.new(site, layout, blog, seed: i).manufacture
     end
 
+    visit root_path
+
     blog.children.last(5).each do |post|
-      expect(page.body).to include cms_fragment_content('title', post)
+      expect(page.body).to have_link(cms_fragment_content('title', post), exact: true)
     end
 
     blog.children.first(10).each do |post|
-      expect(page.body).not_to include cms_fragment_content('title', post)
+      expect(page.body).not_to have_link(cms_fragment_content('title', post), exact: true)
     end
   end
 end

@@ -19,4 +19,14 @@ module Comfy::ComfyHelper
   def blog_search_engine_configured?
     Chill::Application.config.google_custom_blog_search_id.present?
   end
+
+  def page_path(label)
+    Comfy::Cms::Page.find_by_label(label).full_path
+  # If someone tries to use this on an undefined page, we'll return something
+  # that will probably 404. That means we will probably notice the page is
+  # missing, but we won't crash the site -- especially useful in development,
+  # as localhost may not have a fully defined set of pages.
+  rescue NoMethodError
+    "pages/#{label}"
+  end
 end
