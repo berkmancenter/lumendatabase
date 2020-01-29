@@ -15,4 +15,8 @@ module Comfy::ComfyHelper
     Kaminari.paginate_array(scope.to_a, total_count: scope.count)
             .page(params[:page]).per(10)
   end
+
+  def blog_search_engine_configured?
+    Chill::Application.config.google_custom_blog_search_id.present?
+  end
 end

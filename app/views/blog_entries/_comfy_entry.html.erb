@@ -1,7 +1,7 @@
 <article class="post-item">
   <h3 class="title">
     <% if blog_entry.full_path.present? %>
-      <%= link_to(cms_fragment_content('title', blog_entry), "/cms#{blog_entry.full_path}") %>
+      <%= link_to(cms_fragment_content('title', blog_entry), blog_entry.full_path) %>
     <% end %>
   </h3>
   <%= render 'blog_entries/comfy_metadata', blog_entry: blog_entry %>

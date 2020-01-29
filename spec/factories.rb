@@ -251,27 +251,6 @@ FactoryBot.define do
     url_original { url }
   end
 
-  factory :blog_entry do
-    title { 'Blog title' }
-    author { 'John Smith' }
-
-    trait :published do
-      published_at { 5.days.ago }
-    end
-
-    trait :archive do
-      archive { true }
-    end
-
-    trait :with_abstract do
-      abstract { "Some summary of the post's content" }
-    end
-
-    trait :with_content do
-      content { 'Some *markdown* content' }
-    end
-  end
-
   factory :role do
     name { 'test_role' }
   end
