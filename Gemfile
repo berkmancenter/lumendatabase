@@ -55,6 +55,7 @@ group :development do
   gem 'bullet'
   gem 'derailed'
   gem 'memory_profiler'
+  gem 'web-console'
 end
 
 group :development, :test do

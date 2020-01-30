@@ -69,6 +69,7 @@ GEM
     arel (9.0.0)
     bcrypt (3.1.13)
     benchmark-ips (2.7.2)
+    bindex (0.8.1)
     bootsnap (1.4.5)
       msgpack (~> 1.0)
     bootstrap-datepicker-rails (1.8.0.1)
@@ -462,6 +463,11 @@ GEM
     vcr (4.0.0)
     warden (1.2.7)
       rack (>= 1.0)
+    web-console (3.7.0)
+      actionview (>= 5.0)
+      activemodel (>= 5.0)
+      bindex (>= 0.4.0)
+      railties (>= 5.0)
     webmock (3.4.2)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
@@ -546,6 +552,7 @@ DEPENDENCIES
   turnout
   uglifier
   vcr
+  web-console
   webmock
 
 BUNDLED WITH

@@ -58,6 +58,8 @@ Rails.application.routes.draw do
     end
   end
 
+  get 'blog_feed', to: 'blog_feed#index'
+
   root to: 'home#index'
 
   comfy_route :cms_admin, path: "/cms_admin"
