@@ -9,7 +9,7 @@ The Lumen Database collects and analyzes legal complaints and requests for remov
 
 Automated Submissions and Search Using the API
 ===========
-The main [Lumen Database instance](https://www.lumendatabase.org/) has an API that allows individuals and organizations that receive large numbers of notices to submit them without using the web interface. The API also provides an easy way for researchers to search the database. Members of the public can test the database, but will likely need to request an API key from the [Lumen team](mailto:team@lumendatabase.org) in order to receive a token that provides full acess. To learn about the capabilities of the API you can consult the [API documentation](https://github.com/berkmancenter/lumendatabase/wiki/Lumen-API-Documentation).
+The main [Lumen Database instance](https://www.lumendatabase.org/) has an API that allows individuals and organizations that receive large numbers of notices to submit them without using the web interface. The API also provides an easy way for researchers to search the database. Members of the public can test the database, but will likely need to request an API key from the [Lumen team](mailto:team@lumendatabase.org) in order to receive a token that provides full access. To learn about the capabilities of the API you can consult the [API documentation](https://github.com/berkmancenter/lumendatabase/wiki/Lumen-API-Documentation).
 
 Development
 ===========
@@ -20,7 +20,7 @@ Development
 * PostgreSQL 9.6
 * Elasticsearch 5.6.x
 * Java Runtime Environment (OpenJDK works fine)
-* Piwik Tracking
+* Piwik Tracking (only used in prod)
 * Mail server (SMTP, Sendmail)
 * phantomjs (used only by test runner)
 
@@ -48,12 +48,18 @@ You can customize behavior during seeding (db:setup) with a couple of environmen
   instead of the default 500
 * `SKIP_FAKE_DATA=1` will skip generating fake seed data entirely.
 
-#### Admin login
+#### Sample user logins
 
-    Username: admin@lumendatabase.org
+The seed data creates logins of the following form:
+
+    Username: {username}@lumendatabase.org
     Password: password
 
-If you seeded your database with an older version of `seeds.rb`, your username may be admin@chillingeffects.org.
+username is one of {user, submitter, redactor, publisher, admin, super_admin},
+with corresponding privileges.
+
+If you seeded your database with an older version of `seeds.rb`, your username
+may use chillingeffects.org rather than lumendatabase.org.
 
 #### Running Tests
 
@@ -74,9 +80,13 @@ their own commit.
 
 * [Skylight](https://www.skylight.io/app/applications/utm46ElcSDtw/recent/5m/endpoints)
   * track page rendering time, count allocations, find possibly dodgy SQL
-  * analytics to help you find the problem areas
+  * analytics to help you find the problem areas at a high level
   * login required
   * runs in prod
+* [mini-profiler](https://github.com/MiniProfiler/rack-mini-profiler)
+  * available in dev by default
+  * in use on prod, visible only to super_admins
+  * in-depth memory profiling, stacktracing, and SQL queries; good for granular analysis
 * [bullet](https://github.com/flyerhzm/bullet)
   * find N+1 queries and unused eager loading
   * runs in dev
@@ -151,8 +161,8 @@ The application requires a mail server, in development it's best to use a local 
 Ephemera
 ========
 
-The `/blog_entries` page contains a google custom search engine that's supposed
-to search the Lumen blog. To enable, create a custom search engine
+The `/blog_entries` page can contain a google custom search engine that
+searches the Lumen blog. To enable, create a custom search engine
 [here](https://www.google.com/cse/create/new) restricted to the path the blog
 lives at, for instance `https://www.lumendatabase.org/blog_entries/*`. Extract
 the "cx" id from the javascript embed code and put it in the
