@@ -2,6 +2,7 @@ require 'rails_helper'
 require 'comfy/blog_post_factory'
 
 feature 'CMS blog entries' do
+  include ComfyHelpers
   include Comfy::ComfyHelper
   include Comfy::CmsHelper
 
@@ -15,6 +16,10 @@ feature 'CMS blog entries' do
   after :each do
     Comfy::Cms::Page.where.not(id: @blog.id).delete_all
     @blog.reload
+  end
+
+  after :all do
+    destroy_cms
   end
 
   context 'archive' do

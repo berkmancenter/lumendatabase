@@ -725,10 +725,16 @@ where works.id in (
   task set_up_cms: :environment do
     if Comfy::Cms::Site.first.present?
       puts 'CMS already set up'
-      exit
+      # We don't want to mess with prod or dev data if they exist already, but
+      # in test we need to repeatedly re-initialize the CMS in different
+      # example groups.
+      exit unless Rails.env.test?
+    else
+      Comfy::Cms::Site.create!(identifier: 'lumen_cms')
     end
-    Comfy::Cms::Site.create!(identifier: 'lumen_cms')
-    Rake::Task['comfy:cms_seeds:import'].invoke('lumen_cms', 'lumen_cms')
+    Rake::Task['comfy:cms_seeds:import'].execute(
+      from: 'lumen_cms', to: 'lumen_cms'
+    )
   end
 
   # There were also earlier tasks to migrate BlogEntry content to the CMS, but

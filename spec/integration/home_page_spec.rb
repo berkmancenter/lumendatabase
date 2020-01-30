@@ -1,11 +1,16 @@
 require 'rails_helper'
 
 feature 'home page' do
-  include Rails.application.routes.url_helpers
+  include ComfyHelpers
   include Comfy::CmsHelper
+  include Rails.application.routes.url_helpers
 
   before :all do
     Rake::Task['lumen:set_up_cms'].execute
+  end
+
+  after :all do
+    destroy_cms
   end
 
   it 'links to recent visible notices' do

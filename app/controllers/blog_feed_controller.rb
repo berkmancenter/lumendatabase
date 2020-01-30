@@ -23,7 +23,7 @@ class BlogFeedController < ApplicationController
                     .last(10)
                     .reverse
   rescue NoMethodError # when blog_entries undefined, or no children
-    nil
+    []
   end
 
   def articleify(post)

@@ -2,6 +2,7 @@ require 'rails_helper'
 require 'rss'
 
 feature 'blog rss feed' do
+  include ComfyHelpers
   include Comfy::CmsHelper
   include ERB::Util
 
@@ -14,6 +15,10 @@ feature 'blog rss feed' do
     15.times do |i|
       BlogPostFactory.new(@site, @layout, @blog, seed: i).manufacture
     end
+  end
+
+  after :all do
+    destroy_cms
   end
 
   it 'resolves at the expected URL' do
