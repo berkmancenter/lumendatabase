@@ -93,7 +93,6 @@ class Notice < ApplicationRecord
   has_many :topic_assignments, dependent: :destroy
   has_many :topics, through: :topic_assignments
   has_many :topic_relevant_questions, through: :topics, source: :relevant_questions
-  has_many :related_blog_entries, -> { distinct }, through: :topics, source: :blog_entries
   has_many :entity_notice_roles, dependent: :destroy, inverse_of: :notice
   has_many :entities, through: :entity_notice_roles
   has_many :file_uploads

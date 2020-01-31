@@ -1,5 +1,5 @@
 Turnout.configure do |config|
-  config.maintenance_pages_path = Rails.root.join('app', 'views', 'pages')
+  config.maintenance_pages_path = Rails.root.join('public')
   config.default_reason = 'Lumen is down for maintenance. It should be back shortly.'
   config.default_allowed_paths = [
     '^/admin',

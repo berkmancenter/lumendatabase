@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'collapses_topics'
 
 describe CollapsesTopics do
-  [BlogEntry, TopicManager, RelevantQuestion, Notice].each do |model|
+  [TopicManager, RelevantQuestion, Notice].each do |model|
     it "correctly merges a set of topics together for #{model.name}" do
       factory_name = singular_name = model.name.tableize.singularize
       if singular_name == 'notice'

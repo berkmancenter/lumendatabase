@@ -31,10 +31,4 @@ describe "Submitters" do
       )
     end
   end
-
-  it "only supports Twitter and Google" do
-    expect(get: "/Other").not_to be_routable
-    expect(get: "/Other/Whatever").not_to be_routable
-  end
 end
-
