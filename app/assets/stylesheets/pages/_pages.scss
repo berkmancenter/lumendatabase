@@ -1,32 +1,26 @@
 .static-pages {
-  section.main {
-    section {
-      margin-bottom: 30px;
-    }
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
 
-    ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-    }
+  h2 {
+    font-size: 20px;
+    line-height: 1.4em;
+    margin-top: 1.5em;
+    margin-bottom: 0.4em;
+    color: $base-title-color;
+    font-weight: 700;
+  }
 
-    h2 {
-      font-size: 20px;
-      line-height: 1.4em;
-      margin-top: 1.5em;
-      margin-bottom: 0.4em;
-      color: $base-title-color;
-      font-weight: 700;
-    }
+  h3 {
+    font-size: 18px;
+    color: $base-font-color-2;
+  }
 
-    h3 {
-      font-size: 18px;
-      color: $base-font-color-2;
-    }
-
-    p, li {
-      line-height: 1.6em;
-    }
+  p, li {
+    line-height: 1.6em;
   }
 }
 

@@ -48,12 +48,10 @@ section.main.app {
 }
 
 // Add inner padding to certain pages
-body.topics-show, .static-pages {
-  .main-inner {
-    padding: $base-padding;
+body.topics-show .main-inner, .main-inner .static-pages {
+  padding: $base-padding;
 
-    @include media($mobile) {
-      padding: $base-padding-mobile;
-    }
+  @include media($mobile) {
+    padding: $base-padding-mobile;
   }
 }
