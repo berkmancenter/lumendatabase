@@ -126,7 +126,6 @@ feature 'User authorization' do
     site_data = [
       create(:topic),
       create(:relevant_question),
-      create(:blog_entry),
       create(:user),
       create(:role)
     ]

@@ -16,6 +16,10 @@
 # Ignore rvm config (may vary between environments).
 .rvmrc
 
+# Ignore yarn stuff
+node_modules/
+yarn.lock
+
 # Ignore all logfiles and tempfiles.
 log/*
 tmp/

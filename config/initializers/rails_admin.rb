@@ -110,8 +110,6 @@ RailsAdmin.config do |config|
 
         exclude_fields :topic_assignments,
                        :topic_relevant_questions,
-                       :related_blog_entries,
-                       :blog_topic_assignments,
                        :infringing_urls,
                        :copyrighted_urls,
                        :token_urls
@@ -150,8 +148,6 @@ RailsAdmin.config do |config|
       configure(:notices) { hide }
       configure(:topic_assignments) { hide }
 
-      configure(:blog_entries) { hide }
-      configure(:blog_entry_topic_assignments) { hide }
       configure :parent_id, :enum do
         enum_method do
           :parent_enum

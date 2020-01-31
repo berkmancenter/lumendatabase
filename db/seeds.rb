@@ -10,7 +10,6 @@ Entity.__elasticsearch__.create_index! force: true
 seed_files = %w[
   topics.rb
   relevant_questions.rb
-  blog_entries.rb
   risk_triggers.rb
   users.rb
 ]

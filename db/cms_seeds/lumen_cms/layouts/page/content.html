@@ -5,15 +5,11 @@ app_layout: application
 position: 1
 
 [content]
-<div class="high_voltage-pages">
-  <div class="main-inner">
-    <header>
-      <h1>{{ cms:text title }}</h1>
-    </header>
+{{ cms:partial 'cms_pages/layout' }}
 
-    {{ cms:wysiwyg content }}
-  </div>  
-</div>
+{{ cms:wysiwyg page_content, render: false }}
+
+{{ cms:text page_title, render: false }}
 [js]
 
 [css]
