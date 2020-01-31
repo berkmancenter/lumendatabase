@@ -1,5 +1,23 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [20.01b](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.01b) - 2020-01-31
+### Changed
+* CMS URL promoted to the top level, so that the CMS is now serving blog and static page content
+* Maintenance page is now served from a different directory
+* Tests of blog and pages functionality updated to ensure same behavior in the CMS
+* `high_voltage-pages` CSS class renamed to `static-pages` so as not to baffle future developers
+
+### Removed
+* `BlogEntry` and `BlogEntryTopicAssignment` models and associated code
+* `OriginalNewsId` controller
+  * The content was migrated into the CMS in an intermediate commit, not tagged as a release.
+* Rake tasks from 20.01a (no longer usable as `BlogEntry` no longer exists)
+* `high_voltage` gem and existing static pages (`app/views/pages` directory)
+
+### Added
+* `web-console` gem, for debugging in development
+* Testing of RSS feed
+
 ## [20.01a](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.01a) - 2020-01-21
 ### Added
 * We have a CMS! (Comfortable-Mexican-Sofa)
