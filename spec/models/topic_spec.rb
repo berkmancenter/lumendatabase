@@ -8,8 +8,6 @@ describe Topic, type: :model do
 
   it { is_expected.to have_many(:topic_assignments).dependent(:destroy) }
   it { is_expected.to have_many(:notices).through(:topic_assignments) }
-  it { is_expected.to have_many(:blog_entry_topic_assignments).dependent(:destroy) }
-  it { is_expected.to have_many(:blog_entries).through(:blog_entry_topic_assignments) }
   it { is_expected.to have_and_belong_to_many :relevant_questions }
 
   context "#description_html" do

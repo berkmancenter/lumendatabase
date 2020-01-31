@@ -6,7 +6,6 @@ class CollapsesTopics
   end
 
   MODELS = %w|
-    BlogEntry
     TopicManager
     RelevantQuestion
     Notice

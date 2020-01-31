@@ -5,12 +5,6 @@ user_levels = [
   ['publisher@lumendatabase.org',   [Role.publisher]],
   ['admin@lumendatabase.org',       [Role.admin]],
   ['super_admin@lumendatabase.org', [Role.super_admin]],
-  ['adam@lumendatabase.org',        [Role.super_admin]],
-  ['wendy@lumendatabase.org',       [Role.super_admin]],
-  ['djcp@thoughtbot.com',           [Role.super_admin]],
-  ['matt@thoughtbot.com',           [Role.super_admin]],
-  ['pat@thoughtbot.com',            [Role.super_admin]],
-  ['phil@thoughtbot.com',           [Role.super_admin]],
 ]
 
 user_levels.each do |email, roles|

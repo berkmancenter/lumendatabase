@@ -9,21 +9,15 @@ xml.rss :version => "2.0" do
     xml.link "https://www.lumendatabase.org/"
     xml.language "en"
 
-    for article in @blog_articles
+    @blog_articles.each do |article|
       xml.item do
-        if article.title
-          xml.title article.title
-        else
-          xml.title ""
-        end
+        xml.title article.title
         xml.author article.author
-        xml.pubDate article.created_at.to_s(:rfc822)
-        xml.link "https://www.lumendatabase.org/blog_entries/" + article.id.to_s
-        xml.guid article.id
-
-        text = article.content_html
-        xml.description "<p>" + text + "</p>"
-
+        xml.pubDate article.pubDate
+        xml.link article.link
+        xml.guid article.guid
+        xml.description article.description
+        xml.text article.content
       end
     end
   end

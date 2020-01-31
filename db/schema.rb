@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_13_152854) do
+ActiveRecord::Schema.define(version: 2020_01_28_213909) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,28 +34,6 @@ ActiveRecord::Schema.define(version: 2019_12_13_152854) do
     t.string "checksum", null: false
     t.datetime "created_at", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
-  end
-
-  create_table "blog_entries", id: :serial, force: :cascade do |t|
-    t.integer "user_id"
-    t.string "author", null: false
-    t.string "title", null: false
-    t.text "abstract"
-    t.text "content"
-    t.datetime "published_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string "image"
-    t.integer "original_news_id"
-    t.string "url", limit: 1024
-    t.boolean "archive", default: false
-  end
-
-  create_table "blog_entry_topic_assignments", id: :serial, force: :cascade do |t|
-    t.integer "blog_entry_id"
-    t.integer "topic_id"
-    t.index ["blog_entry_id"], name: "index_blog_entry_topic_assignments_on_blog_entry_id"
-    t.index ["topic_id"], name: "index_blog_entry_topic_assignments_on_topic_id"
   end
 
   create_table "comfy_cms_categories", force: :cascade do |t|

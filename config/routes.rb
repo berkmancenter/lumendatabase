@@ -30,18 +30,13 @@ Rails.application.routes.draw do
   get '/submission_id/:id', to: 'submission_ids#show'
   get '/original_notice_id/:id', to: 'original_notice_ids#show'
 
-  get '/original_news_id/:id', to: 'original_news_ids#show'
-
   resources :topics, only: [:show]
 
   scope format: true, constraints: { format: :json } do
     resources :topics, only: [:index]
   end
 
-  resources :blog_entries, only: %i[index show archive]
-  get 'blog_feed', to: 'blog_entries#feed'
   get 'notices_feed', to: 'notices#feed'
-  get 'blog_archive', to: 'blog_entries#archive'
 
   match :faceted_search,
         controller: 'notices/search',
@@ -63,9 +58,11 @@ Rails.application.routes.draw do
     end
   end
 
+  get 'blog_feed', to: 'blog_feed#index'
+
   root to: 'home#index'
 
   comfy_route :cms_admin, path: "/cms_admin"
   # Ensure that this route is defined last
-  comfy_route :cms, path: "/cms"
+  comfy_route :cms, path: "/"
 end

@@ -20,7 +20,6 @@ gem 'date_validator'
 gem 'devise'
 gem 'dotenv-rails'
 gem 'flutie'
-gem 'high_voltage'
 gem 'jquery-placeholder-rails'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
@@ -58,6 +57,7 @@ group :development do
   gem 'bullet'
   gem 'derailed'
   gem 'memory_profiler'
+  gem 'web-console'
 end
 
 group :development, :test do
