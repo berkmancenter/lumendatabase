@@ -7,7 +7,7 @@ RSpec.describe Defamation, type: :model do
   end
 
   it 'has the expected partial path' do
-    notice = create(:defamation)
+    notice = build(:defamation)
     expect(notice.to_partial_path).to eq 'notices/notice'
   end
 
@@ -37,25 +37,25 @@ RSpec.describe Defamation, type: :model do
   end
 
   it 'hides sender names when hide_identities is true' do
-    defamation = create(:defamation)
+    defamation = build(:defamation)
     allow(defamation).to receive(:hide_identities?).and_return(true)
     expect(defamation.sender_name).to eq described_class::MASK
   end
 
   it 'hides principal names when hide_identities is true' do
-    defamation = create(:defamation)
+    defamation = build(:defamation)
     allow(defamation).to receive(:hide_identities?).and_return(true)
     expect(defamation.principal_name).to eq described_class::MASK
   end
 
   it 'shows sender names when hide_identities is false' do
-    defamation = create(:defamation)
+    defamation = build(:defamation)
     allow(defamation).to receive(:hide_identities?).and_return(true)
     expect(defamation.sender_name).to eq described_class::MASK
   end
 
   it 'shows principal names when hide_identities is false' do
-    defamation = create(:defamation)
+    defamation = build(:defamation)
     allow(defamation).to receive(:hide_identities?).and_return(true)
     expect(defamation.principal_name).to eq described_class::MASK
   end

@@ -40,24 +40,24 @@ describe FileUpload, type: :model do
       expect(file_upload.file_file_name).to match 'factory_file'
     end
 
-    it "can have file names overridden" do
+    it 'can have file names overridden' do
       file_upload = create(:file_upload, file_name: 'foo.jpg')
       expect(file_upload.file_file_name).to eq 'foo.jpg'
     end
 
-    it "have valid file name when file_name is blank" do
-      file_upload = create(:file_upload, file_name: '')
+    it 'have valid file name when file_name is blank' do
+      file_upload = build(:file_upload, file_name: '')
       expect(file_upload.file_file_name).to match 'factory_file'
     end
 
-    it "have unsavory characters stripped from file names" do
+    it 'have unsavory characters stripped from file names' do
       [
        'bsdfsdf asdflkasdfjasdf /.pdf',
        'b../../.pdf',
        'c:\\documents\asdfasdf.fdf',
        'fcwSDFasdf & fldifs.jpg',
       ].each do |file_name|
-        file_upload = create(:file_upload, file_name: file_name)
+        file_upload = build(:file_upload, file_name: file_name)
         expect(file_upload.file_file_name).to match /\A[a-z\d\.\-_ ]+\Z/i
       end
     end
@@ -65,15 +65,15 @@ describe FileUpload, type: :model do
 
   context '#set_documents_requesters_notifications' do
     it 'sets a documents requesters notification when a new supporting file upload is created' do
-      notice = create(:dmca)
+      notice = build(:dmca)
       create(:file_upload, kind: 'supporting', notice: notice)
 
       expect(DocumentsUpdateNotificationNotice.where(notice: notice).count).to eq(1)
     end
 
     it 'sets a documents requesters notification when a supporting file upload is updated' do
-      notice = create(:dmca)
-      file_upload = create(:file_upload, kind: 'original', notice: notice)
+      notice = build(:dmca)
+      file_upload = build(:file_upload, kind: 'original', notice: notice)
 
       expect(DocumentsUpdateNotificationNotice.where(notice: notice).count).to eq(0)
 

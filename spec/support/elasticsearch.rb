@@ -68,7 +68,9 @@ RSpec.configure do |config|
 
   # Stop elasticsearch cluster after test run
   config.after :suite do
-    Elasticsearch::Extensions::Test::Cluster.stop(**es_options)
+    if Elasticsearch::Extensions::Test::Cluster.running?(on: es_port)
+      Elasticsearch::Extensions::Test::Cluster.stop(**es_options)
+    end
   end
 end
 
