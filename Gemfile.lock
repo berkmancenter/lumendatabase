@@ -439,6 +439,7 @@ GEM
       tins (~> 1.0)
     terrapin (0.6.0)
       climate_control (>= 0.0.3, < 1.0)
+    test-prof (0.10.2)
     therubyracer (0.12.3)
       libv8 (~> 3.16.14.15)
       ref
@@ -547,6 +548,7 @@ DEPENDENCIES
   simplecov
   skylight
   stackprof
+  test-prof
   therubyracer
   timecop
   turnout

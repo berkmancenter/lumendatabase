@@ -89,6 +89,7 @@ group :test do
   gem 'rails-controller-testing'
   gem 'shoulda-matchers', '~> 3.1', '>= 3.1.1'
   gem 'simplecov', require: false
+  gem 'test-prof'
   gem 'timecop'
   gem 'vcr'
   gem 'webmock'
