@@ -63,12 +63,16 @@ may use chillingeffects.org rather than lumendatabase.org.
 
 #### Running Tests
 
-    $ bundle exec rspec spec/
+    $ rspec
 
 The integration tests are quite slow; for some development purposes you may
 find it more convenient to `bundle exec rspec spec/ --exclude-pattern="spec/integration/*"`.
 
 If `elasticsearch` isn't on your $PATH, set `ENV['TEST_CLUSTER_COMMAND']=/path/to/elasticsearch`, and make sure permissions are set correctly for your test suite to run it.
+
+If you're running a subset of tests that you know don't require Elasticsearch,
+you can run them without setting it up via
+`TEST_WITH_ELASTICSEARCH=0 rspec path/to/tests`.
 
 #### Linting
 

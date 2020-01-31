@@ -19,7 +19,12 @@ RSpec.configure do |config|
   # port 9250 so as not to interfere with development/production clusters.
   # This may throw a warning that the cluster is already running, but you can
   # ignore that.
+  # There are enough tests that require Elasticsearch that it's a pain to
+  # restrict this to integration tests. However, if you're running a model test
+  # or something else you know doesn't require ES, you can use ENV to test
+  # without Elasticsearch, since it's faster.
   config.before :suite do
+    next if ENV['TEST_WITH_ELASTICSEARCH'].to_s == "0"
     if Elasticsearch::Extensions::Test::Cluster.running?(on: es_port)
       Elasticsearch::Extensions::Test::Cluster.stop(**es_options)
     end
