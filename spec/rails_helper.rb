@@ -57,12 +57,6 @@ RSpec.configure do |config|
   # Enables --only-failures.
   config.example_status_persistence_file_path = 'rspec_examples.txt'
 
-  # Don't make calls to populate the Twitter widget during tests.
-  # (More generally, don't fail tests based on the availability of external
-  # services, and don't make a ton of external calls during tests.)
-  config.before :each do
-    stub_request(:any, 'https://platform.twitter.com/widgets.js')
-  end
   #config.raise_errors_for_deprecations!
 end
 
