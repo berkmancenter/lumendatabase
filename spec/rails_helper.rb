@@ -26,12 +26,17 @@ Capybara.default_max_wait_time = 15
 Capybara.register_driver :poltergeist do |app|
   Capybara::Poltergeist::Driver.new(
     app,
+    port: 51674 + ENV['TEST_ENV_NUMBER'].to_i,
     phantomjs_logger: File.open("#{Rails.root}/log/test_phantomjs.log", 'a')
   )
 end
 
 Capybara.javascript_driver = :poltergeist
 Capybara.server = :webrick
+
+Capybara.configure do |config|
+  config.server_port = 9887 + ENV['TEST_ENV_NUMBER'].to_i
+end
 
 ActiveRecord::Migration.maintain_test_schema!
 

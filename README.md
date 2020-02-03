@@ -74,6 +74,16 @@ If you're running a subset of tests that you know don't require Elasticsearch,
 you can run them without setting it up via
 `TEST_WITH_ELASTICSEARCH=0 rspec path/to/tests`.
 
+#### Parallelizing Tests
+You can speed up tests by running them in parallel:
+    $ rake parallel:spec
+
+You will need to do some setup before the first time you run this:
+- alter `config/database.yml` so that the test database is `yourproject_test<%= ENV['TEST_ENV_NUMBER'] %>`
+- run `rake parallel:setup`
+
+It will default to using the number of processors parallel_tests believes to be available, but you can change this by setting `ENV['PARALLEL_TEST_PROCESSORS']` to the desired number.
+
 #### Linting
 
 Use rubocop and leave the code at least as clean as you found it. If you make
