@@ -94,10 +94,10 @@ feature 'Searching Notices', type: :feature do
     # is that caching a search result page might inadvertently cause all pages
     # of a search to match the first viewed page - we want to make sure that
     # doesn't happen.
-    create_list(:dmca, 15, title: 'paginate me')
+    create_list(:dmca, 3, title: 'paginate me')
     index_changed_instances
 
-    submit_search 'paginate me'
+    search_for(term: 'paginate me', page: 2, per_page: 1)
 
     first_page = page.body
 

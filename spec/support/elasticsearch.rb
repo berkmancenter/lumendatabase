@@ -32,7 +32,6 @@ RSpec.configure do |config|
     if Elasticsearch::Extensions::Test::Cluster.running?(on: es_port)
       Elasticsearch::Extensions::Test::Cluster.stop(**es_options)
     end
-    puts "about to start with options #{es_options}"
     Elasticsearch::Extensions::Test::Cluster.start(**es_options)
   end
 
