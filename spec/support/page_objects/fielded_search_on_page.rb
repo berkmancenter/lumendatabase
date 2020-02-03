@@ -2,9 +2,8 @@ require_relative '../page_object'
 
 class FieldedSearchOnPage < PageObject
   def open_advanced_search
-    return if advanced_search_visible?
-    sleep ENV['SEARCH_SLEEP'].to_i if ENV['SEARCH_SLEEP']
-    find('a#toggle-advanced-search').click
+    node = first('.container.advanced-search', visible: :all)
+    find('a#toggle-advanced-search').click unless node.visible?
   end
 
   def add_more
@@ -47,8 +46,8 @@ class FieldedSearchOnPage < PageObject
   end
 
   def open_sort_order_menu
-    return if sort_order_visible?
-    find('.sort-order a.dropdown-toggle').click
+    menu = first('.sort-order ol.dropdown-menu', visible: :all)
+    find('.sort-order a.dropdown-toggle').click unless menu.visible?
   end
 
   def change_field(from, to)
@@ -65,39 +64,19 @@ class FieldedSearchOnPage < PageObject
     end
   end
 
-  def run_search(wait_for_index = true)
-    if wait_for_index
-      sleep((ENV['SEARCH_SLEEP'] && ENV['SEARCH_SLEEP'].to_i) || 1)
-    end
-
+  def run_search
     find('.advanced-search .resubmit .button').click
   end
 
-  def visit_search_page(wait_for_index = false)
-    if wait_for_index
-      sleep((ENV['SEARCH_SLEEP'] && ENV['SEARCH_SLEEP'].to_i) || 1)
-    end
-
+  def visit_search_page
     visit '/notices/search'
   end
 
   def parameterized_search_for(field, term)
-    sleep((ENV['SEARCH_SLEEP'] && ENV['SEARCH_SLEEP'].to_i) || 1)
-
     visit "/notices/search?#{field}=#{CGI.escape(term)}"
   end
 
   def within_results(&block)
     within('.results-list', &block)
-  end
-
-  private
-
-  def advanced_search_visible?
-    first('.container.advanced-search', minimum: 0)
-  end
-
-  def sort_order_visible?
-    first('.sort-order ol.dropdown-menu', minimum: 0)
   end
 end
