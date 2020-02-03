@@ -160,40 +160,6 @@ feature 'Searching Notices', type: :feature do
     end
   end
 
-  scenario 'it does not include rescinded notices', search: true do
-    notice = create(:dmca, title: 'arbitrary', rescinded: true)
-    index_changed_instances
-
-    expect_search_to_not_find('arbitrary', notice)
-  end
-
-  scenario 'it does not include spam notices', search: true do
-    notice = create(:dmca, title: 'arbitrary', spam: true)
-    index_changed_instances
-
-    expect_search_to_not_find('arbitrary', notice)
-  end
-
-  scenario 'it does not include hidden notices', search: true do
-    notice = create(:dmca, title: 'arbitrary', hidden: true)
-    index_changed_instances
-
-    expect_search_to_not_find('arbitrary', notice)
-  end
-
-  scenario 'it does not include unpublished notices', search: true do
-    notice = create(:dmca, title: 'fanciest pants', published: false)
-    found_notice = create(:dmca, title: 'fancy pants')
-    index_changed_instances
-
-    within_search_results_for('pants') do
-      expect(page).to have_n_results(1)
-      expect(page).to have_words(found_notice.title)
-    end
-
-    expect_search_to_not_find('fanciest pants', notice)
-  end
-
   context 'within associated models' do
     scenario 'for topic names', search: true do
       topic = create(:topic, name: 'Lion King')
@@ -442,6 +408,19 @@ feature 'Searching Notices', type: :feature do
     expect(
       find('a', text: "Since #{last_month}").find('span').text
     ).to eq '1 Results'
+  end
+
+  scenario 'respects criteria which should suppress notices' do
+    rescinded = create(:dmca, title: 'rescinded', rescinded: true)
+    hidden = create(:dmca, title: 'hidden', hidden: true)
+    spam = create(:dmca, title: 'spam', spam: true)
+    unpublished = create(:dmca, title: 'unpublished', published: false)
+    index_changed_instances
+
+    expect_search_to_not_find('rescinded', rescinded)
+    expect_search_to_not_find('hidden', hidden)
+    expect_search_to_not_find('spam', spam)
+    expect_search_to_not_find('unpublished', unpublished)
   end
 
   private
