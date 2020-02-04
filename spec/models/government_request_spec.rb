@@ -7,7 +7,7 @@ RSpec.describe GovernmentRequest, type: :model do
   end
 
   it 'has the expected partial path' do
-    notice = create(:government_request)
+    notice = build(:government_request)
     expect(notice.to_partial_path).to eq 'notices/notice'
   end
 

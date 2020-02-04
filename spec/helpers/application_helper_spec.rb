@@ -4,7 +4,7 @@ describe ApplicationHelper do
   include ApplicationHelper
 
   context '#can_see_full_notice_version?' do
-    let(:notice) { create(:dmca) }
+    let(:notice) { build(:dmca) }
     let(:token_url) do
       create(
         :token_url,

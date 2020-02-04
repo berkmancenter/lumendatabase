@@ -5,6 +5,7 @@ feature 'home page' do
   include Comfy::CmsHelper
   include Rails.application.routes.url_helpers
 
+  # TODO: mock this out to save on setup.
   before :all do
     Rake::Task['lumen:set_up_cms'].execute
   end

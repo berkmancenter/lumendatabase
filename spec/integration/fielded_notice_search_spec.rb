@@ -150,9 +150,7 @@ feature 'Fielded searches of Notices' do
       notice = create(:dmca, :with_facet_data, title: 'Lion King two')
       index_changed_instances
 
-      search_on_page = FieldedSearchOnPage.new
-      search_on_page.visit_search_page(true)
-      search_on_page.open_advanced_search
+      search_on_page = init_search_on_page
 
       search_on_page.add_fielded_search_for(title_field, 'lion')
 
@@ -177,28 +175,20 @@ feature 'Fielded searches of Notices' do
     end
 
     context 'active' do
-      before :each do
-        search_on_page = FieldedSearchOnPage.new
-        search_on_page.visit_search_page
-        search_on_page.open_advanced_search
-      end
-
       scenario 'dropdown retains visibility between page views', search: true, js: true do
-        search_on_page = FieldedSearchOnPage.new
-        search_on_page.open_advanced_search
+        skip 'This fails intermittently due to the time it takes to set cookies'
+        search_on_page = init_search_on_page
         expect(page).to have_visible_advanced_search_controls
-
-        sleep 0.2
 
         search_on_page.visit_search_page
         expect(page).to have_visible_advanced_search_controls
       end
 
       scenario 'retains query parameters', search: true, js: true do
-        search_on_page = FieldedSearchOnPage.new
+        search_on_page = init_search_on_page
         search_on_page.add_fielded_search_for(title_field, 'lion')
 
-        search_on_page.run_search(false)
+        search_on_page.run_search
         search_on_page.open_advanced_search
 
         search_on_page.within_fielded_searches do
@@ -211,7 +201,7 @@ feature 'Fielded searches of Notices' do
         # <input value='                                          '/>
         attack =       "'/><div id='inserted'></div><input value='"
 
-        search_on_page = FieldedSearchOnPage.new
+        search_on_page = init_search_on_page
         search_on_page.parameterized_search_for(:title, attack)
 
         search_on_page.within_fielded_searches do
@@ -220,7 +210,7 @@ feature 'Fielded searches of Notices' do
       end
 
       scenario 'allows you to remove a fielded search', search: true, js: true do
-        search_on_page = FieldedSearchOnPage.new
+        search_on_page = init_search_on_page
         search_on_page.add_fielded_search_for(title_field, 'lion')
 
         search_on_page.remove_fielded_search_for(:title)
@@ -231,7 +221,7 @@ feature 'Fielded searches of Notices' do
       end
 
       scenario 'does not allow changing a field after adding another', search: true, js: true do
-        search_on_page = FieldedSearchOnPage.new
+        search_on_page = init_search_on_page
         search_on_page.add_fielded_search_for(title_field, 'lion')
         search_on_page.add_more
 
@@ -240,8 +230,8 @@ feature 'Fielded searches of Notices' do
         end
       end
 
-      scenario 'removes the option from other drop-downs for a search that\'s been added', search: true, js: true do
-        search_on_page = FieldedSearchOnPage.new
+      scenario "removes the option from other drop-downs for a search that's been added", search: true, js: true do
+        search_on_page = init_search_on_page
         search_on_page.add_fielded_search_for(title_field, 'lion')
         search_on_page.add_more
 
@@ -255,9 +245,9 @@ feature 'Fielded searches of Notices' do
       end
 
       scenario 'removes the options for a search from a previous page', search: true, js: true do
-        search_on_page = FieldedSearchOnPage.new
+        search_on_page = init_search_on_page
         search_on_page.add_fielded_search_for(title_field, 'lion')
-        search_on_page.run_search(false)
+        search_on_page.run_search
 
         search_on_page.within_fielded_searches do
           # existing field is made disabled, and the new select should
@@ -269,7 +259,7 @@ feature 'Fielded searches of Notices' do
       end
 
       scenario 'allows you to select a search after you delete it', search: true, js: true do
-        search_on_page = FieldedSearchOnPage.new
+        search_on_page = init_search_on_page
         search_on_page.add_fielded_search_for(title_field, 'lion')
         search_on_page.remove_fielded_search_for(:title)
 
@@ -283,7 +273,7 @@ feature 'Fielded searches of Notices' do
       end
 
       scenario 'does not allow you to select the same search twice', search: true, js: true do
-        search_on_page = FieldedSearchOnPage.new
+        search_on_page = init_search_on_page
         search_on_page.add_fielded_search_for(title_field, 'lion')
 
         search_on_page.within_fielded_searches do
@@ -294,23 +284,21 @@ feature 'Fielded searches of Notices' do
       end
 
       scenario 'removes the add query link after all searches have been added', search: true, js: true do
-        search_on_page = FieldedSearchOnPage.new
+        search_on_page = init_search_on_page
         Notice::SEARCHABLE_FIELDS.each do |field|
           search_on_page.add_fielded_search_for(field, 'test')
           expect(page).to have_css(".field-group.#{field.parameter}")
         end
 
         search_on_page.within_fielded_searches do
-          skip "It's not worth debugging this line's intermittent failures"
           expect(page).to have_no_css('#duplicate-field')
         end
       end
 
       scenario 'activates the add query link when they are available', search: true, js: true do
-        search_on_page = FieldedSearchOnPage.new
+        search_on_page = init_search_on_page
         Notice::SEARCHABLE_FIELDS.each do |field|
           search_on_page.add_fielded_search_for(field, 'test')
-          skip "It's not worth debugging this line's intermittent failures"
           expect(page).to have_css(".field-group.#{field.parameter}")
         end
 
@@ -324,6 +312,13 @@ feature 'Fielded searches of Notices' do
   end
 
   private
+
+  def init_search_on_page
+    sop = FieldedSearchOnPage.new
+    sop.visit_search_page
+    sop.open_advanced_search
+    sop
+  end
 
   def have_visible_advanced_search_controls
     have_css('.container.advanced-search', visible: true)

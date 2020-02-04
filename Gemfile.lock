@@ -69,7 +69,6 @@ GEM
     arel (9.0.0)
     bcrypt (3.1.13)
     benchmark-ips (2.7.2)
-    bindex (0.8.1)
     bootsnap (1.4.5)
       msgpack (~> 1.0)
     bootstrap-datepicker-rails (1.8.0.1)
@@ -275,6 +274,9 @@ GEM
       mime-types
       mimemagic (~> 0.3.0)
       terrapin (~> 0.6.0)
+    parallel (1.19.1)
+    parallel_tests (2.31.0)
+      parallel
     pg (1.1.4)
     phantomjs (2.1.1.0)
     poltergeist (1.18.1)
@@ -290,7 +292,7 @@ GEM
       pry (~> 0.10)
     pry-rails (0.3.9)
       pry (>= 0.10.4)
-    public_suffix (3.1.1)
+    public_suffix (4.0.3)
     rack (2.0.8)
     rack-accept (0.4.5)
       rack (>= 0.4)
@@ -439,6 +441,7 @@ GEM
       tins (~> 1.0)
     terrapin (0.6.0)
       climate_control (>= 0.0.3, < 1.0)
+    test-prof (0.10.2)
     therubyracer (0.12.3)
       libv8 (~> 3.16.14.15)
       ref
@@ -463,15 +466,10 @@ GEM
     vcr (4.0.0)
     warden (1.2.7)
       rack (>= 1.0)
-    web-console (3.7.0)
-      actionview (>= 5.0)
-      activemodel (>= 5.0)
-      bindex (>= 0.4.0)
-      railties (>= 5.0)
-    webmock (3.4.2)
+    webmock (3.8.0)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
-      hashdiff
+      hashdiff (>= 0.4.0, < 2.0.0)
     websocket-driver (0.7.1)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.4)
@@ -518,6 +516,7 @@ DEPENDENCIES
   neat
   oink
   paperclip (~> 5)
+  parallel_tests
   pg (~> 1.1.4)
   phantomjs
   poltergeist
@@ -547,12 +546,12 @@ DEPENDENCIES
   simplecov
   skylight
   stackprof
+  test-prof
   therubyracer
   timecop
   turnout
   uglifier
   vcr
-  web-console
   webmock
 
 BUNDLED WITH

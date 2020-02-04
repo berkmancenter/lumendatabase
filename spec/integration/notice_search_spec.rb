@@ -94,10 +94,10 @@ feature 'Searching Notices', type: :feature do
     # is that caching a search result page might inadvertently cause all pages
     # of a search to match the first viewed page - we want to make sure that
     # doesn't happen.
-    create_list(:dmca, 15, title: 'paginate me')
+    create_list(:dmca, 3, title: 'paginate me')
     index_changed_instances
 
-    submit_search 'paginate me'
+    search_for(term: 'paginate me', page: 2, per_page: 1)
 
     first_page = page.body
 
@@ -158,40 +158,6 @@ feature 'Searching Notices', type: :feature do
       expect(page).to have_css('a[rel="next"]')
       expect(page).to have_css('a[rel="prev"]')
     end
-  end
-
-  scenario 'it does not include rescinded notices', search: true do
-    notice = create(:dmca, title: 'arbitrary', rescinded: true)
-    index_changed_instances
-
-    expect_search_to_not_find('arbitrary', notice)
-  end
-
-  scenario 'it does not include spam notices', search: true do
-    notice = create(:dmca, title: 'arbitrary', spam: true)
-    index_changed_instances
-
-    expect_search_to_not_find('arbitrary', notice)
-  end
-
-  scenario 'it does not include hidden notices', search: true do
-    notice = create(:dmca, title: 'arbitrary', hidden: true)
-    index_changed_instances
-
-    expect_search_to_not_find('arbitrary', notice)
-  end
-
-  scenario 'it does not include unpublished notices', search: true do
-    notice = create(:dmca, title: 'fanciest pants', published: false)
-    found_notice = create(:dmca, title: 'fancy pants')
-    index_changed_instances
-
-    within_search_results_for('pants') do
-      expect(page).to have_n_results(1)
-      expect(page).to have_words(found_notice.title)
-    end
-
-    expect_search_to_not_find('fanciest pants', notice)
   end
 
   context 'within associated models' do
@@ -442,6 +408,19 @@ feature 'Searching Notices', type: :feature do
     expect(
       find('a', text: "Since #{last_month}").find('span').text
     ).to eq '1 Results'
+  end
+
+  scenario 'respects criteria which should suppress notices' do
+    rescinded = create(:dmca, title: 'rescinded', rescinded: true)
+    hidden = create(:dmca, title: 'hidden', hidden: true)
+    spam = create(:dmca, title: 'spam', spam: true)
+    unpublished = create(:dmca, title: 'unpublished', published: false)
+    index_changed_instances
+
+    expect_search_to_not_find('rescinded', rescinded)
+    expect_search_to_not_find('hidden', hidden)
+    expect_search_to_not_find('spam', spam)
+    expect_search_to_not_find('unpublished', unpublished)
   end
 
   private

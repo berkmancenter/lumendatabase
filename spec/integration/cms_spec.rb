@@ -1,11 +1,15 @@
-require 'rails_helper'
 require 'comfy/blog_post_factory'
+require 'rails_helper'
+require 'rss'
 
 feature 'CMS blog entries' do
   include ComfyHelpers
   include Comfy::ComfyHelper
   include Comfy::CmsHelper
+  include ERB::Util
 
+  # Try to put all CMS integration specs in this file, so that we only need to
+  # do this costly setup once.
   before :all do
     Rake::Task['lumen:set_up_cms'].execute
     @site = Comfy::Cms::Site.find_by_identifier('lumen_cms')
@@ -14,8 +18,14 @@ feature 'CMS blog entries' do
   end
 
   after :each do
-    Comfy::Cms::Page.where.not(id: @blog.id).delete_all
+    @blog.children.destroy_all
     @blog.reload
+  end
+
+  before :each do |example|
+    title  = example.metadata[:full_description]
+    source =  example.metadata[:example_group_block].source_location.join ":"
+    puts %{rspec #{source} "#{title}"}
   end
 
   after :all do
@@ -31,11 +41,11 @@ feature 'CMS blog entries' do
       visit @blog.full_path
 
       (0..9).each do |i|
-        expect(page).to have_link("page_#{i}")
+        expect(page).to have_link("page_#{i}", exact: true)
       end
 
       (10..14).each do |i|
-        expect(page).not_to have_link("page_#{i}")
+        expect(page).not_to have_link("page_#{i}", exact: true)
       end
 
       visit "#{@blog.full_path}?page=2"
@@ -47,7 +57,7 @@ feature 'CMS blog entries' do
       end
 
       (10..14).each do |i|
-        expect(page).to have_link("page_#{i}")
+        expect(page).to have_link("page_#{i}", exact: true)
       end
     end
 
@@ -59,8 +69,8 @@ feature 'CMS blog entries' do
 
       visit @blog.full_path
 
-      expect(page).to have_link('page_0')
-      expect(page).not_to have_link('page_1')
+      expect(page).to have_link('page_0', exact: true)
+      expect(page).not_to have_link('page_1', exact: true)
     end
 
     it 'displays working links' do
@@ -224,6 +234,49 @@ feature 'CMS blog entries' do
       click_on cms_fragment_content('title', blog_entry)
 
       expect(current_path).to eq blog_entry.full_path
+    end
+  end
+
+  context 'feed' do
+    before :all do
+      15.times do |i|
+        BlogPostFactory.new(@site, @layout, @blog, seed: i).manufacture
+      end
+    end
+
+    after :all do
+      @blog.children.delete_all
+    end
+
+    it 'resolves at the expected URL' do
+      visit '/blog_feed.rss'
+      expect(page).to have_http_status(200)
+    end
+
+    it 'contains the latest content' do
+      visit '/blog_feed.rss'
+
+      @blog.children.last(10).each do |post|
+        expect(page).to have_content cms_fragment_content('title', post)
+        expect(page).to have_content cms_fragment_content('author', post)
+        expect(page).to have_content post.created_at.to_s(:rfc822)
+        expect(page).to have_content post.url
+        expect(page).to have_content cms_fragment_content('content', post)
+        expect(page).to have_content cms_fragment_content('abstract', post)
+      end
+    end
+
+    # Not attempting to validate it against a schema here; just smoke-testing
+    # that it is parseable as RSS. If it isn't, the parser will raise an
+    # exception.
+    it 'is probably valid' do
+      visit '/blog_feed.rss'
+      RSS::Parser.parse(page.body)
+    end
+
+    it 'is available from the home page' do
+      visit '/'
+      expect(page).to have_link(href: 'blog_feed.rss')
     end
   end
 
