@@ -1,5 +1,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## Unreleased
+### Changed
+* Sped up test suite (~25%)
+* Upgrade simple_form (4.1 -> 5; thanks dependabot)
+
 ## [20.01b](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.01b) - 2020-01-31
 ### Changed
 * CMS URL promoted to the top level, so that the CMS is now serving blog and static page content
