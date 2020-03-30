@@ -86,6 +86,7 @@ group :test do
   gem 'poltergeist'
   gem 'rack-test', require: 'rack/test'
   gem 'rails-controller-testing'
+  gem 'rspec-pride'
   gem 'shoulda-matchers', '~> 3.1', '>= 3.1.1'
   gem 'simplecov', require: false
   gem 'test-prof'
