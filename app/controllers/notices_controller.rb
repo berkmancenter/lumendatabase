@@ -81,7 +81,7 @@ class NoticesController < ApplicationController
   end
 
   def notice_params
-    params.require(:notice).except(:type).permit(
+    raw_params = params.require(:notice).except(:type).permit(
       :title,
       :subject,
       :body,
@@ -108,6 +108,7 @@ class NoticesController < ApplicationController
       ],
       works_attributes: work_params
     )
+    raw_params.to_h
   end
 
   def entity_params

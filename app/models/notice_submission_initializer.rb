@@ -41,7 +41,7 @@ class NoticeSubmissionInitializer
 
   def notice
     @notice ||= model_class.new(
-      if parameters.class == Hash
+      if ([ActiveSupport::HashWithIndifferentAccess, Hash].include? parameters.class)
         parameters
       else
         parameters.permit!

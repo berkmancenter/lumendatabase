@@ -52,7 +52,7 @@ class NoticeSubmissionFinalizer
       # Now that we know all the URLs which needed to be un-concatenated,
       # update the work hash. We're doing that here because we don't want to
       # modify it while looping over its contents!
-      work_hash[attr] << new_hashes.uniq if new_hashes.present?
+      work_hash[attr] += new_hashes.uniq if new_hashes.present?
     end
   end
 
