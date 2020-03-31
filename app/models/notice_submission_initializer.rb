@@ -1,8 +1,12 @@
+require 'param_flattener'
+
 # This performs initial steps of the Notice submission process: creating a
 # new Notice with enough of the provided attributes that it can be persisted.
 # Where persisting attributes is slow, those can be deferred to the
 # NoticeSubmissionFinalizer.
 class NoticeSubmissionInitializer
+  include ParamFlattener
+
   delegate :errors, to: :notice
 
   # Notice validates the presence of works, but we delay adding works because
@@ -93,24 +97,5 @@ class NoticeSubmissionInitializer
   def entity_notice_role(role_name)
     roles = flatten_param(parameters[:entity_notice_roles_attributes])
     roles.detect { |role| role[:name] == role_name }
-  end
-
-  # JSON API submissions:
-  #
-  #   [{ ... }, { ... }, { ... }]
-  #
-  # Rails form submissions:
-  #
-  #   { '0' => { ... }, '1' => { ... }, '3' => { ... } }
-  #
-  # This flattens the second style to the first, IFF it's not that way
-  # already. Curse you, Rails for making me type-check.
-  def flatten_param(param)
-    case param
-    when ActionController::Parameters then param.values
-    when Hash  then param.values
-    when Array then param
-    else []
-    end
   end
 end

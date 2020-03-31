@@ -1,8 +1,12 @@
+require 'param_flattener'
+
 # This performs final updates to a Notice instance that has been created, but
 # not yet supplied with all its attributes. The goal here is to be able to
 # move slow parts of the notice creation process outside the request/response
 # cycle.
 class NoticeSubmissionFinalizer
+  include ParamFlattener
+
   delegate :errors, to: :notice
 
   def initialize(notice, parameters)
@@ -29,12 +33,12 @@ class NoticeSubmissionFinalizer
   # see this problem, we should instead create a CopyrightedUrl instance for
   # each URL, as this is surely the original intent.
   def fix_concatenated_urls(attr)
-    parameters[:works_attributes].each do |work_hash|
+    flatten_param(parameters[:works_attributes]).each do |work_hash|
       next unless work_hash[attr].present?
 
       new_hashes = []
 
-      work_hash[attr].each do |url_hash|
+      flatten_param(work_hash[attr]).each do |url_hash|
         next unless url_hash[:url].scan('/http').present?
 
         split_urls = conservative_split(url_hash[:url])
