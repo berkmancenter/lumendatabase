@@ -1,6 +1,6 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
-## Unreleased
+## [20.04](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.04) - 2020-04-01
 ### Changed
 * #593 Speed up test suite (~25%)
 * #586 Upgrade simple_form (4.1 -> 5; thanks dependabot)
