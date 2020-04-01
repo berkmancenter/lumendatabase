@@ -8,7 +8,7 @@ RSpec.describe CourtOrder, type: :model do
   end
 
   it 'has the expected partial path' do
-    notice = create(:court_order)
+    notice = build(:court_order)
     expect(notice.to_partial_path).to eq 'notices/notice'
   end
 

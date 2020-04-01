@@ -4,6 +4,7 @@ Coveralls.wear!('rails')
 # Uncomment the following line if you'd like to get an HTML-formatted
 # coverage report (`coverage/index.html`) when you run tests on localhost.
 # SimpleCov.formatter = SimpleCov::Formatter::HTMLFormatter
+SimpleCov.command_name "RSpec/Cucumber:#{Process.pid.to_s}#{ENV['TEST_ENV_NUMBER']}"
 
 ENV['RAILS_ENV'] ||= 'test'
 

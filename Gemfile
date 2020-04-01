@@ -57,11 +57,11 @@ group :development do
   gem 'bullet'
   gem 'derailed'
   gem 'memory_profiler'
-  gem 'web-console'
 end
 
 group :development, :test do
   gem 'factory_bot_rails'
+  gem 'parallel_tests'
   gem 'phantomjs'
   gem 'pry', '~> 0.10.4'
   gem 'pry-byebug'
@@ -85,12 +85,13 @@ group :test do
   gem 'curb'
   gem 'database_cleaner'
   gem 'elasticsearch-extensions'
-  gem 'fakeweb'
   gem 'poltergeist'
   gem 'rack-test', require: 'rack/test'
   gem 'rails-controller-testing'
+  gem 'rspec-pride'
   gem 'shoulda-matchers', '~> 3.1', '>= 3.1.1'
   gem 'simplecov', require: false
+  gem 'test-prof'
   gem 'timecop'
   gem 'vcr'
   gem 'webmock'

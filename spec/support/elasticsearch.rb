@@ -2,12 +2,16 @@
 require 'elasticsearch/extensions/test/cluster'
 
 RSpec.configure do |config|
-  es_port = 9250
+  # The ENV['TEST_ENV_NUMBER'] things are needed to ensure test isolation
+  # when parallelizing.
+  es_port = 9250 + ENV['TEST_ENV_NUMBER'].to_i
   es_options = {
     network_host: 'localhost',
     port: es_port,
     number_of_nodes: 1,
-    timeout: 120
+    timeout: 120,
+    cluster_name: "cluster#{ENV['TEST_ENV_NUMBER']}",
+    path_data: "/tmp/elasticsearch_test#{ENV['TEST_ENV_NUMBER']}"
   }
   if ENV['TEST_CLUSTER_COMMAND'].present?
     es_options[:command] = ENV['TEST_CLUSTER_COMMAND']
@@ -19,7 +23,12 @@ RSpec.configure do |config|
   # port 9250 so as not to interfere with development/production clusters.
   # This may throw a warning that the cluster is already running, but you can
   # ignore that.
+  # There are enough tests that require Elasticsearch that it's a pain to
+  # restrict this to integration tests. However, if you're running a model test
+  # or something else you know doesn't require ES, you can use ENV to test
+  # without Elasticsearch, since it's faster.
   config.before :suite do
+    next if ENV['TEST_WITH_ELASTICSEARCH'].to_s == "0"
     if Elasticsearch::Extensions::Test::Cluster.running?(on: es_port)
       Elasticsearch::Extensions::Test::Cluster.stop(**es_options)
     end
@@ -63,7 +72,9 @@ RSpec.configure do |config|
 
   # Stop elasticsearch cluster after test run
   config.after :suite do
-    Elasticsearch::Extensions::Test::Cluster.stop(**es_options)
+    if Elasticsearch::Extensions::Test::Cluster.running?(on: es_port)
+      Elasticsearch::Extensions::Test::Cluster.stop(**es_options)
+    end
   end
 end
 
@@ -72,7 +83,7 @@ end
 # reconnection it will use 127.0.0.1 instead, that's why we need to use
 # 127.0.0.1, at least for now, unless they fix the issue
 config = {
-  host: 'http://127.0.0.1:9250',
+  host: "http://127.0.0.1:#{9250 + ENV['TEST_ENV_NUMBER'].to_i}",
   request_timeout: 20
 }
 

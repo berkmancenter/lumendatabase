@@ -8,8 +8,6 @@ module SearchHelpers
   end
 
   def submit_search(term)
-    sleep (ENV["SEARCH_SLEEP"] && ENV["SEARCH_SLEEP"].to_i) || 1 # required for indexing to complete
-
     visit '/'
 
     fill_in 'search', with: term
@@ -17,8 +15,6 @@ module SearchHelpers
   end
 
   def search_for(searches)
-    sleep (ENV["SEARCH_SLEEP"] && ENV["SEARCH_SLEEP"].to_i) || 1 # required for indexing to complete
-
     query = searches.map { |k,v| "#{k}=#{CGI.escape(v.to_s)}" }.join('&')
 
     visit "/notices/search?#{query}"
@@ -47,8 +43,6 @@ module SearchHelpers
   end
 
   def submit_faceted_search(term, facet, facet_value)
-    sleep (ENV["SEARCH_SLEEP"] && ENV["SEARCH_SLEEP"].to_i) || 1 # required for indexing to complete
-
     visit '/'
 
     fill_in 'search', with: term

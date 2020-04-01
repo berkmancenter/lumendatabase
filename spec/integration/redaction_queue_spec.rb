@@ -26,7 +26,7 @@ feature "Redaction queue" do
   end
 
   scenario "A user releases some of the notices in their queue" do
-    create_list(:dmca, 2, :redactable)
+    create(:dmca, :redactable)
     notice = create(:dmca, :redactable)
 
     with_queue do |queue|
@@ -40,34 +40,30 @@ feature "Redaction queue" do
   scenario "A user marks some notices as spam" do
     notice_one = create(:dmca, :redactable)
     notice_two = create(:dmca, :redactable)
-    notice_three = create(:dmca, :redactable)
 
     with_queue do |queue|
-      queue.unselect_notice(notice_three)
+      queue.unselect_notice(notice_two)
       queue.mark_selected_as_spam
 
-      expect(queue).to have_notices([notice_three])
+      expect(queue).to have_notices([notice_two])
 
       expect(notice_one.reload).to be_spam
-      expect(notice_two.reload).to be_spam
-      expect(notice_three.reload).not_to be_spam
+      expect(notice_two.reload).not_to be_spam
     end
   end
 
   scenario "A user hides some notices" do
     notice_one = create(:dmca, :redactable)
     notice_two = create(:dmca, :redactable)
-    notice_three = create(:dmca, :redactable)
 
     with_queue do |queue|
-      queue.unselect_notice(notice_three)
+      queue.unselect_notice(notice_two)
       queue.hide_selected
 
-      expect(queue).to have_notices([notice_three])
+      expect(queue).to have_notices([notice_two])
 
       expect(notice_one.reload).to be_hidden
-      expect(notice_two.reload).to be_hidden
-      expect(notice_three.reload).not_to be_hidden
+      expect(notice_two.reload).not_to be_hidden
     end
   end
 

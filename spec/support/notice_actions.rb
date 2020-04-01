@@ -45,7 +45,6 @@ module NoticeActions
 
     if @field_index > 0
       click_on 'Attach another'
-      sleep 0.2
     end
 
     field_name = "notice_file_uploads_attributes_#{@field_index}_file"

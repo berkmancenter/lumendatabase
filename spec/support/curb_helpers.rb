@@ -17,8 +17,6 @@ module CurbHelpers
   end
 
   def with_curb_get_for_json(url, options)
-    sleep((ENV['SEARCH_SLEEP'] && ENV['SEARCH_SLEEP'].to_i) || 1)
-
     curb = Curl::Easy.http_get(
       "http://#{host}:#{port}/#{url}?#{Curl.postalize(options)}"
     ) do |curl|

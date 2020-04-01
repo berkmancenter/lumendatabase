@@ -36,6 +36,5 @@ feature 'Topics' do
       create(:dmca, topics: [@topic])
     end
     index_changed_instances
-    sleep 2
   end
 end

@@ -7,7 +7,7 @@ describe LawEnforcementRequest, type: :model do
   }
 
   it 'has additional entities' do
-    notice = create(
+    notice = build(
       :court_order,
       role_names: %w[recipient sender principal issuing_court plaintiff
                      defendant]
@@ -23,7 +23,7 @@ describe LawEnforcementRequest, type: :model do
   end
 
   it 'has the expected partial path' do
-    notice = create(:law_enforcement_request)
+    notice = build(:law_enforcement_request)
     expect(notice.to_partial_path).to eq 'notices/notice'
   end
 

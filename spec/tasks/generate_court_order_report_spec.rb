@@ -12,7 +12,9 @@ describe 'rake lumen:generate_court_order_report', type: :task do
 
   after :all do
     ENV['USER_CRON_EMAIL'] = @cached_user_cron_email
-    CourtOrder.destroy_all
+    [CourtOrder, Work, Entity].each do |model|
+      model.destroy_all
+    end
   end
 
   it 'sends a single email' do
