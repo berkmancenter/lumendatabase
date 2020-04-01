@@ -7,7 +7,7 @@ RSpec.describe Other, type: :model do
   end
 
   it 'has the expected partial path' do
-    notice = create(:other)
+    notice = build(:other)
     expect(notice.to_partial_path).to eq 'notices/notice'
   end
 
@@ -37,25 +37,25 @@ RSpec.describe Other, type: :model do
   end
 
   it 'hides sender names when hide_identities is true' do
-    notice = create(:other)
+    notice = build(:other)
     allow(notice).to receive(:hide_identities?).and_return(true)
     expect(notice.sender_name).to eq described_class::MASK
   end
 
   it 'hides principal names when hide_identities is true' do
-    notice = create(:other)
+    notice = build(:other)
     allow(notice).to receive(:hide_identities?).and_return(true)
     expect(notice.principal_name).to eq described_class::MASK
   end
 
   it 'shows sender names when hide_identities is false' do
-    notice = create(:other)
+    notice = build(:other)
     allow(notice).to receive(:hide_identities?).and_return(true)
     expect(notice.sender_name).to eq described_class::MASK
   end
 
   it 'shows principal names when hide_identities is false' do
-    notice = create(:other)
+    notice = build(:other)
     allow(notice).to receive(:hide_identities?).and_return(true)
     expect(notice.principal_name).to eq described_class::MASK
   end

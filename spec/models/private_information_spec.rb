@@ -7,7 +7,7 @@ RSpec.describe PrivateInformation, type: :model do
   end
 
   it 'has the expected partial path' do
-    notice = create(:private_information)
+    notice = build(:private_information)
     expect(notice.to_partial_path).to eq 'notices/notice'
   end
 

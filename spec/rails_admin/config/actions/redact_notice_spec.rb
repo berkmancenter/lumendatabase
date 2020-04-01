@@ -153,7 +153,6 @@ describe 'RedactNoticeProc' do
 
   context 'Handling POST requests' do
     before { allow(request).to receive(:post?).and_return(true) }
-    let!(:redactable_notices) { create_list(:dmca, 3, :redactable) }
 
     it 'delegates to the PostResponder' do
       responder = double('Post responder')
@@ -167,6 +166,7 @@ describe 'RedactNoticeProc' do
 
     context 'PostResponder#handle' do
       it 'redacts this and all next notices' do
+        redactable_notices = create_list(:dmca, 2, :redactable)
         params[:selected_text] = 'Sensitive thing'
         params[:next_notices]  = %w[2 3 4]
         redactor = expect_new(InstanceRedactor,

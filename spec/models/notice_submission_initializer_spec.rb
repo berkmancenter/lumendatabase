@@ -156,7 +156,7 @@ describe NoticeSubmissionInitializer, type: :model do
     end
 
     it 'does not override an explicitly submitted entity' do
-      user = create(:user, :with_entity)
+      user = build(:user, :with_entity)
       expect(DMCA).to receive(:new).with(
         entity_notice_roles_attributes: [
           { name: 'recipient', entity_attributes: { name: 'Recipient' } },

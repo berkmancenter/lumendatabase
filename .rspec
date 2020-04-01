@@ -1,3 +1,5 @@
---colour
 --drb
 --profile
+--color
+--require rspec/pride
+--format PrideFormatter

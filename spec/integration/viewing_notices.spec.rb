@@ -8,6 +8,10 @@ feature 'Viewing notices' do
     submit_recent_notice(@notice_title)
   end
 
+  after :all do
+    Notice.destroy_all
+  end
+
   scenario 'as an anonymous user' do
     visit notice_url(Notice.last)
 

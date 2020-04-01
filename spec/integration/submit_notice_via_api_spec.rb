@@ -1,10 +1,10 @@
 require 'rails_helper'
 require 'base64'
 
-feature 'notice submission' do
+feature 'notice submission', js: true do
   include CurbHelpers
 
-  scenario 'submitting as an unauthenticated user', js: true do
+  scenario 'submitting as an unauthenticated user' do
     parameters = request_hash(default_notice_hash)
     parameters.delete(:authentication_token)
 
@@ -13,7 +13,7 @@ feature 'notice submission' do
     expect(curb.response_code).to eq 401
   end
 
-  scenario 'submitting as a normal user', js: true do
+  scenario 'submitting as a normal user' do
     user = create(:user)
     parameters = request_hash(default_notice_hash, user)
 
@@ -22,13 +22,13 @@ feature 'notice submission' do
     expect(curb.response_code).to eq 401
   end
 
-  scenario 'submitting an incomplete notice', js: true do
+  scenario 'submitting an incomplete notice' do
     curb = post_api('/notices', request_hash(title: 'foo'))
 
     expect(curb.response_code).to eq 422
   end
 
-  scenario 'submitting a notice', js: true do
+  scenario 'submitting a notice' do
     parameters = request_hash(
       default_notice_hash(title: 'A superduper title')
     )
@@ -43,7 +43,7 @@ feature 'notice submission' do
     expect(notice.recipient.kind).to eq 'individual'
   end
 
-  scenario 'submitting a notice with token in header', js: true do
+  scenario 'submitting a notice with token in header' do
     parameters = request_hash(default_notice_hash)
     token = parameters.delete(:x_authentication_token)
 
@@ -54,7 +54,7 @@ feature 'notice submission' do
     expect(curb.response_code).to eq 201
   end
 
-  scenario 'submitting a notice with an existing Entity', js: true do
+  scenario 'submitting a notice with an existing Entity' do
     entity = create(:entity)
 
     parameters = request_hash(
@@ -74,7 +74,7 @@ feature 'notice submission' do
     expect(Notice.last.title).to eq 'A notice with an entity created by id'
   end
 
-  scenario 'submitting as a user with a linked entity', js: true do
+  scenario 'submitting as a user with a linked entity' do
     user = create(:user, :submitter)
     entity = create(:entity, user: user, name: 'Twitter')
     notice_parameters = default_notice_hash(title: 'A superduper title')
@@ -89,7 +89,7 @@ feature 'notice submission' do
     expect(notice.recipient).to eq entity
   end
 
-  scenario 'submitting a notice with text file attachments', js: true do
+  scenario 'submitting a notice with text file attachments' do
     parameters = request_hash(notice_hash_with_text_files)
 
     post_api('/notices', parameters)
@@ -107,7 +107,7 @@ feature 'notice submission' do
       .to eq 'supporting_document.txt'
   end
 
-  scenario 'submitting a notice with binary file attachments', js: true do
+  scenario 'submitting a notice with binary file attachments' do
     parameters = request_hash(notice_hash_with_binary_files)
 
     post_api('/notices', parameters)
@@ -125,6 +125,52 @@ feature 'notice submission' do
 
     expect(original_document.original_filename).to eq 'original.jpg'
     expect(supporting_document.original_filename).to eq 'supporting.jpg'
+  end
+
+  scenario 'submitting concatenated copyrighted URLs' do
+    parameters = request_hash(
+      default_notice_hash(
+        works_attributes: [{
+          description: 'A work',
+          copyrighted_urls_attributes: [{
+            url: 'http://example.com/http://example2.com'
+          }]
+        }]
+      )
+    )
+
+    curb = post_api('/notices', parameters)
+
+    expect(curb.response_code).to eq 201
+
+    work = Notice.last.works.first
+
+    expect(work.copyrighted_urls.map(&:url)).to match_array([
+      'http://example.com/', 'http://example2.com'
+    ])
+  end
+
+  scenario 'submitting concatenated infringing URLs' do
+    parameters = request_hash(
+      default_notice_hash(
+        works_attributes: [{
+          description: 'A work',
+          infringing_urls_attributes: [{
+            url: 'http://example.com/http://example2.com'
+          }]
+        }]
+      )
+    )
+
+    curb = post_api('/notices', parameters)
+
+    expect(curb.response_code).to eq 201
+
+    work = Notice.last.works.first
+
+    expect(work.infringing_urls.map(&:url)).to match_array([
+      'http://example.com/', 'http://example2.com'
+    ])
   end
 
   private
