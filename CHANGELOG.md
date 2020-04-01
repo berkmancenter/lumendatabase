@@ -2,8 +2,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Unreleased
 ### Changed
-* Sped up test suite (~25%)
-* Upgrade simple_form (4.1 -> 5; thanks dependabot)
+* #593 Speed up test suite (~25%)
+* #586 Upgrade simple_form (4.1 -> 5; thanks dependabot)
+* #594 Upgrade nokogiri, actionview
+* #594 Split apart concatenated URLs in notice creation to make separate CopyrightedUrl/InfringingUrl objects
 
 ## [20.01b](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.01b) - 2020-01-31
 ### Changed
