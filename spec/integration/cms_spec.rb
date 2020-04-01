@@ -22,12 +22,6 @@ feature 'CMS blog entries' do
     @blog.reload
   end
 
-  before :each do |example|
-    title  = example.metadata[:full_description]
-    source =  example.metadata[:example_group_block].source_location.join ":"
-    puts %{rspec #{source} "#{title}"}
-  end
-
   after :all do
     destroy_cms
   end
@@ -86,6 +80,7 @@ feature 'CMS blog entries' do
       2.times do |i|
         BlogPostFactory.new(@site, @layout, @blog, seed: i).manufacture
       end
+      @blog.reload
       # Switch around the expected creation dates, to make sure we're sorting
       # on created_at and not id.
       @blog.children.first.update(created_at: 2.days.ago)

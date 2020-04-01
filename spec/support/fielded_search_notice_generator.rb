@@ -12,8 +12,10 @@ class FieldedSearchNoticeGenerator
   def initialize(field)
     @field = field
     @query = "Something Specific"
-    @matched_notice = FactoryBot.create(:dmca, title: "To Be Found")
-    @unmatched_notice = FactoryBot.create(:dmca, title: "Not To Be Found")
+    # Add 'field' to strings to make these more unique and keep tests from
+    # contaminating one another.
+    @matched_notice = FactoryBot.create(:dmca, title: "To Be Found #{field}")
+    @unmatched_notice = FactoryBot.create(:dmca, title: "Not To Be Found #{field}")
   end
 
   def for_title
