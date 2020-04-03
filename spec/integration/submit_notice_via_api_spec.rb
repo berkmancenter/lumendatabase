@@ -150,6 +150,30 @@ feature 'notice submission', js: true do
     ])
   end
 
+  scenario 'submitting both valid and concatenated copyrighted URLs' do
+    parameters = request_hash(
+      default_notice_hash(
+        works_attributes: [{
+          description: 'A work',
+          copyrighted_urls_attributes: [
+            { url: 'http://example.com/http://example2.com' },
+            { url: 'http://picklefactory.com' }
+          ]
+        }]
+      )
+    )
+
+    curb = post_api('/notices', parameters)
+
+    expect(curb.response_code).to eq 201
+
+    work = Notice.last.works.first
+
+    expect(work.copyrighted_urls.map(&:url)).to match_array([
+      'http://example.com/', 'http://example2.com', 'http://picklefactory.com'
+    ])
+  end
+
   scenario 'submitting concatenated infringing URLs' do
     parameters = request_hash(
       default_notice_hash(

@@ -94,13 +94,13 @@ class Notice < ApplicationRecord
   has_many :topics, through: :topic_assignments
   has_many :topic_relevant_questions, through: :topics, source: :relevant_questions
   has_many :entity_notice_roles, dependent: :destroy, inverse_of: :notice
-  has_many :entities, through: :entity_notice_roles
+  has_many :entities, through: :entity_notice_roles, index_errors: true
   has_many :file_uploads
 
-  has_and_belongs_to_many :works
+  has_and_belongs_to_many :works, index_errors: true
 
-  has_many :infringing_urls, through: :works
-  has_many :copyrighted_urls, through: :works
+  has_many :infringing_urls, through: :works, index_errors: true
+  has_many :copyrighted_urls, through: :works, index_errors: true
   has_many :token_urls, dependent: :destroy
   has_and_belongs_to_many :relevant_questions
   has_one :documents_update_notification_notice
