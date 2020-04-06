@@ -8,6 +8,34 @@ RSpec.describe CopyrightedUrl, type: :model do
     it { is_expected.to validate_presence_of(:url_original) }
     it { is_expected.to validate_length_of(:url).is_at_most(8.kilobytes) }
     it { is_expected.to validate_length_of(:url_original).is_at_most(8.kilobytes) }
+
+    it 'validates format of URLs' do
+      url = 'https://tilde.club:443/path/to/myfile.html?utf8=✓#AnchorGoesHere'
+      assert !!(url =~ URI::regexp)
+      assert CopyrightedUrl.new(url: url).valid?
+    end
+
+    it 'allows URLs without a protocol' do
+      url = '//tilde.club:443/path/to/myfile.html?utf8=✓#AnchorGoesHere'
+      assert !!("http:#{url}" =~ URI::regexp)
+      assert CopyrightedUrl.new(url: url).valid?
+    end
+
+    it 'allows concatenated URLs' do
+      url = 'https://amazon.com/book/here/http://amazon.com/another/book/'
+      assert CopyrightedUrl.new(url: url).valid?
+    end
+
+    it 'removes querystrings from URLs which are otherwise too long' do
+      base_url = 'https://long.querystring.ahoy/'
+      url = "#{base_url}?q=#{'a' * 8.kilobytes}"
+      assert !!(url =~ URI::regexp)
+      c = CopyrightedUrl.new(url: url)
+      assert c.valid?
+      c.save
+      expect(c.url).to eq base_url
+      expect(c.url_original).to eq base_url
+    end
   end
 
   context "#url" do

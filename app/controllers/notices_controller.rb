@@ -209,6 +209,9 @@ class NoticesController < ApplicationController
       true
     else
       @notice.works.delete(PLACEHOLDER_WORKS)
+      # Important: this does _not_ create the works if they have not yet been
+      # saved, so we're not putting that slowdown into the request/response loop
+      # here. It just restores the unsaved objects to the collection.
       @notice.works << original_works
       false
     end
