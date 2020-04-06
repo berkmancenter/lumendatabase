@@ -9,6 +9,7 @@ class NoticeBuilder
     @notice = model_class.new(params)
     set_all_entities
     add_defaults
+    @notice.auto_redact
     @notice
   end
 
@@ -20,7 +21,6 @@ class NoticeBuilder
     @notice.file_uploads.map do |file|
       file.kind = 'supporting' if file.kind.nil?
     end
-    @notice.auto_redact
   end
 
   def generic_title
@@ -55,6 +55,10 @@ class NoticeBuilder
   end
 
   def entity_present?(role_name)
-    !!@notice.send(role_name)
+    return false unless (attrs = params.symbolize_keys[:entity_notice_roles_attributes])
+
+    attrs.map do
+      |x| x.symbolize_keys[:name].to_sym == role_name
+    end.any?
   end
 end
