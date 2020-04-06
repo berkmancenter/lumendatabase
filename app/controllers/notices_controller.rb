@@ -41,8 +41,12 @@ class NoticesController < ApplicationController
     return unless (@notice = Notice.find(params[:id]))
 
     respond_to do |format|
-      show_html format
-      show_json format
+      format.html { show_render_html }
+      format.json do
+        render json: @notice,
+               serializer: NoticeSerializerProxy,
+               root: json_root_for(@notice.class)
+       end
     end
   end
 
@@ -202,10 +206,8 @@ class NoticesController < ApplicationController
 
     if @notice.save
       @notice.mark_for_review
-      # The following two lines need to be backgrounded eventually
-      @notice.works.delete(PLACEHOLDER_WORKS)
-      fix_concatenated_urls(original_works)
-      @notice.works << original_works
+      # We can slap a .delay in here once we have background jobs set up.
+      NoticeFinalizer.new(@notice, original_works).finalize
       true
     else
       @notice.works.delete(PLACEHOLDER_WORKS)
@@ -215,38 +217,6 @@ class NoticesController < ApplicationController
       @notice.works << original_works
       false
     end
-  end
-
-  def fix_concatenated_urls(works)
-    return unless works.present?
-    works.each do |work|
-      work.copyrighted_urls << fixed_urls(work, :copyrighted_urls)
-      work.infringing_urls << fixed_urls(work, :infringing_urls)
-    end
-  end
-
-  def fixed_urls(work, url_type)
-    new_urls = []
-    work.send(url_type).each do |url_obj|
-      next unless url_obj[:url].scan('/http').present?
-
-      split_urls = conservative_split(url_obj[:url])
-      # Overwrite the current URL with one of the split-apart URLs. Then
-      # add the rest of the split-apart URLs to a list for safekeeping.
-      url_obj[:url] = split_urls.pop()
-      split_urls_as_hashes = split_urls.map { |url| { url: url } }
-      new_urls << work.send(url_type).build(split_urls_as_hashes)
-    end
-    new_urls
-  end
-
-  # We can't just split on 'http', because doing so will result in strings
-  # which no longer contain it. We need to look at the pairs of 'http' and
-  # $the_rest_of_the_URL which split produces and then mash them back together.
-  def conservative_split(s)
-    b = []
-    s.split(/(http)/).reject { |x| x.blank? }.each_slice(2) { |s| b << s.join }
-    b
   end
 
   def run_show_callbacks
@@ -262,20 +232,6 @@ class NoticesController < ApplicationController
     return if current_user.notice_viewer_viewed_notices >= current_user.notice_viewer_views_limit
 
     current_user.increment!(:notice_viewer_viewed_notices)
-  end
-
-  def show_html(format)
-    format.html do
-      show_render_html
-    end
-  end
-
-  def show_json(format)
-    format.json do
-      render json: @notice,
-             serializer: NoticeSerializerProxy,
-             root: json_root_for(@notice.class)
-    end
   end
 
   def show_render_html
