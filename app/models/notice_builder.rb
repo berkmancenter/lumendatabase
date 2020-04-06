@@ -1,10 +1,13 @@
 class NoticeBuilder
+  include Skylight::Helpers
+
   def initialize(model_class, params, user=nil)
     @model_class = model_class
     @params = params
     @user = user
   end
 
+  instrument_method
   def build
     @notice = model_class.new(params)
     set_all_entities

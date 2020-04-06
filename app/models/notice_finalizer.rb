@@ -3,6 +3,8 @@
 # This lets us move this potentially slow operation out of the request/response
 # loop.
 class NoticeFinalizer
+  include Skylight::Helpers
+
   def initialize(notice, works)
     @notice = notice
     @works = works
@@ -10,14 +12,19 @@ class NoticeFinalizer
 
   def finalize
     fix_concatenated_urls
-    notice.works << works
-    notice.works.delete(NoticesController::PLACEHOLDER_WORKS)
-    notice.save
+    Skylight.instrument title: 'Fixup works' do
+      notice.works << works
+      notice.works.delete(NoticesController::PLACEHOLDER_WORKS)
+    end
+    Skylight.instrument title: 'Save notice' do
+      notice.save
+    end
   end
 
   private
   attr_accessor :works, :notice
 
+  instrument_method
   def fix_concatenated_urls
     return unless works.present?
     works.each do |work|
