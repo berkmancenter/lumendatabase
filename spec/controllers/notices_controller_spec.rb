@@ -234,24 +234,31 @@ describe NoticesController do
   end
 
   context '#create' do
-    context 'format-independent logic' do
-      before do
-        @submit_notice = double('NoticeSubmissionInitializer').as_null_object
-        @notice_params = ActiveSupport::HashWithIndifferentAccess.new(title: 'A title')
-      end
+    before do
+      @fake_notice = double('Notice').as_null_object
+      @notice_params = ActiveSupport::HashWithIndifferentAccess.new(title: 'A title')
+    end
 
+    def make_allowances
+      allow(subject).to receive(:authorized_to_create?).and_return true
+      allow(NoticeBuilder).to receive(:new).and_return @fake_notice
+    end
+
+    context 'format-independent logic' do
       it 'initializes a DMCA by default from params' do
-        expect(NoticeSubmissionInitializer).to receive(:new)
-          .with(DMCA, @notice_params)
-          .and_return(@submit_notice)
+        make_allowances
+
+        expect(NoticeBuilder).to receive(:new)
+          .with(DMCA, @notice_params, anything)
 
         post :create, params: { notice: @notice_params }
       end
 
       it 'uses the type param to instantiate the correct class' do
-        expect(NoticeSubmissionInitializer).to receive(:new)
-          .with(Trademark, @notice_params)
-          .and_return(@submit_notice)
+        make_allowances
+
+        expect(NoticeBuilder).to receive(:new)
+          .with(Trademark, @notice_params, anything)
 
         post :create, params: {
           notice: @notice_params.merge(type: 'trademark')
@@ -261,10 +268,11 @@ describe NoticesController do
       it 'defaults to DMCA if the type is missing or invalid' do
         invalid_types = ['', 'FlimFlam', 'Object', 'User', 'Hash']
 
-        expect(NoticeSubmissionInitializer).to receive(:new)
+        make_allowances
+        expect(NoticeBuilder).to receive(:new)
           .exactly(5).times
-          .with(DMCA, @notice_params)
-          .and_return(@submit_notice)
+          .with(DMCA, @notice_params, anything)
+          .and_return(@fake_notice)
 
         invalid_types.each do |invalid_type|
           post :create, params: {
@@ -272,68 +280,23 @@ describe NoticesController do
           }
         end
       end
-
-      it 'has the expected delayed parameters' do
-        expect(NoticesController::DELAYED_PARAMS).to eq %i[works_attributes]
-      end
-
-      it 'initializes NoticeSubmissionInitializer without delayed parameters' do
-        stub_submit_notice
-
-        params = @notice_params
-        params[:works_attributes] = [{
-          description: 'The model of a modern major-general',
-          kind: 'polymath',
-          infringing_urls_attributes: ['https://url.one', 'https://url.two'],
-          copyrighted_urls_attributes: ['https://url.three']
-        }]
-
-        expect(NoticeSubmissionInitializer).to receive(:new)
-          .with(anything, params.except(:works_attributes))
-
-        post :create, params: { notice: params }
-      end
-
-      it 'initializes NoticeSubmissionFinalizer with delayed parameters' do
-        submit_notice = stub_submit_notice
-        finalizer = stub_finalize_notice
-
-        notice = build_stubbed(:dmca)
-
-        allow(submit_notice).to receive(:notice).and_return(notice)
-        allow(finalizer).to receive(:finalize).and_return(notice)
-
-        params = @notice_params
-        params[:works_attributes] = [{
-          description: 'The model of a modern major-general',
-          kind: 'polymath',
-          infringing_urls_attributes: ['https://url.one', 'https://url.two'],
-          copyrighted_urls_attributes: ['https://url.three']
-        }]
-
-        expect(NoticeSubmissionFinalizer).to receive(:new)
-          .with(anything, hash_including(:works_attributes))
-
-        post :create, params: { notice: params }
-      end
     end
 
     context 'as HTML' do
       it 'redirects when saved successfully' do
-        stub_submit_notice
-
+        make_allowances
         post_create
 
         expect(response).to redirect_to(:root)
       end
 
       it 'renders the new template when unsuccessful' do
-        submit_notice = stub_submit_notice
-        allow(submit_notice).to receive(:submit).and_return(false)
+        make_allowances
+        allow(@fake_notice).to receive(:valid?).and_return(false)
 
         post_create
 
-        expect(assigns(:notice)).to eq submit_notice.notice
+        expect(assigns(:notice)).to eq @fake_notice
         expect(response).to render_template(:new)
       end
     end
@@ -347,7 +310,8 @@ describe NoticesController do
       end
 
       it 'returns unauthorized if one cannot submit' do
-        stub_submit_notice
+        # Don't stub authorized_to_create? here -- we want to be implementation-
+        # independent.
         @ability.cannot(:submit, Notice)
         response_body = { documentation_link: Rails.configuration.x.api_documentation_link }.to_json
         post_create :json
@@ -357,11 +321,10 @@ describe NoticesController do
       end
 
       it 'returns a proper Location header when saved successfully' do
-        notice = build_stubbed(:dmca)
-        submit_notice = stub_submit_notice
-        finalizer = stub_finalize_notice
-        allow(submit_notice).to receive(:notice).and_return(notice)
-        allow(finalizer).to receive(:finalize).and_return(notice)
+        notice = create(:dmca)
+        allow(subject).to receive(:authorized_to_create?).and_return true
+        allow(NoticeBuilder).to receive_message_chain(:new, :build)
+                            .and_return notice
 
         post_create :json
 
@@ -370,8 +333,9 @@ describe NoticesController do
       end
 
       it 'returns a useful status code when there are errors' do
-        submit_notice = stub_submit_notice
-        allow(submit_notice).to receive(:submit).and_return(false)
+        make_allowances
+        allow(@fake_notice).to receive(:valid?).and_return(false)
+        allow(@fake_notice).to receive(:errors).and_return(['bruh'])
 
         post_create :json
 
@@ -379,35 +343,18 @@ describe NoticesController do
       end
 
       it 'includes any errors in the response' do
-        submit_notice = stub_submit_notice
-        allow(submit_notice).to receive(:submit).and_return(false)
-        allow(submit_notice).to receive(:errors).and_return(
-          mock_errors(submit_notice.notice, works: "can't be blank")
-        )
+        make_allowances
+        allow(@fake_notice).to receive(:valid?).and_return(false)
+        allow(@fake_notice).to receive(:errors).and_return(['bruh'])
 
         post_create :json
 
         json = JSON.parse(response.body)
-        expect(json).to have_key('works').with_value(["can't be blank"])
+        expect(json).to have_key('notices').with_value(['bruh'])
       end
     end
 
     private
-
-    def stub_submit_notice
-      NoticeSubmissionInitializer.new(DMCA, {}).tap do |submit_notice|
-        allow(submit_notice).to receive(:submit).and_return(true)
-        allow(NoticeSubmissionInitializer).to receive(:new).and_return(submit_notice)
-      end
-    end
-
-    def stub_finalize_notice
-      NoticeSubmissionFinalizer.new(DMCA, {}).tap do |finalizer|
-        allow(NoticeSubmissionFinalizer)
-          .to receive(:new)
-          .and_return(finalizer)
-      end
-    end
 
     def post_create(format = :html)
       post :create, params: { notice: { title: 'A title' }, format: format }

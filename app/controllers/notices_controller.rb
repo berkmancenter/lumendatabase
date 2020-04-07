@@ -1,9 +1,12 @@
 class NoticesController < ApplicationController
   layout :resolve_layout
-
   protect_from_forgery with: :exception
-
   skip_before_action :verify_authenticity_token, only: :create
+
+  # Notice validates the presence of works, but we delay adding works because
+  # it is too time-consuming for the request/response cycle. Therefore we
+  # need to add a placeholder so the Notice instance can save.
+  PLACEHOLDER_WORKS = [Work.unknown].freeze
 
   def new
     (render :submission_disabled and return) if cannot?(:submit, Notice)
@@ -17,17 +20,20 @@ class NoticesController < ApplicationController
   end
 
   def create
-    respond_to do |format|
-      format.json do
-        unless authorized_to_create?
-          self.status = :unauthorized
-          self.response_body = { documentation_link: Rails.configuration.x.api_documentation_link }.to_json
-          return
-        end
-        create_respond_json
-      end
+    return unauthorized_response unless authorized_to_create?
 
-      format.html { create_respond_html }
+    @notice = NoticeBuilder.new(
+      get_notice_type(params), notice_params, current_user
+    ).build
+
+    respond_to do |format|
+      if @notice.valid? && ready_for_persistence?
+        format.json { head :created, location: @notice }
+        format.html { redirect_to :root, notice: 'Notice created!' }
+      else
+        format.html  { render :new }
+        format.json  { render json: @notice.errors, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -35,20 +41,13 @@ class NoticesController < ApplicationController
     return unless (@notice = Notice.find(params[:id]))
 
     respond_to do |format|
-      show_html format
-      show_json format
+      format.html { show_render_html }
+      format.json do
+        render json: @notice,
+               serializer: NoticeSerializerProxy,
+               root: json_root_for(@notice.class)
+       end
     end
-  end
-
-  def url_input
-    notice = get_notice_type(params).new
-    @options = OpenStruct.new(
-      notice: notice,
-      url_type: params[:url_type].to_sym,
-      main_index: params[:index].to_i,
-      child_index: (Time.now.to_f * 10_000).to_i
-    )
-    build_works(notice)
   end
 
   def feed
@@ -67,14 +66,26 @@ class NoticesController < ApplicationController
     render nothing: true
   end
 
+  # This can't be in 'private' because it is invoke by JavaScript to add
+  # additional URL inputs to the page; if it's private, that JS call fails.
+  def url_input
+    notice = get_notice_type(params).new
+    @options = OpenStruct.new(
+      notice: notice,
+      url_type: params[:url_type].to_sym,
+      main_index: params[:index].to_i,
+      child_index: (Time.now.to_f * 10_000).to_i
+    )
+    build_works(notice)
+  end
+
   private
 
-  # These parameters will be added to the Notice instance during the delayed
-  # job outside of the request/response loop. Skylight reveals that adding
-  # infringing_urls is slow, particularly if the number is large, and involves
-  # repeated SQL queries. Tracking down those queries is much harder than
-  # delegating the job to a place where it won't annoy users.
-  DELAYED_PARAMS = %i[works_attributes].freeze
+  def unauthorized_response
+    self.status = :unauthorized
+    self.response_body = { documentation_link: Rails.configuration.x.api_documentation_link }.to_json
+    return
+  end
 
   def json_root_for(klass)
     klass.to_s.tableize.singularize
@@ -142,7 +153,7 @@ class NoticesController < ApplicationController
   # usage difference between this version and a version that avoids these calls.
   # --ay, 11 December 2018
   def get_notice_type(params)
-    type_string = params[:type] || 'DMCA'
+    type_string = params[:type] || params[:notice][:type] || 'DMCA'
     type_string = 'DMCA' if type_string == 'Dmca'
 
     notice_type = type_string.classify.constantize
@@ -189,57 +200,22 @@ class NoticesController < ApplicationController
     end
   end
 
-  def preliminary_submission
-    NoticeSubmissionInitializer.new(
-      get_notice_type(params[:notice]),
-      initial_params
-    )
-  end
+  def ready_for_persistence?
+    original_works = @notice.works.to_ary
+    @notice.works = PLACEHOLDER_WORKS
 
-  # initial_params are used to create the notice instance. final_params are
-  # used to update it in the delayed job.
-  def initial_params
-    notice_params.except(*DELAYED_PARAMS)
-  end
-
-  def final_params
-    notice_params.slice(*DELAYED_PARAMS)
-  end
-
-  def finalize(notice)
-    NoticeSubmissionFinalizer.new(notice, final_params).finalize
-  end
-
-  def create_respond_json
-    submission = preliminary_submission
-
-    if submission.submit(current_user)
-      finalize(submission.notice)
-      head :created, location: submission.notice
+    if @notice.save
+      @notice.mark_for_review
+      # We can slap a .delay in here once we have background jobs set up.
+      NoticeFinalizer.new(@notice, original_works).finalize
+      true
     else
-      render json: submission.errors, status: :unprocessable_entity
-    end
-  end
-
-  def create_respond_html
-    submission = preliminary_submission
-
-    if submission.submit(current_user)
-      finalize(submission.notice)
-      redirect_to :root, notice: 'Notice created!'
-    else
-      @notice = submission.notice
-      render :new
-    end
-  end
-
-  def json_errors(notice)
-    if notice.present?
-      notice.errors
-    else
-      msg = 'You are not authorized to do that, or you are missing required ' \
-            'parameters'.freeze
-      { errors: msg }
+      @notice.works.delete(PLACEHOLDER_WORKS)
+      # Important: this does _not_ create the works if they have not yet been
+      # saved, so we're not putting that slowdown into the request/response loop
+      # here. It just restores the unsaved objects to the collection.
+      @notice.works << original_works
+      false
     end
   end
 
@@ -256,20 +232,6 @@ class NoticesController < ApplicationController
     return if current_user.notice_viewer_viewed_notices >= current_user.notice_viewer_views_limit
 
     current_user.increment!(:notice_viewer_viewed_notices)
-  end
-
-  def show_html(format)
-    format.html do
-      show_render_html
-    end
-  end
-
-  def show_json(format)
-    format.json do
-      render json: @notice,
-             serializer: NoticeSerializerProxy,
-             root: json_root_for(@notice.class)
-    end
   end
 
   def show_render_html
