@@ -6,8 +6,8 @@ describe InfringingUrl, type: :model do
 
   context 'automatic validations' do
     it { is_expected.to validate_presence_of(:url_original) }
-    it { is_expected.to validate_length_of(:url).is_at_most(8.kilobytes) }
-    it { is_expected.to validate_length_of(:url_original).is_at_most(8.kilobytes) }
+    it { is_expected.to validate_length_of(:url).is_at_most(ValidatesUrls::MAX_LENGTH) }
+    it { is_expected.to validate_length_of(:url_original).is_at_most(ValidatesUrls::MAX_LENGTH) }
 
     it 'validates format of URLs' do
       url = 'https://tilde.club:443/path/to/myfile.html?utf8=✓#AnchorGoesHere'
