@@ -272,7 +272,7 @@ feature 'notice submission' do
     end
   end
 
-  scenario "submitting a notice without required fields present" do
+  scenario 'submitting a notice without required fields present' do
     sign_in(create(:user, :submitter))
 
     visit '/notices/new?type=DMCA'
@@ -290,6 +290,18 @@ feature 'notice submission' do
     visit '/notices/new?type=GovernmentRequest'
 
     expect(page).to have_text('Submitter of the Notice')
+  end
+
+  scenario 'adding an additional URL', js: true do
+    sign_in(create(:user, :submitter))
+
+    visit '/notices/new?type=DMCA'
+
+    expect(page).to have_text('Allegedly Infringing URL', count: 1)
+
+    find_all(:button, 'Add Another URL')[1].click
+
+    expect(page).to have_text('Allegedly Infringing URL', count: 2)
   end
 
   context 'template rendering' do

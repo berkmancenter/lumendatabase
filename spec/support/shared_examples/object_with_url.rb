@@ -3,7 +3,6 @@ shared_examples 'an object with a url' do
   ['http://foo.com',
     '//bar.com',
     'https://example.com/asdfasdf',
-    'http://foo@bar:example.com/',
     'http://foofarexample.com:3000/',
     'hTTps://example.com/asdfasdf?foobarbaz',
     'HTTP://example.com/asdfasdf#bleep',
