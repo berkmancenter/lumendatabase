@@ -4,6 +4,6 @@ require 'validates_urls'
 
 class CopyrightedUrl < ApplicationRecord
   include ValidatesAutomatically
-  include DefaultUrlOriginal
   include ValidatesUrls
+  include DefaultUrlOriginal
 end
