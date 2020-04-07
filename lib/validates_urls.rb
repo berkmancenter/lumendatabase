@@ -6,7 +6,6 @@ module ValidatesUrls
     model.send(:validates, 'url_original'.freeze, { presence: true } )
     model.send(:validate, :good_urls?)
     model.send(:validate, :length_ok_when_split?)
-    model.send(:after_initialize, :fixup_querystring)
   end
 
   private
@@ -44,21 +43,7 @@ module ValidatesUrls
     [url_text.bytesize < MAX_LENGTH,
      url_text.split('/http')
              .map { |x| x.bytesize < (MAX_LENGTH - 5) }
-             .all?,
-     without_querystring(url_text).bytesize < MAX_LENGTH
+             .all?
     ].any?
-  end
-
-  def fixup_querystring
-    url_text = self.send(:url) || ''
-    return if url_text.bytesize < MAX_LENGTH
-
-    shorter = without_querystring(url_text)
-
-    self.send(:url=, shorter)
-  end
-
-  def without_querystring(url_text)
-    Addressable::URI.parse(url_text).omit(:query).to_s
   end
 end

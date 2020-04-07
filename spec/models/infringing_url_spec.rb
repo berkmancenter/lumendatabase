@@ -25,17 +25,6 @@ describe InfringingUrl, type: :model do
       url = 'https://amazon.com/book/here/http://amazon.com/another/book/'
       assert CopyrightedUrl.new(url: url).valid?
     end
-
-    it 'removes querystrings from URLs which are otherwise too long' do
-      base_url = 'https://long.querystring.ahoy/'
-      url = "#{base_url}?q=#{'a' * 8.kilobytes}"
-      assert !!(url =~ URI::regexp)
-      c = CopyrightedUrl.new(url: url)
-      assert c.valid?
-      c.save
-      expect(c.url).to eq base_url
-      expect(c.url_original).to eq base_url
-    end
   end
 
   context "#url" do
