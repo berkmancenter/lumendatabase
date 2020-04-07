@@ -50,13 +50,12 @@ module ValidatesUrls
   end
 
   def fixup_querystring
-    url_text = self.send(:url) || self.send(:url_original) || ''
+    url_text = self.send(:url) || ''
     return if url_text.bytesize < MAX_LENGTH
 
     shorter = without_querystring(url_text)
 
     self.send(:url=, shorter)
-    self.send(:url_original=, shorter)
   end
 
   def without_querystring(url_text)

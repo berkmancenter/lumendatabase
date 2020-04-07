@@ -1,3 +1,6 @@
+# Make sure to include this *after* including any validations on url --
+# we want to make sure those validations are automatically incorporated into
+# url_original.
 module DefaultUrlOriginal
   def self.included(model)
     model.instance_eval do
