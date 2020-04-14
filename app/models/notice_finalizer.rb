@@ -36,7 +36,7 @@ class NoticeFinalizer
   def fixed_urls(work, url_type)
     new_urls = []
     work.send(url_type).each do |url_obj|
-      next unless url_obj[:url].scan('/http').present?
+      next unless url_obj[:url]&.scan('/http').present?
 
       split_urls = conservative_split(url_obj[:url])
       # Overwrite the current URL with one of the split-apart URLs. Then
