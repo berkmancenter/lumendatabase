@@ -2,18 +2,17 @@
   <div class="inner-wrapper">
     <span><%= image_tag 'Cc.logo.circle.svg', height: '16', style: 'vertical-align: middle;' %> 2017 Lumen</span>
     <nav>
-	<%= link_to "License", page_path("license") %>
-    <%= link_to "Privacy", page_path("privacy") %>
-    <%= link_to "Legal", page_path("legal") %>
-    <%= link_to "Researchers", page_path("researchers") %>
-    <% if user_signed_in? %>
-      <% if can? :access, :rails_admin %>
-        <%= link_to "Admin", rails_admin_path %>
+      <% footer_links.each do |link| %>
+        <%= link_to cms_fragment_content('page_title', link), link.full_path %>
       <% end %>
-      <%= link_to "Sign Out", destroy_user_session_path %>
-    <% else %>
-      <%= link_to "Sign In", new_user_session_path %>
-    <% end %>
+      <% if user_signed_in? %>
+        <% if can? :access, :rails_admin %>
+          <%= link_to "Admin", rails_admin_path %>
+        <% end %>
+        <%= link_to "Sign Out", destroy_user_session_path %>
+      <% else %>
+        <%= link_to "Sign In", new_user_session_path %>
+      <% end %>
     </nav>
   </div>
 </footer>

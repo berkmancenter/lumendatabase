@@ -42,4 +42,16 @@ module ApplicationHelper
 
     TokenUrl.valid?(params[:access_token], notice)
   end
+
+  def footer_links
+    ids = Comfy::Cms::Fragment.where(identifier: 'link_in_footer', boolean: true)
+                              .pluck(:record_id)
+    Comfy::Cms::Page.where(id: ids)
+  end
+
+  def header_links
+    ids = Comfy::Cms::Fragment.where(identifier: 'link_in_header', boolean: true)
+                              .pluck(:record_id)
+    Comfy::Cms::Page.where(id: ids)
+  end
 end
