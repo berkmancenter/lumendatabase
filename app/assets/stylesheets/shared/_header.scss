@@ -1,35 +1,64 @@
 //************************************************************************//
-// Form
+// Nav overrides for CMS/search-style pages
 //************************************************************************//
 header.app {
-  $padding: 20px;
-  background: $base-background-color-alt;
+  .nav-wrapper {
+    padding: 15px 0;
+  }
 
-  h1 {
-    display: block;
-    margin: 0 30px 30px 10px;
-    float: left;
+  .nav-item {
+    a {
+      border-radius: 2px;
+      color: $nav-link-color;
+      font-size: $base-font-size;
+      font-weight: 500;
+      text-decoration: none;
 
-    img {
-      margin-top: 10px;
-      display: block;
+      &:hover {
+        background: $nav-hover;
+        color: #fff;
+      }
+
+      &:focus {
+        outline: none;
+      }
+
+      &:hover, &:focus, &:link, &:visited {
+        text-decoration: none;
+      }
     }
 
-    @include media($mobile) {
-      float: none;
-      display: block;
-      text-align: center;
-      margin: 0;
-
-      img {
-        margin: 10px auto 15px;
-        display: block;
-        width: 80%;
-        height: 80%;
-      }
+    #dropdown-topics a {
+      color: #fff;
     }
   }
 
+  .nav-item {
+    padding: 25px 0px;
+  }
+
+  a {
+    padding: 10px 20px;
+  }
+
+  @include media($tablet) {
+    .nav-item {
+      padding: 10px 0px;
+    }
+  }
+
+  a#root {
+    display: inline-block;
+  }
+  #root img {
+    display: block;
+  }
+}
+
+//************************************************************************//
+// Form
+//************************************************************************//
+header.app {
   h2 {
     color: white;
     font-size: em(22, 15);

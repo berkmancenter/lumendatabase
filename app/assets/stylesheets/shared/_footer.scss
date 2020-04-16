@@ -4,29 +4,6 @@ footer.main {
   font-size: $base-font-size-small-1;
   font-weight: 500;
 
-  div.inner-wrapper {
-    @include clearfix;
-    @include container;
-    margin: 0 auto;
-    padding: 0;
-  }
-
-  span, nav {
-    float: left;
-  }
-
-  span, a {
-    margin: 40px 25px;
-    display: inline-block;
-  }
-
-  @include media($mobile) {
-    span, a {
-      margin: 10px 25px;
-      display: block;
-    }
-  }
-
   a {
     color: $base-font-color-3;
     text-decoration: none;
@@ -34,5 +11,24 @@ footer.main {
     &:hover {
       color: $base-link-color;
     }
+  }
+}
+
+body.home footer.main {
+  background: none;
+  border: 0;
+  font-size: $base-font-size-small-2;
+  margin: 0 auto;
+  max-width: $home-width;
+  padding: 0;
+
+  .nav-item, a {
+    &:first-child {
+      padding-left: 0;
+    }
+  }
+
+  @include media($tablet) {
+    padding: 0 10px;
   }
 }

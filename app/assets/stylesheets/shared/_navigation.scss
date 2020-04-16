@@ -1,180 +1,15 @@
 //************************************************************************//
-// Main Navigation Shared
-//************************************************************************//
-nav.main-nav {
-  background: $nav-bg;
-
-  ol.nav-list {
-    clear: left;
-    @include clearfix;
-    margin: 0 auto;
-    max-width: $home-width;
-    padding: 0;
-    width: 100%;
-
-    li.open {
-      background: $header-background-1;
-      color: #fff;
-    }
-  }
-
-  .nav-item {
-    float: left;
-    list-style: none;
-    position: relative;
-    text-align: center;
-    width: 33%;
-
-    @include media($small-screen){
-      position: static;
-    }
-
-    > a {
-      @extend %nav-anchor;
-      color: $nav-color;
-      font-size: $base-font-size-small-1;
-      font-weight: bold;
-
-      @include media($mobile){
-        font-size: $base-font-size-small-2 - 1;
-        line-height: 1.4em;
-      }
-
-      &:focus {
-        outline: none;
-      }
-
-      &:hover {
-        color: #fff;
-      }
-    }
-  }
-
-  #dropdown-topics {
-    @include media($small-screen){
-      background: darken($nav-bg, 4%);
-      left: 5%;
-      margin-left: 0;
-      margin-top: 0;
-      padding-top: 0;
-      width: 90%;
-
-      > ol {
-        position: relative;
-        width: 33.4%;
-        background: $nav-bg;
-      }
-
-      li.dropdown-submenu {
-        position: static;
-
-        .dropdown-menu {
-          margin-top: 0;
-          height: 100%;
-          width: 100%;
-        }
-      }
-    }
-  }
-}
-
-
-//************************************************************************//
-// Navigation
-//************************************************************************//
-nav.main-nav {
-}
-
-//************************************************************************//
-// Landing Page / Home
-//************************************************************************//
-body.home-index {
-  nav.main-nav {
-    li.search {
-      display: none;
-    }
-  }
-}
-
-//************************************************************************//
-// App Header Navigation - not landing
-//************************************************************************//
-header.app {
-  nav.main-nav {
-    position: fixed;
-    z-index: 10;
-    top: 0;
-    left: 0;
-    width: 100%;
-    float: none;
-
-    li.nav-item {
-      width: (100% / 5);
-    }
-
-    li.open {
-      background: none;
-    }
-  }
-
-  @include media(min-width 769px) {
-    nav.main-nav {
-      float: right;
-      position: static;
-      @include clearfix;
-      margin-top: 23px;
-      background: none;
-      width: auto;
-    }
-
-    ol.nav-list {
-      margin: 0;
-      padding: 0;
-      @include clearfix;
-
-
-      li.nav-item {
-        width: auto;
-
-        > a {
-          border-radius: 2px;
-          color: $nav-link-color;
-          font-size: $base-font-size;
-          font-weight: 500;
-          margin-right: 5px;
-          padding: 6px 15px;
-
-          &:hover {
-            background: $nav-hover;
-            color: #fff;
-          }
-
-          &:focus {
-            outline: none;
-          }
-        }
-
-        &.open > a {
-          background: $nav-hover;
-          color: #fff;
-        }
-      }
-    }
-  }
-}
-
-//************************************************************************//
 // Dropdown Menu
 //************************************************************************//
 .dropdown {
   &.open > .dropdown-menu {
-    display: block; // Open dropdown menu on click
+    display: flex; // Open dropdown menu on click
   }
 }
 
 // Global Dropdown Menu Styles
 //************************************************************************//
-li.nav-item .dropdown-menu {
+.nav-item .dropdown-menu {
   @include ui-dropdown(center, $width: 200px, $nub-bg-color: $nav-bg, $nub-border-color: none);
   background: $nav-bg;
   border: 0;
@@ -198,6 +33,7 @@ li.nav-item .dropdown-menu {
     line-height: 1.2;
     margin: 0;
     padding: 12px 15px;
+    text-align: left;
   }
 }
 
@@ -210,6 +46,13 @@ li.dropdown-submenu {
   > a {
     padding-right: 30px;
     position: relative;
+    font-size: $base-font-size-small-1;
+    font-weight: bold;
+
+    @include media($mobile){
+      font-size: $base-font-size-small-2 - 1;
+      line-height: 1.4em;
+    }
 
     &:after {
       @include triangle(12px, hsla(0, 0%, 100%, 0.6), right);

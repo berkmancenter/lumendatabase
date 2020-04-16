@@ -1,13 +1,6 @@
 <header class="app">
-  <div class="header-inner">
-    <h1>
-      <%= link_to root_path, :id => "root" do %>
-        <%= image_tag("logo_2x.png", :size=> "265x64") %>
-      <% end %>
-    </h1>
-    <%= render 'shared/navigation' -%>
-    <div class="container header-bar">
-      <h2><%= yield(:header) %></h2>
-    </div>
+  <%= render "shared/header_nav" %>
+  <div class="container header-bar">
+    <h2><%= yield(:header) %></h2>
   </div>
 </header>

@@ -8,7 +8,9 @@
 </head>
 <body class="<%= body_class %>">
   <%= render 'flashes' -%>
-  <%= render 'shared/navigation' -%>
+  <div class="blue-nav">
+    <%= render 'shared/navigation' -%>
+  </div>
   <section class="main home">
     <%= yield %>
   </section>

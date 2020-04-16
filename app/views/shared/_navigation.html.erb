@@ -1,23 +1,21 @@
 <% cache '_navigation' do %>
   <nav class="main-nav">
-    <ol class="nav-list">
-      <li class="nav-item search">
-        <%= link_to("Search", root_path) %>
-      </li>
-      <li class="nav-item topics dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Topics</a>
-        <div id="dropdown-topics" class="dropdown-menu" role="menu">
-          <ol>
-            <% cache('dropdown-topics') do %>
-              <%= render partial: 'shared/topic_dropdown', collection: topic_roots,
-                  as: :topic %>
-            <% end %>
-          </ol>
-        </div>
-      </li>
-      <% header_links.each do |link| %>
-        <li class="nav-item about"><%= link_to cms_fragment_content('page_title', link), link.full_path %></li>
-      <% end %>
-    </ol>
+    <div class="nav-item search"><%= link_to("Search", root_path) %></div>
+    <div class="nav-item topics dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown">Topics</a>
+      <div id="dropdown-topics" class="dropdown-menu" role="menu">
+        <ol>
+          <% cache('dropdown-topics') do %>
+            <%= render partial: 'shared/topic_dropdown', collection: topic_roots,
+                as: :topic %>
+          <% end %>
+        </ol>
+      </div>
+    </div>
+    <% header_links.each do |link| %>
+      <div class="nav-item">
+        <%= link_to cms_fragment_content('page_title', link), link.full_path %>
+      </div>
+    <% end %>
   </nav>
 <% end %>

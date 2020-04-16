@@ -1,18 +1,22 @@
 <footer class="main">
-  <div class="inner-wrapper">
-    <span><%= image_tag 'Cc.logo.circle.svg', height: '16', style: 'vertical-align: middle;' %> 2017 Lumen</span>
-    <nav>
-      <% footer_links.each do |link| %>
-        <%= link_to cms_fragment_content('page_title', link), link.full_path %>
-      <% end %>
-      <% if user_signed_in? %>
-        <% if can? :access, :rails_admin %>
-          <%= link_to "Admin", rails_admin_path %>
+  <div class="nav-wrapper">
+    <div class="nav-item">
+      <span><%= image_tag 'Cc.logo.circle.svg', height: '16', style: 'vertical-align: middle;' %> 2017 Lumen</span>
+    </div>
+    <div class="flex-end">
+      <nav>
+        <% footer_links.each do |link| %>
+          <span class="nav-item"><%= link_to cms_fragment_content('page_title', link), link.full_path %></span>
         <% end %>
-        <%= link_to "Sign Out", destroy_user_session_path %>
-      <% else %>
-        <%= link_to "Sign In", new_user_session_path %>
-      <% end %>
-    </nav>
+        <% if user_signed_in? %>
+          <% if can? :access, :rails_admin %>
+            <span class="nav-item"><%= link_to "Admin", rails_admin_path %></span>
+          <% end %>
+          <span class="nav-item"><%= link_to "Sign Out", destroy_user_session_path %></span>
+        <% else %>
+          <span class="nav-item"><%= link_to "Sign In", new_user_session_path %></span>
+        <% end %>
+      </nav>
+    </div>
   </div>
 </footer>
