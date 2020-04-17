@@ -170,30 +170,3 @@ section.home-search-form {
     margin: 0 0 0.4em;
   }
 }
-
-// Home Footer
-//************************************************************************//
-body.home footer.main {
-  background: none;
-  border: 0;
-
-  div.inner-wrapper {
-    font-size: $base-font-size-small-2;
-    margin: 0 auto;
-    max-width: $home-width;
-    padding: 0;
-  }
-
-  span, a {
-    margin: 0 15px 15px;
-    color: lighten($base-font-color-3, 20%);
-  }
-
-  a:hover {
-    color: $base-link-color;
-  }
-
-  nav {
-    float: right;
-  }
-}

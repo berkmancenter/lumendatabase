@@ -3,12 +3,6 @@ require 'rails_helper'
 describe 'shared/_navigation.html.erb' do
   include Comfy::ComfyHelper
 
-  it 'shows a link to research' do
-    render
-
-    expect(rendered).to contain_link(page_path("research"))
-  end
-
   it 'has links to all topics' do
     topics = create_list(:topic, 3)
 
