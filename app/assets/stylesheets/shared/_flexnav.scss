@@ -47,14 +47,18 @@ nav {
 .nav-wrapper {
   display: flex;
   justify-content: space-between;
+  padding-left: 25px;
+  padding-right: 25px;
 
   .nav-item, a {
-    padding: 25px 25px;
+    padding-top: 25px;
+    padding-bottom: 25px;
   }
 
   @include media($tablet) {
     .nav-item, a {
-      padding: 10px 25px;
+      padding-top: 10px;
+      padding-bottom: 10px;
     }
   }
 }

@@ -55,6 +55,19 @@ header.app {
   }
 }
 
+header.search-header {
+  @include container;
+  margin: 0 auto;
+
+  @include media($small-screen) {
+    margin: 0 $base-padding;
+  }
+
+  @include media($mobile) {
+    margin: 0 10px;
+  }
+}
+
 //************************************************************************//
 // Form
 //************************************************************************//
@@ -79,6 +92,8 @@ header.app {
 
     &.header-bar {
       border-radius: 4px 4px 0 0;
+      max-width: $max-width;
+      margin: 0 auto;
     }
   }
 
@@ -318,5 +333,9 @@ header.app .container.advanced-search {
         width: 100%;
       }
     }
+  }
+
+  button {
+    max-width: 100%;
   }
 }
