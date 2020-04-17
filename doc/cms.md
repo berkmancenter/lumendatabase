@@ -25,6 +25,14 @@ during the authentication process.
 * Click 'Add Child Page' next to 'pages'
 * Fill out the fields
 
+### To add links to the header or footer:
+* Content of the 'page' type includes checkboxes for 'Link in Header' and 'Link in Footer'
+* If you check these, the content will appear in the header/footer, respectively
+* A few caveats:
+  - The header and footer will not update immediately (due to page caching)
+  - The text in the header/footer will be the text in the 'Page Title' field
+  - This does not support putting blog posts into the header/footer. We could add that support via 1) updating the blog layout (see [notes on the pull request](https://github.com/berkmancenter/lumendatabase/pull/596)) and 2) updating the code so that it pulls the correct title -- the title fields for blogs and pages have different names due to CMS limitations.
+
 ### Extra details for the curious
 You will also see an 'original_news_id' parent page (along with the 'blog_entries' and 'pages' parent pages). This exists to maintain permalinks for old versions of the content. Please don't touch it.
 
