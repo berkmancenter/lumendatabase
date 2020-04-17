@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [20.04b](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.04b) - 2020-04-17
+### Added
+* [#596](https://github.com/berkmancenter/lumendatabase/pull/596) CMS administrators can now manage header/footer links to CMS content through the CMS.
+
 ## [20.04a](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.04a) - 2020-04-07
 ### Changed
 * [#595](https://github.com/berkmancenter/lumendatabase/pull/595) Validate bytelength of submitted URLs more aggressively
