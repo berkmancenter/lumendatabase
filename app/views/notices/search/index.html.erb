@@ -1,7 +1,7 @@
 <%= title 'Search' %>
 <%= cache(@searcher.cache_key) do %>
   <section class="search-results">
-    <header>
+    <header class="app">
       <%= form_tag(notices_search_index_path, method: :get, id: 'facets-form') do %>
         <% if @searchdata.response['aggregations'] %>
           <ol class="results-facets">
