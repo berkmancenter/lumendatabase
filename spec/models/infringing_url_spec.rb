@@ -11,19 +11,22 @@ describe InfringingUrl, type: :model do
 
     it 'validates format of URLs' do
       url = 'https://tilde.club:443/path/to/myfile.html?utf8=✓#AnchorGoesHere'
-      assert !!(url =~ URI::regexp)
-      assert CopyrightedUrl.new(url: url).valid?
+      assert InfringingUrl.new(url: url).valid?
     end
 
     it 'allows URLs without a protocol' do
       url = '//tilde.club:443/path/to/myfile.html?utf8=✓#AnchorGoesHere'
-      assert !!("http:#{url}" =~ URI::regexp)
-      assert CopyrightedUrl.new(url: url).valid?
+      assert InfringingUrl.new(url: url).valid?
+    end
+
+    it 'disallows bad URLs' do
+      url = 'https://this.url.has.a space'
+      assert !InfringingUrl.new(url: url).valid?
     end
 
     it 'allows concatenated URLs' do
       url = 'https://amazon.com/book/here/http://amazon.com/another/book/'
-      assert CopyrightedUrl.new(url: url).valid?
+      assert InfringingUrl.new(url: url).valid?
     end
   end
 

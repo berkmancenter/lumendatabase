@@ -5,11 +5,13 @@ class NoticeBuilder
     @model_class = model_class
     @params = params
     @user = user
+    @json_params = nil
   end
 
   instrument_method
   def build
     @notice = model_class.new(params)
+    set_json_params
     set_all_entities
     add_defaults
     @notice.auto_redact
@@ -17,7 +19,19 @@ class NoticeBuilder
   end
 
   private
-  attr_reader :model_class, :params, :user
+  attr_reader :model_class, :params, :json_params, :user
+
+  # This ensures that the data structure we're working with will look like JSON
+  # data, not form data, so we don't have to worry about figuring out which
+  # format we're using.
+  def set_json_params
+    @json_params = @notice.as_json(
+      include: {
+        works: { include: { copyrighted_urls: {}, infringing_urls: {} } },
+        entity_notice_roles: { include: :entity }
+      }
+    ).deep_symbolize_keys
+  end
 
   def add_defaults
     @notice.title = generic_title unless @notice.title.present?
@@ -58,10 +72,10 @@ class NoticeBuilder
   end
 
   def entity_present?(role_name)
-    return false unless (attrs = params.symbolize_keys[:entity_notice_roles_attributes])
+    return false unless (attrs = json_params[:entity_notice_roles])
 
     attrs.map do
-      |x| x.symbolize_keys[:name].to_sym == role_name
+      |x| x[:name].to_sym == role_name
     end.any?
   end
 end
