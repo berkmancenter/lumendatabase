@@ -31,6 +31,7 @@ during the authentication process.
 * A few caveats:
   - The header and footer will not update immediately (due to page caching)
   - The text in the header/footer will be the text in the 'Page Title' field
+  - You cannot control the order that the links appear in
   - This does not support putting blog posts into the header/footer. We could add that support via 1) updating the blog layout (see [notes on the pull request](https://github.com/berkmancenter/lumendatabase/pull/596)) and 2) updating the code so that it pulls the correct title -- the title fields for blogs and pages have different names due to CMS limitations.
 
 ### Extra details for the curious
