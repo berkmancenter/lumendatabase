@@ -17,19 +17,21 @@ module ValidatesUrls
       value = self.send(attr)
       next unless value.present?
 
-      unless ( is_ordinary_uri?(value) || is_noprotocol_uri?(value) )
+      # This is invalid per the spec but common, so let's allow it.
+      munged_value = value.gsub('utf8=✓', 'utf8%3D%E2%9C%93')
+      unless ( is_ordinary_uri?(munged_value) || is_noprotocol_uri?(munged_value) )
         errors.add(attr, 'Must be a valid URL')
       end
     end
   end
 
   def is_ordinary_uri?(value)
-    !!(value =~ URI::regexp)
+    !!(value =~ /\A#{URI::regexp}\z/)
   end
 
   # Matches things like "//bar.com".
   def is_noprotocol_uri?(value)
-    value.start_with?('//') && (('http:' + value) =~ URI::regexp)
+    value.start_with?('//') && (('http:' + value) =~ /\A#{URI::regexp}\z/)
   end
 
   def length_ok_when_split?
