@@ -15,6 +15,16 @@ class NoticeFinalizer
     Skylight.instrument title: 'Fixup works' do
       notice.works << works
       notice.works.delete(NoticesController::PLACEHOLDER_WORKS)
+    # Add logging for visibility into weird submission bug
+    rescue ActiveRecord::RecordInvalid => e
+      if ENV['LOG_INVALID_WORKS'].present?
+        Rails.logger.warn "Invalid Works were #{works}"
+        works.each do |w|
+          Rails.logger.warn "Invalid InfringingUrls were #{w.infringing_urls.pluck(:url)}"
+          Rails.logger.warn "Invalid CopyrightedUrls were #{w.copyrighted_urls.pluck(:url)}"
+        end
+      end
+      raise e
     end
     Skylight.instrument title: 'Save notice' do
       notice.save
