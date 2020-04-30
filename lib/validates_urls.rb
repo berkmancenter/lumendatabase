@@ -17,8 +17,9 @@ module ValidatesUrls
       value = self.send(attr)
       next unless value.present?
 
-      encoded_value = URI.encode(value)
-      unless ( is_ordinary_uri?(encoded_value) || is_noprotocol_uri?(encoded_value) )
+      # This is invalid per the spec but common, so let's allow it.
+      munged_value = value.gsub('utf8=✓', 'utf8%3D%E2%9C%93')
+      unless ( is_ordinary_uri?(munged_value) || is_noprotocol_uri?(munged_value) )
         errors.add(attr, 'Must be a valid URL')
       end
     end
