@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [20.05](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.05) - 2020-05-01
+### Changed
+* [Dependency version upgrades](https://github.com/berkmancenter/lumendatabase/commit/ffd65d5f749014db61a675389c76942c1c2955bb).
+
 ## [20.04c](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.04b) - 2020-04-30
 ### Fixed
 * [#598](https://github.com/berkmancenter/lumendatabase/pull/598) Fixes a bug introduced in .04a whereby submitting multipart form data through the API failed due to known inconsistencies between form data and JSON data representations, and unknown differences between production and test environments.
