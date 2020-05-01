@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [20.04c](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.04b) - 2020-04-30
+### Fixed
+* [#598](https://github.com/berkmancenter/lumendatabase/pull/598) Fixes a bug introduced in .04a whereby submitting multipart form data through the API failed due to known inconsistencies between form data and JSON data representations, and unknown differences between production and test environments.
+
 ## [20.04b](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.04b) - 2020-04-17
 ### Added
 * [#596](https://github.com/berkmancenter/lumendatabase/pull/596) CMS administrators can now manage header/footer links to CMS content through the CMS.
