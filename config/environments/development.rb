@@ -40,6 +40,10 @@ Rails.application.configure do
     openssl_verify_mode: ENV['SMTP_VERIFY_MODE'] || 'none'
   }
 
+  config.action_mailer.default_url_options = {
+    host:  ENV['SMTP_HOST'] || 'localhost'
+  }
+
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
