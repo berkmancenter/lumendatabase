@@ -1,9 +1,15 @@
 //************************************************************************//
 // Dropdown Menu
 //************************************************************************//
-.dropdown {
+nav .dropdown {
   &.open > .dropdown-menu {
     display: flex; // Open dropdown menu on click
+  }
+}
+
+.dropdown {
+  &.open > .dropdown-menu {
+    display: block; // Open dropdown menu on click, but make it vertical
   }
 }
 
