@@ -1,5 +1,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## Not yet released
+### Changed
+* Update version of acts-as-taggable-on to improve performance
+* Override acts-as-taggable-on parser to hardcode some high-allocation calls
+
 ## [20.05a](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.05a) - 2020-05-04
 ### Fixed
 * [#600](https://github.com/berkmancenter/lumendatabase/pull/600) Bug in search result dropdown display introduced in [20.04b](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.04b).
