@@ -54,6 +54,7 @@ gem 'elasticsearch-model', '~> 5.0'
 gem 'elasticsearch-rails', '~> 5.0'
 
 group :development do
+  gem 'allocation_tracer'
   gem 'bullet'
   gem 'derailed'
   gem 'memory_profiler'
