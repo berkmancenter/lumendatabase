@@ -16,7 +16,7 @@ class Notice < ApplicationRecord
   ].freeze
 
   SEARCHABLE_FIELDS = [
-    TermSearch.new(:term, :_all, 'All Fields'),
+    TermSearch.new(:term, Searchability::MULTI_MATCH_FIELDS, 'All Fields'),
     TermSearch.new(:title, :title, 'Title'),
     TermSearch.new(:topics, 'topics.name', 'Topics'),
     TermSearch.new(:tags, :tag_list, 'Tags'),

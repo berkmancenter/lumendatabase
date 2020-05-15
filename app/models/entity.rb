@@ -22,6 +22,15 @@ class Entity < ApplicationRecord
 
   delegate :publication_delay, to: :user, allow_nil: true
 
+  index_name [Rails.application.engine_name,
+              Rails.env,
+              name.demodulize.downcase,
+              ENV['ES_INDEX_SUFFIX']].compact.join('_')
+
+  # document type must go before mappings so it is included in the data sent to
+  # ES
+  document_type 'entity'
+
   mappings do
     Entity.columns
           .map(&:name)
@@ -32,11 +41,6 @@ class Entity < ApplicationRecord
 
     indexes :parent_id
   end
-
-  index_name [Rails.application.engine_name,
-              Rails.env,
-              name.demodulize.downcase,
-              ENV['ES_INDEX_SUFFIX']].compact.join('_')
 
   def as_indexed_json(_options)
     out = as_json

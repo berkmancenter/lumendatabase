@@ -160,11 +160,11 @@ GEM
     elasticsearch-extensions (0.0.31)
       ansi
       elasticsearch
-    elasticsearch-model (5.1.0)
+    elasticsearch-model (6.1.0)
       activesupport (> 3)
-      elasticsearch (~> 5)
+      elasticsearch (> 1)
       hashie
-    elasticsearch-rails (5.1.0)
+    elasticsearch-rails (6.1.0)
     elasticsearch-transport (5.0.5)
       faraday
       multi_json
@@ -194,7 +194,7 @@ GEM
       html2haml (>= 1.0.1)
       railties (>= 5.1)
     hashdiff (1.0.1)
-    hashie (3.6.0)
+    hashie (4.1.0)
     heapy (0.1.4)
     hodel_3000_compliant_logger (0.1.1)
     html2haml (2.2.0)
@@ -498,8 +498,8 @@ DEPENDENCIES
   devise
   dotenv-rails
   elasticsearch-extensions
-  elasticsearch-model (~> 5.0)
-  elasticsearch-rails (~> 5.0)
+  elasticsearch-model (~> 6.0)
+  elasticsearch-rails (~> 6.0)
   factory_bot_rails
   flutie
   jquery-placeholder-rails

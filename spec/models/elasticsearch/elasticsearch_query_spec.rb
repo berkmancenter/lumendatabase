@@ -23,6 +23,10 @@ describe ElasticsearchQuery, type: :model do
     six_months_ago = now - 6.months
     year_ago = now - 12.months
 
+    end_of_date_range = Time.new(2020, 5, 21).beginning_of_day
+    beginning_of_date_range = end_of_date_range - 1.year
+
+
     expected = {
       _source: ["score", "id", "title"],
       query: {
@@ -32,14 +36,19 @@ describe ElasticsearchQuery, type: :model do
             { match: { hidden: { query: false, operator: 'AND' } } },
             { match: { published: { query: true, operator: 'AND' } } },
             { match: { rescinded: { query: false, operator: 'AND' } } },
-            { match: { _all: { query: 'i give up', operator: 'AND' } } }
+            { multi_match: {
+              query: 'i give up',
+              fields:  Searchability::MULTI_MATCH_FIELDS,
+              type: :cross_fields,
+              operator: 'AND'
+            } }
           ],
           filter: [
             { term: { sender_name_facet: 'Mike Itten' } },
             { range: {
                 date_received: {
-                  from: year_ago,
-                  to: now
+                  from: beginning_of_date_range,
+                  to: end_of_date_range
                 }
               }
             }
@@ -106,7 +115,6 @@ describe ElasticsearchQuery, type: :model do
       end
     end
     es_query.prepare
-
 
     expect(es_query.search_definition).to eq expected
   end
@@ -183,29 +191,69 @@ describe ElasticsearchQuery, type: :model do
 
   context 'searching by field' do
     Notice::SEARCHABLE_FIELDS.each do |search|
-      it "respects #{search.parameter}" do
-        obj = described_class.new(search.parameter => 'batman')
-        obj.register search
+      case search.field
+      when Array
+        it "respects #{search.parameter}" do
+          obj = described_class.new(search.parameter => 'batman')
+          obj.register search
 
-        obj.prepare
+          obj.prepare
 
-        expect(obj.search_definition[:query][:bool][:must]).to include(
-          { match: { search.field => { query: 'batman', operator: 'OR'} } }
-        )
-      end
+          expect(obj.search_definition[:query][:bool][:must]).to include(
+            { multi_match: {
+              query: 'batman',
+              fields: search.field.map(&:to_s),
+              operator: 'OR'
+            } }
+          )
+        end
 
-      it "matches all when required for #{search.parameter}" do
-        obj = described_class.new(
-          search.parameter => 'all of these',
-          "#{search.parameter}-require-all" => true
-        )
-        obj.register search
+        it "matches all when required for #{search.parameter}" do
+          obj = described_class.new(
+            search.parameter => 'all of these',
+            "#{search.parameter}-require-all" => true
+          )
+          obj.register search
 
-        obj.prepare
+          obj.prepare
 
-        expect(obj.search_definition[:query][:bool][:must]).to include(
-          { match: { search.field => { query: 'all of these', operator: 'AND'} } }
-        )
+          expect(obj.search_definition[:query][:bool][:must]).to include(
+            { multi_match: {
+              query: 'all of these',
+              fields: search.field.map(&:to_s),
+              operator: 'AND',
+              # The 'AND' operator doesn't work the way you expect on the
+              # default multi_match type. See
+              # https://www.elastic.co/guide/en/elasticsearch/reference/6.8/query-dsl-multi-match-query.html .
+              type: :cross_fields
+            } }
+          )
+        end
+      else
+        it "respects #{search.parameter}" do
+          obj = described_class.new(search.parameter => 'batman')
+          obj.register search
+
+          obj.prepare
+
+          expect(obj.search_definition[:query][:bool][:must]).to include(
+            { match: { search.field => { query: 'batman', operator: 'OR'} } }
+          )
+        end
+
+        it "matches all when required for #{search.parameter}" do
+          obj = described_class.new(
+            search.parameter => 'all of these',
+            "#{search.parameter}-require-all" => true
+          )
+          obj.register search
+
+          obj.prepare
+
+          expect(obj.search_definition[:query][:bool][:must]).to include(
+            { match: { search.field => { query: 'all of these', operator: 'AND'} } }
+          )
+        end
       end
     end
   end

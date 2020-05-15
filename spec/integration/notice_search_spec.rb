@@ -277,6 +277,57 @@ feature 'Searching Notices', type: :feature do
       end
     end
 
+    scenario 'for works with redacted URLs', search: true do
+      i_url = create(
+        :infringing_url,
+        url: 'https://example.com',
+        url_original: 'https://totes.redacted'
+      )
+
+      c_url = create(
+        :copyrighted_url,
+        url: 'https://foo.bar',
+        url_original: 'https://sharklasers.com'
+      )
+
+      work1 = create(:work, infringing_urls: [i_url])
+      work2 = create(:work, copyrighted_urls: [c_url])
+      notice = create(:dmca, works: [work1, work2])
+      index_changed_instances
+
+      within_search_results_for('totes') do
+        expect(page).to have_n_results(0)
+      end
+
+      within_search_results_for('example.com') do
+        expect(page).to have_n_results(1)
+        expect(page).not_to have_words('totes')
+      end
+
+      within_search_results_for('sharklasers') do
+        expect(page).to have_n_results(0)
+      end
+
+      within_search_results_for('foo.bar') do
+        expect(page).to have_n_results(1)
+        expect(page).not_to have_words('sharklasers')
+      end
+
+      # This isn't found, because the standard analyzer's tokenizer only splits
+      # on periods which are followed by whitespace. You can switch to the
+      # simple or stop analyzer and this will be found, but it also changes how
+      # highlighting works -- e.g. since "infringing_url" becomes two tokens,
+      # a test elsewhere that searching for that term produces appropriately
+      # highlighted results breaks. This was a bug in our Elasticsearch 5.x
+      # implementation that wasn't caught until testing of 6.x; I'm carrying it
+      # over because I'm aiming for feature parity in the upgrade. --ay 22 May 2020
+      within_search_results_for('foo') do
+        pending 'tokenizer does not split URLs'
+        expect(page).to have_n_results(1)
+        expect(page).not_to have_words('sharklasers')
+      end
+    end
+
     scenario 'for urls associated through works', search: true do
       work = create(
         :work,
@@ -433,6 +484,9 @@ feature 'Searching Notices', type: :feature do
     yield if block_given?
   end
 
+  # TODO split on punctuation, then rejoin on punctuation with highlights,
+  # because analyzer. or make a different excerpter for URLs. Or fix the URL
+  # analyzer.
   def have_excerpt(excerpt, prefix = nil, suffix = nil)
     include([prefix, "<em>#{excerpt}</em>", suffix].compact.join(' '))
   end

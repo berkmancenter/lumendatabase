@@ -93,8 +93,8 @@ class ElasticsearchQuery
   end
 
   def add_searches_to_elasticsearch_query(param, value)
-    registry[:searches].each do |filter|
-      query = filter.as_elasticsearch_query(
+    registry[:searches].each do |term_search|
+      query = term_search.as_elasticsearch_query(
         param,
         value,
         operator_for_param(param)

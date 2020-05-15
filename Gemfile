@@ -48,10 +48,10 @@ gem 'skylight'
 gem 'stackprof'
 gem 'turnout'
 
-# These need to go last or tests fail. Their versions need to be pinned
-# because there are breaking changes in 6.
-gem 'elasticsearch-model', '~> 5.0'
-gem 'elasticsearch-rails', '~> 5.0'
+# This needs to go last or tests fail. Their versions need to be pinned
+# because there are breaking changes between major versions.
+gem 'elasticsearch-model', '~> 6.0'
+gem 'elasticsearch-rails', '~> 6.0'
 
 group :development do
   gem 'allocation_tracer'

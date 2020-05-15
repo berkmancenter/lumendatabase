@@ -19,7 +19,15 @@ class TermSearch
 
     query_hash = {}
     if @field.is_a?(Array)
-      query_hash = { query: value, fields: @field.map(&:to_s) }
+      query_hash = {
+        query: value,
+        fields: @field.map(&:to_s),
+        operator: operator
+      }
+
+      if operator == 'AND'
+        query_hash[:type] = :cross_fields
+      end
 
       { multi_match: query_hash }
     else
