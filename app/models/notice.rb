@@ -198,13 +198,6 @@ class Notice < ApplicationRecord
       .where('entities.id' => submitters)
   end
 
-  def self.add_default_filter(search)
-    { rescinded: false, spam: false, hidden: false, published: true }.each do |field, value|
-      filter = TermFilter.new(field)
-      filter.apply_to_search(search, field, value)
-    end
-  end
-
   def self.find_visible(notice_id)
     self.visible.find(notice_id)
   end

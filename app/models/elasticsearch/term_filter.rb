@@ -14,30 +14,26 @@ class TermFilter
     'notices/search/term_filter'
   end
 
+  # When tests for this fail, update them to use as_elasticsearch_filter,
+  # and then delete this, and make sure filter_for is handled similarly elsewhere.
   def filter_for(value)
-    [:terms, @indexed_attribute => [value]]
   end
 
-  def apply_to_search(searcher, param, value)
-    if handles?(param)
-      term_filter = filter_for(value)
-      searcher[:filters] << term_filter
-    end
+  def as_elasticsearch_filter(param, value)
+    return unless handles?(param)
+
+    { term: { @indexed_attribute => value } }
   end
 
-  def register_filter(searcher)
-    local_indexed_attribute = @indexed_attribute
-    local_parameter = @parameter
-
-    searcher[:registered_filters] << {
+  def process_for_query
+    {
       type: 'terms',
-      local_parameter: local_parameter,
-      local_indexed_attribute: local_indexed_attribute
+      local_parameter: @parameter,
+      local_indexed_attribute: @indexed_attribute
     }
   end
 
-  def apply_to_query(*)
-  end
+  def as_elasticsearch_query(*); end
 
   private
 
