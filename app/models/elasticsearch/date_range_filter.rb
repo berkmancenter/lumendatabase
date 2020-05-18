@@ -14,36 +14,29 @@ class DateRangeFilter
     'notices/search/date_range_filter'
   end
 
-  def apply_to_search(searcher, param, value)
-    if handles?(param)
-      date_range_filter = filter_for(value)
-      searcher[:filters]  << date_range_filter
-    end
+  def as_elasticsearch_filter(param, value)
+    return unless handles?(param)
+
+    filter_for(value)
   end
 
-  def register_filter(searcher)
-    # These must be local variables to be passed into the Tire searcher
-    local_parameter = @parameter
-    local_indexed_attribute = @indexed_attribute
-    local_ranges = ranges
-
-    searcher[:registered_filters] << {
+  def process_for_query
+    {
       type: 'date_range',
-      local_parameter: local_parameter,
-      local_indexed_attribute: local_indexed_attribute,
-      local_ranges: local_ranges
+      local_parameter:  @parameter,
+      local_indexed_attribute: @indexed_attribute,
+      local_ranges: ranges
     }
   end
 
   def filter_for(value)
     filter_values = FilterRangeValues.new(value)
 
-    [:range, @indexed_attribute => filter_values.to_attribute]
+    { range: { @indexed_attribute => filter_values.to_attribute } }
   end
 
 
-  def apply_to_query(*)
-  end
+  def as_elasticsearch_query(*); end
 
   private
 

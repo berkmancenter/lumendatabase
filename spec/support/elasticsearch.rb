@@ -57,10 +57,12 @@ RSpec.configure do |config|
     config.before :each, type: type do
       searchable_models.each do |model|
         begin
-          model.__elasticsearch__.client.delete_by_query(
-            index: model.__elasticsearch__.index_name
-          )
-          model.__elasticsearch__.delete_index!
+          if model.__elasticsearch__.index_exists? index: model.__elasticsearch__.index_name
+            model.__elasticsearch__.client.delete_by_query(
+              index: model.__elasticsearch__.index_name, q: '.'.freeze
+            )
+            model.__elasticsearch__.delete_index!
+          end
         rescue Elasticsearch::Transport::Transport::Errors::NotFound; end
 
         begin

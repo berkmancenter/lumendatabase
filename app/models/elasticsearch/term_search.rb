@@ -30,29 +30,25 @@ class TermSearch
     end
   end
 
-  def apply_to_search(*)
-  end
+  def as_elasticsearch_filter(*); end
 
-  def apply_to_query(query, param, value, operator)
-    if handles?(param)
-      if value.is_a?(Array)
-        value.each do |sub_val|
-          apply_to_query_single(query, sub_val, operator)
-        end
-      else
-        apply_to_query_single(query, value, operator)
+  def as_elasticsearch_query(param, value, operator)
+    return nil unless handles?(param)
+
+    query = []
+
+    if value.is_a?(Array)
+      value.each do |sub_val|
+        query << query_for(sub_val, operator)
       end
+    else
+      query << query_for(value, operator)
     end
+
+    query
   end
 
-  def apply_to_query_single(query, value, operator)
-    term_query = query_for(value, operator)
-
-    query[:bool][:must] << term_query
-  end
-
-  def register_filter(*)
-  end
+  def process_for_query; end
 
   private
 
