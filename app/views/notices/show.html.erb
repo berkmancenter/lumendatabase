@@ -58,7 +58,9 @@
 
       <div class="main">
         <h2>Re: <%= subject(@notice) %></h2>
-        <p class="source">Sent via: <%= sent_via(@notice) %></p>
+        <% if @notice.source.present? %>
+          <p class="source">Sent via: <%= @notice.source %></p>
+        <% end %>
 
         <dl class="notice-type">
           <dt class="label">Notice Type:</dt>
