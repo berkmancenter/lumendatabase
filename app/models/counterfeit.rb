@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Counterfeit < Notice
-  before_save :set_jurisdiction
+  after_create :set_jurisdiction
   define_elasticsearch_mapping
 
   DEFAULT_ENTITY_NOTICE_ROLES = (BASE_ENTITY_NOTICE_ROLES |
@@ -22,6 +22,8 @@ class Counterfeit < Notice
   # The jurisdiction for a counterfeit notice should be the country of the
   # brand owner, who is the principal if present and the sender otherwise.
   def set_jurisdiction
-    jurisdiction_list = [principal&.country_code] || [sender.country_code]
+    self.jurisdictions = []
+    self.jurisdiction_list << principal&.country_code&.upcase || sender&.country_code&.upcase
+    self.save
   end
 end

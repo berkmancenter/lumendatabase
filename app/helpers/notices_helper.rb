@@ -104,6 +104,8 @@ module NoticesHelper
       'URL mentioned in request'
     when ::Defamation
       'Allegedly Defamatory URL'
+    when ::Counterfeit
+      'Allegedly Infringing Counterfeit URL'
     when ::Other
       'Problematic URL'
     end
