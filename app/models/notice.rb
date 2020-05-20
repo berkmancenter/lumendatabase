@@ -74,14 +74,15 @@ class Notice < ApplicationRecord
 
   TYPES_TO_TOPICS = {
     'DMCA'                  => 'Copyright',
+    'Counterfeit'           => 'Counterfeit',
     'Counternotice'         => 'Copyright',
-    'Trademark'             => 'Trademark',
-    'Defamation'            => 'Defamation',
     'CourtOrder'            => 'Court Orders',
+    'DataProtection'        => 'EU - Right to Be Forgotten',
+    'Defamation'            => 'Defamation',
+    'GovernmentRequest'     => 'Government Requests',
     'LawEnforcementRequest' => 'Law Enforcement Requests',
     'PrivateInformation'    => 'Right of Publicity',
-    'DataProtection'        => 'EU - Right to Be Forgotten',
-    'GovernmentRequest'     => 'Government Requests',
+    'Trademark'             => 'Trademark',
     'Other'                 => OTHER_TOPIC
   }.freeze
 
