@@ -28,10 +28,12 @@
       </h6>
     <% end %>
     <%= render 'entities/address', entity: entity, role: role %>
-    <span class="date sent">Sent on <%= date_sent(notice) %></span>
+    <% if date_sent(notice).present? %>
+      <span class="date sent">Sent on <%= date_sent(notice) %></span>
+    <% end %>
   <% elsif role == :recipient %>
     <%= render 'entities/address', entity: entity, role: role %>
-    
+
     <% if date_sent(notice) != date_received(notice) %>
       <span class="date received">Received on <%= date_received(notice) %></span>
     <% end %>
