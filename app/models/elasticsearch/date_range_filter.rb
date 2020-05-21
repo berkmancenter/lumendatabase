@@ -22,7 +22,7 @@ class DateRangeFilter
 
   def process_for_query
     {
-      type: 'date_range',
+      type: :date_range,
       local_parameter:  @parameter,
       local_indexed_attribute: @indexed_attribute,
       local_ranges: ranges

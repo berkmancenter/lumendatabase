@@ -11,6 +11,106 @@ require 'spec_helper'
 # can first update the tests here to assert that we produce the correct query
 # syntax, and then update ElasticsearchQuery until tests pass.
 describe ElasticsearchQuery, type: :model do
+
+  # This test has the expected query syntax for a query that exercises many
+  # searching/filtering/aggregating/highlighting functions. When updating ES
+  # versions, we can update the `expected` variable to the new syntax, and then
+  # update the model until it matches.
+  it 'produces a correct query' do
+    now = Time.now.beginning_of_day
+    day_ago = now - 1.day
+    month_ago = now - 1.month
+    six_months_ago = now - 6.months
+    year_ago = now - 12.months
+
+    expected = {
+      _source: ["score", "id", "title"],
+      query: {
+        bool: {
+          must: [
+            { match: { spam: { query: false, operator: 'AND' } } },
+            { match: { hidden: { query: false, operator: 'AND' } } },
+            { match: { published: { query: true, operator: 'AND' } } },
+            { match: { rescinded: { query: false, operator: 'AND' } } },
+            { match: { _all: { query: 'i give up', operator: 'AND' } } }
+          ],
+          filter: [
+            { term: { sender_name_facet: 'Mike Itten' } },
+            { range: {
+                date_received: {
+                  from: year_ago,
+                  to: now
+                }
+              }
+            }
+          ]
+        }
+      },
+      aggregations: {
+        topic_facet: { terms: { field: :topic_facet } },
+        sender_name_facet: { terms: { field: :sender_name_facet } },
+        principal_name_facet: { terms: { field: :principal_name_facet } },
+        recipient_name_facet: { terms: { field: :recipient_name_facet } },
+        submitter_name_facet: { terms: { field: :submitter_name_facet } },
+        tag_list_facet: { terms: { field: :tag_list_facet } },
+        country_code_facet: { terms: { field: :country_code_facet } },
+        language_facet: { terms: { field: :language_facet } },
+        submitter_country_code_facet: { terms:
+          { field: :submitter_country_code_facet}
+        },
+        action_taken_facet: { terms: { field: :action_taken_facet } },
+        date_received_facet: {
+          date_range: {
+            field: :date_received_facet,
+            ranges: [
+              { from: day_ago, to: now },
+              { from: month_ago, to: now },
+              { from: six_months_ago, to: now },
+              { from: year_ago, to: now }
+            ]
+          }
+        }
+      },
+      highlight: {
+        pre_tags: '<em>',
+        post_tags: '</em>',
+        fields: {
+          title: { type: 'plain', require_field_match: false },
+          tag_list: { type: 'plain', require_field_match: false },
+          :'topics.name' => { type: 'plain', require_field_match: false },
+          sender_name: { type: 'plain', require_field_match: false },
+          recipient_name: { type: 'plain', require_field_match: false },
+          :'works.description' => { type: 'plain', require_field_match: false },
+          :'works.infringing_urls.url' => { type: 'plain', require_field_match: false },
+          :'works.copyrighted_urls.url' => { type: 'plain', require_field_match: false }
+        }
+      },
+      size: 10,
+      from: 0
+    }
+
+    params = {
+      "sender_name_facet"=>"Mike Itten",
+      "date_received_facet"=>"1558411200000.0..1590033600000.0",
+      "term"=>"i give up",
+      "term-require-all"=>"true"
+    }
+
+    es_query = ElasticsearchQuery.new(params).tap do |searcher|
+      Notice::SEARCHABLE_FIELDS.each do |searched_field|
+        searcher.register searched_field
+      end
+
+      Notice::FILTERABLE_FIELDS.each do |filtered_field|
+        searcher.register filtered_field
+      end
+    end
+    es_query.prepare
+
+
+    expect(es_query.search_definition).to eq expected
+  end
+
   context 'misc functions' do
     it 'returns an elasticsearch search instance', vcr: true do
       expect(subject.search).to be_instance_of(Elasticsearch::Model::Response::Response)

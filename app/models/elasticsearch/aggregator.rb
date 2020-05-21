@@ -19,7 +19,7 @@ class Aggregator
     h = {}
     h[field[:type]] = { field: field[:local_parameter] }
 
-    if field[:type] == 'date_range'
+    if field[:type] == :date_range
       h[field[:type]][:ranges] = field[:local_ranges]
     end
 

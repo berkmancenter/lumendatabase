@@ -130,9 +130,9 @@ class ElasticsearchQuery
     exact_term_query = {}
 
     case field[:type]
-    when 'terms'
+    when :terms
       exact_term_query[:term] = { field[:local_parameter] => value }
-    when 'date_range'
+    when :date_range
       val_arr = value.split('..')
       exact_term_query[:range] = {
         field[:local_parameter] => {

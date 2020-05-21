@@ -27,7 +27,7 @@ class TermFilter
 
   def process_for_query
     {
-      type: 'terms',
+      type: :terms,
       local_parameter: @parameter,
       local_indexed_attribute: @indexed_attribute
     }
