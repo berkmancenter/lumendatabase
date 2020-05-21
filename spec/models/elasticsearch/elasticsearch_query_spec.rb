@@ -1,16 +1,16 @@
 require 'spec_helper'
 
-# This model test primarily checks that SearchesModels produces a correctly
+# This model test primarily checks that ElasticsearchQuery produces a correctly
 # formed Elasticsearch query, given various inputs. It doesn't check that good
 # results get returned (that's up to Elasticsearch) or displayed (integration
 # tests).
-# Separating #prepare from #search in SearchesModels gives us a seam that lets
+# Separating #prepare from #search in ElasticsearchQuery gives us a seam that lets
 # us test here, checking the prepared query without needing to mock out
 # Elasticsearch. Additionally, checking the query will simplify upgrading to
 # other versions of Elasticsearch in future; when the query DSL changes, we
 # can first update the tests here to assert that we produce the correct query
-# syntax, and then update SearchesModels until tests pass.
-describe SearchesModels, type: :model do
+# syntax, and then update ElasticsearchQuery until tests pass.
+describe ElasticsearchQuery, type: :model do
   context 'misc functions' do
     it 'returns an elasticsearch search instance', vcr: true do
       expect(subject.search).to be_instance_of(Elasticsearch::Model::Response::Response)

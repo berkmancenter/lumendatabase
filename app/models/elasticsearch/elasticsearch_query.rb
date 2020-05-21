@@ -8,7 +8,7 @@
 # an Elasticsearch query. However, there are helper models (also located in
 # app/models/Elasticsearch) which know how to produce values for particular
 # keys in the query.
-class SearchesModels
+class ElasticsearchQuery
   attr_accessor :sort_by, :registry
   attr_reader :instances, :model_class, :params, :page, :per_page
 
