@@ -16,8 +16,9 @@ during the authentication process.
 
 ### To add a blog post:
 * Click 'Add Child Page' next to 'blog_entries'
+* Make sure to select the 'blawg' layout
 * Fill out the fields
-  * Don't change the prefilled 'parent' and 'layout' fields
+  * Don't change the prefilled 'parent' field
 * 'slug' will be the end of the URL (lumendatabase.org/blog_entries/your-slug-here)
 * 'image' can be any of the following: lightning, storm, rain, overcast, clouds, sunny, sunset, autumn, desert, tornado, snow (or you can leave it blank)
 
