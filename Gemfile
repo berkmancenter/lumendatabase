@@ -50,8 +50,8 @@ gem 'turnout'
 
 # This needs to go last or tests fail. Their versions need to be pinned
 # because there are breaking changes between major versions.
-gem 'elasticsearch-model', '~> 6.0'
-gem 'elasticsearch-rails', '~> 6.0'
+gem 'elasticsearch-model', '~> 7.0'
+gem 'elasticsearch-rails', '~> 7.0'
 
 group :development do
   gem 'allocation_tracer'

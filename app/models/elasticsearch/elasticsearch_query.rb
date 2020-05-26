@@ -57,7 +57,7 @@ class ElasticsearchQuery
     prepare
 
     search_response = model_class.__elasticsearch__
-                                  .search(search_definition, type: '')
+                                  .search(search_definition)
     search_response.limit(per_page)
 
     search_response

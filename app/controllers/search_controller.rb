@@ -49,13 +49,14 @@ class SearchController < ApplicationController
   # Return the enriched instance (or nil, if none was found).
   def augment_instance(instance)
     return unless instance.present?
-    result = @ids_to_results[instance.id]
+
+    result = @searchdata.select { |datum| datum[:_id] == instance.id.to_s }.first
 
     class << instance
       attr_accessor :_score, :highlight
     end
 
-    instance._score = result._source['_score']
+    instance._score = result[:_score]
 
     highlights = result[:highlight].presence || []
     instance.highlight = highlights.map { |h| h[1] }.flatten
@@ -69,15 +70,10 @@ class SearchController < ApplicationController
   end
 
   def wrap_instances
-    @ids_to_results = @searchdata.results.map { |r| [r._source[:id], r] }.to_h
-    instances = self.class::SEARCHED_MODEL.where(id: @ids_to_results.keys)
-    # Because the instances are in db order, we'll need to re-sort them to
-    # preserve the elasticsearch order. This is preferable to iterating through
-    # the elasticsearch results and fetching one db item each time, however;
-    # we used to do that and all those roundtrips were costing us in
-    # performance.
+    # #records fetches the database instances while maintaining the search
+    # response ordering.
+    instances = @searchdata.records
     instances.map { |r| augment_instance(r) }
-             .sort_by { |a| @ids_to_results.keys.index(a[:id]) }
   end
 
   # Elasticsearch cannot return more than 20_000 results in production (2000

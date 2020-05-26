@@ -32,6 +32,7 @@ module Searchability
           indexes :class_name, type: 'keyword'
           indexes :title
           indexes :date_received, type: 'date'
+          indexes :created_at, type: 'date'
           indexes :rescinded, type: 'boolean'
           indexes :spam, type: 'boolean'
           indexes :published, type: 'boolean'
