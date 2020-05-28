@@ -42,6 +42,9 @@ class Entity < ApplicationRecord
     indexes :parent_id
   end
 
+  MULTI_MATCH_FIELDS = %w(name^5 kind address_line_1 address_line_2 state
+    country_code^2 email url^3 ancestry city zip created_at updated_at)
+
   def as_indexed_json(_options)
     out = as_json
 
