@@ -65,8 +65,7 @@ class SearchController < ApplicationController
   end
 
   def sort_by(sort_by_param)
-    sorting = Sortings.find(sort_by_param)
-    sorting.sort_by
+    ResultOrdering.define(sort_by_param).sort_by
   end
 
   def wrap_instances

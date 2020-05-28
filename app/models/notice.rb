@@ -44,13 +44,13 @@ class Notice < ApplicationRecord
     DateRangeFilter.new(:date_received_facet, :date_received, 'Date')
   ].freeze
 
-  SORTINGS = [
-    Sorting.new('relevancy desc', [:_score, :desc], 'Most Relevant'),
-    Sorting.new('relevancy asc', [:_score, :asc], 'Least Relevant'),
-    Sorting.new('date_received desc', [:date_received, :desc], 'Date Received - newest'),
-    Sorting.new('date_received asc', [:date_received, :asc], 'Date Received - oldest'),
-    Sorting.new('created_at desc', [:created_at, :desc], 'Reported to Lumen - newest'),
-    Sorting.new('created_at asc', [:created_at, :asc], 'Reported to Lumen - oldest')
+  ORDERING_OPTIONS = [
+    ResultOrdering.new('relevancy desc', [:_score, :desc], 'Most Relevant'),
+    ResultOrdering.new('relevancy asc', [:_score, :asc], 'Least Relevant'),
+    ResultOrdering.new('date_received desc', [:date_received, :desc], 'Date Received - newest'),
+    ResultOrdering.new('date_received asc', [:date_received, :asc], 'Date Received - oldest'),
+    ResultOrdering.new('created_at desc', [:created_at, :desc], 'Reported to Lumen - newest'),
+    ResultOrdering.new('created_at asc', [:created_at, :asc], 'Reported to Lumen - oldest')
   ].freeze
 
   REDACTABLE_FIELDS = %i[body].freeze
