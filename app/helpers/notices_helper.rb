@@ -31,14 +31,6 @@ module NoticesHelper
     end
   end
 
-  def sent_via(notice)
-    if notice.source.present?
-      notice.source
-    else
-      'Unknown'
-    end
-  end
-
   def iso_countries
     CountrySelect::ISO_COUNTRIES_FOR_SELECT
   end
@@ -104,6 +96,8 @@ module NoticesHelper
       'URL mentioned in request'
     when ::Defamation
       'Allegedly Defamatory URL'
+    when ::Counterfeit
+      'Allegedly Infringing Counterfeit URL'
     when ::Other
       'Problematic URL'
     end

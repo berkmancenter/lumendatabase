@@ -1,7 +1,4 @@
 <span class="private">[Private]</span>
 <span>
-  <%= entity.city %>,
-  <%= entity.state %>,
-  <%= entity.zip %>,
-  <%= entity.country_code.try(:upcase) %>
+  <%= [entity.city, entity.state, entity.zip, entity.country_code&.upcase].compact.join (', ') %>
 </span>
