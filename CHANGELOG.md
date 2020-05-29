@@ -4,6 +4,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 * Update version of acts-as-taggable-on to improve performance
 * Override acts-as-taggable-on parser to hardcode some high-allocation calls
+* Update rails (patch version) to address vulns
 
 ## [20.05a](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.05a) - 2020-05-04
 ### Fixed
