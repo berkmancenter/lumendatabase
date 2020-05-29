@@ -310,12 +310,12 @@ describe 'notices/show.html.erb' do
     end
   end
 
-  it 'displays correctly for a notice of unknown source' do
+  it 'suppresses display for a notice of unknown source' do
     assign(:notice, build(:dmca, source: nil))
 
     render
 
-    expect(rendered).to have_words('Sent via: Unknown')
+    expect(rendered).not_to have_words('Sent via')
   end
 
   it "displays the notice's subject" do
