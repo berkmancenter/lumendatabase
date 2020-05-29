@@ -58,17 +58,6 @@ describe NoticesHelper do
     expect(helper.subject(dmca)).to eq 'Unknown'
   end
 
-  it 'displays notice sent_via' do
-    source = 'Internet megacorp'
-    dmca = build(:dmca, source: source)
-    expect(helper.sent_via(dmca)).to eq source
-  end
-
-  it 'handles missing notice sent_via' do
-    dmca = build(:dmca, source: nil)
-    expect(helper.sent_via(dmca)).to eq 'Unknown'
-  end
-
   it 'correctly labels URL inputs' do
     court_order = build(:court_order)
     data_protection = build(:data_protection)

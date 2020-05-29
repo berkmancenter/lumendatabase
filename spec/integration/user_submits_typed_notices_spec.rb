@@ -365,6 +365,69 @@ feature 'typed notice submissions' do
     end
   end
 
+  scenario 'User submits and views a Counterfeit notice' do
+    submission = NoticeSubmissionOnPage.new(Counterfeit, create(:user, :submitter))
+    submission.open_submission_form
+
+    submission.fill_in_form_with(
+      'Description' => 'These URLs are a serious problem', # works.description
+      'Allegedly Infringing Counterfeit URL' => 'http://example.com/original_object1',
+      'Body' => 'I am complaining', # notice.body
+    )
+
+    roles = Counterfeit::DEFAULT_ENTITY_NOTICE_ROLES
+    countries = Hash[roles.zip(
+      ['Anguilla', 'Antarctica', 'Bangladesh', 'Cocos (Keeling) Islands']
+    )]
+
+    roles.each do |role|
+      submission.fill_in_entity_form_with(
+        role,
+        'Name' => role.capitalize
+      )
+      within("section.#{role}") do
+        select countries[role], from: 'Country'
+      end
+    end
+
+    submission.submit
+
+    sign_out
+
+    visit '/'
+
+    within('#recent-notices li:nth-child(1)') { find('a').click }
+
+    expect(page).to have_words('Notice Type: Counterfeit')
+
+    principal_country = CountrySelect::ISO_COUNTRIES_FOR_SELECT[
+      countries['principal']
+    ].upcase
+
+    expect(page).to have_words("Jurisdictions #{principal_country}")
+
+    within('.notice-body') do
+      expect(page).to have_content('Body')
+      expect(page).to have_content('I am complaining')
+    end
+
+    within('#works') do
+      expect(page).to have_words('Allegedly Infringing Counterfeit URLs')
+      expect(page).to have_content('example.com - 1 URL')
+      expect(page).to have_content('These URLs are a serious problem')
+    end
+
+    sign_in(create(:user, :admin))
+
+    visit '/'
+
+    within('#recent-notices li:nth-child(1)') { find('a').click }
+
+    within("#works") do
+      expect(page).to have_content('http://example.com/original_object1')
+    end
+  end
+
   scenario 'Entities can have different default types depending on role' do
     submission = NoticeSubmissionOnPage.new(
       CourtOrder, create(:user, :submitter)
