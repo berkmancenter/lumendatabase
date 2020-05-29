@@ -15,10 +15,10 @@ RSpec::Matchers.define :have_words do |string|
   end
 
   failure_message do |actual|
-    "expected to find #{string.inspect} in:\n#{actual.text}"
+    "expected to find #{string.inspect} in:\n#{actual}"
   end
 
   failure_message_when_negated do |actual|
-    "expected not to find #{string.inspect} in:\n#{actual.text}"
+    "expected not to find #{string.inspect} in:\n#{actual}"
   end
 end

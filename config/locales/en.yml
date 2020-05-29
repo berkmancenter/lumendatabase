@@ -108,6 +108,9 @@ en:
     GovernmentRequest:
       'Has a government agency or an agent of a government agency requested the removal of images, text, video, or other content posted online, or that you or your ISP provide them with your or someone else’s identity, private information or data that would normally not be available to the public?'
 
+    Counterfeit:
+      'Has a brand owner requested the removal of allegedly counterfeit content?'
+
   first_time_visitor: |
     The information on this page represents either a request to remove material from an online site or a DMCA  (copyright) "counternotice," asking that material already removed be replaced.
 
