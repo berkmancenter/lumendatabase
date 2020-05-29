@@ -122,15 +122,16 @@ FactoryBot.define do
       end
     end
 
+    factory :counterfeit, class: 'Counterfeit'
     factory :counternotice, class: 'Counternotice'
-    factory :trademark, class: 'Trademark'
-    factory :defamation, class: 'Defamation'
     factory :court_order, class: 'CourtOrder'
-    factory :law_enforcement_request, class: 'LawEnforcementRequest'
-    factory :government_request, class: 'GovernmentRequest'
-    factory :private_information, class: 'PrivateInformation'
     factory :data_protection, class: 'DataProtection'
+    factory :defamation, class: 'Defamation'
+    factory :government_request, class: 'GovernmentRequest'
+    factory :law_enforcement_request, class: 'LawEnforcementRequest'
     factory :other, class: 'Other'
+    factory :private_information, class: 'PrivateInformation'
+    factory :trademark, class: 'Trademark'
   end
 
   factory :file_upload do
