@@ -1,6 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
 ## Not yet released
+### Added 
+* Counterfeit notice type [#604](https://github.com/berkmancenter/lumendatabase/pull/604)
+
 ### Changed
 * Update version of acts-as-taggable-on to improve performance
 * Override acts-as-taggable-on parser to hardcode some high-allocation calls
