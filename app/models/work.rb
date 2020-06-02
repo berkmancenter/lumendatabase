@@ -3,6 +3,7 @@
 require 'validates_automatically'
 
 class Work < ApplicationRecord
+  include Skylight::Helpers
   include ValidatesAutomatically
 
   UNKNOWN_WORK_DESCRIPTION = 'Unknown work'.freeze
@@ -19,6 +20,9 @@ class Work < ApplicationRecord
                                 }
   validates_associated :infringing_urls, :copyrighted_urls
   validates :kind, length: { maximum: 255 }
+
+  before_save :force_redactions
+  before_validation :fix_concatenated_urls, on: :create
 
   # Similar to the hack in EntityNoticeRole, because all validations are
   # run before all inserts, we have to save to ensure we don't have the
@@ -99,7 +103,7 @@ class Work < ApplicationRecord
     InstanceRedactor.new.redact(self, REDACTABLE_FIELDS)
   end
 
-  before_save do
+  def force_redactions
     auto_redact
 
     # DeterminesWorkKind is intended for use here but disabled due to confusion
@@ -110,5 +114,35 @@ class Work < ApplicationRecord
     # updated (presumably redacted). This will keep redacted text out of the
     # Elasticsearch index.
     notices.update_all(updated_at: Time.now) if description_changed?
+  end
+
+  instrument_method
+  def fix_concatenated_urls
+    copyrighted_urls = fixed_urls(:copyrighted_urls)
+    infringing_urls = fixed_urls(:infringing_urls)
+  end
+
+  def fixed_urls(url_type)
+    new_urls = []
+    self.send(url_type).each do |url_obj|
+      next unless url_obj[:url]&.scan('/http').present?
+
+      split_urls = conservative_split(url_obj[:url])
+      # Overwrite the current URL with one of the split-apart URLs. Then
+      # add the rest of the split-apart URLs to a list for safekeeping.
+      url_obj[:url] = split_urls.pop()
+      split_urls_as_hashes = split_urls.map { |url| { url: url } }
+      new_urls << self.send(url_type).build(split_urls_as_hashes)
+    end
+    new_urls
+  end
+
+  # We can't just split on 'http', because doing so will result in strings
+  # which no longer contain it. We need to look at the pairs of 'http' and
+  # $the_rest_of_the_URL which split produces and then mash them back together.
+  def conservative_split(s)
+    b = []
+    s.split(/(http)/).reject { |x| x.blank? }.each_slice(2) { |s| b << s.join }
+    b
   end
 end
