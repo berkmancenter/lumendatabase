@@ -19,6 +19,23 @@ class NoticesController < ApplicationController
     build_works(@notice)
   end
 
+  # In commit d7879d0 and prior, this was split into a two-part process with a
+  # NoticeBuilder and a NoticeFinalizer. The idea here was that we'd create
+  # Notices with stub works, and then background the time-consuming work + URL
+  # creation step.
+  # However, background processing adds a lot of complexity, and didn't seem
+  # worth it in light of the fact that no one really cares if notice creation
+  # is slow. Also, the format.html step when the notice was invalid was allowing
+  # the stub notice to be created (which it should not!) but returning http 200
+  # instead of 201 or 429, confusing clients.
+  # Current code falls back to something more like the Rails standard. Not
+  # exactly the same -- we still use NoticeBuilder to do some default-setting
+  # and to create entity relationships -- but close enough that we can rely on
+  # rails native error handling.
+  # If you're reading this because you want to take another run at backgrounding
+  # the expensive parts of notice creation, by all means check out the code
+  # from that commit, but make sure to wrap ready_for_persistence? in a
+  # transaction.
   def create
     return unauthorized_response unless authorized_to_create?
 
@@ -27,7 +44,9 @@ class NoticesController < ApplicationController
     ).build
 
     respond_to do |format|
-      if @notice.valid? && ready_for_persistence?
+      if @notice.valid?
+        @notice.save
+        @notice.mark_for_review
         format.json { head :created, location: @notice }
         format.html { redirect_to :root, notice: 'Notice created!' }
       else
@@ -197,25 +216,6 @@ class NoticesController < ApplicationController
       false
     else
       true
-    end
-  end
-
-  def ready_for_persistence?
-    original_works = @notice.works.to_ary
-    @notice.works = PLACEHOLDER_WORKS
-
-    if @notice.save
-      @notice.mark_for_review
-      # We can slap a .delay in here once we have background jobs set up.
-      NoticeFinalizer.new(@notice, original_works).finalize
-      true
-    else
-      @notice.works.delete(PLACEHOLDER_WORKS)
-      # Important: this does _not_ create the works if they have not yet been
-      # saved, so we're not putting that slowdown into the request/response loop
-      # here. It just restores the unsaved objects to the collection.
-      @notice.works << original_works
-      false
     end
   end
 
