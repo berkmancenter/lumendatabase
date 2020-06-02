@@ -263,6 +263,14 @@ class Notice < ApplicationRecord
   end
 
   def mark_for_review
+    # We can't do this before notice creation, because the assessment may
+    # depend on values of related entities, and the relationships aren't
+    # available to traverse before persistence.
+    unless persisted?
+      Rails.logger.warn('Attempted to mark a notice for review before creation')
+      return
+    end
+
     update_column(:review_required, RiskAssessment.new(self).high_risk?)
   end
 
