@@ -19,11 +19,6 @@ describe InfringingUrl, type: :model do
       assert InfringingUrl.new(url: url).valid?
     end
 
-    it 'disallows bad URLs' do
-      url = 'https://this.url.has.a space'
-      assert !InfringingUrl.new(url: url).valid?
-    end
-
     it 'allows concatenated URLs' do
       url = 'https://amazon.com/book/here/http://amazon.com/another/book/'
       assert InfringingUrl.new(url: url).valid?

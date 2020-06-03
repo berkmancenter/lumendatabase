@@ -33,6 +33,7 @@ module NoticeActions
   end
 
   def open_recent_notice
+    visit '/'
     within('#recent-notices li:nth-child(1)') { find('a').click }
   end
 
