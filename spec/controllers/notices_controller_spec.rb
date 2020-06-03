@@ -283,13 +283,6 @@ describe NoticesController do
     end
 
     context 'as HTML' do
-      it 'redirects when saved successfully' do
-        make_allowances
-        post_create
-
-        expect(response).to redirect_to(:root)
-      end
-
       it 'renders the new template when unsuccessful' do
         make_allowances
         allow(@fake_notice).to receive(:valid?).and_return(false)
