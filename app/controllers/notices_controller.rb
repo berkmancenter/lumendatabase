@@ -47,11 +47,14 @@ class NoticesController < ApplicationController
       if @notice.valid?
         @notice.save
         @notice.mark_for_review
+        flash.notice = 'Notice created!'
         format.json { head :created, location: @notice }
-        format.html { redirect_to :root, notice: 'Notice created!' }
+        format.html { render :new, status: :created }
       else
-        format.html  { render :new }
-        format.json  { render json: @notice.errors, status: :unprocessable_entity }
+        Rails.logger.warn "Could not create notice with params: #{params}"
+        flash.alert = 'Notice creation failed. See errors below.'
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @notice.errors, status: :unprocessable_entity }
       end
     end
   end
