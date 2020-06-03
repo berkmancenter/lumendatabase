@@ -16,6 +16,7 @@ feature 'notice submission' do
 
     expect(page).to have_css('#flash_notice')
 
+    visit '/'
     expect(page).to have_css('#recent-notices li', text: 'A title')
   end
 
