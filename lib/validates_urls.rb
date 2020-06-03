@@ -25,8 +25,11 @@ module ValidatesUrls
     end
   end
 
+  # This isn't a very good URL validator, but when we use the proper one from
+  # URI::regexp, 1) we reject a lot of data we're getting in the wild, and 2)
+  # we can no longer add [REDACTED].
   def is_ordinary_uri?(value)
-    !!(value =~ /\A#{URI::regexp}\z/)
+    !!(value =~ /\A([a-z]{3,5}:)?\/\/.+/i)
   end
 
   # Matches things like "//bar.com".
