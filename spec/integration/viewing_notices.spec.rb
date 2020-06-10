@@ -60,8 +60,8 @@ feature 'Viewing notices' do
     check_full_works_urls
   end
 
-  scenario 'as an anonymous user viewing whitelisted notice' do
-    ENV['WHITELISTED_NOTICES_FULL'] = "1234,#{Notice.last.id}"
+  scenario 'as an anonymous user viewing allowed notice' do
+    ENV['ALLOWED_NOTICES_FULL'] = "1234,#{Notice.last.id}"
 
     visit notice_url(Notice.last)
 

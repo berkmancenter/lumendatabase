@@ -74,8 +74,8 @@ class Rack::Attack::Request
   # IP addresses of known legitimate researchers who might otherwise be
   # caught up in low rate limits.
   def special_ip?
-    if defined? WhitelistedIps::IPS
-      WhitelistedIps::IPS.map { |iprange| iprange.include? ip }.any?
+    if defined? AllowedIps::IPS
+      AllowedIps::IPS.map { |iprange| iprange.include? ip }.any?
     else
       false
     end

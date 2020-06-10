@@ -35,10 +35,10 @@ module ApplicationHelper
   end
 
   def can_see_full_notice_version?(notice)
-    whitelisted_notices = (ENV['WHITELISTED_NOTICES_FULL'] || []).split(',')
+    allowed_notices = (ENV['ALLOWED_NOTICES_FULL'] || []).split(',')
 
     return true if can?(:view_full_version, notice) ||
-                   whitelisted_notices.include?(notice.id.to_s)
+                   allowed_notices.include?(notice.id.to_s)
 
     TokenUrl.valid?(params[:access_token], notice)
   end

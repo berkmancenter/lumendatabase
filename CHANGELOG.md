@@ -112,7 +112,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 * Compresses http responses
 * `get_approximate_count` method on `Notice` and `InfringingUrl` (uses postgres reltuples)
-* Whitelists logged-in users using the web interface (if they would not be throttled using the API)
+* Allows logged-in users using the web interface (if they would not be throttled using the API)
 
 ### Changed
 * Updates numerous dependencies
@@ -158,7 +158,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 * Asset-pipeline-related gems no longer loaded in prod to save on memory
 * Prevent deep pagination on search results, since Elasticsearch doesn't support it
-* Much lower throttling limits in rack-attack, coupled with mechanism for whitelisting IPs
+* Much lower throttling limits in rack-attack, coupled with mechanism for allowing IPs
 * Increased cache time-to-live
 
 ## [2.1.6.2](https://github.com/berkmancenter/lumendatabase/releases/tag/2.1.6.2) - 2019-02-04
