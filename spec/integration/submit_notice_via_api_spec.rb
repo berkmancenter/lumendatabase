@@ -127,74 +127,101 @@ feature 'notice submission', js: true do
     expect(supporting_document.original_filename).to eq 'supporting.jpg'
   end
 
-  scenario 'submitting concatenated copyrighted URLs' do
-    parameters = request_hash(
-      default_notice_hash(
-        works_attributes: [{
-          description: 'A work',
-          copyrighted_urls_attributes: [{
-            url: 'http://example.com/http://example2.com'
+  context 'concatenation' do
+    scenario 'submitting concatenated copyrighted URLs' do
+      parameters = request_hash(
+        default_notice_hash(
+          works_attributes: [{
+            description: 'A work',
+            copyrighted_urls_attributes: [{
+              url: 'http://example.com/http://example2.com'
+            }]
           }]
-        }]
+        )
       )
-    )
 
-    curb = post_api('/notices', parameters)
+      curb = post_api('/notices', parameters)
 
-    expect(curb.response_code).to eq 201
+      expect(curb.response_code).to eq 201
 
-    work = Notice.last.works.first
+      work = Notice.last.works.first
 
-    expect(work.copyrighted_urls.map(&:url)).to match_array([
-      'http://example.com/', 'http://example2.com'
-    ])
-  end
+      expect(work.copyrighted_urls.map(&:url)).to match_array([
+        'http://example.com/', 'http://example2.com'
+      ])
+    end
 
-  scenario 'submitting both valid and concatenated copyrighted URLs' do
-    parameters = request_hash(
-      default_notice_hash(
-        works_attributes: [{
-          description: 'A work',
-          copyrighted_urls_attributes: [
-            { url: 'http://example.com/http://example2.com' },
-            { url: 'http://picklefactory.com' }
-          ]
-        }]
-      )
-    )
-
-    curb = post_api('/notices', parameters)
-
-    expect(curb.response_code).to eq 201
-
-    work = Notice.last.works.first
-
-    expect(work.copyrighted_urls.map(&:url)).to match_array([
-      'http://example.com/', 'http://example2.com', 'http://picklefactory.com'
-    ])
-  end
-
-  scenario 'submitting concatenated infringing URLs' do
-    parameters = request_hash(
-      default_notice_hash(
-        works_attributes: [{
-          description: 'A work',
-          infringing_urls_attributes: [{
-            url: 'http://example.com/http://example2.com'
+    scenario 'submitting both valid and concatenated copyrighted URLs' do
+      parameters = request_hash(
+        default_notice_hash(
+          works_attributes: [{
+            description: 'A work',
+            copyrighted_urls_attributes: [
+              { url: 'http://example.com/http://example2.com' },
+              { url: 'http://picklefactory.com' }
+            ]
           }]
-        }]
+        )
       )
-    )
 
-    curb = post_api('/notices', parameters)
+      curb = post_api('/notices', parameters)
 
-    expect(curb.response_code).to eq 201
+      expect(curb.response_code).to eq 201
 
-    work = Notice.last.works.first
+      work = Notice.last.works.first
 
-    expect(work.infringing_urls.map(&:url)).to match_array([
-      'http://example.com/', 'http://example2.com'
-    ])
+      expect(work.copyrighted_urls.map(&:url)).to match_array([
+        'http://example.com/', 'http://example2.com', 'http://picklefactory.com'
+      ])
+    end
+
+    scenario 'submitting concatenated infringing URLs' do
+      parameters = request_hash(
+        default_notice_hash(
+          works_attributes: [{
+            description: 'A work',
+            infringing_urls_attributes: [{
+              url: 'http://example.com/http://example2.com'
+            }]
+          }]
+        )
+      )
+
+      curb = post_api('/notices', parameters)
+
+      expect(curb.response_code).to eq 201
+
+      work = Notice.last.works.first
+
+      expect(work.infringing_urls.map(&:url)).to match_array([
+        'http://example.com/', 'http://example2.com'
+      ])
+    end
+
+    # This is to protect against a bug we saw in the wild, introduced by the
+    # deconcatenation work.
+    scenario "submitting URLs which look concatenated but aren't" do
+      parameters = request_hash(
+        default_notice_hash(
+          works_attributes: [{
+            description: 'A work',
+            infringing_urls_attributes: [{
+              url: 'http://httpwww.mp3stahuj.cz/henry-d-feat-sista-carmen-prague-city-42689'
+            }]
+          }]
+        )
+      )
+
+      curb = post_api('/notices', parameters)
+
+      expect(curb.response_code).to eq 201
+
+      work = Notice.last.works.first
+
+      expect(work.infringing_urls.map(&:url)).to match_array([
+        'http://httpwww.mp3stahuj.cz/henry-d-feat-sista-carmen-prague-city-42689'
+      ])
+    end
   end
 
   private

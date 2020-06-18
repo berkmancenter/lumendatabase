@@ -140,9 +140,13 @@ class Work < ApplicationRecord
   # We can't just split on 'http', because doing so will result in strings
   # which no longer contain it. We need to look at the pairs of 'http' and
   # $the_rest_of_the_URL which split produces and then mash them back together.
+  # Note: this will NOT WORK on URLs which contain other URLs as
+  # path/querystring options, like Wayback Machine URLs. Unfortunately URLs do
+  # not follow a regular grammar so we have a mess of twisty little edge cases.
+  # If they become a problem in the wild, we can deal with it then.
   def conservative_split(s)
     b = []
-    s.split(/(http)/).reject { |x| x.blank? }.each_slice(2) { |s| b << s.join }
+    s.split(/(https?:\/\/)/).reject { |x| x.blank? }.each_slice(2) { |s| b << s.join }
     b
   end
 end
