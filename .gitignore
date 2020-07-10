@@ -41,7 +41,6 @@ config/database.yml
 .rubocop.yml
 rspec_examples.txt
 .reek.yml
-allowed_ips.rb
 safelisted_ips.rb
 public/usercron/
 .ssh/*

@@ -58,9 +58,9 @@ module Chill
     # like if you have constraints or database-specific column types
     # config.active_record.schema_format = :sql
 
-    # Enforce allow mode for mass assignment.
-    # This will create an empty list of allowed attributes available for mass-assignment for all models
-    # in your app. As such, your models will need to explicitly allow or deny accessible
+    # Enforce safelist mode for mass assignment.
+    # This will create an empty safelisted attributes available for mass-assignment for all models
+    # in your app. As such, your models will need to explicitly safelist or blocklist accessible
     # parameters by using an attr_accessible or attr_protected declaration.
 
     # Enable the asset pipeline
