@@ -1,5 +1,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [20.06](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.06) - 2020-06-18
+### Fixed
+* [#609](https://github.com/berkmancenter/lumendatabase/pull/609) Bug in URL deconcatenation logic, which erroneously rejected URLs that contained "http" as a substring outside of the protocol indicator.
+
+
 ## [20.05b](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.05a) - 2020-05-29
 ### Added 
 * Counterfeit notice type [#604](https://github.com/berkmancenter/lumendatabase/pull/604)
@@ -107,7 +112,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 * Compresses http responses
 * `get_approximate_count` method on `Notice` and `InfringingUrl` (uses postgres reltuples)
-* Whitelists logged-in users using the web interface (if they would not be throttled using the API)
+* Safelists logged-in users using the web interface (if they would not be throttled using the API)
 
 ### Changed
 * Updates numerous dependencies
@@ -153,7 +158,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 * Asset-pipeline-related gems no longer loaded in prod to save on memory
 * Prevent deep pagination on search results, since Elasticsearch doesn't support it
-* Much lower throttling limits in rack-attack, coupled with mechanism for whitelisting IPs
+* Much lower throttling limits in rack-attack, coupled with mechanism for safelisting IPs
 * Increased cache time-to-live
 
 ## [2.1.6.2](https://github.com/berkmancenter/lumendatabase/releases/tag/2.1.6.2) - 2019-02-04

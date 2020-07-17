@@ -63,12 +63,12 @@ ComfortableMexicanSofa.configure do |config|
   # <% User.delete_all %> but if you really want to allow it...
   #   config.allow_erb = false
 
-  # Whitelist of all helper methods that can be used via {{cms:helper}} tag. By default
+  # Safelist of all helper methods that can be used via {{cms:helper}} tag. By default
   # all helpers are allowed except `eval`, `send`, `call` and few others. Empty array
   # will prevent rendering of all helpers.
   #   config.allowed_helpers = nil
 
-  # Whitelist of partials paths that can be used via {{cms:partial}} tag. All partials
+  # Safelist of partials paths that can be used via {{cms:partial}} tag. All partials
   # are accessible by default. Empty array will prevent rendering of all partials.
   #   config.allowed_partials = nil
 

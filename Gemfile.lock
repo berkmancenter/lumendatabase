@@ -294,7 +294,7 @@ GEM
     pry-rails (0.3.9)
       pry (>= 0.10.4)
     public_suffix (4.0.4)
-    rack (2.2.2)
+    rack (2.2.3)
     rack-accept (0.4.5)
       rack (>= 0.4)
     rack-attack (6.3.0)
@@ -566,4 +566,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   1.17.3
+   2.1.4

@@ -121,10 +121,12 @@ module NoticesHelper
   end
 
   def truncatable_cache_key(key, can_see_full)
+    key_part = "#{key}_#{params[:access_token]}"
+    
     if can_see_full
-      "untruncated_#{key}"
+      "untruncated_#{key_part}"
     else
-      key
+      "truncated_#{key_part}"
     end
   end
 end

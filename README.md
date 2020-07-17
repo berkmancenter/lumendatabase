@@ -9,7 +9,7 @@ The Lumen Database collects and analyzes legal complaints and requests for remov
 
 Automated Submissions and Search Using the API
 ===========
-The main [Lumen Database instance](https://www.lumendatabase.org/) has an API that allows individuals and organizations that receive large numbers of notices to submit them without using the web interface. The API also provides an easy way for researchers to search the database. Members of the public can test the database, but will likely need to request an API key from the [Lumen team](mailto:team@lumendatabase.org) in order to receive a token that provides full access. To learn about the capabilities of the API you can consult the [API documentation](https://github.com/berkmancenter/lumendatabase/wiki/Lumen-API-Documentation).
+The main [Lumen Database instance](https://www.lumendatabase.org/) has an API that allows individuals and organizations that receive large numbers of notices to submit them without using the web interface. The API also provides an easy way for researchers to search the database. Members of the public can test the database, but will likely need to request an API key from the [Lumen team](mailto:team@lumendatabase.org) to receive a token that provides full access. To learn about the capabilities of the API, you can consult the [API documentation](https://github.com/berkmancenter/lumendatabase/wiki/Lumen-API-Documentation).
 
 Development
 ===========
@@ -26,13 +26,14 @@ Development
 
 #### Setup
 
-By default the app will try to connect to Elasticsearch on `http://localhost:9200`. If you want to use a different host set the `ELASTICSEARCH_URL` environment variable.
+By default, the app will try to connect to Elasticsearch on `http://localhost:9200`. If you want to use a different host set the `ELASTICSEARCH_URL` environment variable.
 
     $ bundle install
     $ cp config/database.yml.example config/database.yml
       (edit database.yml as you wish)
       (ensure PostgreSQL and Elasticsearch are running)
     $ rails db:setup
+    $ rails lumen:set_up_cms
 
 #### Running the app
 
@@ -86,9 +87,7 @@ It will default to using the number of processors parallel_tests believes to be 
 
 #### Linting
 
-Use rubocop and leave the code at least as clean as you found it. If you make
-linting-only changes, it's considerate to your code reviewer to keep them in
-their own commit.
+Use rubocop and leave the code at least as clean as you found it. If you make linting-only changes, it's considerate to your code reviewer to keep them in their own commit.
 
 ####  Profiling
 
@@ -185,7 +184,7 @@ appear after this variable has been configured.
 
 Lumen API
 =========
-You can search the database and, if you have a contributer token, add to the database using our API.
+You can search the database and, if you have a contributor token, add to the database using our API.
 
 The Lumen API is documented in our GitHub Wiki: https://github.com/berkmancenter/lumendatabase/wiki/Lumen-API-Documentation
 
