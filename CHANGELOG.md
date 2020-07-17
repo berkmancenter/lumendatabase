@@ -1,9 +1,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
-## [20.06](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.06) - 2020-06-18
+## [20.07](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.07) - 2020-07-17#
 ### Fixed
+* [#611](https://github.com/berkmancenter/lumendatabase/pull/611) Fix bug whereby people with access tokens could not download attached documents
+* [#610](https://github.com/berkmancenter/lumendatabase/pull/610) Improve docs for new devs (thanks, @siaw23 !)
 * [#609](https://github.com/berkmancenter/lumendatabase/pull/609) Bug in URL deconcatenation logic, which erroneously rejected URLs that contained "http" as a substring outside of the protocol indicator.
 
+### Security
+* Updated rack version.
 
 ## [20.05b](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.05a) - 2020-05-29
 ### Added 
