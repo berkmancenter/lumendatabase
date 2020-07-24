@@ -13,6 +13,7 @@ class Entity < ApplicationRecord
 
   PER_PAGE = 10
   HIGHLIGHTS = %i[name].freeze
+  DO_NOT_INDEX = %w[id name_original]
 
   validates :address_line_1, length: { maximum: 255 }
 
@@ -27,14 +28,10 @@ class Entity < ApplicationRecord
               name.demodulize.downcase,
               ENV['ES_INDEX_SUFFIX']].compact.join('_')
 
-  # document type must go before mappings so it is included in the data sent to
-  # ES
-  document_type 'entity'
-
-  mappings do
+  mappings dynamic: false do
     Entity.columns
           .map(&:name)
-          .reject { |name| name == 'id' }
+          .reject { |name| DO_NOT_INDEX.include? name }
           .each do |column_name|
       indexes column_name
     end

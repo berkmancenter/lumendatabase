@@ -23,10 +23,9 @@ module Searchability
                   Rails.env,
                   'notice',
                   ENV['ES_INDEX_SUFFIX']].compact.join('_')
-      document_type 'notice'
 
       settings do
-        mapping do
+        mappings dynamic: false do
           # fields
           indexes :id, type: 'keyword'
           indexes :class_name, type: 'keyword'
