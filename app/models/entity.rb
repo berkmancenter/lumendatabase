@@ -2,7 +2,6 @@
 
 require 'validates_automatically'
 require 'hierarchical_relationships'
-require 'entity_index_queuer'
 require 'default_name_original'
 
 class Entity < ApplicationRecord
@@ -53,7 +52,20 @@ class Entity < ApplicationRecord
                           scope: ADDITIONAL_DEDUPLICATION_FIELDS
 
   # == Callbacks ============================================================
-  after_update { EntityIndexQueuer.for(id) }
+  # We do this because it will trigger associated notices to be reindexed
+  # at the next reindex run, allowing their submitter_name and similar fields
+  # to change in Elasticsearch. This is important because if we redact these
+  # fields on Entity, we want those redactions to be reflected in the UI.
+  # Using ActiveRecord callbacks to alter associated models is a bad plan (see
+  # https://youtu.be/cgneN2ISuGY) because it couples them tightly together, but
+  # they were already coupled tightly together because Elasticsearch indexes
+  # fields on Notice which are derived from Entity, so we aren't making things
+  # much worse, and this is far and away the simplest way to force reindexing
+  # of Notice.
+  # update_all is dramatically more performant than e.g. update -- it skips
+  # all validations and constructs a single SQL statement to update all the
+  # notices.
+  after_save { notices.update_all(updated_at: Time.now) }
 
   # == Class Methods ========================================================
   def self.submitters
