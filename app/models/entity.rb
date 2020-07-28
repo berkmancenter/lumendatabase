@@ -11,18 +11,25 @@ class Entity < ApplicationRecord
   include DefaultNameOriginal
   include Elasticsearch::Model
 
+  # == Constants ============================================================
   PER_PAGE = 10
   HIGHLIGHTS = %i[name].freeze
   DO_NOT_INDEX = %w[id name_original]
+  KINDS = %w[organization individual].freeze
+  ADDITIONAL_DEDUPLICATION_FIELDS =
+    %i[address_line_1 city state zip country_code phone email].freeze
+  MULTI_MATCH_FIELDS = %w(name^5 kind address_line_1 address_line_2 state
+    country_code^2 email url^3 ancestry city zip created_at updated_at)
 
-  validates :address_line_1, length: { maximum: 255 }
-
+  # == Relationships ========================================================
   belongs_to :user
   has_many :entity_notice_roles, dependent: :destroy
   has_many :notices, through: :entity_notice_roles
 
+  # == Attributes ===========================================================
   delegate :publication_delay, to: :user, allow_nil: true
 
+  # == Extensions ===========================================================
   index_name [Rails.application.engine_name,
               Rails.env,
               name.demodulize.downcase,
@@ -39,9 +46,23 @@ class Entity < ApplicationRecord
     indexes :parent_id
   end
 
-  MULTI_MATCH_FIELDS = %w(name^5 kind address_line_1 address_line_2 state
-    country_code^2 email url^3 ancestry city zip created_at updated_at)
+  # == Validations ==========================================================
+  validates :address_line_1, length: { maximum: 255 }
+  validates_inclusion_of :kind, in: KINDS
+  validates_uniqueness_of :name,
+                          scope: ADDITIONAL_DEDUPLICATION_FIELDS
 
+  # == Callbacks ============================================================
+  after_update { EntityIndexQueuer.for(id) }
+
+  # == Class Methods ========================================================
+  def self.submitters
+    submitter_ids = EntityNoticeRole.submitters.map(&:entity_id)
+
+    where(id: submitter_ids)
+  end
+
+  # == Instance Methods =====================================================
   def as_indexed_json(_options)
     out = as_json
 
@@ -49,16 +70,6 @@ class Entity < ApplicationRecord
 
     out
   end
-
-  KINDS = %w[organization individual].freeze
-  ADDITIONAL_DEDUPLICATION_FIELDS =
-    %i[address_line_1 city state zip country_code phone email].freeze
-
-  validates_inclusion_of :kind, in: KINDS
-  validates_uniqueness_of :name,
-                          scope: ADDITIONAL_DEDUPLICATION_FIELDS
-
-  after_update { EntityIndexQueuer.for(id) }
 
   def attributes_for_deduplication
     all_deduplication_attributes = [
@@ -68,11 +79,5 @@ class Entity < ApplicationRecord
     attributes.select do |key, _value|
       all_deduplication_attributes.include?(key.to_sym)
     end
-  end
-
-  def self.submitters
-    submitter_ids = EntityNoticeRole.submitters.map(&:entity_id)
-
-    where(id: submitter_ids)
   end
 end

@@ -10,6 +10,7 @@ class Notice < ApplicationRecord
 
   extend RecentScope
 
+  # == Constants ============================================================
   HIGHLIGHTS = %i[
     title tag_list topics.name sender_name recipient_name
     works.description works.infringing_urls.url works.copyrighted_urls.url
@@ -90,52 +91,33 @@ class Notice < ApplicationRecord
   TYPES = TYPES_TO_TOPICS.keys
   TOPICS = TYPES_TO_TOPICS.values
 
+  # == Relationships ========================================================
   belongs_to :reviewer, class_name: 'User'
 
   has_many :topic_assignments, dependent: :destroy
   has_many :topics, through: :topic_assignments
   has_many :topic_relevant_questions, through: :topics, source: :relevant_questions
+
   has_many :entity_notice_roles, dependent: :destroy, inverse_of: :notice
   has_many :entities, through: :entity_notice_roles, index_errors: true
-  has_many :file_uploads
 
   has_and_belongs_to_many :works, index_errors: true
-
   has_many :infringing_urls, through: :works, index_errors: true
   has_many :copyrighted_urls, through: :works, index_errors: true
+
   has_many :token_urls, dependent: :destroy
   has_and_belongs_to_many :relevant_questions
   has_one :documents_update_notification_notice
+  has_many :file_uploads
 
-  validates_inclusion_of :action_taken, in: VALID_ACTIONS, allow_blank: true
-  validates_inclusion_of :language, in: Language.codes, allow_blank: true
-  validates_presence_of :works, :entity_notice_roles
-  validates :date_sent, date: { after: Proc.new { Date.new(1998,10,28) }, before: Proc.new { Time.now + 1.day }, allow_blank: true }
-  validates :date_received, date: { after: Proc.new { Date.new(1998,10,28) }, before: Proc.new { Time.now + 1.day }, allow_blank: true }
+  # == Attributes ===========================================================
+  delegate :country_code, to: :recipient, allow_nil: true
 
-  # Using reset_type because type is ALWAYS protected (deep in the Rails code).
-  # attr_protected :id, :type, :reset_type
-  # attr_protected :id, :type, as: :admin
-
-  def reset_type
-    type
+  %i[sender principal recipient submitter attorney] .each do |entity|
+    delegate :name, :country_code, to: entity, prefix: true, allow_nil: true
   end
 
-  def reset_type=(value)
-    unless value.in?(TYPES)
-      fail ActiveModel::MissingAttributeError.new("Cannot reset Notice type to: #{value}")
-    end
-    self[:type] = value
-  end
-
-  def reset_type_enum
-    TYPES
-  end
-
-  def language_enum
-    Language.all.inject( {} ) { |memo, l| memo[l.label] = l.code; memo }
-  end
-
+  # == Extensions ===========================================================
   acts_as_taggable_on :tags, :jurisdictions
 
   accepts_nested_attributes_for :file_uploads,
@@ -145,12 +127,16 @@ class Notice < ApplicationRecord
 
   accepts_nested_attributes_for :works, allow_destroy: true
 
-  delegate :country_code, to: :recipient, allow_nil: true
+  define_elasticsearch_mapping
 
-  %i[sender principal recipient submitter attorney] .each do |entity|
-    delegate :name, :country_code, to: entity, prefix: true, allow_nil: true
-  end
+  # == Validations ==========================================================
+  validates_inclusion_of :action_taken, in: VALID_ACTIONS, allow_blank: true
+  validates_inclusion_of :language, in: Language.codes, allow_blank: true
+  validates_presence_of :works, :entity_notice_roles
+  validates :date_sent, date: { after: Proc.new { Date.new(1998,10,28) }, before: Proc.new { Time.now + 1.day }, allow_blank: true }
+  validates :date_received, date: { after: Proc.new { Date.new(1998,10,28) }, before: Proc.new { Time.now + 1.day }, allow_blank: true }
 
+  # == Callbacks ============================================================
   before_save :set_topics
   after_create :set_published!, if: :submitter
   # This may fail in the dev environment if you don't have ES up and running,
@@ -159,8 +145,7 @@ class Notice < ApplicationRecord
     __elasticsearch__.delete_document ignore: 404
   end
 
-  define_elasticsearch_mapping
-
+  # == Class Methods ========================================================
   def self.label
     name.titleize
   end
@@ -219,6 +204,30 @@ class Notice < ApplicationRecord
 
   def self.get_approximate_count
     ActiveRecord::Base.connection.execute("SELECT reltuples FROM pg_class WHERE relname = 'notices'").getvalue(0, 0).to_i
+  end
+
+  # == Instance Methods =====================================================
+
+  # Using reset_type because type is ALWAYS protected (deep in the Rails code).
+  # attr_protected :id, :type, :reset_type
+  # attr_protected :id, :type, as: :admin
+  def reset_type
+    type
+  end
+
+  def reset_type=(value)
+    unless value.in?(TYPES)
+      fail ActiveModel::MissingAttributeError.new("Cannot reset Notice type to: #{value}")
+    end
+    self[:type] = value
+  end
+
+  def reset_type_enum
+    TYPES
+  end
+
+  def language_enum
+    Language.all.inject( {} ) { |memo, l| memo[l.label] = l.code; memo }
   end
 
   def active_model_serializer
