@@ -1,6 +1,5 @@
 require 'validates_automatically'
 require 'hierarchical_relationships'
-require 'topic_index_queuer'
 
 class Topic < ApplicationRecord
   include ValidatesAutomatically
@@ -18,7 +17,8 @@ class Topic < ApplicationRecord
     order(:name)
   end
 
-  after_update { TopicIndexQueuer.for(self.id) }
+  # See note in Entity for similar logic.
+  after_save { notices.update_all(updated_at: Time.now) }
 
   def description_html
     MarkdownParser.render(description.to_s)
