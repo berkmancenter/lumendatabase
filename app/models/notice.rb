@@ -84,6 +84,7 @@ class Notice < ApplicationRecord
     'PrivateInformation'    => 'Right of Publicity',
     'Trademark'             => 'Trademark',
     'Other'                 => OTHER_TOPIC
+    'Placeholder'           => OTHER_TOPIC
   }.freeze
 
   TYPES = TYPES_TO_TOPICS.keys
