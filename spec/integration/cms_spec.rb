@@ -19,7 +19,6 @@ feature 'CMS blog entries' do
 
   after :each do
     @blog.children.destroy_all
-    @blog.reload
   end
 
   after :all do
@@ -32,6 +31,7 @@ feature 'CMS blog entries' do
         BlogPostFactory.new(@site, @layout, @blog, seed: i).manufacture
       end
 
+      @blog.reload
       visit @blog.full_path
 
       (0..9).each do |i|
@@ -61,6 +61,7 @@ feature 'CMS blog entries' do
       end
       @blog.children.where(label: 'page_1').update(is_published: false)
 
+      @blog.reload
       visit @blog.full_path
 
       expect(page).to have_link('page_0', exact: true)
@@ -70,6 +71,7 @@ feature 'CMS blog entries' do
     it 'displays working links' do
       BlogPostFactory.new(@site, @layout, @blog, seed: 0).manufacture
 
+      @blog.reload
       visit @blog.full_path
 
       click_link 'page_0'
@@ -93,6 +95,7 @@ feature 'CMS blog entries' do
 
     it 'displays metadata' do
       BlogPostFactory.new(@site, @layout, @blog).manufacture
+      @blog.reload
       post = @blog.children.first
 
       visit @blog.full_path
@@ -105,6 +108,7 @@ feature 'CMS blog entries' do
 
     it 'displays formatted html' do
       BlogPostFactory.new(@site, @layout, @blog).manufacture
+      @blog.reload
       post = @blog.children.first
       expect(cms_fragment_content('abstract', post)).to include('<p>')
 
@@ -130,6 +134,7 @@ feature 'CMS blog entries' do
   context 'post' do
     it 'loads a blog entry' do
       BlogPostFactory.new(@site, @layout, @blog).manufacture
+      @blog.reload
 
       post = @blog.children.first
       visit post.full_path
@@ -145,6 +150,7 @@ feature 'CMS blog entries' do
 
     it 'displays formatted html' do
       BlogPostFactory.new(@site, @layout, @blog).manufacture
+      @blog.reload
       post = @blog.children.first
       expect(cms_fragment_content('content', post)).to include('<p>')
 
@@ -154,6 +160,7 @@ feature 'CMS blog entries' do
 
     it 'routes original_news_ids' do
       BlogPostFactory.new(@site, @layout, @blog).manufacture
+      @blog.reload
       post = @blog.children.first
 
       parent = Comfy::Cms::Page.create(
@@ -213,6 +220,7 @@ feature 'CMS blog entries' do
   context 'user' do
     it 'reads a blog entry' do
       BlogPostFactory.new(@site, @layout, @blog).manufacture
+      @blog.reload
       blog_entry = @blog.children.last
 
       visit '/blog_entries'
@@ -223,6 +231,7 @@ feature 'CMS blog entries' do
 
     it 'opens a blog entry from the home page' do
       BlogPostFactory.new(@site, @layout, @blog).manufacture
+      @blog.reload
       blog_entry = @blog.children.last
 
       visit '/'
@@ -251,6 +260,7 @@ feature 'CMS blog entries' do
     it 'contains the latest content' do
       visit '/blog_feed.rss'
 
+      @blog.reload
       @blog.children.last(10).each do |post|
         expect(page).to have_content cms_fragment_content('title', post)
         expect(page).to have_content cms_fragment_content('author', post)
