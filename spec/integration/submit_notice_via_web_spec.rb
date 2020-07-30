@@ -305,6 +305,23 @@ feature 'notice submission' do
     expect(page).to have_text('Allegedly Infringing URL', count: 2)
   end
 
+  scenario 'menu page has all expected notice types' do
+    sign_in(create(:user, :submitter))
+
+    visit '/notices/new'
+
+    expect(page).to have_css '.notices-list li', text: 'Counternotice'
+    expect(page).to have_css '.notices-list li', text: 'Court Order'
+    expect(page).to have_css '.notices-list li', text: 'Data Protection'
+    expect(page).to have_css '.notices-list li', text: 'Defamation'
+    expect(page).to have_css '.notices-list li', text: 'DMCA'
+    expect(page).to have_css '.notices-list li', text: 'Government Request'
+    expect(page).to have_css '.notices-list li', text: 'Law Enforcement Request'
+    expect(page).to have_css '.notices-list li', text: 'Other'
+    expect(page).to have_css '.notices-list li', text: 'Private Information'
+    expect(page).to have_css '.notices-list li', text: 'Trademark'
+  end
+
   context 'template rendering' do
     scenario 'counternotice form' do
       sign_in(create(:user, :submitter))
