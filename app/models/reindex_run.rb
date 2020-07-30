@@ -43,8 +43,8 @@ class ReindexRun < ApplicationRecord
   end
 
   def apply_metadata(metadata)
-    attrs = metadata.map { |k, v| ["#{k.name.downcase}_count", v] }.to_h
-    attrs[updated_at] = Time.now
+    attrs = metadata.map { |k, v| ["#{k.downcase}_count", v] }.to_h
+    attrs[:updated_at] = Time.now
     update_attributes(attrs)
   end
 
