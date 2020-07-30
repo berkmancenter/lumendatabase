@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [20.07a](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.07a) - 2020-07-30
+### Added
+* [#614](https://github.com/berkmancenter/lumendatabase/pull/614) Counternotice is now in the list of creatable notice types at `/notices/new/`.
+
 ## [20.07](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.07) - 2020-07-17
 ### Fixed
 * [#611](https://github.com/berkmancenter/lumendatabase/pull/611) Fix bug whereby people with access tokens could not download attached documents
