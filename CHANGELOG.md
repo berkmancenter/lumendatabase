@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## Unreleased
+### Fixed
+* [#615](https://github.com/berkmancenter/lumendatabase/pull/615) Fix ReindexRun metadata creation.
+
 ## [20.07a](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.07a) - 2020-07-30
 ### Added
 * [#614](https://github.com/berkmancenter/lumendatabase/pull/614) Counternotice is now in the list of creatable notice types at `/notices/new/`.
