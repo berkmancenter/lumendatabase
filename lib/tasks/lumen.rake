@@ -764,6 +764,7 @@ where works.id in (
       [Notice, Entity].each do |klass|
         count = 0
         klass.where("updated_at > '#{reindexing_start_date}'").find_in_batches(batch_size: batch_size) do |instances|
+          # Force garbage collection to avoid OOM
           GC.start
           instances.each do |instance|
             instance.__elasticsearch__.index_document
