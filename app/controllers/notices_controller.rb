@@ -47,9 +47,9 @@ class NoticesController < ApplicationController
       if @notice.valid?
         @notice.save
         @notice.mark_for_review
-        flash.notice = 'Notice created!'
+        flash.notice = "Notice created! It can be found at #{notice_url(@notice)}"
         format.json { head :created, location: @notice }
-        format.html { render :new, status: :created }
+        format.html { redirect_to new_notice_url }
       else
         Rails.logger.warn "Could not create notice with params: #{params}"
         flash.alert = 'Notice creation failed. See errors below.'
