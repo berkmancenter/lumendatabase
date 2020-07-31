@@ -3,6 +3,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## Unreleased
 ### Fixed
 * [#615](https://github.com/berkmancenter/lumendatabase/pull/615) Fix ReindexRun metadata creation.
+* [#616](https://github.com/berkmancenter/lumendatabase/pull/616) Fixes bug in redirect behavior after notice submission through web form.
 
 ## [20.07a](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.07a) - 2020-07-30
 ### Added
