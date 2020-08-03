@@ -77,6 +77,35 @@ module NoticesHelper
     url + (params[:access_token] ? "&access_token=#{params[:access_token]}" : '')
   end
 
+  # This prefills the submitter and recipient fields with info from a linked
+  # entity, if the user has one.
+  def placeholder_text(user, role, field)
+    return {} unless [
+      [:submitter, :recipient].include?(role.downcase.to_sym),
+      user&.entity.present?
+    ].all?
+
+    { value: user.entity.send(field) }
+  end
+
+  def placeholder_country(user, role)
+    return {} unless [
+      [:submitter, :recipient].include?(role.downcase.to_sym),
+      user&.entity&.country_code&.present?
+    ].all?
+
+    { selected: user&.entity&.country_code&.downcase.to_sym }
+  end
+
+  def placeholder_kind(user, role)
+    return {} unless [
+      [:submitter, :recipient].include?(role.downcase.to_sym),
+      user&.entity.present?
+    ].all?
+
+    { selected: user.entity.kind }
+  end
+
   private
 
   def display_date_field(record, field)
