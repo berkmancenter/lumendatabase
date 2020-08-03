@@ -6,10 +6,11 @@ class ReindexRun < ApplicationRecord
 
     metadata = {}
     REINDEXED_MODELS.each do |model|
-      metadata[model.name] = this_run.index_model_for(model)
+      num_indexed = this_run.index_recent_documents(model)
+      metadata["#{model.name.downcase}_count"] = num_indexed
     end
 
-    this_run.apply_metadata(metadata)
+    this_run.update(metadata)
 
     sweep_search_result_caches
   rescue => e
@@ -30,7 +31,7 @@ class ReindexRun < ApplicationRecord
     self.class.order('created_at').second_to_last
   end
 
-  def index_model_for(model)
+  def index_recent_documents(model)
     count = 0
     batch_size = (ENV['BATCH_SIZE'] || 100).to_i
     updateable_set(model).find_in_batches(batch_size: batch_size) do |instances|
@@ -42,12 +43,6 @@ class ReindexRun < ApplicationRecord
     count
   end
 
-  def apply_metadata(metadata)
-    attrs = metadata.map { |k, v| ["#{k.name.downcase}_count", v] }.to_h
-    attrs[updated_at] = Time.now
-    update_attributes(attrs)
-  end
-
   private
 
   def last_run_time
@@ -57,6 +52,6 @@ class ReindexRun < ApplicationRecord
   end
 
   def updateable_set(model)
-    model.where('updated_at > ? or updated_at is null', last_run_time)
+    model.where('updated_at >= ? or updated_at is null', last_run_time)
   end
 end

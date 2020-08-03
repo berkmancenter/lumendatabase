@@ -67,7 +67,7 @@
           <dd class="field"><%= @notice.type.titleize %></dd>
         </dl>
 
-    	  <% unless @notice.action_taken.nil? || @notice.action_taken.blank? %>
+    	  <% if @notice.action_taken.present? %>
           <dl class="action-taken">
             <dt class="label">Action taken:</dt>
             <dd class="field"><%= @notice.action_taken %></dd>
