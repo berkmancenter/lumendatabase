@@ -108,7 +108,7 @@ feature "Searching for Notices via the API" do
     end
   end
 
-  Notice.type_models.each do |klass|
+  (Notice.type_models - [Placeholder]).each do |klass|
     class_factory = klass.to_s.tableize.singularize.to_sym
     scenario "a #{klass} notice has basic notice metadata", js: true, search: true do
 
@@ -123,6 +123,7 @@ feature "Searching for Notices via the API" do
 
       expect_api_search_to_find("king") do |json|
         json_item = json['notices'].first
+
         expect(json_item).to have_key('title').with_value(notice.title)
         expect(json_item).to have_key('id').with_value(notice.id)
         expect(json_item).to have_key('topics').with_value(expected_topics)

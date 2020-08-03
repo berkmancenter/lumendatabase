@@ -7,14 +7,14 @@
   </p>
   <section class="notices-list">
     <ul>
-      <% (Notice.type_models + [Counternotice]).each do |model| %>
+      <% Notice.display_models.each do |model| %>
         <li data-id="<%= model.name %>"><%= model.label %></li>
       <% end %>
     </ul>
   </section>
 
   <section class="info-panel">
-    <% (Notice.type_models + [Counternotice]).each do |model| %>
+    <% Notice.display_models.each do |model| %>
       <div data-id="<%= model.name %>">
         <article>
           <b><%= model.label %>:</b>

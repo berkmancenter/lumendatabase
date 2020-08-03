@@ -83,7 +83,8 @@ class Notice < ApplicationRecord
     'LawEnforcementRequest' => 'Law Enforcement Requests',
     'PrivateInformation'    => 'Right of Publicity',
     'Trademark'             => 'Trademark',
-    'Other'                 => OTHER_TOPIC
+    'Other'                 => OTHER_TOPIC,
+    'Placeholder'           => OTHER_TOPIC
   }.freeze
 
   TYPES = TYPES_TO_TOPICS.keys
@@ -166,6 +167,10 @@ class Notice < ApplicationRecord
 
   def self.type_models
     (TYPES - ['Counternotice']).map(&:constantize).freeze
+  end
+
+  def self.display_models
+    (TYPES - ['Placeholder']).map(&:constantize).freeze
   end
 
   def self.available_for_review

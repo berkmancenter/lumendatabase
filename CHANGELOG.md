@@ -1,6 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
 ## Unreleased
+### Added
+* [#617](https://github.com/berkmancenter/lumendatabase/pull/617) Plceholder notice type
+
 ### Fixed
 * [#615](https://github.com/berkmancenter/lumendatabase/pull/615) Fix ReindexRun metadata creation.
 * [#616](https://github.com/berkmancenter/lumendatabase/pull/616) Fixes bug in redirect behavior after notice submission through web form.
@@ -19,7 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 * Updated rack version.
 
 ## [20.05b](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.05a) - 2020-05-29
-### Added 
+### Added
 * Counterfeit notice type [#604](https://github.com/berkmancenter/lumendatabase/pull/604)
 
 ### Changed
