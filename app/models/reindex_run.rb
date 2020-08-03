@@ -52,6 +52,6 @@ class ReindexRun < ApplicationRecord
   end
 
   def updateable_set(model)
-    model.where('updated_at > ? or updated_at is null', last_run_time)
+    model.where('updated_at >= ? or updated_at is null', last_run_time)
   end
 end

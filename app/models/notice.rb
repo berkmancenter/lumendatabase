@@ -169,6 +169,10 @@ class Notice < ApplicationRecord
     (TYPES - ['Counternotice']).map(&:constantize).freeze
   end
 
+  def self.display_models
+    (TYPES - ['Placeholder']).map(&:constantize).freeze
+  end
+
   def self.available_for_review
     where(
       review_required: true,

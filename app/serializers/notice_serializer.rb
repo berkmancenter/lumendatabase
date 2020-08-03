@@ -21,7 +21,7 @@ class NoticeSerializer < ActiveModel::Serializer
   # use hash operations on it within the hooks supported by
   # active-model-serializer.
   def works
-    if current_user && Ability.new(scope).can?(:view_full_version_api, object)
+    if defined?(current_user) && current_user && Ability.new(scope).can?(:view_full_version_api, object)
       base_works = object.works.as_json(
         only: [:description],
         include: {
