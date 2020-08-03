@@ -132,6 +132,7 @@ FactoryBot.define do
     factory :other, class: 'Other'
     factory :private_information, class: 'PrivateInformation'
     factory :trademark, class: 'Trademark'
+    factory :placeholder, class: 'Placeholder'
   end
 
   factory :file_upload do

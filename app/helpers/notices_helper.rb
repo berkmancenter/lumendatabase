@@ -1,14 +1,14 @@
 module NoticesHelper
   def form_partial_for(instance)
-    "#{instance.type.tableize.singularize}_form"
+    "#{instance.class.name.tableize.singularize}_form"
   end
 
   def show_partial_for(instance)
-    "#{instance.type.tableize.singularize}_show"
+    "#{instance.class.name.tableize.singularize}_show"
   end
 
   def works_partial_for(instance)
-    "#{instance.type.tableize.singularize}_works"
+    "#{instance.class.name.tableize.singularize}_works"
   end
 
   def date_sent(notice)
@@ -122,7 +122,7 @@ module NoticesHelper
 
   def truncatable_cache_key(key, can_see_full)
     key_part = "#{key}_#{params[:access_token]}"
-    
+
     if can_see_full
       "untruncated_#{key_part}"
     else

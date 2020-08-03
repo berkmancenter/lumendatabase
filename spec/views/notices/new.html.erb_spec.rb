@@ -11,7 +11,8 @@ describe 'notices/new.html.erb' do
     expect(rendered).to have_css 'form.new_notice'
   end
 
-  Notice.type_models.each do |model|
+  # Placeholders are an admin feature, not available through the web form.
+  (Notice.type_models - [Placeholder]).each do |model|
     it "knows the notice type for #{model}" do
       assign(:notice, model.new)
 
@@ -163,7 +164,7 @@ describe 'notices/new.html.erb' do
     expect(rendered).to have_words('Allegedly Infringing URL *')
   end
 
-  Notice.type_models.each do |model|
+  (Notice.type_models - [Placeholder]).each do |model|
     context "country selectors in \"#{model.label}\" notices" do
       it 'use ISO country codes' do
         factory_name = model.name.tableize.singularize
