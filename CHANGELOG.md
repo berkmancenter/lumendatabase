@@ -1,10 +1,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
 ## Unreleased
+### Fixed
+* [#618](https://github.com/berkmancenter/lumendatabase/pull/618) Improve communication around deep pagination
 
 ## [20.08](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.08) - 2020-08-03
 ### Added
-* [#617](https://github.com/berkmancenter/lumendatabase/pull/617) Plceholder notice type
+* [#617](https://github.com/berkmancenter/lumendatabase/pull/617) Placeholder notice type
 
 ### Fixed
 * [#615](https://github.com/berkmancenter/lumendatabase/pull/615) Fix ReindexRun metadata creation.
