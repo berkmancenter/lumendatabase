@@ -741,6 +741,48 @@ where works.id in (
   # they were removed upon removal of the BlogEntry model, after having been
   # run to migrate production content. They were last available in commit
   # b45018d.
+
+  desc 'Run catchup ES indexing'
+  task run_catchup_es_indexing: :environment do
+    reindexing_timestamp_file = Rails.root.join('tmp', 'reindexing_timestamp')
+    log_message_prefix = '[rake lumen:run_catchup_es_indexing]'
+
+    unless File.exist?(reindexing_timestamp_file)
+      m = "#{log_message_prefix} tmp/reindexing_timestamp file doesn't exist"
+      puts m
+      Rails.logger.error m
+      exit
+    end
+
+    reindexing_start_date = File.mtime(reindexing_timestamp_file)
+    # Get extra 10 minutes, just to make sure that everything is indexed
+    reindexing_start_date -= 10.minutes
+    batch_size = (ENV['BATCH_SIZE'] || 100).to_i
+
+    # Index updated and new entities
+    begin
+      [Notice, Entity].each do |klass|
+        count = 0
+        klass.where("updated_at > '#{reindexing_start_date}'").find_in_batches(batch_size: batch_size) do |instances|
+          # Force garbage collection to avoid OOM
+          GC.start
+          instances.each do |instance|
+            instance.__elasticsearch__.index_document
+            count += 1
+            print '.'
+          end
+          m = "#{log_message_prefix} #{count} #{klass} instances indexed at #{Time.now.to_i}"
+          puts m
+          Rails.logger.info m
+        end
+      end
+      ReindexRun.sweep_search_result_caches
+    rescue => e
+      m = "#{log_message_prefix} Reindexing did not succeed because: #{e.inspect}"
+      puts m
+      Rails.logger.error m
+    end
+  end
 end
 
 class CourtOrderReporter
