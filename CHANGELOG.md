@@ -1,6 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
 ## Unreleased
+### Added
+* [#619](https://github.com/berkmancenter/lumendatabase/pull/619) Prefill submitter and recipient information on notice creation web form when the submitting user has a linked entity
+
 ### Fixed
 * [#618](https://github.com/berkmancenter/lumendatabase/pull/618) Improve communication around deep pagination
 
