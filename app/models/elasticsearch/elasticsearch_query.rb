@@ -63,8 +63,14 @@ class ElasticsearchQuery
     search_response
   end
 
+  # The date is part of the cache key because our filesystem cache does not have
+  # a proper cache expiration strategy; we're just deleting everything
+  # periodically unless it's been recently accessed. However, this means that
+  # files which are very frequently accessed can stick around in the cache
+  # forever, which makes it impossible to redact things from search results.
+  # Adding a datestamp guarantees that the cache_key eventually expires.
   def cache_key
-    @cache_key ||= "search-result-#{Digest::MD5.hexdigest(params.values.to_s)}"
+    @cache_key ||= "search-result-#{Digest::MD5.hexdigest(params.values.to_s)}-#{Date.today}"
   end
 
   private
