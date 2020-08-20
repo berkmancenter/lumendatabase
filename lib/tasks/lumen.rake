@@ -337,21 +337,31 @@ namespace :lumen do
   desc 'Index non-indexed models'
   task index_non_indexed: :environment do
     begin
-      $stdout.puts "Indexing #{Notice.count + Entity.count} instances..."
-      [Notice, Entity].each do |klass|
-        ids = klass.pluck(:id)
-        ids.each do |id|
-          if ReindexRun.indexed?(klass, id)
-            puts "Skipping #{klass}, #{id}"
-          else
-            puts "Indexing #{klass}, #{id}"
-            klass.find(id).__elasticsearch__.index_document
-          end
+      $stdout.puts "Indexing #{Notice.count} Notice instances..."
+      # do notices
+      Notice.includes(works: [:infringing_urls, :copyrighted_urls])
+            .find_in_batches do |group|
+        group.each do |obj|
           $stdout.puts '.'
+          next if ReindexRun.indexed?(Notice, obj.id)
+
+          $stdout.puts "Indexing Notice, #{obj.id}"
+          obj.__elasticsearch__.index_document
+        end
+      end
+
+      $stdout.puts "Indexing #{Entity.count} Entity instances..."
+      Entity.find_in_batches do |group|
+        group.each do |obj|
+          $stdout.puts '.'
+          next if ReindexRun.indexed?(Entity, obj.id)
+
+          $stdout.puts "Indexing Entity, #{obj.id}"
+          obj.__elasticsearch__.index_document
         end
       end
     rescue => e
-      $stderr.warn "Reindexing did not succeed because: #{e.inspect}"
+      $stdout.puts "Reindexing did not succeed because: #{e.inspect}"
     end
   end
 
