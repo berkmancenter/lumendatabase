@@ -341,8 +341,9 @@ namespace :lumen do
       # do notices
       Notice.includes(works: [:infringing_urls, :copyrighted_urls])
             .find_in_batches do |group|
+        GC.start # force once per batch to avoid OOM
         group.each do |obj|
-          $stdout.puts '.'
+          print '.'
           next if ReindexRun.indexed?(Notice, obj.id)
 
           $stdout.puts "Indexing Notice, #{obj.id}"
@@ -353,7 +354,7 @@ namespace :lumen do
       $stdout.puts "Indexing #{Entity.count} Entity instances..."
       Entity.find_in_batches do |group|
         group.each do |obj|
-          $stdout.puts '.'
+          print '.'
           next if ReindexRun.indexed?(Entity, obj.id)
 
           $stdout.puts "Indexing Entity, #{obj.id}"
