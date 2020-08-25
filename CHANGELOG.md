@@ -2,7 +2,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Unreleased
 ### Added
-* [#617](https://github.com/berkmancenter/lumendatabase/pull/617) Plceholder notice type
+* [#619](https://github.com/berkmancenter/lumendatabase/pull/619) Prefill submitter and recipient information on notice creation web form when the submitting user has a linked entity
+
+### Fixed
+* [#618](https://github.com/berkmancenter/lumendatabase/pull/618) Improve communication around deep pagination
+
+## [20.08](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.08) - 2020-08-03
+### Added
+* [#617](https://github.com/berkmancenter/lumendatabase/pull/617) Placeholder notice type
 
 ### Fixed
 * [#615](https://github.com/berkmancenter/lumendatabase/pull/615) Fix ReindexRun metadata creation.

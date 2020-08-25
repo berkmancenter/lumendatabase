@@ -193,6 +193,10 @@ form.new_notice {
     padding-left: $form-label-width + $form-label-margin;
   }
 
+  label.half-width + input {
+    padding-left: $form-label-width / 2 + $form-label-margin;    
+  }
+
   textarea {
     height: 150px;
     width: 100%;

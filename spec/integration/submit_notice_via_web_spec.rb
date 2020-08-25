@@ -191,6 +191,28 @@ feature 'notice submission' do
     end
   end
 
+  scenario 'submitting as a user with a linked entity prefills form' do
+    user = create(:user, :submitter)
+    entity = create(
+      :entity, user: user, kind: 'organization',
+      address_line_1: '23 Everett St.', address_line_2: '2nd Floor',
+      city: 'Cambridge', state: 'MA', zip: '02138', phone: '(617) 495-7547',
+      country_code: 'US', email: 'totallyfake@cyber.harvard.edu',
+      url: 'https://cyber.harvard.edu'
+    )
+    user.reload
+    sign_in(user)
+
+    visit new_notice_path(type: 'DMCA')
+
+    within('.role.submitter') do
+      verify_entity_info(entity)
+    end
+    within('.role.recipient') do
+      verify_entity_info(entity)
+    end
+  end
+
   scenario 'submitting notices with duplicate items' do
     submit_recent_notice
     submit_recent_notice
@@ -524,5 +546,52 @@ feature 'notice submission' do
     expect(page).to have_css 'header'
     expect(page).to have_css '.role'
     expect(page).to have_css '.submit'
+  end
+
+  def verify_entity_info(entity)
+    expect(
+      find('.notice_entity_notice_roles_entity_name input')
+      .value
+    ).to eq entity.name
+    expect(
+      find('.notice_entity_notice_roles_entity_kind select')
+      .value
+    ).to eq entity.kind
+    expect(
+      find('.notice_entity_notice_roles_entity_address_line_1 input')
+      .value
+    ).to eq entity.address_line_1
+    expect(
+      find('.notice_entity_notice_roles_entity_address_line_2 input')
+      .value
+    ).to eq entity.address_line_2
+    expect(
+      find('.notice_entity_notice_roles_entity_city input')
+      .value
+    ).to eq entity.city
+    expect(
+      find('.notice_entity_notice_roles_entity_state input')
+      .value
+    ).to eq entity.state
+    expect(
+      find('.notice_entity_notice_roles_entity_zip input')
+      .value
+    ).to eq entity.zip
+    expect(
+      find('.notice_entity_notice_roles_entity_country_code select')
+      .value
+    ).to eq entity.country_code.downcase
+    expect(
+      find('.notice_entity_notice_roles_entity_phone input')
+      .value
+    ).to eq entity.phone
+    expect(
+      find('.notice_entity_notice_roles_entity_email input')
+      .value
+    ).to eq entity.email
+    expect(
+      find('.notice_entity_notice_roles_entity_url input')
+      .value
+    ).to eq entity.url
   end
 end
