@@ -155,7 +155,8 @@ describe NoticesController do
         }
 
         json = JSON.parse(response.body)["dmca"]["works"][0]["infringing_urls"][0]
-        expect(json).to have_key('url_original')
+        expect(json).to have_key('url')
+        expect(json).not_to have_key('url_original')
       end
     end
 
