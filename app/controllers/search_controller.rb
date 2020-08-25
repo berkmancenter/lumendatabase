@@ -83,12 +83,13 @@ class SearchController < ApplicationController
   # Elasticsearch cannot return more than 20_000 results in production (2000
   # pages at 10 results per page).
   def prevent_impossible_pagination
-    return if params[:page].to_i < 2000
+    return if num_results < 20_001
 
     render 'shared/_error',
            status: :not_found,
            locals: {
-             message: 'Lumen cannot display more than 2000 pages of results.'
+             message: 'Lumen cannot display beyond the 20,000th result. ' \
+                      'Try a more specific query.'
            }
   end
 
@@ -100,8 +101,8 @@ class SearchController < ApplicationController
     render 'shared/_error',
            status: :unauthorized,
            locals: {
-             message: 'You must be logged in to see past the first 10 pages ' \
-                      'of results. ' \
+             message: 'You must be logged in to see past the first 100 ' \
+                      'results. ' \
                       '<a href="https://lumendatabase.org/pages/researchers#key">Request ' \
                       'a research account key</a>.'.html_safe
            }
@@ -109,7 +110,11 @@ class SearchController < ApplicationController
 
   def pagination_allowed?
     [user_signed_in?,
-     params[:page].to_i < 11,
-     request.format.json?].any?
+     num_results < 101,
+     request.format.json? && num_results < 20_001].any?
+  end
+
+  def num_results
+    params[:page].to_i * (params[:per_page] || 10 ).to_i
   end
 end

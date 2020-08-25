@@ -5,6 +5,7 @@ require 'ingestor'
 require 'collapses_topics'
 require 'csv'
 require 'comfy/blog_post_factory'
+require 'loggy'
 
 namespace :lumen do
   desc 'Delete elasticsearch index'
@@ -822,6 +823,42 @@ where works.id in (
   # they were removed upon removal of the BlogEntry model, after having been
   # run to migrate production content. They were last available in commit
   # b45018d.
+
+  desc 'Run catchup ES indexing'
+  task run_catchup_es_indexing: :environment do
+    reindexing_timestamp_file = Rails.root.join('tmp', 'reindexing_timestamp')
+    loggy = Loggy.new('rake lumen:run_catchup_es_indexing', true)
+
+    unless File.exist?(reindexing_timestamp_file)
+      loggy.info 'tmp/reindexing_timestamp file doesn\'t exist'
+      exit
+    end
+
+    reindexing_start_date = File.mtime(reindexing_timestamp_file)
+    # Get extra 10 minutes, just to make sure that everything is indexed
+    reindexing_start_date -= 10.minutes
+    batch_size = (ENV['BATCH_SIZE'] || 100).to_i
+
+    # Index updated and new entities
+    begin
+      [Notice, Entity].each do |klass|
+        count = 0
+        klass.where("updated_at > '#{reindexing_start_date}'").order('id ASC').find_in_batches(batch_size: batch_size) do |instances|
+          # Force garbage collection to avoid OOM
+          GC.start
+          instances.each do |instance|
+            instance.__elasticsearch__.index_document
+            count += 1
+            loggy.info(klass.name + ' indexing id ' + instance.id.to_s)
+          end
+          loggy.info(count.to_s + ' ' + klass.name + ' instances indexed')
+        end
+      end
+      ReindexRun.sweep_search_result_caches
+    rescue => e
+      loggy.error('Reindexing did not succeed because: ' + e.inspect)
+    end
+  end
 end
 
 class CourtOrderReporter
