@@ -68,6 +68,28 @@ feature 'Viewing notices' do
     check_full_works_urls
   end
 
+  context 'requesting additional access' do
+    scenario 'notice is safelisted' do
+      ENV['SAFELISTED_NOTICES_FULL'] = "1234,#{Notice.last.id}"
+
+      visit notice_url(Notice.last)
+
+      expect(page).not_to have_content('Click here to request access')
+    end
+
+    scenario 'confidential court orders' do
+      n = Notice.last
+      n.reset_type = 'CourtOrder'
+      n.update(subject: "Google received a request to remove content from our services based on a court order. Due to the nature of the court's order, Google has not provided a copy to Lumen.")
+      n.save
+      n
+
+      visit notice_url(n)
+
+      expect(page).not_to have_content('Click here to request access')
+    end
+  end
+
   def check_full_works_urls
     within('#works') do
       expect(page).to have_content 'http://www.example.com/original_work.pdf'
