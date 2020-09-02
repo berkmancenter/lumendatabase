@@ -1,6 +1,15 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
 ## Unreleased
+### Fixed
+* [#621](https://github.com/berkmancenter/lumendatabase/pull/621) Don't offer a 'click here to request access' option when there is nothing further to be requested
+* [#622](https://github.com/berkmancenter/lumendatabase/pull/622) Display date_sent even when sender name is hidden
+* [#622](https://github.com/berkmancenter/lumendatabase/pull/622) Don't display ",,," when sender/recipient address is empty
+
+## [20.08a](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.08a) - 2020-08-25
+### Removed
+* [#620](https://github.com/berkmancenter/lumendatabase/pull/620) Stop sending `url_original` with serialized URL objects
+
 ### Added
 * [#619](https://github.com/berkmancenter/lumendatabase/pull/619) Prefill submitter and recipient information on notice creation web form when the submitting user has a linked entity
 
