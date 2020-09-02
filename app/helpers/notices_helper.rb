@@ -1,4 +1,16 @@
 module NoticesHelper
+  # Determines whether 'click to request access' should be an option.
+  # Yes, the messy function signature implies there is a lot going on with the
+  # business logic.
+  def access_requestable?(notice, show_original, show_infringing)
+    [
+      show_original || show_infringing,
+      # Additional access cannot be requested for confidential court orders
+      # as there is nothing further to display.
+      !confidential_order?(notice)
+    ].all?
+  end
+
   def form_partial_for(instance)
     "#{instance.class.name.tableize.singularize}_form"
   end
@@ -108,8 +120,13 @@ module NoticesHelper
 
   private
 
+  def confidential_order?(notice)
+    notice.is_a?(CourtOrder) &&
+      notice.subject&.include?('Google has not provided a copy to Lumen')
+  end
+
   def display_date_field(record, field)
-    return unless (date = record.send(field))
+    return unless record && (date = record.send(field))
     time_tag date, date.to_s(:simple)
   end
 
