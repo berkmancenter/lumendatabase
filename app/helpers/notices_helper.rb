@@ -126,7 +126,7 @@ module NoticesHelper
   end
 
   def display_date_field(record, field)
-    return unless (date = record.send(field))
+    return unless record && (date = record.send(field))
     time_tag date, date.to_s(:simple)
   end
 

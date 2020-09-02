@@ -1,4 +1,4 @@
 <span class="private">[Private]</span>
 <span>
-  <%= [entity.city, entity.state, entity.zip, entity.country_code&.upcase].compact.join (', ') %>
+  <%= [entity.city, entity.state, entity.zip, entity.country_code&.upcase].reject { |item| item&.blank? }.join (', ') %>
 </span>

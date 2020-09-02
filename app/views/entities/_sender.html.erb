@@ -1,0 +1,22 @@
+<% if !notice.hide_identities? %>
+  <% if notice.on_behalf_of_principal? %>
+    <h6>
+      <span class="on_behalf_of">on behalf of</span>
+      <%=
+        link_to(
+          notice.principal_name,
+          faceted_search_path('principal_name' => notice.principal_name)
+        )
+      %>
+    </h6>
+  <% end %>
+  <%= render 'entities/address', entity: entity %>
+<% end %>
+
+<% if date_sent(notice).present? %>
+  <span class="date sent">Sent on <%= date_sent(notice) %></span>
+<% end %>
+
+<% if entity.country_code.present? %>
+  <span><%= t 'views.entities.entity.country' %>: <%= entity.country_code.upcase %></span>
+<% end %>

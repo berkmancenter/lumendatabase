@@ -68,6 +68,29 @@ feature 'Viewing notices' do
     check_full_works_urls
   end
 
+  context 'entities' do
+    scenario 'can see the date when the sender is redacted' do
+      n = Notice.last
+      n.update(date_sent: Date.new(2020, 9, 2))
+      n.reload
+      allow(n).to receive(:hide_identities?).and_return(true)
+
+      visit notice_url(n)
+
+      expect(page).to have_content('Sent on September 02, 2020')
+    end
+
+    scenario 'blank addresses do not lead to lines of commas' do
+      n = Notice.last
+      n.submitter.update(city: '', state: '', zip: '', country_code: '')
+      n.reload
+
+      visit notice_url(n)
+
+      expect(page).not_to have_content(',,,')
+    end
+  end
+
   context 'requesting additional access' do
     scenario 'notice is safelisted' do
       ENV['SAFELISTED_NOTICES_FULL'] = "1234,#{Notice.last.id}"
