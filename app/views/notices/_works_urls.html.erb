@@ -51,7 +51,7 @@
     </div>
   <% end %>
 
-  <% if show_original || show_infringing %>
+  <% if access_requestable?(@notice, show_original, show_infringing) %>
     <div class="row">
       <p><%= link_to 'Click here', request_access_notice_path(@notice) %> to request access and see full URLs.</p>
     </div>
