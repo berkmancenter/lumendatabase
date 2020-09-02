@@ -1,6 +1,6 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
-## Unreleased
+## [20.09](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.00) - 2020-09-02
 ### Fixed
 * [#621](https://github.com/berkmancenter/lumendatabase/pull/621) Don't offer a 'click here to request access' option when there is nothing further to be requested
 * [#622](https://github.com/berkmancenter/lumendatabase/pull/622) Display date_sent even when sender name is hidden
