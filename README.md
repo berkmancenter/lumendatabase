@@ -18,7 +18,7 @@ Development
 
 * ruby 2.5.5
 * PostgreSQL 9.6
-* Elasticsearch 5.6.x
+* Elasticsearch 7.7.x
 * Java Runtime Environment (OpenJDK works fine)
 * Piwik Tracking (only used in prod)
 * Mail server (SMTP, Sendmail)

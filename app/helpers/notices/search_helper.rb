@@ -46,7 +46,6 @@ module Notices::SearchHelper
   end
 
   def sort_order_label(sort_by_param)
-    sorting = Sortings.find(sort_by_param)
-    sorting.label
+    ResultOrdering.define(sort_by_param).label
   end
 end

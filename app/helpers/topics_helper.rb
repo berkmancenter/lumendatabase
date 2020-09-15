@@ -17,7 +17,7 @@ module TopicsHelper
   # as this information will be populating a recent notice sidebar and
   # therefore does not need to be comprehensive.
   def topic_notice_searcher
-    searcher = SearchesModels.new(topic: @topic.name, size: 10)
+    searcher = ElasticsearchQuery.new(topic: @topic.name, size: 10)
     searcher.register TermSearch.new(:topic, :topic_facet)
     searcher.sort_by = :date_received, :desc
     searcher

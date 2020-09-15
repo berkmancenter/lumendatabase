@@ -10,11 +10,11 @@ class Entities::SearchController < SearchController
   end
 
   def item_searcher
-    SearchesModels.new(params, Entity).tap do |searcher|
+    ElasticsearchQuery.new(params, Entity).tap do |searcher|
       if can?(:search, Entity)
-        searcher.register TermSearch.new(:term, :_all)
+        searcher.register TermSearch.new(:term, Entity::MULTI_MATCH_FIELDS)
       else
-        searcher.register TermSearch.new(:term, %i[name country_code url])
+        searcher.register TermSearch.new(:term, %i[name^5 country_code url])
       end
     end
   end

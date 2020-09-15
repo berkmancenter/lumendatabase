@@ -1,4 +1,4 @@
-require "rails_helper"
+require 'rails_helper'
 
 describe Entity, type: :model do
   context 'automatic validations' do
@@ -32,7 +32,7 @@ describe Entity, type: :model do
   it { is_expected.to have_many(:notices).through(:entity_notice_roles)  }
   it { is_expected.to validate_inclusion_of(:kind).in_array(Entity::KINDS) }
 
-  context ".submitters" do
+  context '.submitters' do
     it "returns only submitter types" do
       create(:entity, entity_notice_roles: [
         build(:entity_notice_role, name: 'sender')
@@ -48,11 +48,21 @@ describe Entity, type: :model do
   end
 
   context 'post update reindexing' do
-    it "uses the TopicIndexQueuer to schedule notices for indexing" do
-      entity = create(:entity)
-      expect(EntityIndexQueuer).to receive(:for).with(entity.id)
+    it 'updates updated_at for every notice associated with an entity' do
+      notice = create(:dmca)
 
+      previous_updated_at = notice.updated_at
+      entity = notice.entities.first
+      entity.name = 'transparent change'
       entity.save
+
+      notice.reload
+      second_updated_at = notice.updated_at
+      expect(second_updated_at).to be > previous_updated_at
+
+      entity.update(name: 'Updatey McUpdateface')
+      notice.reload
+      expect(notice.updated_at).to be > second_updated_at
     end
   end
 

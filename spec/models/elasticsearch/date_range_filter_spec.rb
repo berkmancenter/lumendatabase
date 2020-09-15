@@ -1,10 +1,7 @@
 require 'spec_helper'
 
 describe DateRangeFilter, type: :model do
-
-  it_behaves_like 'a search filter'
-
-  it "properly creates facet parameters" do
+  it 'properly creates facet parameters' do
     to = Time.now
     from = to - 1.month
 
@@ -14,9 +11,8 @@ describe DateRangeFilter, type: :model do
       "#{from.to_i * 1000}..#{to.to_i * 1000}"
     )
 
-    expect(filter[0]).to eq :range
-    expect(filter[1][:date_received][:to]).to be_within(1).of(to)
-    expect(filter[1][:date_received][:from]).to be_within(1).of(from)
+    expect(filter[:range][:date_received][:to]).to be_within(1).of(to)
+    expect(filter[:range][:date_received][:from]).to be_within(1).of(from)
   end
 
 end

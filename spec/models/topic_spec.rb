@@ -10,9 +10,9 @@ describe Topic, type: :model do
   it { is_expected.to have_many(:notices).through(:topic_assignments) }
   it { is_expected.to have_and_belong_to_many :relevant_questions }
 
-  context "#description_html" do
-    it "converts #description from markdown" do
-      topic = build(:topic, description: "Some *sweet* markdown")
+  context '#description_html' do
+    it 'converts #description from markdown' do
+      topic = build(:topic, description: 'Some *sweet* markdown')
 
       html = topic.description_html
 
@@ -21,11 +21,21 @@ describe Topic, type: :model do
   end
 
   context 'post update reindexing' do
-    it "uses the TopicIndexQueuer to schedule notices for indexing" do
-      topic = create(:topic)
-      expect(TopicIndexQueuer).to receive(:for).with(topic.id)
+    it 'updates updated_at for every notice associated with a topic' do
+      notice = create(:dmca)
 
+      previous_updated_at = notice.updated_at
+      topic = notice.topics.first
+      topic.name = 'transparent change'
       topic.save
+
+      notice.reload
+      second_updated_at = notice.updated_at
+      expect(second_updated_at).to be > previous_updated_at
+
+      topic.update(name: 'Updatey McUpdateface')
+      notice.reload
+      expect(notice.updated_at).to be > second_updated_at
     end
   end
 
