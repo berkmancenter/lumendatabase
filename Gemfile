@@ -61,14 +61,9 @@ group :development do
 end
 
 group :development, :test do
-  gem 'factory_bot_rails'
-  gem 'parallel_tests'
-  gem 'phantomjs'
   gem 'pry', '~> 0.10.4'
   gem 'pry-byebug'
   gem 'pry-rails'
-  gem 'rspec-collection_matchers', '~> 1.1', '>= 1.1.2'
-  gem 'rspec-rails'
   gem 'ruby-prof'
   gem 'sham_rack'
 end
@@ -83,17 +78,22 @@ group :development, :test, :assets do
 end
 
 group :test do
+  gem 'capybara-selenium'
   gem 'curb'
   gem 'database_cleaner'
   gem 'elasticsearch-extensions'
-  gem 'poltergeist'
+  gem 'factory_bot_rails'
+  gem 'parallel_tests'
   gem 'rack-test', require: 'rack/test'
+  gem 'rspec-collection_matchers', '~> 1.1', '>= 1.1.2'
   gem 'rails-controller-testing'
+  gem 'rspec-rails'
   gem 'rspec-pride'
   gem 'shoulda-matchers', '~> 3.1', '>= 3.1.1'
   gem 'simplecov', require: false
   gem 'test-prof'
   gem 'timecop'
   gem 'vcr'
+  gem 'webdrivers'
   gem 'webmock'
 end
