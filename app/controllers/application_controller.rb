@@ -26,34 +26,6 @@ class ApplicationController < ActionController::Base
 
   private
 
-  def meta_hash_for(results)
-    %i[
-      current_page next_page offset per_page
-      previous_page total_entries total_pages
-    ].each_with_object(query_meta(results)) do |attribute, memo|
-      begin
-        memo[attribute] = results.send(attribute)
-      rescue
-        memo[attribute] = nil
-      end
-    end
-  end
-
-  def query_meta(results)
-    {
-      query: {
-        term: params[:term]
-      }.merge(facet_query_meta(results) || {}),
-      facets: results.response.aggregations
-    }
-  end
-
-  def facet_query_meta(results)
-    results.response.aggregations && results.response.aggregations.keys.each_with_object({}) do |facet, memo|
-      memo[facet.to_sym] = params[facet.to_sym] if params[facet.to_sym].present?
-    end
-  end
-
   def layout_by_resource
     if devise_controller?
       'sessions'

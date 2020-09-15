@@ -6,7 +6,7 @@ class Notices::SearchController < SearchController
   private
 
   def item_searcher
-    SearchesModels.new(params).tap do |searcher|
+    ElasticsearchQuery.new(params).tap do |searcher|
       Notice::SEARCHABLE_FIELDS.each do |searched_field|
         searcher.register searched_field
       end

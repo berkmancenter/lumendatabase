@@ -49,13 +49,14 @@ class SearchController < ApplicationController
   # Return the enriched instance (or nil, if none was found).
   def augment_instance(instance)
     return unless instance.present?
-    result = @ids_to_results[instance.id]
+
+    result = @searchdata.select { |datum| datum[:_id] == instance.id.to_s }.first
 
     class << instance
       attr_accessor :_score, :highlight
     end
 
-    instance._score = result._source['_score']
+    instance._score = result[:_score]
 
     highlights = result[:highlight].presence || []
     instance.highlight = highlights.map { |h| h[1] }.flatten
@@ -64,20 +65,14 @@ class SearchController < ApplicationController
   end
 
   def sort_by(sort_by_param)
-    sorting = Sortings.find(sort_by_param)
-    sorting.sort_by
+    ResultOrdering.define(sort_by_param).sort_by
   end
 
   def wrap_instances
-    @ids_to_results = @searchdata.results.map { |r| [r._source[:id], r] }.to_h
-    instances = self.class::SEARCHED_MODEL.where(id: @ids_to_results.keys)
-    # Because the instances are in db order, we'll need to re-sort them to
-    # preserve the elasticsearch order. This is preferable to iterating through
-    # the elasticsearch results and fetching one db item each time, however;
-    # we used to do that and all those roundtrips were costing us in
-    # performance.
+    # #records fetches the database instances while maintaining the search
+    # response ordering.
+    instances = @searchdata.records
     instances.map { |r| augment_instance(r) }
-             .sort_by { |a| @ids_to_results.keys.index(a[:id]) }
   end
 
   # Elasticsearch cannot return more than 20_000 results in production (2000
@@ -116,5 +111,33 @@ class SearchController < ApplicationController
 
   def num_results
     params[:page].to_i * (params[:per_page] || 10 ).to_i
+  end
+
+  def meta_hash_for(results)
+    %i[
+      current_page next_page offset per_page
+      previous_page total_entries total_pages
+    ].each_with_object(query_meta(results)) do |attribute, memo|
+      begin
+        memo[attribute] = results.send(attribute)
+      rescue
+        memo[attribute] = nil
+      end
+    end
+  end
+
+  def query_meta(results)
+    {
+      query: {
+        term: params[:term]
+      }.merge(facet_query_meta(results) || {}),
+      facets: results.response.aggregations
+    }
+  end
+
+  def facet_query_meta(results)
+    results.response.aggregations && results.response.aggregations.keys.each_with_object({}) do |facet, memo|
+      memo[facet.to_sym] = params[facet.to_sym] if params[facet.to_sym].present?
+    end
   end
 end

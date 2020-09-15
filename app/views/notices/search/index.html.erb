@@ -20,12 +20,12 @@
         <div class="dropdown sort-order">
           Sort by: <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><%= sort_order_label(params[:sort_by]) %></a>
           <ol class="dropdown-menu" role="menu">
-            <% Notice::SORTINGS.each do |sorting| %>
+            <% Notice::ORDERING_OPTIONS.each do |ordering| %>
               <li class="facet">
               <%=
                 link_to(
-                  sorting.label, '#', 'data-value': sorting.key,
-                  'data-label': sorting.label
+                  ordering.label, '#', 'data-value': ordering.param,
+                  'data-label': ordering.label
                 ) %>
               </li>
             <% end %>

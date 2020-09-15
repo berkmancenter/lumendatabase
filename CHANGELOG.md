@@ -1,6 +1,6 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
-## Unreleased
+## [20.09](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.00) - 2020-09-02
 ### Fixed
 * [#621](https://github.com/berkmancenter/lumendatabase/pull/621) Don't offer a 'click here to request access' option when there is nothing further to be requested
 * [#622](https://github.com/berkmancenter/lumendatabase/pull/622) Display date_sent even when sender name is hidden
@@ -207,7 +207,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 * "Submitter" field on notice submissions
-* VCR dependency for SearchesModels spec
+* VCR dependency for ElasticsearchQuery spec
 * Placeholder notice for use in Google Canadian law notice responses
 * Auto-redaction of work descriptions for newly added works
 * Rake task for redaction of descriptions of existing works (this will be applied slowly over time to redact our existing 203M works)
@@ -215,7 +215,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed/Fixed
 * Bug preventing notices submitted via OldChill from being imported into Lumen
-* Excessive instantiations on `SearchesModels#search` leading to slow notice searches and topic/notice display pages; the API for `#search` has been changed to allow its consumers to reduce their data demands
+* Excessive instantiations on `ElasticsearchQuery#search` leading to slow notice searches and topic/notice display pages; the API for `#search` has been changed to allow its consumers to reduce their data demands
 * Excessive db queries on `NoticesController#create`
 * Excessive db queries on`RailsAdmin#MainController#edit` (resulting in minor changes to admin interface)
 * More extensive caching of expensive fragments
