@@ -15,7 +15,7 @@ gem 'comfortable_mexican_sofa'
 # It also removes CountrySelect::ISO_COUNTRIES_FOR_SELECT in 1.3, which is a
 # breaking change for us.
 gem 'country_select', '~> 1.2.0'
-gem 'coveralls', require: false
+gem 'coveralls', '~> 0.8.0', require: false
 gem 'date_validator'
 gem 'devise'
 gem 'dotenv-rails'
@@ -50,10 +50,10 @@ gem 'skylight'
 gem 'stackprof'
 gem 'turnout'
 
-# These need to go last or tests fail. Their versions need to be pinned
-# because there are breaking changes in 6.
-gem 'elasticsearch-model', '~> 5.0'
-gem 'elasticsearch-rails', '~> 5.0'
+# This needs to go last or tests fail. Their versions need to be pinned
+# because there are breaking changes between major versions.
+gem 'elasticsearch-model', '~> 7.0'
+gem 'elasticsearch-rails', '~> 7.0'
 
 group :development do
   gem 'allocation_tracer'

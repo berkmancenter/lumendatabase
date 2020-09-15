@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/berkmancenter/lumendatabase.svg?branch=master)](https://travis-ci.org/berkmancenter/lumendatabase)
-[![Coverage Status](https://coveralls.io/repos/github/berkmancenter/lumendatabase/badge.svg?branch=master)](https://coveralls.io/github/berkmancenter/lumendatabase?branch=master)
+[![Build Status](https://travis-ci.org/berkmancenter/lumendatabase.svg?branch=dev)](https://travis-ci.org/berkmancenter/lumendatabase)
+[![Coverage Status](https://coveralls.io/repos/github/berkmancenter/lumendatabase/badge.svg?branch=dev)](https://coveralls.io/github/berkmancenter/lumendatabase?branch=dev)
 [![Code Climate](https://codeclimate.com/github/codeclimate/codeclimate/badges/gpa.svg)](https://codeclimate.com/github/berkmancenter/lumendatabase)
 
 Lumen Database
@@ -18,7 +18,7 @@ Development
 
 * ruby 2.5.5
 * PostgreSQL 9.6
-* Elasticsearch 5.6.x
+* Elasticsearch 7.7.x
 * Java Runtime Environment (OpenJDK works fine)
 * Piwik Tracking (only used in prod)
 * Mail server (SMTP, Sendmail)
