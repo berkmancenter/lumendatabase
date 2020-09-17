@@ -22,7 +22,7 @@ Development
 * Java Runtime Environment (OpenJDK works fine)
 * Piwik Tracking (only used in prod)
 * Mail server (SMTP, Sendmail)
-* phantomjs (used only by test runner)
+* ChromeDriver (used only by test runner)
 
 #### Setup
 

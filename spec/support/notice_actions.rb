@@ -52,6 +52,7 @@ module NoticeActions
 
     with_file('some content') do |file|
       attach_file field_name, file.path
+      find('body').send_keys(:escape)
     end
     @field_index += 1
   end
