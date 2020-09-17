@@ -29,6 +29,7 @@ RSpec.configure do |config|
   # without Elasticsearch, since it's faster.
   config.before :suite do
     next if ENV['TEST_WITH_ELASTICSEARCH'].to_s == "0"
+    next if ENV['CIRCLECI'].present?
     if Elasticsearch::Extensions::Test::Cluster.running?(on: es_port)
       Elasticsearch::Extensions::Test::Cluster.stop(**es_options)
     end
@@ -76,6 +77,7 @@ RSpec.configure do |config|
 
   # Stop elasticsearch cluster after test run
   config.after :suite do
+    next if ENV['CIRCLECI'].present?
     if Elasticsearch::Extensions::Test::Cluster.running?(on: es_port)
       Elasticsearch::Extensions::Test::Cluster.stop(**es_options)
     end

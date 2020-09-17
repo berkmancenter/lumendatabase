@@ -38,6 +38,11 @@ RSpec.configure do |config|
   config.example_status_persistence_file_path = 'rspec_examples.txt'
 
   #config.raise_errors_for_deprecations!
+  config.before(:each, js: true) do
+    # The default window size is too narrow, and may cause elements to overlap
+    # (and thus not be clickable) due to inadequately responsive design.
+    Capybara.page.driver.browser.manage.window.resize_to(2048, 600)
+  end
 end
 
 RSpec::Mocks.configuration.allow_message_expectations_on_nil = true

@@ -22,10 +22,10 @@ module NoticeActions
       fill_in 'Name', with: 'Submitter the first'
     end
 
-    fill_in 'Work URL', with: 'http://www.example.com/original_work.pdf'
+    fill_in 'Original Work URL', with: 'http://www.example.com/original_work.pdf'
     fill_in 'Kind of Work', with: 'movie'
     fill_in 'Description', with: 'A series of videos and still images'
-    fill_in 'Infringing URL', with: 'http://example.com/infringing_url1'
+    fill_in 'Allegedly Infringing URL', with: 'http://example.com/infringing_url1'
 
     yield if block_given?
 
@@ -52,7 +52,6 @@ module NoticeActions
 
     with_file('some content') do |file|
       attach_file field_name, file.path
-      find('body').send_keys(:escape)
     end
     @field_index += 1
   end

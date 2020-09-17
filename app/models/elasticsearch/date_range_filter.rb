@@ -57,6 +57,8 @@ class DateRangeFilter
   class FilterRangeValues
     def initialize(time_value)
       @from, @to = time_value.split(Notice::RANGE_SEPARATOR, 2).map do |str|
+        # This returns local time. (#at takes a timezone parameter as of
+        # ruby 2.7+, but is not customizable in the current 2.5 codebase.)
         Time.at(str.to_i / 1000)
       end
     end

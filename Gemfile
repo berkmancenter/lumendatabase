@@ -87,8 +87,9 @@ group :test do
   gem 'rack-test', require: 'rack/test'
   gem 'rspec-collection_matchers', '~> 1.1', '>= 1.1.2'
   gem 'rails-controller-testing'
-  gem 'rspec-rails'
+  gem 'rspec_junit_formatter'
   gem 'rspec-pride'
+  gem 'rspec-rails'
   gem 'shoulda-matchers', '~> 3.1', '>= 3.1.1'
   gem 'simplecov', require: false
   gem 'test-prof'
