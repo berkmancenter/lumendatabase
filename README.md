@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/berkmancenter/lumendatabase.svg?branch=dev)](https://travis-ci.org/berkmancenter/lumendatabase)
+[![Build Status](https://circleci.com/gh/berkmancenter/lumendatabase.svg?style=shield)](https://circleci.com/gh/berkmancenter/lumendatabase)
 [![Coverage Status](https://coveralls.io/repos/github/berkmancenter/lumendatabase/badge.svg?branch=dev)](https://coveralls.io/github/berkmancenter/lumendatabase?branch=dev)
 [![Code Climate](https://codeclimate.com/github/codeclimate/codeclimate/badges/gpa.svg)](https://codeclimate.com/github/berkmancenter/lumendatabase)
 
