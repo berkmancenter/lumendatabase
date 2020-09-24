@@ -23,7 +23,9 @@ describe ElasticsearchQuery, type: :model do
     six_months_ago = now - 6.months
     year_ago = now - 12.months
 
-    end_of_date_range = Time.new(2020, 5, 21).beginning_of_day
+    # Important to specify timezone, because otherwise it may not be the same
+    # as the epoch-denominated times below.
+    end_of_date_range = Time.new(2020, 5, 21, 0, 0, 0, '-04:00').beginning_of_day
     beginning_of_date_range = end_of_date_range - 1.year
 
 
@@ -38,7 +40,7 @@ describe ElasticsearchQuery, type: :model do
             { match: { rescinded: { query: false, operator: 'AND' } } },
             { multi_match: {
               query: 'i give up',
-              fields:  Searchability::MULTI_MATCH_FIELDS,
+              fields: Searchability::MULTI_MATCH_FIELDS,
               type: :cross_fields,
               operator: 'AND'
             } }
