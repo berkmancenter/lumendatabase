@@ -1,5 +1,15 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## Unreleased
+### Changed
+* [#612](https://github.com/berkmancenter/lumendatabase/pull/612) Elasticsearch updated from 5.x to 7.x.
+  * This includes a major refactor of the Elasticsearch-handling components to promote maintainability.
+* [#624](https://github.com/berkmancenter/lumendatabase/pull/624) Migrate phantomjs (no longer maintained) to selenium.
+* [#623](https://github.com/berkmancenter/lumendatabase/pull/623) Migrate from Travis (stopped working) to CircleCI.
+
+### Security
+* [#625](https://github.com/berkmancenter/lumendatabase/pull/625) Patch update to rails version.
+
 ## [20.09](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.00) - 2020-09-02
 ### Fixed
 * [#621](https://github.com/berkmancenter/lumendatabase/pull/621) Don't offer a 'click here to request access' option when there is nothing further to be requested
