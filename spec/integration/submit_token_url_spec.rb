@@ -13,7 +13,7 @@ feature 'token url submission' do
     expect(page).to have_content 'A new single-use link has been generated and sent to'
   end
 
-  scenario 'won\'t allow to submit twice using the same email', js: true do
+  scenario "won't allow to submit twice using the same email", js: true do
     visit request_access_notice_path(notice)
 
     expect_correct_title
@@ -27,14 +27,16 @@ feature 'token url submission' do
     expect(page).to have_content 'This email address has been used already'
   end
 
-  scenario 'won\'t allow to submit using a not valid email', js: true do
+  scenario "won't allow to submit using a not valid email", js: true do
     visit request_access_notice_path(notice)
 
     expect_correct_title
 
     submit('hohoho')
+    message = page.find('#token_url_email').native.attribute('validationMessage')
 
-    expect(page).to have_content 'Email is invalid'
+    expect(message).to be_present
+    expect(current_path).to eq request_access_notice_path(notice)
   end
 
   scenario 'will contain all the form fields', js: true do

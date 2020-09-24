@@ -1,0 +1,8 @@
+test:
+  adapter: postgresql
+  database: lumen_test
+  username: postgres
+  encoding: utf8
+  # Scale connection pool by parallelism amount to avoid exhaustion.
+  pool: 5*<%= ENV['CIRCLE_NODE_TOTAL'] %>
+  timeout: 5000
