@@ -1,8 +1,6 @@
 version: 2.1
-
 orbs:
   ruby: circleci/ruby@1.1.1
-  coveralls: coveralls/coveralls@1.0.6
 
 jobs:
   build:
