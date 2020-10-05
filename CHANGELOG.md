@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 * [#624](https://github.com/berkmancenter/lumendatabase/pull/624) Migrate phantomjs (no longer maintained) to selenium.
 * [#623](https://github.com/berkmancenter/lumendatabase/pull/623) Migrate from Travis (stopped working) to CircleCI.
 
+### Added
+* [#626](https://github.com/berkmancenter/lumendatabase/pull/626) Documentation of elasticsearch upgrade process.
+
 ### Security
 * [#625](https://github.com/berkmancenter/lumendatabase/pull/625) Patch update to rails version.
 
