@@ -2,6 +2,21 @@
 
 Maintenance windows are Wednesday and Saturday nights (after 5pm Eastern).
 
+## tl;dr
+
+Most deploys can be completed with:
+* `git pull`
+* `touch tmp/restart.txt`
+
+CircleCI should have already run tests on `dev`, though you should rerun them yourself for `master-legacy`.
+
+Additional steps are needed if there have been changes to any of the following:
+* stylesheets;
+* the database schema;
+* the Gemfile.lock.
+
+The full process is documented below.
+
 ## Special instructions
 If any deploys have special instructions, write them here, with a date and PR number. When that PR has been deployed, you can erase the special instructions.
 
@@ -60,6 +75,7 @@ If any deploys have special instructions, write them here, with a date and PR nu
 * `cp ../.env .`
 * `rails db:migrate`
   - If this throws a `PG::ConnectionBad:` and asks something like "Is the server running locally and accepting connections on Unix domain socket "/var/run/postgresql/.s.PGSQL.5432"?", use `RAILS_ENV=production rails db:migrate`
+  - **First check** that the database is not in the midst of a backup process. This process is **blocking**, and your `db:migrate` will be queued behind it. This can lead to very substantial downtime.
 * `rails assets:clobber`
 * `RAILS_ENV=development rails assets:precompile`
   * This MUST specify the development environment, because bourbon is not loaded in production to save on memory.
