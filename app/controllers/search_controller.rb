@@ -71,6 +71,8 @@ class SearchController < ApplicationController
   def wrap_instances
     # #records fetches the database instances while maintaining the search
     # response ordering.
+    # Note that the search definition above is lazy; this is the first line
+    # where anything with Elasticsearch actually gets executed.
     instances = @searchdata.records
     instances.map { |r| augment_instance(r) }
   end
