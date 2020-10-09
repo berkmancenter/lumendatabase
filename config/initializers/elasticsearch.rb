@@ -1,6 +1,9 @@
 config = {
   host: 'http://localhost:9200',
-  request_timeout: 20
+  # This request timeout is ridiculously large, but searches with a very large
+  # number of hits will fail without it (throwing a Faraday::TimeoutError
+  # (Net::ReadTimeout)).
+  request_timeout: 40
 }
 
 if File.exist?('config/elasticsearch.yml')
