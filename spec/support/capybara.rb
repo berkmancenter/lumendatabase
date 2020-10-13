@@ -4,6 +4,12 @@ require 'webdrivers/chromedriver'
 # https://docs.travis-ci.com/user/common-build-problems/#capybara-im-getting-errors-about-elements-not-being-found
 Capybara.default_max_wait_time = 15
 
+# TROUBLESHOOTING: are your tests failing because of the wrong chromedriver
+# version, even though you know you have the right version installed, and
+# moreover webdrivers is automatically managing the upgrades?
+# Before you go editing these options, check for running Chrome processes and
+# kill them! Old running Chrome versions will disrupt Capybara's ability to find
+# and launch the new version.
 default_chrome_options = %w(
   --blink-settings=imagesEnabled=false
   --disable-extensions

@@ -9,6 +9,7 @@ class Entity < ApplicationRecord
   include HierarchicalRelationships
   include DefaultNameOriginal
   include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
 
   # == Constants ============================================================
   PER_PAGE = 10

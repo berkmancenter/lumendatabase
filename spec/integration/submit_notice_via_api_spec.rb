@@ -43,6 +43,26 @@ feature 'notice submission', js: true do
     expect(notice.recipient.kind).to eq 'individual'
   end
 
+  scenario 'submitting a notice updates the elasticsearch index' do
+    parameters = request_hash(
+      default_notice_hash(title: 'Time to update elasticsearch')
+    )
+
+    curb = post_api('/notices', parameters)
+
+    retry_until = Time.now + 5.seconds
+
+    # The test will fail if we just check immediately due to the time it takes
+    # to update the index, so allow it to retry for a bit.
+    while ( Time.now < retry_until )
+      new_results = Notice.__elasticsearch__.search 'elasticsearch'
+      test = (new_results.count == 1)
+      break if test
+    end
+
+    expect(test)
+  end
+
   scenario 'submitting a notice with token in header' do
     parameters = request_hash(default_notice_hash)
     token = parameters.delete(:x_authentication_token)

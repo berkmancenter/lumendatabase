@@ -7,6 +7,7 @@ require 'validates_automatically'
 class Notice < ApplicationRecord
   include Searchability
   include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
 
   extend RecentScope
 
