@@ -8,14 +8,13 @@ module Searchability
   # Default fields to search with a multimatch query. Weights some of the
   # fields, based purely on intuition from reading logs.
   # Before Elasticsearch 6.x this was an `_all` query, but `_all` is no longer
-  # supported. These MULTI_MATCH_FIELDS match what we actually included in
-  # `_all` via our elasticsearch mapping.
-  MULTI_MATCH_FIELDS = %w(
-    title^2 tag_list jurisdiction_list request_type mark_registration_number
-    sender_name^2 principal_name submitter_name submitter_country_code
-    recipient_name^2 subject body topics.name works.description^4
-    works.infringing_urls.url works.copyrighted_urls.url
-  )
+  # supported. Instead, we define base_search and preferred_search fields which
+  # contain all the fields we actually searched via _all, and copy fields to
+  # those during indexing (in a mutually exclusive way: fields get copied to
+  # one or the other, not both). This lets us do simple weighting.
+  # We could simply list all of the fields we would have searched, but that
+  # scoring proves to be incredibly slow.
+  MULTI_MATCH_FIELDS = %w(base_search preferred_search^2)
 
   module ClassMethods
     def define_elasticsearch_mapping(exclusions = {})
@@ -27,37 +26,39 @@ module Searchability
       settings do
         mappings dynamic: false do
           # fields
+          indexes :base_search, type: 'text'
+          indexes :preferred_search, type: 'text'
           indexes :id, type: 'keyword'
           indexes :class_name, type: 'keyword'
-          indexes :title
+          indexes :title, copy_to: 'preferred_search'
           indexes :date_received, type: 'date'
           indexes :created_at, type: 'date'
           indexes :rescinded, type: 'boolean'
           indexes :spam, type: 'boolean'
           indexes :published, type: 'boolean'
           indexes :hidden, type: 'boolean'
-          indexes :subject
-          indexes :body
-          indexes :tag_list
-          indexes :jurisdiction_list
+          indexes :subject, copy_to: 'base_search'
+          indexes :body, copy_to: 'base_search'
+          indexes :tag_list, copy_to: 'base_search'
+          indexes :jurisdiction_list, copy_to: 'base_search'
           indexes :action_taken, type: 'keyword'
-          indexes :request_type, type: 'keyword'
-          indexes :mark_registration_number, type: 'keyword'
-          indexes :sender_name
-          indexes :principal_name
-          indexes :submitter_name
-          indexes :submitter_country_code
-          indexes :recipient_name
+          indexes :request_type, type: 'keyword', copy_to: 'base_search'
+          indexes :mark_registration_number, type: 'keyword', copy_to: 'base_search'
+          indexes :sender_name, copy_to: 'preferred_search'
+          indexes :principal_name, copy_to: 'base_search'
+          indexes :submitter_name, copy_to: 'base_search'
+          indexes :submitter_country_code, copy_to: 'base_search'
+          indexes :recipient_name, copy_to: 'preferred_search'
           indexes :topics do
-            indexes :name
+            indexes :name, copy_to: 'base_search'
           end
           indexes :works do
-            indexes :description
+            indexes :description, copy_to: 'preferred_search'
             indexes :infringing_urls do
-              indexes :url
+              indexes :url, copy_to: 'base_search'
             end
             indexes :copyrighted_urls do
-              indexes :url
+              indexes :url, copy_to: 'base_search'
             end
           end
 
