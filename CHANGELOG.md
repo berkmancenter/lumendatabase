@@ -2,6 +2,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Unreleased
 
+## [20.10a](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.10a) - 2020-10-20
+* [#628](https://github.com/berkmancenter/lumendatabase/pull/628) Tweaks Elasticsearch options so that high-volume searches resolve before timeout.
+
 ## [20.10](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.10) - 2020-10-05
 ### Changed
 * [#612](https://github.com/berkmancenter/lumendatabase/pull/612) Elasticsearch updated from 5.x to 7.x.
