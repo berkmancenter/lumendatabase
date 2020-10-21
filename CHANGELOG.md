@@ -1,6 +1,8 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
 ## Unreleased
+* [#630](https://github.com/berkmancenter/lumendatabase/pull/630) Updates caching strategy on home page to be more resilient across deploys.
+* [#630](https://github.com/berkmancenter/lumendatabase/pull/630) Improves documentation (Elasticsearch indexing, release procedures).
 
 ## [20.10a](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.10a) - 2020-10-20
 * [#628](https://github.com/berkmancenter/lumendatabase/pull/628) Tweaks Elasticsearch options so that high-volume searches resolve before timeout.
