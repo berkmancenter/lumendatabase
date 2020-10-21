@@ -64,3 +64,15 @@ This covers what we did to upgrade from ES 5 to ES 7. It's preserved here in hop
   * This will allow you to upgrade with near-zero downtime, by reindexing in the background and cutting over when ready.
 6. You can now do your Rails deploy (with the upgraded elasticsearch gems) and it should just work.
    * If the Rails server is already running a correct version and you just want to update the elasticsearch index, there's nothing (!) you need to do on the Rails side -- repointing the index will take care of it for you.
+
+## What we index
+
+Earlier versions of Elasticsearch had an `_all` field. By default all the fields were copied to `_all`, which was analyzed as text. This was also the default search field.
+
+As of Elasticsearch 7.x, `_all` no longer exists. The documentation says you should specify particular fields you want to search. It also says that searching a large number of fields creates performance problems.
+
+In our original ES 7.x deploy, we did search a large number of fields. This was fast for relatively small result sets (e.g. 'batman', which has more than 10K hits, but is still small compared to some of our users' searches). However, it timed out for large searches (like "DMCA").
+
+A subsequent reindex + deploy copied some fields to `base_search` and `preferred_search`, such that we can boost `preferred_search` when searching. (See `app/models/elasticsearch/searchability.rb`.) This made small searches slower, but made it possible for large searches to complete at all.
+
+Additional tweaking would be better.
