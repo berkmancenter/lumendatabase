@@ -9,6 +9,10 @@ Most deploys can be completed with:
 * sudo to appropriate user
 * `git pull`
 * `touch tmp/restart.txt`
+* If this is a production deploy:
+  - Update CHANGELOG.md
+  - On github, make a release on master-legacy at the deployed commit
+  - Format as YYYY.MM (or YYYY.MM.a, YYYY.MM.b, etc. for subsequent deploys in the same month)
 
 CircleCI should have already run tests on `dev`, though you should rerun them yourself for `master-legacy`.
 
@@ -84,7 +88,11 @@ If any deploys have special instructions, write them here, with a date and PR nu
   * Prod will still be able to find the precompiled assets.
 * `rails lumen:maintenance_end`
   * This includes the `touch tmp/restart.txt` command, which tells Passenger to restart its listener.
-* Update `CHANGELOG.md` per [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+* For production releases:
+  * Update `CHANGELOG.md` per [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+  * Cut a release on Github
+    - Make a release on the deployed commit (should be HEAD of master-legacy)
+    - Format as YYYY.MM (or YYYY.MM.a, YYYY.MM.b, etc. for subsequent deploys in the same month)
 
 ## Rollback
 Any rollback should be approached with caution. Write out a specific plan which starts from the below steps but consider whether there are instructions specific to the code being rolled back which need to be added.
