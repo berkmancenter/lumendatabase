@@ -5,6 +5,8 @@ Maintenance windows are Wednesday and Saturday nights (after 5pm Eastern).
 ## tl;dr
 
 Most deploys can be completed with:
+* cd to appropriate directory
+* sudo to appropriate user
 * `git pull`
 * `touch tmp/restart.txt`
 
