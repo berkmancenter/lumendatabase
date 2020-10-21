@@ -2,12 +2,21 @@ class HomeController < ApplicationController
   layout 'home'
 
   def index
-    # If you change versions of Rails, update the name of this cache key!
-    # The new version may not be able to read objects serialized by the old
-    # one.
-    @notices = Rails.cache.fetch(
-      'newest_notices', expires_in: 1.hour
-    ) { Notice.visible.recent }
+    # We cache the IDs, not the notices, because caching the notices will mean
+    # the home page breaks if anything happens to change the structure of a
+    # notice. (For example: serialization changes across rails versions;
+    # Elasticsearch mapping changes.) The IDs will remain stable and we can
+    # rehydrate them from the database without too much performance difference.
+    # This is still faster than applying the visible & recent scopes each time.
+    notice_ids = Rails.cache.fetch(
+      'recent_notices', expires_in: 1.hour
+    ) do
+      @notices = Notice.visible.recent
+      @notices.pluck(:id)
+    end
+
+    @notices ||= Notice.where(id: notice_ids)
+
     @blog_entries = blog_entries
   end
 
