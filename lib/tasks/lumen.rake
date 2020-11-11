@@ -755,7 +755,22 @@ where works.id in (
   # b45018d.
 
   desc 'Run catchup ES indexing'
-  task run_catchup_es_indexing: :environment do
+  task :run_catchup_es_indexing, %i[notices_index_name entities_index_name] => :environment do |_t, args|
+    unless args[:notices_index_name].nil?
+      types_to_set = [
+        DMCA, Counterfeit, Counternotice, CourtOrder, DataProtection, Defamation,
+        GovernmentRequest, LawEnforcementRequest, PrivateInformation, Trademark,
+        Other
+      ]
+      types_to_set.each do |type_to_set|
+        type_to_set.index_name args[:notices_index_name]
+      end
+    end
+
+    unless args[:entities_index_name].nil?
+      Entity.index_name args[:entities_index_name]
+    end
+
     reindexing_timestamp_file = Rails.root.join('tmp', 'reindexing_timestamp')
     loggy = Loggy.new('rake lumen:run_catchup_es_indexing', true)
 
@@ -768,11 +783,12 @@ where works.id in (
     # Get extra 10 minutes, just to make sure that everything is indexed
     reindexing_start_date -= 10.minutes
     batch_size = (ENV['BATCH_SIZE'] || 100).to_i
+    number_of_all_items = Notice.where("updated_at > '#{reindexing_start_date}'").count + Entity.where("updated_at > '#{reindexing_start_date}'").count
 
     # Index updated and new entities
     begin
+      count = 0
       [Notice, Entity].each do |klass|
-        count = 0
         klass.where("updated_at > '#{reindexing_start_date}'").order('id ASC').find_in_batches(batch_size: batch_size) do |instances|
           # Force garbage collection to avoid OOM
           GC.start
@@ -781,7 +797,7 @@ where works.id in (
             count += 1
             loggy.info(klass.name + ' indexing id ' + instance.id.to_s)
           end
-          loggy.info(count.to_s + ' ' + klass.name + ' instances indexed')
+          loggy.info(count.to_s + '/' + number_of_all_items.to_s + ' instances indexed')
         end
       end
       ReindexRun.sweep_search_result_caches
