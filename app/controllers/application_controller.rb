@@ -72,8 +72,9 @@ class ApplicationController < ActionController::Base
     store_location_for(:user, request.fullpath)
   end
 
-  def resource_not_found(exception)
-    logger.error(exception)
+  def resource_not_found(exception = false)
+    logger404s = Logger.new("#{Rails.root}/log/#{Rails.env}_404s.log")
+    logger404s.error(exception) if exception
 
     respond_to do |format|
       format.html do
