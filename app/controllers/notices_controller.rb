@@ -60,7 +60,7 @@ class NoticesController < ApplicationController
   end
 
   def show
-    return unless (@notice = Notice.find(params[:id]))
+    return resource_not_found("Can't fing notice with id=#{params[:id]}") unless (@notice = Notice.find_by(id: params[:id]))
 
     respond_to do |format|
       format.html { show_render_html }
@@ -68,15 +68,21 @@ class NoticesController < ApplicationController
         render json: @notice,
                serializer: NoticeSerializerProxy,
                root: json_root_for(@notice.class)
-       end
+      end
     end
   end
 
   def feed
-    @recent_notices = Rails.cache.fetch(
+    notice_ids = Rails.cache.fetch(
       'recent_notices',
       expires_in: 1.hour
-    ) { Notice.visible.recent }
+    ) do
+      @notices = Notice.visible.recent
+      @notices.pluck(:id)
+    end
+
+    @recent_notices ||= Notice.where(id: notice_ids)
+
     respond_to do |format|
       format.rss { render layout: false }
     end
