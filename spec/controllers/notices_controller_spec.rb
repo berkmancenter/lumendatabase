@@ -4,7 +4,7 @@ describe NoticesController do
   context '#show' do
     it 'finds the notice by ID' do
       notice = Notice.new
-      expect(Notice).to receive(:find).with('42').and_return(notice)
+      expect(Notice).to receive(:find_by).with(id: '42').and_return(notice)
 
       get :show, params: { id: 42 }
 
@@ -170,7 +170,7 @@ describe NoticesController do
       end
 
       it 'increases the notice counter for the user when the viewing limit is set and viewing html' do
-        expect(Notice).to receive(:find).with('42').and_return(notice)
+        expect(Notice).to receive(:find_by).with(id: '42').and_return(notice)
 
         user.notice_viewer_views_limit = 1
         allow(controller).to receive(:current_user).and_return(user)
@@ -181,7 +181,7 @@ describe NoticesController do
       end
 
       it "won't increase the notice counter for the user when the viewing limit is set and viewing json" do
-        expect(Notice).to receive(:find).with('42').and_return(notice)
+        expect(Notice).to receive(:find_by).with(id: '42').and_return(notice)
 
         user.notice_viewer_views_limit = 1
         allow(controller).to receive(:current_user).and_return(user)
@@ -192,7 +192,7 @@ describe NoticesController do
       end
 
       it "won't increase the notice counter for the user when the viewing limit is nil or 0" do
-        expect(Notice).to receive(:find).twice.with('42').and_return(notice)
+        expect(Notice).to receive(:find_by).with(id: '42').exactly(2).times.and_return(notice)
 
         user.notice_viewer_views_limit = nil
         allow(controller).to receive(:current_user).and_return(user)
@@ -209,7 +209,7 @@ describe NoticesController do
       end
 
       it 'increases the notice counter for the user when the viewing limit is set until the limit is reached' do
-        expect(Notice).to receive(:find).with('42').exactly(3).times.and_return(notice)
+        expect(Notice).to receive(:find_by).with(id: '42').exactly(3).times.and_return(notice)
 
         user.notice_viewer_views_limit = 2
         allow(controller).to receive(:current_user).and_return(user)
@@ -230,7 +230,7 @@ describe NoticesController do
 
     def stub_find_notice(notice = nil)
       notice ||= Notice.new
-      notice.tap { |n| allow(Notice).to receive(:find).and_return(n) }
+      notice.tap { |n| allow(Notice).to receive(:find_by).and_return(n) }
     end
   end
 
