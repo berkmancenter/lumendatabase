@@ -98,3 +98,5 @@ group :test do
   gem 'webdrivers'
   gem 'webmock'
 end
+
+gem "mysql2", "~> 0.5.3"
