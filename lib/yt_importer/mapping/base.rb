@@ -103,10 +103,6 @@ module YtImporter
         @data_from_legacy_database['Readlevel'].to_s
       end
 
-      def parse_works
-        []
-      end
-
       def parse_mark_registration_number(*)
       end
 
@@ -154,6 +150,24 @@ module YtImporter
 
       def work_description
         ''
+      end
+
+      def parse_works
+        infringing_urls = parsed_infringing_urls.map do |url|
+          uri = URI.parse(url)
+          valid = %w(http https).include?(uri.scheme)
+          unless valid
+            url = "https://#{url}"
+          end
+
+          InfringingUrl.new(url: url)
+        end
+        [
+          Work.new(
+            description: work_description,
+            infringing_urls: infringing_urls
+          )
+        ]
       end
     end
   end

@@ -29,7 +29,7 @@ module YtImporter
 
     def import
       create_new_yt_import_record
-      generate_yt_files_list
+      generate_yt_files_list unless ENV['YT_IMPORT_SKIP_FILE_GENERATION']
       import_notices
     end
 
@@ -53,21 +53,24 @@ module YtImporter
       ''
     end
 
+    def import_files_list_file
+      ENV['YT_IMPORT_FILES_LIST_FILE'] || 'tmp/yt_importer_files_list'
+    end
+
     def generate_yt_files_list
-      `touch tmp/yt_importer_files_list`
-      `find #{FILES_DIRECTORY} -type f #{import_date_from} #{import_date_to}  -exec grep -Rl 'youtube.com' {} + > tmp/yt_importer_files_list`
-      @number_to_import = `wc -l < tmp/yt_importer_files_list`.strip.to_i
+      `touch #{import_files_list_file}`
+      `find #{FILES_DIRECTORY} -type f #{import_date_from} #{import_date_to}  -exec grep -Rl 'youtube.com' {} + > #{import_files_list_file}`
     end
 
     def import_notices
       connect_to_legacy_database
-
+      @number_to_import = `wc -l < #{import_files_list_file}`.strip.to_i
       @number_imported += 1
 
-      File.open('tmp/yt_importer_files_list') do |file|
+      File.open(import_files_list_file) do |file|
         file.each_slice(IMPORT_FILE_BATCH_SIZE) do |lines|
           lines.each do |file_to_process|
-            import_single_notice(file_to_process.gsub('\n', ''))
+            import_single_notice(file_to_process.strip)
 
             # To avoid "Commands out of sync; you can't run this command now" errors
             @legacy_database_connection.abandon_results!
@@ -80,12 +83,7 @@ module YtImporter
       @logger.info("Importing --- #{@number_imported + @number_failed_imports}/#{@number_to_import} --- file")
       @logger.info("Importing #{file_to_process}")
 
-      if system("grep 'Automatically added fields' #{file_to_process}")
-        # digested_file_data = digest_plain_file(file_to_process)
-        @number_failed_imports += 1
-        @logger.info("Couldn't import #{file_to_process}, missing format")
-        return
-      elsif system("grep '<table' #{file_to_process}")
+      if system("grep '<table' #{file_to_process}")
         format_class = 'Html'
       elsif system("grep '<HTML' #{file_to_process}") && !system("grep '<table' #{file_to_process}")
         format_class = 'PlainNew'
@@ -203,11 +201,12 @@ EOSQL
 
     def read_file(file)
       content = IO.read(file)
-      if !content.valid_encoding?
-        content.unpack("C*").pack("U*")
-      else
-        content
+
+      unless content.valid_encoding?
+        content = content.unpack("C*").pack("U*")
       end
+
+      content.gsub(/\r\n?/, "\n")
     end
   end
 end

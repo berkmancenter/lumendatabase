@@ -24,18 +24,6 @@ module YtImporter
         def parsed_infringing_urls
           data_field_without_field_label(@notice_paragraphs.fetch(@urls_index, nil)&.content).split(/[\s,]/)
         end
-
-        def parse_works
-          infringing_urls = parsed_infringing_urls.map do |url|
-            InfringingUrl.new(url: url)
-          end
-          [
-            Work.new(
-              description: work_description,
-              infringing_urls: infringing_urls
-            )
-          ]
-        end
       end
     end
   end
