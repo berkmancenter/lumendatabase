@@ -4,6 +4,10 @@ require 'yt_importer/mapping/html/counterfeit'
 require 'yt_importer/mapping/html/defamation'
 require 'yt_importer/mapping/html/other_legal'
 require 'yt_importer/mapping/html/trademark_d'
+require 'yt_importer/mapping/plain_new/counterfeit'
+require 'yt_importer/mapping/plain_new/defamation'
+require 'yt_importer/mapping/plain_new/other_legal'
+require 'yt_importer/mapping/plain_new/trademark_d'
 
 module YtImporter
   class YtImporter
@@ -18,7 +22,6 @@ module YtImporter
         return
       end
 
-      @digested_files = []
       @number_to_import = 0
       @number_imported = 0
       @number_failed_imports = 0
@@ -74,7 +77,8 @@ module YtImporter
     end
 
     def import_single_notice(file_to_process)
-      @logger.info("Importing #{@number_imported + @number_failed_imports}/#{@number_to_import} file")
+      @logger.info("Importing --- #{@number_imported + @number_failed_imports}/#{@number_to_import} --- file")
+      @logger.info("Importing #{file_to_process}")
 
       if system("grep 'Automatically added fields' #{file_to_process}")
         # digested_file_data = digest_plain_file(file_to_process)
@@ -83,12 +87,15 @@ module YtImporter
         return
       elsif system("grep '<table' #{file_to_process}")
         format_class = 'Html'
-        digested_file_data = digest_html_file(file_to_process)
+      elsif system("grep '<HTML' #{file_to_process}") && !system("grep '<table' #{file_to_process}")
+        format_class = 'PlainNew'
       else
         @number_failed_imports += 1
         @logger.info("Couldn't import #{file_to_process}, missing format")
         return
       end
+
+      file_data = read_file(file_to_process)
 
       mapper_class = nil
       mapper_class = "YtImporter::Mapping::#{format_class}::Counterfeit" if system("grep '<counterfeit\+' #{file_to_process}")
@@ -112,7 +119,7 @@ module YtImporter
         return
       end
 
-      mapped_notice_data = mapper_class.constantize.new(digested_file_data, data_from_legacy_database, file_to_process)
+      mapped_notice_data = mapper_class.constantize.new(file_data, data_from_legacy_database, file_to_process)
 
       works = mapped_notice_data.works
       works = [Work.unknown] if works.empty?
@@ -153,11 +160,6 @@ module YtImporter
         stacktrace: "#{e.backtrace}: #{e.message} (#{e.class})",
         message: "Couldn't import #{file_to_process}"
       )
-    end
-
-    def digest_html_file(file)
-      @logger.info("Digesting #{file}")
-      read_file(file)
     end
 
     def connect_to_legacy_database

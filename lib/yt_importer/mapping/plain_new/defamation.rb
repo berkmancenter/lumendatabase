@@ -2,10 +2,10 @@ require 'yt_importer/mapping/plain/base'
 
 module YtImporter
   module Mapping
-    module Plain
-      class TrademarkD < Base
+    module PlainNew
+      class Defamation < Base
         def notice_type
-          Trademark
+          ::Defamation
         end
       end
     end

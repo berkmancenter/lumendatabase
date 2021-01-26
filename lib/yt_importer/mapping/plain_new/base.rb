@@ -2,7 +2,7 @@ require 'yt_importer/mapping/base'
 
 module YtImporter
   module Mapping
-    module Plain
+    module PlainNew
       class Base < Base
       end
     end

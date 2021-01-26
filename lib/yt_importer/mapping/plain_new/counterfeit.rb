@@ -2,7 +2,7 @@ require 'yt_importer/mapping/plain/trademark_d'
 
 module YtImporter
   module Mapping
-    module Plain
+    module PlainNew
       class Counterfeit < TrademarkD
       end
     end
