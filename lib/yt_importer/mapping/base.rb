@@ -29,8 +29,8 @@ module YtImporter
 
       def entity_notice_roles
         roles = [
-          google_entity_role('submitter'),
-          google_entity_role('recipient')
+          youtube_entity_role('submitter'),
+          youtube_entity_role('recipient')
         ]
 
         roles << sender if sender
@@ -97,6 +97,14 @@ module YtImporter
         ''
       end
 
+      def jurisdiction
+        []
+      end
+
+      def regulation_list
+        []
+      end
+
       private
 
       def readlevel
@@ -134,9 +142,9 @@ module YtImporter
         end
       end
 
-      def google_entity_role(role_name)
+      def youtube_entity_role(role_name)
         EntityNoticeRole.new(
-          entity: Entity.where(name: 'Google LLC').first,
+          entity: Entity.where(name: 'YouTube Legal Support').first,
           name: role_name
         )
       end
@@ -162,10 +170,22 @@ module YtImporter
 
           InfringingUrl.new(url: url)
         end
+
+        original_urls = parsed_original_urls.map do |url|
+          uri = URI.parse(url)
+          valid = %w(http https).include?(uri.scheme)
+          unless valid
+            url = "https://#{url}"
+          end
+
+          CopyrightedUrl.new(url: url)
+        end
+
         [
           Work.new(
             description: work_description,
-            infringing_urls: infringing_urls
+            infringing_urls: infringing_urls,
+            copyrighted_urls: original_urls
           )
         ]
       end

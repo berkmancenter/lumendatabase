@@ -6,6 +6,10 @@ module YtImporter
       class Counterfeit < TrademarkD
         NOTICE_TYPE_LABEL = 'Counterfeit'
 
+        def jurisdiction
+          get_single_line_field('Country').split(',')
+        end
+
         private
 
         def parsed_infringing_urls

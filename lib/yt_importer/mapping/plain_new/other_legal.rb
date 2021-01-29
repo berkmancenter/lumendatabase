@@ -10,6 +10,14 @@ module YtImporter
           ::Other
         end
 
+        def regulation_list
+          get_single_line_field('cite_law').split(',')
+        end
+
+        def jurisdiction
+          get_single_line_field('Country').split(',')
+        end
+
         private
 
         def parsed_infringing_urls

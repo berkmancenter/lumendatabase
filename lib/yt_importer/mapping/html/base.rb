@@ -24,6 +24,10 @@ module YtImporter
         def parsed_infringing_urls
           data_field_without_field_label(@notice_paragraphs.fetch(@urls_index, nil)&.content).split(/[\s,]/)
         end
+
+        def parsed_original_urls
+          []
+        end
       end
     end
   end

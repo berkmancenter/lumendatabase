@@ -145,7 +145,9 @@ module YtImporter
         entity_notice_roles: mapped_notice_data.entity_notice_roles,
         body: mapped_notice_data.body,
         body_original: mapped_notice_data.body_original,
-        mark_registration_number: mapped_notice_data.mark_registration_number
+        mark_registration_number: mapped_notice_data.mark_registration_number,
+        jurisdiction_list: mapped_notice_data.jurisdiction,
+        regulation_list: mapped_notice_data.regulation_list
       })
 
       new_notice.save!

@@ -10,6 +10,10 @@ module YtImporter
           ::Defamation
         end
 
+        def jurisdiction
+          get_single_line_field('country').split(',')
+        end
+
         private
 
         def parsed_infringing_urls
