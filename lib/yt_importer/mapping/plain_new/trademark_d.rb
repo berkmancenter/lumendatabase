@@ -31,9 +31,8 @@ module YtImporter
 
         def principal
           behalf_client = get_single_line_field('TrademarkOwnerName')
-          legal_name = get_single_line_field('Fulllegalname')
 
-          build_role('principal', behalf_client || legal_name)
+          build_role('principal', behalf_client)
         end
       end
     end
