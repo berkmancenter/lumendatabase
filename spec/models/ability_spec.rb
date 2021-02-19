@@ -44,6 +44,10 @@ describe Ability do
     it "cannot submit to the API" do
       expect(subject.can? :submit, Notice).to be_falsey
     end
+
+    it "cannot update through the API" do
+      expect(subject.can? :update_through_api, Notice).to be_falsey
+    end
   end
 
   context "a notice viewer" do
@@ -67,6 +71,10 @@ describe Ability do
 
     it "can submit to the API" do
       expect(subject.can? :submit, Notice).to be true
+    end
+
+    it "can update through the API" do
+      expect(subject.can? :update_through_api, Notice).to be true
     end
 
     it "can't generate new notice token urls" do

@@ -9,6 +9,7 @@ class User < ApplicationRecord
   has_and_belongs_to_many :roles
   has_many :token_urls, dependent: :destroy
   accepts_nested_attributes_for :entity
+  has_many :notices
 
   def role?(role)
     roles.include?(role)

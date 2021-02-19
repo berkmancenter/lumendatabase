@@ -1,16 +1,17 @@
 class NoticeBuilder
   include Skylight::Helpers
 
-  def initialize(model_class, params, user=nil)
+  def initialize(model_class, params, user = nil, notice_to_update = nil)
     @model_class = model_class
     @params = params
     @user = user
     @json_params = nil
+    @notice_to_update = notice_to_update
   end
 
   instrument_method
   def build
-    @notice = model_class.new(params)
+    set_new_or_update
     set_json_params
     set_all_entities
     add_defaults
@@ -19,6 +20,7 @@ class NoticeBuilder
   end
 
   private
+
   attr_reader :model_class, :params, :json_params, :user
 
   # This ensures that the data structure we're working with will look like JSON
@@ -38,6 +40,7 @@ class NoticeBuilder
     @notice.file_uploads.map do |file|
       file.kind = 'supporting' if file.kind.nil?
     end
+    @notice.user = @user unless @user.nil?
   end
 
   def generic_title
@@ -77,5 +80,20 @@ class NoticeBuilder
     attrs.map do
       |x| x[:name].to_sym == role_name
     end.any?
+  end
+
+  def set_new_or_update
+    if @notice_to_update.nil?
+      @notice = model_class.new(@params)
+    else
+      prepare_notice_to_update
+      @notice = @notice_to_update
+      @notice.assign_attributes(@params)
+    end
+  end
+
+  def prepare_notice_to_update
+    @notice_to_update.works = []
+    @notice_to_update.entity_notice_roles = []
   end
 end

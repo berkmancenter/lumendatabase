@@ -16,6 +16,8 @@ describe DMCA, type: :model do
   end
 
   context 'model definitions and properties' do
+    it { is_expected.to belong_to :reviewer }
+    it { is_expected.to belong_to :user }
     it { is_expected.to have_many :file_uploads }
     it { is_expected.to have_many(:entity_notice_roles).dependent(:destroy) }
     it { is_expected.to have_and_belong_to_many :works }

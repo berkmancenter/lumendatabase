@@ -1,7 +1,7 @@
 class NoticesController < ApplicationController
   layout :resolve_layout
   protect_from_forgery with: :exception
-  skip_before_action :verify_authenticity_token, only: :create
+  skip_before_action :verify_authenticity_token, only: %i[create update]
 
   # Notice validates the presence of works, but we delay adding works because
   # it is too time-consuming for the request/response cycle. Therefore we
@@ -54,6 +54,26 @@ class NoticesController < ApplicationController
         Rails.logger.warn "Could not create notice with params: #{params}"
         flash.alert = 'Notice creation failed. See errors below.'
         format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @notice.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def update
+    return resource_not_found("Can't fing notice with id=#{params[:id]}") unless (@notice_to_update = Notice.find_by(id: params[:id]))
+    return unauthorized_response unless authorized_to_update?
+
+    @notice = NoticeBuilder.new(
+      get_notice_type(params), notice_params, current_user, @notice_to_update
+    ).build
+
+    respond_to do |format|
+      if @notice.valid?
+        @notice.save
+        @notice.mark_for_review
+        format.json { head :ok, location: @notice }
+      else
+        Rails.logger.warn "Could not update notice with params: #{params}"
         format.json { render json: @notice.errors, status: :unprocessable_entity }
       end
     end
@@ -221,11 +241,11 @@ class NoticesController < ApplicationController
   end
 
   def authorized_to_create?
-    if cannot?(:submit, Notice)
-      false
-    else
-      true
-    end
+    can?(:submit, Notice)
+  end
+
+  def authorized_to_update?
+    can?(:update_through_api, Notice) && @notice_to_update.user == current_user
   end
 
   def run_show_callbacks

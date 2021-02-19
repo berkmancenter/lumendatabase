@@ -17,7 +17,10 @@ class Ability
       can :view_full_version, Notice if can_view_full_version
     end
 
-    can :submit, Notice if user.role?(Role.submitter)
+    if user.role?(Role.submitter)
+      can :submit, Notice
+      can :update_through_api, Notice
+    end
 
     if user.role?(Role.redactor)
       grant_admin_access

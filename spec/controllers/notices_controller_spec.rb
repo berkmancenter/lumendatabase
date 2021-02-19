@@ -227,11 +227,6 @@ describe NoticesController do
         expect(user.notice_viewer_viewed_notices).to eq 2
       end
     end
-
-    def stub_find_notice(notice = nil)
-      notice ||= Notice.new
-      notice.tap { |n| allow(Notice).to receive(:find_by).and_return(n) }
-    end
   end
 
   context '#create' do
@@ -347,19 +342,132 @@ describe NoticesController do
         expect(json).to have_key('notices').with_value(['bruh'])
       end
     end
+  end
 
-    private
+  context '#update' do
+    before do
+      @fake_notice = double('Notice').as_null_object
+      @notice_params = ActiveSupport::HashWithIndifferentAccess.new(title: 'A title')
 
-    def post_create(format = :html)
-      post :create, params: { notice: { title: 'A title' }, format: format }
+      allow(subject).to receive('#[Double "Notice"]_url').and_return true
+      allow(NoticeBuilder).to receive(:new).and_return @fake_notice
+      allow(Notice).to receive(:find_by).with(id: '1').and_return(@fake_notice)
     end
 
-    def mock_errors(model, field_errors = {})
-      ActiveModel::Errors.new(model).tap do |errors|
-        field_errors.each do |field, message|
-          errors.add(field, message)
+    context 'general logic' do
+      before do
+        allow(subject).to receive(:authorized_to_update?).and_return true
+      end
+
+      it 'initializes a DMCA by default from params' do
+        expect(NoticeBuilder).to receive(:new)
+          .with(DMCA, @notice_params, anything, @fake_notice)
+
+        put :update, params: {
+          id: 1,
+          notice: @notice_params,
+          format: :json
+        }
+      end
+
+      it 'uses the type param to instantiate the correct class' do
+        expect(NoticeBuilder).to receive(:new)
+          .with(Trademark, @notice_params, anything, @fake_notice)
+
+        put :update, params: {
+          id: 1,
+          notice: @notice_params.merge(type: 'trademark'),
+          format: :json
+        }
+      end
+
+      it 'defaults to DMCA if the type is missing or invalid' do
+        invalid_types = ['', 'FlimFlam', 'Object', 'User', 'Hash']
+
+        expect(NoticeBuilder).to receive(:new)
+          .exactly(5).times
+          .with(DMCA, @notice_params, anything, @fake_notice)
+          .and_return(@fake_notice)
+
+        invalid_types.each do |invalid_type|
+          post :update, params: {
+            id: 1,
+            notice: @notice_params.merge(type: invalid_type),
+            format: :json
+          }
         end
       end
     end
+
+    context 'authorization/errors' do
+      before do
+        @ability = Object.new
+        @ability.extend(CanCan::Ability)
+        @ability.can(:update_through_api, Notice)
+      end
+
+      it 'returns unauthorized if one cannot update' do
+        @ability.cannot(:update_through_api, Notice)
+        response_body = { documentation_link: Rails.configuration.x.api_documentation_link }.to_json
+
+        post_update 1, :json
+
+        expect(response.status).to eq 401
+        expect(response.body).to eq response_body
+      end
+
+      it 'returns 404 if no notice found' do
+        allow(Notice).to receive(:find_by).with(id: '2').and_return(nil)
+        allow(subject).to receive(:authorized_to_update?).and_return true
+
+        post_update 2, :json
+
+        expect(response.status).to eq 404
+      end
+
+      it 'returns a useful status code when there are errors' do
+        allow(subject).to receive(:authorized_to_update?).and_return true
+        allow(@fake_notice).to receive(:valid?).and_return(false)
+        allow(@fake_notice).to receive(:errors).and_return(['bruh'])
+
+        post_update 1, :json
+
+        expect(response).to be_unprocessable
+      end
+
+      it 'includes any errors in the response' do
+        allow(subject).to receive(:authorized_to_update?).and_return true
+        allow(@fake_notice).to receive(:valid?).and_return(false)
+        allow(@fake_notice).to receive(:errors).and_return(['bruh'])
+
+        post_update 1, :json
+
+        json = JSON.parse(response.body)
+        expect(json).to have_key('notices').with_value(['bruh'])
+      end
+    end
+  end
+
+  private
+
+  def post_create(format = :html)
+    post :create, params: { notice: { title: 'A title' }, format: format }
+  end
+
+  def post_update(id, format = :html)
+    post :update, params: { id: id, notice: { title: 'A title' }, format: format }
+  end
+
+  def mock_errors(model, field_errors = {})
+    ActiveModel::Errors.new(model).tap do |errors|
+      field_errors.each do |field, message|
+        errors.add(field, message)
+      end
+    end
+  end
+
+  def stub_find_notice(notice = nil)
+    notice ||= Notice.new
+    notice.tap { |n| allow(Notice).to receive(:find_by).and_return(n) }
   end
 end

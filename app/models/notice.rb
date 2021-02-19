@@ -93,6 +93,7 @@ class Notice < ApplicationRecord
 
   # == Relationships ========================================================
   belongs_to :reviewer, class_name: 'User'
+  belongs_to :user
 
   has_many :topic_assignments, dependent: :destroy
   has_many :topics, through: :topic_assignments

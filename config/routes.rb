@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     resources :search, only: [:index]
   end
 
-  resources :notices, only: %i[show new create] do
+  resources :notices, only: %i[show new create update] do
     collection do
       get :url_input
     end
