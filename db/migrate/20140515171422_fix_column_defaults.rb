@@ -1,4 +1,4 @@
-class FixColumnDefaults < ActiveRecord::Migration
+class FixColumnDefaults < ActiveRecord::Migration[4.2]
   ENTITY_COLUMNS_TO_FIX = [
     :address_line_1,
     :address_line_2,

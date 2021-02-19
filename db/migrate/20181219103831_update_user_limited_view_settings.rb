@@ -1,4 +1,4 @@
-class UpdateUserLimitedViewSettings < ActiveRecord::Migration
+class UpdateUserLimitedViewSettings < ActiveRecord::Migration[4.2]
   def change
     User.where(notice_viewer_viewed_notices: nil)
         .update_all(notice_viewer_viewed_notices: 0)

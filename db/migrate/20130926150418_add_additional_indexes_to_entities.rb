@@ -1,4 +1,4 @@
-class AddAdditionalIndexesToEntities < ActiveRecord::Migration
+class AddAdditionalIndexesToEntities < ActiveRecord::Migration[4.2]
   def change
     remove_index :entities, :name
 

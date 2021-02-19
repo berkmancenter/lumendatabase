@@ -1,4 +1,4 @@
-class CreateNewRiskTriggers < ActiveRecord::Migration
+class CreateNewRiskTriggers < ActiveRecord::Migration[4.2]
   def change
     # Create a new table
     create_table :risk_triggers do |t|

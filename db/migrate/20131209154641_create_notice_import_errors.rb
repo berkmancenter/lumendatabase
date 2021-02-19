@@ -1,4 +1,4 @@
-class CreateNoticeImportErrors < ActiveRecord::Migration
+class CreateNoticeImportErrors < ActiveRecord::Migration[4.2]
   def change
     create_table(:notice_import_errors) do |t|
       t.integer :original_notice_id

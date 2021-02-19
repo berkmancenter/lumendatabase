@@ -1,4 +1,4 @@
-class RenameRiskTriggers < ActiveRecord::Migration
+class RenameRiskTriggers < ActiveRecord::Migration[4.2]
   def change
     rename_table :risk_triggers, :risk_trigger_conditions
     remove_column :risk_trigger_conditions, :field

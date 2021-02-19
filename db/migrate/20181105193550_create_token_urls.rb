@@ -1,4 +1,4 @@
-class CreateTokenUrls < ActiveRecord::Migration
+class CreateTokenUrls < ActiveRecord::Migration[4.2]
   def change
     create_table :token_urls do |t|
       t.string :email, index: true, null: true

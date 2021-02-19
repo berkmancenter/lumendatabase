@@ -1,4 +1,4 @@
-class CreateReindexRuns < ActiveRecord::Migration
+class CreateReindexRuns < ActiveRecord::Migration[4.2]
   def change
     create_table :reindex_runs do |t|
       t.integer :entity_count, default: 0

@@ -1,4 +1,4 @@
-class CreateRiskTriggers < ActiveRecord::Migration
+class CreateRiskTriggers < ActiveRecord::Migration[4.2]
   def change
     create_table(:risk_triggers) do |t|
       t.string :field
