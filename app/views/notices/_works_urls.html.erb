@@ -51,9 +51,15 @@
     </div>
   <% end %>
 
-  <% if access_requestable?(@notice, show_original, show_infringing) %>
+  <% if access_just_for_researchers?(@notice) %>
     <div class="row">
-      <p><%= link_to 'Click here', request_access_notice_path(@notice) %> to request access and see full URLs.</p>
+      <p>Thanks for your interest, but URLs from submitter <%= @notice.submitter.name %> are viewable only by users with a Lumen researcher credential.</p>
     </div>
+  <% else %>
+    <% if access_requestable?(@notice, show_original, show_infringing) %>
+      <div class="row">
+        <p><%= link_to 'Click here', request_access_notice_path(@notice) %> to request access and see full URLs.</p>
+      </div>
+    <% end %>
   <% end %>
 <% end %>
