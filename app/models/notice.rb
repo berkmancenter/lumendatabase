@@ -360,6 +360,10 @@ class Notice < ApplicationRecord
     topics << topic unless topics.include?(topic)
   end
 
+  def restricted_to_researchers?
+    submitter&.full_notice_only_researchers
+  end
+
   private
 
   def submitters
