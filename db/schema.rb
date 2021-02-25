@@ -290,7 +290,6 @@ ActiveRecord::Schema.define(version: 2021_02_23_193057) do
     t.text "notes"
     t.integer "counternotice_for_id"
     t.integer "counternotice_for_sid"
-    t.bigint "user_id"
     t.index ["created_at"], name: "index_notices_on_created_at"
     t.index ["original_notice_id"], name: "index_notices_on_original_notice_id"
     t.index ["published"], name: "index_notices_on_published"
@@ -298,7 +297,6 @@ ActiveRecord::Schema.define(version: 2021_02_23_193057) do
     t.index ["submission_id"], name: "index_notices_on_submission_id"
     t.index ["type"], name: "index_notices_on_type"
     t.index ["updated_at"], name: "index_notices_on_updated_at"
-    t.index ["user_id"], name: "index_notices_on_user_id"
   end
 
   create_table "notices_relevant_questions", id: :serial, force: :cascade do |t|
