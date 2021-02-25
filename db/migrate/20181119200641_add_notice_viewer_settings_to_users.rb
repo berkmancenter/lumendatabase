@@ -1,4 +1,4 @@
-class AddNoticeViewerSettingsToUsers < ActiveRecord::Migration
+class AddNoticeViewerSettingsToUsers < ActiveRecord::Migration[4.2]
   def change
     add_column :users, :notice_viewer_views_limit, :integer, default: 1
     add_column :users, :notice_viewer_viewed_notices, :integer, default: 0

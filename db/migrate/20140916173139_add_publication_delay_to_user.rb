@@ -1,4 +1,4 @@
-class AddPublicationDelayToUser < ActiveRecord::Migration
+class AddPublicationDelayToUser < ActiveRecord::Migration[4.2]
   def up
     add_column :users, :publication_delay, :integer, default: 0, null: false
     User.all.each do |u|

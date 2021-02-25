@@ -1,4 +1,4 @@
-class CreateCategoryManagers < ActiveRecord::Migration
+class CreateCategoryManagers < ActiveRecord::Migration[4.2]
   def change
     create_table(:category_managers) do |t|
       t.string :name

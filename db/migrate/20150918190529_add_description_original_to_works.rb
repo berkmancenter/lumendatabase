@@ -1,4 +1,4 @@
-class AddDescriptionOriginalToWorks < ActiveRecord::Migration
+class AddDescriptionOriginalToWorks < ActiveRecord::Migration[4.2]
   def up
     add_column t, c, :text
     execute "UPDATE #{t} SET #{c} = #{d}"

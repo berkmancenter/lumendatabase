@@ -1,4 +1,4 @@
-class RenameCategoryToTopic < ActiveRecord::Migration
+class RenameCategoryToTopic < ActiveRecord::Migration[4.2]
   def change
     create_table "blog_entry_topic_assignments", :force => true do |t|
       t.integer "blog_entry_id"

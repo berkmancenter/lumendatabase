@@ -1,4 +1,4 @@
-class AddUrlOriginalToInfringingUrls < ActiveRecord::Migration
+class AddUrlOriginalToInfringingUrls < ActiveRecord::Migration[4.2]
   def change
     rename_index t, "index_#{t}_on_#{u}", "index_#{t}_on_#{c}"
     rename_column t, u, c
