@@ -4,6 +4,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 * [#630](https://github.com/berkmancenter/lumendatabase/pull/630) Updates caching strategy on home page to be more resilient across deploys.
 * [#630](https://github.com/berkmancenter/lumendatabase/pull/630) Improves documentation (Elasticsearch indexing, release procedures).
 
+## [21.02](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.02) - 2020-02-27
+### Added
+  *  Add a new functionality that allows to show sensitive notice URLs only to researchers.
+
+## [20.11b](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.11b) - 2020-11-24
+### Changed
+  *  Fix the test suite.
+
 ## [20.11a](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.11a) - 2020-11-21
 ### Changed
   *  Clean up the production log.
