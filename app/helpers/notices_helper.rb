@@ -11,6 +11,10 @@ module NoticesHelper
     ].all?
   end
 
+  def access_just_for_researchers?(notice)
+    notice&.submitter&.full_notice_only_researchers
+  end
+
   def form_partial_for(instance)
     "#{instance.class.name.tableize.singularize}_form"
   end

@@ -1,4 +1,4 @@
-class CreateEntityNoticeRoles < ActiveRecord::Migration
+class CreateEntityNoticeRoles < ActiveRecord::Migration[4.2]
   def change
     create_table :entity_notice_roles do |t|
       t.belongs_to :entity

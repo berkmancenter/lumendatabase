@@ -1,4 +1,4 @@
-class CreateInfringingUrls < ActiveRecord::Migration
+class CreateInfringingUrls < ActiveRecord::Migration[4.2]
   def change
     create_table(:infringing_urls) do |t|
       t.string :url, limit: 1.kilobyte, null: false

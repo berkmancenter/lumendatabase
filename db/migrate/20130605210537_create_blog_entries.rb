@@ -1,4 +1,4 @@
-class CreateBlogEntries < ActiveRecord::Migration
+class CreateBlogEntries < ActiveRecord::Migration[4.2]
   def change
     create_table(:blog_entries) do |t|
       t.belongs_to :user

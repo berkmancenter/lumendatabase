@@ -1,4 +1,4 @@
-class CreateBlogEntryCategorizations < ActiveRecord::Migration
+class CreateBlogEntryCategorizations < ActiveRecord::Migration[4.2]
   def change
     create_table(:blog_entry_categorizations) do |t|
       t.belongs_to :blog_entry

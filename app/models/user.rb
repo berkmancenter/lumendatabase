@@ -8,6 +8,10 @@ class User < ApplicationRecord
   has_one :entity
   has_and_belongs_to_many :roles
   has_many :token_urls, dependent: :destroy
+  has_and_belongs_to_many :full_notice_only_researchers_entities,
+                          join_table: :entities_full_notice_only_researchers_users,
+                          class_name: 'Entity'
+
   accepts_nested_attributes_for :entity
 
   def role?(role)

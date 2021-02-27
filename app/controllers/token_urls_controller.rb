@@ -3,6 +3,9 @@ class TokenUrlsController < ApplicationController
 
   def new
     @notice = Notice.find(params[:id])
+
+    authorize! :request_access_token, @notice
+
     @token_url = TokenUrl.new
   end
 
@@ -11,6 +14,9 @@ class TokenUrlsController < ApplicationController
     token_url_params[:email].gsub!(/(\+.*?)(?=@)/, '')
     @token_url = TokenUrl.new(token_url_params)
     @notice = Notice.where(id: token_url_params[:notice_id]).first
+
+    authorize!(:create_access_token, @notice) unless @notice.nil?
+
     valid_to_submit = validate
 
     if valid_to_submit[:status]
@@ -46,11 +52,8 @@ class TokenUrlsController < ApplicationController
 
   def generate_permanent
     @notice = Notice.find(params[:id])
-    if cannot?(:generate_permanent_notice_token_urls, @notice)
-      redirect_to(notice_path(@notice), alert: 'Not authorized')
 
-      return
-    end
+    authorize! :generate_permanent_notice_token_urls, @notice
 
     @token_url = TokenUrl.new(
       user: current_user,
@@ -80,6 +83,7 @@ class TokenUrlsController < ApplicationController
     return redirect_to(root_path, alert: errors) if errors.present?
 
     token_url.update_attribute(:documents_notification, false)
+
     redirect_to(
       root_path,
       notice: 'Documents notification has been disabled.'

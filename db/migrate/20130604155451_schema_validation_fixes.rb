@@ -1,4 +1,4 @@
-class SchemaValidationFixes < ActiveRecord::Migration
+class SchemaValidationFixes < ActiveRecord::Migration[4.2]
   def change
     change_column :categories, :name, :string, null: false
 
