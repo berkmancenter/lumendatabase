@@ -1,4 +1,4 @@
-class AddCopyrightedUrls < ActiveRecord::Migration
+class AddCopyrightedUrls < ActiveRecord::Migration[4.2]
   def change
     create_table :copyrighted_urls do |t|
       t.string :url, limit: 1.kilobyte, null: false

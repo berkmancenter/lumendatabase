@@ -2,11 +2,21 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
+    can :request_access_token, Notice do |notice|
+      !notice&.submitter&.full_notice_only_researchers
+    end
+
+    can :create_access_token, Notice do |notice|
+      !notice&.submitter&.full_notice_only_researchers
+    end
+
     return unless user
 
     if user.role?(Role.notice_viewer)
       if user.can_generate_permanent_notice_token_urls
-        can :generate_permanent_notice_token_urls, Notice
+        can :generate_permanent_notice_token_urls, Notice do |notice|
+          full_notice_only_researchers?(notice, user)
+        end
       end
 
       can_view_full_version = true
@@ -14,7 +24,11 @@ class Ability
       can_view_full_version = false if user.notice_viewer_views_limit && user.notice_viewer_viewed_notices >= user.notice_viewer_views_limit
       can_view_full_version = false if user.notice_viewer_time_limit && Time.now > user.notice_viewer_time_limit
 
-      can :view_full_version, Notice if can_view_full_version
+      if can_view_full_version
+        can :view_full_version, Notice do |notice|
+          full_notice_only_researchers?(notice, user)
+        end
+      end
     end
 
     can :submit, Notice if user.role?(Role.submitter)
@@ -46,7 +60,7 @@ class Ability
       can :pdf_requests, :all
       can :view_full_version, Notice
       can :generate_permanent_notice_token_urls, Notice
-      can [:index, :show, :create, :update, :read, :manage], 'Cms::Site'
+      can %i[index show create update read manage], 'Cms::Site'
     end
 
     if user.role?(Role.super_admin)
@@ -60,6 +74,9 @@ class Ability
       grant_full_notice_api_response(user)
 
       can :read, Notice
+      can :view_full_version, Notice do |notice|
+        full_notice_only_researchers?(notice, user)
+      end
     end
   end
 
@@ -81,6 +98,18 @@ class Ability
   end
 
   def grant_full_notice_api_response(user)
-    can :view_full_version_api, Notice unless user.limit_notice_api_response
+    return if user.limit_notice_api_response
+
+    can :view_full_version_api, Notice do |notice|
+      full_notice_only_researchers?(notice, user)
+    end
+  end
+
+  def full_notice_only_researchers?(notice, user)
+    return false if notice&.submitter&.full_notice_only_researchers &&
+                    notice&.submitter&.full_notice_only_researchers_users&.any? &&
+                    !notice.submitter.full_notice_only_researchers_users.include?(user)
+
+    true
   end
 end

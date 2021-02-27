@@ -1,4 +1,4 @@
-class CreateNoticesRelevantQuestions < ActiveRecord::Migration
+class CreateNoticesRelevantQuestions < ActiveRecord::Migration[4.2]
   def change
     create_table(:notices_relevant_questions) do |t|
       t.belongs_to :notice

@@ -1,4 +1,4 @@
-class AddPublishedToNotice < ActiveRecord::Migration
+class AddPublishedToNotice < ActiveRecord::Migration[4.2]
   def up
     add_column :notices, :published, :boolean, default: true, null: false
     Notice.update_all(published: true)

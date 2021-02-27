@@ -29,7 +29,8 @@ describe Entity, type: :model do
 
   it { is_expected.to belong_to(:user) }
   it { is_expected.to have_many(:entity_notice_roles).dependent(:destroy) }
-  it { is_expected.to have_many(:notices).through(:entity_notice_roles)  }
+  it { is_expected.to have_many(:notices).through(:entity_notice_roles) }
+  it { is_expected.to have_and_belong_to_many(:full_notice_only_researchers_users) }
   it { is_expected.to validate_inclusion_of(:kind).in_array(Entity::KINDS) }
 
   context '.submitters' do
