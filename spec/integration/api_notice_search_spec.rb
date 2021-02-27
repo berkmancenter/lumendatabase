@@ -357,6 +357,92 @@ feature "Searching for Notices via the API" do
     end
   end
 
+  context 'Sensitive notices available only for researchers' do
+    scenario 'returns the full notice version of a researchers-only notice for a researcher user', js: true, search: true do
+      params = trademark_params(true)
+      notice = Notice.new(params[:notice])
+      notice.save
+      notice.submitter.full_notice_only_researchers = true
+      notice.save
+      index_changed_instances
+
+      user = create(:user, :researcher)
+
+      marks = notice.works.map do |work|
+        {
+          'description' => work.description,
+          'infringing_urls' => work.infringing_urls.map(&:url)
+        }
+      end
+
+      expect_api_search_to_find('king', authentication_token: user.authentication_token) do |json|
+        json_item = json['notices'].first
+        expect(
+          json_item['marks'].first['infringing_urls'].sort
+        ).to eq(
+          marks.first['infringing_urls'].sort
+        )
+      end
+    end
+
+    scenario 'returns the limited notice version of a researchers-only notice for a researcher user not included in the allowed researchers list', js: true, search: true do
+      params = trademark_params(true)
+      user = create(:user, :researcher)
+      user_allowed = create(:user, :researcher)
+      notice = Notice.new(params[:notice])
+      notice.save
+      notice.submitter.full_notice_only_researchers = true
+      notice.submitter.full_notice_only_researchers_users << user_allowed
+      notice.submitter.full_notice_only_researchers_users << user
+      notice.submitter.save
+      index_changed_instances
+
+      marks = notice.works.map do |work|
+        {
+          'description' => work.description,
+          'infringing_urls' => work.infringing_urls.map(&:url)
+        }
+      end
+
+      expect_api_search_to_find('king', authentication_token: user.authentication_token) do |json|
+        json_item = json['notices'].first
+        expect(
+          json_item['marks'].first['infringing_urls'].sort
+        ).to eq(
+          marks.first['infringing_urls'].sort
+        )
+      end
+    end
+
+    scenario 'returns the full notice version of a researchers-only notice for a researcher user included in the allowed researchers list', js: true, search: true do
+      params = trademark_params(true)
+      user = create(:user, :researcher)
+      user_allowed = create(:user, :researcher)
+      notice = Notice.new(params[:notice])
+      notice.save
+      notice.submitter.full_notice_only_researchers = true
+      notice.submitter.full_notice_only_researchers_users << user_allowed
+      notice.submitter.save
+      index_changed_instances
+
+      marks = notice.works.map do |work|
+        {
+          'description' => work.description,
+          'infringing_urls' => work.infringing_urls_counted_by_domain.as_json
+        }
+      end
+
+      expect_api_search_to_find('king', authentication_token: user.authentication_token) do |json|
+        json_item = json['notices'].first
+        expect(json_item).to have_key('marks')
+        expect(json_item['marks'].length).to eq(1)
+        expect(json_item['marks'].first.keys.sort).to eq(marks.first.keys.sort)
+        expect(json_item['marks'].first['description']).to eq(marks.first['description'])
+        expect(json_item['marks'].first['infringing_urls'].sort).to eq(marks.first['infringing_urls'].sort)
+      end
+    end
+  end
+
   def expect_api_search_to_find(term, options = {})
     with_curb_get_for_json(
       "notices/search.json",
@@ -416,6 +502,18 @@ feature "Searching for Notices via the API" do
           },
           {
             name: 'sender',
+            entity_attributes: {
+              name: 'Joe Lawyer',
+              kind: 'individual',
+              address_line_1: '1234 Anystreet St.',
+              city: 'Anytown',
+              state: 'CA',
+              zip: '94044',
+              country_code: 'US'
+            }
+          },
+          {
+            name: 'submitter',
             entity_attributes: {
               name: 'Joe Lawyer',
               kind: 'individual',

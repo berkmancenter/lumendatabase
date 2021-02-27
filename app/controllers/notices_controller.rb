@@ -152,7 +152,7 @@ class NoticesController < ApplicationController
 
   def entity_params
     %i[name kind address_line_1 address_line_2 city state zip country_code
-       phone email url]
+       phone email url full_notice_only_researchers]
   end
 
   def work_params

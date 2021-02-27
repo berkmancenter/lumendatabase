@@ -16,7 +16,8 @@ RailsAdmin.config do |config|
   config.audit_with :history, 'Role'
   config.audit_with :history, 'Notice'
 
-  # config.attr_accessible_role { :admin }
+  boolean_true_icon = '<span class="label label-success">&#x2713;</span>'.html_safe
+  boolean_false_icon = '<span class="label label-danger">&#x2718;</span>'.html_safe
 
   config.actions do
     dashboard do
@@ -50,6 +51,7 @@ RailsAdmin.config do |config|
 
     config.model notice_type do
       label { abstract_model.model.label }
+
       list do
         # SELECT COUNT is slow when the number of instances is large; let's
         # avoid calling it for Notice and its subclasses.
@@ -85,6 +87,11 @@ RailsAdmin.config do |config|
         configure(:infringing_urls) { hide }
         configure(:copyrighted_urls) { hide }
         configure(:token_urls) { hide }
+        configure(:restricted_to_researchers) do
+          formatted_value do
+            bindings[:object].restricted_to_researchers? ? boolean_true_icon : boolean_false_icon
+          end
+        end
       end
 
       edit do

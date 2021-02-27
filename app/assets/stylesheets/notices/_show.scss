@@ -601,3 +601,10 @@ section#related-blog-entries {
     color: rgba($base-font-color-3, 0.7);
   }
 }
+
+.lumen-badge {
+  background-color: $base-link-color;
+  padding: 2px 4px;
+  color: #ffffff;
+  border-radius: 5px;
+}

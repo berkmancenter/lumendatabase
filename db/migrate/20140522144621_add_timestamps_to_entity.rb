@@ -1,4 +1,4 @@
-class AddTimestampsToEntity < ActiveRecord::Migration
+class AddTimestampsToEntity < ActiveRecord::Migration[4.2]
   def change
     change_table(:entities) do |t|
       t.timestamps

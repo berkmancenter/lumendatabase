@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_28_213909) do
+ActiveRecord::Schema.define(version: 2021_02_23_193057) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -177,13 +177,6 @@ ActiveRecord::Schema.define(version: 2020_01_28_213909) do
     t.datetime "updated_at"
   end
 
-  create_table "domain_counts", id: :serial, force: :cascade do |t|
-    t.string "domain_name"
-    t.integer "count", default: 0
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "entities", id: :serial, force: :cascade do |t|
     t.string "name", null: false
     t.string "kind", default: "individual", null: false
@@ -201,6 +194,7 @@ ActiveRecord::Schema.define(version: 2020_01_28_213909) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string "name_original"
+    t.boolean "full_notice_only_researchers"
     t.index ["address_line_1"], name: "index_entities_on_address_line_1"
     t.index ["ancestry"], name: "index_entities_on_ancestry"
     t.index ["city"], name: "index_entities_on_city"
@@ -213,6 +207,12 @@ ActiveRecord::Schema.define(version: 2020_01_28_213909) do
     t.index ["updated_at"], name: "index_entities_on_updated_at"
     t.index ["user_id"], name: "index_entities_on_user_id"
     t.index ["zip"], name: "index_entities_on_zip"
+  end
+
+  create_table "entities_full_notice_only_researchers_users", force: :cascade do |t|
+    t.bigint "entity_id"
+    t.bigint "user_id"
+    t.index ["entity_id"], name: "index_entities_full_notice_only_researchers_users_on_entity_id"
   end
 
   create_table "entity_notice_roles", id: :serial, force: :cascade do |t|
@@ -376,10 +376,10 @@ ActiveRecord::Schema.define(version: 2020_01_28_213909) do
 
   create_table "taggings", id: :serial, force: :cascade do |t|
     t.integer "tag_id"
-    t.integer "taggable_id"
     t.string "taggable_type"
-    t.integer "tagger_id"
+    t.integer "taggable_id"
     t.string "tagger_type"
+    t.integer "tagger_id"
     t.string "context", limit: 128
     t.datetime "created_at"
     t.index ["context"], name: "index_taggings_on_context"

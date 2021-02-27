@@ -60,12 +60,73 @@ feature 'Viewing notices' do
     check_full_works_urls
   end
 
-  scenario 'as an anonymous user viewing safelisted notice' do
+  scenario 'as an anonymous user viewing a safelisted notice' do
     ENV['SAFELISTED_NOTICES_FULL'] = "1234,#{Notice.last.id}"
 
     visit notice_url(Notice.last)
 
     check_full_works_urls
+  end
+
+  context 'full access restricted to researchers only' do
+    scenario 'as a logged in user viewing a notice with full access restricted to researchers only' do
+      user = create(:user)
+      sign_in(user)
+
+      notice = Notice.last
+      notice.submitter.full_notice_only_researchers = true
+      notice.submitter.save!
+
+      visit notice_url(Notice.last)
+
+      check_limited_works_urls
+      expect(page).to have_content("Thanks for your interest, but URLs from submitter #{notice.submitter.name} are viewable only by users with a Lumen researcher credential.")
+    end
+
+    scenario 'as a researcher viewing a notice with full access restricted to researchers only' do
+      user = create(:user, :researcher)
+      sign_in(user)
+
+      notice = Notice.last
+      notice.submitter.full_notice_only_researchers = true
+      notice.submitter.save!
+
+      visit notice_url(Notice.last)
+
+      check_full_works_urls
+    end
+
+    scenario 'as a researcher not included in the allowed users list viewing a notice with full access restricted to researchers only' do
+      user = create(:user, :researcher)
+      user_allowed = create(:user, :researcher)
+      sign_in(user)
+
+      notice = Notice.last
+      notice.submitter.full_notice_only_researchers = true
+      notice.submitter.full_notice_only_researchers_users << user_allowed
+      notice.submitter.save!
+
+      visit notice_url(Notice.last)
+
+      check_limited_works_urls
+      expect(page).to have_content("Thanks for your interest, but URLs from submitter #{notice.submitter.name} are viewable only by users with a Lumen researcher credential.")
+    end
+
+    scenario 'as a researcher included in the allowed users list viewing a notice with full access restricted to researchers only' do
+      user = create(:user, :researcher)
+      user_allowed = create(:user, :researcher)
+      sign_in(user)
+
+      notice = Notice.last
+      notice.submitter.full_notice_only_researchers = true
+      notice.submitter.full_notice_only_researchers_users = [user, user_allowed]
+      notice.submitter.save!
+
+      visit notice_url(Notice.last)
+
+      check_full_works_urls
+      expect(page).not_to have_content("Thanks for your interest, but URLs from submitter #{notice.submitter.name} are viewable only by users with a Lumen researcher credential.")
+    end
   end
 
   context 'entities' do

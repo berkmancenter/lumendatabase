@@ -1,4 +1,4 @@
-class CreateCategoriesRelevantQuestions < ActiveRecord::Migration
+class CreateCategoriesRelevantQuestions < ActiveRecord::Migration[4.2]
   def change
     create_table(:categories_relevant_questions) do |t|
       t.belongs_to :category

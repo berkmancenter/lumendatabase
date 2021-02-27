@@ -24,6 +24,9 @@ class Entity < ApplicationRecord
   belongs_to :user
   has_many :entity_notice_roles, dependent: :destroy
   has_many :notices, through: :entity_notice_roles
+  has_and_belongs_to_many :full_notice_only_researchers_users,
+                          join_table: :entities_full_notice_only_researchers_users,
+                          class_name: 'User'
 
   # == Attributes ===========================================================
   delegate :publication_delay, to: :user, allow_nil: true

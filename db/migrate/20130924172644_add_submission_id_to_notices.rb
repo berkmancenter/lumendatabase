@@ -1,4 +1,4 @@
-class AddSubmissionIdToNotices < ActiveRecord::Migration
+class AddSubmissionIdToNotices < ActiveRecord::Migration[4.2]
   def change
     add_column :notices, :submission_id, :integer
 
