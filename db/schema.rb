@@ -459,6 +459,7 @@ ActiveRecord::Schema.define(version: 2021_04_19_110640) do
     t.integer "notice_viewer_viewed_notices", default: 0, null: false
     t.datetime "notice_viewer_time_limit"
     t.boolean "limit_notice_api_response", default: false, null: false
+    t.boolean "allow_generate_permanent_tokens_researchers_only_notices"
     t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true

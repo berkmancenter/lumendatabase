@@ -288,6 +288,22 @@ RailsAdmin.config do |config|
         nested_form false
       end
       configure(:token_urls) { hide }
+
+      field :email
+      field :password
+      field :password_confirmation
+      field :reset_password_sent_at
+      field :authentication_token
+      field :publication_delay
+      field :can_generate_permanent_notice_token_urls
+      field :allow_generate_permanent_tokens_researchers_only_notices
+      field :notice_viewer_views_limit
+      field :notice_viewer_time_limit
+      field :notice_viewer_viewed_notices
+      field :limit_notice_api_response
+      field :entity
+      field :roles
+      field :full_notice_only_researchers_entities
     end
   end
 
