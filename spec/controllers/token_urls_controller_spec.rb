@@ -123,33 +123,83 @@ describe TokenUrlsController do
     end
   end
 
-  context '#disable_documents_notification' do
-    it 'disables a documents notification' do
+  context '#generate_permanent' do
+    it 'user with can_generate_permanent_notice_token_urls can generate a permanent token url' do
+      user = create(:user, :researcher, can_generate_permanent_notice_token_urls: true)
+      allow(controller).to receive(:current_user).and_return(user)
+
       notice = create(:dmca)
-      token_url = create(:token_url, notice: notice, documents_notification: true)
 
       params = {
-        id: token_url.id,
-        token: token_url.token
+        id: notice.id
       }
 
-      get :disable_documents_notification, params: params
+      post :generate_permanent, params: params
 
-      expect(TokenUrl.last.documents_notification).to eq(false)
+      expect(TokenUrl.where(notice: notice, user: user, valid_forever: true).count).to eq(1)
     end
 
-    it "won't disable a documents notification with a wrong token" do
+    it 'user without can_generate_permanent_notice_token_urls can\'t generate a permanent token url' do
+      user = create(:user, :researcher)
+      allow(controller).to receive(:current_user).and_return(user)
+
       notice = create(:dmca)
-      token_url = create(:token_url, notice: notice, documents_notification: true)
 
       params = {
-        id: token_url.id,
-        token: 'hohoho'
+        id: notice.id
       }
 
-      get :disable_documents_notification, params: params
+      post :generate_permanent, params: params
 
-      expect(TokenUrl.last.documents_notification).to eq(true)
+      expect(TokenUrl.where(notice: notice, user: user, valid_forever: true).count).to eq(0)
+      expect_authorization_error
+    end
+
+    it 'user with can_generate_permanent_notice_token_urls and allow_generate_permanent_tokens_researchers_only_notices access can generate a permanent token url for a sensitive notice' do
+      user = create(
+        :user,
+        :researcher,
+        can_generate_permanent_notice_token_urls: true,
+        allow_generate_permanent_tokens_researchers_only_notices: true
+      )
+      allow(controller).to receive(:current_user).and_return(user)
+
+      # Sensitive notice
+      notice = create(:dmca, role_names: %w[sender principal submitter])
+      notice.submitter.full_notice_only_researchers = true
+      notice.submitter.save!
+
+      params = {
+        id: notice.id
+      }
+
+      post :generate_permanent, params: params
+
+      expect(TokenUrl.where(notice: notice, user: user, valid_forever: true).count).to eq(1)
+    end
+
+    it 'user with can_generate_permanent_notice_token_urls and without allow_generate_permanent_tokens_researchers_only_notices access can\'t generate a permanent token url for a sensitive notice' do
+      user = create(
+        :user,
+        :researcher,
+        can_generate_permanent_notice_token_urls: true,
+        allow_generate_permanent_tokens_researchers_only_notices: false
+      )
+      allow(controller).to receive(:current_user).and_return(user)
+
+      # Sensitive notice
+      notice = create(:dmca, role_names: %w[sender principal submitter])
+      notice.submitter.full_notice_only_researchers = true
+      notice.submitter.save!
+
+      params = {
+        id: notice.id
+      }
+
+      post :generate_permanent, params: params
+
+      expect(TokenUrl.where(notice: notice, user: user, valid_forever: true).count).to eq(0)
+      expect_authorization_error
     end
   end
 

@@ -7,6 +7,10 @@ class AddFullNoticeOnlyResearchersToEntities < ActiveRecord::Migration[5.2]
 
     add_column :entities, :full_notice_only_researchers, :boolean
 
+    unless Comfy::Cms::Site.first.present?
+      Comfy::Cms::Site.create!(identifier: 'lumen_cms')
+    end
+
     Comfy::Cms::Snippet.create!(
       identifier: 'lumen_notice_only_full_for_researchers',
       label: 'Full for researchers only text on notice view',

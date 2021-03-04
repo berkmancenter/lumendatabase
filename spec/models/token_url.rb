@@ -87,4 +87,70 @@ describe TokenUrl, type: :model do
       expect(result).to eq(false)
     end
   end
+
+  context 'destroying' do
+    it 'destroys related token urls when the user/creator is destroyed' do
+      user = create(:user)
+      token_url = create(
+        :token_url,
+        notice: notice,
+        user: user
+      )
+      token_url_2 = create(
+        :token_url,
+        notice: notice,
+        user: user
+      )
+
+      expect(TokenUrl.where(id: [token_url.id, token_url_2.id]).count).to eq(2)
+
+      user.destroy
+
+      expect(TokenUrl.where(id: [token_url.id, token_url_2.id]).count).to eq(0)
+    end
+
+    it 'doesn\'t destroy related permanent token urls when the user/creator is destroyed' do
+      user = create(:user)
+      token_url = create(
+        :token_url,
+        notice: notice,
+        user: user,
+        valid_forever: true
+      )
+      token_url_2 = create(
+        :token_url,
+        notice: notice,
+        user: user
+      )
+
+      expect(TokenUrl.where(id: [token_url.id, token_url_2.id]).count).to eq(2)
+
+      user.destroy
+
+      expect(TokenUrl.where(id: [token_url.id, token_url_2.id]).count).to eq(1)
+      expect(TokenUrl.find(token_url.id)).to eq(token_url)
+    end
+
+    it 'doesn\'t destroy other user tokens' do
+      user = create(:user)
+      user_2 = create(:user)
+      token_url = create(
+        :token_url,
+        notice: notice,
+        user: user
+      )
+      token_url_2 = create(
+        :token_url,
+        notice: notice,
+        user: user_2
+      )
+
+      expect(TokenUrl.where(id: [token_url.id, token_url_2.id]).count).to eq(2)
+
+      user.destroy
+
+      expect(TokenUrl.where(id: [token_url.id, token_url_2.id]).count).to eq(1)
+      expect(TokenUrl.find(token_url_2.id)).to eq(token_url_2)
+    end
+  end
 end
