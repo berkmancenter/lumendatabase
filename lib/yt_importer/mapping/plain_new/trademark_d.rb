@@ -24,9 +24,13 @@ module YtImporter
           name = [
             get_single_line_field('Fulllegalname'),
             get_single_line_field('CompanyName')
-          ].reject { |val| val.blank? }.join(', ').strip
+          ].reject(&:blank?).uniq.join(', ').strip
 
           build_role('sender', name)
+        end
+
+        def parse_mark_registration_number
+          get_single_line_field('AppRegNumber')
         end
 
         def principal

@@ -25,8 +25,6 @@ module YtImporter
         def principal
           name = get_single_line_field('TrademarkOwner')
 
-          return nil unless name.present?
-
           build_role('principal', name)
         end
       end

@@ -33,17 +33,6 @@ module YtImporter
       name.split(/url_box/)[0]
     end
 
-    # def address_hash(prefix)
-    #   {
-    #     address_line_1: @data_from_legacy_database["#{prefix}_Address1"],
-    #     address_line_2: @data_from_legacy_database["#{prefix}_Address2"],
-    #     city: @data_from_legacy_database["#{prefix}_City"],
-    #     state: @data_from_legacy_database["#{prefix}_State"],
-    #     zip: @data_from_legacy_database["#{prefix}_Zip"],
-    #     country_code: parse_country_code(@data_from_legacy_database["#{prefix}_Country"])
-    #   }
-    # end
-
     def parse_country_code(country_code)
       return country_code if country_code.nil?
 

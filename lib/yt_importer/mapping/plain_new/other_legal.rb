@@ -36,8 +36,6 @@ module YtImporter
         def sender
           name = get_single_line_field('Signature')
 
-          return nil unless name.present?
-
           build_role('sender', name)
         end
 
@@ -45,7 +43,10 @@ module YtImporter
           behalf_client = get_single_line_field('client')
           legal_name = get_single_line_field('Fulllegalname')
 
-          build_role('principal', behalf_client || legal_name)
+          name = legal_name if legal_name.present?
+          name = behalf_client if behalf_client.present?
+
+          build_role('principal', name)
         end
       end
     end

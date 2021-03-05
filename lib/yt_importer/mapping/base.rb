@@ -56,7 +56,7 @@ module YtImporter
       end
 
       def mark_registration_number
-        mark_registration_number = parse_mark_registration_number(@raw_file_path)
+        mark_registration_number = parse_mark_registration_number
         return mark_registration_number if mark_registration_number.present?
 
         ''

@@ -16,7 +16,7 @@ module YtImporter
           name = [
             data_field_without_field_label(@notice_paragraphs.fetch(1, nil)&.content),
             data_field_without_field_label(@notice_paragraphs.fetch(2, nil)&.content)
-          ].reject { |val| val.blank? }.join(', ').strip
+          ].reject(&:blank?).uniq.join(', ').strip
 
           build_role('sender', name)
         end
