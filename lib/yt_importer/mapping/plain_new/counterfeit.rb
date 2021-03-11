@@ -6,6 +6,10 @@ module YtImporter
       class Counterfeit < TrademarkD
         NOTICE_TYPE_LABEL = 'Counterfeit'
 
+        def notice_type
+          ::Counterfeit
+        end
+
         def jurisdiction
           get_single_line_field('Country').split(',')
         end

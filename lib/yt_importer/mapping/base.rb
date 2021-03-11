@@ -105,6 +105,10 @@ module YtImporter
         []
       end
 
+      def language
+        ''
+      end
+
       private
 
       def readlevel

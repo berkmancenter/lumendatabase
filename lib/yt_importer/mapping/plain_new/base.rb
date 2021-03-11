@@ -4,6 +4,10 @@ module YtImporter
   module Mapping
     module PlainNew
       class Base < Base
+        def language
+          get_single_line_field('Language')
+        end
+
         private
 
         def get_single_line_field(field_name)
