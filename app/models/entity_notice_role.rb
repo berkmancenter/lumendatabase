@@ -51,6 +51,10 @@ class EntityNoticeRole < ApplicationRecord
         where(name: role)
       end
     end
+
+    def all_roles_names
+      ROLES
+    end
   end
 
   validates_inclusion_of :name, in: ROLES
