@@ -239,7 +239,7 @@ class Notice < ApplicationRecord
   end
 
   def other_entity_notice_roles
-    other_roles = self.class::DEFAULT_ENTITY_NOTICE_ROLES - Notice::DEFAULT_ENTITY_NOTICE_ROLES
+    other_roles = EntityNoticeRole.all_roles_names - Notice::DEFAULT_ENTITY_NOTICE_ROLES
     entity_notice_roles.find_all do |entity_notice_role|
       other_roles.include?(entity_notice_role.name)
     end
