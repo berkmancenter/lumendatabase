@@ -37,7 +37,7 @@ gem 'rack-attack'
 gem 'rack-mini-profiler', require: ['enable_rails_patches', 'rack-mini-profiler']
 gem 'rails', '~> 6.0.0'
 gem 'rails_admin'
-gem 'rails_admin_tag_list', git: 'https://github.com/berkmancenter/rails_admin_tag_list'
+gem 'rails_admin_tag_list', '~> 0.2.1'
 gem 'recaptcha'
 gem 'recipient_interceptor', require: false
 gem 'record_tag_helper', '~> 1.0'
