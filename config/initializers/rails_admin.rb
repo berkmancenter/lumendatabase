@@ -2,6 +2,8 @@ require 'rails_admin/config/actions/redact_queue'
 require 'rails_admin/config/actions/redact_notice'
 require 'rails_admin/config/actions/pdf_requests'
 require 'rails_admin/config/actions/statistics'
+require 'rails_admin/config/actions/approve_api_submitter_request'
+require 'rails_admin/config/actions/reject_api_submitter_request'
 require 'rails_admin/config/fields/types/datetime_timezoned'
 
 RailsAdmin.config do |config|
@@ -45,6 +47,8 @@ RailsAdmin.config do |config|
     redact_notice
     pdf_requests
     statistics
+    approve_api_submitter_request
+    reject_api_submitter_request
   end
 
   ['Notice', Notice::TYPES].flatten.each do |notice_type|
@@ -382,6 +386,35 @@ RailsAdmin.config do |config|
       field :document_type
       field :comments
       field :published
+
+  config.model 'ApiSubmitterRequest' do
+    list do
+      field :id
+      field :email
+      field :entity_name
+      field :entity_url
+      field :user
+      field :approved
+    end
+
+    edit do
+      field :email
+      field :approved
+      field :entity_url
+      field :description
+      field :admin_notes
+      field :entity_name
+      field :entity_kind
+      field :entity_address_line_1
+      field :entity_address_line_2
+      field :entity_state
+      field :entity_country_code
+      field :entity_phone
+      field :entity_url
+      field :entity_email
+      field :entity_city
+      field :entity_zip
+      field :user
     end
   end
 
@@ -447,9 +480,7 @@ RailsAdmin.config do |config|
   # == END ============================================================
 
   def notice_token_urls_count_links(bindings, perm = false)
-    token_urls = bindings[:object].token_urls.where(valid_forever: perm)
-    links_to_token_urls = token_urls.map { |token_url| bindings[:view].link_to(token_url) }.join(', ')
-    "#{token_urls.count} <br> #{links_to_token_urls}".html_safe
+    bindings[:object].token_urls.where(valid_forever: perm).count
   end
 
   def token_url_config

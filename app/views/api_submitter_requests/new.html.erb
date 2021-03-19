@@ -1,0 +1,46 @@
+<% title 'Apply for submitter JS plugin access' %>
+
+<article class="api-submitter-access-request">
+  <section class="body">
+    <p>In order to use the submitter JS plugin you need to be verified and accepted.</p>
+    <p>Fill this simple form and wait for an email from us.</p>
+    <p>Integration documentation of the plugin is located here: <a href="/api_submitter_documentation" target="_blank">https://lumendatabase.org/api_submitter_documentation</a>.</p>
+
+    <%= simple_form_for(@api_submitter_request) do |f| %>
+      <%= f.error_notification %>
+
+      <div class="form-inputs">
+        <h3>General information</h2>
+        <%= f.input :email, label: 'Contact email address', hint: 'We will use this email address to contact you regarding your application.', required: true %>
+        <%= f.input :submissions_forward_email, label: 'Submissions forwarding email address', hint: 'We will send a copy of each submission to this email address.', required: true %>
+        <%= f.input :description, as: :text, label: 'Describe shortly your website/application', required: true %>
+
+        <h3>Your company/organization/personal data</h2>
+        <div class="required">
+          <%= f.input :entity_name, label: 'Name', required: true %>
+          <%= f.input :entity_kind, label: 'Type', prompt: nil, collection: Entity::KINDS, required: true %>
+        </div>
+        <div class="optional">
+          <%= f.input :entity_address_line_1, label: 'Address Line 1' %>
+          <%= f.input :entity_address_line_2, label: 'Address Line 2' %>
+          <%= f.input :entity_city, label: 'City' %>
+          <%= f.input :entity_state, label: 'State',
+            label_html: { class: 'half-width' }, maxlength: '2' %>
+          <%= f.input :entity_zip, label: 'Zip Code',
+            label_html: { class: 'half-width' } %>
+          <%= f.input :entity_country_code,
+            { collection: CountrySelect::ISO_COUNTRIES_FOR_SELECT, label: 'Country' } %>
+          <%= f.input :entity_email, label: 'Email' %>
+          <%= f.input :entity_phone, label: 'Phone' %>
+          <%= f.input :entity_url, label: 'URL' %>
+        </div>
+
+        <%= recaptcha_tags %>
+      </div>
+
+      <div class="form-actions">
+        <%= f.submit 'Submit' %>
+      </div>
+    <% end %>
+  </section>
+</article>

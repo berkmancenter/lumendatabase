@@ -96,6 +96,16 @@ en:
         menu: 'Statistics'
         title: 'Statistics'
 
+      approve_api_submitter_request:
+        breadcrumb: 'Approve'
+        menu: 'Approve'
+        title: 'Approve'
+
+      reject_api_submitter_request:
+        breadcrumb: 'Reject'
+        menu: 'Reject'
+        title: 'Reject'
+
   type_descriptions:
     DMCA:
       'Is someone complaining that images, text, video, or other content found online infringe their copyrights?'

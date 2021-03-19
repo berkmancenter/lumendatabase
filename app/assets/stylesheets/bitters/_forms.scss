@@ -118,3 +118,17 @@ input {
     font-weight: 300;
   }
 }
+
+form {
+  .input {
+    .hint {
+      font-size: $base-font-size-small-2;
+      margin-top: -10px;
+      display: block;
+    }
+  }
+
+  input + .hint {
+    margin-bottom: 5px;
+  }
+}

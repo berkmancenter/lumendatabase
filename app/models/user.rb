@@ -8,6 +8,7 @@ class User < ApplicationRecord
   has_and_belongs_to_many :full_notice_only_researchers_entities,
                           join_table: :entities_full_notice_only_researchers_users,
                           class_name: 'Entity'
+  has_one :api_submitter_request
 
   # == Extensions ===========================================================
   devise :database_authenticatable,
@@ -16,7 +17,8 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :entity
 
   # == Callbacks ============================================================
-  before_save :ensure_authentication_token
+  before_save :ensure_authentication_token,
+              :ensure_widget_public_key
   after_destroy do
     token_urls.where(valid_forever: false).destroy_all
   end
@@ -27,9 +29,15 @@ class User < ApplicationRecord
   end
 
   def ensure_authentication_token
-    if authentication_token.blank?
-      self.authentication_token = generate_authentication_token
-    end
+    return unless authentication_token.blank?
+
+    self.authentication_token = generate_authentication_token
+  end
+
+  def ensure_widget_public_key
+    return unless widget_public_key.blank?
+
+    self.widget_public_key = generate_widget_public_key
   end
 
   private
@@ -38,6 +46,13 @@ class User < ApplicationRecord
     loop do
       token = Devise.friendly_token
       break token unless User.where(authentication_token: token).first
+    end
+  end
+
+  def generate_widget_public_key
+    loop do
+      token = Devise.friendly_token
+      break token unless User.where(widget_public_key: token).first
     end
   end
 end
