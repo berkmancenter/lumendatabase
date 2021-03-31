@@ -1,0 +1,44 @@
+//= require iframe-resizer-client.min
+
+var LumenSubmitterWidget = (function () {
+  'use strict';
+
+  var constructor = function (options) {
+    var _this = this;
+    var emptyInit = options === undefined;
+
+    if (emptyInit) {
+      return false;
+    }
+
+    this.options = options;
+
+    this.render_iframe();
+  };
+
+  constructor.prototype.render_iframe = function () {
+    if (!this.options.public_key) {
+      return false;
+    }
+
+    this.SERVICE_URL = `<%= Rails.application.routes.url_helpers.new_submitter_widget_notice_url(host: Chill::Application.config.site_host) %>?widget_public_key=${this.options.public_key}`;
+
+    if (this.options.element_selector) {
+      this.dom_element = document.querySelector(this.options.element_selector);
+      if (this.dom_element) {
+        this.iframe = document.createElement('iframe');
+        this.iframe.src = this.SERVICE_URL;
+        this.dom_element.appendChild(this.iframe);
+
+        // This will max the iframe size
+        iFrameResize({ log: false }, this.iframe)
+      }
+    }
+  };
+
+  var init = function (options) {
+    return new constructor(options);
+  };
+
+  return init;
+})();

@@ -41,6 +41,7 @@ class ApiSubmitterRequestsController < ApplicationController
   def api_submitter_request_params
     params.require(:api_submitter_request).permit(
       :email,
+      :submissions_forward_email,
       :description,
       :entity_name,
       :entity_kind,
