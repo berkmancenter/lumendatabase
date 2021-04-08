@@ -1,0 +1,31 @@
+<%= render 'notices/submitter_widget/form_components/header',
+           label: 'Private Information notice' %>
+<%= simple_form_for(notice, url: submitter_widget_notices_path(widget_public_key: @widget_public_key)) do |form| %>
+  <section class="notice-body">
+    <h4><span>Step 1.</span> Describe the Notice</h4>
+    <%= render 'notices/submitter_widget/form_components/main_metadata', form: form %>
+  </section>
+
+  <section class="works">
+    <h4><span>Step 2.</span> URLs With Private Information</h4>
+    <p>Enter the URL with private information and a brief description of the information in question.</p>
+    <% form.object.works.each_with_index do |work, index| %>
+      <%= form.simple_fields_for(:works, work, child_index: index) do |works_form| %>
+        <div class="body-wrapper left">
+          <%= render(
+            partial: 'url_input_group',
+            locals: { notice: notice, assoc: :infringing_urls, works_form: works_form, index: index }
+          ) %>
+        </div>
+        <div class="body-wrapper right">
+          <%= works_form.input :description, label: "Type of information" %>
+        </div>
+      <% end %>
+    <% end %>
+  </section>
+
+  <%= render 'notices/form_components/roles',
+             label: 'Private Information notice',
+             form: form %>
+  <%= render 'notices/form_components/submit', form: form %>
+<% end %>

@@ -1,0 +1,30 @@
+<%= render 'notices/submitter_widget/form_components/header' %>
+<%= simple_form_for(notice, url: submitter_widget_notices_path(widget_public_key: @widget_public_key)) do |form| %>
+  <section class="notice-body">
+    <h4><span>Step 1.</span> Describe the Notice</h4>
+    <%= render 'notices/submitter_widget/form_components/main_metadata', form: form, request_collection: GovernmentRequest::VALID_REQUEST_TYPES %>
+  </section>
+
+  <section class="works">
+    <h4><span>Step 2.</span> Original Works in Question</h4>
+    <p>Enter information about the original work(s) and infringing URL(s).</p>
+    <div class="body-wrapper left">
+      <%= form.simple_fields_for(:works) do |works_form| %>
+        <%= works_form.simple_fields_for(:copyrighted_urls) do |urls_form| %>
+          <%= urls_form.input :url, label: "URL of original work", placeholder: "https://" %>
+        <% end %>
+        <%= works_form.simple_fields_for(:infringing_urls) do |urls_form| %>
+          <%= urls_form.input :url, label: "URL mentioned in request", placeholder: "https://" %>
+        <% end %>
+        <%= works_form.input :kind, label: "Kind of Work", placeholder: "Movie, Music, Book" %>
+      </div>
+      <div class="body-wrapper right">
+        <%= works_form.input :description, label: 'Subject of Government Request' %>
+      </div>
+    <% end %>
+    <%= form.input :regulation_list, label: 'Relevant laws or regulations', placeholder: 'A comma separated list' %>
+  </section>
+
+  <%= render 'notices/form_components/roles', form: form %>
+  <%= render 'notices/form_components/submit', form: form %>
+<% end %>

@@ -157,3 +157,32 @@ en:
     * The URL(s) for the material that the complainant wants taken down
     * A brief description of the issue leading to the complaint; and whether the recipient acted on the complaint or not.
     * In the case of a copyright complaint, the notice will also include a description of the original copyrighted material, and its URL if one exists.
+
+  submitter_widget:
+    type_descriptions:
+      DMCA:
+        'Complain that images, text, video, or other content posted online infringe your copyrights.'
+
+      Trademark:
+        'Complain that images, text, video, other content posted online, or some other form of online activity, infringe your trademark(s).'
+
+      Defamation:
+        'Complain that images, text, video, other content posted online, or some other form of online activity, defame, libel or slander you, or otherwise harm your reputation?'
+
+      CourtOrder:
+        'Report an order issued by a judge or court or injunction ordering the removal of images, text, video, or other content posted online, or the disabling of access to materials available online?'
+
+      LawEnforcementRequest:
+        'As a law enforcement agency or an agent of a law enforcement agency request the removal of images, text, video, or other content posted online, or private information or data that would normally not be available to the public?'
+
+      PrivateInformation:
+        'Complain that images, text, video, or other content posted online reveal your private information or otherwise violate your privacy?'
+
+      Other:
+        'Does the cease and desist letter you are reporting not meet any of the descriptions above?'
+
+      GovernmentRequest:
+        'As a government agency or an agent of a government agency request the removal of images, text, video, or other content posted online, or private information or data that would normally not be available to the public?'
+
+      Counterfeit:
+        'As a brand owner request the removal of allegedly counterfeit content?'

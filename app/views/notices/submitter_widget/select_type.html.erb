@@ -1,0 +1,35 @@
+<% title 'Report a Demand' %>
+
+<div class="inner-padding">
+  <h1>Which type of demand would you like to report?</h1>
+
+  <section class="notices-list">
+    <ul>
+      <% @display_models.each do |model| %>
+        <li data-id="<%= model.name %>"><%= model.label %></li>
+      <% end %>
+    </ul>
+  </section>
+
+  <section class="info-panel">
+    <% @display_models.each do |model| %>
+      <div data-id="<%= model.name %>">
+        <article>
+          <b><%= model.label %>:</b>
+          <%= raw t("submitter_widget.type_descriptions.#{model.name}") %>
+        </article>
+        <div class="button-wrapper">
+          <%=
+            link_to(
+              "Report #{model.label}",
+              new_submitter_widget_notice_path(type: model.name, widget_public_key: @widget_public_key),
+              class: "button"
+            )
+          %>
+        </div>
+      </div>
+    <% end %>
+  </section>
+</div>
+
+<%= javascript_include_tag('iframe-resizer-server.min') %>

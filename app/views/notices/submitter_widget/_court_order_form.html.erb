@@ -1,0 +1,31 @@
+<%= render 'notices/submitter_widget/form_components/header',
+           label: 'Court Order takedown notice' %>
+<%= simple_form_for(notice, url: submitter_widget_notices_path(widget_public_key: @widget_public_key)) do |form| %>
+  <section class="notice-body">
+    <h4><span>Step 1.</span> Describe the Notice</h4>
+    <%= render 'notices/submitter_widget/form_components/main_metadata',
+               form: form %>
+  </section>
+
+  <section class="works">
+    <h4><span>Step 2.</span> Original Works in Question</h4>
+    <p>Enter information about the original work(s) and targeted URL(s).</p>
+    <% form.object.works.each_with_index do |work, index| %>
+      <%= form.simple_fields_for(:works) do |works_form| %>
+        <div class="body-wrapper left">
+          <%= render(
+            partial: 'url_input_group',
+            locals: { notice: notice, assoc: :infringing_urls, works_form: works_form, index: index }
+          ) %>
+        </div>
+        <div class="body-wrapper right">
+          <%= works_form.input :description, label: 'Subject of Court Order' %>
+        </div>
+      <% end %>
+    <% end %>
+    <%= form.input :regulation_list, label: 'Laws Referenced by Court Order', placeholder: 'A comma separated list' %>
+  </section>
+
+  <%= render 'notices/form_components/roles', form: form %>
+  <%= render 'notices/form_components/submit', form: form %>
+<% end %>

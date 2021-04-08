@@ -1,0 +1,52 @@
+<% action_taken = true if local_assigns[:action_taken].nil? %>
+<% subject = true if local_assigns[:subject].nil? %>
+<% topics = true if local_assigns[:topics].nil? %>
+<% tag_list = true if local_assigns[:tag_list].nil? %>
+<% body = true if local_assigns[:body].nil? %>
+<% label = 'Body' if local_assigns[:label].nil? %>
+<% request_collection = nil if local_assigns[:request_collection].nil? %>
+<% mark_reg = nil if local_assigns[:mark_reg].nil? %>
+<div>
+  <%= form.input :type, as: :hidden %>
+  <%= form.input :title %>
+  <% if body %>
+    <%= form.input :body, label: label %>
+  <% end %>
+  <%= form.hidden_field :webform, value: true %>
+  <% if subject %>
+    <%= form.input :subject %>
+  <% end %>
+  <%if tag_list %>
+    <%= form.input :tag_list, placeholder: 'movie, video, article, etc.' %>
+  <% end %>
+  <%if topics %>
+    <%=
+      form.input :topic_ids,
+        label: "Topics",
+        prompt: nil,
+        collection: available_topics,
+        input_html: { multiple: true }
+      %>
+  <% end %>
+  <% if request_collection.present? %>
+    <%= form.input :request_type, collection: request_collection %>
+  <% end %>
+  <% if mark_reg %>
+    <%= form.input :mark_registration_number, label: "Registration Number" %>
+  <% end %>
+  <%= form.input :language, collection: Language.all, label_method: :label, value_method: :code %>
+  <%= form.input :jurisdiction_list, label: "Jurisdiction", placeholder: 'a list of countries - US, CA, etc.' %>
+
+  <div class="attach">
+    <%= form.simple_fields_for(:file_uploads) do |file_uploads_form| %>
+      <h6>File attachments</h6>
+
+      <p>Any file you attach to this notice will be viewable by the public in the form in which you have attached it. It will not be reviewed by Lumen staff prior to being available to download.</p>
+
+      <div id="file_uploads_inputs">
+        <%= file_uploads_form.input :file, label: 'Attach file' %>
+      </div>
+      <a href="javascript:void(0);" id="add-another" class="button">Attach another</a>
+    <% end %>
+  </div>
+</div>
