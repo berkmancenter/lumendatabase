@@ -2,9 +2,9 @@ Hi,
 
 your submitter plugin access request has been approved.
 
-Your plugin private key is: <%= @user.authentication_token %>
+Your plugin private key is: <%= @user.widget_public_key %>
 
-You can use it to configure the plugin. Integration documentation of the plugin is located here: <%= root_url %>/api_submitter_documentation.
+You can use it to configure the plugin. Integration documentation of the plugin is located here: <%= Chill::Application.config.site_host %>/api_submitter_documentation.
 
 Thank you,
 Lumen Database team

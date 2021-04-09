@@ -27,12 +27,13 @@ class SubmitterWidgetNoticesController < NoticesController
     end
 
     @notice = NoticeBuilder.new(
-      get_notice_type(params), notice_params, current_user
+      get_notice_type(params), notice_params, submitter_widget_user
     ).build
+
+    @notice.review_required = true
 
     if @notice.valid?
       @notice.save
-      @notice.mark_for_review
       flash.notice = 'Notice created! Thank you, it will be reviewed and published on the Lumen database website.'
     else
       Rails.logger.warn "Could not create notice with params: #{params}"
@@ -46,7 +47,7 @@ class SubmitterWidgetNoticesController < NoticesController
 
   def build_entity_notice_roles(model_class)
     model_class::DEFAULT_ENTITY_NOTICE_ROLES.each do |role|
-      next if %w[sender recipient].include?(role)
+      next if %w[submitter recipient].include?(role)
 
       @notice.entity_notice_roles.build(name: role).build_entity(
         kind: default_kind_based_on_role(role)
@@ -55,8 +56,7 @@ class SubmitterWidgetNoticesController < NoticesController
   end
 
   def allowed_to_submit?
-    widget_public_key &&
-      User.find_by_widget_public_key(widget_public_key.to_s)
+    widget_public_key && submitter_widget_user
   end
 
   def authorized_to_create?
@@ -70,6 +70,10 @@ class SubmitterWidgetNoticesController < NoticesController
   end
 
   def redirect_to_new_form
-    redirect_to new_submitter_widget_notice_path(type: params[:notice][:type], widget_public_key: @widget_public_key)
+    redirect_to new_submitter_widget_notice_path(widget_public_key: @widget_public_key)
+  end
+
+  def submitter_widget_user
+    User.find_by_widget_public_key(widget_public_key.to_s)
   end
 end

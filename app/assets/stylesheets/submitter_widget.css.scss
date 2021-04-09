@@ -1,6 +1,7 @@
 .submitter_widget_notices {
   /* @HACK:FIXME Firefox has problems with rendering an iframe */
   width: calc(100% - 1px);
+  background-color: #ffffff;
 
   section.main.app {
     background-color: #ffffff;

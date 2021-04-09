@@ -28,10 +28,15 @@ var LumenSubmitterWidget = (function () {
       if (this.dom_element) {
         this.iframe = document.createElement('iframe');
         this.iframe.src = this.SERVICE_URL;
+        this.iframe.style.cssText = 'border: none; margin: 0; padding: 0; width:100%;';
         this.dom_element.appendChild(this.iframe);
 
         // This will max the iframe size
-        iFrameResize({ log: false }, this.iframe)
+        iFrameResize({
+          log: false,
+          warningTimeout: 0,
+          checkOrigin: false
+        }, this.iframe)
       }
     }
   };

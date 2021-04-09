@@ -5,7 +5,17 @@
   <meta name="ROBOTS" content="NOODP" />
   <title><%= yield(:title) %></title>
   <%= render 'shared/head' -%>
-  <%= stylesheet_link_tag 'submitter_widget', :media => 'all' %>
+  <%= stylesheet_link_tag :submitter_widget, :media => 'all' %>
+  <script>
+    window.paceOptions = {
+      startOnPageLoad: false
+    }
+
+    window.onbeforeunload = function () {
+      Pace.stop()
+      Pace.bar.render()
+    }
+  </script>
 </head>
 <body class="<%= body_class %>">
   <%= render 'flashes' -%>
