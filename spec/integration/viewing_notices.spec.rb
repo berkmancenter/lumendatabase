@@ -150,6 +150,20 @@ feature 'Viewing notices' do
 
       expect(page).not_to have_content(',,,')
     end
+
+    scenario 'can see all entities assigned to the notice' do
+      all_possible_roles_entities = EntityNoticeRole.all_roles_names.map do |role_name|
+        create(:entity_notice_role, name: role_name)
+      end
+
+      notice = create(:court_order, entity_notice_roles: all_possible_roles_entities)
+
+      visit notice_url(notice)
+
+      EntityNoticeRole.all_roles_names.map do |role_name|
+        expect(page).not_to have_content("<h5>#{role_name}</h5>")
+      end
+    end
   end
 
   context 'requesting additional access' do
