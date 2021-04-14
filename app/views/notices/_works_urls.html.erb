@@ -53,7 +53,11 @@
 
   <% if access_just_for_researchers?(@notice) %>
     <div class="row">
-      <p><%= cms_snippet_content('lumen_notice_only_full_for_researchers').gsub!('###SUBMITTER_NAME###', @notice.submitter.name).html_safe %></p>
+      <% if access_just_for_specific_researchers?(@notice) %>
+        <p><%= cms_snippet_content('lumen_notice_only_full_for_specific_researchers').gsub!('###SUBMITTER_NAME###', @notice.submitter.name).html_safe %></p>
+      <% else %>
+        <p><%= cms_snippet_content('lumen_notice_only_full_for_researchers').gsub!('###SUBMITTER_NAME###', @notice.submitter.name).html_safe %></p>
+      <% end %>
     </div>
   <% else %>
     <% if access_requestable?(@notice, show_original, show_infringing) %>
