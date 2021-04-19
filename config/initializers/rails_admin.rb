@@ -81,17 +81,46 @@ RailsAdmin.config do |config|
         field :hidden
         field :request_type
         field :webform
+        field :views_overall
+        field :views_by_notice_viewer
       end
 
       show do
-        configure(:infringing_urls) { hide }
-        configure(:copyrighted_urls) { hide }
-        configure(:token_urls) { hide }
-        configure(:restricted_to_researchers) do
+        field :title
+        field :type
+        field :published
+        field :date_received
+        field :date_sent
+        field :source
+        field :subject
+        field :review_required
+        field :language
+        field :rescinded
+        field :spam
+        field :hidden
+        field :restricted_to_researchers do
           formatted_value do
             bindings[:object].restricted_to_researchers? ? boolean_true_icon : boolean_false_icon
           end
         end
+        field :webform
+        field :views_overall
+        field :views_by_notice_viewer
+        field :temporary_token_urls do
+          formatted_value do
+            notice_token_urls_count_links(bindings)
+          end
+        end
+        field :permanent_token_urls do
+          formatted_value do
+            notice_token_urls_count_links(bindings, true)
+          end
+        end
+        field :topics
+        field :entity_notice_roles
+        field :entities
+        field :works
+        field :file_uploads
       end
 
       edit do
@@ -272,12 +301,12 @@ RailsAdmin.config do |config|
     end
 
     list do
-      field :url
       field :email
       field :user
       field :notice
       field :expiration_date
       field :valid_forever
+      field :views
       field :created_at
     end
 
@@ -318,5 +347,11 @@ RailsAdmin.config do |config|
         end
       end
     end
+  end
+
+  def notice_token_urls_count_links(bindings, perm = false)
+    token_urls = bindings[:object].token_urls.where(valid_forever: perm)
+    links_to_token_urls = token_urls.map { |token_url| bindings[:view].link_to(token_url) }.join(', ')
+    "#{token_urls.count} <br> #{links_to_token_urls}".html_safe
   end
 end

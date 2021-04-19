@@ -228,6 +228,80 @@ describe NoticesController do
       end
     end
 
+    context 'updates stats' do
+      let(:notice) { build(:dmca) }
+      let(:notice_viewer_user) do
+        build(
+          :user,
+          :notice_viewer
+        )
+      end
+
+      it 'increases the notice views counter for an anonymous user' do
+        notice.views_overall = 0
+        notice.views_by_notice_viewer = 0
+
+        expect(Notice).to receive(:find_by).twice.with(id: '42').and_return(notice)
+
+        allow(controller).to receive(:current_user).and_return(nil)
+
+        get :show, params: { id: 42 }
+        get :show, params: { id: 42 }
+
+        expect(notice.views_overall).to eq 2
+        expect(notice.views_by_notice_viewer).to eq 0
+      end
+
+      it 'increases the notice notice_viewer views counter for a user with the notice_viewer role' do
+        notice.views_overall = 50
+        notice.views_by_notice_viewer = 5
+
+        expect(Notice).to receive(:find_by).exactly(3).times.with(id: '42').and_return(notice)
+
+        allow(controller).to receive(:current_user).and_return(notice_viewer_user)
+
+        get :show, params: { id: 42 }
+        get :show, params: { id: 42 }
+        get :show, params: { id: 42 }
+
+        expect(notice.views_overall).to eq 53
+        expect(notice.views_by_notice_viewer).to eq 8
+      end
+
+      it 'increases the token url temp views counter' do
+        expect(Notice).to receive(:find_by).exactly(6).times.with(id: '42').and_return(notice)
+
+        token_url = TokenUrl.create!(
+          email: 'test_user@lumendatabase.org',
+          valid_forever: false,
+          notice: notice
+        )
+
+        allow(controller).to receive(:current_user).and_return(notice_viewer_user)
+
+        get :show, params: { id: 42, access_token: token_url.token }
+        get :show, params: { id: 42, access_token: token_url.token }
+        get :show, params: { id: 42, access_token: token_url.token }
+
+        token_url.reload
+        expect(token_url.views).to eq 3
+
+        token_url = TokenUrl.create!(
+          user: notice_viewer_user,
+          email: 'test_user@lumendatabase.org',
+          valid_forever: true,
+          notice: notice
+        )
+
+        get :show, params: { id: 42, access_token: token_url.token }
+        get :show, params: { id: 42, access_token: token_url.token }
+        get :show, params: { id: 42, access_token: token_url.token }
+
+        token_url.reload
+        expect(token_url.views).to eq 3
+      end
+    end
+
     def stub_find_notice(notice = nil)
       notice ||= Notice.new
       notice.tap { |n| allow(Notice).to receive(:find_by).and_return(n) }
