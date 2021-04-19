@@ -62,6 +62,8 @@ class NoticesController < ApplicationController
   def show
     return resource_not_found("Can't fing notice with id=#{params[:id]}") unless (@notice = Notice.find_by(id: params[:id]))
 
+    update_stats
+
     respond_to do |format|
       format.html { show_render_html }
       format.json do
@@ -260,5 +262,15 @@ class NoticesController < ApplicationController
       render :show
       run_show_callbacks
     end
+  end
+
+  def update_stats
+    @notice.increment!(:views_overall)
+    @notice.increment!(:views_by_notice_viewer) if !current_user.nil? && current_user.role?(Role.notice_viewer)
+
+    return unless TokenUrl.valid?(params[:access_token], @notice)
+
+    token_url = TokenUrl.find_by(token: params[:access_token])
+    token_url.increment!(:views)
   end
 end
