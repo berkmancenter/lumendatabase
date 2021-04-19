@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_23_193057) do
+ActiveRecord::Schema.define(version: 2021_04_19_110640) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -290,6 +290,8 @@ ActiveRecord::Schema.define(version: 2021_02_23_193057) do
     t.text "notes"
     t.integer "counternotice_for_id"
     t.integer "counternotice_for_sid"
+    t.integer "views_overall", default: 0
+    t.integer "views_by_notice_viewer", default: 0
     t.index ["created_at"], name: "index_notices_on_created_at"
     t.index ["original_notice_id"], name: "index_notices_on_original_notice_id"
     t.index ["published"], name: "index_notices_on_published"
@@ -409,6 +411,7 @@ ActiveRecord::Schema.define(version: 2021_02_23_193057) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean "documents_notification"
+    t.integer "views", default: 0
     t.index ["documents_notification"], name: "index_token_urls_on_documents_notification"
     t.index ["email"], name: "index_token_urls_on_email"
     t.index ["notice_id"], name: "index_token_urls_on_notice_id"
