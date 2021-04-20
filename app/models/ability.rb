@@ -12,13 +12,13 @@ class Ability
 
     return unless user
 
-    if user.role?(Role.notice_viewer)
-      if user.can_generate_permanent_notice_token_urls
-        can :generate_permanent_notice_token_urls, Notice do |notice|
-          full_notice_only_researchers?(notice, user)
-        end
+    if user.can_generate_permanent_notice_token_urls
+      can :generate_permanent_notice_token_urls, Notice do |notice|
+        full_notice_only_researchers?(notice, user)
       end
+    end
 
+    if user.role?(Role.notice_viewer)
       can_view_full_version = true
 
       can_view_full_version = false if user.notice_viewer_views_limit && user.notice_viewer_viewed_notices >= user.notice_viewer_views_limit
