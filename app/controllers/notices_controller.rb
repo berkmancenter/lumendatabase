@@ -6,7 +6,7 @@ class NoticesController < ApplicationController
   # Notice validates the presence of works, but we delay adding works because
   # it is too time-consuming for the request/response cycle. Therefore we
   # need to add a placeholder so the Notice instance can save.
-  PLACEHOLDER_WORKS = [Work.unknown].freeze
+  PLACEHOLDER_WORKS = [Lumen::UNKNOWN_WORK].freeze
 
   def new
     (render :submission_disabled and return) if cannot?(:submit, Notice)
