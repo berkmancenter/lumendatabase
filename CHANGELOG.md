@@ -4,6 +4,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 * [#630](https://github.com/berkmancenter/lumendatabase/pull/630) Updates caching strategy on home page to be more resilient across deploys.
 * [#630](https://github.com/berkmancenter/lumendatabase/pull/630) Improves documentation (Elasticsearch indexing, release procedures).
 
+## [21.04ab](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.04b) - 2021-04-21
+### Changed
+  *  Allowed any role with the `can_generate_permanent_notice_token_urls` setting be able to generate permanent token urls.
+
 ## [21.04a](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.04a) - 2021-04-19
 ### Added
   *  Added basic notice viewing stats.
