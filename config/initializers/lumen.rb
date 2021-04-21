@@ -1,4 +1,4 @@
 module Lumen
   REDACTION_MASK = '[REDACTED]'.freeze
-  UNKNOWN_WORK = Work.unknown
+  UNKNOWN_WORK = Work.unknown rescue nil
 end
