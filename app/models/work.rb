@@ -56,6 +56,8 @@ class Work < ApplicationRecord
     end
   end
 
+  # This is very slow; don't call it directly except at app startup time.
+  # config/application.rb stores the result; fetch it from there.
   def self.unknown
     @unknown ||= find_or_create!(
       kind: 'unknown', description: UNKNOWN_WORK_DESCRIPTION

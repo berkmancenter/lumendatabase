@@ -17,11 +17,15 @@ RSpec.describe Work, type: :model do
       expect(work.description).to eq Work::UNKNOWN_WORK_DESCRIPTION
     end
 
-    it 'caches the unknown work' do
+    it 'returns a consistent result' do
       work1 = Work.unknown
       work2 = Work.unknown
 
       expect(work1).to eq work2
+    end
+
+    it 'can be referenced via config' do
+      expect(Work.unknown).to eq Lumen::UNKNOWN_WORK
     end
   end
 

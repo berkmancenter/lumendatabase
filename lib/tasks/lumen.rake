@@ -839,9 +839,18 @@ class CourtOrderReporter
   end
 
   def fetch_files
-    @files = FileUpload.where(
-      notice: CourtOrder.where('created_at > ?', 1.week.ago),
-    )
+    order_ids = if ENV['EXCLUDE_ENTITY_NAMES']
+                  CourtOrder.where('notices.created_at > ?', 1.week.ago)
+                            .includes(:entities)
+                            .references(:entities)
+                            .where.not(entities: {
+                              name: ENV['EXCLUDE_ENTITY_NAMES'].split(',')
+                            }).distinct.pluck(:id)
+                else
+                  CourtOrder.where('created_at > ?', 1.week.ago).pluck(:id)
+                end
+
+    @files = FileUpload.where(notice: order_ids)
   end
 
   def write_files
@@ -905,7 +914,7 @@ class CourtOrderReporter
 
   def email_single_user(email)
     Net::SMTP.start(SMTP_SETTINGS[:address]) do |smtp|
-      smtp.send_message mailtext, 'no-reply@lumendatabase.org', email
+      smtp.send_message mailtext, Chill::Application.config.default_sender, email
     end
   end
 
