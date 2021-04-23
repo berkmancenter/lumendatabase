@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_19_110640) do
+ActiveRecord::Schema.define(version: 2021_04_28_162503) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,24 @@ ActiveRecord::Schema.define(version: 2021_04_19_110640) do
     t.string "checksum", null: false
     t.datetime "created_at", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "archived_token_urls", force: :cascade do |t|
+    t.string "email"
+    t.string "token"
+    t.bigint "notice_id"
+    t.bigint "user_id"
+    t.datetime "expiration_date"
+    t.boolean "valid_forever"
+    t.boolean "documents_notification"
+    t.integer "views", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["documents_notification"], name: "index_archived_token_urls_on_documents_notification"
+    t.index ["email"], name: "index_archived_token_urls_on_email"
+    t.index ["notice_id"], name: "index_archived_token_urls_on_notice_id"
+    t.index ["token"], name: "index_archived_token_urls_on_token"
+    t.index ["user_id"], name: "index_archived_token_urls_on_user_id"
   end
 
   create_table "comfy_cms_categories", force: :cascade do |t|
@@ -250,6 +268,12 @@ ActiveRecord::Schema.define(version: 2021_04_19_110640) do
     t.integer "work_id", null: false
     t.index ["infringing_url_id"], name: "index_infringing_urls_works_on_infringing_url_id"
     t.index ["work_id"], name: "index_infringing_urls_works_on_work_id"
+  end
+
+  create_table "lumen_settings", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "key", null: false
+    t.string "value", null: false
   end
 
   create_table "notice_import_errors", id: :serial, force: :cascade do |t|

@@ -308,36 +308,11 @@ RailsAdmin.config do |config|
   end
 
   config.model 'TokenUrl' do
-    configure :url do
-      formatted_value do
-        url = "#{Chill::Application.config.site_host}/notices/#{bindings[:object].notice_id}?access_token=#{bindings[:object].token}"
-        %(<a href="//#{url}">#{bindings[:object].token}</a>).html_safe
-      end
-      visible false
-    end
+    token_url_config
+  end
 
-    list do
-      field :email
-      field :user
-      field :notice
-      field :expiration_date
-      field :valid_forever
-      field :views
-      field :created_at
-    end
-
-    edit do
-      field :email do
-        required false
-      end
-      field :user
-      field :notice do
-        required true
-      end
-      field :expiration_date
-      field :valid_forever
-      field :documents_notification
-    end
+  config.model 'ArchivedTokenUrl' do
+    token_url_config
   end
 
   config.model 'RiskTriggerCondition' do
@@ -365,9 +340,40 @@ RailsAdmin.config do |config|
     end
   end
 
+  config.model 'LumenSetting' do
+    edit do
+      field :value
+    end
+  end
+
   def notice_token_urls_count_links(bindings, perm = false)
     token_urls = bindings[:object].token_urls.where(valid_forever: perm)
     links_to_token_urls = token_urls.map { |token_url| bindings[:view].link_to(token_url) }.join(', ')
     "#{token_urls.count} <br> #{links_to_token_urls}".html_safe
+  end
+
+  def token_url_config
+    list do
+      field :email
+      field :user
+      field :notice
+      field :expiration_date
+      field :valid_forever
+      field :views
+      field :created_at
+    end
+
+    edit do
+      field :email do
+        required false
+      end
+      field :user
+      field :notice do
+        required true
+      end
+      field :expiration_date
+      field :valid_forever
+      field :documents_notification
+    end
   end
 end

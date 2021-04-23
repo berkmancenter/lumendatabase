@@ -5,6 +5,7 @@ require 'collapses_topics'
 require 'csv'
 require 'comfy/blog_post_factory'
 require 'loggy'
+require 'court_order_reporter'
 
 namespace :lumen do
   desc 'Delete elasticsearch index'
@@ -28,25 +29,27 @@ namespace :lumen do
 
   desc 'Update index for all existing hidden notices '
   task index_hidden_notices: :environment do
+    loggy = Loggy.new('rake lumen:index_hidden_notices', true)
+
     # one-off script for existing hidden notices
     begin
       batch_size = (ENV['BATCH_SIZE'] || 192).to_i
 
       notices = Notice.where(hidden: true)
-      Rails.logger.info 'index_notices hidden: true'
+      loggy.info 'index_notices hidden: true'
 
       count = 0
       notices.find_in_batches(batch_size: batch_size) do |batch|
         Notice.import batch
         count += batch.count
-        Rails.logger.info "index_notices hidden: true, count: #{count}, time: #{Time.now.to_i}"
+        loggy.info "index_notices hidden: true, count: #{count}, time: #{Time.now.to_i}"
       end
 
       ReindexRun.sweep_search_result_caches
 
-      Rails.logger.info "index_notices done hidden: true, count: #{count}, time: #{Time.now.to_i}"
+      loggy.info "index_notices done hidden: true, count: #{count}, time: #{Time.now.to_i}"
     rescue => e
-      Rails.logger.error "index_notices hidden: true, error: #{e.inspect}"
+      loggy.error "index_notices hidden: true, error: #{e.inspect}"
     end
   end
 
@@ -56,16 +59,18 @@ namespace :lumen do
   end
 
   def index_notices_by_csv(input_csv, id_column)
+    loggy = Loggy.new('rake lumen:index_notices_by_csv', true)
+
     usage = "index_notices_by_csv['input_csv,id_column']"
 
     if input_csv.nil? || id_column.nil?
-      puts usage
+      loggy.info usage
       return
     end
 
     unless File.exist?(input_csv)
-      puts 'Cannot find input_csv'
-      puts usage
+      loggy.error 'Cannot find input_csv'
+      loggy.error usage
       return
     end
 
@@ -73,7 +78,7 @@ namespace :lumen do
 
     csv = CSV.read input_csv, headers: true
 
-    Rails.logger.info "index_notices csv: #{input_csv}, total: #{csv.count}"
+    loggy.info "index_notices csv: #{input_csv}, total: #{csv.count}"
 
     count = 0
 
@@ -82,108 +87,118 @@ namespace :lumen do
 
       Notice.import batch
       count += batch.count
-      Rails.logger.info "index_notices csv: #{input_csv}, count: #{count}, time: #{Time.now.to_i}"
+      loggy.info "index_notices csv: #{input_csv}, count: #{count}, time: #{Time.now.to_i}"
 
       ReindexRun.sweep_search_result_caches
 
-      Rails.logger.info "index_notices done csv: #{input_csv}, count: #{count}, time: #{Time.now.to_i}"
+      loggy.info "index_notices done csv: #{input_csv}, count: #{count}, time: #{Time.now.to_i}"
     end
   end
 
   desc 'Recreate elasticsearch index for notices with a given recipient entity_id'
   task :index_notices_by_entity_id, [:entity_id] => :environment do |_t, args|
+    loggy = Loggy.new('rake lumen:index_notices_by_entity_id', true)
+
     begin
       batch_size = (ENV['BATCH_SIZE'] || 192).to_i
 
       notices = Notice.where("id in ( select notice_id from entity_notice_roles where name = 'recipient' and entity_id = #{args[:entity_id]} )")
-      Rails.logger.info "index_notices entity_id: #{args[:entity_id]}, total: #{notices.count}"
+      loggy.info "index_notices entity_id: #{args[:entity_id]}, total: #{notices.count}"
 
       count = 0
       notices.find_in_batches(batch_size: batch_size) do |batch|
         Notice.import batch
         count += batch.count
-        Rails.logger.info "index_notices entity_id: #{args[:entity_id]}, count: #{count}, time: #{Time.now.to_i}"
+        loggy.info "index_notices entity_id: #{args[:entity_id]}, count: #{count}, time: #{Time.now.to_i}"
       end
 
       ReindexRun.sweep_search_result_caches
 
-      Rails.logger.info "index_notices done entity_id: #{args[:entity_id]}, count: #{count}, time: #{Time.now.to_i}"
+      loggy.info "index_notices done entity_id: #{args[:entity_id]}, count: #{count}, time: #{Time.now.to_i}"
     rescue => e
-      Rails.logger.error "index_notices entity_id: #{args[:entity_id]}, error: #{e.inspect}"
+      loggy.error "index_notices entity_id: #{args[:entity_id]}, error: #{e.inspect}"
     end
   end
 
   desc 'Recreate elasticsearch index for notices of a given date'
   task :index_notices_by_date, [:date] => :environment do |_t, args|
+    loggy = Loggy.new('rake lumen:index_notices_by_date', true)
+
     begin
       batch_size = (ENV['BATCH_SIZE'] || 192).to_i
 
       notices = Notice.where("created_at::date = '#{args[:date]}'")
-      Rails.logger.info "index_notices date: #{args[:date]}, total: #{notices.count}"
+      loggy.info "index_notices date: #{args[:date]}, total: #{notices.count}"
 
       count = 0
       notices.find_in_batches(batch_size: batch_size) do |batch|
         Notice.import batch
         count += batch.count
-        Rails.logger.info "index_notices date: #{args[:date]}, count: #{count}, time: #{Time.now.to_i}"
+        loggy.info "index_notices date: #{args[:date]}, count: #{count}, time: #{Time.now.to_i}"
       end
 
       ReindexRun.sweep_search_result_caches
 
-      Rails.logger.info "index_notices done date: #{args[:date]}, count: #{count}, time: #{Time.now.to_i}"
+      loggy.info "index_notices done date: #{args[:date]}, count: #{count}, time: #{Time.now.to_i}"
     rescue => e
-      Rails.logger.error "index_notices error date: #{args[:date]}, error: #{e.inspect}"
+      loggy.error "index_notices error date: #{args[:date]}, error: #{e.inspect}"
     end
   end
 
   desc 'Recreate elasticsearch index for notices of a given month'
   task :index_notices_by_month, [:month, :year] => :environment do |_t, args|
+    loggy = Loggy.new('rake lumen:index_notices_by_month', true)
+
     begin
       batch_size = (ENV['BATCH_SIZE'] || 192).to_i
 
       notices = Notice.where("extract( year from created_at ) = #{args[:year]} and extract( month from created_at ) = #{args[ :month ]}")
-      Rails.logger.info "index_notices date: #{args[:year]}-#{args[:month]}, total: #{notices.count}"
+      loggy.info "index_notices date: #{args[:year]}-#{args[:month]}, total: #{notices.count}"
 
       count = 0
       notices.find_in_batches(batch_size: batch_size) do |batch|
         Notice.import batch
         count += batch.count
-        Rails.logger.info "index_notices date: #{args[:year]}-#{args[:month]}, count: #{count}, time: #{Time.now.to_i}"
+        loggy.info "index_notices date: #{args[:year]}-#{args[:month]}, count: #{count}, time: #{Time.now.to_i}"
       end
 
       ReindexRun.sweep_search_result_caches
 
-      Rails.logger.info "index_notices done date: #{args[:year]}-#{args[:month]}, count: #{count}, time: #{Time.now.to_i}"
+      loggy.info "index_notices done date: #{args[:year]}-#{args[:month]}, count: #{count}, time: #{Time.now.to_i}"
     rescue => e
-      Rails.logger.error "index_notices date: #{args[:year]}-#{args[:month]}, error: #{e.inspect}"
+      loggy.error "index_notices date: #{args[:year]}-#{args[:month]}, error: #{e.inspect}"
     end
   end
 
   desc 'Recreate elasticsearch index for notices of a given year'
   task :index_notices_by_year, [:year] => :environment do |_t, args|
+    loggy = Loggy.new('rake lumen:index_notices_by_year', true)
+
     begin
       batch_size = (ENV['BATCH_SIZE'] || 192).to_i
 
       notices = Notice.where("extract( year from created_at ) = #{args[:year]}")
-      Rails.logger.info "index_notices date: #{args[:year]}, total: #{notices.count}"
+      loggy.info "index_notices date: #{args[:year]}, total: #{notices.count}"
 
       count = 0
       notices.find_in_batches(batch_size: batch_size) do |batch|
         Notice.import batch
         count += batch.count
-        Rails.logger.info "index_notices date: #{args[:year]}, count: #{count}, time: #{Time.now.to_i}"
+        loggy.info "index_notices date: #{args[:year]}, count: #{count}, time: #{Time.now.to_i}"
       end
 
       ReindexRun.sweep_search_result_caches
 
-      Rails.logger.info "index_notices done date: #{args[:year]}, count: #{count}, time: #{Time.now.to_i}"
+      loggy.info "index_notices done date: #{args[:year]}, count: #{count}, time: #{Time.now.to_i}"
     rescue => e
-      Rails.logger.error "index_notices date: #{args[:year]}, error: #{e.inspect}"
+      loggy.error "index_notices date: #{args[:year]}, error: #{e.inspect}"
     end
   end
 
   desc 'Recreate elasticsearch index memory efficiently'
   task recreate_elasticsearch_index: :environment do
+    loggy = Loggy.new('rake lumen:recreate_elasticsearch_index', true)
+
     begin
       batch_size = (ENV['BATCH_SIZE'] || 100).to_i
       [Notice, Entity].each do |klass|
@@ -194,27 +209,28 @@ namespace :lumen do
           instances.each do |instance|
             instance.__elasticsearch__.index_document
             count += 1
-            print '.'
+            puts '.'
           end
-          Rails.logger.info "#{count} #{klass} instances indexed at #{Time.now.to_i}"
+          loggy.info "#{count} #{klass} instances indexed at #{Time.now.to_i}"
         end
       end
       ReindexRun.sweep_search_result_caches
     rescue => e
-      Rails.logger.error "Reindexing did not succeed because: #{e.inspect}"
+      loggy.error "Reindexing did not succeed because: #{e.inspect}"
     end
   end
 
   desc 'Recreate elasticsearch index memory efficiently'
   task create_elasticsearch_index_for_updated_instances: :environment do
+    loggy = Loggy.new('rake lumen:create_elasticsearch_index_for_updated_instances', true)
+
     begin
       batch_size = (ENV['BATCH_SIZE'] || 100).to_i
       from = Date.parse(ENV['from'], '%Y-%m-%d') if ENV['from']
 
       if from.nil?
         error = '"from" parameter is missing (correct format %Y-%m-%d)'
-        puts error
-        Rails.logger.error error
+        loggy.error error
 
         return
       end
@@ -228,19 +244,21 @@ namespace :lumen do
           instances.each do |instance|
             instance.__elasticsearch__.index_document
             count += 1
-            print '.'
+            puts '.'
           end
-          Rails.logger.info "#{count} #{klass} instances indexed at #{Time.now.to_i}"
+          loggy.info "#{count} #{klass} instances indexed at #{Time.now.to_i}"
         end
       end
       ReindexRun.sweep_search_result_caches
     rescue => e
-      Rails.logger.error "Reindexing did not succeed because: #{e.inspect}"
+      loggy.error "Reindexing did not succeed because: #{e.inspect}"
     end
   end
 
   desc 'Assign titles to untitled notices'
   task title_untitled_notices: :environment do
+    loggy = Loggy.new('rake lumen:title_untitled_notices', true)
+
     # Similar to NoticeBuilder model
     def generic_title(notice)
       if notice.recipient_name.present?
@@ -253,14 +271,14 @@ namespace :lumen do
     begin
       untitled_notices = Notice.where(title: 'Untitled')
 
-      $stdout.puts "Renaming #{untitled_notices.count} notices..."
+      loggy.info "Renaming #{untitled_notices.count} notices..."
       untitled_notices.each do |notice|
         new_title = generic_title(notice)
         notice.update_attribute(:title, new_title)
-        $stdout.puts '.'
+        puts '.'
       end
     rescue => e
-      $stderr.warn "Titling did not succeed because: #{e.inspect}"
+      loggy.warn "Titling did not succeed because: #{e.inspect}"
     end
   end
 
@@ -270,16 +288,17 @@ namespace :lumen do
   end
 
   def hide_notices_by_sid(input_csv, sid_column)
+    loggy = Loggy.new('rake lumen:hide_notices_by_sid', true)
+
     usage = "hide_notices_by_sid['input_csv,sid_column']"
 
     if input_csv.nil? || sid_column.nil?
-      puts usage
+      loggy.info usage
       return
     end
 
     unless File.exist?(input_csv)
-      puts 'Cannot find input_csv'
-      puts usage
+      loggy.error 'Cannot find input_csv'
       return
     end
 
@@ -299,14 +318,16 @@ namespace :lumen do
         failed += 1
       end
 
-      puts total if (total % 100).zero?
+      loggy.info total if (total % 100).zero?
     end
 
-    puts "total: #{total}, successful: #{successful}, failed: #{failed}"
+    loggy.info "total: #{total}, successful: #{successful}, failed: #{failed}"
   end
 
   desc 'Change incorrect notice type'
   task :change_incorrect_notice_type, [:input_csv] => :environment do |_t, args|
+    loggy = Loggy.new('rake lumen:change_incorrect_notice_type', true)
+
     incorrect_ids_file = args[:input_csv] || Rails.root.join('tmp', 'incorrect_ids.csv')
     incorrect_notice_ids = []
     incorrect_notice_id_type = {}
@@ -317,7 +338,7 @@ namespace :lumen do
 
     incorrect_notices = Notice.where(id: incorrect_notice_ids)
 
-    $stdout.puts "Changing #{incorrect_notices.count} notices..."
+    loggy.info "Changing #{incorrect_notices.count} notices..."
     incorrect_notices.each do |notice|
       old_type = notice.class.name.constantize
       new_type = incorrect_notice_id_type[notice.id].constantize
@@ -330,39 +351,41 @@ namespace :lumen do
       notice.topic_assignments.delete_all
       notice.touch
       notice.save!
-      $stdout.puts '.'
+      puts '.'
     end
   end
 
   desc 'Index non-indexed models'
   task index_non_indexed: :environment do
+    loggy = Loggy.new('rake lumen:index_non_indexed', true)
+
     begin
-      $stdout.puts "Indexing #{Notice.count} Notice instances..."
+      loggy.info "Indexing #{Notice.count} Notice instances..."
       # do notices
       Notice.includes(works: [:infringing_urls, :copyrighted_urls])
             .find_in_batches do |group|
         GC.start # force once per batch to avoid OOM
         group.each do |obj|
-          print '.'
+          puts '.'
           next if ReindexRun.indexed?(Notice, obj.id)
 
-          $stdout.puts "Indexing Notice, #{obj.id}"
+          loggy.info "Indexing Notice, #{obj.id}"
           obj.__elasticsearch__.index_document
         end
       end
 
-      $stdout.puts "Indexing #{Entity.count} Entity instances..."
+      loggy.info "Indexing #{Entity.count} Entity instances..."
       Entity.find_in_batches do |group|
         group.each do |obj|
-          print '.'
+          puts '.'
           next if ReindexRun.indexed?(Entity, obj.id)
 
-          $stdout.puts "Indexing Entity, #{obj.id}"
+          loggy.info "Indexing Entity, #{obj.id}"
           obj.__elasticsearch__.index_document
         end
       end
     rescue => e
-      $stdout.puts "Reindexing did not succeed because: #{e.inspect}"
+      loggy.info "Reindexing did not succeed because: #{e.inspect}"
     end
   end
 
@@ -418,6 +441,8 @@ where notices.id in (
 
   desc 'Redact content in a single notice by id'
   task :redact_lr_legalother_single, [:notice_id] => :environment do |_t, args|
+    loggy = Loggy.new('rake lumen:redact_lr_legalother_single', true)
+
     begin
       notices = Notice.includes(
         works: %i[infringing_urls copyrighted_urls]
@@ -445,15 +470,16 @@ where notices.id in (
         end
       end
     rescue => e
-      $stderr.warn "reassigning did not succeed because: #{e.inspect}"
+      loggy.warn "reassigning did not succeed because: #{e.inspect}"
     end
   end
 
   desc 'Redact content in lr_legalother notices from Google'
   task redact_lr_legalother: :environment do
+    loggy = Loggy.new('rake lumen:redact_lr_legalother', true)
+
     begin
       entities = Entity.where("entities.name ilike '%Google%'")
-      total = entities.count
       entities.each.with_index(1) do |e, i|
         notices = e.notices.includes(
           works: %i[infringing_urls copyrighted_urls]
@@ -463,7 +489,7 @@ where notices.id in (
           type: 'Defamation'
         )
 
-        $stdout.puts "Redacting #{[notices.count, 1].max} notice(s)..."
+        loggy.info "Redacting #{[notices.count, 1].max} notice(s)..."
 
         notices.find_in_batches do |group|
           group.each do |notice|
@@ -479,14 +505,14 @@ where notices.id in (
               work.copyrighted_urls.each do |cu|
                 cu.update_attributes(url: redactor.redact(cu.url))
               end
-              $stdout.puts '.'
+              puts '.'
             end
           end
         end
         p.finish unless p.finished?
       end
     rescue => e
-      $stderr.warn "reassigning did not succeed because: #{e.inspect}"
+      loggy.warn "reassigning did not succeed because: #{e.inspect}"
     end
   end
 
@@ -699,16 +725,19 @@ where works.id in (
 
   desc 'Send notifications about file uploads updates'
   task send_file_uploads_notifications: :environment do
-    date_time_task = proc { "[#{Time.now.strftime("%d/%m/%Y %H:%M:%S")}] [rails send_file_uploads_notifications]" }
+    loggy = Loggy.new('rake lumen:send_file_uploads_notifications', true)
 
-    puts "#{date_time_task.call} Starting a new task run"
+    loggy.info 'Starting a new task run'
+
+    loggy.info 'Removing old DocumentsUpdateNotificationNotice records'
+    DocumentsUpdateNotificationNotice.where("created_at < '#{2.days.ago}'").delete_all
 
     if DocumentsUpdateNotificationNotice.all.empty?
-      puts "#{date_time_task.call} No scheduled notifications, nothing to process"
+      loggy.info 'No scheduled notifications, nothing to process'
     end
 
     DocumentsUpdateNotificationNotice.all.each do |doc_notification|
-      puts "#{date_time_task.call} Starting processing notice ##{doc_notification.notice.id}"
+      loggy.info "Starting processing notice ##{doc_notification.notice.id}"
 
       TokenUrl.where(
         notice: doc_notification.notice,
@@ -716,21 +745,21 @@ where works.id in (
       ).each do |token_url|
         next unless token_url.email.present?
 
-        puts "#{date_time_task.call} Sending a notification about notice ##{doc_notification.notice.id} to #{token_url.email}"
+        loggy.info "Sending a notification about notice ##{doc_notification.notice.id} to #{token_url.email}"
 
         TokenUrlsMailer.notice_file_uploads_updates_notification(
           token_url.email, token_url, doc_notification.notice
         ).deliver_now
 
-        token_url.update_attribute(:expiration_date, Time.now + 24.hours)
+        token_url.update_attribute(:expiration_date, Time.now + LumenSetting.get_i('truncation_token_urls_active_period').seconds)
       end
 
-      puts "#{date_time_task.call} Finishing processing notice ##{doc_notification.notice.id}"
+      loggy.info "Finishing processing notice ##{doc_notification.notice.id}"
     end
 
     DocumentsUpdateNotificationNotice.delete_all
 
-    puts "#{date_time_task.call} Finishing the task"
+    loggy.info 'Finishing the task'
   end
 
   desc 'Set up CMS'
@@ -805,125 +834,23 @@ where works.id in (
       loggy.error('Reindexing did not succeed because: ' + e.inspect)
     end
   end
-end
 
-class CourtOrderReporter
-  def report
-    setup_directories
-    initialize_info_file
-    fetch_files
-    write_files
-    make_archive
-    email_users
-  end
+  desc 'Archive expired token urls'
+  task archive_expired_token_urls: :environment do
+    loggy = Loggy.new('rake lumen:archive_expired_token_urls', true)
 
-  def setup_directories
-    Rails.logger.info '[rake] Generating court order attachments report'
+    batch_size = 100
 
-    @magic_dir = ENV['USER_CRON_MAGIC_DIR'] || 'usercron'
-    @base_dir = Rails.root.join('public', @magic_dir)
-    Dir.mkdir(@base_dir) unless Dir.exist?(@base_dir)
+    TokenUrl.where(valid_forever: false).where('expiration_date < ?', Time.now).find_in_batches(batch_size: batch_size) do |token_urls|
+      # Force garbage collection to avoid OOM
+      GC.start
+      token_urls.each do |token_url|
+        ArchivedTokenUrl.create!(token_url.attributes)
+        token_url.destroy!
 
-    @working_dir = Rails.root.join('public', @magic_dir, 'working')
-    Dir.mkdir(@working_dir) unless Dir.exist?(@working_dir)
-  end
-
-  def initialize_info_file
-    @info_filepath = File.join(@working_dir, 'info.txt')
-    info_header = <<~HEREDOC
-      The following notices (if any) have attached files which must be reviewed
-      by Lumen staff before they can be released:
-    HEREDOC
-
-    File.write(@info_filepath, info_header)
-  end
-
-  def fetch_files
-    order_ids = if ENV['EXCLUDE_ENTITY_NAMES']
-                  CourtOrder.where('notices.created_at > ?', 1.week.ago)
-                            .includes(:entities)
-                            .references(:entities)
-                            .where.not(entities: {
-                              name: ENV['EXCLUDE_ENTITY_NAMES'].split(',')
-                            }).distinct.pluck(:id)
-                else
-                  CourtOrder.where('created_at > ?', 1.week.ago).pluck(:id)
-                end
-
-    @files = FileUpload.where(notice: order_ids)
-  end
-
-  def write_files
-    @files.each do |f|
-      if f.kind == 'supporting'
-        copy_file_to_archive(f)
-      else
-        notify_about_unredacted_files(f)
+        loggy.info "Archived token url ##{token_url.id}"
+        puts '.'
       end
     end
-  end
-
-  def copy_file_to_archive(f)
-    # The first and third params ensure the filename is useful; the second
-    # ensures it is unique. Stripping spaces and punctuation prevents problems
-    # with invalid filenames.
-    evil = /[\s$'"#=\[\]!><|;{}()*?~&\\]/
-    name = "#{f.notice_id}_#{f.id}_#{f.file_file_name}".gsub(evil, '')
-    system("cp #{Shellwords.escape(f.file.path)} '#{File.join(@working_dir, name)}'")
-  end
-
-  def notify_about_unredacted_files(f)
-    return if f.notice.file_uploads.where(kind: 'supporting').present?
-    File.write(
-      @info_filepath,
-      Rails.application.routes.url_helpers.notice_url(
-        f.notice,
-        host: Rails.application.config.action_mailer.default_url_options[:host]
-      ),
-      mode: 'a'
-    )
-  end
-
-  def make_archive
-    Rails.logger.info '[rake] Making court order reports archive'
-    @archive_filename = Date.today.iso8601
-    system("tar -czvf #{File.join(@base_dir, @archive_filename)}.tar.gz -C #{@working_dir} .")
-    system("rm -r #{@working_dir}")
-  end
-
-  def email_users
-    unless (emails && defined? SMTP_SETTINGS)
-      Rails.logger.warn '[rake] Missing email or SMTP_SETTINGS; not emailing court order report'
-      exit
-    end
-
-    Rails.logger.info '[rake] Sending court order report email'
-
-    emails.each do |email|
-      email_single_user(email)
-    end
-  end
-
-  def emails
-    @emails ||= begin
-      JSON.parse ENV['USER_CRON_EMAIL']   # list of emails
-    rescue JSON::ParserError
-      [ENV['USER_CRON_EMAIL']]            # single-email string, as 1-item list
-    end
-  end
-
-  def email_single_user(email)
-    Net::SMTP.start(SMTP_SETTINGS[:address]) do |smtp|
-      smtp.send_message mailtext, Chill::Application.config.default_sender, email
-    end
-  end
-
-  def mailtext
-    @mailtext ||= <<~HEREDOC
-        Subject: Latest email archive from Lumen
-
-        The latest archive of Lumen court order files can be found at
-        #{Chill::Application.config.site_host}/#{@magic_dir}/#{@archive_filename}.tar.gz.
-    HEREDOC
   end
 end
