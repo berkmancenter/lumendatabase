@@ -2,7 +2,7 @@
 
 class Other < Notice
   MASK = 'REDACTED'
-  REDACTION_REGEX = /google/i
+  REDACTION_REGEX = /google|youtube/i
 
   define_elasticsearch_mapping(works: [:description])
 

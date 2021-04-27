@@ -26,6 +26,16 @@ module YtImporter
           )
         end
 
+        def sender
+          full_legal_name = get_single_line_field('Fulllegalname')
+          company_name = get_single_line_field('CompanyName')
+
+          name = full_legal_name if full_legal_name.present?
+          name = company_name if company_name.present?
+
+          build_role('sender', name)
+        end
+
         def principal
           name = get_single_line_field('TrademarkOwner')
 
