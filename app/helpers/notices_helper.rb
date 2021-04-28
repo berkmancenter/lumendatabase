@@ -15,6 +15,10 @@ module NoticesHelper
     notice&.submitter&.full_notice_only_researchers
   end
 
+  def access_just_for_specific_researchers?(notice)
+    notice&.submitter&.full_notice_only_researchers_users&.any?
+  end
+
   def form_partial_for(instance)
     "#{instance.class.name.tableize.singularize}_form"
   end
@@ -170,11 +174,13 @@ module NoticesHelper
     )
   end
 
-  def truncatable_cache_key(key, can_see_full)
-    key_part = "#{key}_#{params[:access_token]}"
+  def notice_cache_key(notice, can_see_full)
+    key_part = "#{notice.cache_key}_#{params[:access_token]}"
 
     if can_see_full
       "untruncated_#{key_part}"
+    elsif access_just_for_researchers?(notice)
+      "truncated_just_researchers_#{key_part}"
     else
       "truncated_#{key_part}"
     end

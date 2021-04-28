@@ -2,6 +2,7 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
+    # anonymous user
     can :request_access_token, Notice do |notice|
       !notice&.submitter&.full_notice_only_researchers
     end
@@ -31,13 +32,16 @@ class Ability
       end
     end
 
+    # submitter role
     can :submit, Notice if user.role?(Role.submitter)
 
+    # redactor role
     if user.role?(Role.redactor)
       grant_admin_access
       grant_redact
     end
 
+    # publisher role
     if user.role?(Role.publisher)
       grant_admin_access
       grant_redact
@@ -45,6 +49,7 @@ class Ability
       can :publish, Notice
     end
 
+    # admin role
     if user.role?(Role.admin)
       grant_admin_access
       grant_redact
@@ -63,6 +68,7 @@ class Ability
       can %i[index show create update read manage], 'Cms::Site'
     end
 
+    # super_admin role
     if user.role?(Role.super_admin)
       grant_full_notice_api_response(user)
 
@@ -70,6 +76,7 @@ class Ability
       can :view_full_version, Notice
     end
 
+    # researcher role
     if user.role?(Role.researcher)
       grant_full_notice_api_response(user)
 
@@ -77,8 +84,15 @@ class Ability
       can :view_full_version, Notice do |notice|
         full_notice_only_researchers?(notice, user)
       end
+
+      cannot :generate_permanent_notice_token_urls, Notice do |notice|
+        full_notice_only_researchers?(notice, user) == false ||
+          (notice&.submitter&.full_notice_only_researchers && !user.allow_generate_permanent_tokens_researchers_only_notices)
+      end
     end
   end
+
+  private
 
   def grant_admin_access
     can :read, :all

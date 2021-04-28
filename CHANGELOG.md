@@ -1,36 +1,36 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
-## Unreleased
-* [#630](https://github.com/berkmancenter/lumendatabase/pull/630) Updates caching strategy on home page to be more resilient across deploys.
-* [#630](https://github.com/berkmancenter/lumendatabase/pull/630) Improves documentation (Elasticsearch indexing, release procedures).
-
-## [21.04ab](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.04b) - 2021-04-21
+## [21.04c](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.04b) - 2021-04-28
 ### Changed
-  *  Allowed any role with the `can_generate_permanent_notice_token_urls` setting be able to generate permanent token urls.
+* Allowed to set selected users to create permanent token urls for sensitive notices.
+
+## [21.04b](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.04b) - 2021-04-21
+### Changed
+* Allowed any role with the `can_generate_permanent_notice_token_urls` setting be able to generate permanent token urls.
 
 ## [21.04a](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.04a) - 2021-04-19
 ### Added
-  *  Added basic notice viewing stats.
+* Added basic notice viewing stats.
 
 ## [21.04](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.04) - 2021-04-14
 ### Fixed
-  *  Made the notice view show all available notice entity roles.
+* Made the notice view show all available notice entity roles.
 
 ## [21.02](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.02) - 2021-02-27
 ### Added
-  *  Add a new functionality that allows to show sensitive notice URLs only to researchers.
+* Add a new functionality that allows to show sensitive notice URLs only to researchers.
 
 ## [20.11b](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.11b) - 2020-11-24
 ### Changed
-  *  Fix the test suite.
+* Fix the test suite.
 
 ## [20.11a](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.11a) - 2020-11-21
 ### Changed
-  *  Clean up the production log.
+* Clean up the production log.
 
 ## [20.11](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.11) - 2020-11-11
 ### Changed
-  *  Allow to customize the search index name during the `run_catchup_es_indexing` task.
+* Allow to customize the search index name during the `run_catchup_es_indexing` task.
 
 ## [20.10a](https://github.com/berkmancenter/lumendatabase/releases/tag/2020.10a) - 2020-10-20
 * [#628](https://github.com/berkmancenter/lumendatabase/pull/628) Tweaks Elasticsearch options so that high-volume searches resolve before timeout.

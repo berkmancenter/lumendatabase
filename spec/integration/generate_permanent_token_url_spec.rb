@@ -10,9 +10,7 @@ feature 'permanent token url generation' do
   end
 
   scenario 'user without access can\'t see the generation link', js: true do
-    sign_in(
-      create(:user, :notice_viewer, can_generate_permanent_notice_token_urls: false)
-    )
+    sign_in(create(:user, :notice_viewer, can_generate_permanent_notice_token_urls: false))
 
     visit notice_path(notice)
 
@@ -20,9 +18,7 @@ feature 'permanent token url generation' do
   end
 
   def test_permenent_token_urls_generation(user)
-    sign_in(
-      user
-    )
+    sign_in(user)
 
     visit notice_path(notice)
 
