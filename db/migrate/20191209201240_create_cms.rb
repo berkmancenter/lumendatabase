@@ -138,5 +138,7 @@ class CreateCms < ActiveRecord::Migration[5.2]
       unique: true,
       name:   "index_cms_categorizations_on_cat_id_and_catd_type_and_catd_id"
     end
+
+    Comfy::Cms::Site.create!(identifier: 'lumen_cms')
   end
 end
