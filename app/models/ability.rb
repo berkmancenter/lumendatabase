@@ -85,14 +85,9 @@ class Ability
         full_notice_only_researchers?(notice, user)
       end
 
-      if user.can_generate_permanent_notice_token_urls
-        can :generate_permanent_notice_token_urls, Notice do |notice|
-          full_notice_only_researchers?(notice, user) &&
-            (
-              !notice&.submitter&.full_notice_only_researchers ||
-              (notice&.submitter&.full_notice_only_researchers && user.allow_generate_permanent_tokens_researchers_only_notices)
-            )
-        end
+      cannot :generate_permanent_notice_token_urls, Notice do |notice|
+        full_notice_only_researchers?(notice, user) == false ||
+          (notice&.submitter&.full_notice_only_researchers && !user.allow_generate_permanent_tokens_researchers_only_notices)
       end
     end
   end
