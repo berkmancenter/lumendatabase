@@ -124,7 +124,7 @@ module YtImporter
 
       file_creation_time = File.ctime(file_to_process)
 
-      new_notice = mapped_notice_data.notice_type.new({
+      notice_params = {
         original_notice_id: legacy_notice_id,
         title: mapped_notice_data.title,
         subject: mapped_notice_data.subject,
@@ -149,7 +149,11 @@ module YtImporter
         jurisdiction_list: mapped_notice_data.jurisdiction,
         regulation_list: mapped_notice_data.regulation_list,
         language: mapped_notice_data.language
-      })
+      }
+
+      new_notice = NoticeBuilder.new(
+        mapped_notice_data.notice_type, notice_params
+      ).build
 
       new_notice.save!
       @number_imported += 1
