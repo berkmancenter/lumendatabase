@@ -346,6 +346,55 @@ RailsAdmin.config do |config|
     end
   end
 
+  # Hide unused models from the admin
+  # == START ============================================================
+  config.model 'ReindexRun' do
+    visible false
+  end
+  config.model 'NoticeImportError' do
+    visible false
+  end
+  config.model 'DocumentsUpdateNotificationNotice' do
+    visible false
+  end
+  config.model 'ActiveStorage::Blob' do
+    visible false
+  end
+  config.model 'ActiveStorage::Attachment' do
+    visible false
+  end
+  config.model 'Comfy::Cms::Categorization' do
+    visible false
+  end
+  config.model 'Comfy::Cms::Category' do
+    visible false
+  end
+  config.model 'Comfy::Cms::File' do
+    visible false
+  end
+  config.model 'Comfy::Cms::Fragment' do
+    visible false
+  end
+  config.model 'Comfy::Cms::Layout' do
+    visible false
+  end
+  config.model 'Comfy::Cms::Page' do
+    visible false
+  end
+  config.model 'Comfy::Cms::Revision' do
+    visible false
+  end
+  config.model 'Comfy::Cms::Site' do
+    visible false
+  end
+  config.model 'Comfy::Cms::Snippet' do
+    visible false
+  end
+  config.model 'Comfy::Cms::Translation' do
+    visible false
+  end
+  # == END ============================================================
+
   def notice_token_urls_count_links(bindings, perm = false)
     token_urls = bindings[:object].token_urls.where(valid_forever: perm)
     links_to_token_urls = token_urls.map { |token_url| bindings[:view].link_to(token_url) }.join(', ')
