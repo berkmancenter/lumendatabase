@@ -71,10 +71,10 @@ end
 group :development, :test, :assets do
   gem 'bourbon'
   gem 'coffee-rails'
+  gem 'mini_racer'
   gem 'neat'
   gem 'sassc-rails'
-  gem 'therubyracer'
-  gem 'uglifier'
+  gem 'terser'
 end
 
 group :test do
