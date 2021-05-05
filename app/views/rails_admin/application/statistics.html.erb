@@ -1,0 +1,47 @@
+<div class="admin-statistics-section">
+  <h3>Token urls requested per day</h3>
+
+  <div class="admin-token-urls-per-day-wrapper">
+    <canvas id="admin-token-urls-per-day"></canvas>
+  </div>
+</div>
+
+<div class="admin-statistics-section">
+  <h3>Other</h3>
+
+  <h4>Notices count: <%= @notices_count %></h4>
+  <h4>Infringing urls count: <%= @infringing_urls_count %></h4>
+  <h4>Copyright urls count: <%= @copyrighted_urls_count %></h4>
+</div>
+
+<script>
+  function show_token_urls_per_day_chart() {
+    var token_urls_per_day_chart = <%= @token_urls_per_day.html_safe %>;
+
+    var ctx = document.getElementById('admin-token-urls-per-day');
+    var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: Object.keys(token_urls_per_day_chart),
+        datasets: [{
+          label: 'Token urls requested',
+          data: Object.values(token_urls_per_day_chart),
+          borderWidth: 1
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            ticks: {
+              beginAtZero: true,
+              stepSize: 1
+            }
+          }
+        }
+      }
+    })
+  }
+
+  show_token_urls_per_day_chart();
+</script>

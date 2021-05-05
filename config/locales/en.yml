@@ -59,6 +59,9 @@ en:
       short: '%B %d'
 
   admin:
+    misc:
+      navigation: 'Data collections'
+      root_navigation: 'Tools'
     actions:
       redact_notice:
         breadcrumb: 'Redact notice'
@@ -76,6 +79,11 @@ en:
         menu: 'PDF Requests'
         title: 'PDF Requests'
         link: 'https://lumendatabase.org/'
+
+      statistics:
+        breadcrumb: 'Statistics'
+        menu: 'Statistics'
+        title: 'Statistics'
 
   type_descriptions:
     DMCA:
