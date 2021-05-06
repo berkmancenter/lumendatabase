@@ -1,12 +1,18 @@
-<div class="admin-statistics-section">
+<div class="admin-statistics-section admin-statistics-section-token-urls-per-day">
   <h3>Token urls requested per day</h3>
+
+  <form method="get">
+    <input value="<%= @token_urls_per_day_from %>" name="token_urls_per_day_from">
+    <input value="<%= @token_urls_per_day_to %>" name="token_urls_per_day_to">
+    <input type="submit" value="Refresh">
+  </form>
 
   <div class="admin-token-urls-per-day-wrapper">
     <canvas id="admin-token-urls-per-day"></canvas>
   </div>
 </div>
 
-<div class="admin-statistics-section">
+<div class="admin-statistics-section admin-statistics-section-other">
   <h3>Other</h3>
 
   <table>

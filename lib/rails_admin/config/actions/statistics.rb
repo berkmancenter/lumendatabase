@@ -15,12 +15,13 @@ class StatisticsProcHelper
     )
   end
 
-  def fetch_token_urls_per_day
-    from = (Date.today - 1.month).beginning_of_day
-    to = Date.today.end_of_day
+  def fetch_token_urls_per_day(params)
+    from = params[:token_urls_per_day_from] || (Date.today - 1.month).beginning_of_day
+    to = params[:token_urls_per_day_to] || Date.today.end_of_day
 
     ArchivedTokenUrl.where(created_at: from..to)
                     .group('date(created_at)')
+                    .order('date(created_at)')
                     .count
                     .to_json
   end
@@ -29,7 +30,9 @@ end
 StatisticsProc = Proc.new do
   helper = StatisticsProcHelper.new
 
-  @token_urls_per_day = helper.fetch_token_urls_per_day
+  @token_urls_per_day = helper.fetch_token_urls_per_day(params)
+  @token_urls_per_day_from = params[:token_urls_per_day_from] || (Date.today - 1.month)
+  @token_urls_per_day_to = params[:token_urls_per_day_to] || Date.today
   @notices_count = helper.fetch_formatted_count('notices')
   @copyrighted_urls_count = helper.fetch_formatted_count('copyrighted_urls')
   @infringing_urls_count = helper.fetch_formatted_count('infringing_urls')
