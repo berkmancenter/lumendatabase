@@ -7,7 +7,7 @@ class LumenSetting < ApplicationRecord
     return nil if key.nil?
 
     found_value = Lumen::SETTINGS.find { |setting| setting.key == key }&.value
-    found_value = Lumen.const_get(key.upcase) if found_value.nil?
+    found_value = Lumen.const_get(key.upcase) if found_value.nil? && Object.const_defined?("Lumen::#{key.upcase}")
     found_value
   end
 
