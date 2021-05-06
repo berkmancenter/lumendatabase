@@ -9,9 +9,20 @@
 <div class="admin-statistics-section">
   <h3>Other</h3>
 
-  <h4>Notices count: <%= @notices_count %></h4>
-  <h4>Infringing urls count: <%= @infringing_urls_count %></h4>
-  <h4>Copyright urls count: <%= @copyrighted_urls_count %></h4>
+  <table>
+    <tr>
+      <td>Notices count</td>
+      <td><%= @notices_count %></td>
+    </tr>
+    <tr>
+      <td>Infringing urls count</td>
+      <td><%= @infringing_urls_count %></td>
+    </tr>
+    <tr>
+      <td>Copyright urls count</td>
+      <td><%= @copyrighted_urls_count %></td>
+    </tr>
+  </table>
 </div>
 
 <script>
