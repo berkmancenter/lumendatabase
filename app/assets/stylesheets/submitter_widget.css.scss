@@ -68,4 +68,12 @@
       }
     }
   }
+
+  section.notices-list ul li {
+    color: #000000;
+
+    &.active {
+      background: #c8c8c8;
+    }
+  }
 }
