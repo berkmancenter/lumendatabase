@@ -4,7 +4,7 @@ class SubmitterWidgetNoticesController < NoticesController
   def new
     response.headers.delete 'X-Frame-Options'
 
-    @display_models = Notice.display_models - [Counternotice, DataProtection]
+    @display_models = Notice.display_models - [DataProtection]
     @widget_public_key = params[:widget_public_key]
 
     (render :submission_disabled and return) unless allowed_to_submit?

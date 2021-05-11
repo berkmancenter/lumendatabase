@@ -169,6 +169,9 @@ en:
       Defamation:
         'Complain that images, text, video, other content posted online, or some other form of online activity, defame, libel or slander you, or otherwise harm your reputation?'
 
+      Counternotice: >
+        Report a counter notice to someone's notice that complained that images, text, video, or other content you put online infringed their copyrights?
+
       CourtOrder:
         'Report an order issued by a judge or court or injunction ordering the removal of images, text, video, or other content posted online, or the disabling of access to materials available online?'
 
