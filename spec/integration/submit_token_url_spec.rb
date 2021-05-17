@@ -27,6 +27,24 @@ feature 'token url submission' do
     expect(page).to have_content 'This email address has been used already'
   end
 
+  scenario 'will allow to submit twice using the same email when previous token are expired', js: true do
+    visit request_access_notice_path(notice)
+
+    expect_correct_title
+
+    submit
+
+    expect(page).to have_content 'A new single-use link has been generated and sent to'
+
+    token_url = TokenUrl.last
+    token_url.expiration_date = Time.now - LumenSetting.get_i('truncation_token_urls_active_period').seconds - 10.seconds
+    token_url.save!
+
+    submit
+
+    expect(page).to have_content 'A new single-use link has been generated and sent to'
+  end
+
   scenario "won't allow to submit using a not valid email", js: true do
     visit request_access_notice_path(notice)
 

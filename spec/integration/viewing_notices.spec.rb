@@ -36,7 +36,7 @@ feature 'Viewing notices' do
     token_url = TokenUrl.create(
       email: 'user@example.com',
       notice: notice2,
-      expiration_date: Time.now + 24.hours
+      expiration_date: Time.now + LumenSetting.get_i('truncation_token_urls_active_period').seconds
     )
 
     visit notice_url(Notice.last, access_token: token_url.token)
@@ -50,7 +50,7 @@ feature 'Viewing notices' do
     token_url = TokenUrl.create(
       email: 'user@example.com',
       notice: Notice.last,
-      expiration_date: Time.now + 24.hours
+      expiration_date: Time.now + LumenSetting.get_i('truncation_token_urls_active_period').seconds
     )
 
     visit notice_url(Notice.last, access_token: token_url.token)

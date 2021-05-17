@@ -20,7 +20,7 @@ class TokenUrlsController < ApplicationController
     valid_to_submit = validate
 
     if valid_to_submit[:status]
-      @token_url[:expiration_date] = Time.now + 24.hours
+      @token_url[:expiration_date] = Time.now + LumenSetting.get_i('truncation_token_urls_active_period').seconds
 
       if @token_url.save
         run_post_create_actions
@@ -115,18 +115,19 @@ class TokenUrlsController < ApplicationController
       }
     end
 
-    if TokenUrl.where(email: token_url_params[:email]).any?
+    if TokenUrl
+       .where(email: token_url_params[:email])
+       .where('expiration_date > ?', Time.now)
+       .any?
       return {
         status: false,
         why: 'This email address has been used already. Use a different ' \
-             'email or contact our team at team@lumendatabase.org to get ' \
-             'a researcher account.'
+             'email, wait until the previous url expires or contact our ' \
+             'team at team@lumendatabase.org to get a researcher account.'
       }
     end
 
-    {
-      status: true
-    }
+    { status: true }
   end
 
   def disable_documents_notification_errors(token_url)

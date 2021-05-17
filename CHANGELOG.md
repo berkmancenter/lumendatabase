@@ -1,5 +1,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [21.05](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.05) - 2021-05-17
+### Changed
+* Allowed to set a custom token urls interval value and archive old token urls.
+* Cleaned up the admin interface.
+
 ## [21.04c](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.04b) - 2021-04-28
 ### Changed
 * Allowed to set selected users to create permanent token urls for sensitive notices.

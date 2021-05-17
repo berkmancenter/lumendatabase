@@ -5,7 +5,7 @@ PdfRequestProc = Proc.new do
   @requested_pdfs = FileUpload.where pdf_requested: true, pdf_request_fulfilled: false
   render @action.template_name
 end
- 
+
 module RailsAdmin
   module Config
     module Actions
@@ -21,4 +21,3 @@ module RailsAdmin
     end
   end
 end
-

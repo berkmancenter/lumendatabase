@@ -229,7 +229,7 @@ GEM
     kaminari-core (1.2.1)
     kramdown (2.3.0)
       rexml
-    libv8 (3.16.14.19)
+    libv8-node (15.14.0.1)
     lograge (0.11.2)
       actionpack (>= 4)
       activesupport (>= 4)
@@ -253,6 +253,8 @@ GEM
     mini_magick (4.10.1)
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
+    mini_racer (0.4.0)
+      libv8-node (~> 15.14.0.0)
     minitest (5.14.2)
     msgpack (1.3.1)
     multi_json (1.15.0)
@@ -354,7 +356,6 @@ GEM
     record_tag_helper (1.0.1)
       actionview (>= 5)
     redcarpet (3.5.0)
-    ref (2.0.0)
     regexp_parser (1.7.1)
     remotipart (1.4.4)
     request_store (1.4.1)
@@ -445,10 +446,9 @@ GEM
       tins (~> 1.0)
     terrapin (0.6.0)
       climate_control (>= 0.0.3, < 1.0)
+    terser (1.1.3)
+      execjs (>= 0.3.0, < 3)
     test-prof (0.11.3)
-    therubyracer (0.12.3)
-      libv8 (~> 3.16.14.15)
-      ref
     thor (0.20.3)
     thread_safe (0.3.6)
     tilt (2.0.10)
@@ -462,8 +462,6 @@ GEM
       tilt (>= 1.4, < 3)
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
-    uglifier (4.2.0)
-      execjs (>= 0.3.0, < 3)
     uniform_notifier (1.13.0)
     vcr (4.0.0)
     warden (1.2.7)
@@ -520,6 +518,7 @@ DEPENDENCIES
   lograge
   memory_profiler
   mime-types
+  mini_racer
   neat
   oink
   paperclip (~> 5)
@@ -553,11 +552,10 @@ DEPENDENCIES
   simplecov
   skylight
   stackprof
+  terser
   test-prof
-  therubyracer
   timecop
   turnout
-  uglifier
   vcr
   webdrivers
   webmock
