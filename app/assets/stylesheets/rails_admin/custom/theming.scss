@@ -87,3 +87,18 @@ aside#redaction-tools {
 .span9 {
   @extend .col-md-9;
 }
+
+// Statistics
+//************************************************************************//
+.admin-token-urls-per-day-wrapper {
+  height: 300px;
+}
+
+.admin-statistics-section-other {
+  table {
+    td {
+      padding: 5px 8px;
+      font-size: 20px;
+    }
+  }
+}

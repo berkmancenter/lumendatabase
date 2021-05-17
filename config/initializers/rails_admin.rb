@@ -1,6 +1,7 @@
 require 'rails_admin/config/actions/redact_queue'
 require 'rails_admin/config/actions/redact_notice'
 require 'rails_admin/config/actions/pdf_requests'
+require 'rails_admin/config/actions/statistics'
 require 'rails_admin/config/fields/types/datetime_timezoned'
 
 RailsAdmin.config do |config|
@@ -42,8 +43,8 @@ RailsAdmin.config do |config|
 
     redact_queue
     redact_notice
-
     pdf_requests
+    statistics
   end
 
   ['Notice', Notice::TYPES].flatten.each do |notice_type|
@@ -308,36 +309,11 @@ RailsAdmin.config do |config|
   end
 
   config.model 'TokenUrl' do
-    configure :url do
-      formatted_value do
-        url = "#{Chill::Application.config.site_host}/notices/#{bindings[:object].notice_id}?access_token=#{bindings[:object].token}"
-        %(<a href="//#{url}">#{bindings[:object].token}</a>).html_safe
-      end
-      visible false
-    end
+    token_url_config
+  end
 
-    list do
-      field :email
-      field :user
-      field :notice
-      field :expiration_date
-      field :valid_forever
-      field :views
-      field :created_at
-    end
-
-    edit do
-      field :email do
-        required false
-      end
-      field :user
-      field :notice do
-        required true
-      end
-      field :expiration_date
-      field :valid_forever
-      field :documents_notification
-    end
+  config.model 'ArchivedTokenUrl' do
+    token_url_config
   end
 
   config.model 'RiskTriggerCondition' do
@@ -365,9 +341,89 @@ RailsAdmin.config do |config|
     end
   end
 
+  config.model 'LumenSetting' do
+    edit do
+      field :value
+    end
+  end
+
+  # Hide unused models from the admin
+  # == START ============================================================
+  config.model 'ReindexRun' do
+    visible false
+  end
+  config.model 'NoticeImportError' do
+    visible false
+  end
+  config.model 'DocumentsUpdateNotificationNotice' do
+    visible false
+  end
+  config.model 'ActiveStorage::Blob' do
+    visible false
+  end
+  config.model 'ActiveStorage::Attachment' do
+    visible false
+  end
+  config.model 'Comfy::Cms::Categorization' do
+    visible false
+  end
+  config.model 'Comfy::Cms::Category' do
+    visible false
+  end
+  config.model 'Comfy::Cms::File' do
+    visible false
+  end
+  config.model 'Comfy::Cms::Fragment' do
+    visible false
+  end
+  config.model 'Comfy::Cms::Layout' do
+    visible false
+  end
+  config.model 'Comfy::Cms::Page' do
+    visible false
+  end
+  config.model 'Comfy::Cms::Revision' do
+    visible false
+  end
+  config.model 'Comfy::Cms::Site' do
+    visible false
+  end
+  config.model 'Comfy::Cms::Snippet' do
+    visible false
+  end
+  config.model 'Comfy::Cms::Translation' do
+    visible false
+  end
+  # == END ============================================================
+
   def notice_token_urls_count_links(bindings, perm = false)
     token_urls = bindings[:object].token_urls.where(valid_forever: perm)
     links_to_token_urls = token_urls.map { |token_url| bindings[:view].link_to(token_url) }.join(', ')
     "#{token_urls.count} <br> #{links_to_token_urls}".html_safe
+  end
+
+  def token_url_config
+    list do
+      field :email
+      field :user
+      field :notice
+      field :expiration_date
+      field :valid_forever
+      field :views
+      field :created_at
+    end
+
+    edit do
+      field :email do
+        required false
+      end
+      field :user
+      field :notice do
+        required true
+      end
+      field :expiration_date
+      field :valid_forever
+      field :documents_notification
+    end
   end
 end

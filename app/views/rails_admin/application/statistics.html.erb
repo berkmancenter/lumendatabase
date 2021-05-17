@@ -1,0 +1,64 @@
+<div class="admin-statistics-section admin-statistics-section-token-urls-per-day">
+  <h3>Token urls requested per day</h3>
+
+  <form method="get">
+    <input value="<%= @token_urls_per_day_from %>" name="token_urls_per_day_from">
+    <input value="<%= @token_urls_per_day_to %>" name="token_urls_per_day_to">
+    <input type="submit" value="Refresh">
+  </form>
+
+  <div class="admin-token-urls-per-day-wrapper">
+    <canvas id="admin-token-urls-per-day"></canvas>
+  </div>
+</div>
+
+<div class="admin-statistics-section admin-statistics-section-other">
+  <h3>Other</h3>
+
+  <table>
+    <tr>
+      <td>Notices count</td>
+      <td><%= @notices_count %></td>
+    </tr>
+    <tr>
+      <td>Infringing urls count</td>
+      <td><%= @infringing_urls_count %></td>
+    </tr>
+    <tr>
+      <td>Copyright urls count</td>
+      <td><%= @copyrighted_urls_count %></td>
+    </tr>
+  </table>
+</div>
+
+<script>
+  function show_token_urls_per_day_chart() {
+    var token_urls_per_day_chart = <%= @token_urls_per_day.html_safe %>;
+
+    var ctx = document.getElementById('admin-token-urls-per-day');
+    var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: Object.keys(token_urls_per_day_chart),
+        datasets: [{
+          label: 'Token urls requested',
+          data: Object.values(token_urls_per_day_chart),
+          borderWidth: 1
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            ticks: {
+              beginAtZero: true,
+              stepSize: 1
+            }
+          }
+        }
+      }
+    })
+  }
+
+  show_token_urls_per_day_chart();
+</script>

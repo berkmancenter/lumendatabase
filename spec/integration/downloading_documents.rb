@@ -28,7 +28,7 @@ feature 'Downloading documents' do
     token_url = create(
       :token_url,
       notice: notice,
-      expiration_date: Time.now + 24.hours
+      expiration_date: Time.now + LumenSetting.get_i('truncation_token_urls_active_period').seconds
     )
 
     visit notice.file_uploads.first.url + "&access_token=#{token_url.token}"
@@ -40,7 +40,7 @@ feature 'Downloading documents' do
     token_url = create(
       :token_url,
       notice: notice,
-      expiration_date: Time.now - 24.hours
+      expiration_date: Time.now - LumenSetting.get_i('truncation_token_urls_active_period').seconds
     )
 
     visit notice.file_uploads.first.url + "&access_token=#{token_url.token}"
