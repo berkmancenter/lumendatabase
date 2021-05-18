@@ -30,10 +30,6 @@ module ApplicationHelper
     rails_admin.edit_path(model_name: model_name, id: object.id)
   end
 
-  def active_advanced_search_parameters?
-    Notice::SEARCHABLE_FIELDS.find { |field| params[field.parameter] }.present?
-  end
-
   def can_see_full_notice_version?(notice)
     # Safelisted notices
     safelisted_notices = (ENV['SAFELISTED_NOTICES_FULL'] || []).split(',')

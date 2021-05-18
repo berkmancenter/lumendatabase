@@ -19,7 +19,3 @@
     <%= hidden_field_tag(:sort_by, params[:sort_by], class: 'sort_by_field') %>
   <% end %>
 </header>
-
-<%= javascript_tag do -%>
-  var active_advanced_search_parameters = <%= active_advanced_search_parameters? %>;
-<% end %>

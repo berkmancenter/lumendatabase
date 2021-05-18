@@ -8,9 +8,19 @@ toggleAdvancedSearch = (duration) ->
         { expires: 365 }
       )
 
+hasAdvancedFieldActive = () ->
+  fields_data = $('.search-field-data').map (_, elem) -> $(elem).data()
+
+  hasFields = false
+  for field in fields_data
+    if field.value && field.parameter != 'term'
+      hasFields = true
+
+  return hasFields
+
 $('#toggle-advanced-search').on 'click', ->
   toggleAdvancedSearch('fast')
 
 $ ->
-  if $.cookie('advanced_search_visibility') == "1" || ( typeof( active_advanced_search_parameters ) != 'undefined' && active_advanced_search_parameters )
+  if $.cookie('advanced_search_visibility') == "1" || hasAdvancedFieldActive()
     toggleAdvancedSearch(0)
