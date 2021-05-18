@@ -729,9 +729,6 @@ where works.id in (
 
     loggy.info 'Starting a new task run'
 
-    loggy.info 'Removing old DocumentsUpdateNotificationNotice records'
-    DocumentsUpdateNotificationNotice.where("created_at < '#{2.days.ago}'").delete_all
-
     if DocumentsUpdateNotificationNotice.all.empty?
       loggy.info 'No scheduled notifications, nothing to process'
     end
