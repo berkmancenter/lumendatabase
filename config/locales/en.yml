@@ -173,7 +173,7 @@ en:
         Report a counter notice to someone's notice that complained that images, text, video, or other content you put online infringed their copyrights?
 
       CourtOrder:
-        'Report an order issued by a judge or court or injunction ordering the removal of images, text, video, or other content posted online, or the disabling of access to materials available online?'
+        'Report an order or injunction issued by a judge or court mandating the removal or blocking of, or disabling of access to, images, text, video, or other content posted online.'
 
       LawEnforcementRequest:
         'As a law enforcement agency or an agent of a law enforcement agency request the removal of images, text, video, or other content posted online, or private information or data that would normally not be available to the public?'
@@ -188,4 +188,10 @@ en:
         'As a government agency or an agent of a government agency request the removal of images, text, video, or other content posted online, or private information or data that would normally not be available to the public?'
 
       Counterfeit:
-        'As a brand owner request the removal of allegedly counterfeit content?'
+        'Are you a brand owner or brand representative requesting the removal of allegedly counterfeit content?'
+
+    roles:
+      header_intro:
+        DMCA:
+          principal:
+            "Enter information about the <strong>copyright holder</strong> for this DMCA takedown notice."

@@ -66,6 +66,19 @@
         float: none;
         padding: 0;
       }
+
+      &.individual {
+        .notice_entity_notice_roles_entity_address_line_1,
+        .notice_entity_notice_roles_entity_address_line_2,
+        .notice_entity_notice_roles_entity_city,
+        .notice_entity_notice_roles_entity_state,
+        .notice_entity_notice_roles_entity_zip,
+        .notice_entity_notice_roles_entity_phone,
+        .notice_entity_notice_roles_entity_email,
+        .notice_entity_notice_roles_entity_url {
+          display: none;
+        }
+      }
     }
   }
 
@@ -76,4 +89,6 @@
       background: #c8c8c8;
     }
   }
+
+  
 }

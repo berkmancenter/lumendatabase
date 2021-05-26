@@ -1,7 +1,4 @@
 <% action_taken = true if local_assigns[:action_taken].nil? %>
-<% subject = true if local_assigns[:subject].nil? %>
-<% topics = true if local_assigns[:topics].nil? %>
-<% tag_list = true if local_assigns[:tag_list].nil? %>
 <% body = true if local_assigns[:body].nil? %>
 <% label = 'Body' if local_assigns[:label].nil? %>
 <% request_collection = nil if local_assigns[:request_collection].nil? %>
@@ -13,21 +10,6 @@
     <%= form.input :body, label: label %>
   <% end %>
   <%= form.hidden_field :webform, value: true %>
-  <% if subject %>
-    <%= form.input :subject %>
-  <% end %>
-  <%if tag_list %>
-    <%= form.input :tag_list, placeholder: 'movie, video, article, etc.' %>
-  <% end %>
-  <%if topics %>
-    <%=
-      form.input :topic_ids,
-        label: "Topics",
-        prompt: nil,
-        collection: available_topics,
-        input_html: { multiple: true }
-      %>
-  <% end %>
   <% if request_collection.present? %>
     <%= form.input :request_type, collection: request_collection %>
   <% end %>

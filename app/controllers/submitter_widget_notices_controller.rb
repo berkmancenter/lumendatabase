@@ -46,8 +46,13 @@ class SubmitterWidgetNoticesController < NoticesController
   private
 
   def build_entity_notice_roles(model_class)
+    # We want the principal role to come first
+    @notice.entity_notice_roles.build(name: 'principal').build_entity(
+      kind: default_kind_based_on_role('principal')
+    )
+
     model_class::DEFAULT_ENTITY_NOTICE_ROLES.each do |role|
-      next if %w[submitter recipient].include?(role)
+      next if %w[submitter recipient principal].include?(role)
 
       @notice.entity_notice_roles.build(name: role).build_entity(
         kind: default_kind_based_on_role(role)
