@@ -1,5 +1,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [21.05d](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.05d) - 2021-05-28
+### Changed
+* Made the `kind` field required in the `file_upload` model.
+* Replaced the `expire_fragment` method with a system method call during the async indexing rake task.
+
 ## [21.05c](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.05c) - 2021-05-24
 ### Changed
 * Bumped Ruby to `2.5.9`.
