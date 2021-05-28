@@ -9,8 +9,10 @@ class FileUpload < ApplicationRecord
 
   ALLOWED_KINDS = %w[original supporting].freeze
 
-  validates_inclusion_of :kind, in: ALLOWED_KINDS
-  validates :kind, length: { maximum: 255 }
+  validates :kind,
+            presence: true,
+            length: { maximum: 255 },
+            inclusion: { in: ALLOWED_KINDS }
 
   belongs_to :notice
   has_attached_file :file,
