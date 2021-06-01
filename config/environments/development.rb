@@ -75,4 +75,7 @@ Rails.application.configure do
   # config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   config.active_storage.service = :local
+
+  # Allow any hostname
+  config.hosts.clear
 end
