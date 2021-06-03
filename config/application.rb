@@ -4,8 +4,9 @@ require_relative '../lib/middleware/catch_json_parsing_errors'
 require 'rails/all'
 require 'active_storage/engine'
 
-
-Bundler.require(:default, Rails.env)
+# Require the gems listed in Gemfile, including any gems
+# you've limited to :test, :development, or :production.
+Bundler.require(*Rails.groups)
 
 module Chill
   class Application < Rails::Application
