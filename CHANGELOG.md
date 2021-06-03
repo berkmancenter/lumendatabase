@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [21.06](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.06) - 2021-06-03
+### Changed
+* Updated the `rails` gem to 6.0.x.
+
 ## [21.05d](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.05d) - 2021-05-28
 ### Changed
 * Made the `kind` field required in the `file_upload` model.
