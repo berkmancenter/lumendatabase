@@ -1,6 +1,6 @@
 module YtImporter
   class EntityNoticeRoleBuilder
-    def initialize(role_name, name, address)
+    def initialize(role_name, name, address = {})
       @role_name = role_name
       @name = name
       @address = address
@@ -9,9 +9,9 @@ module YtImporter
     def build
       attributes = { name: clean_entity_name(@name) }
 
-      if @address
-        attributes.merge!(@address)
-      end
+      @address[:country_code] = parse_country_code(@address[:country_code]) if @address[:country_code]
+
+      attributes.merge!(@address) if @address
 
       EntityNoticeRole.new(name: @role_name, entity_attributes: attributes)
     end

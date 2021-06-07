@@ -109,6 +109,10 @@ module YtImporter
         ''
       end
 
+      def local_jurisdiction_laws
+        ''
+      end
+
       private
 
       def readlevel
@@ -153,7 +157,7 @@ module YtImporter
         )
       end
 
-      def build_role(role_name, name, address = nil)
+      def build_role(role_name, name, address = {})
         builder = EntityNoticeRoleBuilder.new(
           role_name, name, address
         )
