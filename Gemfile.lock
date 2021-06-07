@@ -533,6 +533,7 @@ DEPENDENCIES
   memory_profiler
   mime-types
   mini_racer
+  mysql2 (~> 0.5.3)
   neat
   oink
   paperclip (~> 5)
