@@ -11,11 +11,16 @@ module YtImporter
         end
 
         def jurisdiction
-          get_single_line_field('Jurisdiction_one_other').split(',')
+          jurisdictions = get_single_line_field('Jurisdiction_one_other')
+
+          return [] if jurisdictions.blank?
+
+          jurisdictions.split(',')
         end
 
         def parsed_infringing_urls
-          @notice_text.scan(/video_url:\s*(.+)\n/).flatten
+          @notice_text.scan(/video_url:\s*(.+)\n/).flatten +
+            @notice_text.scan(/channel_url:\s*(.+)\n/).flatten
         end
 
         def work_description
@@ -24,9 +29,7 @@ module YtImporter
           )
 
           infringement_type = get_single_line_field('InfringementType')
-          if infringement_type
-            description << "\n\n Infringement type: #{infringement_type}"
-          end
+          description << "\n\n Infringement type: #{infringement_type}" if infringement_type
 
           description
         end
@@ -37,6 +40,8 @@ module YtImporter
             get_single_line_field('CompanyName')
           ].reject(&:blank?).uniq.join(', ').strip
 
+          return nil if name.blank?
+
           build_role('sender', name)
         end
 
@@ -46,6 +51,8 @@ module YtImporter
 
         def principal
           behalf_client = get_single_line_field('TrademarkOwnerName')
+
+          return nil if behalf_client.blank?
 
           build_role('principal', behalf_client)
         end

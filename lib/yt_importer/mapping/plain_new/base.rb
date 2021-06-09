@@ -1,4 +1,5 @@
 require 'yt_importer/mapping/base'
+require 'uri'
 
 module YtImporter
   module Mapping

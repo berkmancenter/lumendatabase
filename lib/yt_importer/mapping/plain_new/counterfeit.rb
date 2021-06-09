@@ -33,11 +33,15 @@ module YtImporter
           name = full_legal_name if full_legal_name.present?
           name = company_name if company_name.present?
 
+          return nil if name.blank?
+
           build_role('sender', name)
         end
 
         def principal
           name = get_single_line_field('TrademarkOwner')
+
+          return nil if name.blank?
 
           build_role('principal', name)
         end

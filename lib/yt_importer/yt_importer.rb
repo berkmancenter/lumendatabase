@@ -156,11 +156,21 @@ module YtImporter
         mapped_notice_data.notice_type, notice_params
       ).build
 
+      unless new_notice.entity_notice_roles.any?
+        @number_failed_imports += 1
+        @logger.error("Couldn't import #{file_to_process} No entities found")
+        YoutubeImportError.create(
+          filename: file_to_process,
+          message: "Couldn't import #{file_to_process} No entities found"
+        )
+        return
+      end
+
       new_notice.save!
       @number_imported += 1
     rescue StandardError, NameError => e
       @number_failed_imports += 1
-      @logger.info("Couldn't import #{file_to_process} #{e.backtrace}: #{e.message} (#{e.class})")
+      @logger.error("Couldn't import #{file_to_process} #{e.backtrace}: #{e.message} (#{e.class})")
       YoutubeImportError.create(
         filename: file_to_process,
         stacktrace: "#{e.backtrace}: #{e.message} (#{e.class})",

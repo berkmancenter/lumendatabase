@@ -50,6 +50,8 @@ module YtImporter
             address[:country_code] = country_code
           end
 
+          return nil if name.blank?
+
           build_role('sender', name, address)
         end
 
@@ -59,6 +61,8 @@ module YtImporter
 
           name = legal_name if legal_name.present?
           name = behalf_client if behalf_client.present?
+
+          return nil if name.blank?
 
           build_role('principal', name)
         end
