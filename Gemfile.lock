@@ -384,7 +384,7 @@ GEM
       rspec-core (~> 3.10.0)
       rspec-expectations (~> 3.10.0)
       rspec-mocks (~> 3.10.0)
-    rspec-collection_matchers (1.1.3)
+    rspec-collection_matchers (1.2.0)
       rspec-expectations (>= 2.99.0.beta1)
     rspec-core (3.10.1)
       rspec-support (~> 3.10.0)
@@ -433,8 +433,8 @@ GEM
     sexp_processor (4.13.0)
     sham_rack (1.4.1)
       rack
-    shoulda-matchers (3.1.3)
-      activesupport (>= 4.0.0)
+    shoulda-matchers (4.5.1)
+      activesupport (>= 4.2.0)
     simple_form (5.0.2)
       actionpack (>= 5.0)
       activemodel (>= 5.0)
@@ -556,7 +556,7 @@ DEPENDENCIES
   recipient_interceptor
   record_tag_helper (~> 1.0)
   redcarpet
-  rspec-collection_matchers (~> 1.1, >= 1.1.2)
+  rspec-collection_matchers (~> 1.1)
   rspec-pride
   rspec-rails
   rspec_junit_formatter
@@ -564,7 +564,7 @@ DEPENDENCIES
   sassc-rails
   select2-rails (~> 4.0, >= 4.0.3)
   sham_rack
-  shoulda-matchers (~> 3.1, >= 3.1.1)
+  shoulda-matchers (~> 4.0)
   simple_form
   simplecov
   skylight
@@ -578,4 +578,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   2.2.17
+   2.2.19
