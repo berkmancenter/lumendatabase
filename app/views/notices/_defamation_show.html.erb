@@ -3,6 +3,11 @@
     <h5 class="title">Legal Complaint</h5>
     <p class="body"><pre><%= notice.redacted(:body) %></pre></p>
   <% end %>
+
+  <% if notice.local_jurisdiction_laws.present? %>
+    <h5 class="title">Local Jurisdiction Laws</h5>
+    <p class="body"><pre><%= notice.redacted(:local_jurisdiction_laws) %></pre></p>
+  <% end %>
 </section>
 
 <%= render works_partial_for(notice), works: notice.works %>

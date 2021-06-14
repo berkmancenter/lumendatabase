@@ -358,6 +358,12 @@ RailsAdmin.config do |config|
   config.model 'DocumentsUpdateNotificationNotice' do
     visible false
   end
+  config.model 'YoutubeImportError' do
+    visible false
+  end
+  config.model 'YtImport' do
+    visible false
+  end
   config.model 'ActiveStorage::Blob' do
     visible false
   end

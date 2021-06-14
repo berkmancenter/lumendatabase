@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_31_172648) do
+ActiveRecord::Schema.define(version: 2021_06_07_171849) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -316,6 +316,7 @@ ActiveRecord::Schema.define(version: 2021_05_31_172648) do
     t.integer "counternotice_for_sid"
     t.integer "views_overall", default: 0
     t.integer "views_by_notice_viewer", default: 0
+    t.text "local_jurisdiction_laws"
     t.index ["created_at"], name: "index_notices_on_created_at"
     t.index ["original_notice_id"], name: "index_notices_on_original_notice_id"
     t.index ["published"], name: "index_notices_on_published"
@@ -495,6 +496,20 @@ ActiveRecord::Schema.define(version: 2021_05_31_172648) do
     t.datetime "updated_at"
     t.string "kind"
     t.text "description_original"
+  end
+
+  create_table "youtube_import_errors", force: :cascade do |t|
+    t.integer "original_notice_id"
+    t.text "message"
+    t.string "filename", limit: 1024
+    t.text "stacktrace"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "yt_imports", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
