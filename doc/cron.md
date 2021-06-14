@@ -8,7 +8,6 @@ Lumen relies on several cron jobs in production. As of October 2020, cron runs:
   - The default cache clearing mechanism is rm -rf, which leads to large spikes in resource usage once per cron interval as the system rebuilds its cache. safer_cache_clear checks for file `atime` before deleting.
   - This runs every 20 minutes, which was empirically determined to be a good balance between cache hit ratios and disk resources. The ideal interval may change as user behavior and available hardware change.
 * `rails lumen:publish_embargoed`
-* `rails lumen:import_new_notices_via_mysql`
 * `rails lumen:generate_court_order_report`
   - There's also a cron job which rotates the generated reports.
 

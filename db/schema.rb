@@ -497,5 +497,19 @@ ActiveRecord::Schema.define(version: 2021_05_31_172648) do
     t.text "description_original"
   end
 
+  create_table "youtube_import_errors", force: :cascade do |t|
+    t.integer "original_notice_id"
+    t.text "message"
+    t.string "filename", limit: 1024
+    t.text "stacktrace"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "yt_imports", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
 end

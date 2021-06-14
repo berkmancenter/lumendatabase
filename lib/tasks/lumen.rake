@@ -6,6 +6,7 @@ require 'csv'
 require 'comfy/blog_post_factory'
 require 'loggy'
 require 'court_order_reporter'
+require 'yt_importer/yt_importer'
 
 namespace :lumen do
   desc 'Delete elasticsearch index'
@@ -830,6 +831,18 @@ where works.id in (
     rescue => e
       loggy.error('Reindexing did not succeed because: ' + e.inspect)
     end
+  end
+
+  desc 'Import YT notices'
+  task import_yt_notices: :environment do
+    loggy = Loggy.new('rake lumen:import_yt_notices', true)
+
+    loggy.info('Starting importing YT notices from old chill')
+
+    importer = YtImporter::YtImporter.new
+    importer.import
+
+    loggy.info('Finished importing YT notices from old chill')
   end
 
   desc 'Archive expired token urls'

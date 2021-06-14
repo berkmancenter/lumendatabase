@@ -118,7 +118,7 @@ class Notice < ApplicationRecord
   end
 
   # == Extensions ===========================================================
-  acts_as_taggable_on :tags, :jurisdictions
+  acts_as_taggable_on :tags, :jurisdictions, :regulations
 
   accepts_nested_attributes_for :file_uploads,
     reject_if: ->(attributes) { [attributes['file'], attributes[:pdf_request_fulfilled]].all?(&:blank?) }

@@ -2,7 +2,7 @@
 <section class="<%= role %> <%= additional_css %>">
   <h5><%= role %></h5>
   <h6>
-    <% if role == :sender && notice.hide_identities? %>
+    <% if [:sender, :principal].include?(role.to_sym) && notice.hide_identities? %>
       REDACTED
     <% else %>
       <%=
