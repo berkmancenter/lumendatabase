@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [21.06b](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.06b) - 2021-06-14
+### Changed
+* Added a library for importing notices from Youtube.
+
 ## [21.06a](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.06a) - 2021-06-10
 ### Changed
 * Bumped `ruby` to `2.6.6`.
