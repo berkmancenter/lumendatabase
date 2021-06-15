@@ -364,6 +364,9 @@ RailsAdmin.config do |config|
   config.model 'YtImport' do
     visible false
   end
+  config.model 'YoutubeImportFileLocation' do
+    visible false
+  end
   config.model 'ActiveStorage::Blob' do
     visible false
   end

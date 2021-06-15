@@ -83,13 +83,16 @@ module YtImporter
       @logger.info("Importing --- #{@number_imported + @number_failed_imports}/#{@number_to_import} --- file")
       @logger.info("Importing #{file_to_process}")
 
-      if system("grep '<table' #{file_to_process}")
+      if system("grep -q '<table' #{file_to_process}")
         format_class = 'Html'
-      elsif system("grep '<HTML' #{file_to_process}") && !system("grep '<table' #{file_to_process}")
+      elsif system("grep -q '<HTML' #{file_to_process}") && !system("grep '<table' #{file_to_process}")
         format_class = 'PlainNew'
       else
         @number_failed_imports += 1
-        @logger.info("Couldn't import #{file_to_process}, missing format")
+        single_notice_import_error(
+          "Missing format [#{file_to_process}]",
+          file_to_process
+        )
         return
       end
 
@@ -103,7 +106,10 @@ module YtImporter
 
       if mapper_class.nil?
         @number_failed_imports += 1
-        @logger.info("Couldn't import #{file_to_process}, missing mapping type")
+        single_notice_import_error(
+          "Missing mapping type [#{file_to_process}]",
+          file_to_process
+        )
         return
       end
 
@@ -111,16 +117,25 @@ module YtImporter
 
       legacy_notice_id = data_from_legacy_database['NoticeID']
 
-      if Notice.where(original_notice_id: legacy_notice_id).any?
+      if YoutubeImportFileLocation.where(path: file_to_process).any?
         @number_failed_imports += 1
-        @logger.info("Couldn't import #{file_to_process}, this notice was imported already in the past")
+        single_notice_import_error(
+          "This notice was imported already in the past [#{file_to_process}]",
+          file_to_process
+        )
         return
       end
 
       mapped_notice_data = mapper_class.constantize.new(file_data, data_from_legacy_database, file_to_process)
 
-      works = mapped_notice_data.works
-      works = [Work.unknown] if works.empty?
+      if mapped_notice_data.works.empty?
+        @number_failed_imports += 1
+        single_notice_import_error(
+          "Missing urls/works [#{file_to_process}]",
+          file_to_process
+        )
+        return
+      end
 
       file_creation_time = File.ctime(file_to_process)
 
@@ -136,7 +151,7 @@ module YtImporter
         date_sent: file_creation_time,
         date_received: file_creation_time,
         file_uploads: mapped_notice_data.file_uploads,
-        works: works,
+        works: mapped_notice_data.works,
         review_required: false,
         topics: mapped_notice_data.topics,
         rescinded: mapped_notice_data.rescinded?,
@@ -156,12 +171,14 @@ module YtImporter
         mapped_notice_data.notice_type, notice_params
       ).build
 
-      unless new_notice.entity_notice_roles.any?
+      # Reject submitter and recipient, these roles will always be Youtube
+      unless new_notice.entity_notice_roles
+                       .reject { |entity_notice_role| %w[submitter recipient].include?(entity_notice_role.name) }
+                       .any?
         @number_failed_imports += 1
-        @logger.error("Couldn't import #{file_to_process} No entities found")
-        YoutubeImportError.create(
-          filename: file_to_process,
-          message: "Couldn't import #{file_to_process} No entities found"
+        single_notice_import_error(
+          "No entities found [#{file_to_process}]",
+          file_to_process
         )
         return
       end
@@ -170,11 +187,10 @@ module YtImporter
       @number_imported += 1
     rescue StandardError, NameError => e
       @number_failed_imports += 1
-      @logger.error("Couldn't import #{file_to_process} #{e.backtrace}: #{e.message} (#{e.class})")
-      YoutubeImportError.create(
-        filename: file_to_process,
-        stacktrace: "#{e.backtrace}: #{e.message} (#{e.class})",
-        message: "Couldn't import #{file_to_process}"
+      single_notice_import_error(
+        "#{e.backtrace}: #{e.message} (#{e.class}) [#{file_to_process}]",
+        file_to_process,
+        "#{e.backtrace}: #{e.message} (#{e.class})"
       )
     end
 
@@ -225,6 +241,15 @@ EOSQL
       end
 
       content.gsub(/\r\n?/, "\n")
+    end
+
+    def single_notice_import_error(message, filename, stacktrace = '')
+      @logger.error(message)
+      YoutubeImportError.create(
+        message: message,
+        filename: filename,
+        stacktrace: stacktrace
+      )
     end
   end
 end
