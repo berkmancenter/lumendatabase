@@ -89,10 +89,6 @@ module YtImporter
         format_class = 'PlainNew'
       else
         @number_failed_imports += 1
-        single_notice_import_error(
-          "Missing format [#{file_to_process}]",
-          file_to_process
-        )
         return
       end
 
