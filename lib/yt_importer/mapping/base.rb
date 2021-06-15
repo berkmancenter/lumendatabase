@@ -43,7 +43,8 @@ module YtImporter
       def file_uploads
         [FileUpload.new(
           kind: 'original',
-          file: File.open(@raw_file_path)
+          file: File.open(@raw_file_path),
+          youtube_import_file_location: YoutubeImportFileLocation.new(path: @raw_file_path)
         )]
       end
 
@@ -70,7 +71,7 @@ module YtImporter
       end
 
       def subject
-        "Youtube video"
+        'Youtube video'
       end
 
       def topics

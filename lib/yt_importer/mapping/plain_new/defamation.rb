@@ -45,10 +45,8 @@ module YtImporter
 
           name = signature if signature.present?
           name = behalf_client if behalf_client.present?
-          if country_code.present?
-            address = {}
-            address[:country_code] = country_code
-          end
+          address = {}
+          address[:country_code] = country_code if country_code.present?
 
           return nil if name.blank?
 
