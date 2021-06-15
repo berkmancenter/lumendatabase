@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_07_171849) do
+ActiveRecord::Schema.define(version: 2021_06_15_090113) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -505,6 +505,14 @@ ActiveRecord::Schema.define(version: 2021_06_07_171849) do
     t.text "stacktrace"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "youtube_import_file_locations", force: :cascade do |t|
+    t.bigint "file_upload_id"
+    t.string "path", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["file_upload_id"], name: "index_youtube_import_file_locations_on_file_upload_id"
   end
 
   create_table "yt_imports", force: :cascade do |t|
