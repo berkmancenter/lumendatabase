@@ -124,7 +124,8 @@ module YtImporter
 
       mapped_notice_data = mapper_class.constantize.new(file_data, data_from_legacy_database, file_to_process)
 
-      if mapped_notice_data.works.empty?
+      if mapped_notice_data.works.empty? ||
+         mapped_notice_data.works.map(&:infringing_urls).flatten.empty?
         @number_failed_imports += 1
         single_notice_import_error(
           "Missing urls/works [#{file_to_process}]",
