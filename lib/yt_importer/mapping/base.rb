@@ -3,18 +3,8 @@ require 'yt_importer/entity_notice_role_builder'
 module YtImporter
   module Mapping
     class Base
-      attr_accessor :data_from_legacy_database
-
-      READLEVELS = {
-        '3' => :hidden,
-        '8' => :hidden,
-        '9' => :spam,
-        '10' => :rescinded
-      }
-
-      def initialize(notice_text, data_from_legacy_database, raw_file_path)
+      def initialize(notice_text, raw_file_path)
         @notice_text = notice_text
-        @data_from_legacy_database = data_from_legacy_database
         @raw_file_path = raw_file_path
         @notice_type = DMCA
       end
@@ -46,14 +36,6 @@ module YtImporter
           file: File.open(@raw_file_path),
           youtube_import_file_location: YoutubeImportFileLocation.new(path: @raw_file_path)
         )]
-      end
-
-      def hidden?
-        READLEVELS[readlevel] == :hidden
-      end
-
-      def rescinded?
-        READLEVELS[readlevel] == :rescinded
       end
 
       def mark_registration_number
@@ -115,10 +97,6 @@ module YtImporter
       end
 
       private
-
-      def readlevel
-        @data_from_legacy_database['Readlevel'].to_s
-      end
 
       def parse_mark_registration_number(*)
       end

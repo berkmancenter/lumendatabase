@@ -13,6 +13,12 @@ module YtImporter
   class YtImporter
     FILES_DIRECTORY = ENV['BASE_DIRECTORY']
     IMPORT_FILE_BATCH_SIZE = 500
+    READLEVELS = {
+      '3' => :hidden,
+      '8' => :hidden,
+      '9' => :spam,
+      '10' => :rescinded
+    }.freeze
 
     def initialize
       @logger = Loggy.new('YtImporter', true)
@@ -95,10 +101,10 @@ module YtImporter
       file_data = read_file(file_to_process)
 
       mapper_class = nil
-      mapper_class = "YtImporter::Mapping::#{format_class}::Counterfeit" if system("grep '<counterfeit\+' #{file_to_process}")
-      mapper_class = "YtImporter::Mapping::#{format_class}::Defamation" if system("grep '<defamation\+' #{file_to_process}")
-      mapper_class = "YtImporter::Mapping::#{format_class}::OtherLegal" if system("grep '<other-legal\+' #{file_to_process}")
-      mapper_class = "YtImporter::Mapping::#{format_class}::TrademarkD" if system("grep '<trademark\+' #{file_to_process}")
+      mapper_class = "YtImporter::Mapping::#{format_class}::Counterfeit" if system("grep -q '<counterfeit\+' #{file_to_process}")
+      mapper_class = "YtImporter::Mapping::#{format_class}::Defamation" if system("grep -q '<defamation\+' #{file_to_process}")
+      mapper_class = "YtImporter::Mapping::#{format_class}::OtherLegal" if system("grep -q '<other-legal\+' #{file_to_process}")
+      mapper_class = "YtImporter::Mapping::#{format_class}::TrademarkD" if system("grep -q '<trademark\+' #{file_to_process}")
 
       if mapper_class.nil?
         @number_failed_imports += 1
@@ -109,10 +115,6 @@ module YtImporter
         return
       end
 
-      data_from_legacy_database = get_file_data_from_legacy_database(file_to_process)
-
-      legacy_notice_id = data_from_legacy_database['NoticeID']
-
       if YoutubeImportFileLocation.where(path: file_to_process).any?
         @number_failed_imports += 1
         single_notice_import_error(
@@ -122,7 +124,7 @@ module YtImporter
         return
       end
 
-      mapped_notice_data = mapper_class.constantize.new(file_data, data_from_legacy_database, file_to_process)
+      mapped_notice_data = mapper_class.constantize.new(file_data, file_to_process)
 
       if mapped_notice_data.works.empty? ||
          mapped_notice_data.works.map(&:infringing_urls).flatten.empty?
@@ -134,10 +136,12 @@ module YtImporter
         return
       end
 
+      data_from_legacy_database = get_file_data_from_legacy_database(file_to_process)
+
       file_creation_time = File.ctime(file_to_process)
 
       notice_params = {
-        original_notice_id: legacy_notice_id,
+        original_notice_id: data_from_legacy_database['NoticeID'],
         title: mapped_notice_data.title,
         subject: mapped_notice_data.subject,
         source: mapped_notice_data.source,
@@ -151,8 +155,8 @@ module YtImporter
         works: mapped_notice_data.works,
         review_required: false,
         topics: mapped_notice_data.topics,
-        rescinded: mapped_notice_data.rescinded?,
-        hidden: mapped_notice_data.hidden?,
+        rescinded: rescinded?(data_from_legacy_database['ReadLevel']),
+        hidden: hidden?(data_from_legacy_database['ReadLevel']),
         submission_id: data_from_legacy_database['SubmissionID'],
         entity_notice_roles: mapped_notice_data.entity_notice_roles,
         body: mapped_notice_data.body,
@@ -220,10 +224,12 @@ module YtImporter
 
     def legacy_database_query(file_path)
 return <<EOSQL
-SELECT tNotice.NoticeID, tNotice.ReadLevel
+SELECT tNotice.NoticeID, tNotice.ReadLevel, rSub.sID AS SubmissionID
 FROM tNotice
 LEFT JOIN tNotImage all_documents
  ON all_documents.NoticeID = tNotice.NoticeID
+LEFT JOIN rSubmit rSub
+ ON tNotice.NoticeID=rSub.sID
 WHERE all_documents.Location='#{file_path}'
 GROUP BY tNotice.NoticeID
 ORDER BY tNotice.NoticeID ASC
@@ -247,6 +253,14 @@ EOSQL
         filename: filename,
         stacktrace: stacktrace
       )
+    end
+
+    def hidden?(readlevel)
+      READLEVELS[readlevel] == :hidden
+    end
+
+    def rescinded?(readlevel)
+      READLEVELS[readlevel] == :rescinded
     end
   end
 end
