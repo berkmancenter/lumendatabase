@@ -249,12 +249,12 @@ class NoticesController < ApplicationController
     if @notice.rescinded?
       render :rescinded
     elsif @notice.hidden
-      render file: 'public/404_hidden',
+      render 'error_pages/404_hidden',
              formats: [:html],
              status: :not_found,
              layout: false
     elsif @notice.spam || !@notice.published
-      render file: 'public/404_unavailable',
+      render 'error_pages/404_unavailable',
              formats: [:html],
              status: :not_found,
              layout: false

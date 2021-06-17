@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  extend Devise::Models
+
   # == Relationships ========================================================
   has_one :entity
   has_and_belongs_to_many :roles
