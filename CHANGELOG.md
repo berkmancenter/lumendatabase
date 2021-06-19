@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [21.06c](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.06c) - 2021-06-19
+### Changed
+* Updated the `rails` gem to 6.1.x.
+
 ## [21.06b](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.06b) - 2021-06-14
 ### Changed
 * Added a library for importing notices from Youtube.
