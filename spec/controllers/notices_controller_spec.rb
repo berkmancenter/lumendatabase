@@ -36,7 +36,7 @@ describe NoticesController do
         get :show, params: { id: 1 }
 
         expect(response.status).to eq(404)
-        expect(response).to render_template(file: '404_unavailable.html')
+        expect(response).to render_template('error_pages/404_unavailable')
       end
 
       it 'renders the unavailable template if the notice is unpublished' do
@@ -45,7 +45,7 @@ describe NoticesController do
         get :show, params: { id: 1 }
 
         expect(response.status).to eq(404)
-        expect(response).to render_template(file: '404_unavailable.html')
+        expect(response).to render_template('error_pages/404_unavailable')
       end
 
       it 'renders the hidden template if the notice is hidden' do
@@ -54,7 +54,7 @@ describe NoticesController do
         get :show, params: { id: 1 }
 
         expect(response.status).to eq(404)
-        expect(response).to render_template(file: '404_hidden.html')
+        expect(response).to render_template('error_pages/404_hidden')
       end
     end
 

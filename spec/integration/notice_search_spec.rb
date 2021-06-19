@@ -396,7 +396,7 @@ feature 'Searching Notices', type: :feature do
     scenario 'a topic updates its name', search: true do
       topic = create(:topic, name: 'something')
       notice = create(:dmca, topics: [topic])
-      topic.update_attributes!(name: 'arbitrary')
+      topic.update!(name: 'arbitrary')
       index_changed_instances
 
       within_search_results_for('arbitrary') do
@@ -503,6 +503,6 @@ feature 'Searching Notices', type: :feature do
     end
     # A recipient is created by the factory as it's necessary to validate the
     # notice. We need to switch the notice to our preferred recipient.
-    dmca.recipient.update_attributes(name: recipient_name)
+    dmca.recipient.update(name: recipient_name)
   end
 end

@@ -17,7 +17,7 @@ class RedirectingController < ApplicationController
         status: :moved_permanently
       )
     else
-      render file: 'public/404_unavailable', formats: [:html], status: :not_found, layout: false
+      render 'error_pages/404_unavailable', formats: [:html], status: :not_found, layout: false
     end
   end
 

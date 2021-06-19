@@ -458,14 +458,14 @@ where notices.id in (
           next unless notice.sender.present?
           redactor = InstanceRedactor::EntityNameRedactor.new(notice.sender.name)
           notice.works.each do |work|
-            work.update_attributes(
+            work.update(
               description: redactor.redact(work.description)
             )
             work.infringing_urls.each do |iu|
-              iu.update_attributes(url: redactor.redact(iu.url))
+              iu.update(url: redactor.redact(iu.url))
             end
             work.copyrighted_urls.each do |cu|
-              cu.update_attributes(url: redactor.redact(cu.url))
+              cu.update(url: redactor.redact(cu.url))
             end
           end
         end
@@ -497,14 +497,14 @@ where notices.id in (
             next unless notice.sender.present?
             redactor = InstanceRedactor::EntityNameRedactor.new(notice.sender.name)
             notice.works.each do |work|
-              work.update_attributes(
+              work.update(
                 description: redactor.redact(work.description)
               )
               work.infringing_urls.each do |iu|
-                iu.update_attributes(url: redactor.redact(iu.url))
+                iu.update(url: redactor.redact(iu.url))
               end
               work.copyrighted_urls.each do |cu|
-                cu.update_attributes(url: redactor.redact(cu.url))
+                cu.update(url: redactor.redact(cu.url))
               end
               puts '.'
             end

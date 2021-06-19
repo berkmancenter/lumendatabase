@@ -92,7 +92,7 @@ RSpec.describe Work, type: :model do
 
     expect(notice).not_to be_valid
     expect(notice.errors.messages).to eq(
-      'works.infringing_urls': ['is invalid']
+      'works.infringing_urls': ['is invalid', 'is invalid']
     )
   end
 
@@ -106,7 +106,7 @@ RSpec.describe Work, type: :model do
 
     expect(notice).not_to be_valid
     expect(notice.errors.messages).to eq(
-      'works.copyrighted_urls': ['is invalid']
+      'works.copyrighted_urls': ['is invalid', 'is invalid']
     )
   end
 

@@ -57,7 +57,7 @@ describe EntityNoticeRole, type: :model do
 
       expect(notice).not_to be_valid
       expect(notice.errors.messages).to eq(
-        { :"entity_notice_roles.entity" => ["is invalid"] }
+        { :"entity_notice_roles.entity" => ["is invalid", "is invalid"] }
       )
     end
   end

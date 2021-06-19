@@ -381,24 +381,24 @@ describe DMCA, type: :model do
     context '#on_behalf_of_principal?' do
       it 'returns true when principal is present and differs from sender' do
         notice = create(:dmca, role_names: %w[sender principal])
-        notice.sender.update_attributes(name: 'The Sender')
-        notice.principal.update_attributes(name: 'The Principal')
+        notice.sender.update(name: 'The Sender')
+        notice.principal.update(name: 'The Principal')
 
         expect(notice).to be_on_behalf_of_principal
       end
 
       it 'returns false when principal is not present' do
         notice = create(:dmca, role_names: %w[sender principal])
-        notice.sender.update_attributes(name: 'The Sender')
-        notice.principal.update_attributes(name: '')
+        notice.sender.update(name: 'The Sender')
+        notice.principal.update(name: '')
 
         expect(notice).not_to be_on_behalf_of_principal
       end
 
       it 'returns false when principal is same as sender' do
         notice = create(:dmca, role_names: %w[sender principal])
-        notice.sender.update_attributes(name: 'The Sender')
-        notice.principal.update_attributes(name: 'The Sender')
+        notice.sender.update(name: 'The Sender')
+        notice.principal.update(name: 'The Sender')
 
         expect(notice).not_to be_on_behalf_of_principal
       end

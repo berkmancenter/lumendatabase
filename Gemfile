@@ -36,7 +36,7 @@ gem 'rack-attack'
 # The ActiveSupport::Notifications default causes rails to hang on startup, so
 # we fall back to the earlier enable_rails_patches behavior.
 gem 'rack-mini-profiler', require: ['enable_rails_patches', 'rack-mini-profiler']
-gem 'rails', '~> 6.0.0'
+gem 'rails', '~> 6.1.0'
 gem 'rails_admin'
 gem 'rails_admin_tag_list', '~> 0.2.1'
 gem 'recaptcha'
@@ -56,7 +56,6 @@ gem 'elasticsearch-rails', '~> 7.0'
 
 group :development do
   gem 'allocation_tracer'
-  gem 'bullet'
   gem 'derailed'
   gem 'memory_profiler'
 end

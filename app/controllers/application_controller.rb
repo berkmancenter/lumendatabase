@@ -78,7 +78,7 @@ class ApplicationController < ActionController::Base
 
     respond_to do |format|
       format.html do
-        render file: 'public/404',
+        render 'error_pages/404',
                status: :not_found,
                layout: false
       end
