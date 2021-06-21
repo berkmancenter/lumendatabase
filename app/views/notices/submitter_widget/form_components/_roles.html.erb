@@ -2,13 +2,14 @@
 <% step_number = 3 %>
 
 <%= form.simple_fields_for(:entity_notice_roles) do |roles_form| %>
-  <% role = roles_form.object.name %>
-  <% custom_roles_header_intro = t("submitter_widget.roles.header_intro.#{@notice.class.name}.#{role}", default: '') %>
+  <% role = roles_form.object.name.titleize %>
+  <% custom_role_header_title = t("submitter_widget.roles.title.#{@notice.class.name}.#{role}", default: '') %>
+  <% custom_roles_header_intro = t("submitter_widget.roles.header_intro.#{role}", default: '') %>
+  <% role_header_title = custom_role_header_title.present? ? custom_role_header_title : role %>
 
   <%# don't titleize the role until after the following line or it will break the css selector %>
   <section class="role <%= role.downcase %> <%= roles_form.object.entity.kind %>">
-    <% role = role.titleize %>
-    <h4><span>Step <%= step_number %>.</span> <%= role %> of the Notice</h4>
+    <h4><span>Step <%= step_number %>.</span> <%= role_header_title %> of the Notice</h4>
 
     <% if custom_roles_header_intro.present? %>
       <p><%= raw custom_roles_header_intro %></p>

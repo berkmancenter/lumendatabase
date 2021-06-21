@@ -3,6 +3,8 @@
 <% label = 'Body' if local_assigns[:label].nil? %>
 <% request_collection = nil if local_assigns[:request_collection].nil? %>
 <% mark_reg = nil if local_assigns[:mark_reg].nil? %>
+<% file_attachments_description = nil if local_assigns[:file_attachments_description].nil? %>
+
 <div>
   <%= form.input :type, as: :hidden %>
   <%= form.input :title %>
@@ -24,6 +26,10 @@
       <h6>File attachments</h6>
 
       <p>Any file you attach to this notice will be viewable by the public in the form in which you have attached it. It will not be reviewed by Lumen staff prior to being available to download.</p>
+
+      <% if file_attachments_description %>
+        <p><%= file_attachments_description %></p>
+      <% end %>
 
       <div id="file_uploads_inputs">
         <%= file_uploads_form.input :file, label: 'Attach file' %>

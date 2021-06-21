@@ -387,6 +387,8 @@ RailsAdmin.config do |config|
       field :document_type
       field :comments
       field :published
+    end
+  end
 
   config.model 'ApiSubmitterRequest' do
     list do

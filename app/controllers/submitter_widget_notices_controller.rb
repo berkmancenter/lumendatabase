@@ -81,4 +81,12 @@ class SubmitterWidgetNoticesController < NoticesController
   def submitter_widget_user
     User.find_by_widget_public_key(widget_public_key.to_s)
   end
+
+  def default_kind_based_on_role(role)
+    if role == 'issuing_court' || (role == 'principal' && @notice.class == LawEnforcementRequest)
+      'organization'
+    else
+      'individual'
+    end
+  end
 end
