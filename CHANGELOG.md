@@ -1,8 +1,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [21.06d](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.06d) - 2021-06-26
+### Changed
+* Bumped `ruby` to `2.7.2`.
+
 ## [21.06c](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.06c) - 2021-06-19
 ### Changed
-* Updated the `rails` gem to 6.1.x.
+* Updated the `rails` gem to `6.1.x`.
 
 ## [21.06b](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.06b) - 2021-06-14
 ### Changed
@@ -14,7 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [21.06](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.06) - 2021-06-03
 ### Changed
-* Updated the `rails` gem to 6.0.x.
+* Updated the `rails` gem to `6.0.x`.
 
 ## [21.05d](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.05d) - 2021-05-28
 ### Changed
