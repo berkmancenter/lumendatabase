@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'validates_automatically'
+require './lib/monkeypatches/paperclip/url_generator.rb'
 
 class FileUpload < ApplicationRecord
   include ValidatesAutomatically
