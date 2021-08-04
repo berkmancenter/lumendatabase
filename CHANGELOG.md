@@ -1,8 +1,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [21.08](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.08) - 2021-08-04
+### Changed
+* Bumped `ruby` to `3.0.2`.
+
 ## [21.06d](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.06d) - 2021-06-26
 ### Changed
-* Bumped `ruby` to `2.7.2`.
+* Bumped `ruby` to `2.7.3`.
 
 ## [21.06c](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.06c) - 2021-06-19
 ### Changed
