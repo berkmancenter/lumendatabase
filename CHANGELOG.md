@@ -2,7 +2,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [21.06d](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.06d) - 2021-06-26
 ### Changed
-* Bumped `ruby` to `2.7.2`.
+* Bumped `ruby` to `2.7.3`.
 
 ## [21.06c](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.06c) - 2021-06-19
 ### Changed

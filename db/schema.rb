@@ -254,8 +254,8 @@ ActiveRecord::Schema.define(version: 2021_06_17_163334) do
     t.integer "notice_id"
     t.string "kind"
     t.string "file_file_name"
-    t.string "file_content_type"
     t.integer "file_file_size"
+    t.string "file_content_type"
     t.datetime "file_updated_at"
     t.boolean "pdf_requested"
     t.boolean "pdf_request_fulfilled", default: false
