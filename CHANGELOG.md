@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [21.08a](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.08a) - 2021-08-05
+### Changed
+* Extended full notice view limits to researcher role.
+
 ## [21.08](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.08) - 2021-08-04
 ### Changed
 * Bumped `ruby` to `3.0.2`.
