@@ -172,7 +172,7 @@ describe NoticesController do
       it 'increases the notice counter for the user when the viewing limit is set and viewing html' do
         expect(Notice).to receive(:find_by).with(id: '42').and_return(notice)
 
-        user.notice_viewer_views_limit = 1
+        user.full_notice_views_limit = 1
         allow(controller).to receive(:current_user).and_return(user)
 
         get :show, params: { id: 42 }
@@ -183,7 +183,7 @@ describe NoticesController do
       it "won't increase the notice counter for the user when the viewing limit is set and viewing json" do
         expect(Notice).to receive(:find_by).with(id: '42').and_return(notice)
 
-        user.notice_viewer_views_limit = 1
+        user.full_notice_views_limit = 1
         allow(controller).to receive(:current_user).and_return(user)
 
         get :show, params: { id: 42, format: :json }
@@ -194,14 +194,14 @@ describe NoticesController do
       it "won't increase the notice counter for the user when the viewing limit is nil or 0" do
         expect(Notice).to receive(:find_by).with(id: '42').exactly(2).times.and_return(notice)
 
-        user.notice_viewer_views_limit = nil
+        user.full_notice_views_limit = nil
         allow(controller).to receive(:current_user).and_return(user)
 
         get :show, params: { id: 42, format: :json }
 
         expect(user.notice_viewer_viewed_notices).to eq 0
 
-        user.notice_viewer_views_limit = 0
+        user.full_notice_views_limit = 0
 
         get :show, params: { id: 42, format: :json }
 
@@ -211,7 +211,7 @@ describe NoticesController do
       it 'increases the notice counter for the user when the viewing limit is set until the limit is reached' do
         expect(Notice).to receive(:find_by).with(id: '42').exactly(3).times.and_return(notice)
 
-        user.notice_viewer_views_limit = 2
+        user.full_notice_views_limit = 2
         allow(controller).to receive(:current_user).and_return(user)
 
         get :show, params: { id: 42 }

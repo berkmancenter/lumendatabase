@@ -298,8 +298,8 @@ RailsAdmin.config do |config|
       field :publication_delay
       field :can_generate_permanent_notice_token_urls
       field :allow_generate_permanent_tokens_researchers_only_notices
-      field :notice_viewer_views_limit
-      field :notice_viewer_time_limit
+      field :full_notice_views_limit
+      field :full_notice_time_limit
       field :notice_viewer_viewed_notices
       field :limit_notice_api_response
       field :entity
