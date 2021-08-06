@@ -10,7 +10,10 @@ module Paperclip
       if url.respond_to?(:escape)
         url.escape
       else
-        CGI.escape(url).gsub(escape_regex){|m| "%#{m.ord.to_s(16).upcase}" }
+        Addressable::URI.encode_component(
+          url,
+          Addressable::URI::CharacterClasses::QUERY
+        ).gsub(escape_regex) { |m| "%#{m.ord.to_s(16).upcase}" }
       end
     end
   end
