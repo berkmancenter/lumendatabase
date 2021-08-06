@@ -177,7 +177,7 @@ describe NoticesController do
 
         get :show, params: { id: 42 }
 
-        expect(user.notice_viewer_viewed_notices).to eq 1
+        expect(user.viewed_notices).to eq 1
       end
 
       it "won't increase the notice counter for the user when the viewing limit is set and viewing json" do
@@ -188,7 +188,7 @@ describe NoticesController do
 
         get :show, params: { id: 42, format: :json }
 
-        expect(user.notice_viewer_viewed_notices).to eq 0
+        expect(user.viewed_notices).to eq 0
       end
 
       it "won't increase the notice counter for the user when the viewing limit is nil or 0" do
@@ -199,13 +199,13 @@ describe NoticesController do
 
         get :show, params: { id: 42, format: :json }
 
-        expect(user.notice_viewer_viewed_notices).to eq 0
+        expect(user.viewed_notices).to eq 0
 
         user.full_notice_views_limit = 0
 
         get :show, params: { id: 42, format: :json }
 
-        expect(user.notice_viewer_viewed_notices).to eq 0
+        expect(user.viewed_notices).to eq 0
       end
 
       it 'increases the notice counter for the user when the viewing limit is set until the limit is reached' do
@@ -216,15 +216,15 @@ describe NoticesController do
 
         get :show, params: { id: 42 }
 
-        expect(user.notice_viewer_viewed_notices).to eq 1
+        expect(user.viewed_notices).to eq 1
 
         get :show, params: { id: 42 }
 
-        expect(user.notice_viewer_viewed_notices).to eq 2
+        expect(user.viewed_notices).to eq 2
 
         get :show, params: { id: 42 }
 
-        expect(user.notice_viewer_viewed_notices).to eq 2
+        expect(user.viewed_notices).to eq 2
       end
     end
 

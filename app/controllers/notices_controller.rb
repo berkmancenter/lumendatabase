@@ -235,14 +235,12 @@ class NoticesController < ApplicationController
   end
 
   def process_notice_viewer_request
-    # Only notice viewers
-    return unless current_user.role?(Role.notice_viewer)
     # Only when the views limit is set for a user
     return unless current_user.full_notice_views_limit.present?
     # No need to update the counter when the limit is reached
-    return if current_user.notice_viewer_viewed_notices >= current_user.full_notice_views_limit
+    return if current_user.viewed_notices >= current_user.full_notice_views_limit
 
-    current_user.increment!(:notice_viewer_viewed_notices)
+    current_user.increment!(:viewed_notices)
   end
 
   def show_render_html
