@@ -1,13 +1,11 @@
 if Rails.env.staging? || Rails.env.production?
   SMTP_SETTINGS = {
     address: ENV['SMTP_ADDRESS'], # example: 'smtp.sendgrid.net'
-    authentication: :plain,
-    enable_starttls_auto: false,
+    enable_starttls_auto: true,
     domain: ENV['SMTP_DOMAIN'], # example: 'this-app.com'
-    password: ENV['SMTP_PASSWORD'],
     port: ENV['SMTP_PORT'],
-    user_name: ENV['SMTP_USERNAME']
-  } unless defined?( SMTP_SETTINGS )
+    openssl_verify_mode: 'none'
+  } unless defined?(SMTP_SETTINGS)
 
   Rails.application.config.action_mailer.smtp_settings = SMTP_SETTINGS
 end

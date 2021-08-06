@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_05_105224) do
+ActiveRecord::Schema.define(version: 2021_08_06_084400) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -488,7 +488,7 @@ ActiveRecord::Schema.define(version: 2021_08_05_105224) do
     t.integer "publication_delay", default: 0, null: false
     t.boolean "can_generate_permanent_notice_token_urls", default: false, null: false
     t.integer "full_notice_views_limit", default: 1
-    t.integer "notice_viewer_viewed_notices", default: 0, null: false
+    t.integer "viewed_notices", default: 0, null: false
     t.datetime "full_notice_time_limit"
     t.boolean "limit_notice_api_response", default: false, null: false
     t.boolean "allow_generate_permanent_tokens_researchers_only_notices"

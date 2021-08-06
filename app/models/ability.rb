@@ -122,8 +122,8 @@ class Ability
   def can_view_full_version?(user)
     can_view_full_version = true
 
-    can_view_full_version = false if user.full_notice_views_limit && user.notice_viewer_viewed_notices >= user.full_notice_views_limit
-    can_view_full_version = false if user.full_notice_time_limit && Time.now > user.full_notice_time_limit
+    can_view_full_version = false if user.full_notice_views_limit && user.viewed_notices >= user.full_notice_views_limit
+    can_view_full_version = false if user.full_notice_time_limit && Time.now > user.full_notice_time_limit.in_time_zone('Eastern Time (US & Canada)')
 
     if can_view_full_version
       can :view_full_version, Notice do |notice|

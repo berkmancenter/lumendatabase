@@ -300,7 +300,7 @@ RailsAdmin.config do |config|
       field :allow_generate_permanent_tokens_researchers_only_notices
       field :full_notice_views_limit
       field :full_notice_time_limit
-      field :notice_viewer_viewed_notices
+      field :viewed_notices
       field :limit_notice_api_response
       field :entity
       field :roles
