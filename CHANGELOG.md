@@ -1,5 +1,14 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [21.08c](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.08c) - 2021-08-06
+### Changed
+* Changed the urls encoding method of paperclip file uploads.
+
+## [21.08b](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.08b) - 2021-08-06
+### Changed
+* Started comparing full notice time limits in the EST timezone.
+* Updated the SMTP configuration.
+
 ## [21.08a](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.08a) - 2021-08-05
 ### Changed
 * Extended full notice view limits to researcher role.
