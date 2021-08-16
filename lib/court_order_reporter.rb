@@ -108,7 +108,7 @@ class CourtOrderReporter
   end
 
   def email_single_user(email)
-    Net::SMTP.start(SMTP_SETTINGS[:address]) do |smtp|
+    Net::SMTP.new(SMTP_SETTINGS[:address]).start(tls_verify: false) do |smtp|
       smtp.send_message mailtext, Chill::Application.config.default_sender, email
     end
   end
