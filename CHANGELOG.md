@@ -1,8 +1,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
-## [21.08cd](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.08d) - 2021-08-16
+## [21.08e](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.08e) - 2021-08-17
 ### Fixed
-* Stopped a verifying TLS certificate when sending emails from the `CourtOrderReporter` class.
+* Updated the `addressable` gem.
+
+## [21.08d](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.08d) - 2021-08-16
+### Fixed
+* Stopped verifying a TLS certificate when sending emails from the `CourtOrderReporter` class.
 
 ## [21.08c](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.08c) - 2021-08-06
 ### Changed
