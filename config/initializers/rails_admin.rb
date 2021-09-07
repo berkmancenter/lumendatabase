@@ -373,6 +373,9 @@ RailsAdmin.config do |config|
   config.model 'ActiveStorage::Attachment' do
     visible false
   end
+  config.model 'ActiveStorage::VariantRecord' do
+    visible false
+  end
   config.model 'Comfy::Cms::Categorization' do
     visible false
   end
