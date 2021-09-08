@@ -6,6 +6,7 @@ class ApplicationController < ActionController::Base
 
   before_action :authenticate_user_from_token!
   before_action :set_profiler_auth
+  before_action :set_current_user
 
   rescue_from CanCan::AccessDenied do |ex|
     logger.warn "Unauthorized attempt to #{ex.action} #{ex.subject}"
@@ -87,5 +88,9 @@ class ApplicationController < ActionController::Base
                status: :not_found
       end
     end
+  end
+
+  def set_current_user
+    Current.user = current_user
   end
 end
