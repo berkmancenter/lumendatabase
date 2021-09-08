@@ -12,7 +12,7 @@ class Notice < ApplicationRecord
 
   # == Constants ============================================================
   HIGHLIGHTS = %i[
-    title tag_list topics.name sender_name recipient_name
+    title body tag_list topics.name sender_name recipient_name
     works.description works.infringing_urls.url works.copyrighted_urls.url
   ].freeze
 

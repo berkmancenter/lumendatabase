@@ -8,7 +8,9 @@ class Highlighter
     @highlight = {
       pre_tags: '<em>',
       post_tags: '</em>',
-      fields: {}
+      fields: {},
+      type: 'plain',
+      require_field_match: false
     }
   end
 
@@ -21,10 +23,7 @@ class Highlighter
 
   def setup_highlight
     @model_class::HIGHLIGHTS.each do |highlight_field|
-      @highlight[:fields][highlight_field] = {
-        type: 'plain',
-        require_field_match: false
-      }
+      @highlight[:fields][highlight_field] = {}
     end
   end
 end
