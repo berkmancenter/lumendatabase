@@ -70,7 +70,8 @@ class ElasticsearchQuery
   # forever, which makes it impossible to redact things from search results.
   # Adding a datestamp guarantees that the cache_key eventually expires.
   def cache_key
-    @cache_key ||= "search-result-#{Digest::MD5.hexdigest(params.values.to_s)}-#{Date.today}"
+    is_super_admin = Current.user&.role?(Role.super_admin)
+    @cache_key ||= "search-result-#{Digest::MD5.hexdigest(params.values.to_s)}-#{Date.today}-#{is_super_admin}"
   end
 
   private
