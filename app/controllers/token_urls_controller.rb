@@ -145,7 +145,7 @@ class TokenUrlsController < ApplicationController
   end
 
   def token_email_spam?(email)
-    email_segments = email.split('.')
+    email_segments = email.split('@')[1].split('.')
     domain = "#{email_segments[email_segments.length - 2]}.#{email_segments[email_segments.length - 1]}"
     blocklisted_domains = ENV['TOKEN_URLS_BLOCKED_DOMAINS']&.split(',') || []
 
