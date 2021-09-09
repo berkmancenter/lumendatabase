@@ -1,3 +1,6 @@
+require 'uri'
+require 'net/http'
+
 class TokenUrlsController < ApplicationController
   include Recaptcha::ClientHelper
 
@@ -127,11 +130,41 @@ class TokenUrlsController < ApplicationController
       }
     end
 
+    return {
+      status: false,
+      why: 'This email address is not valid. Try to use a different email ' \
+           'address.'
+    } if token_email_spam?(token_url_params[:email])
+
     { status: true }
   end
 
   def disable_documents_notification_errors(token_url)
     return 'Token url was not found.' if token_url.nil?
     return 'Wrong token provided.' unless token_url.token == params[:token]
+  end
+
+  def token_email_spam?(email)
+    email_segments = email.split('.')
+    domain = "#{email_segments[email_segments.length - 2]}.#{email_segments[email_segments.length - 1]}"
+    blocklisted_domains = ENV['TOKEN_URLS_BLOCKED_DOMAINS']&.split(',') || []
+
+    return true if blocklisted_domains.include?(domain)
+
+    begin
+      uri = URI("http://us.stopforumspam.org/api?email=#{email}")
+      res = Net::HTTP.get_response(uri)
+
+      parsed_spam_response = Nokogiri::XML('<?xml version="1.0" encoding="utf-8"?>' + res.body)
+      email_spam_frequency = parsed_spam_response.search('//frequency').text.to_i
+
+      # If a frequency value is not 0 then it's spam
+      !email_spam_frequency.zero?
+    rescue
+      # When the API is down just move along, not great but probably not going
+      # to happen too often
+      Rails.logger.warn 'Can\'t connect to the stopforumspam API.'
+      true
+    end
   end
 end

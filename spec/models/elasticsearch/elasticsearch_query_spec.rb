@@ -85,15 +85,18 @@ describe ElasticsearchQuery, type: :model do
       highlight: {
         pre_tags: '<em>',
         post_tags: '</em>',
+        type: 'plain',
+        require_field_match: false,
         fields: {
-          title: { type: 'plain', require_field_match: false },
-          tag_list: { type: 'plain', require_field_match: false },
-          :'topics.name' => { type: 'plain', require_field_match: false },
-          sender_name: { type: 'plain', require_field_match: false },
-          recipient_name: { type: 'plain', require_field_match: false },
-          :'works.description' => { type: 'plain', require_field_match: false },
-          :'works.infringing_urls.url' => { type: 'plain', require_field_match: false },
-          :'works.copyrighted_urls.url' => { type: 'plain', require_field_match: false }
+          body: {},
+          title: {},
+          tag_list: {},
+          :'topics.name' => {},
+          sender_name: {},
+          recipient_name: {},
+          :'works.description' => {},
+          :'works.infringing_urls.url' => {},
+          :'works.copyrighted_urls.url' => {}
         }
       },
       size: 10,
