@@ -13,8 +13,10 @@ class TokenUrlsController < ApplicationController
   end
 
   def create
-    # Remove everything between + and @
+    # Remove everything between + and @ and downcase it
     token_url_params[:email].gsub!(/(\+.*?)(?=@)/, '')
+    token_url_params[:email].downcase!
+
     @token_url = TokenUrl.new(token_url_params)
     @notice = Notice.where(id: token_url_params[:notice_id]).first
 
@@ -137,11 +139,11 @@ class TokenUrlsController < ApplicationController
       }
     end
 
-    if token_email_spam?(token_url_params[:email])
+    if token_email_spam?
       return {
         status: false,
-        why: 'This email address is not valid. Try to use a different email ' \
-             'address.'
+        why: 'This email address is not allowed. Try to use a different ' \
+             'email address.'
       }
     end
 
@@ -153,14 +155,14 @@ class TokenUrlsController < ApplicationController
     return 'Wrong token provided.' unless token_url.token == params[:token]
   end
 
-  def token_email_spam?(email)
-    email_segments = email.split('@')[1].split('.')
+  def token_email_spam?
+    email_segments = token_url_params[:email].split('@')[1].split('.')
     domain = "#{email_segments[email_segments.length - 2]}.#{email_segments[email_segments.length - 1]}"
 
     return true if BlockedTokenUrlDomain.where(name: domain).any?
 
     begin
-      uri = URI("http://us.stopforumspam.org/api?email=#{email}")
+      uri = URI("http://us.stopforumspam.org/api?email=#{token_url_params[:email]}")
       res = Net::HTTP.get_response(uri)
 
       parsed_spam_response = Nokogiri::XML('<?xml version="1.0" encoding="utf-8"?>' + res.body)
