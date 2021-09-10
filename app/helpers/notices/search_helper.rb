@@ -45,7 +45,7 @@ module Notices::SearchHelper
     @unspecified_identifiers[parameter]
   end
 
-  def sort_order_label(sort_by_param)
-    ResultOrdering.define(sort_by_param).label
+  def sort_order_label(sort_by_param, model_class)
+    ResultOrdering.define(sort_by_param, model_class).label
   end
 end

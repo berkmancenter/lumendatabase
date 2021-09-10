@@ -11,7 +11,7 @@ class DateRangeFilter
   end
 
   def to_partial_path
-    'notices/search/date_range_filter'
+    'search/date_range_filter'
   end
 
   def as_elasticsearch_filter(param, value)

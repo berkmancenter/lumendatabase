@@ -3,11 +3,11 @@
   <div class="container search header-bar">
     <%= render 'shared/search' %>
   </div>
-  <%= form_tag(notices_search_index_path, method: :get) do %>
+  <%= form_tag(@search_index_path, method: :get) do %>
     <div class="container advanced-search">
       <div class="width-wrapper">
         <h5>Advanced Search: <span>add additional search queries<span></h5>
-        <% Notice::SEARCHABLE_FIELDS.each do |field| %>
+        <% @searchable_fields.each do |field| %>
           <%= render field %>
         <% end %>
         <a id="duplicate-field" href="javascript:void(0);" class="add-group">Add more</a>
@@ -16,6 +16,6 @@
         </div>
       </div>
     </div>
-    <%= hidden_field_tag(:sort_by, params[:sort_by], class: 'sort_by_field') %>
+    <%= hidden_field_tag(:sort_by, params[:sort_by], class: 'sort_by_field', id: nil) %>
   <% end %>
 </header>

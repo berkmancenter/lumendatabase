@@ -300,6 +300,20 @@ ActiveRecord::Schema.define(version: 2021_09_12_082226) do
     t.string "value", null: false
   end
 
+  create_table "media_mentions", force: :cascade do |t|
+    t.string "title", limit: 1000
+    t.text "description"
+    t.string "source", limit: 1000
+    t.string "link_to_source", limit: 1000
+    t.string "scale_of_mention", limit: 1000
+    t.date "date"
+    t.string "document_type", limit: 100
+    t.text "comments"
+    t.boolean "published", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "notice_import_errors", id: :serial, force: :cascade do |t|
     t.integer "original_notice_id"
     t.string "file_list", limit: 2048

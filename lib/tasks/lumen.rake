@@ -862,4 +862,49 @@ where works.id in (
       end
     end
   end
+
+  desc 'Import media mendtions from csv'
+  task :import_media_mentions_from_csv, [:input_csv] => :environment do |_t, args|
+    input_csv = args[:input_csv]
+
+    loggy = Loggy.new('rake lumen:import_media_mentions_from_csv', true)
+
+    usage = "Use 'rake import_media_mentions_from_csv['input_csv_path']'"
+
+    if input_csv.nil?
+      loggy.info usage
+      next
+    end
+
+    unless File.exist?(input_csv)
+      loggy.error 'Cannot find input_csv'
+      loggy.error usage
+      next
+    end
+
+    new_mentions = []
+    CSV.foreach(input_csv, headers: true) do |row|
+      loggy.info "Importing '#{row['Title']}'"
+
+      date = ''
+      date = Date.strptime(row['Date'], '%m/%d/%Y') if row['Date'] if row['Date'] && row['Date'].count('/') == 2
+      date = Date.strptime("01/#{row['Date']}", '%d/%m/%Y') if row['Date'] if row['Date'] && row['Date'].count('/') == 1
+      date = Date.strptime("01/01/#{row['Date']}", '%m/%d/%Y') if row['Date'] if row['Date'] && row['Date'].length == 4
+
+      new_mentions << {
+        title: row['Title'],
+        source: row['Source (or publisher for book)'],
+        link_to_source: row['Link to Source'],
+        scale_of_mention: row['Scale of mention'],
+        date: date,
+        document_type: row['Type'],
+        comments: row['Comments'],
+        published: true
+      }
+    end
+
+    new_mentions.reverse!
+
+    MediaMention.import new_mentions
+  end
 end

@@ -1,0 +1,12 @@
+<%= content_tag_for(:li, result, class: 'media-mention-result') do %>
+  <div class="media-mention-result-title">
+    <h3 class="title">
+      <%= link_to result.title, media_mention_path(result.id) %>
+    </h3>
+  </div>
+  <div class="media-mention-result-meta">
+    <div><label>Source</label> <%= result.source %></div>
+    <div><label>Document Type</label> <%= result.document_type %></div>
+    <div><label>Date Published</label> <%= result.date %></div>
+  </div>
+<% end %>
