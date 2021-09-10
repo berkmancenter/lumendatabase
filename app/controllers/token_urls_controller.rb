@@ -118,6 +118,13 @@ class TokenUrlsController < ApplicationController
       }
     end
 
+    if URI::MailTo::EMAIL_REGEXP.match(token_url_params[:email]).nil?
+      return {
+        status: false,
+        why: 'Use a valid email address.'
+      }
+    end
+
     if TokenUrl
        .where(email: token_url_params[:email])
        .where('expiration_date > ?', Time.now)
@@ -130,11 +137,13 @@ class TokenUrlsController < ApplicationController
       }
     end
 
-    return {
-      status: false,
-      why: 'This email address is not valid. Try to use a different email ' \
-           'address.'
-    } if token_email_spam?(token_url_params[:email])
+    if token_email_spam?(token_url_params[:email])
+      return {
+        status: false,
+        why: 'This email address is not valid. Try to use a different email ' \
+             'address.'
+      }
+    end
 
     { status: true }
   end
@@ -147,9 +156,8 @@ class TokenUrlsController < ApplicationController
   def token_email_spam?(email)
     email_segments = email.split('@')[1].split('.')
     domain = "#{email_segments[email_segments.length - 2]}.#{email_segments[email_segments.length - 1]}"
-    blocklisted_domains = ENV['TOKEN_URLS_BLOCKED_DOMAINS']&.split(',') || []
 
-    return true if blocklisted_domains.include?(domain)
+    return true if BlockedTokenUrlDomain.where(name: domain).any?
 
     begin
       uri = URI("http://us.stopforumspam.org/api?email=#{email}")
