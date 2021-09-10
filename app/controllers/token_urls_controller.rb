@@ -113,6 +113,13 @@ class TokenUrlsController < ApplicationController
       }
     end
 
+    if ip_address_blocked?
+      return {
+        status: false,
+        why: 'Your IP address has been blocked for abusing the service.'
+      }
+    end
+
     unless verify_recaptcha(model: @token_url)
       return {
         status: false,
@@ -176,5 +183,9 @@ class TokenUrlsController < ApplicationController
       Rails.logger.warn 'Can\'t connect to the stopforumspam API.'
       true
     end
+  end
+
+  def ip_address_blocked?
+    BlockedTokenUrlIp.where(address: request.remote_ip).any?
   end
 end

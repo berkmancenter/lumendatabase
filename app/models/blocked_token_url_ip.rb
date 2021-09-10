@@ -1,5 +1,5 @@
 require 'validates_automatically'
 
-class BlockedTokenUrlDomain < ApplicationRecord
+class BlockedTokenUrlIp < ApplicationRecord
   include ValidatesAutomatically
 end
