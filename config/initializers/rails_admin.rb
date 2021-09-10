@@ -347,6 +347,14 @@ RailsAdmin.config do |config|
     end
   end
 
+  config.model 'BlockedTokenUrlDomain' do
+    list do
+      field :name
+      field :comments
+      field :created_at
+    end
+  end
+
   # Hide unused models from the admin
   # == START ============================================================
   config.model 'ReindexRun' do
