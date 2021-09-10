@@ -154,6 +154,14 @@ class TokenUrlsController < ApplicationController
       }
     end
 
+    if token_ip_spam?
+      return {
+        status: false,
+        why: 'This IP address is not allowed. Try to use a different ' \
+             'IP address.'
+      }
+    end
+
     { status: true }
   end
 
@@ -181,7 +189,25 @@ class TokenUrlsController < ApplicationController
       # When the API is down just move along, not great but probably not going
       # to happen too often
       Rails.logger.warn 'Can\'t connect to the stopforumspam API.'
-      true
+      false
+    end
+  end
+
+  def token_ip_spam?
+    begin
+      uri = URI("http://us.stopforumspam.org/api?ip=#{request.remote_ip}")
+      res = Net::HTTP.get_response(uri)
+
+      parsed_spam_response = Nokogiri::XML('<?xml version="1.0" encoding="utf-8"?>' + res.body)
+      ip_spam_frequency = parsed_spam_response.search('//frequency').text.to_i
+
+      # If a frequency value is not 0 then it's spam
+      !ip_spam_frequency.zero?
+    rescue
+      # When the API is down just move along, not great but probably not going
+      # to happen too often
+      Rails.logger.warn 'Can\'t connect to the stopforumspam API.'
+      false
     end
   end
 

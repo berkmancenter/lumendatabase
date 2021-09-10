@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [21.09g](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.09g) - 2021-09-10
+### Changed
+* Started checking an IP address of a user requesting a token url against the stopforumspam database.
+
 ## [21.09f](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.09f) - 2021-09-10
 ### Changed
 * Allow to block an ip of a user trying to request a token url.
