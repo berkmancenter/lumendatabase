@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [21.09d](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.09d) - 2021-09-10
+### Changed
+* Moved custom, blocked token url domains from `env` to the database.
+
 ## [21.09c](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.09c) - 2021-09-09
 ### Fixed
 * Made the token urls request view split an email address properly.
