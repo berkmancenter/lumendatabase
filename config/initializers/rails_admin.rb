@@ -439,6 +439,7 @@ RailsAdmin.config do |config|
       field :valid_forever
       field :views
       field :created_at
+      field :ip
     end
 
     edit do

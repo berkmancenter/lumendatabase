@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_10_162317) do
+ActiveRecord::Schema.define(version: 2021_09_12_082226) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,6 +54,7 @@ ActiveRecord::Schema.define(version: 2021_09_10_162317) do
     t.integer "views", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "ip"
     t.index ["documents_notification"], name: "index_archived_token_urls_on_documents_notification"
     t.index ["email"], name: "index_archived_token_urls_on_email"
     t.index ["notice_id"], name: "index_archived_token_urls_on_notice_id"
@@ -460,6 +461,7 @@ ActiveRecord::Schema.define(version: 2021_09_10_162317) do
     t.datetime "updated_at"
     t.boolean "documents_notification"
     t.integer "views", default: 0
+    t.string "ip"
     t.index ["documents_notification"], name: "index_token_urls_on_documents_notification"
     t.index ["email"], name: "index_token_urls_on_email"
     t.index ["notice_id"], name: "index_token_urls_on_notice_id"

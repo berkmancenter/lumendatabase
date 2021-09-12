@@ -18,6 +18,7 @@ class TokenUrlsController < ApplicationController
     token_url_params[:email].downcase!
 
     @token_url = TokenUrl.new(token_url_params)
+    @token_url.ip = request.remote_ip
     @notice = Notice.where(id: token_url_params[:notice_id]).first
 
     authorize!(:create_access_token, @notice) unless @notice.nil?
@@ -113,6 +114,13 @@ class TokenUrlsController < ApplicationController
       }
     end
 
+    if ip_recently_requested?
+      return {
+        status: false,
+        why: 'Your have been submitting a request recently, try again later.'
+      }
+    end
+
     if ip_address_blocked?
       return {
         status: false,
@@ -136,7 +144,7 @@ class TokenUrlsController < ApplicationController
 
     if TokenUrl
        .where(email: token_url_params[:email])
-       .where('expiration_date > ?', Time.now)
+       .where('expiration_date > ?', Time.now.in_time_zone(ENV['SERVER_TIME_ZONE']))
        .any?
       return {
         status: false,
@@ -213,5 +221,12 @@ class TokenUrlsController < ApplicationController
 
   def ip_address_blocked?
     BlockedTokenUrlIp.where(address: request.remote_ip).any?
+  end
+
+  def ip_recently_requested?
+    TokenUrl
+       .where(ip: request.remote_ip)
+       .where('created_at > ?', (Time.now - 24.hours).in_time_zone(ENV['SERVER_TIME_ZONE']))
+       .any?
   end
 end

@@ -143,6 +143,7 @@ Most of these are optional and have sensible defaults (which may vary by environ
 - `RETURN_PATH` - default mailer return path
 - `SEARCH_SLEEP` - used in specs only, time out of Elasticsearch searches
 - `SECRET_KEY_BASE` - the Rails secret token; _required in prod_
+- `SERVER_TIME_ZONE` - name of the server's timezone eg. `Eastern Time (US & Canada)`
 - `SITE_HOST` - site host, used in mailer templates
 - `SKIP_FAKE_DATA` - don't generate fake data when seeding the database
 - `SMTP_ADDRESS` - SMTP server address
