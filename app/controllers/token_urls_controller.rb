@@ -117,7 +117,7 @@ class TokenUrlsController < ApplicationController
     if ip_recently_requested?
       return {
         status: false,
-        why: 'Your have been submitting a request recently, try again later.'
+        why: 'You have been submitting a request recently, try again later.'
       }
     end
 
@@ -179,10 +179,7 @@ class TokenUrlsController < ApplicationController
   end
 
   def token_email_spam?
-    email_segments = token_url_params[:email].split('@')[1].split('.')
-    domain = "#{email_segments[email_segments.length - 2]}.#{email_segments[email_segments.length - 1]}"
-
-    return true if BlockedTokenUrlDomain.where(name: domain).any?
+    return true if BlockedTokenUrlDomain.where("'#{token_url_params[:email]}' ~~* name").any?
 
     begin
       uri = URI("http://us.stopforumspam.org/api?email=#{token_url_params[:email]}")

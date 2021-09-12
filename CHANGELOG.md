@@ -1,5 +1,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [21.09i](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.09i) - 2021-09-12
+### Changed
+* Made email spam filtering use pattern matching.
+
+## [21.09h](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.09h) - 2021-09-12
+### Changed
+* Limited requests of new token urls per IP address.
+
 ## [21.09g](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.09g) - 2021-09-10
 ### Changed
 * Started checking an IP address of a user requesting a token url against the stopforumspam database.
