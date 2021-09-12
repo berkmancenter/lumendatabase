@@ -18,9 +18,13 @@ feature 'token url submission' do
 
     expect_correct_title
 
+    allow_any_instance_of(ActionDispatch::Request).to receive(:remote_ip) { '1.1.1.1' }
+
     submit
 
     expect(page).to have_content 'A new single-use link has been generated and sent to'
+
+    allow_any_instance_of(ActionDispatch::Request).to receive(:remote_ip) { '2.2.2.2' }
 
     submit
 
@@ -32,6 +36,8 @@ feature 'token url submission' do
 
     expect_correct_title
 
+    allow_any_instance_of(ActionDispatch::Request).to receive(:remote_ip) { '1.1.1.1' }
+
     submit
 
     expect(page).to have_content 'A new single-use link has been generated and sent to'
@@ -39,6 +45,8 @@ feature 'token url submission' do
     token_url = TokenUrl.last
     token_url.expiration_date = Time.now - LumenSetting.get_i('truncation_token_urls_active_period').seconds - 10.seconds
     token_url.save!
+
+    allow_any_instance_of(ActionDispatch::Request).to receive(:remote_ip) { '2.2.2.2' }
 
     submit
 
