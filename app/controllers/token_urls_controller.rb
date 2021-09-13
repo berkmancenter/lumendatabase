@@ -4,6 +4,8 @@ require 'net/http'
 class TokenUrlsController < ApplicationController
   include Recaptcha::ClientHelper
 
+  IP_BETWEEN_REQUESTS_WAITING_TIME = 2.hours
+
   def new
     @notice = Notice.find(params[:id])
 
@@ -13,13 +15,13 @@ class TokenUrlsController < ApplicationController
   end
 
   def create
-    # Remove everything between + and @ and downcase it
-    token_url_params[:email].gsub!(/(\+.*?)(?=@)/, '')
-    token_url_params[:email].downcase!
+    @new_token_params = token_url_params
 
-    @token_url = TokenUrl.new(token_url_params)
+    clean_up_email_address
+
+    @token_url = TokenUrl.new(@new_token_params)
     @token_url.ip = request.remote_ip
-    @notice = Notice.where(id: token_url_params[:notice_id]).first
+    @notice = Notice.where(id: @new_token_params[:notice_id]).first
 
     authorize!(:create_access_token, @notice) unless @notice.nil?
 
@@ -46,7 +48,7 @@ class TokenUrlsController < ApplicationController
 
   def run_post_create_actions
     TokenUrlsMailer.send_new_url_confirmation(
-      token_url_params[:email], @token_url, @notice
+      @new_token_params[:email], @token_url, @notice
     ).deliver_later
 
     redirect_to(
@@ -135,7 +137,7 @@ class TokenUrlsController < ApplicationController
       }
     end
 
-    if URI::MailTo::EMAIL_REGEXP.match(token_url_params[:email]).nil?
+    if URI::MailTo::EMAIL_REGEXP.match(@new_token_params[:email]).nil?
       return {
         status: false,
         why: 'Use a valid email address.'
@@ -143,7 +145,7 @@ class TokenUrlsController < ApplicationController
     end
 
     if TokenUrl
-       .where(email: token_url_params[:email])
+       .where(email: @new_token_params[:email])
        .where('expiration_date > ?', Time.now.in_time_zone(ENV['SERVER_TIME_ZONE']))
        .any?
       return {
@@ -179,10 +181,10 @@ class TokenUrlsController < ApplicationController
   end
 
   def token_email_spam?
-    return true if BlockedTokenUrlDomain.where("'#{token_url_params[:email]}' ~~* name").any?
+    return true if BlockedTokenUrlDomain.where("'#{@new_token_params[:email]}' ~~* name").any?
 
     begin
-      uri = URI("http://us.stopforumspam.org/api?email=#{token_url_params[:email]}")
+      uri = URI("http://us.stopforumspam.org/api?email=#{@new_token_params[:email]}")
       res = Net::HTTP.get_response(uri)
 
       parsed_spam_response = Nokogiri::XML('<?xml version="1.0" encoding="utf-8"?>' + res.body)
@@ -223,7 +225,18 @@ class TokenUrlsController < ApplicationController
   def ip_recently_requested?
     TokenUrl
        .where(ip: request.remote_ip)
-       .where('created_at > ?', (Time.now - 24.hours).in_time_zone(ENV['SERVER_TIME_ZONE']))
+       .where('created_at > ?', (Time.now - IP_BETWEEN_REQUESTS_WAITING_TIME).in_time_zone(ENV['SERVER_TIME_ZONE']))
        .any?
+  end
+
+  def clean_up_email_address
+    # Remove everything between + and @ and downcase it
+    email_segments = @new_token_params[:email].split('@')
+    @new_token_params[:email].gsub!(/(\+.*?)(?=@)/, '')
+    # For Google "." means nothing, so let's remove it
+    if ['gmail.com', 'googlemail.com'].any? { |domain| domain.include? email_segments[1] }
+      @new_token_params[:email] = "#{email_segments[0].gsub('.', '')}@#{email_segments[1]}"
+    end
+    @new_token_params[:email].downcase!
   end
 end
