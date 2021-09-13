@@ -4,6 +4,8 @@ require 'net/http'
 class TokenUrlsController < ApplicationController
   include Recaptcha::ClientHelper
 
+  IP_BETWEEN_REQUESTS_WAITING_TIME = 2.hours
+
   def new
     @notice = Notice.find(params[:id])
 
@@ -13,9 +15,7 @@ class TokenUrlsController < ApplicationController
   end
 
   def create
-    # Remove everything between + and @ and downcase it
-    token_url_params[:email].gsub!(/(\+.*?)(?=@)/, '')
-    token_url_params[:email].downcase!
+    clean_up_email_address
 
     @token_url = TokenUrl.new(token_url_params)
     @token_url.ip = request.remote_ip
@@ -223,7 +223,16 @@ class TokenUrlsController < ApplicationController
   def ip_recently_requested?
     TokenUrl
        .where(ip: request.remote_ip)
-       .where('created_at > ?', (Time.now - 24.hours).in_time_zone(ENV['SERVER_TIME_ZONE']))
+       .where('created_at > ?', (Time.now - IP_BETWEEN_REQUESTS_WAITING_TIME).in_time_zone(ENV['SERVER_TIME_ZONE']))
        .any?
+  end
+
+  def clean_up_email_address
+    # Remove everything between + and @ and downcase it
+    email_segments = token_url_params[:email].split('@')
+    token_url_params[:email].gsub!(/(\+.*?)(?=@)/, '')
+    # For Google "." means nothing, so let's remove it
+    token_url_params[:email].gsub!('.', '') if ['gmail.com', 'googlemail.com'].any? { |domain| domain.include? email_segments[1] }
+    token_url_params[:email].downcase!
   end
 end
