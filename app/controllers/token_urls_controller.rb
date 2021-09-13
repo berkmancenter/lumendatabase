@@ -146,7 +146,7 @@ class TokenUrlsController < ApplicationController
 
     if TokenUrl
        .where(email: @new_token_params[:email])
-       .where('expiration_date > ?', Time.now.in_time_zone(ENV['SERVER_TIME_ZONE']))
+       .where('expiration_date > ?', Time.now)
        .any?
       return {
         status: false,
@@ -225,7 +225,7 @@ class TokenUrlsController < ApplicationController
   def ip_recently_requested?
     TokenUrl
        .where(ip: request.remote_ip)
-       .where('created_at > ?', (Time.now - IP_BETWEEN_REQUESTS_WAITING_TIME).in_time_zone(ENV['SERVER_TIME_ZONE']))
+       .where('created_at > ?', Time.now - IP_BETWEEN_REQUESTS_WAITING_TIME)
        .any?
   end
 
