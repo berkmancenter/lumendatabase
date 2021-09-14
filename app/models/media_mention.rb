@@ -3,6 +3,7 @@ require 'validates_automatically'
 class MediaMention < ApplicationRecord
   include ValidatesAutomatically
   include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
 
   PER_PAGE = 10
 
