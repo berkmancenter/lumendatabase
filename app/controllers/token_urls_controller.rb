@@ -146,7 +146,7 @@ class TokenUrlsController < ApplicationController
 
     if TokenUrl
        .where(email: @new_token_params[:email])
-       .where('expiration_date > ?', Time.now.in_time_zone(ENV['SERVER_TIME_ZONE']))
+       .where('expiration_date > ?', Time.now)
        .any?
       return {
         status: false,
@@ -225,18 +225,18 @@ class TokenUrlsController < ApplicationController
   def ip_recently_requested?
     TokenUrl
        .where(ip: request.remote_ip)
-       .where('created_at > ?', (Time.now - IP_BETWEEN_REQUESTS_WAITING_TIME).in_time_zone(ENV['SERVER_TIME_ZONE']))
+       .where('created_at > ?', Time.now - IP_BETWEEN_REQUESTS_WAITING_TIME)
        .any?
   end
 
   def clean_up_email_address
     # Remove everything between + and @ and downcase it
-    email_segments = @new_token_params[:email].split('@')
     @new_token_params[:email].gsub!(/(\+.*?)(?=@)/, '')
+    @new_token_params[:email].downcase!
+    email_segments = @new_token_params[:email].split('@')
     # For Google "." means nothing, so let's remove it
     if ['gmail.com', 'googlemail.com'].any? { |domain| domain.include? email_segments[1] }
       @new_token_params[:email] = "#{email_segments[0].gsub('.', '')}@#{email_segments[1]}"
     end
-    @new_token_params[:email].downcase!
   end
 end
