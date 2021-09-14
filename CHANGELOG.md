@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [21.09k](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.09k) - 2021-09-14
+### Changed
+* Changed order of email filtering when requesting token urls.
+
 ## [21.09j](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.09j) - 2021-09-13
 ### Changed
 * Started cleaning up `gmail` emails from periods when requesting token urls.
