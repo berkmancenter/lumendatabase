@@ -5,8 +5,17 @@
     </h3>
   </div>
   <div class="media-mention-result-meta">
-    <div><label>Source</label> <%= result.source %></div>
-    <div><label>Document Type</label> <%= result.document_type %></div>
-    <div><label>Date Published</label> <%= result.date %></div>
+    <% if result.author.present? %>
+      <div><label>Author</label> <%= result.author %></div>
+    <% end %>
+    <% if result.source.present? %>
+      <div><label>Source</label> <%= result.source %></div>
+    <% end %>
+    <% if result.document_type.present? %>
+      <div><label>Document Type</label> <%= result.document_type %></div>
+    <% end %>
+    <% if result.date.present? %>
+      <div><label>Date Published</label> <%= result.date %></div>
+    <% end %>
   </div>
 <% end %>

@@ -899,7 +899,8 @@ where works.id in (
         date: date,
         document_type: row['Type'],
         comments: row['Comments'],
-        published: true
+        published: true,
+        author: row['Author']
       }
     end
 
