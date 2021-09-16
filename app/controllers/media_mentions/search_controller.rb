@@ -24,7 +24,7 @@ class MediaMentions::SearchController < SearchController
         searcher.register filtered_field
       end
 
-      searcher.sort_by = sort_by(params[:sort_by]) if params[:sort_by]
+      searcher.sort_by = sort_by(params[:sort_by])
     end
   end
 

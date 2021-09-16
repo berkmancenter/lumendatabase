@@ -30,7 +30,7 @@ class MediaMention < ApplicationRecord
   ORDERING_OPTIONS = [
     ResultOrdering.new('relevancy desc', [:_score, :desc], 'Most Relevant'),
     ResultOrdering.new('relevancy asc', [:_score, :asc], 'Least Relevant'),
-    ResultOrdering.new('date desc', [:date, :desc], 'Date Published - newest'),
+    ResultOrdering.new('date desc', [:date, :desc], 'Date Published - newest', true),
     ResultOrdering.new('date asc', [:date, :asc], 'Date Published - oldest')
   ].freeze
 
@@ -44,7 +44,7 @@ class MediaMention < ApplicationRecord
       indexes :description, copy_to: 'base_search'
       indexes :source, copy_to: %w[base_search source_facet]
       indexes :document_type, copy_to: %w[base_search document_type_facet]
-      indexes :date, copy_to: %w[base_search date_facet]
+      indexes :date, type: 'date', copy_to: %w[base_search date_facet]
       indexes :published, type: 'boolean'
       indexes :author, copy_to: 'base_search'
 
