@@ -7,13 +7,25 @@ class MediaMention < ApplicationRecord
 
   PER_PAGE = 10
 
-  MULTI_MATCH_FIELDS = %w(title description document_type source)
+  MULTI_MATCH_FIELDS = %w(base_search)
 
   SEARCHABLE_FIELDS = [
     TermSearch.new(:term, MULTI_MATCH_FIELDS, 'All Fields')
   ].freeze
 
-  FILTERABLE_FIELDS = [].freeze
+  now = Time.now.beginning_of_day
+  DATE_FACET_RANGES = [
+    { from: now - 1.year, to: now },
+    { from: now - 5.years, to: now  },
+    { from: now - 10.years, to: now },
+    { from: now - 20.years, to: now }
+  ]
+
+  FILTERABLE_FIELDS = [
+    TermFilter.new(:source_facet, 'Source'),
+    TermFilter.new(:document_type_facet, 'Document Type'),
+    DateRangeFilter.new(:date_facet, :date, 'Date Published', DATE_FACET_RANGES)
+  ].freeze
 
   ORDERING_OPTIONS = [
     ResultOrdering.new('relevancy desc', [:_score, :desc], 'Most Relevant'),
@@ -24,16 +36,22 @@ class MediaMention < ApplicationRecord
 
   HIGHLIGHTS = [].freeze
 
-  def define_elasticsearch_mapping
-    settings do
-      mappings dynamic: false do
-        # fields
-        indexes :title, type: 'text'
-        indexes :description, type: 'text'
-        indexes :source, type: 'text'
-        indexes :document_type, type: 'text'
-        indexes :date, type: 'date'
-      end
+  settings do
+    mappings dynamic: false do
+      # fields
+      indexes :base_search, type: 'text'
+      indexes :title, copy_to: 'base_search'
+      indexes :description, copy_to: 'base_search'
+      indexes :source, copy_to: %w[base_search source_facet]
+      indexes :document_type, copy_to: %w[base_search document_type_facet]
+      indexes :date, copy_to: %w[base_search date_facet]
+      indexes :published, type: 'boolean'
+      indexes :author, copy_to: 'base_search'
+
+      # facets
+      indexes :source_facet, type: 'keyword'
+      indexes :document_type_facet, type: 'keyword'
+      indexes :date_facet, type: 'date'
     end
   end
 

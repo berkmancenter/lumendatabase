@@ -4,10 +4,11 @@ class DateRangeFilter
 
   attr_reader :title, :parameter
 
-  def initialize(parameter, indexed_attribute = nil, title = '')
+  def initialize(parameter, indexed_attribute = nil, title = '', ranges = default_ranges)
     @parameter = parameter
     @title = title
     @indexed_attribute = indexed_attribute || parameter
+    @ranges = ranges
   end
 
   def to_partial_path
@@ -25,7 +26,7 @@ class DateRangeFilter
       type: :date_range,
       local_parameter:  @parameter,
       local_indexed_attribute: @indexed_attribute,
-      local_ranges: ranges
+      local_ranges: @ranges
     }
   end
 
@@ -40,7 +41,7 @@ class DateRangeFilter
 
   private
 
-  def ranges
+  def default_ranges
     now = Time.now.beginning_of_day
     [
       { from: now - 1.day, to: now },
