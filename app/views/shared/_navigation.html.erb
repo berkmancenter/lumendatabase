@@ -12,6 +12,9 @@
         </ol>
       </div>
     </div>
+    <div class="nav-item">
+      <%= link_to 'Research Papers', media_mentions_search_index_path %>
+    </div>
     <% header_links.each do |link| %>
       <div class="nav-item">
         <%= link_to cms_fragment_content('page_title', link), link.full_path %>
