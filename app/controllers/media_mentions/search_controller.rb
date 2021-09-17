@@ -11,7 +11,7 @@ class MediaMentions::SearchController < SearchController
     @filterable_fields = MediaMention::FILTERABLE_FIELDS
     @ordering_options = MediaMention::ORDERING_OPTIONS
     @url_root = URL_ROOT
-    @search_all_placeholder = 'Search all research papers...'
+    @search_all_placeholder = 'Search all research and media mentions...'
   end
 
   def item_searcher

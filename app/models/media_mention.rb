@@ -24,6 +24,7 @@ class MediaMention < ApplicationRecord
   FILTERABLE_FIELDS = [
     TermFilter.new(:source_facet, 'Source'),
     TermFilter.new(:document_type_facet, 'Document Type'),
+    TermFilter.new(:scale_of_mention_facet, 'Scale of Mention'),
     DateRangeFilter.new(:date_facet, :date, 'Date Published', DATE_FACET_RANGES)
   ].freeze
 
@@ -47,10 +48,12 @@ class MediaMention < ApplicationRecord
       indexes :date, type: 'date', copy_to: %w[base_search date_facet]
       indexes :published, type: 'boolean'
       indexes :author, copy_to: 'base_search'
+      indexes :scale_of_mention, copy_to: %w[base_search scale_of_mention_facet]
 
       # facets
       indexes :source_facet, type: 'keyword'
       indexes :document_type_facet, type: 'keyword'
+      indexes :scale_of_mention_facet, type: 'keyword'
       indexes :date_facet, type: 'date'
     end
   end

@@ -1,4 +1,4 @@
-<% title 'Research Papers', @media_mention.title %>
+<% title 'Research and Media Mentions', @media_mention.title %>
 
 <article class="media-mention-show">
   <section class="body">
@@ -38,6 +38,13 @@
           <div class="media-mention-show-metadata-item">
             <div class="label">Document Type</div>
             <div class="field"><%= @media_mention.document_type %></div>
+          </div>
+        <% end %>
+
+        <% if @media_mention.scale_of_mention.present? %>
+          <div class="media-mention-show-metadata-item">
+            <div class="label">Scale of Mention</div>
+            <div class="field"><%= @media_mention.scale_of_mention %></div>
           </div>
         <% end %>
       </div>

@@ -17,5 +17,8 @@
     <% if result.date.present? %>
       <div><label>Date Published</label> <%= result.date %></div>
     <% end %>
+    <% if result.scale_of_mention.present? %>
+      <div><label>Scale of Mention</label> <%= result.scale_of_mention %></div>
+    <% end %>
   </div>
 <% end %>
