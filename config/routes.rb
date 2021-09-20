@@ -64,6 +64,12 @@ Rails.application.routes.draw do
 
   get 'blog_feed', to: 'blog_feed#index'
 
+  namespace :media_mentions do
+    resources :search, only: [:index]
+  end
+
+  resources :media_mentions, only: :show
+
   root to: 'home#index'
 
   comfy_route :cms_admin, path: "/cms_admin"

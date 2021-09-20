@@ -46,7 +46,7 @@ class Notice < ApplicationRecord
   ].freeze
 
   ORDERING_OPTIONS = [
-    ResultOrdering.new('relevancy desc', [:_score, :desc], 'Most Relevant'),
+    ResultOrdering.new('relevancy desc', [:_score, :desc], 'Most Relevant', true),
     ResultOrdering.new('relevancy asc', [:_score, :asc], 'Least Relevant'),
     ResultOrdering.new('date_received desc', [:date_received, :desc], 'Date Received - newest'),
     ResultOrdering.new('date_received asc', [:date_received, :asc], 'Date Received - oldest'),

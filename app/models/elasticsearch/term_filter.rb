@@ -11,7 +11,7 @@ class TermFilter
   end
 
   def to_partial_path
-    'notices/search/term_filter'
+    'search/term_filter'
   end
 
   # When tests for this fail, update them to use as_elasticsearch_filter,

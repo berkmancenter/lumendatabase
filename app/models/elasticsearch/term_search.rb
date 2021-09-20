@@ -11,7 +11,7 @@ class TermSearch
   end
 
   def to_partial_path
-    'notices/search/term_search'
+    'search/term_search'
   end
 
   def query_for(value, operator)

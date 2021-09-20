@@ -64,6 +64,11 @@ class NoticesController < ApplicationController
 
     update_stats
 
+    @searchable_fields = Notice::SEARCHABLE_FIELDS
+    @filterable_fields = Notice::FILTERABLE_FIELDS
+    @ordering_options = Notice::ORDERING_OPTIONS
+    @search_all_placeholder = 'Search all notices...'
+
     respond_to do |format|
       format.html { show_render_html }
       format.json do
