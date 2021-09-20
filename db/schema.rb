@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_15_110014) do
+ActiveRecord::Schema.define(version: 2021_09_17_184944) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -305,7 +305,7 @@ ActiveRecord::Schema.define(version: 2021_09_15_110014) do
     t.text "description"
     t.string "source", limit: 1000
     t.string "link_to_source", limit: 1000
-    t.string "scale_of_mention", limit: 1000
+    t.string "scale_of_mention", limit: 1000, null: false
     t.date "date"
     t.string "document_type", limit: 100
     t.text "comments"

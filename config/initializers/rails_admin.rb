@@ -363,6 +363,27 @@ RailsAdmin.config do |config|
     end
   end
 
+  config.model 'MediaMention' do
+    edit do
+      configure :scale_of_mention, :enum do
+        enum do
+          LumenSetting.get('media_mentions_scale_of_mentions').split(',')
+        end
+      end
+
+      field :title
+      field :author
+      field :description
+      field :source
+      field :link_to_source
+      field :scale_of_mention
+      field :date
+      field :document_type
+      field :comments
+      field :published
+    end
+  end
+
   # Hide unused models from the admin
   # == START ============================================================
   config.model 'ReindexRun' do

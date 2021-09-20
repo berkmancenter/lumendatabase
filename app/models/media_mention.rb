@@ -37,6 +37,8 @@ class MediaMention < ApplicationRecord
 
   HIGHLIGHTS = [].freeze
 
+  validates :scale_of_mention, presence: true, inclusion: { in: LumenSetting.get('media_mentions_scale_of_mentions').split(',') }
+
   settings do
     mappings dynamic: false do
       # fields
