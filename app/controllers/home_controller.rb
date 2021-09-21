@@ -18,6 +18,7 @@ class HomeController < ApplicationController
     @notices ||= Notice.where(id: notice_ids)
 
     @blog_entries = blog_entries
+    @search_index_path = notices_search_index_path
   end
 
   def blog_entries

@@ -5,6 +5,16 @@ class Notices::SearchController < SearchController
 
   private
 
+  def set_model_specific_variables
+    @model_class = Notice
+    @search_index_path = notices_search_index_path
+    @searchable_fields = Notice::SEARCHABLE_FIELDS
+    @filterable_fields = Notice::FILTERABLE_FIELDS
+    @ordering_options = Notice::ORDERING_OPTIONS
+    @url_root = URL_ROOT
+    @search_all_placeholder = 'Search all notices...'
+  end
+
   def item_searcher
     ElasticsearchQuery.new(params).tap do |searcher|
       Notice::SEARCHABLE_FIELDS.each do |searched_field|

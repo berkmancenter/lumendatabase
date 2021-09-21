@@ -5,8 +5,10 @@
 # - URL_ROOT
 # - SEARCHED_MODEL
 # - item_searcher
+# - set_model_specific_variables
 # They may also define html_responder.
 class SearchController < ApplicationController
+  before_action :set_model_specific_variables
   before_action :prevent_impossible_pagination
   before_action :restrict_deep_pagination
 
@@ -65,7 +67,7 @@ class SearchController < ApplicationController
   end
 
   def sort_by(sort_by_param)
-    ResultOrdering.define(sort_by_param).sort_by
+    ResultOrdering.define(sort_by_param, @model_class).sort_by
   end
 
   def wrap_instances
@@ -142,4 +144,6 @@ class SearchController < ApplicationController
       memo[facet.to_sym] = params[facet.to_sym] if params[facet.to_sym].present?
     end
   end
+
+  def set_model_specific_variables; end
 end

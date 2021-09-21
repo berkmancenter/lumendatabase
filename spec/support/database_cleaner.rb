@@ -1,6 +1,8 @@
 RSpec.configure do |config|
+  tables_to_skip_clean = %w[lumen_settings]
+
   config.before(:suite) do
-    DatabaseCleaner.clean_with(:deletion)
+    DatabaseCleaner.clean_with(:deletion, except: tables_to_skip_clean)
   end
 
   config.before(:each) do
@@ -8,7 +10,7 @@ RSpec.configure do |config|
   end
 
   config.before(:each, :js => true) do
-    DatabaseCleaner.strategy = :deletion
+    DatabaseCleaner.strategy = :deletion, { except: tables_to_skip_clean }
   end
 
   config.before(:each) do
