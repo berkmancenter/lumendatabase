@@ -60,7 +60,7 @@ jobs:
           name: Database setup
           command: |
             cp config/database.yml.circle config/database.yml
-            bundle exec rails db:schema:load RAILS_ENV=test
+            bundle exec rails db:drop db:create db:migrate RAILS_ENV=test
       - run: mkdir -p tmp/cache
 
       # Precompile assets to speed up tests.

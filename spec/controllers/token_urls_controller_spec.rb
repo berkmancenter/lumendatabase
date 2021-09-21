@@ -85,23 +85,6 @@ describe TokenUrlsController do
       expect(TokenUrl.count).to eq orig_count
     end
 
-    it 'creates a new token and strips out the email part between "+" and "@"' do
-      allow(controller).to receive(:verify_recaptcha).and_return(true)
-
-      notice = create(:dmca)
-
-      params = {
-        token_url: {
-          email: 'user+123456@example.com',
-          notice_id: notice.id
-        }
-      }
-
-      post :create, params: params
-
-      expect(TokenUrl.last.email).to eq 'user@example.com'
-    end
-
     it "won't call the validate method twice" do
       allow(controller).to receive(:verify_recaptcha).and_return(true)
       allow(controller).to receive(:validate).and_return(
@@ -120,6 +103,17 @@ describe TokenUrlsController do
       }
 
       post :create, params: params
+    end
+
+    it "won't let to request a new token from the same ip immediately" do
+      allow(controller).to receive(:verify_recaptcha).and_return(true)
+
+      orig_count = TokenUrl.count
+
+      create_token 'user@example.com'
+      create_token 'user2@example.com'
+
+      expect(TokenUrl.count).to eq(orig_count + 1)
     end
   end
 
@@ -201,6 +195,30 @@ describe TokenUrlsController do
       expect(TokenUrl.where(notice: notice, user: user, valid_forever: true).count).to eq(0)
       expect_authorization_error
     end
+
+    context '#clean_up_email_address' do
+      it 'downcases a new token email address' do
+        create_token 'uSer@eXample.com'
+
+        expect(TokenUrl.last.email).to eq 'user@example.com'
+      end
+
+      it 'removes everything between "+" and "@"' do
+        create_token 'user+notthistime@example.com'
+
+        expect(TokenUrl.last.email).to eq 'user@example.com'
+      end
+
+      it 'removes periods if a new token email address is gmail' do
+        create_token 'user.x.x.x@gmail.com'
+
+        expect(TokenUrl.last.email).to eq 'userxxx@gmail.com'
+
+        create_token 'user.x.x.x@googlemail.com', '2.2.2.2'
+
+        expect(TokenUrl.last.email).to eq 'userxxx@googlemail.com'
+      end
+    end
   end
 
   private
@@ -208,5 +226,21 @@ describe TokenUrlsController do
   def expect_authorization_error
     expect(session['flash']['flashes']['alert']).to eq 'You are not authorized to access this page.'
     expect(response.status).to eq 302
+  end
+
+  def create_token(email, ip = '1.1.1.1')
+    allow_any_instance_of(ActionDispatch::Request).to receive(:remote_ip) { ip }
+    allow(controller).to receive(:verify_recaptcha).and_return(true)
+
+    notice = create(:dmca)
+
+    params = {
+      token_url: {
+        email: email,
+        notice_id: notice.id
+      }
+    }
+
+    post :create, params: params
   end
 end
