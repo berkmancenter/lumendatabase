@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [21.09l](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.09l) - 2021-09-21
+### Added
+* Created a new view listing media mentions.
+
 ## [21.09k](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.09k) - 2021-09-14
 ### Changed
 * Changed order of email filtering when requesting token urls.
