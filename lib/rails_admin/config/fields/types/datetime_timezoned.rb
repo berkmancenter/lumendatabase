@@ -10,7 +10,7 @@ module RailsAdmin
 
           # Convert to the RA custom timezone
           def value
-            return super if RailsAdmin::Config::Fields::Types::Date
+            return super if date_class?
 
             value_in_default_time_zone = bindings[:object].send(name)
             return nil if value_in_default_time_zone.nil?
@@ -24,7 +24,7 @@ module RailsAdmin
 
           # Convert back to the default app timezone
           def parse_input(params)
-            return super if RailsAdmin::Config::Fields::Types::Date
+            return super if date_class?
 
             params[name] = parse_value(params[name]) if params[name]
 
@@ -50,6 +50,10 @@ module RailsAdmin
                                        )
 
             time_in_old_zone.in_time_zone(to_tz)
+          end
+
+          def date_class?
+            self.instance_of? RailsAdmin::Config::Fields::Types::Date
           end
         end
       end
