@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [21.09n](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.09n) - 2021-09-30
+### Changed
+* Allowed admins to create notices.
+
 ## [21.09m](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.09m) - 2021-09-21
 ### Fixed
 * Fixed the default timezone for times in the admin.

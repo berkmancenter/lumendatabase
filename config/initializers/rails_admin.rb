@@ -149,7 +149,8 @@ RailsAdmin.config do |config|
                        :topic_relevant_questions,
                        :infringing_urls,
                        :copyrighted_urls,
-                       :token_urls
+                       :token_urls,
+                       :entities
 
         configure :review_required do
           visible do
