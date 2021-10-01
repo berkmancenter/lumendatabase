@@ -52,7 +52,7 @@ module NoticesHelper
   end
 
   def iso_countries
-    CountrySelect::ISO_COUNTRIES_FOR_SELECT
+    ::CountrySelect::ISO_COUNTRIES_FOR_SELECT
   end
 
   def first_time_visitor_content
