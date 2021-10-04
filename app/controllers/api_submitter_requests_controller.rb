@@ -6,8 +6,6 @@ class ApiSubmitterRequestsController < ApplicationController
   end
 
   def create
-    # Remove everything between + and @
-    api_submitter_request_params[:email].gsub!(/(\+.*?)(?=@)/, '')
     @api_submitter_request = ApiSubmitterRequest.new(api_submitter_request_params)
 
     valid_to_submit = validate
@@ -34,7 +32,7 @@ class ApiSubmitterRequestsController < ApplicationController
   def run_post_create_actions
     redirect_to(
       new_api_submitter_request_path,
-      notice: 'We have received your application, you should receive an email from us within 48 hours.'
+      notice: 'We have received your application, you will receive an email from us when we verify your request.'
     )
   end
 
