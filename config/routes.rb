@@ -22,6 +22,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :submitter_widget_notices, only: %i[new create]
+
   namespace :entities do
     resources :search, only: [:index]
   end
@@ -69,6 +71,8 @@ Rails.application.routes.draw do
   end
 
   resources :media_mentions, only: :show
+
+  resources :api_submitter_requests
 
   root to: 'home#index'
 

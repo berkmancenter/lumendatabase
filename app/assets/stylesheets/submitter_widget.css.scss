@@ -1,0 +1,94 @@
+.submitter_widget_notices {
+  /* @HACK:FIXME Firefox has problems with rendering an iframe */
+  width: calc(100% - 1px);
+  background-color: #ffffff;
+
+  section.main.app {
+    background-color: #ffffff;
+  }
+
+  .main-inner {
+    margin: 0;
+  }
+
+  .inner-padding {
+    padding: 0;
+  }
+
+  section.notice-new {
+    header {
+      padding: 0;
+    }
+
+    section {
+      padding: 20px 5px;
+    }
+
+    header {
+      padding-bottom: 20px;
+    }
+
+    .buttons-wrapper {
+      padding: 45px 5px 0 5px;
+
+      .submit {
+        float: none;
+        display: inline-block;
+      }
+    }
+
+    section.notice-body {
+      #add-another {
+        display: inline-block;
+      }
+    }
+
+    section.works {
+      .body-wrapper {
+        width: 100%;
+        float: none;
+      }
+    }
+
+    section.role {
+      .body-wrapper {
+        width: 100%;
+        float: none;
+        margin-top: 0 !important;
+      }
+
+      label.half-width {
+        width: 180px;
+      }
+
+      .input {
+        width: 100%;
+        float: none;
+        padding: 0;
+      }
+
+      &.individual {
+        .notice_entity_notice_roles_entity_address_line_1,
+        .notice_entity_notice_roles_entity_address_line_2,
+        .notice_entity_notice_roles_entity_city,
+        .notice_entity_notice_roles_entity_state,
+        .notice_entity_notice_roles_entity_zip,
+        .notice_entity_notice_roles_entity_phone,
+        .notice_entity_notice_roles_entity_email,
+        .notice_entity_notice_roles_entity_url {
+          display: none;
+        }
+      }
+    }
+  }
+
+  section.notices-list ul li {
+    color: #000000;
+
+    &.active {
+      background: #c8c8c8;
+    }
+  }
+
+  
+}

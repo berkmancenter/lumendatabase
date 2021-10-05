@@ -1,0 +1,57 @@
+<% label = local_assigns[:label] || @notice.class.label %>
+<% step_number = 3 %>
+
+<%= form.simple_fields_for(:entity_notice_roles) do |roles_form| %>
+  <% role = roles_form.object.name.titleize %>
+  <% custom_role_header_title = t("submitter_widget.roles.title.#{@notice.class.name}.#{role}", default: '') %>
+  <% custom_roles_header_intro = t("submitter_widget.roles.header_intro.#{role}", default: '') %>
+  <% role_header_title = custom_role_header_title.present? ? custom_role_header_title : role %>
+
+  <%# don't titleize the role until after the following line or it will break the css selector %>
+  <section class="role <%= role.downcase %> <%= roles_form.object.entity.kind %>">
+    <h4><span>Step <%= step_number %>.</span> <%= role_header_title %> of the Notice</h4>
+
+    <% if custom_roles_header_intro.present? %>
+      <p><%= raw custom_roles_header_intro %></p>
+    <% else %>
+      <p>Enter information about the <b><%= role %></b> of the <%= label %>.</p>
+    <% end %>
+
+    <%= roles_form.input :name, as: :hidden %>
+    <%= roles_form.simple_fields_for(:entity) do |entity_form| %>
+      <div class="body-wrapper left required">
+        <%= entity_form.input :name, label: "Name",
+          input_html: placeholder_text(current_user, role, :name) %>
+        <%= entity_form.input :kind,
+          { label: "#{role} Type", prompt: nil, collection: Entity::KINDS }
+            .merge(placeholder_kind(current_user, role))
+        %>
+      </div>
+      <div class="body-wrapper right optional">
+        <%= entity_form.input :address_line_1, label: "Address Line 1",
+          input_html: placeholder_text(current_user, role, :address_line_1) %>
+        <%= entity_form.input :address_line_2, label: "Address Line 2",
+          input_html: placeholder_text(current_user, role, :address_line_2) %>
+        <%= entity_form.input :city, label: "City",
+          input_html: placeholder_text(current_user, role, :city) %>
+        <%= entity_form.input :state, label: "State",
+          label_html: { class: 'half-width' }, maxlength: "2",
+          input_html: placeholder_text(current_user, role, :state) %>
+        <%= entity_form.input :zip, label: "Zip Code",
+          label_html: { class: 'half-width' },
+          input_html: placeholder_text(current_user, role, :zip) %>
+        <%= entity_form.input :country_code,
+          { collection: iso_countries, label: "Country" }.merge(
+            placeholder_country(current_user, role)
+          ) %>
+        <%= entity_form.input :phone, label: "Phone",
+          input_html: placeholder_text(current_user, role, :phone) %>
+        <%= entity_form.input :email, label: "Email",
+          input_html: placeholder_text(current_user, role, :email) %>
+        <%= entity_form.input :url, label: "#{role} URL",
+          input_html: placeholder_text(current_user, role, :url) %>
+      </div>
+    <% end %>
+  </section>
+  <% step_number += 1 %>
+<% end %>

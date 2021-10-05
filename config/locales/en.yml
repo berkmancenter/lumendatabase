@@ -96,6 +96,16 @@ en:
         menu: 'Statistics'
         title: 'Statistics'
 
+      approve_api_submitter_request:
+        breadcrumb: 'Approve'
+        menu: 'Approve'
+        title: 'Approve'
+
+      reject_api_submitter_request:
+        breadcrumb: 'Reject'
+        menu: 'Reject'
+        title: 'Reject'
+
   type_descriptions:
     DMCA:
       'Is someone complaining that images, text, video, or other content found online infringe their copyrights?'
@@ -147,3 +157,44 @@ en:
     * The URL(s) for the material that the complainant wants taken down
     * A brief description of the issue leading to the complaint; and whether the recipient acted on the complaint or not.
     * In the case of a copyright complaint, the notice will also include a description of the original copyrighted material, and its URL if one exists.
+
+  submitter_widget:
+    type_descriptions:
+      DMCA:
+        'Complain that images, text, video, or other content posted online infringe your copyrights.'
+
+      Trademark:
+        'Are you complaining that images, text, video, other content posted online, or some other form of online activity, infringe your trademark(s)?'
+
+      Defamation:
+        'Are you complaining that images, text, video, other content posted online, or some other form of online activity, defame, libel or slander you, or otherwise harm your reputation?'
+
+      Counternotice: >
+        Are you reporting a counter notice to someone's DMCA notice that complained that images, text, video, or other content you put online have infringed their copyrights?
+
+      CourtOrder:
+        'Report an order or injunction issued by a judge or court mandating the removal or blocking of, or disabling of access to, images, text, video, or other content posted online.'
+
+      LawEnforcementRequest:
+        'Has a law enforcement agency or an agent of a law enforcement agency request the removal of images, text, video, or other content posted online, or private information or data that would normally not be available to the public?'
+
+      PrivateInformation:
+        'Are you complaining that images, text, video, or other content posted online reveal your private information or otherwise violate your privacy?'
+
+      Other:
+        'Does the cease and desist letter you are reporting not meet any of the descriptions above?'
+
+      GovernmentRequest:
+        'Has a government agency or an agent of a government agency request the removal of images, text, video, or other content posted online, or private information or data that would normally not be available to the public?'
+
+      Counterfeit:
+        'Are you a brand owner or brand representative requesting the removal of allegedly counterfeit content?'
+
+    roles:
+      title:
+        LawEnforcementRequest:
+          Principal:
+            'Sending Agency, Department or Branch'
+      header_intro:
+        Principal:
+          'Enter information about the person or company whose rights are the subject of the takedown notice.'
