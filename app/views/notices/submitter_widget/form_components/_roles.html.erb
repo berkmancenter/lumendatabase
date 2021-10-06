@@ -4,7 +4,8 @@
 <%= form.simple_fields_for(:entity_notice_roles) do |roles_form| %>
   <% role = roles_form.object.name.titleize %>
   <% custom_role_header_title = t("submitter_widget.roles.title.#{@notice.class.name}.#{role}", default: '') %>
-  <% custom_roles_header_intro = t("submitter_widget.roles.header_intro.#{role}", default: '') %>
+  <% custom_roles_header_intro = t("submitter_widget.roles.header_intro.#{@notice.class.name}.#{role}", default: '') %>
+  <% custom_roles_header_intro = t("submitter_widget.roles.header_intro.#{role}", default: '') unless custom_roles_header_intro.present? %>
   <% role_header_title = custom_role_header_title.present? ? custom_role_header_title : role %>
 
   <%# don't titleize the role until after the following line or it will break the css selector %>
@@ -23,7 +24,7 @@
         <%= entity_form.input :name, label: "Name",
           input_html: placeholder_text(current_user, role, :name) %>
         <%= entity_form.input :kind,
-          { label: "#{role} Type", prompt: nil, collection: Entity::KINDS }
+          { label: 'Type', prompt: nil, collection: Entity::KINDS }
             .merge(placeholder_kind(current_user, role))
         %>
       </div>

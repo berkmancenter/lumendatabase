@@ -83,7 +83,9 @@ class SubmitterWidgetNoticesController < NoticesController
   end
 
   def default_kind_based_on_role(role)
-    if role == 'issuing_court' || (role == 'principal' && @notice.class == LawEnforcementRequest)
+    if role == 'issuing_court' ||
+       (role == 'principal' && @notice.class == LawEnforcementRequest) ||
+       (role == 'principal' && @notice.class == GovernmentRequest)
       'organization'
     else
       'individual'
