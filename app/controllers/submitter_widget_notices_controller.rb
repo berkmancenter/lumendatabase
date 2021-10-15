@@ -35,6 +35,8 @@ class SubmitterWidgetNoticesController < NoticesController
     if @notice.valid?
       @notice.save
       flash.notice = 'Notice created! Thank you, it will be reviewed and published on the Lumen database website.'
+
+      SubmitterWidgetMailer.send_submitted_notice_copy(@notice).deliver_later
     else
       Rails.logger.warn "Could not create notice with params: #{params}"
       flash.alert = 'Notice creation failed. See errors below.'

@@ -311,6 +311,7 @@ RailsAdmin.config do |config|
       field :entity
       field :roles
       field :full_notice_only_researchers_entities
+      field :submissions_forward_email
     end
   end
 
@@ -402,6 +403,7 @@ RailsAdmin.config do |config|
 
     edit do
       field :email
+      field :submissions_forward_email
       field :approved
       field :entity_url
       field :description
