@@ -1,11 +1,9 @@
 class SubmitterWidgetNoticesController < NoticesController
   layout 'submitter_widget'
+  before_action :before_actions
 
   def new
-    response.headers.delete 'X-Frame-Options'
-
     @display_models = Notice.display_models - [DataProtection]
-    @widget_public_key = params[:widget_public_key]
 
     (render :submission_disabled and return) unless allowed_to_submit?
     (render 'notices/submitter_widget/select_type' and return) if params[:type].blank?
@@ -16,10 +14,6 @@ class SubmitterWidgetNoticesController < NoticesController
   end
 
   def create
-    response.headers.delete 'X-Frame-Options'
-
-    @widget_public_key = params[:widget_public_key]
-
     unless authorized_to_create?
       Rails.logger.warn "Could not auth user with params: #{params}"
       flash.alert = 'Something went wrong. Contact a website administrator.'
@@ -90,5 +84,11 @@ class SubmitterWidgetNoticesController < NoticesController
     else
       'individual'
     end
+  end
+
+  def before_actions
+    # It will be an iframe and will run from different sites
+    response.headers.delete 'X-Frame-Options'
+    @widget_public_key = params[:widget_public_key]
   end
 end
