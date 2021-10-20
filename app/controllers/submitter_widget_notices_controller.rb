@@ -30,8 +30,6 @@ class SubmitterWidgetNoticesController < NoticesController
       get_notice_type(params), notice_params, submitter_widget_user
     ).build
 
-    @notice.review_required = true
-
     if @notice.valid?
       @notice.save
       flash.notice = 'Notice created! Thank you, it will be reviewed and published on the Lumen database website.'
