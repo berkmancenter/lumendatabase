@@ -33,5 +33,8 @@
   <%= render 'notices/submitter_widget/form_components/roles',
              label: 'Trademark takedown notice',
              form: form %>
+
+  <%= recaptcha_tags %>
+
   <%= render 'notices/form_components/submit', form: form %>
 <% end %>

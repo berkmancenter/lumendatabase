@@ -11,7 +11,7 @@
 
   <section class="works">
     <h4><span>Step 2.</span> URLs of Allegedly Defamatory Material</h4>
-    <p>Please do not include links to unnecessary material. <b>Any URLs you enter will be republished on this site.</b></p>
+    <p>Please do not include links to unnecessary material. <b>Any URLs you enter will be republished on Lumen Database site.</b></p>
     <% form.object.works.each_with_index do |work, index| %>
       <%= form.simple_fields_for(:works) do |works_form| %>
         <div class="body-wrapper left">
@@ -27,5 +27,8 @@
   <%= render 'notices/submitter_widget/form_components/roles',
              label: 'Defamation takedown notice',
              form: form %>
+
+  <%= recaptcha_tags %>
+
   <%= render 'notices/form_components/submit', form: form %>
 <% end %>

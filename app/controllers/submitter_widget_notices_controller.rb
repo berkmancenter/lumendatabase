@@ -1,4 +1,6 @@
 class SubmitterWidgetNoticesController < NoticesController
+  include Recaptcha::ClientHelper
+
   layout 'submitter_widget'
   before_action :before_actions
 
@@ -23,6 +25,11 @@ class SubmitterWidgetNoticesController < NoticesController
     @notice = NoticeBuilder.new(
       get_notice_type(params), notice_params, submitter_widget_user
     ).build
+
+    unless verify_recaptcha(model: @notice)
+      flash.alert = 'Captcha verification failed, please try again.'
+      render 'notices/submitter_widget/new' and return
+    end
 
     if @notice.valid?
       @notice.save
