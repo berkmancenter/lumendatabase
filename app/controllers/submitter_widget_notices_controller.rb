@@ -5,6 +5,9 @@ class SubmitterWidgetNoticesController < NoticesController
   before_action :before_actions
 
   def new
+    # Iframe session won't be kept so we need to use GET params
+    flash[params[:flash]['type']] = params[:flash]['message'] if params[:flash]
+
     @display_models = Notice.display_models - [DataProtection]
 
     (render :submission_disabled and return) unless allowed_to_submit?
@@ -18,8 +21,10 @@ class SubmitterWidgetNoticesController < NoticesController
   def create
     unless authorized_to_create?
       Rails.logger.warn "Could not auth user with params: #{params}"
-      flash.alert = 'Something went wrong. Contact a website administrator.'
-      redirect_to_new_form and return
+      redirect_to_new_form({
+        type: 'alert',
+        message: 'Something went wrong. Contact a website administrator.'
+      }) and return
     end
 
     @notice = NoticeBuilder.new(
@@ -28,20 +33,24 @@ class SubmitterWidgetNoticesController < NoticesController
 
     unless verify_recaptcha(model: @notice)
       flash.alert = 'Captcha verification failed, please try again.'
-      render 'notices/submitter_widget/new' and return
+      strip_fixed_roles and render 'notices/submitter_widget/new' and return
     end
 
     if @notice.valid?
       @notice.save
-      flash.notice = 'Notice created! Thank you, it will be reviewed and published on the Lumen database website.'
 
       SubmitterWidgetMailer.send_submitted_notice_copy(@notice).deliver_later
+
+      redirect_to_new_form({
+        type: 'notice',
+        message: 'Notice created! Thank you, it will be reviewed and published on the Lumen Database website.'
+      }) and return
     else
       Rails.logger.warn "Could not create notice with params: #{params}"
       flash.alert = 'Notice creation failed. See errors below.'
     end
 
-    redirect_to_new_form
+    strip_fixed_roles and render 'notices/submitter_widget/new' and return
   end
 
   private
@@ -75,8 +84,8 @@ class SubmitterWidgetNoticesController < NoticesController
     params[key] || request.env["HTTP_X_#{key.upcase}"]
   end
 
-  def redirect_to_new_form
-    redirect_to new_submitter_widget_notice_path(widget_public_key: @widget_public_key)
+  def redirect_to_new_form(url_flash = nil)
+    redirect_to new_submitter_widget_notice_path(widget_public_key: @widget_public_key, flash: url_flash)
   end
 
   def submitter_widget_user
@@ -97,5 +106,9 @@ class SubmitterWidgetNoticesController < NoticesController
     # It will be an iframe and will run from different sites
     response.headers.delete 'X-Frame-Options'
     @widget_public_key = params[:widget_public_key]
+  end
+
+  def strip_fixed_roles
+    @notice.entity_notice_roles = @notice.entity_notice_roles.reject { |entity_notice_role| %w[submitter recipient].include?(entity_notice_role.name) }
   end
 end
