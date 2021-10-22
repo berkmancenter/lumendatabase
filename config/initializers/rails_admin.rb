@@ -311,7 +311,7 @@ RailsAdmin.config do |config|
       field :entity
       field :roles
       field :full_notice_only_researchers_entities
-      field :submissions_forward_email
+      field :widget_submissions_forward_email
     end
   end
 
