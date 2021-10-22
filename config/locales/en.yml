@@ -161,7 +161,7 @@ en:
   submitter_widget:
     type_descriptions:
       DMCA:
-        'Complain that images, text, video, or other content posted online infringe your copyrights.'
+        'Are you a copyright holder or a legal representative of a copyright holder requesting the removal of images, text, video, or other content posted online that allegedly infringe your copyrights?'
 
       Trademark:
         'Are you complaining that images, text, video, other content posted online, or some other form of online activity, infringe your trademark(s)?'
@@ -173,19 +173,19 @@ en:
         Are you reporting a counter notice to someone's DMCA notice that complained that images, text, video, or other content you put online have infringed their copyrights?
 
       CourtOrder:
-        'Report an order or injunction issued by a judge or court mandating the removal or blocking of, or disabling of access to, images, text, video, or other content posted online.'
+        'Are you reporting an order or injunction issued by a judge or court mandating the removal or blocking of, or disabling of access to, images, text, video, or other content posted online?'
 
       LawEnforcementRequest:
-        'Has a law enforcement agency or an agent of a law enforcement agency request the removal of images, text, video, or other content posted online, or private information or data that would normally not be available to the public?'
+        'Are you reporting that a law enforcement agency or an agent of a law enforcement agency has requested the removal of images, text, video, or other content posted online?'
 
       PrivateInformation:
         'Are you complaining that images, text, video, or other content posted online reveal your private information or otherwise violate your privacy?'
 
       Other:
-        'Does the cease and desist letter you are reporting not meet any of the descriptions above?'
+        'Are you reporting a request to remove material online for a reason other than one of those listed above?'
 
       GovernmentRequest:
-        'Has a government agency or an agent of a government agency request the removal of images, text, video, or other content posted online, or private information or data that would normally not be available to the public?'
+        'Are you reporting that a government agency or an agent of a government agency has requested or ordered the removal of images, text, video, or other content posted online?'
 
       Counterfeit:
         'Are you a brand owner or brand representative requesting the removal of allegedly counterfeit content?'
@@ -195,6 +195,15 @@ en:
         LawEnforcementRequest:
           Principal:
             'Sending Agency, Department or Branch'
+        GovernmentRequest:
+          Principal:
+            'Government Branch or Agency'
       header_intro:
         Principal:
           'Enter information about the person or company whose rights are the subject of the takedown notice.'
+        LawEnforcementRequest:
+          Principal:
+            'Enter information about the law enforcement branch, department, or agency that has sent the takedown request.'
+        GovernmentRequest:
+          Principal:
+            'Enter information about the governmental branch, department, or agency that has sent the takedown request.'

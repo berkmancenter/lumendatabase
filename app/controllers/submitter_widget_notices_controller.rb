@@ -1,11 +1,14 @@
 class SubmitterWidgetNoticesController < NoticesController
+  include Recaptcha::ClientHelper
+
   layout 'submitter_widget'
+  before_action :before_actions
 
   def new
-    response.headers.delete 'X-Frame-Options'
+    # Iframe session won't be kept so we need to use GET params
+    flash[params[:flash]['type']] = params[:flash]['message'] if params[:flash]
 
     @display_models = Notice.display_models - [DataProtection]
-    @widget_public_key = params[:widget_public_key]
 
     (render :submission_disabled and return) unless allowed_to_submit?
     (render 'notices/submitter_widget/select_type' and return) if params[:type].blank?
@@ -16,31 +19,38 @@ class SubmitterWidgetNoticesController < NoticesController
   end
 
   def create
-    response.headers.delete 'X-Frame-Options'
-
-    @widget_public_key = params[:widget_public_key]
-
     unless authorized_to_create?
       Rails.logger.warn "Could not auth user with params: #{params}"
-      flash.alert = 'Something went wrong. Contact a website administrator.'
-      redirect_to_new_form and return
+      redirect_to_new_form({
+        type: 'alert',
+        message: 'Something went wrong. Contact a website administrator.'
+      }) and return
     end
 
     @notice = NoticeBuilder.new(
       get_notice_type(params), notice_params, submitter_widget_user
     ).build
 
-    @notice.review_required = true
+    unless verify_recaptcha(model: @notice)
+      flash.alert = 'Captcha verification failed, please try again.'
+      strip_fixed_roles and render 'notices/submitter_widget/new' and return
+    end
 
     if @notice.valid?
       @notice.save
-      flash.notice = 'Notice created! Thank you, it will be reviewed and published on the Lumen database website.'
+
+      SubmitterWidgetMailer.send_submitted_notice_copy(@notice).deliver_later
+
+      redirect_to_new_form({
+        type: 'notice',
+        message: 'Notice created! Thank you, it will be reviewed and published on the Lumen Database website.'
+      }) and return
     else
       Rails.logger.warn "Could not create notice with params: #{params}"
       flash.alert = 'Notice creation failed. See errors below.'
     end
 
-    redirect_to_new_form
+    strip_fixed_roles and render 'notices/submitter_widget/new' and return
   end
 
   private
@@ -74,8 +84,8 @@ class SubmitterWidgetNoticesController < NoticesController
     params[key] || request.env["HTTP_X_#{key.upcase}"]
   end
 
-  def redirect_to_new_form
-    redirect_to new_submitter_widget_notice_path(widget_public_key: @widget_public_key)
+  def redirect_to_new_form(url_flash = nil)
+    redirect_to new_submitter_widget_notice_path(widget_public_key: @widget_public_key, flash: url_flash)
   end
 
   def submitter_widget_user
@@ -83,10 +93,22 @@ class SubmitterWidgetNoticesController < NoticesController
   end
 
   def default_kind_based_on_role(role)
-    if role == 'issuing_court' || (role == 'principal' && @notice.class == LawEnforcementRequest)
+    if role == 'issuing_court' ||
+       (role == 'principal' && @notice.class == LawEnforcementRequest) ||
+       (role == 'principal' && @notice.class == GovernmentRequest)
       'organization'
     else
       'individual'
     end
+  end
+
+  def before_actions
+    # It will be an iframe and will run from different sites
+    response.headers.delete 'X-Frame-Options'
+    @widget_public_key = params[:widget_public_key]
+  end
+
+  def strip_fixed_roles
+    @notice.entity_notice_roles = @notice.entity_notice_roles.reject { |entity_notice_role| %w[submitter recipient].include?(entity_notice_role.name) }
   end
 end
