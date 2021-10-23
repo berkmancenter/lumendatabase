@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [21.10a](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.10a) - 2021-10-23
+### Changed
+* Made flash messages stop using the session in the submitter widget submission form.
+
 ## [21.10](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.10) - 2021-10-22
 ### Added
 * Added the submitter JavaScript widget.
