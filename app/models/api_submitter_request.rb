@@ -32,6 +32,7 @@ class ApiSubmitterRequest < ApplicationRecord
     password = SecureRandom.hex
     new_user = User.create!(
       email: self.email,
+      widget_submissions_forward_email: self.submissions_forward_email,
       roles: [Role.submitter],
       password: password,
       entity: new_entity

@@ -6,7 +6,7 @@ class SubmitterWidgetNoticesController < NoticesController
 
   def new
     # Iframe session won't be kept so we need to use GET params
-    flash[params[:flash]['type']] = params[:flash]['message'] if params[:flash]
+    flash[params[:flash_message]['type']] = params[:flash_message]['message'] if params[:flash_message]
 
     @display_models = Notice.display_models - [DataProtection]
 
@@ -85,7 +85,7 @@ class SubmitterWidgetNoticesController < NoticesController
   end
 
   def redirect_to_new_form(url_flash = nil)
-    redirect_to new_submitter_widget_notice_path(widget_public_key: @widget_public_key, flash: url_flash)
+    redirect_to new_submitter_widget_notice_path(widget_public_key: @widget_public_key, flash_message: url_flash)
   end
 
   def submitter_widget_user

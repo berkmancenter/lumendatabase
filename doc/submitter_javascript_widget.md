@@ -33,6 +33,6 @@ If you want to submit test notices you can use our test instance of the Lumen Da
 
 If possible, avoid submitting any dummy data to the live site, please 😉.
 ## Demo
-To see a live demo of the widget visit this page: https://lumendatabase.org/submitter_widget_demo. The source code of the demo is here: https://github.com/berkmancenter/lumendatabase/blob/master/public/submitter_widget_demo/index.html. Feel free to use the form and submit new notices, they will be published on our test instance of the Lumen Database: https://api-beta.lumendatabase.org.
+To see a live demo of the widget visit this page: https://lumendatabase.org/submitter_widget_demo/index.html. The source code of the demo is here: https://github.com/berkmancenter/lumendatabase/blob/master/public/submitter_widget_demo/index.html. Feel free to use the form and submit new notices, they will be published on our test instance of the Lumen Database: https://api-beta.lumendatabase.org.
 ## Need help?
 If you need help with integrating the widget create a new issue here: https://github.com/berkmancenter/lumendatabase/issues.
