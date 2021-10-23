@@ -6,7 +6,7 @@ class SubmitterWidgetNoticesController < NoticesController
 
   def new
     # Iframe session won't be kept so we need to use GET params
-    flash[params[:flash_message]['type']] = params[:flash_message]['message'] if params[:flash_message]
+    flash.now[params[:flash_message]['type']] = params[:flash_message]['message'] if params[:flash_message]
 
     @display_models = Notice.display_models - [DataProtection]
 
