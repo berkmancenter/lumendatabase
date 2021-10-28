@@ -321,6 +321,7 @@ RailsAdmin.config do |config|
       field :entity
       field :roles
       field :created_at
+      field :full_notice_time_limit
     end
   end
 
