@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [21.10d](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.10d) - 2021-10-28
+### Added
+* Added the full_notice_time_limit field to the users list view in the admin.
+
 ## [21.10c](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.10c) - 2021-10-28
 ### Added
 * Allowed to sort users by a role in the admin.
