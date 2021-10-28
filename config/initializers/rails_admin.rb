@@ -313,6 +313,15 @@ RailsAdmin.config do |config|
       field :full_notice_only_researchers_entities
       field :widget_submissions_forward_email
     end
+
+    list do
+      scopes [nil] + Role::NAMES.sort.map { |role| "#{role}s" }
+
+      field :email
+      field :entity
+      field :roles
+      field :created_at
+    end
   end
 
   config.model 'TokenUrl' do
