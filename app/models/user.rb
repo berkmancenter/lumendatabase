@@ -23,6 +23,11 @@ class User < ApplicationRecord
     token_urls.where(valid_forever: false).destroy_all
   end
 
+  # == Scopes ===============================================================
+  Role::NAMES.each do |role|
+    scope "#{role}s", -> { joins(:roles).where(roles: { name: role }) }
+  end
+
   # == Instance Methods =====================================================
   def role?(role)
     roles.include?(role)
