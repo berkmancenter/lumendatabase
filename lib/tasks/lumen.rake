@@ -7,6 +7,7 @@ require 'comfy/blog_post_factory'
 require 'loggy'
 require 'court_order_reporter'
 require 'yt_importer/yt_importer'
+require 'fileutils'
 
 namespace :lumen do
   desc 'Delete elasticsearch index'
@@ -907,5 +908,48 @@ where works.id in (
     new_mentions.reverse!
 
     MediaMention.import new_mentions
+  end
+
+  desc 'Export gov requests'
+  task export_gov_requests: :environment do
+    loggy = Loggy.new('rake lumen:archive_expired_token_urls', true)
+
+    batch_size = 100
+
+    govs_dir = Rails.root.join('public')
+
+    json_file = File.open("#{govs_dir}/notices.json", 'w+')
+
+    json_file.write('[')
+
+    i = 1
+    GovernmentRequest.where('spam=false and hidden=false and published=true and rescinded=false').find_in_batches(batch_size: batch_size) do |notices|
+      # Force garbage collection to avoid OOM
+      GC.start
+      notices.each do |notice|
+        begin
+          json_file.write(NoticeSerializerProxy.new(notice).to_json)
+          json_file.write(',')
+
+          supporting_docs = notice.file_uploads.where(kind: 'supporting')
+          if supporting_docs.any?
+            notice_dir = "#{govs_dir}/#{notice.id}"
+            FileUtils.mkdir_p(notice_dir)
+            supporting_docs.each do |file_upload|
+              FileUtils.cp(file_upload.file.path, notice_dir)
+            end
+          end
+        rescue StandardError => e
+          puts "Rescued: #{e.inspect}"
+        end
+
+        loggy.info i.to_s
+        i += 1
+      end
+    end
+
+    json_file.write(']')
+
+    json_file.close
   end
 end
