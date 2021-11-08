@@ -8,6 +8,7 @@ require 'loggy'
 require 'court_order_reporter'
 require 'yt_importer/yt_importer'
 require 'fileutils'
+require 'uri'
 
 namespace :lumen do
   desc 'Delete elasticsearch index'
@@ -951,5 +952,55 @@ where works.id in (
     json_file.write(']')
 
     json_file.close
+  end
+
+  desc 'Feed notices with empty works'
+  task feed_notices_with_empty_works: :environment do
+    loggy = Loggy.new('rake lumen:feed_notices_with_empty_works', true)
+
+    batch_size = 100
+
+    i = 0
+
+    Notice.where('spam=false and hidden=false and published=true and rescinded=false').find_in_batches(batch_size: batch_size) do |notices|
+      # Force garbage collection to avoid OOM
+      GC.start
+      notices.each do |notice|
+        i += 1
+        loggy.info "Processing #{notice.id} i:#{i}"
+
+        begin
+          next if notice.works.none?
+          next if notice.file_uploads.none?
+          next if notice.infringing_urls.any?
+          next if notice.copyrighted_urls.any?
+
+          urls = []
+          notice.file_uploads.each do |file_upload|
+            content = File.read(file_upload.file.path)
+            if content.include? 'url_box'
+              file_urls = content.scan(/^url_box:(.+?)\r\n/).flatten.select { |url_box_result| url_box_result.strip =~ URI::DEFAULT_PARSER.make_regexp }
+              urls.concat file_urls
+            end
+          end
+
+          urls.uniq!
+          urls = urls.compact.collect(&:strip)
+
+          if urls.any?
+            loggy.info "Fixing #{notice.id} i:#{i}"
+            new_infringing_urls = urls.map do |url|
+              existing = InfringingUrl.where('url=? OR url_original=?', url, url).first
+              existing || InfringingUrl.create!(url: url)
+            end
+
+            notice.works.first.infringing_urls = new_infringing_urls
+            notice.save!
+          end
+        rescue StandardError => e
+          loggy.error "Rescued: #{e.inspect}"
+        end
+      end
+    end
   end
 end
