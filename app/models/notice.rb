@@ -106,6 +106,7 @@ class Notice < ApplicationRecord
   has_many :copyrighted_urls, through: :works, index_errors: true
 
   has_many :token_urls, dependent: :destroy
+  has_many :archived_token_urls, dependent: :destroy
   has_and_belongs_to_many :relevant_questions
   has_one :documents_update_notification_notice
   has_many :file_uploads
@@ -144,6 +145,9 @@ class Notice < ApplicationRecord
   after_destroy do
     __elasticsearch__.delete_document ignore: 404
   end
+
+  # == Scopes ===============================================================
+  scope :top_notices_token_urls, -> { joins(:archived_token_urls).select('notices.*, COUNT(archived_token_urls.id) AS counted_archived_token_urls').group('notices.id') }
 
   # == Class Methods ========================================================
   def self.label
@@ -362,6 +366,10 @@ class Notice < ApplicationRecord
 
   def restricted_to_researchers?
     submitter&.full_notice_only_researchers
+  end
+
+  def token_urls_count
+    archived_token_urls.count
   end
 
   private
