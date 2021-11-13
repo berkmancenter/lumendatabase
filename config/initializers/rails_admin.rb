@@ -4,6 +4,7 @@ require 'rails_admin/config/actions/pdf_requests'
 require 'rails_admin/config/actions/statistics'
 require 'rails_admin/config/actions/approve_api_submitter_request'
 require 'rails_admin/config/actions/reject_api_submitter_request'
+require 'rails_admin/config/actions/top_notices_token_urls'
 require 'rails_admin/config/fields/types/datetime_timezoned'
 
 RailsAdmin.config do |config|
@@ -49,6 +50,7 @@ RailsAdmin.config do |config|
     statistics
     approve_api_submitter_request
     reject_api_submitter_request
+    top_notices_token_urls
   end
 
   ['Notice', Notice::TYPES].flatten.each do |notice_type|
@@ -88,6 +90,7 @@ RailsAdmin.config do |config|
         field :webform
         field :views_overall
         field :views_by_notice_viewer
+        field :token_urls_count
       end
 
       show do

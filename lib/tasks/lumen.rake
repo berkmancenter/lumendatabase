@@ -7,6 +7,8 @@ require 'comfy/blog_post_factory'
 require 'loggy'
 require 'court_order_reporter'
 require 'yt_importer/yt_importer'
+require 'fileutils'
+require 'uri'
 
 namespace :lumen do
   desc 'Delete elasticsearch index'
@@ -907,5 +909,98 @@ where works.id in (
     new_mentions.reverse!
 
     MediaMention.import new_mentions
+  end
+
+  desc 'Export gov requests'
+  task export_gov_requests: :environment do
+    loggy = Loggy.new('rake lumen:archive_expired_token_urls', true)
+
+    batch_size = 100
+
+    govs_dir = Rails.root.join('public')
+
+    json_file = File.open("#{govs_dir}/notices.json", 'w+')
+
+    json_file.write('[')
+
+    i = 1
+    GovernmentRequest.where('spam=false and hidden=false and published=true and rescinded=false').find_in_batches(batch_size: batch_size) do |notices|
+      # Force garbage collection to avoid OOM
+      GC.start
+      notices.each do |notice|
+        begin
+          json_file.write(NoticeSerializerProxy.new(notice).to_json)
+          json_file.write(',')
+
+          supporting_docs = notice.file_uploads.where(kind: 'supporting')
+          if supporting_docs.any?
+            notice_dir = "#{govs_dir}/#{notice.id}"
+            FileUtils.mkdir_p(notice_dir)
+            supporting_docs.each do |file_upload|
+              FileUtils.cp(file_upload.file.path, notice_dir)
+            end
+          end
+        rescue StandardError => e
+          puts "Rescued: #{e.inspect}"
+        end
+
+        loggy.info i.to_s
+        i += 1
+      end
+    end
+
+    json_file.write(']')
+
+    json_file.close
+  end
+
+  desc 'Feed notices with empty works'
+  task feed_notices_with_empty_works: :environment do
+    loggy = Loggy.new('rake lumen:feed_notices_with_empty_works', true)
+
+    batch_size = 100
+
+    i = 0
+
+    Notice.where('spam=false and hidden=false and published=true and rescinded=false').find_in_batches(batch_size: batch_size) do |notices|
+      # Force garbage collection to avoid OOM
+      GC.start
+      notices.each do |notice|
+        i += 1
+        loggy.info "Processing #{notice.id} i:#{i}"
+
+        begin
+          next if notice.works.none?
+          next if notice.file_uploads.none?
+          next if notice.infringing_urls.any?
+          next if notice.copyrighted_urls.any?
+
+          urls = []
+          notice.file_uploads.each do |file_upload|
+            content = File.read(file_upload.file.path)
+            if content.include? 'url_box'
+              file_urls = content.scan(/^url_box:(.+?)\r\n/).flatten.select { |url_box_result| url_box_result.strip =~ URI::DEFAULT_PARSER.make_regexp }
+              urls.concat file_urls
+            end
+          end
+
+          urls.uniq!
+          urls = urls.compact.collect(&:strip)
+
+          if urls.any?
+            loggy.info "Fixing #{notice.id} i:#{i}"
+            new_infringing_urls = urls.map do |url|
+              existing = InfringingUrl.where('url=? OR url_original=?', url, url).first
+              existing || InfringingUrl.create!(url: url)
+            end
+
+            notice.works.first.infringing_urls = new_infringing_urls
+            notice.save!
+          end
+        rescue StandardError => e
+          loggy.error "Rescued: #{e.inspect}"
+        end
+      end
+    end
   end
 end
