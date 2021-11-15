@@ -1,5 +1,4 @@
 require 'loggy'
-require 'mysql2'
 require 'yt_importer/mapping/html/counterfeit'
 require 'yt_importer/mapping/html/defamation'
 require 'yt_importer/mapping/html/other_legal'
@@ -13,12 +12,6 @@ module YtImporter
   class YtImporter
     FILES_DIRECTORY = ENV['BASE_DIRECTORY']
     IMPORT_FILE_BATCH_SIZE = 500
-    READLEVELS = {
-      '3' => :hidden,
-      '8' => :hidden,
-      '9' => :spam,
-      '10' => :rescinded
-    }.freeze
 
     def initialize
       @logger = Loggy.new('YtImporter', true)
@@ -69,7 +62,6 @@ module YtImporter
     end
 
     def import_notices
-      connect_to_legacy_database
       @number_to_import = `wc -l < #{import_files_list_file}`.strip.to_i
       @number_imported += 1
 
@@ -77,9 +69,6 @@ module YtImporter
         file.each_slice(IMPORT_FILE_BATCH_SIZE) do |lines|
           lines.each do |file_to_process|
             import_single_notice(file_to_process.strip)
-
-            # To avoid "Commands out of sync; you can't run this command now" errors
-            @legacy_database_connection.abandon_results!
           end
         end
       end
@@ -136,12 +125,9 @@ module YtImporter
         return
       end
 
-      data_from_legacy_database = get_file_data_from_legacy_database(file_to_process)
-
       file_creation_time = File.ctime(file_to_process)
 
       notice_params = {
-        original_notice_id: data_from_legacy_database['NoticeID'],
         title: mapped_notice_data.title,
         subject: mapped_notice_data.subject,
         source: mapped_notice_data.source,
@@ -155,9 +141,8 @@ module YtImporter
         works: mapped_notice_data.works,
         review_required: false,
         topics: mapped_notice_data.topics,
-        rescinded: rescinded?(data_from_legacy_database['ReadLevel']),
-        hidden: hidden?(data_from_legacy_database['ReadLevel']),
-        submission_id: data_from_legacy_database['SubmissionID'],
+        rescinded: false,
+        hidden: false,
         entity_notice_roles: mapped_notice_data.entity_notice_roles,
         body: mapped_notice_data.body,
         body_original: mapped_notice_data.body_original,
@@ -185,6 +170,16 @@ module YtImporter
       end
 
       new_notice.save!
+
+      new_notice.reload.id
+      new_notice.submission_id = new_notice.id
+      new_notice.original_notice_id = new_notice.id
+      new_notice.save!
+
+      yt_email_address_field = /^From:(.+?)\n/.match(file_data)&.to_s
+      yt_email_address = /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}\b/i.match(yt_email_address_field)&.to_s
+      YtSubmissionConfirmation.yt_submission_confirmed(new_notice, yt_email_address).deliver_later
+
       @number_imported += 1
     rescue StandardError, NameError => e
       @number_failed_imports += 1
@@ -193,47 +188,6 @@ module YtImporter
         file_to_process,
         "#{e.backtrace}: #{e.message} (#{e.class})"
       )
-    end
-
-    def connect_to_legacy_database
-      @legacy_database_connection = Mysql2::Client.new(
-        host: ENV['MYSQL_HOST'],
-        username: ENV['MYSQL_USERNAME'],
-        password: ENV['MYSQL_PASSWORD'],
-        port: ENV['MYSQL_PORT'].to_i,
-        database: ENV['MYSQL_DATABASE'],
-        reconnect: true,
-        read_timeout: 28800,
-        connect_timeout: 28800
-      )
-    end
-
-    def get_file_data_from_legacy_database(file_path)
-      # Let's just get the file path part that is present in the database
-      file_path_segments = file_path.split('/')
-      db_file_path = "#{file_path_segments[7]}/#{file_path_segments[8]}/#{file_path_segments[9]}/#{file_path_segments[10]}/#{file_path_segments[11]}"
-      result_row = nil
-      results = @legacy_database_connection.query(legacy_database_query(db_file_path), stream: true, cache_rows: false)
-
-      results.each do |row|
-        result_row = row
-      end
-
-      result_row
-    end
-
-    def legacy_database_query(file_path)
-return <<EOSQL
-SELECT tNotice.NoticeID, tNotice.ReadLevel, rSub.sID AS SubmissionID
-FROM tNotice
-LEFT JOIN tNotImage all_documents
- ON all_documents.NoticeID = tNotice.NoticeID
-LEFT JOIN rSubmit rSub
- ON tNotice.NoticeID=rSub.sID
-WHERE all_documents.Location='#{file_path}'
-GROUP BY tNotice.NoticeID
-ORDER BY tNotice.NoticeID ASC
-EOSQL
     end
 
     def read_file(file)
@@ -253,14 +207,6 @@ EOSQL
         filename: filename,
         stacktrace: stacktrace
       )
-    end
-
-    def hidden?(readlevel)
-      READLEVELS[readlevel] == :hidden
-    end
-
-    def rescinded?(readlevel)
-      READLEVELS[readlevel] == :rescinded
     end
   end
 end
