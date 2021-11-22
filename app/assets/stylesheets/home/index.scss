@@ -34,9 +34,21 @@ section.home-search-form {
     padding: $form-padding;
     border-radius: 4px;
 
+    @include media($tablet) {
+      width: $home-search-input-w + ($form-padding*2) - 200px;
+    }
+
     input#search {
       font-size: $base-font-size + 1px;
       height: $home-search-input-h + 10px;
+
+      @include media($tablet) {
+        width: $home-search-input-w - 200px;
+      }
+
+      @include media($mobile) {
+        width: 100%;
+      }
     }
 
     div.submit {
@@ -129,7 +141,7 @@ section.home-search-form {
       border-top: 3px solid $home-background-color;
 
         @include media($mobile) {
-        border: 0;
+          border: 0;
         }
     }
   }
@@ -144,7 +156,6 @@ section.home-search-form {
     margin-bottom: 0.8em;
 
     a {
-      @include ellipsis;
       font-size: $base-font-size-small-1;
       font-weight: 600;
       text-decoration: none;

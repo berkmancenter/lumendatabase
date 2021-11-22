@@ -55,6 +55,11 @@ nav {
     padding-bottom: 25px;
   }
 
+  @include media($small-screen) {
+    display: block;
+    justify-content: inherit;
+  }
+
   @include media($tablet) {
     .nav-item, a {
       padding-top: 10px;
@@ -73,10 +78,20 @@ nav {
     display: flex;
     justify-content: flex-end;
     text-align: left;
+
+    @include media($small-screen) {
+      display: block;
+      justify-content: inherit;
+    }
   }
 
   .nav-item, a {
     padding: 25px 0px 25px 25px;
+  }
+
+  @include media($small-screen) {
+    display: block;
+    justify-content: inherit;
   }
 
   @include media($tablet) {

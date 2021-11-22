@@ -35,6 +35,10 @@ header.app {
 
   .nav-item {
     padding: 25px 0px;
+
+    @include media($small-screen) {
+      padding: 10px 0px;
+    }
   }
 
   a {
