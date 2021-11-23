@@ -857,7 +857,7 @@ where works.id in (
       # Force garbage collection to avoid OOM
       GC.start
       token_urls.each do |token_url|
-        ArchivedTokenUrl.create(token_url.attributes)
+        ArchivedTokenUrl.create(token_url.attributes.except('email'))
         token_url.destroy!
 
         loggy.info "Archived token url ##{token_url.id}"

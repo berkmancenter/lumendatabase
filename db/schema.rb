@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_17_184944) do
+ActiveRecord::Schema.define(version: 2021_11_23_114128) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,7 +67,6 @@ ActiveRecord::Schema.define(version: 2021_09_17_184944) do
   end
 
   create_table "archived_token_urls", force: :cascade do |t|
-    t.string "email"
     t.string "token"
     t.bigint "notice_id"
     t.bigint "user_id"
@@ -79,7 +78,6 @@ ActiveRecord::Schema.define(version: 2021_09_17_184944) do
     t.datetime "updated_at", null: false
     t.string "ip"
     t.index ["documents_notification"], name: "index_archived_token_urls_on_documents_notification"
-    t.index ["email"], name: "index_archived_token_urls_on_email"
     t.index ["notice_id"], name: "index_archived_token_urls_on_notice_id"
     t.index ["token"], name: "index_archived_token_urls_on_token"
     t.index ["user_id"], name: "index_archived_token_urls_on_user_id"

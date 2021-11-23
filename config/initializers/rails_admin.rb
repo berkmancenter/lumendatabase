@@ -333,7 +333,7 @@ RailsAdmin.config do |config|
   end
 
   config.model 'ArchivedTokenUrl' do
-    token_url_config
+    archived_token_url_config
   end
 
   config.model 'RiskTriggerCondition' do
@@ -518,6 +518,26 @@ RailsAdmin.config do |config|
         required false
       end
       field :user
+      field :notice do
+        required true
+      end
+      field :expiration_date
+      field :valid_forever
+      field :documents_notification
+    end
+  end
+
+  def archived_token_url_config
+    list do
+      field :notice
+      field :expiration_date
+      field :valid_forever
+      field :views
+      field :created_at
+      field :ip
+    end
+
+    edit do
       field :notice do
         required true
       end

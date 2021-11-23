@@ -1,5 +1,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [21.11a](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.11a) - 2021-11-23
+### Fixed
+* Improved the UI on mobile devices.
+### Changed
+* Stopped archiving email addresses in token urls.
+
 ## [21.11](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.11) - 2021-11-13
 ### Added
 * Added a new admin action for listing notices by number of token urls requested.
