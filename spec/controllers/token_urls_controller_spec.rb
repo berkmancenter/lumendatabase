@@ -40,7 +40,7 @@ describe TokenUrlsController do
       post :create, params: params
 
       expect(TokenUrl.last.notice).to eq notice
-      expect(TokenUrl.last.email).to eq 'user@example.com'
+      expect(TokenUrl.last.email).to eq Hasher.hash512('user@example.com')
     end
 
     it 'fails to create a new token url when illegal params are provided' do
@@ -200,23 +200,23 @@ describe TokenUrlsController do
       it 'downcases a new token email address' do
         create_token 'uSer@eXample.com'
 
-        expect(TokenUrl.last.email).to eq 'user@example.com'
+        expect(TokenUrl.last.email).to eq Hasher.hash512('user@example.com')
       end
 
       it 'removes everything between "+" and "@"' do
         create_token 'user+notthistime@example.com'
 
-        expect(TokenUrl.last.email).to eq 'user@example.com'
+        expect(TokenUrl.last.email).to eq Hasher.hash512('user@example.com')
       end
 
       it 'removes periods if a new token email address is gmail' do
         create_token 'user.x.x.x@gmail.com'
 
-        expect(TokenUrl.last.email).to eq 'userxxx@gmail.com'
+        expect(TokenUrl.last.email).to eq Hasher.hash512('userxxx@gmail.com')
 
         create_token 'user.x.x.x@googlemail.com', '2.2.2.2'
 
-        expect(TokenUrl.last.email).to eq 'userxxx@googlemail.com'
+        expect(TokenUrl.last.email).to eq Hasher.hash512('userxxx@googlemail.com')
       end
     end
   end

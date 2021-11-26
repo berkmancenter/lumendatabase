@@ -507,7 +507,7 @@ RailsAdmin.config do |config|
       field :user
       field :notice
       field :expiration_date
-      field :valid_forever
+      field(:valid_forever) { label 'Permenent' }
       field :views
       field :created_at
       field :ip
@@ -522,7 +522,7 @@ RailsAdmin.config do |config|
         required true
       end
       field :expiration_date
-      field :valid_forever
+      field(:valid_forever) { label 'Permenent' }
       field :documents_notification
     end
   end

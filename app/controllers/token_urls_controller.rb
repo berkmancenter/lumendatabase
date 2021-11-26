@@ -1,5 +1,6 @@
 require 'uri'
 require 'net/http'
+require 'hasher'
 
 class TokenUrlsController < ApplicationController
   include Recaptcha::ClientHelper
@@ -19,6 +20,8 @@ class TokenUrlsController < ApplicationController
 
     clean_up_email_address
 
+    @original_email = @new_token_params[:email]
+    @new_token_params[:email] = Hasher.hash512(@new_token_params[:email])
     @token_url = TokenUrl.new(@new_token_params)
     @token_url.ip = request.remote_ip
     @notice = Notice.where(id: @new_token_params[:notice_id]).first
@@ -48,7 +51,7 @@ class TokenUrlsController < ApplicationController
 
   def run_post_create_actions
     TokenUrlsMailer.send_new_url_confirmation(
-      @new_token_params[:email], @token_url, @notice
+      @original_email, @token_url, @notice
     ).deliver_later
 
     redirect_to(
@@ -137,7 +140,7 @@ class TokenUrlsController < ApplicationController
       }
     end
 
-    if URI::MailTo::EMAIL_REGEXP.match(@new_token_params[:email]).nil?
+    if URI::MailTo::EMAIL_REGEXP.match(@original_email).nil?
       return {
         status: false,
         why: 'Use a valid email address.'
@@ -181,10 +184,10 @@ class TokenUrlsController < ApplicationController
   end
 
   def token_email_spam?
-    return true if BlockedTokenUrlDomain.where("'#{@new_token_params[:email]}' ~~* name").any?
+    return true if BlockedTokenUrlDomain.where("'#{@original_email}' ~~* name").any?
 
     begin
-      uri = URI("http://us.stopforumspam.org/api?email=#{@new_token_params[:email]}")
+      uri = URI("http://us.stopforumspam.org/api?email=#{@original_email}")
       res = Net::HTTP.get_response(uri)
 
       parsed_spam_response = Nokogiri::XML('<?xml version="1.0" encoding="utf-8"?>' + res.body)

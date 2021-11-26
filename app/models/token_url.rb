@@ -8,9 +8,6 @@ class TokenUrl < ApplicationRecord
   belongs_to :user
   belongs_to :notice
 
-  validates :email,
-            allow_blank: true,
-            format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :notice, presence: true
 
   def self.valid?(token, notice)
