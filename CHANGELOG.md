@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [21.12](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.12) - 2021-12-01
+### Changed
+* Anonymized email addresses and ips in token urls.
+
 ## [21.11](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.11) - 2021-11-13
 ### Added
 * Added a new admin action for listing notices by number of token urls requested.
