@@ -23,7 +23,7 @@ class TokenUrlsController < ApplicationController
     @original_email = @new_token_params[:email]
     @new_token_params[:email] = Hasher.hash512(@new_token_params[:email])
     @token_url = TokenUrl.new(@new_token_params)
-    @token_url.ip = request.remote_ip
+    @token_url.ip = Hasher.hash512(request.remote_ip)
     @notice = Notice.where(id: @new_token_params[:notice_id]).first
 
     authorize!(:create_access_token, @notice) unless @notice.nil?
@@ -227,7 +227,7 @@ class TokenUrlsController < ApplicationController
 
   def ip_recently_requested?
     TokenUrl
-       .where(ip: request.remote_ip)
+       .where(ip: Hasher.hash512(request.remote_ip))
        .where('created_at > ?', Time.now - IP_BETWEEN_REQUESTS_WAITING_TIME)
        .any?
   end
