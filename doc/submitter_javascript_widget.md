@@ -25,9 +25,15 @@ The widget code is located here: https://lumendatabase.org/assets/widgets/submit
   });
 </script>
 ```
-`element_selector` is just an HTML selector of the widget container.
+`element_selector`  
+is just an HTML selector of the widget container.
 
-`public_key` is your widget token that you received in the confirmation email. Make sure to use it, otherwise users won't be able to submit anything.
+`public_key`  
+is your widget token that you received in the confirmation email. Make sure to use it, otherwise users won't be able to submit anything.
+
+`visible_request_types`  
+(optional, default: `["DMCA", "Counterfeit", "Counternotice", "CourtOrder", "Defamation", "GovernmentRequest", "LawEnforcementRequest", "PrivateInformation", "Trademark", "Other"]
+`) is an array of request types presented to clients. Clients can choose what type of request they want to submit.
 ## Test environment
 If you want to submit test notices you can use our test instance of the Lumen Database: https://api-beta.lumendatabase.org/. Just request a new token here the same way as on the live site: https://api-beta.lumendatabase.org/api_submitter_requests/new and use the widget source code located here: https://api-beta.lumendatabase.org/assets/widgets/submitter.js. You can then submit dummy data to test your integration before making it live.
 

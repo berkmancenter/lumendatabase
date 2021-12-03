@@ -1,6 +1,6 @@
 <%= render 'notices/submitter_widget/form_components/header',
            label: 'DMCA takedown notice' %>
-<%= simple_form_for(notice, url: submitter_widget_notices_path(widget_public_key: @widget_public_key)) do |form| %>
+<%= simple_form_for(notice, url: submitter_widget_notices_path(widget_settings: @widget_settings)) do |form| %>
   <section class="notice-body">
     <h4><span>Step 1.</span> Describe the Notice</h4>
     <%= render 'notices/submitter_widget/form_components/main_metadata', form: form %>

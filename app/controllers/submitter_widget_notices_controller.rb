@@ -10,6 +10,11 @@ class SubmitterWidgetNoticesController < NoticesController
 
     @display_models = Notice.display_models - [DataProtection]
 
+    if widget_settings[:visible_request_types]
+      custom_types = widget_settings[:visible_request_types].split(',')
+      @display_models = @display_models.select { |display_model| custom_types.include?(display_model.name) }
+    end
+
     (render :submission_disabled and return) unless allowed_to_submit?
     (render 'notices/submitter_widget/select_type' and return) if params[:type].blank?
 
@@ -71,25 +76,19 @@ class SubmitterWidgetNoticesController < NoticesController
   end
 
   def allowed_to_submit?
-    widget_public_key && submitter_widget_user
+    widget_settings[:public_key] && submitter_widget_user
   end
 
   def authorized_to_create?
     allowed_to_submit?
   end
 
-  def widget_public_key
-    key = 'widget_public_key'
-
-    params[key] || request.env["HTTP_X_#{key.upcase}"]
-  end
-
   def redirect_to_new_form(url_flash = nil)
-    redirect_to new_submitter_widget_notice_path(widget_public_key: @widget_public_key, flash_message: url_flash)
+    redirect_to new_submitter_widget_notice_path(widget_settings: widget_settings, flash_message: url_flash)
   end
 
   def submitter_widget_user
-    User.find_by_widget_public_key(widget_public_key.to_s)
+    User.find_by_widget_public_key(widget_settings[:public_key].to_s)
   end
 
   def default_kind_based_on_role(role)
@@ -105,10 +104,14 @@ class SubmitterWidgetNoticesController < NoticesController
   def before_actions
     # It will be an iframe and will run from different sites
     response.headers.delete 'X-Frame-Options'
-    @widget_public_key = params[:widget_public_key]
+    @widget_settings = widget_settings
   end
 
   def strip_fixed_roles
     @notice.entity_notice_roles = @notice.entity_notice_roles.reject { |entity_notice_role| %w[submitter recipient].include?(entity_notice_role.name) }
+  end
+
+  def widget_settings
+    params.permit(widget_settings: [:public_key, :visible_request_types])[:widget_settings]
   end
 end
