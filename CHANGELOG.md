@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [21.12a](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.12a) - 2021-12-03
+### Added
+* Allowed to set a custom list of notice types in the submitter widget.
+
 ## [21.12](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.12) - 2021-12-01
 ### Changed
 * Anonymized email addresses and ips in token urls.

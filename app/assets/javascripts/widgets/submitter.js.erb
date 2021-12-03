@@ -21,7 +21,11 @@ var LumenSubmitterWidget = (function () {
       return false;
     }
 
-    this.SERVICE_URL = `<%= Rails.application.routes.url_helpers.new_submitter_widget_notice_url(host: Chill::Application.config.site_host) %>?widget_public_key=${this.options.public_key}`;
+    this.SERVICE_URL = `<%= Rails.application.routes.url_helpers.new_submitter_widget_notice_url(host: Chill::Application.config.site_host) %>?widget_settings[public_key]=${this.options.public_key}`;
+
+    if (this.options.visible_request_types) {
+      this.SERVICE_URL += `&widget_settings[visible_request_types]=${this.options.visible_request_types}`;
+    }
 
     if (this.options.element_selector) {
       this.dom_element = document.querySelector(this.options.element_selector);
