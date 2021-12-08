@@ -22,6 +22,7 @@ class Notice < ApplicationRecord
     TermSearch.new(:topics, 'topics.name', 'Topics'),
     TermSearch.new(:tags, :tag_list, 'Tags'),
     TermSearch.new(:jurisdictions, :jurisdiction_list, 'Jurisdictions'),
+    TermSearch.new(:entities_country_codes, :entities_country_codes, 'Entity Country Code'),
     TermSearch.new(:sender_name, :sender_name, 'Sender Name'),
     TermSearch.new(:principal_name, :principal_name, 'Principal Name'),
     TermSearch.new(:recipient_name, :recipient_name, 'Recipient Name'),
@@ -392,5 +393,9 @@ class Notice < ApplicationRecord
 
   def attorneys
     entity_notice_roles.attorneys.map(&:entity)
+  end
+
+  def entities_country_codes
+    entities.map(&:country_code).uniq
   end
 end
