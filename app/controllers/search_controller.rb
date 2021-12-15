@@ -18,6 +18,19 @@ class SearchController < ApplicationController
   URL_ROOT = nil
 
   def index
+    if request.format.html? && current_user.nil? && !Rails.env.test?
+      permitted = false
+
+      if session[:captcha_permission]
+        time_permission = session[:captcha_permission]
+        permitted = true if time_permission > Time.now
+      end
+
+      unless permitted
+        redirect_to(captcha_gateway_index_path(destination: CGI.escape(request.original_url))) and return
+      end
+    end
+
     @searcher = item_searcher
     @searchdata = @searcher.search
     @wrapped_instances = wrap_instances

@@ -74,6 +74,8 @@ Rails.application.routes.draw do
 
   resources :api_submitter_requests
 
+  resources :captcha_gateway, only: :index
+
   root to: 'home#index'
 
   comfy_route :cms_admin, path: "/cms_admin"

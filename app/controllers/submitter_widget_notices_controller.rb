@@ -1,6 +1,4 @@
 class SubmitterWidgetNoticesController < NoticesController
-  include Recaptcha::ClientHelper
-
   layout 'submitter_widget'
   before_action :before_actions
 
@@ -36,7 +34,8 @@ class SubmitterWidgetNoticesController < NoticesController
       get_notice_type(params), notice_params, submitter_widget_user
     ).build
 
-    unless verify_recaptcha(model: @notice)
+    unless verify_recaptcha(action: 'submitter_widget_new_notice', minimum_score: 0.5)
+      flash.delete(:recaptcha_error)
       flash.alert = 'Captcha verification failed, please try again.'
       strip_fixed_roles and render 'notices/submitter_widget/new' and return
     end

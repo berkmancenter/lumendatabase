@@ -71,6 +71,17 @@ class Rack::Attack
     req.ip if throttled_path?(req)
   end
 
+  # Captcha gateway gives access for 10 minutes, we don't need to let for more
+  # than 6 per hour then.
+  throttle('unauthed captcha gateway request limit per hour',
+           limit: 6,
+           period: 1.hour) do |req|
+    next if req.authenticated?
+
+    Rails.logger.debug "[rack-attack] request limit ip: #{req.ip}, content_type: #{req.content_type}"
+    req.ip if req.path.include?('captcha_gateway')
+  end
+
   self.throttled_response = lambda do |_env|
     Rails.logger.warn "[rack-attack] 429 issued for #{_env['rack.attack.match_discriminator']}"
     [

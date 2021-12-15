@@ -112,6 +112,10 @@ input[type="submit"]:not(.reset) {
   }
 }
 
+button[disabled] {
+  cursor: not-allowed;
+}
+
 input {
   @include placeholder {
     color: #AEB6C2;
