@@ -79,6 +79,19 @@ class FieldedSearchNoticeGenerator
     unmatched_notice.action_taken = "No"
   end
 
+  def for_entities_country_codes
+    matched_notice.entity_notice_roles = [FactoryBot.build(
+      :entity_notice_role, name: 'sender',
+      notice: matched_notice,
+      entity: FactoryBot.build(:entity, name: 'Entity', country_code: query)
+    )]
+    unmatched_notice.entity_notice_roles = [FactoryBot.build(
+      :entity_notice_role, name: 'sender',
+      notice: unmatched_notice,
+      entity: FactoryBot.build(:entity, name: 'Entity', country_code: 'N/A')
+    )]
+  end
+
   private
 
   def for_role_name(role_name)
