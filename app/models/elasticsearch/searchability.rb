@@ -61,6 +61,7 @@ module Searchability
               indexes :url, copy_to: 'base_search'
             end
           end
+          indexes :entities_country_codes, type: 'keyword'
 
           # facets
           indexes :sender_name_facet, type: 'keyword'
@@ -85,6 +86,10 @@ module Searchability
         exclusions[:works] ||= []
 
         out = as_json
+
+        attributes_to_skip = %w[review_required reviewer_id url_count
+                                webform notes views_overall views_by_notice_viewer]
+        out.except!(*attributes_to_skip)
 
         out['class_name'] = self.class.name
         out['sender_name_facet'] = sender_name
@@ -116,6 +121,7 @@ module Searchability
             copyrighted_urls: { only: [:url] }
           }
         )
+        out['entities_country_codes'] = entities_country_codes
 
         out
       end
