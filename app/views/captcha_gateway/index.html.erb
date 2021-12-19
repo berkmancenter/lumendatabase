@@ -1,0 +1,18 @@
+<% title 'Are you a human?' %>
+
+<article class="captcha-gateway">
+  <section class="body">
+    <div class="main">
+      <h4>We need to check if you are a human, wait a few seconds please.</h4>
+      <h4>You will be automatically redirected to your destination page.</h4>
+      <div>
+        <%= image_tag '/assets/captcha_loading.gif' %>
+      </div>
+
+      <form id="captcha-gateway-form" method="get">
+        <%= recaptcha_v3(action: 'gateway') %>
+        <input type="hidden" name="destination" value="<%= params[:destination] %>">
+      </form>
+    </div>
+  </section>
+</article>

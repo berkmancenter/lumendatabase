@@ -3,8 +3,6 @@ require 'net/http'
 require 'hasher'
 
 class TokenUrlsController < ApplicationController
-  include Recaptcha::ClientHelper
-
   IP_BETWEEN_REQUESTS_WAITING_TIME = 2.hours
 
   def new
@@ -133,7 +131,9 @@ class TokenUrlsController < ApplicationController
       }
     end
 
-    unless verify_recaptcha(model: @token_url)
+    unless verify_recaptcha(action: 'new_token_url', minimum_score: 0.5)
+      flash.delete(:recaptcha_error)
+
       return {
         status: false,
         why: 'Captcha verification failed, please try again.'

@@ -1,6 +1,4 @@
 class ApiSubmitterRequestsController < ApplicationController
-  include Recaptcha::ClientHelper
-
   def new
     @api_submitter_request = ApiSubmitterRequest.new
   end
@@ -56,13 +54,14 @@ class ApiSubmitterRequestsController < ApplicationController
   end
 
   def validate
-    unless verify_recaptcha(model: @api_submitter_request)
+    unless verify_recaptcha(action: 'new_submitter_request', minimum_score: 0.5)
+      flash.delete(:recaptcha_error)
+
       return {
         status: false,
         why: 'Captcha verification failed, please try again.'
       }
     end
-
     {
       status: true
     }

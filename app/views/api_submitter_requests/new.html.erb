@@ -35,7 +35,7 @@
           <%= f.input :entity_url, label: 'URL' %>
         </div>
 
-        <%= recaptcha_tags %>
+        <%= recaptcha_v3(action: 'new_submitter_request') %>
       </div>
 
       <div class="form-actions">

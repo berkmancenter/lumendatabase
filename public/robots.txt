@@ -8,15 +8,18 @@ Allow: /$
 Allow: /pages
 Disallow: /notices
 Disallow: /faceted_search
+Disallow: /captcha_gateway
 
 User-agent: ia_archiver
 Allow: /
 Disallow: /faceted_search
+Disallow: /captcha_gateway
 
 User-agent: *
 Disallow: /
 Disallow: /notices
 Disallow: /faceted_search
+Disallow: /captcha_gateway
 Allow: /pages
 
 Allow: /$
