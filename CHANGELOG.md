@@ -1,5 +1,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [21.12c](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.12c) - 2021-12-19
+### Added
+* Updated the `rails` gem.
+* Added reCAPTCHA to the search view.
+
 ## [21.12b](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.12b) - 2021-12-19
 ### Added
 * Added a new search filter to be able to search by entities country codes.
