@@ -29,6 +29,12 @@ class Rack::Attack
     req.admin?
   end
 
+  # Disable the API for users without tokens.
+  blocklist('unauthed api limit') do |req|
+    Rails.logger.debug "[rack-attack] api unauthed ip: #{req.ip}, req.env['HTTP_ACCEPT']: #{req.env['HTTP_ACCEPT']}, content_type: #{req.content_type}"
+    !req.authenticated? && json?(req)
+  end
+
   throttle('permissioned API limit',
            limit: 60,
            period: 1.minute) do |req|
@@ -37,16 +43,6 @@ class Rack::Attack
     Rails.logger.debug "[rack-attack] permissioned api limit ip: #{req.ip}"
 
     req.discriminator if (throttled_path?(req) || json?(req))
-  end
-
-  # Heavily throttle API users without tokens (but allow for trial exploration).
-  throttle('unauthed api limit',
-           limit: 5,
-           period: 24.hours) do |req|
-    next if req.authenticated?
-
-    Rails.logger.debug "[rack-attack] api limit ip: #{req.ip}, req.env['HTTP_ACCEPT']: #{req.env['HTTP_ACCEPT']}, content_type: #{req.content_type}"
-    req.ip if json?(req)
   end
 
   # Allow people to hit up to 10 notices in a minute (i.e. do a search and open

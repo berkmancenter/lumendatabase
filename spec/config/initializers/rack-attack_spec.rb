@@ -99,14 +99,14 @@ describe Rack::Attack, type: :request do
         expect(statuses).to eq([200])
       end
 
-      it 'allows requests to .json' do
+      it 'blocks requests to .json' do
         stub_nonauthentication
 
         limit.times do |i|
           get '/topics.json'
           statuses << response.status
         end
-        expect(statuses).to eq([200])
+        expect(statuses).to eq([403])
       end
 
       it 'allows requests to faceted_search', search: true do
@@ -126,16 +126,6 @@ describe Rack::Attack, type: :request do
 
         (limit + 1).times do |i|
           get "/notices/#{notice.id}"
-          statuses << response.status
-        end
-        expect(statuses).to eq([200, 429])
-      end
-
-      it 'blocks requests to .json' do
-        stub_nonauthentication
-
-        (limit + 1).times do |i|
-          get '/topics.json'
           statuses << response.status
         end
         expect(statuses).to eq([200, 429])
