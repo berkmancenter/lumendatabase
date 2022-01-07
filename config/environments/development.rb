@@ -88,6 +88,4 @@ Rails.application.configure do
 
   # Allow any hostname
   config.hosts.clear
-
-  config.autoload_paths += %W(#{config.root}/lib)
 end

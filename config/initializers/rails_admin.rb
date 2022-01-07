@@ -7,6 +7,10 @@ require 'rails_admin/config/actions/reject_api_submitter_request'
 require 'rails_admin/config/actions/top_notices_token_urls'
 require 'rails_admin/config/fields/types/datetime_timezoned'
 
+# Monkeypatches
+RailsAdmin::Config::Fields::Types::Datetime.prepend RailsAdmin::Config::Fields::Types::DatetimeTimezoned
+
+# Config
 RailsAdmin.config do |config|
   config.parent_controller = '::ApplicationController'
 
