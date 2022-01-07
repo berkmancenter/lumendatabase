@@ -38,7 +38,7 @@ feature 'home page' do
     layout = Comfy::Cms::Layout.find_by_label('blawg')
     blog = Comfy::Cms::Page.find_by_label('blog_entries')
     15.times do |i|
-      BlogPostFactory.new(site, layout, blog, seed: i).manufacture
+      Comfy::BlogPostFactory.new(site, layout, blog, seed: i).manufacture
     end
 
     visit root_path

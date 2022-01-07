@@ -4,7 +4,7 @@ require 'uri'
 module YtImporter
   module Mapping
     module PlainNew
-      class Base < Base
+      class Base < YtImporter::Mapping::Base
         def language
           get_single_line_field('Language')
         end

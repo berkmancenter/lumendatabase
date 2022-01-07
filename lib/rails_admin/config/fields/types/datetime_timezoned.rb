@@ -1,11 +1,11 @@
-require 'rails_admin/config/fields/base'
+require 'rails_admin/config/fields/types/datetime'
 require 'rails_admin/support/datetime'
 
 module RailsAdmin
   module Config
     module Fields
       module Types
-        class Datetime < RailsAdmin::Config::Fields::Base
+        module DatetimeTimezoned
           CUSTOM_RA_TIMEZONE = 'Eastern Time (US & Canada)'.freeze
 
           # Convert to the RA custom timezone

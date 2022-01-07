@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-require './lib/rack-attack/request' # defines helpful monkeypatches used here
+require './lib/rack/attack/request' # defines helpful monkeypatches used here
 
 def throttled_path?(req)
   [

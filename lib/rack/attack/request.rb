@@ -1,6 +1,6 @@
 # Upstream explicitly suggests using this class for monkeypatching:
 # https://github.com/kickstarter/rack-attack/blob/master/lib/rack/attack/request.rb .
-class Rack::Attack::Request
+class Rack::Attack::Request < ::Rack::Request
   LUMEN_REQ_PARAMS = 'action_dispatch.request.request_parameters'.freeze
   LUMEN_AUTH_TOKEN = 'authentication_token'.freeze
   LUMEN_HEADER = 'HTTP_X_AUTHENTICATION_TOKEN'.freeze

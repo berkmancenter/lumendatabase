@@ -28,7 +28,7 @@ feature 'CMS blog entries' do
   context 'archive' do
     it 'paginates blog entries' do
       15.times do |i|
-        BlogPostFactory.new(@site, @layout, @blog, seed: i).manufacture
+        Comfy::BlogPostFactory.new(@site, @layout, @blog, seed: i).manufacture
       end
 
       @blog.reload
@@ -57,7 +57,7 @@ feature 'CMS blog entries' do
 
     it 'displays only published blog entries' do
       2.times do |i|
-        BlogPostFactory.new(@site, @layout, @blog, seed: i).manufacture
+        Comfy::BlogPostFactory.new(@site, @layout, @blog, seed: i).manufacture
       end
       @blog.children.where(label: 'page_1').update(is_published: false)
 
@@ -69,7 +69,7 @@ feature 'CMS blog entries' do
     end
 
     it 'displays working links' do
-      BlogPostFactory.new(@site, @layout, @blog, seed: 0).manufacture
+      Comfy::BlogPostFactory.new(@site, @layout, @blog, seed: 0).manufacture
 
       @blog.reload
       visit @blog.full_path
@@ -80,7 +80,7 @@ feature 'CMS blog entries' do
 
     it 'sorts by date descending' do
       2.times do |i|
-        BlogPostFactory.new(@site, @layout, @blog, seed: i).manufacture
+        Comfy::BlogPostFactory.new(@site, @layout, @blog, seed: i).manufacture
       end
       @blog.reload
       # Switch around the expected creation dates, to make sure we're sorting
@@ -233,7 +233,7 @@ feature 'CMS blog entries' do
   context 'feed' do
     before :all do
       15.times do |i|
-        BlogPostFactory.new(@site, @layout, @blog, seed: i).manufacture
+        Comfy::BlogPostFactory.new(@site, @layout, @blog, seed: i).manufacture
       end
     end
 
@@ -279,7 +279,7 @@ feature 'CMS blog entries' do
   end
 
   def new_post
-    BlogPostFactory.new(@site, @layout, @blog).manufacture
+    Comfy::BlogPostFactory.new(@site, @layout, @blog).manufacture
     @blog.reload # critical to avoid intermittent failures
     @blog.children.first
   end

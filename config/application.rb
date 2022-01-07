@@ -1,5 +1,5 @@
 require_relative 'boot'
-require_relative '../lib/middleware/catch_json_parsing_errors'
+require_relative '../lib/catch_json_parsing_errors'
 
 require 'rails/all'
 require 'active_storage/engine'
@@ -13,7 +13,7 @@ module Chill
     # Ensuring that ActiveStorage routes are loaded before Comfy's globbing
     # route. Without this file serving routes are inaccessible.
     config.railties_order = [ActiveStorage::Engine, :main_app, :all]
-    #config.load_defaults 5.1
+    config.autoloader = :zeitwerk
 
     config.active_record.default_timezone = :utc
     I18n.config.enforce_available_locales = true
@@ -32,7 +32,12 @@ module Chill
 
     # Custom directories with classes and modules you want to be autoloadable.
     # config.autoload_paths += %W(#{config.root}/extras)
-    config.autoload_paths += %W(#{config.root}/app/models/elasticsearch)
+    additional_autoload_paths = %W(
+      #{config.root}/app/models/elasticsearch
+      #{config.root}/lib
+    )
+    config.autoload_paths += additional_autoload_paths
+    config.eager_load_paths += additional_autoload_paths
 
     # Only load the plugins named here, in the order given (default is alphabetical).
     # :all can be used as a placeholder for all plugins not explicitly named.
@@ -84,8 +89,10 @@ module Chill
       timestamp = datetime.strftime '%Y-%m-%d %H:%M:%S (%Z)'
       "#{timestamp} #{severity}: #{progname} #{msg}\n"
     end
+
     # Configuration settings
     config.x.api_documentation_link = "https://github.com/berkmancenter/lumendatabase/wiki/Lumen-API-Documentation"
+
     # Mailer settings
     config.default_sender = ENV['DEFAULT_SENDER'] || 'no-reply@example.com'
     config.return_path = ENV['RETURN_PATH'] || 'user@example.com'

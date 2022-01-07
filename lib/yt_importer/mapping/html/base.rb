@@ -4,7 +4,7 @@ require 'yt_importer/mapping/base'
 module YtImporter
   module Mapping
     module Html
-      class Base < Base
+      class Base < YtImporter::Mapping::Base
         def initialize(notice_text, data_from_legacy_database, raw_file_path)
           @notice_parsed = Nokogiri::HTML(notice_text)
           @notice_paragraphs = @notice_parsed.css('p').to_a

@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-require 'language'
-require 'recent_scope'
-require 'validates_automatically'
-
 class Notice < ApplicationRecord
   include Searchability
   include Elasticsearch::Model
