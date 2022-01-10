@@ -17,8 +17,8 @@ class Topic < ApplicationRecord
     order(:name)
   end
 
-  # See note in Entity for similar logic.
-  after_save { notices.update_all(updated_at: Time.now) }
+  # Force search reindex on related notices
+  after_update { NoticeUpdateCall.create!(caller_id: self.id, caller_type: 'topic') }
 
   def description_html
     MarkdownParser.render(description.to_s)

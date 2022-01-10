@@ -17,6 +17,8 @@ describe 'rake lumen:redact_and_reindex_works', type: :task, search: true do
     original_updated_at = n.updated_at
     task.execute
 
+    Rake::Task['lumen:mark_notices_to_reindex_after_relations_update'].execute
+
     n.reload
     expect(n.updated_at).to be > original_updated_at
   end

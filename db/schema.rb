@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_26_122821) do
+ActiveRecord::Schema.define(version: 2022_01_10_123931) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -346,6 +346,14 @@ ActiveRecord::Schema.define(version: 2021_11_26_122821) do
     t.string "import_set_name", limit: 1024
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "notice_update_calls", force: :cascade do |t|
+    t.integer "caller_id"
+    t.string "caller_type"
+    t.string "status"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "notices", id: :serial, force: :cascade do |t|

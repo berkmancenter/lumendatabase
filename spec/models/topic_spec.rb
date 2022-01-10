@@ -24,18 +24,27 @@ describe Topic, type: :model do
     it 'updates updated_at for every notice associated with a topic' do
       notice = create(:dmca)
 
+      notice.reload
+
       previous_updated_at = notice.updated_at
       topic = notice.topics.first
       topic.name = 'transparent change'
       topic.save
 
+      Rake::Task['lumen:mark_notices_to_reindex_after_relations_update'].execute
+
       notice.reload
-      second_updated_at = notice.updated_at
-      expect(second_updated_at).to be > previous_updated_at
+
+      expect(notice.updated_at).to be > previous_updated_at
+
+      previous_updated_at = notice.updated_at
 
       topic.update(name: 'Updatey McUpdateface')
+
+      Rake::Task['lumen:mark_notices_to_reindex_after_relations_update'].execute
+
       notice.reload
-      expect(notice.updated_at).to be > second_updated_at
+      expect(notice.updated_at).to be > previous_updated_at
     end
   end
 

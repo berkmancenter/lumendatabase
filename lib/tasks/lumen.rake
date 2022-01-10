@@ -1003,4 +1003,30 @@ where works.id in (
       end
     end
   end
+
+  desc 'Mark notices ready to reindex after relations update'
+  task mark_notices_to_reindex_after_relations_update: :environment do
+    loggy = Loggy.new('rake lumen:mark_notices_to_reindex_after_relations_update', true)
+
+    batch_size = 100
+
+    NoticeUpdateCall.where(status: 'new').each do |notice_update_call|
+      next unless ['work', 'entity', 'topic'].include?(notice_update_call.caller_type)
+
+      loggy.info "Processing NoticeUpdateCall id=#{notice_update_call.id}"
+
+      notice_update_call.update_attribute(:status, 'working')
+
+      loggy.info "Processing #{notice_update_call.caller_type} id=#{notice_update_call.caller_id}"
+
+      related_object = notice_update_call.caller_type.classify.constantize.find(notice_update_call.caller_id)
+      related_object.notices.find_in_batches(batch_size: batch_size) do |notices|
+        notices.each do |notice|
+          notice.touch
+        end
+      end
+
+      notice_update_call.update_attribute(:status, 'finished')
+    end
+  end
 end

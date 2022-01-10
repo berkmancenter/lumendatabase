@@ -22,6 +22,7 @@ class Work < ApplicationRecord
   validates :kind, length: { maximum: 255 }
 
   before_save :force_redactions
+  after_update :force_related_notices_reindex
   before_validation :fix_concatenated_urls, on: :create
 
   # Similar to the hack in EntityNoticeRole, because all validations are
@@ -111,11 +112,11 @@ class Work < ApplicationRecord
     # DeterminesWorkKind is intended for use here but disabled due to confusion
     # caused by mis-classified works.
     self.kind = 'Unspecified' if kind.blank?
+  end
 
-    # Force associated notices to be reindexed if the description has been
-    # updated (presumably redacted). This will keep redacted text out of the
-    # Elasticsearch index.
-    notices.update_all(updated_at: Time.now) if description_changed?
+  def force_related_notices_reindex
+    # Force search reindex on related notices
+    NoticeUpdateCall.create!(caller_id: self.id, caller_type: 'work') if saved_change_to_description?
   end
 
   instrument_method

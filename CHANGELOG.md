@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.01](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.01) - 2022-01-10
+### Changed
+* Made marking related notices on work/entity/topic updates run in a rake task.
+
 ## [21.12e](https://github.com/berkmancenter/lumendatabase/releases/tag/2021.12e) - 2021-12-19
 ### Changed
 * Disabled the API for anonymous users.

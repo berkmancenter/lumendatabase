@@ -456,6 +456,9 @@ RailsAdmin.config do |config|
   config.model 'YoutubeImportFileLocation' do
     visible false
   end
+  config.model 'NoticeUpdateCall' do
+    visible false
+  end
   config.model 'ActiveStorage::Blob' do
     visible false
   end
