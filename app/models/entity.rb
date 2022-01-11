@@ -56,7 +56,7 @@ class Entity < ApplicationRecord
 
   # == Callbacks ============================================================
   # Force search reindex on related notices
-  after_update { NoticeUpdateCall.create!(caller_id: self.id, caller_type: 'entity') }
+  after_update { NoticeUpdateCall.create!(caller_id: self.id, caller_type: 'entity') if self.saved_changes.any? }
 
   # == Class Methods ========================================================
   def self.submitters

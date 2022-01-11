@@ -18,7 +18,7 @@ class Topic < ApplicationRecord
   end
 
   # Force search reindex on related notices
-  after_update { NoticeUpdateCall.create!(caller_id: self.id, caller_type: 'topic') }
+  after_update { NoticeUpdateCall.create!(caller_id: self.id, caller_type: 'topic') if self.saved_changes.any? }
 
   def description_html
     MarkdownParser.render(description.to_s)
