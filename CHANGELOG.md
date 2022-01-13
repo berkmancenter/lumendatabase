@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.01a](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.01a) - 2022-01-13
+### Changed
+* Started using the `zeitwerk` autoloader.
+
 ## [22.01](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.01) - 2022-01-10
 ### Changed
 * Made marking related notices on work/entity/topic updates run in a rake task.
