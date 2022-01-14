@@ -328,6 +328,8 @@ describe DMCA, type: :model do
                 name: role_name
               )
 
+              notice.reload
+
               expect(notice.send(role_name)).to eq entity
             end
           end

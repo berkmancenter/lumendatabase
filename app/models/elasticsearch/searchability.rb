@@ -85,7 +85,7 @@ module Searchability
       define_method :as_indexed_json do |options|
         exclusions[:works] ||= []
 
-        out = as_json
+        out = as_json(except: [:jurisdiction_list, :regulation_list, :tag_list])
 
         attributes_to_skip = %w[review_required reviewer_id url_count
                                 webform notes views_overall views_by_notice_viewer]
@@ -100,11 +100,11 @@ module Searchability
         out['submitter_name'] = submitter_name
         out['submitter_country_code_facet'] = submitter_country_code
         out['submitter_country_code'] = submitter_country_code
-        out['tag_list_facet'] = tag_list
-        out['tag_list'] = tag_list
+        out['tag_list_facet'] = tags.collect(&:name)
+        out['tag_list'] = tags.collect(&:name)
         out['date_received_facet'] = date_received
-        out['jurisdiction_list_facet'] = jurisdiction_list
-        out['jurisdiction_list'] = jurisdiction_list
+        out['jurisdiction_list_facet'] = jurisdictions.collect(&:name)
+        out['jurisdiction_list'] = jurisdictions.collect(&:name)
         out['recipient_name_facet'] = recipient_name
         out['recipient_name'] = recipient_name
         out['country_code_facet'] = country_code

@@ -372,23 +372,27 @@ class Notice < ApplicationRecord
   private
 
   def submitters
-    entity_notice_roles.submitters.map(&:entity)
+    select_roles 'submitter'
   end
 
   def senders
-    entity_notice_roles.senders.map(&:entity)
+    select_roles 'sender'
   end
 
   def principals
-    entity_notice_roles.principals.map(&:entity)
+    select_roles 'principal'
   end
 
   def recipients
-    entity_notice_roles.recipients.map(&:entity)
+    select_roles 'recipient'
   end
 
   def attorneys
-    entity_notice_roles.attorneys.map(&:entity)
+    select_roles 'attorney'
+  end
+
+  def select_roles(role_name)
+    entity_notice_roles.select{ |entity_notice_role| entity_notice_role.name == role_name }.map(&:entity)
   end
 
   def entities_country_codes
