@@ -6,6 +6,7 @@ class Role < ApplicationRecord
     admin
     super_admin
     researcher
+    researcher_truncated_urls
     notice_viewer
   ].freeze
 

@@ -82,7 +82,7 @@ describe Ability do
     it_behaves_like 'a non-admin'
     it_behaves_like 'a user that can\'t generate new notice permanent token urls'
 
-    it "can submit to the API" do
+    it 'can submit to the API' do
       expect(subject.can? :submit, Notice).to be true
     end
   end
@@ -123,6 +123,16 @@ describe Ability do
     subject { Ability.new(build(:user, :researcher)) }
 
     it_behaves_like 'a user that can\'t generate new notice permanent token urls'
+  end
+
+  context "a researcher_truncated_urls" do
+    subject { Ability.new(build(:user, :researcher_truncated_urls)) }
+
+    it_behaves_like 'a user that can\'t generate new notice permanent token urls'
+
+    it "can't submit to the API" do
+      expect(subject.can? :submit, Notice).to be false
+    end
   end
 
   context "a researcher with the can_generate_permanent_notice_token_urls setting on" do

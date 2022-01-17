@@ -220,6 +220,10 @@ FactoryBot.define do
     trait :researcher do
       roles { [Role.researcher] }
     end
+
+    trait :researcher_truncated_urls do
+      roles { [Role.researcher_truncated_urls] }
+    end
   end
 
   factory :relevant_question do

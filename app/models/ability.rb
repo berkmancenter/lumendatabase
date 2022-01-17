@@ -85,6 +85,11 @@ class Ability
           (notice&.submitter&.full_notice_only_researchers && !user.allow_generate_permanent_tokens_researchers_only_notices)
       end
     end
+
+    # researcher_truncated_urls role
+    if user.role?(Role.researcher_truncated_urls)
+      can :read, Notice
+    end
   end
 
   private
