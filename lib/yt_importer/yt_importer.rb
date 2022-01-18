@@ -39,7 +39,7 @@ module YtImporter
     end
 
     def import_date_from
-      date = ENV['YT_IMPORT_DATE_FROM'] || YtImport&.last&.created_at&.in_time_zone(ENV['SERVER_TIME_ZONE'])&.strftime('%Y-%m-%d %H:%M:%S') || '2000-01-01 00:00:00'
+      date = ENV['YT_IMPORT_DATE_FROM'] || YtImport&.second_to_last&.created_at&.in_time_zone(ENV['SERVER_TIME_ZONE'])&.strftime('%Y-%m-%d %H:%M:%S') || '2000-01-01 00:00:00'
 
       " -newermt '#{date}'"
     end
