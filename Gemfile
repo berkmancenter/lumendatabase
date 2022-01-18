@@ -26,7 +26,6 @@ gem 'jquery-ui-rails'
 gem 'kaminari'
 gem 'lograge'
 gem 'mime-types'
-gem 'mysql2', '~> 0.5.3'
 gem 'oink'
 # Pinned because the next step is migrating to ActiveStorage.
 gem 'paperclip', '~> 5'
