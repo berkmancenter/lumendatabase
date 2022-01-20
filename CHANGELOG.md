@@ -1,8 +1,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.01f](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.01f) - 2022-01-20
+### Added
+* Started catching and logging `ActionController::UnknownFormat` errors.
+
 ## [22.01e](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.01e) - 2022-01-20
 ### Added
-* Started catching and logging ActionController::RoutingError errors.
+* Started catching and logging `ActionController::RoutingError` errors.
 
 ## [22.01d](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.01d) - 2022-01-18
 ### Changed

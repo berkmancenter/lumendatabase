@@ -79,6 +79,8 @@ class ApplicationController < ActionController::Base
     logger404s = Logger.new("#{Rails.root}/log/#{Rails.env}_404s.log")
     logger404s.error(exception) if exception
 
+    request.format = :json if request.format.instance_of?(Mime::NullType)
+
     respond_to do |format|
       format.html do
         render 'error_pages/404',
