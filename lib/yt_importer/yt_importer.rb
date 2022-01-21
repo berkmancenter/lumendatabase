@@ -14,7 +14,7 @@ module YtImporter
     IMPORT_FILE_BATCH_SIZE = 500
 
     def initialize
-      @logger = Loggy.new('YtImporter', true)
+      @logger = Loggy.new('YtImporter', true, true)
 
       if FILES_DIRECTORY.nil?
         @logger.info('The BASE_DIRECTORY env variable must be set to continue')

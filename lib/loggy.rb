@@ -1,7 +1,13 @@
 class Loggy
-  def initialize(prefix, output_too = false)
+  def initialize(prefix, output_too = false, only_output = false, custom_log_path = false)
     @prefix = prefix
     @output_too = output_too
+    @only_output = only_output
+    @logger_object = if custom_log_path
+                       Logger.new(custom_log_path)
+                     else
+                       Rails.logger
+                     end
   end
 
   def info(message)
@@ -20,7 +26,7 @@ class Loggy
     puts full_message(message) if @output_too
 
     decorated_logger_message = logger_message(message)
-    Rails.logger.send(level.to_sym, decorated_logger_message)
+    @logger_object.send(level.to_sym, decorated_logger_message) unless @only_output
   end
 
   def logger_message(message)

@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.01h](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.01h) - 2022-01-21
+### Changed
+* Allowed the `logger` helper to use custom log file locations.
+
 ## [22.01g](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.01g) - 2022-01-21
 ### Added
 * Started catching and logging requests with formats other than `html` and `json`.

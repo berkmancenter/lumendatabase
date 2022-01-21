@@ -837,7 +837,7 @@ where works.id in (
 
   desc 'Import YT notices'
   task import_yt_notices: :environment do
-    loggy = Loggy.new('rake lumen:import_yt_notices', true)
+    loggy = Loggy.new('rake lumen:import_yt_notices', true, true)
 
     loggy.info('Starting importing YT notices from old chill')
 
