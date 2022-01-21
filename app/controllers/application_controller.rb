@@ -20,7 +20,7 @@ class ApplicationController < ActionController::Base
   after_action :include_auth_cookie
 
   if Rails.env.staging? || Rails.env.production?
-    [ActiveRecord::RecordNotFound, ActionController::RoutingError].each do |exception_class|
+    [ActiveRecord::RecordNotFound, ActionController::RoutingError, ActionController::UnknownFormat].each do |exception_class|
       rescue_from exception_class do |exception|
         resource_not_found(exception)
       end
@@ -79,7 +79,8 @@ class ApplicationController < ActionController::Base
     logger404s = Logger.new("#{Rails.root}/log/#{Rails.env}_404s.log")
     logger404s.error(exception) if exception
 
-    request.format = :json if request.format.instance_of?(Mime::NullType)
+    request.format = :json if request.format.instance_of?(Mime::NullType) ||
+                              [:html, :json].exclude?(request.format.symbol)
 
     respond_to do |format|
       format.html do
