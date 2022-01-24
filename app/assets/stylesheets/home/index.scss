@@ -133,6 +133,12 @@ section.home-search-form {
     &.recent-notices {
       @include span-columns(3 of 6);
       @include omega();
+
+      @include media($mobile) {
+        border: 0;
+        width: 100%;
+        @include omega();
+      }
     }
 
     &.news-snippets {
