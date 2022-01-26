@@ -1,5 +1,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.01i](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.01i) - 2022-01-26
+### Fixed
+* Fixed rendering of the recent notices box on mobile devices.
+### Added
+* Added a submission_id field and filter to the notices list in admin.
+
 ## [22.01h](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.01h) - 2022-01-21
 ### Changed
 * Allowed the `logger` helper to use custom log file locations.
