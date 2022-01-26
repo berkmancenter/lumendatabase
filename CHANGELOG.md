@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.01j](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.01j) - 2022-01-26
+### Changes
+* Enabled the `paranoid` mode in `devise`.
+
 ## [22.01i](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.01i) - 2022-01-26
 ### Fixed
 * Fixed rendering of the recent notices box on mobile devices.
