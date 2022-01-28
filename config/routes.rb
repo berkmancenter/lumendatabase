@@ -74,9 +74,11 @@ Rails.application.routes.draw do
 
   resources :captcha_gateway, only: :index
 
-  root to: 'home#index'
+  root to: 'home#index', via: :get
+  match '/', to: 'application#routing_error', via: ActionDispatch::Routing::HTTP_METHODS - [:get]
 
-  comfy_route :cms_admin, path: "/cms_admin"
+  comfy_route :cms_admin, path: '/cms_admin'
+
   # Ensure that this route is defined last
-  comfy_route :cms, path: "/"
+  comfy_route :cms, path: '/'
 end

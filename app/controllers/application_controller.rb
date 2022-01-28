@@ -31,6 +31,10 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def routing_error
+    resource_not_found
+  end
+
   private
 
   def layout_by_resource
