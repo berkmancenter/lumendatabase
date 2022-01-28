@@ -25,6 +25,10 @@ class ApplicationController < ActionController::Base
         resource_not_found(exception)
       end
     end
+
+    rescue_from Paperclip::AdapterRegistry::NoHandlerError do
+      attachment_type_not_allowed
+    end
   end
 
   private
@@ -79,8 +83,7 @@ class ApplicationController < ActionController::Base
     logger404s = Logger.new("#{Rails.root}/log/#{Rails.env}_404s.log")
     logger404s.error(exception) if exception
 
-    request.format = :json if request.format.instance_of?(Mime::NullType) ||
-                              [:html, :json].exclude?(request.format.symbol)
+    set_default_format
 
     respond_to do |format|
       format.html do
@@ -95,7 +98,32 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def attachment_type_not_allowed
+    bad_request
+  end
+
+  def bad_request
+    set_default_format
+
+    respond_to do |format|
+      format.html do
+        render 'error_pages/400',
+               status: :bad_request,
+               layout: false
+      end
+      format.json do
+        render json: 'Bad Request',
+               status: :bad_request
+      end
+    end
+  end
+
   def set_current_user
     Current.user = current_user
+  end
+
+  def set_default_format
+    request.format = :json if request.format.instance_of?(Mime::NullType) ||
+                              [:html, :json].exclude?(request.format.symbol)
   end
 end

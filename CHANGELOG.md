@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.01k](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.01k) - 2022-01-28
+### Changes
+* Cleaned the error log from multiple minor errors.
+
 ## [22.01j](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.01j) - 2022-01-26
 ### Changes
 * Enabled the `paranoid` mode in `devise`.
