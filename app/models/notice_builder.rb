@@ -12,6 +12,7 @@ class NoticeBuilder
   def build
     @notice = model_class.new(params)
     set_json_params
+    set_works_json
     set_all_entities
     add_defaults
     @notice.auto_redact
@@ -31,6 +32,31 @@ class NoticeBuilder
         entity_notice_roles: { include: :entity }
       }
     ).deep_symbolize_keys
+  end
+
+  def set_works_json
+    def prep_work_json(info)
+      json = {
+        :kind => info[:kind] || 'Unspecified',
+        :description => info[:description],
+        :copyrighted_urls => info[:copyrighted_urls].map { |u| prep_url_json(u) },
+        :infringing_urls => info[:infringing_urls].map { |u| prep_url_json(u) },
+      }
+      if info[:description_original] && info[:description_original] != info[:description]
+        json[:description_original] = info[:description_original]
+      end
+      json
+    end
+
+    def prep_url_json(info)
+      json = {:url => info[:url]}
+      if info[:url_original] && info[:url_original] != info[:url]
+        json[:url_original] = info[:url_original]
+      end
+      json
+    end
+
+    @notice.works_json = @json_params[:works].map { |w| prep_work_json(w) }
   end
 
   def add_defaults
