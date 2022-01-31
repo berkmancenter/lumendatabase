@@ -31,8 +31,13 @@ class UnspecifiedTermFilter < TermFilter
     {
       bool: {
         should: [
-          { terms: { @indexed_attribute => ''.freeze } },
-          { missing: { field: @indexed_attribute } }
+          bool: {
+            must_not: {
+              exists: {
+                field: @indexed_attribute
+              }
+            }
+          }
         ]
       }
     }

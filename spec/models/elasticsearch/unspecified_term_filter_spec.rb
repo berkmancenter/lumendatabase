@@ -21,8 +21,13 @@ describe UnspecifiedTermFilter, type: :model do
       {
         bool: {
           should: [
-            { terms: { term_facet: '' } },
-            { missing: { field: :term_facet } }
+            bool: {
+              must_not: {
+                exists: {
+                  field: :term_facet
+                }
+              }
+            }
           ]
         }
       }
