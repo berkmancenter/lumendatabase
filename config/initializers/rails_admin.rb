@@ -306,6 +306,7 @@ RailsAdmin.config do |config|
       field :email
       field :password
       field :password_confirmation
+      field :notes
       field :reset_password_sent_at
       field :authentication_token
       field :widget_public_key
