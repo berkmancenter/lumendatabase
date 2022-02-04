@@ -1,7 +1,5 @@
 source 'https://rubygems.org'
 
-# Pinned due to development difficulties with AMS 0.9/0.10.
-gem 'active_model_serializers', '~> 0.8.3'
 gem 'activerecord-import'
 gem 'acts-as-taggable-on'
 gem 'addressable'
@@ -23,6 +21,7 @@ gem 'flutie'
 gem 'jquery-placeholder-rails'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
+gem 'jsonapi-serializer'
 gem 'kaminari'
 gem 'lograge'
 gem 'mime-types'

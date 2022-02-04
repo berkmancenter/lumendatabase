@@ -12,6 +12,7 @@ describe NoticeSerializer do
   %i|infringing_urls copyrighted_urls|.each do |url_relation|
     it "includes #{url_relation}" do
       allow_any_instance_of(Ability).to receive(:can?).and_return(true)
+      allow_any_instance_of(Current).to receive(:user).and_return(create(:user, :admin))
 
       with_a_serialized_notice do |notice, json|
         relation_json = json[:works].first[url_relation.to_s].map{ |u| u['url'] }
@@ -27,9 +28,7 @@ describe NoticeSerializer do
     notice = build_notice
     allow(notice).to receive(:_score).and_return(2)
     serializer = NoticeSerializer.new(notice)
-    allow(serializer).to receive(:current_user).and_return(nil)
-
-    score = serializer.as_json[:notice][:score]
+    score = serializer.as_json[:score]
 
     expect(score).to eq 2
   end

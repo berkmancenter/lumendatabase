@@ -1,9 +1,8 @@
-class RescindedNoticeSerializer < ActiveModel::Serializer
-  self.root = :notice
-
+class RescindedNoticeSerializer < BaseSerializer
+  set_type :notice
   attributes :id, :title, :body
 
-  def body
+  attribute :body do
     'Notice Rescinded'
   end
 end

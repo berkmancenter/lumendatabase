@@ -29,6 +29,10 @@ class Rack::Attack
     req.admin?
   end
 
+  safelist('allow from custom ips') do |req|
+    req.additional_allowed?
+  end
+
   # Disable the API for users without tokens.
   blocklist('unauthed api limit') do |req|
     Rails.logger.debug "[rack-attack] api unauthed ip: #{req.ip}, req.env['HTTP_ACCEPT']: #{req.env['HTTP_ACCEPT']}, content_type: #{req.content_type}"

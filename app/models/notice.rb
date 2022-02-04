@@ -231,11 +231,11 @@ class Notice < ApplicationRecord
     Language.all.inject( {} ) { |memo, l| memo[l.label] = l.code; memo }
   end
 
-  def active_model_serializer
+  def model_serializer
     if rescinded?
       RescindedNoticeSerializer
     else
-      super
+      "#{self.class.name}Serializer".safe_constantize
     end
   end
 

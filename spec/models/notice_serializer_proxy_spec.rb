@@ -14,7 +14,7 @@ describe NoticeSerializerProxy, type: :model do
   end
 
   it "uses NoticeSerializer when no custom serializer is present" do
-    object = double('Instance', active_model_serializer: nil)
+    object = double('Instance', model_serializer: nil)
     serialized = NoticeSerializer.new(object)
     allow(serialized).to receive(:a_method).and_return(:a_value) # test delegation
     expect(NoticeSerializer).to receive(:new).with(object).and_return(serialized)

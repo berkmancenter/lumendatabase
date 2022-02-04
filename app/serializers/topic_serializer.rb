@@ -1,3 +1,3 @@
-class TopicSerializer < ActiveModel::Serializer
+class TopicSerializer < BaseSerializer
   attributes :id, :name, :parent_id
 end

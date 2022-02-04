@@ -52,11 +52,10 @@ class SearchController < ApplicationController
     # subclass overrides to these constants, rather than pulling in the
     # original definition.
     render(
-      json: @wrapped_instances,
-      each_serializer: self.class::EACH_SERIALIZER,
-      serializer: ActiveModel::ArraySerializer,
-      root: self.class::URL_ROOT,
-      meta: meta_hash_for(@searchdata)
+      json: {
+        self.class::URL_ROOT => @wrapped_instances.map { |instance| self.class::EACH_SERIALIZER.new(instance) },
+        meta: meta_hash_for(@searchdata)
+      }
     )
   end
 

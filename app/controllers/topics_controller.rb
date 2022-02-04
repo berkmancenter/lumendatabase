@@ -1,6 +1,6 @@
 class TopicsController < ApplicationController
   def index
-    render json: Topic.all
+    render json: { topics: TopicSerializer.new(Topic.all) }
   end
 
   def show

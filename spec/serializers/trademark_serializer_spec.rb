@@ -8,7 +8,7 @@ describe TrademarkSerializer do
     trademark = build(:trademark, works: [work], mark_registration_number: '1337')
     serialized = TrademarkSerializer.new(trademark)
     allow(serialized).to receive(:current_user).and_return(nil)
-    serialized_trademark = serialized.as_json[:trademark]
+    serialized_trademark = serialized.as_json
 
     first_mark = serialized_trademark[:marks].first
 
@@ -24,7 +24,7 @@ describe TrademarkSerializer do
 
     serialized = TrademarkSerializer.new(trademark)
     allow(serialized).to receive(:current_user).and_return(nil)
-    serialized_trademark = serialized.as_json[:trademark]
+    serialized_trademark = serialized.as_json
     mark = serialized_trademark[:marks].first
 
     expect(mark['infringing_urls']).to eq(
