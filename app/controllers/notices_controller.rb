@@ -64,6 +64,7 @@ class NoticesController < ApplicationController
     @filterable_fields = Notice::FILTERABLE_FIELDS
     @ordering_options = Notice::ORDERING_OPTIONS
     @search_all_placeholder = 'Search all notices...'
+    @search_index_path = notices_search_index_path
 
     respond_to do |format|
       format.html { show_render_html }

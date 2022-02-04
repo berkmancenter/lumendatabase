@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.02a](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.02a) - 2022-02-04
+### Fixed
+* Fixed searching from the single notice view.
+
 ## [22.02](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.02) - 2022-02-03
 ### Added
 * Added a `notes` field to the `users` model.
