@@ -387,6 +387,7 @@ ActiveRecord::Schema.define(version: 2022_02_02_182027) do
     t.integer "views_overall", default: 0
     t.integer "views_by_notice_viewer", default: 0
     t.text "local_jurisdiction_laws"
+    t.jsonb "works_json"
     t.index ["created_at"], name: "index_notices_on_created_at"
     t.index ["original_notice_id"], name: "index_notices_on_original_notice_id"
     t.index ["published"], name: "index_notices_on_published"
