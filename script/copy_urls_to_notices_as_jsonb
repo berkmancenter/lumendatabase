@@ -5,6 +5,16 @@ set -e
 beg=0
 inc=1000
 max=20000000
+
+while getopts b:i:m: flag
+do
+    case "${flag}" in
+        b) beg=${OPTARG};;
+        i) inc=${OPTARG};;
+        m) max=${OPTARG};;
+    esac
+done
+
 psql="psql -v ON_ERROR_STOP=1"
 
 for i in $(seq $beg $inc $max); do
