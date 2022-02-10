@@ -9,6 +9,12 @@ class Rack::Attack::Request < ::Rack::Request
     ['127.0.0.1', '::1'].include? ip
   end
 
+  def additional_allowed?
+    return false if ENV['RACK_ATTACK_SAFELISTED_IPS'].nil?
+
+    ENV['RACK_ATTACK_SAFELISTED_IPS'].split(',').include? ip
+  end
+
   def admin?
     return false unless user
     (user.roles.include? Role.admin) || (user.roles.include? Role.super_admin)
@@ -26,7 +32,7 @@ class Rack::Attack::Request < ::Rack::Request
 
   def token
     @token ||= if env.key?(LUMEN_HEADER)
-                 Rails.logger.info "[rack-attack] Authentication Token in header: #{env['HTTP_X_AUTHENTICATION_TOKEN']}"
+                 Rails.logger.info "[rack-attack] Authentication Token in header: #{env[LUMEN_HEADER]}"
                  env[LUMEN_HEADER]
                elsif params[LUMEN_AUTH_TOKEN].present?
                  Rails.logger.info "[rack-attack] Authentication Token in params: #{params[LUMEN_AUTH_TOKEN]}"

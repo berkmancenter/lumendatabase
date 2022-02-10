@@ -50,7 +50,7 @@ class NoticesController < ApplicationController
         Rails.logger.warn "Could not create notice with params: #{params}"
         flash.alert = 'Notice creation failed. See errors below.'
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @notice.errors, status: :unprocessable_entity }
+        format.json { render json: { notices: @notice.errors }, status: :unprocessable_entity }
       end
     end
   end
@@ -69,9 +69,7 @@ class NoticesController < ApplicationController
     respond_to do |format|
       format.html { show_render_html }
       format.json do
-        render json: @notice,
-               serializer: NoticeSerializerProxy,
-               root: json_root_for(@notice.class)
+        render json: { json_root_for(@notice.class) => NoticeSerializerProxy.new(@notice) }
       end
     end
   end

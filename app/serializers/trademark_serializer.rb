@@ -1,8 +1,10 @@
 class TrademarkSerializer < NoticeSerializer
   attributes :marks, :mark_registration_number
 
-  def marks
-    if current_user && Ability.new(scope).can?(:view_full_version_api, object)
+  attributes_to_serialize.delete(:works)
+
+  attribute :marks do |object|
+    if Current.user && Ability.new(Current.user).can?(:view_full_version_api, object)
       object.works.map do |work|
         {
           description: work.description,
@@ -17,14 +19,5 @@ class TrademarkSerializer < NoticeSerializer
         }
       end.as_json
     end
-  end
-
-  private
-
-  def attributes
-    hsh = super
-    hsh.delete(:works)
-
-    hsh
   end
 end

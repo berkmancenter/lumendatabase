@@ -1,20 +1,18 @@
 class LawEnforcementRequestSerializer < NoticeSerializer
   attributes :regulations, :request_type
 
-  def regulations
+  attribute :regulations do |object|
     object.regulation_list.map(&:name)
   end
 
-  private
+  attributes_to_serialize.delete(:body)
+  attribute :explanation, &:body
 
-  def attributes
-    attributes = super
-    swap_keys(attributes, :body, :explanation)
-    attributes[:works].each do |work|
+  attribute :works do |object|
+    works(object).each do |work|
       swap_keys(work, 'description', 'subject_of_enforcement_request')
       swap_keys(work, 'copyrighted_urls', 'original_work_urls')
       swap_keys(work, 'infringing_urls', 'urls_in_request')
     end
-    attributes
   end
 end

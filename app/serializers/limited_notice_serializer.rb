@@ -1,15 +1,15 @@
-class LimitedNoticeSerializer < ActiveModel::Serializer
+class LimitedNoticeSerializer < BaseSerializer
   attributes :id, :type, :title, :body, :date_sent, :date_received,
              :topics, :sender_name, :principal_name, :recipient_name, :works,
              :tags, :jurisdictions, :action_taken, :language
 
   # TODO: serialize additional entities
 
-  def topics
+  attribute :topics do |object|
     object.topics.map(&:name)
   end
 
-  def works
+  attribute :works do |object|
     object.works.as_json(
       only: [:description],
       include: {
@@ -19,25 +19,21 @@ class LimitedNoticeSerializer < ActiveModel::Serializer
     )
   end
 
-  def tags
+  attribute :tags do |object|
     object.tag_list
   end
 
-  def jurisdictions
+  attribute :jurisdictions do |object|
     object.jurisdiction_list
   end
 
-  private
-
-  def attributes
-    attributes = super || []
-
-    attributes[:score] = object._score if object.respond_to?(:_score)
-
-    attributes
+  attribute :score, if: proc { |record|
+    record.respond_to?(:_score)
+  } do |object|
+    object._score
   end
 
-  def swap_keys(hash, original_key, new_key)
+  def self.swap_keys(hash, original_key, new_key)
     original_value = hash.delete(original_key)
     hash[new_key] = original_value
   end

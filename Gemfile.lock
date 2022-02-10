@@ -42,8 +42,6 @@ GEM
     active_link_to (1.0.5)
       actionpack
       addressable
-    active_model_serializers (0.8.4)
-      activemodel (>= 3.0)
     activejob (6.1.4.4)
       activesupport (= 6.1.4.4)
       globalid (>= 0.3.6)
@@ -256,6 +254,8 @@ GEM
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
     json (2.6.1)
+    jsonapi-serializer (2.2.0)
+      activesupport (>= 4.2)
     kaminari (1.2.2)
       activesupport (>= 4.1.0)
       kaminari-actionview (= 1.2.2)
@@ -533,7 +533,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  active_model_serializers (~> 0.8.3)
   activerecord-import
   acts-as-taggable-on
   addressable
@@ -562,6 +561,7 @@ DEPENDENCIES
   jquery-placeholder-rails
   jquery-rails
   jquery-ui-rails
+  jsonapi-serializer
   kaminari
   lograge
   memory_profiler

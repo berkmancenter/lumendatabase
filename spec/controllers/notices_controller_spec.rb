@@ -63,12 +63,11 @@ describe NoticesController do
         it "returns a serialized notice for #{model_class}" do
           notice = stub_find_notice(model_class.new)
 
-          serializer_class = model_class.active_model_serializer || NoticeSerializer
+          serializer_class = notice.model_serializer || NoticeSerializer
           serialized = serializer_class.new(notice)
 
-          allow(serialized).to receive(:current_user).and_return(nil)
-          expect(serializer_class).to receive(:new).
-            with(notice, anything)
+          expect(serializer_class).to receive(:new)
+            .with(notice)
             .and_return(serialized)
 
           get :show, params: { id: 1, format: :json }
