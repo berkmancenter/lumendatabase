@@ -41,6 +41,11 @@ feature 'notice submission', js: true do
 
     expect(notice.title).to eq 'A superduper title'
     expect(notice.recipient.kind).to eq 'individual'
+    notice.works.each_with_index do |work, index|
+      json_work = notice.works_json[index]
+      expect(json_work['description']).to eq work.description
+      expect(json_work['description_original']).to eq work.description_original
+    end
   end
 
   scenario 'submitting a notice with token in header' do

@@ -136,6 +136,7 @@ class Notice < ApplicationRecord
 
   # == Callbacks ============================================================
   before_save :set_topics
+  before_save :set_works_json
   after_create :set_published!, if: :submitter
   # This may fail in the dev environment if you don't have ES up and running,
   # but is works in other envs.
@@ -359,6 +360,10 @@ class Notice < ApplicationRecord
   def set_topics
     topic = notice_topic_map
     topics << topic unless topics.include?(topic)
+  end
+
+  def set_works_json
+    self.works_json = works
   end
 
   def restricted_to_researchers?
