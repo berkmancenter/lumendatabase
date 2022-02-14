@@ -213,8 +213,8 @@ feature 'Searching Notices', type: :feature do
     end
 
     scenario 'for works', search: true do
-      work = create(
-        :work, description: 'An arbitrary description'
+      work = Work.new(
+        description: 'An arbitrary description'
       )
 
       notice = create(:dmca, works: [work])
@@ -230,14 +230,14 @@ feature 'Searching Notices', type: :feature do
 
     scenario 'for redacted works', search: true do
       # Sensitive content should neither display nor be searchable.
-      work1 = create(
-        :work, description: 'My SSN is not 123-45-6789'
+      work1 = Work.new(
+        description: 'My SSN is not 123-45-6789'
       )
-      work2 = create(
-        :work, description: 'My phone number is not (123) 456-7890'
+      work2 = Work.new(
+        description: 'My phone number is not (123) 456-7890'
       )
-      work3 = create(
-        :work, description: 'My email address is not me@example.com'
+      work3 = Work.new(
+        description: 'My email address is not me@example.com'
       )
       notice = create(:dmca, works: [work1, work2, work3])
       index_changed_instances
@@ -277,20 +277,18 @@ feature 'Searching Notices', type: :feature do
     end
 
     scenario 'for works with redacted URLs', search: true do
-      i_url = create(
-        :infringing_url,
+      i_url = InfringingUrl.new(
         url: 'https://example.com',
         url_original: 'https://totes.redacted'
       )
 
-      c_url = create(
-        :copyrighted_url,
+      c_url = CopyrightedUrl.new(
         url: 'https://foo.bar',
         url_original: 'https://sharklasers.com'
       )
 
-      work1 = create(:work, infringing_urls: [i_url])
-      work2 = create(:work, copyrighted_urls: [c_url])
+      work1 = Work.new(infringing_urls: [i_url])
+      work2 = Work.new(copyrighted_urls: [c_url])
       notice = create(:dmca, works: [work1, work2])
       index_changed_instances
 
@@ -328,13 +326,12 @@ feature 'Searching Notices', type: :feature do
     end
 
     scenario 'for urls associated through works', search: true do
-      work = create(
-        :work,
+      work = Work.new(
         infringing_urls: [
-          create(:infringing_url, url: 'http://example1.com/infringing_url')
+          InfringingUrl.new(url: 'http://example1.com/infringing_url')
         ],
         copyrighted_urls: [
-          create(:copyrighted_url, url: 'http://example2.com/copyrighted_url')
+          CopyrightedUrl.new(url: 'http://example2.com/copyrighted_url')
         ]
       )
 

@@ -13,8 +13,8 @@ class ReindexRun < ApplicationRecord
     this_run.update(metadata)
 
     sweep_search_result_caches
-  rescue => e
-    Rails.logger.error "Indexing did not succeed because: #{e.inspect}"
+  # rescue => e
+  #   Rails.logger.error "Indexing did not succeed because: #{e.inspect}"
   end
 
   def self.sweep_search_result_caches

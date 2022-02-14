@@ -46,3 +46,4 @@ public/usercron/
 .ssh/*
 config/skylight.yml
 storage/
+docker_website_bash_history

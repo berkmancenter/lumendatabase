@@ -1,14 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Work, type: :model do
-  it { is_expected.to have_and_belong_to_many :notices }
-  it { is_expected.to have_and_belong_to_many :infringing_urls }
-  it { is_expected.to have_and_belong_to_many :copyrighted_urls }
-
-  context 'automatic validations' do
-    it { is_expected.to validate_length_of(:kind).is_at_most(255) }
-  end
-
   context '.unknown' do
     it 'provides an unknown work' do
       work = Work.unknown
@@ -29,56 +21,19 @@ RSpec.describe Work, type: :model do
     end
   end
 
-  context '#infringing_urls' do
-    it 'does not create duplicate infringing_urls' do
-      existing_infringing_url = create(
-        :infringing_url, url: 'http://www.example.com/infringe'
-      )
-      params = { work: { description: 'Test', infringing_urls_attributes:
-        [{ url: 'http://www.example.com/infringe' },
-         { url: 'http://example.com/new' }] } }
-      work = Work.new(params[:work])
-      work.save
-
-      work.reload
-
-      expect(work.infringing_urls).to include existing_infringing_url
-      expect(InfringingUrl.count).to eq 2
-    end
-  end
-
-  context '#copyrighted_urls' do
-    it 'does not create duplicate copyrighted_urls' do
-      existing_copyrighted_url = create(
-        :copyrighted_url, url: 'http://www.example.com/copyrighted'
-      )
-
-      params = { work: { description: 'Test', copyrighted_urls_attributes:
-        [{ url: 'http://www.example.com/copyrighted' },
-         { url: 'http://example.com/new' }] } }
-      work = Work.new(params[:work])
-      work.save
-
-      work.reload
-
-      expect(work.copyrighted_urls).to include existing_copyrighted_url
-      expect(CopyrightedUrl.count).to eq 2
-    end
-  end
-
   context '#kind' do
     it 'auto classifies before saving if kind is not set' do
       work = build(:work)
 
-      work.save
-      expect(work.kind).to eq 'Unspecified'
+      notice = create(:dmca, works: [work])
+
+      expect(notice.works.first.kind).to eq 'Unspecified'
     end
 
     it 'does not auto classify if kind is set' do
       expect_any_instance_of(DeterminesWorkKind).not_to receive(:kind)
       work = build(:work, kind: 'foo')
-
-      work.save
+      create(:dmca, works: [work])
     end
   end
 
@@ -92,7 +47,7 @@ RSpec.describe Work, type: :model do
 
     expect(notice).not_to be_valid
     expect(notice.errors.messages).to eq(
-      'works.infringing_urls': ['is invalid', 'is invalid']
+      'works': ['is invalid']
     )
   end
 
@@ -106,7 +61,7 @@ RSpec.describe Work, type: :model do
 
     expect(notice).not_to be_valid
     expect(notice.errors.messages).to eq(
-      'works.copyrighted_urls': ['is invalid', 'is invalid']
+      'works': ['is invalid']
     )
   end
 
@@ -129,8 +84,9 @@ RSpec.describe Work, type: :model do
     it 'redacts automatically on save' do
       params = { description: 'Test' }
       work = Work.new(params)
+      notice = create(:dmca, works: [work])
       expect(work).to receive(:auto_redact)
-      work.save
+      notice.save
     end
   end
 
@@ -149,10 +105,10 @@ RSpec.describe Work, type: :model do
   def work_for_redaction_testing(redact_me)
     params = { description: "Test if we redact #{redact_me}" }
     work = Work.new(params)
-    work.auto_redact
-    work.save
-    work.reload
-    work
+    notice = create(:dmca, works: [work])
+    notice.save
+    notice.reload
+    notice.works.first
   end
 
   def test_redaction(content)
