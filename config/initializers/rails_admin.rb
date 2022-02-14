@@ -180,7 +180,7 @@ RailsAdmin.config do |config|
           end
         end
 
-        configure(:works_json) do
+        configure(:works) do
           hide
         end
       end

@@ -49,13 +49,13 @@ class NoticeSerializer < BaseSerializer
 
   def self.works(object)
     if defined?(Current.user) && Current.user && Ability.new(Current.user).can?(:view_full_version_api, object)
-      base_works = object.works.as_json(
-        only: [:description],
-        include: {
-          infringing_urls: { only: %i[url] },
-          copyrighted_urls: { only: %i[url] }
+      base_works = object.works.map do |work|
+        {
+          description: work.description,
+          infringing_urls: work.infringing_urls.map { |iurl| { url: iurl.url } },
+          copyrighted_urls: work.copyrighted_urls.map { |curl| { url: curl.url } }
         }
-      )
+      end.as_json
     else
       base_works = object.works.map do |work|
         {

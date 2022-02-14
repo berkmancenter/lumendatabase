@@ -135,9 +135,10 @@ feature "Searching for Notices via the API" do
 
   context Trademark do
     scenario "has model-specific metadata", js: true, search: true do
-      params = trademark_params(false)
+      params = trademark_params(true)
       notice = Notice.new(params[:notice])
       notice.save
+
       index_changed_instances
 
       marks = notice.works.map do |work|
@@ -169,7 +170,7 @@ feature "Searching for Notices via the API" do
         }
       end
 
-      user = create(:user)
+      user = create(:user, :researcher)
 
       expect_api_search_to_find("king", { authentication_token: user.authentication_token }) do |json|
         json_item = json['notices'].first

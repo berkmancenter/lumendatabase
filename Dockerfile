@@ -40,6 +40,10 @@ RUN sudo wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch
     && sudo tar -xvf elasticsearch-7.17.0-linux-x86_64.tar.gz
 RUN sudo chown -R $USERNAME:$USERNAME /elasticsearch_test
 
+# To be able to create a .bash_history
+WORKDIR /home/lumen/hist
+RUN sudo chown -R $USERNAME:$USERNAME /home/lumen/hist
+
 # Code mounted as a volume
 WORKDIR /app
 

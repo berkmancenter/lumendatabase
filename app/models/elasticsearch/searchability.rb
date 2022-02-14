@@ -82,10 +82,8 @@ module Searchability
       # the "as" attribute is not implemented in elasticsearch-rails
       # according to https://github.com/elastic/elasticsearch-rails/issues/21
       # it's the best workaround
-      define_method :as_indexed_json do |options|
-        exclusions[:works] ||= []
-
-        out = as_json(except: [:jurisdiction_list, :regulation_list, :tag_list])
+      define_method :as_indexed_json do |_options|
+        out = as_json(except: [:jurisdiction_list, :regulation_list, :tag_list, :works_json])
 
         attributes_to_skip = %w[review_required reviewer_id url_count
                                 webform notes views_overall views_by_notice_viewer
@@ -115,13 +113,13 @@ module Searchability
         out['topics'] = topics.map do |topic|
           { id: topic[:id], name: topic[:name] }
         end
-        out['works'] = works.as_json(
-          only: [:description] - exclusions[:works],
-          include: {
-            infringing_urls: { only: [:url] },
-            copyrighted_urls: { only: [:url] }
+        out['works'] = works.map do |work|
+          {
+            description: work.description,
+            infringing_urls: work.infringing_urls.map { |iurl| { url: iurl.url } },
+            copyrighted_urls: work.copyrighted_urls.map { |curl| { url: curl.url } }
           }
-        )
+        end
         out['entities_country_codes'] = entities_country_codes
 
         out

@@ -18,8 +18,6 @@ describe DMCA, type: :model do
   context 'model definitions and properties' do
     it { is_expected.to have_many :file_uploads }
     it { is_expected.to have_many(:entity_notice_roles).dependent(:destroy) }
-    it { is_expected.to have_and_belong_to_many :works }
-    it { is_expected.to have_many(:infringing_urls).through(:works) }
     it { is_expected.to have_many(:entities).through(:entity_notice_roles) }
     it { is_expected.to have_many(:topic_assignments).dependent(:destroy) }
     it { is_expected.to have_many(:topics).through(:topic_assignments) }
