@@ -21,7 +21,7 @@ class Work < ApplicationRecord
   validates_associated :infringing_urls, :copyrighted_urls
   validates :kind, length: { maximum: 255 }
 
-  before_save :force_redactions
+  after_validation :force_redactions
   after_update :force_related_notices_reindex
   before_validation :fix_concatenated_urls, on: :create
 

@@ -30,7 +30,18 @@ feature 'notice submission', js: true do
 
   scenario 'submitting a notice' do
     parameters = request_hash(
-      default_notice_hash(title: 'A superduper title')
+      default_notice_hash({
+        title: 'A superduper title',
+        works_attributes: [{
+          description: 'A work',
+          infringing_urls_attributes: [{
+            url: 'http://example_in.com'
+          }],
+          copyrighted_urls_attributes: [{
+            url: 'http://example_cp.com'
+          }]
+        }]
+      })
     )
 
     curb = post_api('/notices', parameters)
@@ -41,6 +52,12 @@ feature 'notice submission', js: true do
 
     expect(notice.title).to eq 'A superduper title'
     expect(notice.recipient.kind).to eq 'individual'
+    notice.works.each_with_index do |work, index|
+      json_work = notice.works_json[index]
+      expect(json_work['description']).to eq work.description
+      expect(json_work['infringing_urls'][0]['url']).to eq work.infringing_urls.first.url
+      expect(json_work['copyrighted_urls'][0]['url']).to eq work.copyrighted_urls.first.url
+    end
   end
 
   scenario 'submitting a notice with token in header' do

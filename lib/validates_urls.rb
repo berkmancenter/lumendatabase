@@ -19,7 +19,7 @@ module ValidatesUrls
 
       # This is invalid per the spec but common, so let's allow it.
       munged_value = value.gsub('utf8=✓', 'utf8%3D%E2%9C%93')
-      unless ( is_ordinary_uri?(munged_value) || is_noprotocol_uri?(munged_value) )
+      unless is_ordinary_uri?(munged_value) || is_noprotocol_uri?(munged_value)
         errors.add(attr, 'Must be a valid URL')
       end
     end
@@ -38,7 +38,8 @@ module ValidatesUrls
   end
 
   def length_ok_when_split?
-    return false unless !!(url_text = self.send(:url))
+    url_text = self.send(:url)
+    return false unless url_text.present?
 
     # Check if:
     # the URL is short enough on its own; or

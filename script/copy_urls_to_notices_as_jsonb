@@ -1,0 +1,73 @@
+#!/bin/sh
+
+set -e
+
+beg=0
+inc=1000
+max=20000000
+
+while getopts b:i:m: flag
+do
+    case "${flag}" in
+        b) beg=${OPTARG};;
+        i) inc=${OPTARG};;
+        m) max=${OPTARG};;
+    esac
+done
+
+psql="psql -v ON_ERROR_STOP=1"
+
+for i in $(seq $beg $inc $max); do
+    j=$(expr $i + $inc)
+
+    cat << EOM
+PROCESSING $i UNTIL $j ($(expr 100 '*' $i / $max)%)
+EOM
+
+    $psql << EOM
+UPDATE notices n
+SET works_json = w.json
+FROM (
+    SELECT g.notice_id, jsonb_strip_nulls(jsonb_agg(lw)) AS json
+    FROM generate_series($i, $j - 1) g(notice_id)
+    CROSS JOIN LATERAL (
+        SELECT
+            w.kind,
+            w.description,
+            CASE w.description_original WHEN w.description THEN null
+            ELSE w.description_original END AS description_original,
+            array_agg(distinct li) AS infringing_urls,
+            array_agg(distinct ci) AS copyrighted_urls
+        FROM works w
+        JOIN notices_works nw ON nw.work_id = w.id
+        CROSS JOIN LATERAL (
+            SELECT
+                u.url,
+                CASE u.url_original WHEN u.url THEN null
+                ELSE u.url_original END AS url_original
+            FROM infringing_urls u
+            JOIN infringing_urls_works uw ON uw.infringing_url_id = u.id
+            WHERE uw.work_id = w.id
+        ) li
+        CROSS JOIN LATERAL (
+            SELECT
+                u.url,
+                CASE u.url_original WHEN u.url THEN null
+                ELSE u.url_original END AS url_original
+            FROM copyrighted_urls u
+            JOIN copyrighted_urls_works uw ON uw.copyrighted_url_id = u.id
+            WHERE uw.work_id = w.id
+        ) ci
+        WHERE nw.notice_id = g.notice_id
+        GROUP BY 1, 2, 3
+    ) lw
+    GROUP BY g.notice_id
+) w
+WHERE w.notice_id = n.id
+EOM
+
+    $psql << EOM
+VACUUM notices
+EOM
+
+done

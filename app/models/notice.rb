@@ -136,6 +136,7 @@ class Notice < ApplicationRecord
 
   # == Callbacks ============================================================
   before_save :set_topics
+  before_save :set_works_json
   after_create :set_published!, if: :submitter
   # This may fail in the dev environment if you don't have ES up and running,
   # but is works in other envs.
@@ -359,6 +360,35 @@ class Notice < ApplicationRecord
   def set_topics
     topic = notice_topic_map
     topics << topic unless topics.include?(topic)
+  end
+
+  def set_works_json
+    self.works_json = works.map { |w| prep_work_json(w) }
+  end
+
+  def prep_work_json(work)
+    json = {
+      kind: work.kind,
+      description: work.description,
+      copyrighted_urls: work.copyrighted_urls.map { |u| prep_url_json(u) },
+      infringing_urls: work.infringing_urls.map { |u| prep_url_json(u) }
+    }
+
+    if work.description_original && work.description_original != work.description
+      json[:description_original] = work.description_original
+    end
+
+    json
+  end
+
+  def prep_url_json(url_instance)
+    json = { url: url_instance.url }
+
+    if url_instance.url_original && url_instance.url_original != url_instance.url
+      json[:url_original] = url_instance.url_original
+    end
+
+    json
   end
 
   def restricted_to_researchers?
