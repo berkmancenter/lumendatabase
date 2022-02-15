@@ -363,7 +363,32 @@ class Notice < ApplicationRecord
   end
 
   def set_works_json
-    self.works_json = works
+    self.works_json = works.map { |w| prep_work_json(w) }
+  end
+
+  def prep_work_json(work)
+    json = {
+      kind: work.kind,
+      description: work.description,
+      copyrighted_urls: work.copyrighted_urls.map { |u| prep_url_json(u) },
+      infringing_urls: work.infringing_urls.map { |u| prep_url_json(u) }
+    }
+
+    if work.description_original && work.description_original != work.description
+      json[:description_original] = work.description_original
+    end
+
+    json
+  end
+
+  def prep_url_json(url_instance)
+    json = { url: url_instance.url }
+
+    if url_instance.url_original && url_instance.url_original != url_instance.url
+      json[:url_original] = url_instance.url_original
+    end
+
+    json
   end
 
   def restricted_to_researchers?
