@@ -1,5 +1,18 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.02c](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.02c) - 2022-02-15
+### Changed
+* Updated the `rails` gem.
+* Started storing urls as `json` in the `works_json` column in the `notices` table.
+
+## [22.02b](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.02b) - 2022-02-10
+### Changed
+* Started using the `jsonapi-serializer` gem instead of `active_model_serializers`.
+
+## [22.02a](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.02a) - 2022-02-04
+### Fixed
+* Fixed searching from the single notice view.
+
 ## [22.02a](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.02a) - 2022-02-04
 ### Fixed
 * Fixed searching from the single notice view.
