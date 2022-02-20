@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.02d](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.02d) - 2022-02-20
+### Fixed
+* Fixed a grammar issue in the captcha error message.
+
 ## [22.02c](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.02c) - 2022-02-15
 ### Changed
 * Updated the `rails` gem.
