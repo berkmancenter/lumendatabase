@@ -23,24 +23,80 @@ Development
 * Mail server (SMTP, Sendmail)
 * ChromeDriver (used only by test runner)
 
-#### Setup
+#### Using Docker
+
+The easiest way to start is to use `Docker`. Make sure you have the `Docker Engine` and `docker-compose` installed.
+
+Clone the repository.
+
+```
+cp config/database.yml.docker config/database.yml
+```
+
+```
+cp .env.docker .env
+```
+
+```
+docker-compose up
+```
+
+```
+docker-compose exec website bash
+```
+
+```
+rake db:drop db:create db:migrate
+```
+
+```
+rake comfy:cms_seeds:import[lumen_cms,lumen_cms]
+```
+
+```
+rake db:seed
+```
+
+```
+rails s -b 0.0.0.0
+```
+
+Lumen will be available at `http://localhost:8282`.
+
+#### Manual setup
 
 By default, the app will try to connect to Elasticsearch on `http://localhost:9200`. If you want to use a different host set the `ELASTICSEARCH_URL` environment variable.
 
-    $ bundle install
-    $ cp config/database.yml.example config/database.yml
-      (edit database.yml as you wish)
-      (ensure PostgreSQL and Elasticsearch are running)
-    $ rails db:setup
-    $ rails lumen:set_up_cms
+```
+bundle install
+```
 
-#### Running the app
+```
+cp config/database.yml.example config/database.yml
+```
 
-    $ rails s
+(edit database.yml as you wish)  
+(ensure PostgreSQL and Elasticsearch are running)
 
-#### Viewing the app
+```
+rails db:setup
+```
 
-    $BROWSER 'http://localhost:3000'
+```
+rails lumen:set_up_cms
+```
+
+###### Running the app
+
+```
+rails s
+```
+
+###### Viewing the app
+
+```
+$BROWSER 'http://localhost:3000'
+```
 
 You can customize behavior during seeding (db:setup) with a couple of environment variables:
 

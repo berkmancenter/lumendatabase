@@ -19,6 +19,7 @@ default_chrome_options = %w(
   --incognito
   --mute-audio
   --remote-debugging-port=9222
+  --no-sandbox
 )
 
 chrome_options = Selenium::WebDriver::Chrome::Options.new

@@ -1,0 +1,50 @@
+version: '2'
+
+services:
+  postgres:
+    image: 'postgres:13.6-alpine'
+    volumes:
+      - 'postgres:/var/lib/postgresql/data'
+    env_file:
+      - '.env'
+    environment:
+      POSTGRES_USER: ${DATABASE_DEV_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_DEV_PASSWORD}
+
+  website:
+    depends_on:
+      - 'postgres'
+    build: .
+    ports:
+      - '8282:3000'
+      - '1080:1080'
+    volumes:
+      - '.:/app'
+    env_file:
+      - '.env'
+
+  elasticsearch:
+    image: elasticsearch:7.17.0
+    environment:
+      - http.host=0.0.0.0
+      - transport.host=0.0.0.0
+      - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
+      - discovery.type=single-node
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    mem_limit: 4g
+
+volumes:
+  postgres:
+  esdata:
+  esdata_test:
