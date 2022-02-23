@@ -18,5 +18,5 @@
 <% end %>
 
 <% if entity.country_code.present? %>
-  <span><%= t 'views.entities.entity.country' %>: <%= entity.country_code.upcase %></span>
+  <span><%= t 'views.entities.entity.country' %>: <%= entity.country_code.upcase %> <%= ISO3166::Country.new(entity.country_code).emoji_flag %></span>
 <% end %>
