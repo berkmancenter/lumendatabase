@@ -1,0 +1,32 @@
+default: &default
+  adapter: postgresql
+  encoding: utf8
+  min_messages: warning
+  pool: 5
+  timeout: 5000
+
+test:
+  <<: *default
+  username: <%= ENV['DATABASE_DEV_USERNAME'] %>
+  password: <%= ENV['DATABASE_DEV_PASSWORD'] %>
+  host: <%= ENV['DATABASE_DEV_HOST'] %>
+  port: <%= ENV['DATABASE_DEV_PORT'].to_i %>
+  database: lumen_test
+
+development:
+  <<: *default
+  username: <%= ENV['DATABASE_DEV_USERNAME'] %>
+  password: <%= ENV['DATABASE_DEV_PASSWORD'] %>
+  database: <%= ENV['DATABASE_DEV_DB_NAME'] %>
+  host: <%= ENV['DATABASE_DEV_HOST'] %>
+  port: <%= ENV['DATABASE_DEV_PORT'].to_i %>
+  timeout: <%= (ENV['DATABASE_DEV_TIMEOUT'] || 5000).to_i %>
+
+production:
+  <<: *default
+  username: <%= ENV['DATABASE_PROD_USERNAME'] %>
+  password: <%= ENV['DATABASE_PROD_PASSWORD'] %>
+  database: <%= ENV['DATABASE_PROD_DB_NAME'] %>
+  host: <%= ENV['DATABASE_PROD_HOST'] %>
+  port: <%= ENV['DATABASE_PROD_PORT'].to_i %>
+  timeout: <%= (ENV['DATABASE_PROD_TIMEOUT'] || 5000).to_i %>
