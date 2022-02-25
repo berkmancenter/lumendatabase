@@ -57,6 +57,7 @@ class Ability
       can :create, Work
       can :create, Entity
       can :create, EntityNoticeRole
+      can :create, MediaMention
 
       can :pdf_requests, :all
       can :view_full_version, Notice

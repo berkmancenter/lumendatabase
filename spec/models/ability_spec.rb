@@ -166,6 +166,12 @@ describe Ability do
       expect(subject.can? :edit, user).to be_falsey
       expect(subject.can? :edit, role).to be_falsey
     end
+
+    it "can create media mentions" do
+      %i[create read update].each do |action|
+        expect(subject.can? action, MediaMention.new).to be true
+      end
+    end
   end
 
   context "a super admin" do
