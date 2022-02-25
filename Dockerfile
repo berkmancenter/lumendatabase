@@ -12,7 +12,8 @@ RUN wget https://chromedriver.storage.googleapis.com/98.0.4758.102/chromedriver_
     && ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver \
     && ln -s /usr/local/share/chromedriver /usr/bin/chromedriver
 
-RUN apt-get update && apt-get -y install tzdata git build-essential patch ruby-dev zlib1g-dev liblzma-dev default-jre sudo google-chrome-stable vim nano
+RUN apt-get update \
+    && apt-get -y install tzdata git build-essential patch ruby-dev zlib1g-dev liblzma-dev default-jre sudo google-chrome-stable vim nano tmux
 
 # Container user and group
 ARG USERNAME=lumen
@@ -35,7 +36,8 @@ RUN bundle install
 
 # Download a standalone version of Elasticsearch, will be used by rspec
 WORKDIR /elasticsearch_test
-RUN sudo wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.17.0-linux-x86_64.tar.gz && sudo tar -xvf elasticsearch-7.17.0-linux-x86_64.tar.gz
+RUN sudo wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.17.0-linux-x86_64.tar.gz \
+    && sudo tar -xvf elasticsearch-7.17.0-linux-x86_64.tar.gz
 RUN sudo chown -R $USERNAME:$USERNAME /elasticsearch_test
 
 # Code mounted as a volume
