@@ -1,5 +1,14 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.02f](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.02f) - 2022-02-25
+### Changed
+* Added `tmux` to the `Docker` dev machine.
+* Allowed admins to create new media mentions.
+
+## [22.02e](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.02e) - 2022-02-24
+### Added
+* Add `Docker` support to the `development` environment.
+
 ## [22.02d](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.02d) - 2022-02-20
 ### Fixed
 * Fixed a grammar issue in the captcha error message.
