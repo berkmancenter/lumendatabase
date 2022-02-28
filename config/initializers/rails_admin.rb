@@ -134,6 +134,7 @@ RailsAdmin.config do |config|
         field :entities
         field :works
         field :file_uploads
+        field :case_id_number
       end
 
       edit do

@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.02g](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.02g) - 2022-02-28
+### Added
+* Added a new field called `case_id_number` to the `notices` table.
+
 ## [22.02f](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.02f) - 2022-02-25
 ### Changed
 * Added `tmux` to the `Docker` dev machine.
