@@ -15,8 +15,6 @@ do
     esac
 done
 
-psql="psql -v ON_ERROR_STOP=1"
-
 for i in $(seq $beg $inc $max); do
     j=$(expr $i + $inc)
 
@@ -24,50 +22,69 @@ for i in $(seq $beg $inc $max); do
 PROCESSING $i UNTIL $j ($(expr 100 '*' $i / $max)%)
 EOM
 
-    $psql << EOM
-UPDATE notices n
-SET works_json = w.json
-FROM (
-    SELECT g.notice_id, jsonb_strip_nulls(jsonb_agg(lw)) AS json
-    FROM generate_series($i, $j - 1) g(notice_id)
-    CROSS JOIN LATERAL (
+    psql -v ON_ERROR_STOP=1 << EOM
+SET enable_hashjoin = false;
+SET enable_mergejoin = false;
+WITH
+    a AS (
         SELECT
+            nw.notice_id,
             w.kind,
-            w.description,
-            CASE w.description_original WHEN w.description THEN null
-            ELSE w.description_original END AS description_original,
-            array_agg(distinct li) AS infringing_urls,
-            array_agg(distinct ci) AS copyrighted_urls
+            w.description_original,
+            min(w.description) AS description,
+            min(w.id) AS work_id,
+            array_agg(w.id) AS work_ids
         FROM works w
         JOIN notices_works nw ON nw.work_id = w.id
-        CROSS JOIN LATERAL (
-            SELECT
-                u.url,
-                CASE u.url_original WHEN u.url THEN null
-                ELSE u.url_original END AS url_original
-            FROM infringing_urls u
-            JOIN infringing_urls_works uw ON uw.infringing_url_id = u.id
-            WHERE uw.work_id = w.id
-        ) li
-        CROSS JOIN LATERAL (
-            SELECT
-                u.url,
-                CASE u.url_original WHEN u.url THEN null
-                ELSE u.url_original END AS url_original
-            FROM copyrighted_urls u
-            JOIN copyrighted_urls_works uw ON uw.copyrighted_url_id = u.id
-            WHERE uw.work_id = w.id
-        ) ci
-        WHERE nw.notice_id = g.notice_id
-        GROUP BY 1, 2, 3
-    ) lw
-    GROUP BY g.notice_id
-) w
-WHERE w.notice_id = n.id
-EOM
-
-    $psql << EOM
-VACUUM notices
+        WHERE nw.notice_id >= $i AND nw.notice_id < $j
+		GROUP BY nw.notice_id, w.kind, w.description_original
+    ),
+    i AS (
+       SELECT
+           a.work_id,
+           array_agg((SELECT x FROM (SELECT
+               u.url_original,
+               CASE u.url WHEN u.url_original THEN null
+               ELSE u.url END AS url
+           ) x)) AS urls
+       FROM a
+       JOIN infringing_urls_works uw ON uw.work_id = ANY (a.work_ids)
+       JOIN infringing_urls u ON uw.infringing_url_id = u.id
+       GROUP BY a.work_id
+    ),
+    c AS (
+       SELECT
+           a.work_id,
+           array_agg((SELECT x FROM (SELECT
+               u.url_original,
+               CASE u.url WHEN u.url_original THEN null
+               ELSE u.url END AS url
+           ) x)) AS urls
+       FROM a
+       JOIN copyrighted_urls_works uw ON uw.work_id = ANY (a.work_ids)
+       JOIN copyrighted_urls u ON uw.copyrighted_url_id = u.id
+       GROUP BY a.work_id
+    ),
+    f AS (
+        SELECT
+            a.notice_id,
+            jsonb_agg((SELECT x FROM (SELECT
+                a.kind,
+                a.description_original,
+                CASE a.description WHEN a.description_original THEN null
+                ELSE a.description END AS description,
+                COALESCE(i.urls, '{}') AS infringing_urls,
+                COALESCE(c.urls, '{}') AS copyrighted_urls
+            ) x)) AS json
+        FROM a
+        LEFT JOIN i USING (work_id)
+        LEFT JOIN c USING (work_id)
+        GROUP BY a.notice_id
+    )
+UPDATE notices n
+SET works_json = COALESCE((SELECT f.json FROM f WHERE f.notice_id = n.id), '[]')
+WHERE n.id >= $i AND n.id < $j;
+VACUUM notices;
 EOM
 
 done
