@@ -10,6 +10,13 @@
       <dd class="field"><%= render 'shared/regulation_list', regulations: notice.regulations %></dd>
     </dl>
   <% end %>
+
+  <% if notice.case_id_number.present? %>
+    <dl id="request_type">
+      <dt class="label">Case ID #:</dt>
+      <dd class="field"><%= notice.case_id_number %></dd>
+    </dl>
+  <% end %>
 </section>
 
 <%= render works_partial_for(notice), works: notice.works %>

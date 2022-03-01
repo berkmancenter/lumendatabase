@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.03](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.03) - 2022-03-01
+### Added
+* Added the `case_id_number` field to the public single notice view.
+
 ## [22.02g](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.02g) - 2022-02-28
 ### Added
 * Added a new field called `case_id_number` to the `notices` table.

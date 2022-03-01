@@ -1,7 +1,7 @@
 class NoticeSerializer < BaseSerializer
   attributes :id, :type, :title, :body, :date_sent, :date_received,
              :topics, :sender_name, :principal_name, :recipient_name, :works,
-             :tags, :jurisdictions, :action_taken, :language
+             :tags, :jurisdictions, :action_taken, :language, :case_id_number
 
   # Data to be returned when a Work has no associated URL.
   FALLBACK = [{ url: 'No URL submitted' }].freeze
