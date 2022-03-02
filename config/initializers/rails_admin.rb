@@ -153,6 +153,7 @@ RailsAdmin.config do |config|
         configure(:type) do
           hide
         end
+
         configure :reset_type, :enum do
           label 'Type'
           required true
@@ -177,6 +178,10 @@ RailsAdmin.config do |config|
             ability = Ability.new(bindings[:view]._current_user)
             ability.can? :rescind, Notice
           end
+        end
+
+        configure(:works_json) do
+          hide
         end
       end
     end

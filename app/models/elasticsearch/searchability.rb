@@ -88,7 +88,8 @@ module Searchability
         out = as_json(except: [:jurisdiction_list, :regulation_list, :tag_list])
 
         attributes_to_skip = %w[review_required reviewer_id url_count
-                                webform notes views_overall views_by_notice_viewer]
+                                webform notes views_overall views_by_notice_viewer
+                                works_json]
         out.except!(*attributes_to_skip)
 
         out['class_name'] = self.class.name
