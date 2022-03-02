@@ -20,8 +20,11 @@ services:
       - '1080:1080'
     volumes:
       - '.:/app'
+      - docker_website_bash_history:/home/lumen/hist
     env_file:
       - '.env'
+    environment:
+      HISTFILE: /home/lumen/hist/.bash_history
 
   elasticsearch:
     image: elasticsearch:7.17.0
@@ -47,4 +50,4 @@ services:
 volumes:
   postgres:
   esdata:
-  esdata_test:
+  docker_website_bash_history:
