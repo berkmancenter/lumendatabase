@@ -1,5 +1,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.03a](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.03a) - 2022-03-02
+### Changed
+* Hid the `works_json` field from the edit notice form in the admin.
+* Optimized the `copy_urls_to_notices_as_jsonb` script. Thanks to @hasegeli.
+
 ## [22.03](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.03) - 2022-03-01
 ### Added
 * Added the `case_id_number` field to the public single notice view.
