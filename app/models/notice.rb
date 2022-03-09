@@ -362,12 +362,19 @@ class Notice < ApplicationRecord
     topics << topic unless topics.include?(topic)
   end
 
+  def works_json=(value)
+    value = JSON.parse(value) if value.is_a?(String)
+    value = recursive_compact(value)
+    @works = value.map { |work_json| Work.new(work_json) } if value.present?
+    super(value)
+  end
+
   def set_works
     # When it's not set by works_attributes=
-    @works = [] if works.nil?
+    @works = [] if @works.nil?
 
     # Map the existing works in jsonb to the Work model
-    @works = works_json.map { |work_json| Work.new(work_json) } unless works_json.nil?
+    @works = @works_json.map { |work_json| Work.new(work_json) } unless @works_json.nil?
   end
 
   def set_works_json
@@ -448,5 +455,15 @@ class Notice < ApplicationRecord
 
   def entities_country_codes
     entities.map(&:country_code).uniq
+  end
+
+  def recursive_compact(data)
+    case data
+    when Array
+      data.delete_if { |value| res = recursive_compact(value); res.blank? }
+    when Hash
+      data.delete_if { |_, value| res = recursive_compact(value); res.blank? }
+    end
+    data.blank? ? nil : data
   end
 end
