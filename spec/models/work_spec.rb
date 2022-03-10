@@ -85,7 +85,8 @@ RSpec.describe Work, type: :model do
       params = { description: 'Test' }
       work = Work.new(params)
       notice = create(:dmca, works: [work])
-      expect(work).to receive(:auto_redact)
+      notice.reload
+      expect(notice.works.first).to receive(:auto_redact)
       notice.save
     end
   end

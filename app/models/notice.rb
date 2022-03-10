@@ -374,7 +374,7 @@ class Notice < ApplicationRecord
     @works = [] if @works.nil?
 
     # Map the existing works in jsonb to the Work model
-    @works = @works_json.map { |work_json| Work.new(work_json) } unless @works_json.nil?
+    @works = self.works_json.map { |work_json| Work.new(work_json) } unless self.works_json.nil?
   end
 
   def set_works_json

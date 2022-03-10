@@ -99,31 +99,6 @@ class Work
       .reverse!
   end
 
-<<<<<<< HEAD
-  def auto_redact
-    InstanceRedactor.new.redact(self, REDACTABLE_FIELDS)
-  end
-
-  def force_redactions
-    auto_redact
-
-    # DeterminesWorkKind is intended for use here but disabled due to confusion
-    # caused by mis-classified works.
-    self.kind = 'Unspecified' if kind.blank?
-  end
-
-  def force_related_notices_reindex
-    # Force search reindex on related notices
-    NoticeUpdateCall.create!(caller_id: self.id, caller_type: 'work') if saved_change_to_description?
-  end
-
-  def fix_concatenated_urls
-    copyrighted_urls = fixed_urls(:copyrighted_urls)
-    infringing_urls = fixed_urls(:infringing_urls)
-  end
-
-=======
->>>>>>> Use jsonb works_json field for notice urls
   def fixed_urls(url_type)
     new_urls = []
     self.send(url_type).each do |url_obj|
@@ -154,6 +129,11 @@ class Work
 
   def auto_redact
     InstanceRedactor.new.redact(self, REDACTABLE_FIELDS)
+  end
+
+  def force_related_notices_reindex
+    # Force search reindex on related notices
+    NoticeUpdateCall.create!(caller_id: self.id, caller_type: 'work') if saved_change_to_description?
   end
 
   def new_record?
