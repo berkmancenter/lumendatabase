@@ -28,22 +28,27 @@ class TokenUrlsController < ApplicationController
 
     valid_to_submit = validate
 
-    if valid_to_submit[:status]
-      @token_url[:expiration_date] = Time.now + LumenSetting.get_i('truncation_token_urls_active_period').seconds
+    if verify_recaptcha
+      if valid_to_submit[:status]
+        @token_url[:expiration_date] = Time.now + LumenSetting.get_i('truncation_token_urls_active_period').seconds
 
-      if @token_url.save
-        run_post_create_actions
+        if @token_url.save
+          run_post_create_actions
+        else
+          flash.alert = @token_url.errors.full_messages.join('<br>').html_safe
+          render 'new'
+        end
       else
         redirect_to(
           request_access_notice_path(@notice),
-          alert: @token_url.errors.full_messages.join('<br>').html_safe
+          alert: valid_to_submit[:why]
         )
       end
     else
-      redirect_to(
-        request_access_notice_path(@notice),
-        alert: valid_to_submit[:why]
-      )
+      @token_url = TokenUrl.new
+      flash.delete(:recaptcha_error)
+      flash.alert = 'Captcha verification failed, please try again.'
+      render 'new'
     end
   end
 
@@ -128,15 +133,6 @@ class TokenUrlsController < ApplicationController
       return {
         status: false,
         why: 'Your IP address has been blocked for abusing the service.'
-      }
-    end
-
-    unless verify_recaptcha(action: 'new_token_url', minimum_score: 0.5)
-      flash.delete(:recaptcha_error)
-
-      return {
-        status: false,
-        why: 'Captcha verification failed, please try again.'
       }
     end
 

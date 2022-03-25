@@ -3,15 +3,19 @@
 <article class="captcha-gateway">
   <section class="body">
     <div class="main">
-      <h4>We need to check if you are a human, wait a few seconds please.</h4>
-      <h4>You will be automatically redirected to your destination page.</h4>
-      <div>
-        <%= image_tag 'captcha_loading.gif' %>
-      </div>
+      <h4>We need to check if you are a human, resolve the captcha and hit the submit button, please.</h4>
+      <h4>You will be then redirected to your destination page.</h4>
 
       <form id="captcha-gateway-form" method="get">
-        <%= recaptcha_v3(action: 'gateway') %>
         <input type="hidden" name="destination" value="<%= params[:destination] %>">
+
+        <div class="form-inputs">
+          <%= recaptcha_tags %>
+        </div>
+
+        <div class="form-actions">
+          <input type="submit" name="commit" value="Submit">
+        </div>
       </form>
     </div>
   </section>

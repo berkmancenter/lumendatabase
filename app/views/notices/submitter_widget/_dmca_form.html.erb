@@ -32,7 +32,7 @@
              label: 'DMCA takedown notice',
              form: form %>
 
-  <%= recaptcha_v3(action: 'submitter_widget_new_notice') %>
+  <%= recaptcha_tags %>
 
   <%= render 'notices/form_components/submit', form: form %>
 <% end %>

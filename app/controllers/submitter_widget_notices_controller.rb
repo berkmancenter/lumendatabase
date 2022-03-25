@@ -34,7 +34,7 @@ class SubmitterWidgetNoticesController < NoticesController
       get_notice_type(params), notice_params, submitter_widget_user
     ).build
 
-    unless verify_recaptcha(action: 'submitter_widget_new_notice', minimum_score: 0.5)
+    unless verify_recaptcha
       flash.delete(:recaptcha_error)
       flash.alert = 'Captcha verification failed, please try again.'
       strip_fixed_roles and render 'notices/submitter_widget/new' and return

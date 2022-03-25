@@ -6,22 +6,17 @@ class ApiSubmitterRequestsController < ApplicationController
   def create
     @api_submitter_request = ApiSubmitterRequest.new(api_submitter_request_params)
 
-    valid_to_submit = validate
-
-    if valid_to_submit[:status]
+    if verify_recaptcha
       if @api_submitter_request.save
         run_post_create_actions
       else
-        redirect_to(
-          api_submitter_requests_path(@api_submitter_request),
-          alert: @api_submitter_request.errors.full_messages.join('<br>').html_safe
-        )
+        flash.alert = @api_submitter_request.errors.full_messages.join('<br>').html_safe
+        render 'new'
       end
     else
-      redirect_to(
-        api_submitter_requests_path(@api_submitter_request),
-        alert: valid_to_submit[:why]
-      )
+      flash.delete(:recaptcha_error)
+      flash.alert = 'Captcha verification failed, please try again.'
+      render 'new'
     end
   end
 
@@ -51,19 +46,5 @@ class ApiSubmitterRequestsController < ApplicationController
       :entity_city,
       :entity_zip
     )
-  end
-
-  def validate
-    unless verify_recaptcha(action: 'new_submitter_request', minimum_score: 0.5)
-      flash.delete(:recaptcha_error)
-
-      return {
-        status: false,
-        why: 'Captcha verification failed, please try again.'
-      }
-    end
-    {
-      status: true
-    }
   end
 end
