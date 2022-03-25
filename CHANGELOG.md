@@ -1,5 +1,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.03c](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.03c) - 2022-03-25
+### Changed
+* Moved from using the invisible `recaptcha` (v3) to the visible one (v2).
+
+## [22.03b](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.03b) - 2022-03-25
+### Changed
+* Updated the `rails` gem with its dependencies.
+
 ## [22.03a](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.03a) - 2022-03-02
 ### Changed
 * Hid the `works_json` field from the edit notice form in the admin.
