@@ -82,5 +82,46 @@ describe Entity, type: :model do
     end
   end
 
+  context 'redaction' do
+    it 'redacts phone numbers with auto_redact' do
+      content = '(617) 867-5309'
+      test_redaction(content)
+    end
+
+    it 'redacts emails with auto_redact' do
+      content = 'me@example.com'
+      test_redaction(content)
+    end
+
+    it 'redacts SSNs with auto_redact' do
+      content = '123-45-6789'
+      test_redaction(content)
+    end
+
+    it 'redacts automatically on save' do
+      params = { name: 'Test' }
+      entity = Entity.new(params)
+      expect(entity).to receive(:force_redactions)
+      entity.save
+    end
+  end
+
   it_behaves_like 'an object with hierarchical relationships'
+
+  private
+
+  def entity_for_redaction_testing(redact_me)
+    params = { name: "Test if we redact #{redact_me}" }
+    entity = Entity.new(params)
+    entity.save
+    entity.reload
+    entity
+  end
+
+  def test_redaction(content)
+    entity = entity_for_redaction_testing(content)
+
+    expect(entity.name).not_to include content
+    expect(entity.name_original).to include content
+  end
 end

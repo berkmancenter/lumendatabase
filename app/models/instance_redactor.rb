@@ -33,11 +33,14 @@ class InstanceRedactor
     end
 
     return unless new_text != text
+
     instance.send(:"#{field}=", new_text)
   end
 
   def update_original(instance, field, text)
+    return unless instance.respond_to?("#{field}_original")
     return unless instance.send(:"#{field}_original").blank?
+
     instance.send(:"#{field}_original=", text)
   end
 

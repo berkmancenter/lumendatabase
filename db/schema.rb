@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_28_202739) do
+ActiveRecord::Schema.define(version: 2022_04_04_155853) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,7 +38,7 @@ ActiveRecord::Schema.define(version: 2022_02_28_202739) do
   end
 
   create_table "active_storage_variant_records", force: :cascade do |t|
-    t.bigint "blob_id", null: false
+    t.integer "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
@@ -260,6 +260,13 @@ ActiveRecord::Schema.define(version: 2022_02_28_202739) do
     t.datetime "updated_at"
     t.string "name_original"
     t.boolean "full_notice_only_researchers"
+    t.string "address_line_1_original"
+    t.string "address_line_2_original"
+    t.string "city_original"
+    t.string "state_original"
+    t.string "country_code_original"
+    t.string "zip_original"
+    t.string "url_original"
     t.index ["address_line_1"], name: "index_entities_on_address_line_1"
     t.index ["ancestry"], name: "index_entities_on_ancestry"
     t.index ["city"], name: "index_entities_on_city"
@@ -585,7 +592,7 @@ ActiveRecord::Schema.define(version: 2022_02_28_202739) do
   end
 
   create_table "youtube_import_file_locations", force: :cascade do |t|
-    t.bigint "file_upload_id"
+    t.integer "file_upload_id"
     t.string "path", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

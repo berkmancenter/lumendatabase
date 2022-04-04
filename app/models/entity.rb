@@ -19,6 +19,7 @@ class Entity < ApplicationRecord
     %i[address_line_1 city state zip country_code phone email].freeze
   MULTI_MATCH_FIELDS = %w(name^5 kind address_line_1 address_line_2 state
     country_code^2 email url^3 ancestry city zip created_at updated_at)
+  REDACTABLE_FIELDS = %w[name address_line_1 address_line_2 city state zip country_code url].freeze
 
   # == Relationships ========================================================
   belongs_to :user
@@ -57,6 +58,7 @@ class Entity < ApplicationRecord
   # == Callbacks ============================================================
   # Force search reindex on related notices
   after_update { NoticeUpdateCall.create!(caller_id: self.id, caller_type: 'entity') if self.saved_changes.any? }
+  after_validation :force_redactions
 
   # == Class Methods ========================================================
   def self.submitters
@@ -82,5 +84,9 @@ class Entity < ApplicationRecord
     attributes.select do |key, _value|
       all_deduplication_attributes.include?(key.to_sym)
     end
+  end
+
+  def force_redactions
+    InstanceRedactor.new.redact(self, REDACTABLE_FIELDS)
   end
 end
