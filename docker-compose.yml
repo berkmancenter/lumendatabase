@@ -5,6 +5,7 @@ services:
     image: 'postgres:13.6-alpine'
     volumes:
       - 'postgres:/var/lib/postgresql/data'
+      - '.:/app'
     env_file:
       - '.env'
     environment:
