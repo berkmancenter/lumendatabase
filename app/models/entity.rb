@@ -19,7 +19,7 @@ class Entity < ApplicationRecord
     %i[address_line_1 city state zip country_code phone email].freeze
   MULTI_MATCH_FIELDS = %w(name^5 kind address_line_1 address_line_2 state
     country_code^2 email url^3 ancestry city zip created_at updated_at)
-  REDACTABLE_FIELDS = %w[name address_line_1 address_line_2 city state zip country_code url].freeze
+  REDACTABLE_FIELDS = %w[name address_line_1 address_line_2 city state country_code url].freeze
 
   # == Relationships ========================================================
   belongs_to :user

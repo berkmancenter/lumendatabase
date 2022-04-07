@@ -28,6 +28,7 @@ class EntityNoticeRole < ApplicationRecord
   def validate_associated_records_for_entity
     return unless entity.present?
 
+    entity.force_redactions
     if existing_entity = Entity.where(entity.attributes_for_deduplication).first
       self.entity = existing_entity
     else
@@ -60,5 +61,4 @@ class EntityNoticeRole < ApplicationRecord
   validates_inclusion_of :name, in: ROLES
   validates_presence_of :entity, :notice
   validates_associated :entity
-
 end
