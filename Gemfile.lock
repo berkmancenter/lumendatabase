@@ -478,8 +478,6 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
-    skylight (5.1.1)
-      activesupport (>= 5.2.0)
     slop (3.6.0)
     sprockets (4.0.3)
       concurrent-ruby (~> 1.0)
@@ -599,7 +597,6 @@ DEPENDENCIES
   shoulda-matchers (~> 4.0)
   simple_form
   simplecov
-  skylight
   stackprof
   terser
   test-prof

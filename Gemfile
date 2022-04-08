@@ -44,7 +44,6 @@ gem 'redcarpet'
 gem 'rss'
 gem 'select2-rails', '~> 4.0', '>= 4.0.3'
 gem 'simple_form'
-gem 'skylight'
 gem 'stackprof'
 gem 'turnout'
 

@@ -1,6 +1,4 @@
 class NoticeBuilder
-  include Skylight::Helpers
-
   def initialize(model_class, params, user=nil)
     @model_class = model_class
     @params = params
@@ -8,7 +6,6 @@ class NoticeBuilder
     @json_params = nil
   end
 
-  instrument_method
   def build
     @notice = model_class.new(params)
     set_json_params

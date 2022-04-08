@@ -146,11 +146,6 @@ Use rubocop and leave the code at least as clean as you found it. If you make li
 
 ####  Profiling
 
-* [Skylight](https://www.skylight.io/app/applications/utm46ElcSDtw/recent/5m/endpoints)
-  * track page rendering time, count allocations, find possibly dodgy SQL
-  * analytics to help you find the problem areas at a high level
-  * login required
-  * runs in prod
 * [mini-profiler](https://github.com/MiniProfiler/rack-mini-profiler)
   * available in dev by default
   * in use on prod, visible only to super_admins
@@ -161,7 +156,6 @@ Use rubocop and leave the code at least as clean as you found it. If you make li
   * logs to `log/bullet.log`
 * [oink](https://github.com/noahd1/oink)
   * memory usage, allocations
-  * more specific than Skylight as to which objects are being created where
   * runs in dev by default; can run anywhere by setting `ENV[LUMEN_USE_OINK]` (ok to run in production)
   * logs to `log/oink.log`
 
@@ -253,9 +247,3 @@ Copyright
 =========
 
 Copyright (c) 2016 President and Fellows of Harvard College
-
-
-Performance Monitoring
-======================
-
-[View performance data on Skylight](https://oss.skylight.io/app/applications/utm46ElcSDtw/recent/6h/endpoints)

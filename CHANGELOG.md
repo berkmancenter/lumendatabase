@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.04b](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.04b) - 2022-04-08
+### Changed
+* Removed the `skylight` gem.
+
 ## [22.04a](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.04a) - 2022-04-07
 ### Fixed
 * Stopped redacting entities zip codes.

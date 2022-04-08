@@ -3,7 +3,6 @@
 require 'validates_automatically'
 
 class Work < ApplicationRecord
-  include Skylight::Helpers
   include ValidatesAutomatically
 
   UNKNOWN_WORK_DESCRIPTION = 'Unknown work'.freeze
@@ -119,7 +118,6 @@ class Work < ApplicationRecord
     NoticeUpdateCall.create!(caller_id: self.id, caller_type: 'work') if saved_change_to_description?
   end
 
-  instrument_method
   def fix_concatenated_urls
     copyrighted_urls = fixed_urls(:copyrighted_urls)
     infringing_urls = fixed_urls(:infringing_urls)
