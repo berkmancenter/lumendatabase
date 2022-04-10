@@ -1019,10 +1019,18 @@ where works.id in (
 
       loggy.info "Processing #{notice_update_call.caller_type} id=#{notice_update_call.caller_id}"
 
-      related_object = notice_update_call.caller_type.classify.constantize.find(notice_update_call.caller_id)
-      related_object.notices.find_in_batches(batch_size: batch_size) do |notices|
-        notices.each do |notice|
-          notice.touch
+      related_object = notice_update_call.caller_type.classify.constantize.find_by(id: notice_update_call.caller_id)
+      number_of_notices = related_object.notices.count
+      if related_object.present?
+        loggy.info "Processing #{notice_update_call.caller_type} id=#{notice_update_call.caller_id} #{number_of_notices} items to process"
+
+        itx = 1
+        related_object.notices.find_in_batches(batch_size: batch_size) do |notices|
+          notices.each do |notice|
+            loggy.info "Processing #{notice_update_call.caller_type} id=#{notice_update_call.caller_id} #{itx}/#{number_of_notices}"
+            notice.touch
+            itx += 1
+          end
         end
       end
 
