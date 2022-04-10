@@ -57,7 +57,7 @@ class Entity < ApplicationRecord
 
   # == Callbacks ============================================================
   # Force search reindex on related notices
-  after_update { NoticeUpdateCall.create!(caller_id: self.id, caller_type: 'entity') if self.saved_changes.any? }
+  after_update { NoticeUpdateCall.create!(caller_id: self.id, caller_type: 'entity') if self.saved_changes.any? && name_original_was.present? }
   after_validation :force_redactions
 
   # == Class Methods ========================================================

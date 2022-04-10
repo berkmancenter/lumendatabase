@@ -1,5 +1,13 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.04d](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.04d) - 2022-04-10
+### Changed
+* Made the `entity` model create a `NoticeUpdateCall` only when the `name_original` attribute was set.
+
+## [22.04c](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.04c) - 2022-04-10
+### Changed
+* Updated the `mark_notices_to_reindex_after_relations_update` task to get more feedback.
+
 ## [22.04b](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.04b) - 2022-04-08
 ### Changed
 * Removed the `skylight` gem.
