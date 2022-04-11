@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.04f](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.04f) - 2022-04-11
+### Changed
+* Changed how redactions are handled on the `entity` model.
+
 ## [22.04e](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.04e) - 2022-04-11
 ### Changed
 * Removed the `DefaultNameOriginal` module.

@@ -56,7 +56,7 @@ class Entity < ApplicationRecord
   # == Callbacks ============================================================
   # Force search reindex on related notices
   after_update do
-    NoticeUpdateCall.create!(caller_id: self.id, caller_type: 'entity') if self.saved_changes.any? && name_original_was.present?
+    NoticeUpdateCall.create!(caller_id: self.id, caller_type: 'entity') if self.saved_changes.any?
   end
   after_validation :force_redactions
 
@@ -81,7 +81,10 @@ class Entity < ApplicationRecord
       :name, ADDITIONAL_DEDUPLICATION_FIELDS
     ].flatten
 
-    attributes.select do |key, _value|
+    instance_clone = self.dup
+    instance_clone.force_redactions
+
+    instance_clone.attributes.select do |key, _value|
       all_deduplication_attributes.include?(key.to_sym)
     end
   end
