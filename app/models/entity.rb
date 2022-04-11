@@ -2,12 +2,10 @@
 
 require 'validates_automatically'
 require 'hierarchical_relationships'
-require 'default_name_original'
 
 class Entity < ApplicationRecord
   include ValidatesAutomatically
   include HierarchicalRelationships
-  include DefaultNameOriginal
   include Elasticsearch::Model
 
   # == Constants ============================================================
@@ -57,7 +55,9 @@ class Entity < ApplicationRecord
 
   # == Callbacks ============================================================
   # Force search reindex on related notices
-  after_update { NoticeUpdateCall.create!(caller_id: self.id, caller_type: 'entity') if self.saved_changes.any? && name_original_was.present? }
+  after_update do
+    NoticeUpdateCall.create!(caller_id: self.id, caller_type: 'entity') if self.saved_changes.any? && name_original_was.present?
+  end
   after_validation :force_redactions
 
   # == Class Methods ========================================================
