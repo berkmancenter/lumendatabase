@@ -306,7 +306,7 @@ GEM
       sass (>= 3.2)
     nested_form (0.3.2)
     nio4r (2.5.8)
-    nokogiri (1.13.3)
+    nokogiri (1.13.4)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     oink (0.10.1)
