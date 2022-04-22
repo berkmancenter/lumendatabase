@@ -7,7 +7,8 @@ module NoticesHelper
       show_original || show_infringing,
       # Additional access cannot be requested for confidential court orders
       # as there is nothing further to display.
-      !confidential_order?(notice)
+      !confidential_order?(notice),
+      !ContentFilter.notice_has_action?(notice, :full_notice_version_only_lumen_team)
     ].all?
   end
 
