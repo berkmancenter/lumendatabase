@@ -20,7 +20,7 @@ class ContentFilter < ApplicationRecord
 
   def self.notice_has_action?(notice_instance, action_id)
     ContentFilter.all.each do |content_filter|
-      next unless Notice.joins(works: [:infringing_urls, :copyrighted_urls])
+      next unless Notice.joins(:works)
                         .joins(:topics)
                         .joins(entity_notice_roles: :entity)
                         .joins(tags: :taggings)
