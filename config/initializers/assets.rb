@@ -21,3 +21,5 @@ Rails.application.config.assets.precompile += %w[
   pace.min.js
   pace.css
 ]
+
+Rails.application.config.assets.precompile += %w[application.js] if Rails.env.test?

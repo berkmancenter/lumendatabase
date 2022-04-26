@@ -4,13 +4,11 @@
   <section class="search-results">
     <header class="app">
       <%= form_tag(@search_index_path, method: :get, id: 'facets-form') do %>
-        <% if @searchdata.response['aggregations'] %>
-          <ol class="results-facets">
-            <% @filterable_fields.each do |filterable_field| %>
-              <%= render filterable_field, results: @searchdata.response['aggregations'] %>
-            <% end %>
-          </ol>
-        <% end %>
+        <ol class="results-facets">
+          <% @filterable_fields.each do |filterable_field| %>
+            <%= render filterable_field, results: @searchdata.response['aggregations'] %>
+          <% end %>
+        </ol>
         <%= hidden_field_tag(:sort_by, params[:sort_by], class: 'sort_by_field', id: nil) %>
       <% end %>
       <div class="results-context">
@@ -40,3 +38,8 @@
     <%= paginate @searchdata.results, left: 9, right: 2, current_page: @searcher.page.to_i %>
   </section>
 <% end %>
+
+<script type="text/javascript">
+  facet_notices_search_index_path = '<%= facet_notices_search_index_path %>';
+  loader_url = '<%= image_url("loader.gif") %>';
+</script>

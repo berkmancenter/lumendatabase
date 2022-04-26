@@ -37,11 +37,14 @@ RSpec.configure do |config|
   # Enables --only-failures.
   config.example_status_persistence_file_path = 'rspec_examples.txt'
 
-  #config.raise_errors_for_deprecations!
   config.before(:each, js: true) do
     # The default window size is too narrow, and may cause elements to overlap
     # (and thus not be clickable) due to inadequately responsive design.
     Capybara.page.driver.browser.manage.window.resize_to(2048, 600)
+  end
+
+  config.before(:suite) do
+    Rake::Task['lumen:set_up_cms'].execute
   end
 end
 

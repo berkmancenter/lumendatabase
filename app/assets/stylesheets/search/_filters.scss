@@ -31,7 +31,11 @@ ol.results-facets {
     &:last-child {
       border-right: 0;
     }
+  }
 
+  .facet-loader {
+    padding: 5px;
+    vertical-align: middle;
   }
 
   @include media($tablet) {

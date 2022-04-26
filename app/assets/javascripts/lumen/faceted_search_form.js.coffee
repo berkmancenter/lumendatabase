@@ -11,7 +11,7 @@ otherActive = (el) ->
   something_active = closestDropdown(el).find('.active').length > 0
   return something_active && !parentActive(el)
 
-$('ol.results-facets li.facet').on 'click', 'a', (event) ->
+$('ol.results-facets').on 'click', 'li.facet a', (event) ->
   event.preventDefault()
   clearUnspecifiedInputs($(this))
 
@@ -25,6 +25,30 @@ $('ol.results-facets li.facet').on 'click', 'a', (event) ->
     if facet_value == undefined
       hidden_unspecified_indicator.val(true)
     $('form#facets-form').submit()
+
+$('ol.results-facets .dropdown-toggle').on 'click', (event) ->
+  clicked_elem = $(this)
+  list = clicked_elem.nextAll('ol').first()
+
+  if clicked_elem.attr('data-loaded')
+    return
+
+  clicked_elem.attr('data-loaded', true)
+
+  loader = $('<img/>')
+             .attr('src', loader_url)
+             .addClass('facet-loader')
+
+  list.html(loader)
+
+  $.get(
+    facet_notices_search_index_path + window.location.search,
+    { facet_id: clicked_elem.nextAll('input[type=hidden]').first().attr('id') },
+    (response) ->
+      new_facet_list = $(response).find('ol').html()
+      list = clicked_elem.nextAll('ol').first()
+      list.html(new_facet_list)
+  )
 
 clearEmptyParameters = ->
   $('form#facets-form').find('input[type="hidden"]').each (_, element) ->
