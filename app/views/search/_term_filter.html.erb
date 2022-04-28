@@ -5,20 +5,22 @@
   <ol class="dropdown-menu <%= term_filter.parameter %>" role="menu">
     <li class="facet"><a href="javascript:void(0);" data-facet-name="<%= term_filter.parameter %>" data-value="">All</a></li>
     <% unspecified_identifier = unspecified_identifiers(term_filter.parameter) %>
-    <% results[term_filter.parameter.to_s]['buckets'].each do |term| %>
-      <% name = term[:key] %>
-      <% unspecified = name.blank? %>
-      <% active_indicator = facet_active_indicator(term_filter.parameter, name) %>
-      <li class="facet <%= active_indicator %>" name="<%= term_filter.parameter %>">
-      <% data_hash = {
-        facet_name: term_filter.parameter,
-        unspecified_name: unspecified_identifier
-      } %>
-      <% data_hash[:value] = name unless unspecified %>
-      <%= link_to "javascript:void(0);", data: data_hash do %>
-        <%= unspecified ? 'Unspecified' : name %><span class="total-count"><%= term[:doc_count] %> Results</span>
+    <% if results&.dig(term_filter.parameter.to_s) %>
+      <% results[term_filter.parameter.to_s]['buckets'].each do |term| %>
+        <% name = term[:key] %>
+        <% unspecified = name.blank? %>
+        <% active_indicator = facet_active_indicator(term_filter.parameter, name) %>
+        <li class="facet <%= active_indicator %>" name="<%= term_filter.parameter %>">
+        <% data_hash = {
+          facet_name: term_filter.parameter,
+          unspecified_name: unspecified_identifier
+        } %>
+        <% data_hash[:value] = name unless unspecified %>
+        <%= link_to "javascript:void(0);", data: data_hash do %>
+          <%= unspecified ? 'Unspecified' : name %><span class="total-count"><%= term[:doc_count] %> Results</span>
+        <% end %>
+        </li>
       <% end %>
-      </li>
     <% end %>
   </ol>
   <%= hidden_field_tag(term_filter.parameter, params[term_filter.parameter]) %>

@@ -6,7 +6,11 @@ Rails.application.routes.draw do
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
 
   namespace :notices do
-    resources :search, only: [:index]
+    resources :search, only: %i[index] do
+      collection do
+        get :facet
+      end
+    end
   end
 
   resources :notices, only: %i[show new create] do
