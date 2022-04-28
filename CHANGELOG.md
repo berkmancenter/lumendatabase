@@ -1,6 +1,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
-## [22.04g](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.04g) - 2022-04-22
+## [22.04i](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.04i) - 2022-04-28
+### Changed
+* Made the search view load facets on demand, not on every search request.
+* Updated the `rails` gem.
+
+## [22.04h](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.04h) - 2022-04-22
 ### Changed
 * Stopped joining urls in content filters.
 
