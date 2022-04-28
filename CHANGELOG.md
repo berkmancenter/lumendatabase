@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.04j](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.04j) - 2022-04-28
+### Fixed
+* Fixed loading search facets for loggen-in users.
+
 ## [22.04i](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.04i) - 2022-04-28
 ### Changed
 * Made the search view load facets on demand, not on every search request.

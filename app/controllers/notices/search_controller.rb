@@ -4,9 +4,9 @@ class Notices::SearchController < SearchController
   SEARCHED_MODEL = Notice
 
   def facet
-    unless Rails.env.test?
+    if current_user.nil? && !Rails.env.test?
       time_permission = session[:captcha_permission]
-      return if time_permission < Time.now
+      return if time_permission.nil? || time_permission < Time.now
     end
 
     filterable_field_facet = Notice::FILTERABLE_FIELDS.select { |filterable_field| filterable_field.parameter.to_s == params[:facet_id] }.first
