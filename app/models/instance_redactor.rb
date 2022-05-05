@@ -100,9 +100,9 @@ class InstanceRedactor
   class PhoneNumberRedactor
     def redact(text)
       redactor = ContentRedactor.new(
-        /(\(?\d{3}\)?.?)?     # optional area code
-         (\d{3}[^\d]?\d{4})|  # phone number, optional single-char separator
-         (\d+[\d ]{10,16}\d+) # turkish phone number
+        /(\()?\b(\(?\d{3}\)?.?)?  # optional area code
+         (\d{3}[^\d]?\d{4})|      # phone number, optional single-char separator
+         (\d+[\d ]{10,16}\d+)\b   # turkish phone number
         /x
       )
 

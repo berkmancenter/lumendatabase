@@ -41,6 +41,17 @@ describe InstanceRedactor::PhoneNumberRedactor do
       expect(redacted).to eq redacted_text
     end
   end
+
+  it 'does not redact us zip codes' do
+    zip_code = '94104-0602'
+    original_text = "Something with #{zip_code} twice, #{zip_code}."
+    redacted_text = "Something with #{zip_code} twice, #{zip_code}."
+    redactor = described_class.new
+
+    redacted = redactor.redact(original_text)
+
+    expect(redacted).to eq redacted_text
+  end
 end
 
 describe InstanceRedactor::SSNRedactor do
