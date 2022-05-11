@@ -1,14 +1,23 @@
-<div class="search-wrapper">
+<div class="search-box-wrapper">
   <%= form_tag(@search_index_path, method: :get) do %>
-    <div class="input">
-      <%= text_field_tag :term, params[:term], id: "search", type: 'search', placeholder: @search_all_placeholder %>
-    </div>
-    <div class="submit">
-      <button id="submit" class="main-search-submit" type="submit" title="search">Go</button>
-      <div class="search-dropdown dropdown">
-        <a id="toggle-advanced-search" href="" class="dropdown-toggle" data-toggle="dropdown">Open</a>
+    <div class="search-box is-flex is-align-items-center">
+      <div class="search-box-logo">
+        <% if defined? logo %>
+          <%= link_to root_path do %>
+            <%= image_tag('logo_2x.png') %>
+          <% end %>
+        <% end %>
+      </div>
+
+      <div class="search-box-input">
+        <%= text_field_tag :term, params[:term], id: "search", type: 'search', placeholder: @search_all_placeholder %>
+      </div>
+
+      <div class="search-box-submit is-flex is-align-content-stretch">
+        <button id="search-submit" type="submit" title="search">Search</button>
       </div>
     </div>
+
     <%= hidden_field_tag(:sort_by, params[:sort_by], class: 'sort_by_field', id: nil) %>
   <% end %>
 </div>

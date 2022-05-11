@@ -8,12 +8,8 @@
 </head>
 <body class="<%= body_class %>">
   <%= render 'flashes' -%>
-  <div class="blue-nav">
-    <%= render 'shared/navigation' -%>
-  </div>
-  <section class="main home">
-    <%= yield %>
-  </section>
+  <%= render 'shared/navigation' -%>
+  <%= yield %>
   <%= render 'shared/footer' -%>
   <%= render 'javascript' %>
   <%= render 'shared/piwik' %>

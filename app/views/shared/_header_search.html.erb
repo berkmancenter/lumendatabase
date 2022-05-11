@@ -1,8 +1,8 @@
-<header class="app search-header">
+<header class="app header-search">
   <%= render "shared/header_nav" %> 
-  <div class="container search header-bar">
-    <%= render 'shared/search' %>
-  </div>
+  <%= render 'shared/search', logo: true %>
+
+  <div style="display: none;">
   <%= form_tag(@search_index_path, method: :get) do %>
     <div class="container advanced-search">
       <div class="width-wrapper">
@@ -18,4 +18,5 @@
     </div>
     <%= hidden_field_tag(:sort_by, params[:sort_by], class: 'sort_by_field', id: nil) %>
   <% end %>
+  </div>
 </header>

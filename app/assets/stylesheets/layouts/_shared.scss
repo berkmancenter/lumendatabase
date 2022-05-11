@@ -1,0 +1,35 @@
+body {
+  font-family: 'Roboto', sans-serif;
+}
+
+.search-box-wrapper {
+  margin-bottom: 30px;
+
+  input#search {
+    width: 30vw;
+    height: 35px;
+    max-width: 585px;
+  }
+
+  button {
+    background-color: #019CE0;
+    border: 0;
+    color: #ffffff;
+    margin-left: -1px;
+    height: 41px;
+  }
+
+  .search-box-logo {
+    height: 53px;
+    margin-right: 20px;
+
+    img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+  }
+
+  .search-dropdown {
+    display: none;
+  }
+}

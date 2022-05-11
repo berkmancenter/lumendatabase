@@ -1,8 +1,0 @@
-body.home {
-  background: $home-background-color;
-}
-
-.main.home {
-  @include outer-container;
-  max-width: $home-width;
-}

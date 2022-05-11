@@ -1,8 +1,0 @@
-%dropdown-menu{
-  @include ui-dropdown(left, $width: 300px, $nub-bg-color: none, $nub-border-color: none);
-  margin-top: 5px;
-  border-radius: 2px;
-  font-size: $base-font-size-small-1;
-  font-weight: 600;
-  margin-left: -10x;
-}

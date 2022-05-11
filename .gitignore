@@ -18,7 +18,6 @@
 
 # Ignore yarn stuff
 node_modules/
-yarn.lock
 
 # Ignore all logfiles and tempfiles.
 log/*

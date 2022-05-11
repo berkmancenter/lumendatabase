@@ -12,51 +12,62 @@
  */
 
 @import 'normalize';
-@import 'bourbon';
-@import 'neat';
-@import 'bitters/base';
-@import 'components/base';
-@import 'extends/base';
+@import 'bulma/css/bulma';
 
-// Vendor
-@import 'select2';
-@import 'bootstrap-datepicker';
-
-// Shared
-@import 'shared/fontello';
-@import 'shared/pagination';
-@import 'shared/header';
 @import 'shared/footer';
-@import 'shared/navigation';
-@import 'shared/flexnav';
 
 // Layouts
-@import 'layouts/application';
+@import 'layouts/shared';
+@import 'layouts/regular';
 @import 'layouts/home';
-@import 'layouts/sessions';
 
-// Views
-@import 'home/index';
-@import 'notices/show';
-@import 'notices/new';
-@import 'notices/forms';
-@import 'topics/show';
-@import 'search/index';
-@import 'search/filters';
-@import 'blog/index';
-@import 'blog/show';
-@import 'counter_notices/show';
-@import 'token_urls/index';
-@import 'media_mentions/index';
-@import 'api_submitter_requests/index';
-@import 'captcha_gateway/index';
+@import 'elements/shared';
 
-@import 'pages/pages';
-
-.wip {
-  outline: 1px solid yellow;
-
-  &.disabled {
-    outline: none;
-  }
-}
+// @import 'bourbon';
+// @import 'neat';
+// @import 'bitters/base';
+// @import 'components/base';
+// @import 'extends/base';
+// 
+// // Vendor
+// @import 'select2';
+// @import 'bootstrap-datepicker';
+// 
+// // Shared
+// @import 'shared/fontello';
+// @import 'shared/pagination';
+// @import 'shared/header';
+// @import 'shared/footer';
+// @import 'shared/navigation';
+// @import 'shared/flexnav';
+// 
+// // Layouts
+// @import 'layouts/application';
+// @import 'layouts/home';
+// @import 'layouts/sessions';
+// 
+// // Views
+// @import 'home/index';
+// @import 'notices/show';
+// @import 'notices/new';
+// @import 'notices/forms';
+// @import 'topics/show';
+// @import 'search/index';
+// @import 'search/filters';
+// @import 'blog/index';
+// @import 'blog/show';
+// @import 'counter_notices/show';
+// @import 'token_urls/index';
+// @import 'media_mentions/index';
+// @import 'api_submitter_requests/index';
+// @import 'captcha_gateway/index';
+// 
+// @import 'pages/pages';
+// 
+// .wip {
+//   outline: 1px solid yellow;
+// 
+//   &.disabled {
+//     outline: none;
+//   }
+// }

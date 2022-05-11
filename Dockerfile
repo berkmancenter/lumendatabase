@@ -13,7 +13,7 @@ RUN wget https://chromedriver.storage.googleapis.com/98.0.4758.102/chromedriver_
     && ln -s /usr/local/share/chromedriver /usr/bin/chromedriver
 
 RUN apt-get update \
-    && apt-get -y install tzdata git build-essential patch ruby-dev zlib1g-dev liblzma-dev default-jre sudo google-chrome-stable vim nano tmux
+    && apt-get -y install tzdata git build-essential patch ruby-dev zlib1g-dev liblzma-dev default-jre sudo google-chrome-stable vim nano tmux nodejs npm
 
 # Container user and group
 ARG USERNAME=lumen
@@ -27,6 +27,12 @@ RUN groupadd --gid $USER_GID $USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
 
 USER $USERNAME
+
+# # Install yarn
+WORKDIR /app
+RUN sudo chown -R $USERNAME:$USERNAME /app
+RUN sudo npm install --global yarn
+RUN yarn install
 
 # Install and cache gems
 WORKDIR /

@@ -1,0 +1,14 @@
+body.home {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100vh;
+
+  .home-search-form {
+    margin-top: 20vh;
+  }
+
+  .home-about {
+    max-width: 585px;
+  }
+}

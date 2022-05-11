@@ -1,34 +1,15 @@
-footer.main {
-  background: $base-background-color-alt;
-  color: $base-font-color-3;
-  font-size: $base-font-size-small-1;
-  font-weight: 500;
+footer.footer {
+  margin-top: auto;
+  padding: 15px 30px;
+  background-color: #f2f2f2;
+  color: #70757a;
 
   a {
-    color: $base-font-color-3;
-    text-decoration: none;
-
-    &:hover {
-      color: $base-link-color;
-    }
-  }
-}
-
-body.home footer.main {
-  background: none;
-  border: 0;
-  font-size: $base-font-size-small-2;
-  margin: 0 auto;
-  max-width: $home-width;
-  padding: 0;
-
-  .nav-item, a {
-    &:first-child {
-      padding-left: 0;
-    }
+    color: #70757a;
   }
 
-  @include media($tablet) {
-    padding: 0 10px;
+  .footer-cc-img {
+    vertical-align: middle;
+    height: 16px;
   }
 }
