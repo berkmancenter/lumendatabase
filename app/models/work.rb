@@ -1,71 +1,44 @@
 # frozen_string_literal: true
 
-require 'validates_automatically'
+class Work
+  include ActiveModel::Model
+  include ActiveModel::Serialization
+  include ActiveRecord::Validations
 
-class Work < ApplicationRecord
-  include ValidatesAutomatically
+  attr_accessor :description, :description_original, :kind, :infringing_urls, :copyrighted_urls
 
   UNKNOWN_WORK_DESCRIPTION = 'Unknown work'.freeze
   REDACTABLE_FIELDS = %w[description].freeze
 
-  has_and_belongs_to_many :notices
-  has_and_belongs_to_many :infringing_urls
-  has_and_belongs_to_many :copyrighted_urls
-
-  accepts_nested_attributes_for :infringing_urls,
-                                :copyrighted_urls,
-                                reject_if: proc { |attributes|
-                                  attributes['url'].blank?
-                                }
   validates_associated :infringing_urls, :copyrighted_urls
-  validates :kind, length: { maximum: 255 }
 
-  after_validation :force_redactions
-  after_update :force_related_notices_reindex
-  before_validation :fix_concatenated_urls, on: :create
-
-  # Similar to the hack in EntityNoticeRole, because all validations are
-  # run before all inserts, we have to save to ensure we don't have the
-  # same new InfringingUrl or CopyrightedUrl cause a unique key constraint.
-  # This means we have to save when validating, and that we could accumulate
-  # orphaned *Url model instances.
-  %w[infringing_urls copyrighted_urls].each do |relation_type|
-    relation_class = relation_type.classify.constantize
-    define_method("validate_associated_records_for_#{relation_type}") do
-      url_attributes = send(relation_type.to_sym).inject({}) do |memo, url|
-        memo.merge(url.url_original =>
-                   url.attributes.slice('url', 'url_original'))
-      end
-      urls_to_associate = url_attributes.keys.compact
-      Rails.logger.debug "[importer][works] urls_to_associate: #{urls_to_associate}"
-
-      return if urls_to_associate == ['']
-
-      Rails.logger.debug "[importer][works] new_urls: #{urls_to_associate}"
-
-      new_url_instances = urls_to_associate.map do |url|
-        relation_class.new(url_attributes[url])
-      end
-      failing = new_url_instances.reject(&:valid?)
-      relation_class.import new_url_instances, on_duplicate_key_ignore: [:url_original]
-
-      send(
-        "#{relation_type}=".to_sym,
-        failing + relation_class.where(url_original: urls_to_associate)
-      )
-    end
+  def initialize(*)
+    super
+    init_urls
   end
 
-  # This is very slow; don't call it directly except at app startup time.
-  # config/application.rb stores the result; fetch it from there.
+  # == Class Methods ===========================================================
   def self.unknown
-    @unknown ||= find_or_create!(
-      kind: 'unknown', description: UNKNOWN_WORK_DESCRIPTION
+    @unknown ||= Work.new(
+      kind: 'unknown',
+      description: UNKNOWN_WORK_DESCRIPTION
     )
   end
 
-  def self.find_or_create!(attributes)
-    where(attributes).first || create!(attributes)
+  # == Instance Methods ========================================================
+  def init_urls
+    self.infringing_urls = self.infringing_urls.map { |url| valid_url(InfringingUrl, url) }.compact if self.infringing_urls&.first.is_a?(Hash)
+    self.copyrighted_urls = self.copyrighted_urls.map { |url| valid_url(CopyrightedUrl, url) }.compact if self.copyrighted_urls&.first.is_a?(Hash)
+    self.infringing_urls = [] unless self.infringing_urls.present?
+    self.copyrighted_urls = [] unless self.copyrighted_urls.present?
+  end
+
+  def infringing_urls_attributes=(urls)
+    self.infringing_urls = urls.map { |url| valid_url(InfringingUrl, url) }.compact
+  end
+
+  def copyrighted_urls_attributes=(urls)
+    self.copyrighted_urls = urls.map { |url| valid_url(CopyrightedUrl, url) }.compact
   end
 
   def infringing_urls_counted_by_domain
@@ -75,6 +48,31 @@ class Work < ApplicationRecord
   def copyrighted_urls_counted_by_domain
     @copyrighted_urls_counted_by_domain ||= count_by_domain(copyrighted_urls)
   end
+
+  def force_redactions
+    auto_redact
+
+    # DeterminesWorkKind is intended for use here but disabled due to confusion
+    # caused by mis-classified works.
+    self.kind = 'Unspecified' if kind.blank?
+  end
+
+  def fix_concatenated_urls
+    self.copyrighted_urls += fixed_urls(:copyrighted_urls)
+    self.infringing_urls += fixed_urls(:infringing_urls)
+  end
+
+  def as_json(*)
+    {
+      description: self.description,
+      kind: self.kind,
+      infringing_urls: self.infringing_urls,
+      copyrighted_urls: self.copyrighted_urls
+    }
+  end
+
+  # == Private Methods =========================================================
+  private
 
   def count_by_domain(urls)
     counted_urls = {}
@@ -101,28 +99,6 @@ class Work < ApplicationRecord
       .reverse!
   end
 
-  def auto_redact
-    InstanceRedactor.new.redact(self, REDACTABLE_FIELDS)
-  end
-
-  def force_redactions
-    auto_redact
-
-    # DeterminesWorkKind is intended for use here but disabled due to confusion
-    # caused by mis-classified works.
-    self.kind = 'Unspecified' if kind.blank?
-  end
-
-  def force_related_notices_reindex
-    # Force search reindex on related notices
-    NoticeUpdateCall.create!(caller_id: self.id, caller_type: 'work') if saved_change_to_description?
-  end
-
-  def fix_concatenated_urls
-    copyrighted_urls = fixed_urls(:copyrighted_urls)
-    infringing_urls = fixed_urls(:infringing_urls)
-  end
-
   def fixed_urls(url_type)
     new_urls = []
     self.send(url_type).each do |url_obj|
@@ -133,7 +109,7 @@ class Work < ApplicationRecord
       # add the rest of the split-apart URLs to a list for safekeeping.
       url_obj[:url] = split_urls.pop()
       split_urls_as_hashes = split_urls.map { |url| { url: url } }
-      new_urls << self.send(url_type).build(split_urls_as_hashes)
+      new_urls += split_urls_as_hashes.map { |split_url| url_type.to_s.classify.constantize.new(split_url) }
     end
     new_urls
   end
@@ -149,5 +125,33 @@ class Work < ApplicationRecord
     b = []
     s.split(/(https?:\/\/)/).reject { |x| x.blank? }.each_slice(2) { |s| b << s.join }
     b
+  end
+
+  def auto_redact
+    InstanceRedactor.new.redact(self, REDACTABLE_FIELDS)
+  end
+
+  def force_related_notices_reindex
+    # Force search reindex on related notices
+    NoticeUpdateCall.create!(caller_id: self.id, caller_type: 'work') if saved_change_to_description?
+  end
+
+  def new_record?
+    true
+  end
+
+  def valid_url(type, params)
+    url_instance = type.new(params)
+    if url_instance.valid?
+      url_instance
+    else
+      not_valid_url_return(type)
+    end
+  rescue ActiveModel::UnknownAttributeError
+    not_valid_url_return(type)
+  end
+
+  def not_valid_url_return(type)
+    type.new(url: 'invalid')
   end
 end

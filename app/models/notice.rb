@@ -3,6 +3,7 @@
 class Notice < ApplicationRecord
   include Searchability
   include Elasticsearch::Model
+  include RepairNestedParams
 
   extend RecentScope
 
@@ -99,10 +100,6 @@ class Notice < ApplicationRecord
   has_many :entity_notice_roles, dependent: :destroy, inverse_of: :notice
   has_many :entities, through: :entity_notice_roles, index_errors: true
 
-  has_and_belongs_to_many :works, index_errors: true
-  has_many :infringing_urls, through: :works, index_errors: true
-  has_many :copyrighted_urls, through: :works, index_errors: true
-
   has_many :token_urls, dependent: :destroy
   has_many :archived_token_urls, dependent: :destroy
   has_and_belongs_to_many :relevant_questions
@@ -116,6 +113,8 @@ class Notice < ApplicationRecord
     delegate :name, :country_code, to: entity, prefix: true, allow_nil: true
   end
 
+  attr_accessor :works
+
   # == Extensions ===========================================================
   acts_as_taggable_on :tags, :jurisdictions, :regulations
 
@@ -123,8 +122,6 @@ class Notice < ApplicationRecord
     reject_if: ->(attributes) { [attributes['file'], attributes[:pdf_request_fulfilled]].all?(&:blank?) }
 
   accepts_nested_attributes_for :entity_notice_roles, allow_destroy: true
-
-  accepts_nested_attributes_for :works, allow_destroy: true
 
   define_elasticsearch_mapping
 
@@ -134,8 +131,10 @@ class Notice < ApplicationRecord
   validates_presence_of :works, :entity_notice_roles
   validates :date_sent, date: { after: Proc.new { Date.new(1998,10,28) }, before: Proc.new { Time.now + 1.day }, allow_blank: true }
   validates :date_received, date: { after: Proc.new { Date.new(1998,10,28) }, before: Proc.new { Time.now + 1.day }, allow_blank: true }
+  validates_associated :works
 
   # == Callbacks ============================================================
+  after_initialize :set_works
   before_save :set_topics
   before_save :set_works_json
   after_create :set_published!, if: :submitter
@@ -363,8 +362,36 @@ class Notice < ApplicationRecord
     topics << topic unless topics.include?(topic)
   end
 
+  def works_json=(value)
+    value = JSON.parse(value) if value.is_a?(String)
+    value = recursive_compact(value)
+    @works = value.map { |work_json| Work.new(work_json) } if value.present?
+    super(value)
+  end
+
+  def set_works
+    # When it's not set by works_attributes=
+    @works = [] if @works.nil?
+
+    # Map the existing works in jsonb to the Work model
+    @works = self.works_json.map { |work_json| Work.new(work_json) } unless self.works_json.nil?
+  end
+
   def set_works_json
-    self.works_json = works.map { |w| prep_work_json(w) }
+    @works.each do |work|
+      work.force_redactions
+      work.fix_concatenated_urls
+    end
+
+    self.works_json = @works.map { |w| prep_work_json(w) }
+  end
+
+  def works_attributes=(works_attrs)
+    if works_attrs.is_a?(Hash)
+      works_attrs = repair_nested_params({ k: works_attrs })[:k]
+    end
+
+    @works = works_attrs.map { |work| Work.new(work) }
   end
 
   def prep_work_json(work)
@@ -428,5 +455,15 @@ class Notice < ApplicationRecord
 
   def entities_country_codes
     entities.map(&:country_code).uniq
+  end
+
+  def recursive_compact(data)
+    case data
+    when Array
+      data.delete_if { |value| res = recursive_compact(value); res.blank? }
+    when Hash
+      data.delete_if { |_, value| res = recursive_compact(value); res.blank? }
+    end
+    data.blank? ? nil : data
   end
 end

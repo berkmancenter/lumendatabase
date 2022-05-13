@@ -418,19 +418,19 @@ describe 'notices/show.html.erb' do
     render
 
     notice.works.each do |work|
-      expect(rendered).to have_css("#work_#{work.id} .description",
+      expect(rendered).to have_css(".description",
                                    text: work.description)
 
       if with_copyrighted
         work.copyrighted_urls.each do |url|
-          expect(rendered).to have_css("#work_#{work.id} li.copyrighted_url",
+          expect(rendered).to have_css("li.copyrighted_url",
                                        text: url.url)
         end
       end
 
       if with_infringing
         work.infringing_urls.each do |url|
-          expect(rendered).to have_css("#work_#{work.id} li.infringing_url",
+          expect(rendered).to have_css("li.infringing_url",
                                        text: url.url)
         end
       end
@@ -442,18 +442,18 @@ describe 'notices/show.html.erb' do
     render
 
     notice.works.each do |work|
-      expect(rendered).to have_css( "#work_#{work.id} .description", text: work.description )
+      expect(rendered).to have_css(".description", text: work.description)
 
       if with_copyrighted
         uri = URI.parse(work.copyrighted_urls.first.url)
         domain = uri.host
-        expect(rendered).to have_css( "#work_#{work.id} li.copyrighted_url", text: domain + ' - 3 URLs' )
+        expect(rendered).to have_css("li.copyrighted_url", text: domain + ' - 3 URLs')
       end
 
       if with_infringing
         uri = URI.parse(work.infringing_urls.first.url)
         domain = uri.host
-        expect(rendered).to have_css( "#work_#{work.id} li.infringing_url", text: domain + ' - 3 URLs' )
+        expect(rendered).to have_css("li.infringing_url", text: domain + ' - 3 URLs')
       end
     end
   end

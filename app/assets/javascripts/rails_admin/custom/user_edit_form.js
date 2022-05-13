@@ -1,3 +1,7 @@
+$(document).on('pjax:complete', function(event, request) {
+  edit_user_form_actions();
+});
+
 $(document).ready(function () {
   edit_user_form_actions();
 });

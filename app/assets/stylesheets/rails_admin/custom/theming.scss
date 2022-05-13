@@ -102,3 +102,25 @@ aside#redaction-tools {
     }
   }
 }
+
+
+// Notice Edit
+//************************************************************************//
+#notice_works_json_field {
+  .form-group {
+    margin-left: auto;
+  }
+
+  h3 {
+    font-size: 14px;
+    border-bottom: 1px solid black;
+
+    .btn-group {
+      display: none;
+    }
+  }
+
+  .btn-group {
+    margin-bottom: 10px;
+  }
+}

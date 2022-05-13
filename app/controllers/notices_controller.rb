@@ -217,10 +217,12 @@ class NoticesController < ApplicationController
   end
 
   def build_works(notice)
-    notice.works.build do |w|
-      w.copyrighted_urls.build
-      w.infringing_urls.build
-    end
+    notice.works = [
+      Work.new(
+        copyrighted_urls: [CopyrightedUrl.new],
+        infringing_urls: [InfringingUrl.new]
+      )
+    ]
   end
 
   def authorized_to_create?

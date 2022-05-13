@@ -1,5 +1,4 @@
 shared_examples 'an object with a url' do
-
   ['http://foo.com',
     '//bar.com',
     'https://example.com/asdfasdf',
@@ -15,5 +14,4 @@ shared_examples 'an object with a url' do
   ['', 'bee', 'brap.com', 1, nil].each do |bad_url|
     it { is_expected.not_to allow_value(bad_url).for(:url) }
   end
-
 end

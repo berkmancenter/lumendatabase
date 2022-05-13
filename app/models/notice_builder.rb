@@ -24,7 +24,6 @@ class NoticeBuilder
   def set_json_params
     @json_params = @notice.as_json(
       include: {
-        works: { include: { copyrighted_urls: {}, infringing_urls: {} } },
         entity_notice_roles: { include: :entity }
       }
     ).deep_symbolize_keys

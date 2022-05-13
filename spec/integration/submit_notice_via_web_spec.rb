@@ -219,8 +219,8 @@ feature 'notice submission' do
 
     expect(Notice.count).to eq 2
     expect(Entity.count).to eq 4
-    expect(Work.count).to eq 2
-    expect(InfringingUrl.count).to eq 1
+    expect(Notice.last.works.count + Notice.last(1).first.works.count).to eq 2
+    expect([Notice.last.works.first.infringing_urls.map(&:url), Notice.last(1).first.works.first.infringing_urls.map(&:url)].flatten.uniq.count).to eq 1
   end
 
   scenario "submitting a notice with works" do
