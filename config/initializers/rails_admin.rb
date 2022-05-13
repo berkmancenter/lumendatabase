@@ -257,33 +257,6 @@ RailsAdmin.config do |config|
     object_label_method { :question }
   end
 
-  config.model 'Work' do
-    object_label_method { :custom_work_label }
-
-    edit do
-      configure(:notices) { hide }
-    end
-
-    list do
-      limited_pagination true
-      configure(:copyrighted_urls) { hide }
-      configure(:infringing_urls) { hide }
-    end
-
-    nested do
-      configure(:infringing_urls) { hide }
-      configure(:copyrighted_urls) { hide }
-    end
-  end
-
-  config.model 'InfringingUrl' do
-    object_label_method { :url }
-
-    list do
-      limited_pagination true
-    end
-  end
-
   config.model 'FileUpload' do
     edit do
       configure :kind, :enum do
