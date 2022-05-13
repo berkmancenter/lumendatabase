@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.05a](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.05a) - 2022-05-13
+### Changed
+* Stopped using the `infringing_urls`, `copyrighted_url` and `works` database tables. Moved to `jsonb` fields in the `notices` table.
+
 ## [22.05](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.05) - 2022-05-09
 ### Fixed
 * Improved the content filter query for the notice model.
