@@ -132,7 +132,33 @@ RailsAdmin.config do |config|
         field :topics
         field :entity_notice_roles
         field :entities
-        field :works
+        field :works do
+          formatted_value do
+            formatted_works = ''
+            work_idx = 1
+            bindings[:object].works.each do |work|
+              formatted_works += "<strong>Work #{work_idx}</strong><br>"
+              formatted_works += "description: #{work.description}<br>"
+              formatted_works += "description_original: #{work.description_original}<br>"
+              formatted_works += "kind: #{work.kind}<br>"
+              formatted_works += 'infringing urls:<br>'
+              formatted_works += '<ul>'
+              work.infringing_urls.each do |infringing_url|
+                formatted_works += "<li>#{infringing_url.url_original || infringing_url.url}</li>"
+              end
+              formatted_works += '</ul>'
+              formatted_works += 'copyrighted urls:<br>'
+              formatted_works += '<ul>'
+              work.copyrighted_urls.each do |copyrighted_url|
+                formatted_works += "<li>#{copyrighted_url.url_original || copyrighted_url.url}</li>"
+              end
+              formatted_works += '</ul>'
+              work_idx += 1
+            end
+
+            formatted_works.html_safe
+          end
+        end
         field :file_uploads
         field :case_id_number
       end
