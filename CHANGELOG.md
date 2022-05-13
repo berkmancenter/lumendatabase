@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.05b](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.05b) - 2022-05-13
+### Fixed
+* Started stripping `\u0000` unicode characters when submitting new notices. PostgreSQL doesn't like it.
+
 ## [22.05a](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.05a) - 2022-05-13
 ### Changed
 * Stopped using the `infringing_urls`, `copyrighted_url` and `works` database tables. Moved to `jsonb` fields in the `notices` table.
