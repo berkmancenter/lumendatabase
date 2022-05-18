@@ -132,6 +132,7 @@ class Notice < ApplicationRecord
   after_destroy do
     __elasticsearch__.delete_document ignore: 404
   end
+  after_update :clear_proxy_cache
 
   # == Scopes ===============================================================
   scope :top_notices_token_urls, -> { joins(:archived_token_urls).select('notices.*, COUNT(archived_token_urls.id) AS counted_archived_token_urls').group('notices.id') }
@@ -530,5 +531,9 @@ class Notice < ApplicationRecord
     out['entities_country_codes'] = entities_country_codes
 
     out
+  end
+
+  def clear_proxy_cache
+    ProxyCache.clear_notice(id)
   end
 end
