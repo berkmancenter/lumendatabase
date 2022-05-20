@@ -10,7 +10,8 @@ class Highlighter
       post_tags: '</em>',
       fields: {},
       type: 'plain',
-      require_field_match: false
+      require_field_match: false,
+      max_analyzed_offset: 999_999
     }
   end
 
