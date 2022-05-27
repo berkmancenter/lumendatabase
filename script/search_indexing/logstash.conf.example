@@ -1,0 +1,35 @@
+# Sample Logstash configuration for creating a simple
+# Postgres -> Logstash -> Elasticsearch pipeline.
+
+input {
+  jdbc {
+    jdbc_driver_library => "postgresql-42.3.5.jar"
+    jdbc_driver_class => "org.postgresql.Driver"
+    jdbc_connection_string => "jdbc:postgresql://localhost:5432/chill"
+    jdbc_user => "lumen"
+	jdbc_password => "so-secret"
+	jdbc_paging_enabled => true
+	jdbc_page_size => 200000
+    statement_filepath => "query.sql"
+	clean_run => true
+  }
+}
+
+filter {
+  json {
+    source => "works"
+	target => "works"
+  }
+  json {
+    source => "topics"
+	target => "topics"
+  }
+}
+
+output {
+  elasticsearch {
+    hosts => ["http://localhost:9200"]
+    index => "lumen_notice_index"
+	document_id => '%{[id]}'
+  }
+}
