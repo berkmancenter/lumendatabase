@@ -37,33 +37,33 @@ WITH
         FROM works w
         JOIN notices_works nw ON nw.work_id = w.id
         WHERE nw.notice_id >= $i AND nw.notice_id < $j
-		GROUP BY nw.notice_id, w.kind, w.description_original
+        GROUP BY nw.notice_id, w.kind, w.description_original
     ),
     i AS (
-       SELECT
-           a.work_id,
-           array_agg((SELECT x FROM (SELECT
-               u.url_original,
-               CASE u.url WHEN u.url_original THEN null
-               ELSE u.url END AS url
-           ) x)) AS urls
+        SELECT
+            a.work_id,
+            array_agg((SELECT x FROM (SELECT
+                u.url_original,
+                CASE u.url WHEN u.url_original THEN null
+                ELSE u.url END AS url
+            ) x)) AS urls
        FROM a
        JOIN infringing_urls_works uw ON uw.work_id = ANY (a.work_ids)
        JOIN infringing_urls u ON uw.infringing_url_id = u.id
        GROUP BY a.work_id
     ),
     c AS (
-       SELECT
-           a.work_id,
-           array_agg((SELECT x FROM (SELECT
-               u.url_original,
-               CASE u.url WHEN u.url_original THEN null
-               ELSE u.url END AS url
-           ) x)) AS urls
-       FROM a
-       JOIN copyrighted_urls_works uw ON uw.work_id = ANY (a.work_ids)
-       JOIN copyrighted_urls u ON uw.copyrighted_url_id = u.id
-       GROUP BY a.work_id
+        SELECT
+            a.work_id,
+            array_agg((SELECT x FROM (SELECT
+                u.url_original,
+                CASE u.url WHEN u.url_original THEN null
+                ELSE u.url END AS url
+            ) x)) AS urls
+        FROM a
+        JOIN copyrighted_urls_works uw ON uw.work_id = ANY (a.work_ids)
+        JOIN copyrighted_urls u ON uw.copyrighted_url_id = u.id
+        GROUP BY a.work_id
     ),
     f AS (
         SELECT

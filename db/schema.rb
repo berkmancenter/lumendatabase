@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_22_094201) do
+ActiveRecord::Schema.define(version: 2022_05_23_184945) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -403,7 +403,7 @@ ActiveRecord::Schema.define(version: 2022_04_22_094201) do
     t.integer "views_overall", default: 0
     t.integer "views_by_notice_viewer", default: 0
     t.text "local_jurisdiction_laws"
-    t.jsonb "works_json"
+    t.jsonb "works_json", null: false
     t.integer "case_id_number"
     t.index ["created_at"], name: "index_notices_on_created_at"
     t.index ["original_notice_id"], name: "index_notices_on_original_notice_id"
@@ -412,6 +412,7 @@ ActiveRecord::Schema.define(version: 2022_04_22_094201) do
     t.index ["submission_id"], name: "index_notices_on_submission_id"
     t.index ["type"], name: "index_notices_on_type"
     t.index ["updated_at"], name: "index_notices_on_updated_at"
+    t.check_constraint nil, name: "notices_works_json_check"
   end
 
   create_table "notices_relevant_questions", id: :serial, force: :cascade do |t|
