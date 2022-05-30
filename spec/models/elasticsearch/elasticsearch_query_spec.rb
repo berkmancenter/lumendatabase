@@ -87,6 +87,7 @@ describe ElasticsearchQuery, type: :model do
         post_tags: '</em>',
         type: 'plain',
         require_field_match: false,
+        max_analyzed_offset: 999_999,
         fields: {
           body: {},
           title: {},
