@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.06](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.06) - 2022-06-02
+### Changed
+* Started moving existing taggings to new `jsonb` fields in the `notice` table.
+
 ## [22.05c](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.05c) - 2022-05-31
 ### Changed
 * Added a db constraint to avoid inserting wrong works json data.

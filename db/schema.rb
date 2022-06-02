@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_23_184945) do
+ActiveRecord::Schema.define(version: 2022_06_01_165646) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -405,6 +405,9 @@ ActiveRecord::Schema.define(version: 2022_05_23_184945) do
     t.text "local_jurisdiction_laws"
     t.jsonb "works_json", null: false
     t.integer "case_id_number"
+    t.jsonb "tags_json"
+    t.jsonb "jurisdictions_json"
+    t.jsonb "regulations_json"
     t.index ["created_at"], name: "index_notices_on_created_at"
     t.index ["original_notice_id"], name: "index_notices_on_original_notice_id"
     t.index ["published"], name: "index_notices_on_published"
