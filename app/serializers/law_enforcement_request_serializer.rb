@@ -2,7 +2,7 @@ class LawEnforcementRequestSerializer < NoticeSerializer
   attributes :regulations, :request_type
 
   attribute :regulations do |object|
-    object.regulation_list.map(&:name)
+    object.regulation_list
   end
 
   attributes_to_serialize.delete(:body)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_06_01_165646) do
+ActiveRecord::Schema.define(version: 2022_06_02_175148) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -405,9 +405,9 @@ ActiveRecord::Schema.define(version: 2022_06_01_165646) do
     t.text "local_jurisdiction_laws"
     t.jsonb "works_json", null: false
     t.integer "case_id_number"
-    t.jsonb "tags_json"
-    t.jsonb "jurisdictions_json"
-    t.jsonb "regulations_json"
+    t.jsonb "tag_list"
+    t.jsonb "jurisdiction_list"
+    t.jsonb "regulation_list"
     t.index ["created_at"], name: "index_notices_on_created_at"
     t.index ["original_notice_id"], name: "index_notices_on_original_notice_id"
     t.index ["published"], name: "index_notices_on_published"
@@ -415,7 +415,7 @@ ActiveRecord::Schema.define(version: 2022_06_01_165646) do
     t.index ["submission_id"], name: "index_notices_on_submission_id"
     t.index ["type"], name: "index_notices_on_type"
     t.index ["updated_at"], name: "index_notices_on_updated_at"
-    t.check_constraint 'validate_works_json(works_json)', name: "notices_works_json_check"
+    t.check_constraint nil, name: "notices_works_json_check"
   end
 
   create_table "notices_relevant_questions", id: :serial, force: :cascade do |t|
@@ -491,31 +491,6 @@ ActiveRecord::Schema.define(version: 2022_06_01_165646) do
     t.integer "user_id"
     t.index ["role_id"], name: "index_roles_users_on_role_id"
     t.index ["user_id"], name: "index_roles_users_on_user_id"
-  end
-
-  create_table "taggings", id: :serial, force: :cascade do |t|
-    t.integer "tag_id"
-    t.string "taggable_type"
-    t.integer "taggable_id"
-    t.string "tagger_type"
-    t.integer "tagger_id"
-    t.string "context", limit: 128
-    t.datetime "created_at"
-    t.index ["context"], name: "index_taggings_on_context"
-    t.index ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true
-    t.index ["tag_id"], name: "index_taggings_on_tag_id"
-    t.index ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context"
-    t.index ["taggable_id", "taggable_type", "tagger_id", "context"], name: "taggings_idy"
-    t.index ["taggable_id"], name: "index_taggings_on_taggable_id"
-    t.index ["taggable_type"], name: "index_taggings_on_taggable_type"
-    t.index ["tagger_id", "tagger_type"], name: "index_taggings_on_tagger_id_and_tagger_type"
-    t.index ["tagger_id"], name: "index_taggings_on_tagger_id"
-  end
-
-  create_table "tags", id: :serial, force: :cascade do |t|
-    t.string "name"
-    t.integer "taggings_count", default: 0
-    t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
   create_table "token_urls", id: :serial, force: :cascade do |t|

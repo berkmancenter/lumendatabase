@@ -1,3 +1,8 @@
 <%- tags.each do |tag| %>
-  <%= render tag %><%- unless tags.last == tag %>, <% end %>
+  <% if local_assigns[:linked_to_search] %>
+    <%= link_to(tag, faceted_search_path(tags: tag)) %>
+  <% else %>
+    <%= tag %>
+  <% end %>
+  <%- unless tags.last == tag %>, <% end %>
 <% end %>

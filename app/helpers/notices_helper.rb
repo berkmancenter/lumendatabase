@@ -186,4 +186,10 @@ module NoticesHelper
       "truncated_#{key_part}"
     end
   end
+
+  def jsonb_array_input(notice, key)
+    return '' if notice[key].nil?
+
+    notice[key]
+  end
 end

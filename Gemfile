@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
 gem 'activerecord-import'
-gem 'acts-as-taggable-on'
 gem 'addressable'
 gem 'ancestry'
 gem 'bootsnap'

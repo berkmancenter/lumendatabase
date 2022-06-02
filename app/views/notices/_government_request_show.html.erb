@@ -14,7 +14,7 @@
   <% if notice.regulations.present? %>
     <dl id="tags">
       <dt class="label">Laws or Regulations:</dt>
-      <dd class="field"><%= render 'shared/regulation_list', regulations: notice.regulations %></dd>
+      <dd class="field"><%= render 'shared/tag_list', tags: notice.regulations %></dd>
     </dl>
   <% end %>
 </section>

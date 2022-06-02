@@ -22,15 +22,11 @@ class ContentFilter < ApplicationRecord
     ContentFilter.all.each do |content_filter|
       next unless Notice.includes(:topics)
                         .includes(:entity_notice_roles)
-                        .includes(:tags)
-                        .includes(:jurisdictions)
                         .includes(:entities)
                         .where(id: notice_instance.id)
                         .where(content_filter.query)
                         .references(:topics)
                         .references(:entity_notice_roles)
-                        .references(:tags)
-                        .references(:jurisdictions)
                         .references(:entities)
                         .any?
 
