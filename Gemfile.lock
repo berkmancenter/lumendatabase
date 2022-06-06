@@ -125,10 +125,10 @@ GEM
     comfy_bootstrap_form (4.0.8)
       rails (>= 5.0.0)
     concurrent-ruby (1.1.10)
-    country_select (1.2.0)
     countries (4.2.2)
       i18n_data (~> 0.15.0)
       sixarm_ruby_unaccent (~> 1.1)
+    country_select (1.2.0)
     coveralls (0.8.23)
       json (>= 1.8, < 3)
       simplecov (~> 0.16.1)
@@ -550,8 +550,8 @@ DEPENDENCIES
   capybara-selenium
   coffee-rails
   comfortable_mexican_sofa
-  country_select (~> 1.2.0)
   countries
+  country_select (~> 1.2.0)
   coveralls (~> 0.8.0)
   curb
   database_cleaner
