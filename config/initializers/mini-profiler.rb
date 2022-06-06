@@ -5,5 +5,5 @@
 
 # @TODO Create a PR in the rack-mini-profiler repository and ask for replacing
 # the whitelist word and when it's replaced remove it from here
-Rack::MiniProfiler.config.authorization_mode = :whitelist if Rails.env.production?
+Rack::MiniProfiler.config.authorization_mode = :allow_authorized if Rails.env.production?
 Rack::MiniProfiler.config.disable_caching = false
