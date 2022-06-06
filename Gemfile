@@ -13,6 +13,7 @@ gem 'comfortable_mexican_sofa'
 # It also removes CountrySelect::ISO_COUNTRIES_FOR_SELECT in 1.3, which is a
 # breaking change for us.
 gem 'country_select', '~> 1.2.0'
+gem 'countries'
 gem 'coveralls', '~> 0.8.0', require: false
 gem 'date_validator'
 gem 'devise'
