@@ -3,7 +3,6 @@
 class GovernmentRequest < Notice
   DEFAULT_ENTITY_NOTICE_ROLES = (BASE_ENTITY_NOTICE_ROLES |
                                 %w[recipient sender principal submitter]).freeze
-  acts_as_taggable_on :regulations
 
   define_elasticsearch_mapping
 

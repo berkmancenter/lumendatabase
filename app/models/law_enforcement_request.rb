@@ -3,7 +3,6 @@
 class LawEnforcementRequest < Notice
   DEFAULT_ENTITY_NOTICE_ROLES = (BASE_ENTITY_NOTICE_ROLES |
                                 %w[recipient sender principal]).freeze
-  acts_as_taggable_on :regulations
 
   define_elasticsearch_mapping
 
@@ -26,10 +25,5 @@ class LawEnforcementRequest < Notice
 
   def to_partial_path
     'notices/notice'
-  end
-
-  def regulation_list
-    tag_ids = self.taggings.where(context: 'regulations').pluck(:tag_id)
-    ActsAsTaggableOn::Tag.find(tag_ids)
   end
 end

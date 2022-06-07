@@ -22,8 +22,8 @@
   <%= form.input :date_sent, as: :string, placeholder: "YYYY-MM-DD" %>
   <%= form.input :date_received, as: :string, placeholder: "YYYY-MM-DD" %>
   <%= form.input :source, label: "Sent via", placeholder: 'Online form, Email, Postal mail, etc.' %>
-  <%if tag_list %>
-    <%= form.input :tag_list, placeholder: 'movie, youtube, video, etc.' %>
+  <% if tag_list %>
+    <%= form.input :tag_list, placeholder: 'movie, youtube, video, etc.', input_html: { value: jsonb_array_input(form.object, :tag_list) } %>
   <% end %>
   <%if topics %>
     <%=
@@ -35,7 +35,7 @@
       %>
   <% end %>
   <%= form.input :language, collection: Language.all, label_method: :label, value_method: :code %>
-  <%= form.input :jurisdiction_list, label: "Jurisdiction", placeholder: 'a list of countries - US, CA, etc.' %>
+  <%= form.input :jurisdiction_list, label: "Jurisdiction", placeholder: 'a list of countries - US, CA, etc.', input_html: { value: jsonb_array_input(form.object, :jurisdiction_list) } %>
   <% if action_taken %>
     <%=
       form.input :action_taken,

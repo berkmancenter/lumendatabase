@@ -433,7 +433,7 @@ feature "Searching for Notices via the API" do
         }
       end
 
-      expect_api_search_to_find('king', authentication_token: user.authentication_token) do |json|
+      expect_api_search_to_find('king', authentication_token: user.authentication_token) do |json|\
         json_item = json['notices'].first
         expect(json_item).to have_key('marks')
         expect(json_item['marks'].length).to eq(1)

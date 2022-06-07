@@ -22,8 +22,7 @@ class Counterfeit < Notice
   # The jurisdiction for a counterfeit notice should be the country of the
   # brand owner, who is the principal if present and the sender otherwise.
   def set_jurisdiction
-    self.jurisdictions = []
-    self.jurisdiction_list << principal&.country_code&.upcase || sender&.country_code&.upcase
+    self.jurisdiction_list = principal&.country_code&.upcase || sender&.country_code&.upcase
     self.save
   end
 end

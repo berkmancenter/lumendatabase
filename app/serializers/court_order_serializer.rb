@@ -1,6 +1,6 @@
 class CourtOrderSerializer < NoticeSerializer
   attribute :laws_referenced do |object|
-    object.laws_referenced.map(&:name)
+    object.laws_referenced
   end
 
   attributes_to_serialize.delete(:body)

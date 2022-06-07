@@ -11,6 +11,7 @@ function edit_notice_form_actions() {
 
   if (edit_notice_form.length) {
     set_works_editor();
+    set_taggings_editor();
   }
 }
 
@@ -83,5 +84,41 @@ function set_works_editor() {
 
   editor.on('change',() => {
     $('#notice_works_json').html(JSON.stringify(editor.getValue()));
+  });
+}
+
+function set_taggings_editor() {
+  var list_types = ['tag', 'jurisdiction', 'regulation'];
+
+  list_types.forEach(function (type) {
+    var input_field_id = `notice_${type}_list`;
+    var field_id = `${type}_list_field`;
+
+    var editor = new JSONEditor(document.querySelector(`#${input_field_id}_field > div`), {
+      disable_collapse: true,
+      disable_edit_json: true,
+      disable_properties: true,
+      disable_array_reorder: true,
+      disable_array_delete_last_row: true,
+      theme: 'bootstrap4',
+      schema: {
+        'type': 'array',
+        'items': {
+          'title': `${type}`,
+          'type': 'string'
+        }
+      }
+    });
+
+    $(`#${input_field_id}, .${field_id} .help-block`).hide();
+
+    editor.on('ready',() => {
+      $(`.${field_id} .card-title`).first().hide();
+      editor.setValue(JSON.parse($(`#${input_field_id}`).val()));
+    });
+
+    editor.on('change',() => {
+      $(`#${input_field_id}`).val(JSON.stringify(editor.getValue()));
+    });
   });
 }

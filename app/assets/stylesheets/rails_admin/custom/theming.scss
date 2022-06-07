@@ -106,18 +106,20 @@ aside#redaction-tools {
 
 // Notice Edit
 //************************************************************************//
-#notice_works_json_field {
+#notice_works_json_field,
+#notice_tag_list_field,
+#notice_jurisdiction_list_field,
+#notice_regulation_list_field {
   .form-group {
     margin-left: auto;
   }
 
-  h3 {
+  h3, .card {
     font-size: 14px;
-    border-bottom: 1px solid black;
+  }
 
-    .btn-group {
-      display: none;
-    }
+  h3 {
+    border-bottom: 1px solid black;
   }
 
   .btn-group {

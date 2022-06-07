@@ -22,13 +22,5 @@ shared_examples 'an object tagged in the context of' do |tag_context, options = 
         expect(notice.send(context_method)).to eq ['FOO']
       end
     end
-
-    it "cleans up unused #{plural} after deletion" do
-      notice = create(:dmca, context_method => 'foo')
-      notice.send(context_method).remove('foo')
-      notice.save
-
-      expect(ActsAsTaggableOn::Tag.find_by_name('foo')).not_to be
-    end
   end
 end

@@ -116,8 +116,6 @@ class Notice < ApplicationRecord
   attr_accessor :works
 
   # == Extensions ===========================================================
-  acts_as_taggable_on :tags, :jurisdictions, :regulations
-
   accepts_nested_attributes_for :file_uploads,
     reject_if: ->(attributes) { [attributes['file'], attributes[:pdf_request_fulfilled]].all?(&:blank?) }
 
@@ -146,6 +144,11 @@ class Notice < ApplicationRecord
 
   # == Scopes ===============================================================
   scope :top_notices_token_urls, -> { joins(:archived_token_urls).select('notices.*, COUNT(archived_token_urls.id) AS counted_archived_token_urls').group('notices.id') }
+
+  # == Aliases ==============================================================
+  alias_attribute :tags, :tag_list
+  alias_attribute :jurisdictions, :jurisdiction_list
+  alias_attribute :regulations, :regulation_list
 
   # == Class Methods ========================================================
   def self.label
@@ -298,24 +301,42 @@ class Notice < ApplicationRecord
       .first
   end
 
-  def tag_list
-    @tag_list ||= super
+  def jurisdiction_list=(value = '')
+    super(split_and_strip(value))
+  end
+
+  def regulation_list=(value = '')
+    super(split_and_strip(value))
+  end
+
+  def tag_list=(value = '')
+    unless value.nil?
+      value = if value.respond_to?(:each)
+                value.flatten.map(&:downcase)
+              else
+                value.downcase
+              end
+    end
+
+    super(split_and_strip(value))
   end
 
   def jurisdiction_list
-    @jurisdiction_list ||= super
+    return [] if self[:jurisdiction_list].nil?
+
+    self[:jurisdiction_list]
   end
 
-  def tag_list=(tag_list_value = '')
-    unless tag_list_value.nil?
-      tag_list_value = if tag_list_value.respond_to?(:each)
-                         tag_list_value.flatten.map(&:downcase)
-                       else
-                         tag_list_value.downcase
-                       end
-    end
+  def regulation_list
+    return [] if self[:regulation_list].nil?
 
-    super(tag_list_value)
+    self[:regulation_list]
+  end
+
+  def tag_list
+    return [] if self[:tag_list].nil?
+
+    self[:tag_list]
   end
 
   def original_documents
@@ -466,5 +487,11 @@ class Notice < ApplicationRecord
       data.delete_if { |_, value| res = recursive_compact(value); res.blank? }
     end
     data.blank? ? nil : data
+  end
+
+  def split_and_strip(value)
+    return value.split(',').map(&:strip) if value.is_a? String
+
+    value
   end
 end

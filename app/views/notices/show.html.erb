@@ -79,14 +79,18 @@
         <% if @notice.tag_list.present? %>
           <dl class="tag-list">
             <dt class="label">Tags</dt>
-            <dd class="field"><%= @notice.tag_list %></dd>
+            <dd class="field">
+              <%= render 'shared/tag_list', tags: @notice.tag_list %>
+            </dd>
           </dl>
         <% end %>
 
         <dl class="tag-list">
           <dt class="label">Jurisdictions</dt>
           <% if @notice.jurisdiction_list.present? %>
-            <dd class="field"><%= @notice.jurisdiction_list %></dd>
+            <dd class="field">
+              <%= render 'shared/tag_list', tags: @notice.jurisdiction_list %>
+            </dd>
           <% else %>
             <dd class="field">Unspecified</dd>
           <% end %>
@@ -148,7 +152,7 @@
 
       <section id="tags">
         <h6>Tags</h6>
-        <%= render 'shared/tag_list', tags: @notice.tags %>
+        <%= render 'shared/tag_list', tags: @notice.tags, linked_to_search: true %>
       </section>
     </footer>
   <% end %>
