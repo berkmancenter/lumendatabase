@@ -69,8 +69,6 @@ GEM
       minitest (>= 5.1)
       tzinfo (~> 2.0)
       zeitwerk (~> 2.3)
-    acts-as-taggable-on (8.0.0)
-      activerecord (>= 5.0, < 6.2)
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
     allocation_tracer (0.6.3)
@@ -539,7 +537,6 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-import
-  acts-as-taggable-on
   addressable
   allocation_tracer
   ancestry
