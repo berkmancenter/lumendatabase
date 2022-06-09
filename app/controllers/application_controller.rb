@@ -49,7 +49,11 @@ class ApplicationController < ActionController::Base
   end
 
   def resource_not_found(exception = false)
-    logger404s = Logger.new("#{Rails.root}/log/#{Rails.env}_404s.log")
+    logger404s = LumenLogger.init(
+      path: "log/#{Rails.env}_404s.log",
+      customize_event: ->(event) { event['event_type'] = 'rails_log' }
+    )
+
     if exception
       logger404s.error(
         format(

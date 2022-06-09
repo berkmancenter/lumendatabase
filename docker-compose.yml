@@ -48,6 +48,23 @@ services:
         hard: 65536
     mem_limit: 4g
 
+  kibana:
+    depends_on:
+      - 'elasticsearch'
+    image: kibana:7.17.0
+    ports:
+      - 5601:5601
+
+  logstash:
+    depends_on:
+      - 'elasticsearch'
+    image: logstash:7.17.0
+    command: logstash -f /app/logstash_docker.conf
+    volumes:
+      - '.:/app:ro'
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+
 volumes:
   postgres:
   esdata:
