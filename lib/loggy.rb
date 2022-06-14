@@ -4,10 +4,7 @@ class Loggy
     @output_too = output_too
     @only_output = only_output
     @logger_object = if custom_log_path
-                       LogStashLogger.new(
-                         type: :file,
-                         path: "logstash_#{custom_log_path}.log"
-                       )
+                       LumenLogger.init(path: "#{custom_log_path}.log")
                      else
                        Rails.logger
                      end
