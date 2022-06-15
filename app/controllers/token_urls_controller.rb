@@ -57,6 +57,8 @@ class TokenUrlsController < ApplicationController
       @original_email, @token_url, @notice
     ).deliver_later
 
+    LumenLogger.log_metrics('REQUESTED_TOKEN_URL', notice_id: @notice.id, notice_type: @notice.type, email: @token_url.email, email_domain: @original_email.split('@').last)
+
     redirect_to(
       request_access_notice_path(@notice),
       notice: 'A new single-use link has been generated and sent to ' \

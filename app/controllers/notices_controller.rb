@@ -44,10 +44,14 @@ class NoticesController < ApplicationController
         @notice.save
         @notice.mark_for_review
         flash.notice = "Notice created! It can be found at #{notice_url(@notice)}"
+
+        LumenLogger.log_metrics('CREATED_NEW_NOTICE', notice_id: @notice.id, notice_type: @notice.type)
+
         format.json { head :created, location: @notice }
         format.html { redirect_to new_notice_url }
       else
-        Rails.logger.warn "Could not create notice with params: #{params}"
+        LumenLogger.log_metrics('FAILED_CREATE_NEW_NOTICE', notice_errors: @notice.errors)
+
         flash.alert = 'Notice creation failed. See errors below.'
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: { notices: @notice.errors }, status: :unprocessable_entity }
@@ -58,8 +62,6 @@ class NoticesController < ApplicationController
   def show
     return resource_not_found("Can't fing notice with id=#{params[:id]}") unless (@notice = Notice.find_by(id: params[:id]))
 
-    update_stats
-
     @searchable_fields = Notice::SEARCHABLE_FIELDS
     @filterable_fields = Notice::FILTERABLE_FIELDS
     @ordering_options = Notice::ORDERING_OPTIONS
@@ -67,7 +69,12 @@ class NoticesController < ApplicationController
     @search_index_path = notices_search_index_path
 
     respond_to do |format|
-      format.html { show_render_html }
+      LumenLogger.log_metrics('VIEWED_NOTICE', notice_id: @notice.id, notice_type: @notice.type)
+
+      format.html do
+        update_html_stats
+        show_render_html
+      end
       format.json do
         render json: { json_root_for(@notice.class) => NoticeSerializerProxy.new(@notice) }
       end
@@ -84,6 +91,8 @@ class NoticesController < ApplicationController
     end
 
     @recent_notices ||= Notice.where(id: notice_ids)
+
+    LumenLogger.log_metrics('VIEWED_RSS_FEED')
 
     respond_to do |format|
       format.rss { render layout: false }
@@ -233,10 +242,6 @@ class NoticesController < ApplicationController
     end
   end
 
-  def run_show_callbacks
-    process_notice_viewer_request unless current_user.nil?
-  end
-
   def process_notice_viewer_request
     # Only when the views limit is set for a user
     return unless current_user.full_notice_views_limit.present?
@@ -261,7 +266,6 @@ class NoticesController < ApplicationController
              layout: false
     else
       render :show
-      run_show_callbacks
     end
   end
 
@@ -273,7 +277,9 @@ class NoticesController < ApplicationController
     build_works(@notice)
   end
 
-  def update_stats
+  def update_html_stats
+    process_notice_viewer_request unless current_user.nil?
+
     @notice.increment!(:views_overall)
     @notice.increment!(:views_by_notice_viewer) if !current_user.nil? && current_user.role?(Role.notice_viewer)
 
@@ -281,5 +287,7 @@ class NoticesController < ApplicationController
 
     token_url = TokenUrl.find_by(token: params[:access_token])
     token_url.increment!(:views)
+
+    LumenLogger.log_metrics('VIEWED_NOTICE_BY_TOKEN', notice_id: @notice.id, notice_type: @notice.type, token_id: token_url.id)
   end
 end

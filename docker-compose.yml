@@ -56,6 +56,8 @@ services:
       - 5601:5601
 
   logstash:
+    env_file:
+      - '.env'
     depends_on:
       - 'elasticsearch'
     image: logstash:7.17.0

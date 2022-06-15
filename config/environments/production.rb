@@ -1,6 +1,5 @@
 require 'active_support/core_ext/integer/time'
 require 'terser'
-require 'lumen_logger'
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -87,8 +86,6 @@ Rails.application.configure do
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
-
-  config.logger = LumenLogger.init(path: 'log/production.log')
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
