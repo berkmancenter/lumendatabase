@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.06c](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.06c) - 2022-06-24
+### Fixed
+* Made the `JSON editor` in the `admin` work with sub-models of the `notice` model.
+
 ## [22.06b](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.06b) - 2022-06-24
 ### Fixed
 * Stopped exposing full urls in the search view.

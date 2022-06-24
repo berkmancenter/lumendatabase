@@ -106,10 +106,10 @@ aside#redaction-tools {
 
 // Notice Edit
 //************************************************************************//
-#notice_works_json_field,
-#notice_tag_list_field,
-#notice_jurisdiction_list_field,
-#notice_regulation_list_field {
+[id$='_works_json_field'],
+[id$='_tag_list_field'],
+[id$='_jurisdiction_list_field'],
+[id$='_regulation_list_field'] {
   .form-group {
     margin-left: auto;
   }
