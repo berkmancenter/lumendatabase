@@ -365,8 +365,7 @@ namespace :lumen do
     begin
       loggy.info "Indexing #{Notice.count} Notice instances..."
       # do notices
-      Notice.includes(works: [:infringing_urls, :copyrighted_urls])
-            .find_in_batches do |group|
+      Notice.find_in_batches do |group|
         GC.start # force once per batch to avoid OOM
         group.each do |obj|
           puts '.'
