@@ -86,12 +86,15 @@ module NoticesHelper
   end
 
   def with_redacted_urls(text)
-    redacted_text = text.gsub(
+    sanitized_text = ActionView::Base.full_sanitizer.sanitize(text)
+    redacted_text = sanitized_text.gsub(
       %r{(http[s]?://[w]*[\.]*[^/|$]*)(\S*)},
       '\1/[REDACTED]'
     )
 
-    redacted_text
+    words_to_highlight = params[:term]&.split(' ') || []
+
+    highlight(redacted_text, words_to_highlight, highlighter: '<em>\1</em>')
   end
 
   def supporting_document_url(url)

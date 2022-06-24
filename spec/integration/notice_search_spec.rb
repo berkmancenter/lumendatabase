@@ -289,12 +289,17 @@ feature 'Searching Notices', type: :feature do
         url_original: 'https://totes.redacted'
       )
 
+      i_url_2 = InfringingUrl.new(
+        url: 'https://redacted.example.com/hey_i_need_to_be_redacted',
+        url_original: 'https://redacted.example.com/hey_i_need_to_be_redacted'
+      )
+
       c_url = CopyrightedUrl.new(
         url: 'https://foo.bar',
         url_original: 'https://sharklasers.com'
       )
 
-      work1 = Work.new(infringing_urls: [i_url])
+      work1 = Work.new(infringing_urls: [i_url, i_url_2])
       work2 = Work.new(copyrighted_urls: [c_url])
       notice = create(:dmca, works: [work1, work2])
       index_changed_instances
@@ -315,6 +320,11 @@ feature 'Searching Notices', type: :feature do
       within_search_results_for('foo.bar') do
         expect(page).to have_n_results(1)
         expect(page).not_to have_words('sharklasers')
+      end
+
+      within_search_results_for('https') do
+        expect(page).not_to have_words('hey_i_need_to_be_redacted')
+        expect(page).to have_words('https://redacted.example.com/[REDACTED]')
       end
 
       # This isn't found, because the standard analyzer's tokenizer only splits
