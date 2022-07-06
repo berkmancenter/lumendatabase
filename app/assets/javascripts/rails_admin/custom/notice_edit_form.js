@@ -1,30 +1,30 @@
 $(document).on('pjax:complete', function(event, request) {
-  edit_notice_form_actions();
+  notice_form_actions();
 });
 
 $(document).ready(function () {
-  edit_notice_form_actions();
+  notice_form_actions();
 });
 
-function edit_notice_form_actions() {
-  edit_notice_form = $(
-    `form#edit_notice,
-    form#edit_dmca,
-    form#edit_counterfeit,
-    form#edit_counternotice,
-    form#edit_court_order,
-    form#edit_data_protection,
-    form#edit_defamation,
-    form#edit_government_request,
-    form#edit_law_enforcement_request,
-    form#edit_private_information,
-    form#edit_trademark,
-    form#edit_other,
-    form#edit_placeholder`
-  );
+function notice_form_actions() {
+  var forms = ['new', 'edit'];
+  var notice_types = ['notice', 'dmca', 'counterfeit', 'counternotice', 'court_order',
+    'data_protection', 'defamation', 'goverment_request', 'law_enforcement_request',
+    'private_information', 'trademark', 'other', 'placeholder'
+  ];
 
-  if (edit_notice_form.length) {
-    var form_model_type = edit_notice_form.first().attr('id').replace('edit_', '');
+  var selectors = '';
+  forms.forEach(function (val_form) {
+    notice_types.forEach(function (val_type) {
+      selectors += `form#${val_form}_${val_type},`;
+    });
+  });
+  selectors = selectors.slice(0, -1);
+
+  var notice_form = $(selectors);
+
+  if (notice_form.length) {
+    var form_model_type = notice_form.first().attr('id').replace('edit_', '').replace('new_', '');
 
     set_works_editor(form_model_type);
     set_taggings_editor(form_model_type);
@@ -46,12 +46,15 @@ function set_works_editor(form_model_type) {
       'items': {
         'title': 'work',
         'type': 'object',
+        'show_opt_in': true,
         'properties': {
           'description': {
-            'type': 'string'
+            'type': 'string',
+            'show_opt_in': true
           },
           'description_original': {
-            'type': 'string'
+            'type': 'string',
+            'show_opt_in': true
           },
           'kind': {
             'type': 'string'
@@ -132,7 +135,11 @@ function set_taggings_editor(form_model_type) {
 
     editor.on('ready',() => {
       $(`.${field_id} .card-title`).first().hide();
-      editor.setValue(JSON.parse($(`#${input_field_id}`).val()));
+      var val_to_init = $(`#${input_field_id}`).val();
+      if (!val_to_init) {
+        val_to_init = '[]';
+      }
+      editor.setValue(JSON.parse(val_to_init));
     });
 
     editor.on('change',() => {
