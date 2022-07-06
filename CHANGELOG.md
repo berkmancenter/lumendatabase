@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.07](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.07) - 2022-07-06
+### Changed
+* Updated the `rails-html-sanitizer` gem.
+
 ## [22.06c](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.06c) - 2022-06-24
 ### Fixed
 * Made the `JSON editor` in the `admin` work with sub-models of the `notice` model.
