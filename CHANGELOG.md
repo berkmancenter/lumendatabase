@@ -1,6 +1,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
-## [22.07](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.07) - 2022-07-06
+## [22.07a](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.07a) - 2022-07-07
+### Fixed
+* Made the json editor in the admin show all work properties.
+
+## [22.07](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.07) - 2022-07-07
 ### Fixed
 * Made the admin render a json editor instance for new notices.
 ### Changed

@@ -9,7 +9,7 @@ $(document).ready(function () {
 function notice_form_actions() {
   var forms = ['new', 'edit'];
   var notice_types = ['notice', 'dmca', 'counterfeit', 'counternotice', 'court_order',
-    'data_protection', 'defamation', 'goverment_request', 'law_enforcement_request',
+    'data_protection', 'defamation', 'government_request', 'law_enforcement_request',
     'private_information', 'trademark', 'other', 'placeholder'
   ];
 
@@ -40,6 +40,7 @@ function set_works_editor(form_model_type) {
     disable_properties: true,
     disable_array_reorder: true,
     disable_array_delete_last_row: true,
+    required_by_default: true,
     theme: 'bootstrap4',
     schema: {
       'type': 'array',
