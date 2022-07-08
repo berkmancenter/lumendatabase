@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.07c](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.07c) - 2022-07-08
+### Fixed
+* Fixed removing `file uploads` when creating `new notices` in the `admin`.
+
 ## [22.07b](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.07b) - 2022-07-08
 ### Added
 * Made it possible to customize the `notice view` per notice.

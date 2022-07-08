@@ -108,7 +108,11 @@ class NoticeEditForm {
 
     editor.on('ready',() => {
       $('.works_json_field .card-title').first().hide();
-      editor.setValue(JSON.parse($(`#${field_name}`).val()));
+      let val_to_init = $(`#${field_name}`).val();
+      if (!val_to_init) {
+        val_to_init = '[]';
+      }
+      editor.setValue(JSON.parse(val_to_init));
     });
 
     editor.on('change',() => {
