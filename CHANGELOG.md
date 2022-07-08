@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.07b](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.07b) - 2022-07-08
+### Added
+* Made it possible to customize the `notice view` per notice.
+
 ## [22.07a](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.07a) - 2022-07-07
 ### Fixed
 * Made the json editor in the admin show all work properties.

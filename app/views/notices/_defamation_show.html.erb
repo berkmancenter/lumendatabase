@@ -1,6 +1,6 @@
 <section class="notice-body">
   <% if notice.body.present? %>
-    <h5 class="title">Legal Complaint</h5>
+    <h5 class="title"><%= notice.customizations&.fetch('body_field_label') || 'Legal Complaint' %></h5>
     <p class="body"><pre><%= notice.redacted(:body) %></pre></p>
   <% end %>
 
@@ -10,4 +10,4 @@
   <% end %>
 </section>
 
-<%= render works_partial_for(notice), works: notice.works %>
+<%= render 'works', notice: notice %>

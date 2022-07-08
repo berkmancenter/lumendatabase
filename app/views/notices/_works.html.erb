@@ -1,0 +1,5 @@
+<%= notice.customizations&.fetch('static_works_text')&.html_safe %>
+
+<% unless notice.customizations&.fetch('hide_works') %>
+  <%= render works_partial_for(notice), works: notice.works %>
+<% end %>
