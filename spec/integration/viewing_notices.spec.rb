@@ -188,6 +188,20 @@ feature 'Viewing notices' do
     end
   end
 
+  context 'counternotice' do
+    scenario 'link to an original notice is visible' do
+      create(:counternotice, counternotice_for_id: 1234)
+
+      visit notice_url(Counternotice.last)
+
+      create(:counternotice, counternotice_for_sid: 4321)
+
+      visit notice_url(Counternotice.last)
+
+      expect(page).to have_content(notice_by_sid_url(id: 4321))
+    end
+  end
+
   def check_full_works_urls
     within('#works') do
       expect(page).to have_content 'http://www.example.com/original_work.pdf'
