@@ -6,7 +6,7 @@ feature 'content filters' do
       ContentFilter.create(
         name: 'Test',
         query: '"entities"."name" = \'Stop\' ',
-        actions: [:full_notice_version_only_lumen_team]
+        actions: ['full_notice_version_only_lumen_team']
       )
 
       notice = create(:dmca, role_names: %w[sender principal submitter])
@@ -22,7 +22,7 @@ feature 'content filters' do
       ContentFilter.create(
         name: 'Test',
         query: '"entities"."name" = \'Stop\' ',
-        actions: [:full_notice_version_only_lumen_team]
+        actions: ['full_notice_version_only_lumen_team']
       )
 
       notice = create(:dmca, :with_infringing_urls, role_names: %w[sender principal submitter])

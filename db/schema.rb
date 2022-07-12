@@ -38,7 +38,7 @@ ActiveRecord::Schema.define(version: 2022_07_08_082925) do
   end
 
   create_table "active_storage_variant_records", force: :cascade do |t|
-    t.integer "blob_id", null: false
+    t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
@@ -138,7 +138,7 @@ ActiveRecord::Schema.define(version: 2022_07_08_082925) do
     t.index ["boolean"], name: "index_comfy_cms_fragments_on_boolean"
     t.index ["datetime"], name: "index_comfy_cms_fragments_on_datetime"
     t.index ["identifier"], name: "index_comfy_cms_fragments_on_identifier"
-    t.index ["record_type", "record_id"], name: "index_comfy_cms_fragments_on_record"
+    t.index ["record_type", "record_id"], name: "index_comfy_cms_fragments_on_record_type_and_record_id"
   end
 
   create_table "comfy_cms_layouts", force: :cascade do |t|
@@ -581,7 +581,7 @@ ActiveRecord::Schema.define(version: 2022_07_08_082925) do
   end
 
   create_table "youtube_import_file_locations", force: :cascade do |t|
-    t.integer "file_upload_id"
+    t.bigint "file_upload_id"
     t.string "path", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
