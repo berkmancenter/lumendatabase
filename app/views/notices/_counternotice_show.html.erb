@@ -5,4 +5,19 @@
   <% end %>
 </section>
 
+<% if notice.counternotice_for_id || notice.counternotice_for_sid %>
+  <dl class="counternotice-for">
+      <span class="label">Counternotice for:</span>
+      <span class="field">
+        <% if notice.counternotice_for_id %>
+          <% url = notice_url(id: notice.counternotice_for_id) %>
+        <% else %>
+          <% url = notice_by_sid_url(id: notice.counternotice_for_sid) %>
+        <% end %>
+
+        <%= link_to(url, url) %>
+      </span>
+  </dl>
+<% end %>
+
 <%= render 'works', notice: notice %>

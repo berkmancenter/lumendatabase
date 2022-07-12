@@ -35,7 +35,7 @@ Rails.application.routes.draw do
 
   # URLs conforming to old patterns, like /notice.cgi?sID=X, are rewritten by
   # the proxies before they get here.
-  get '/submission_id/:id', to: 'submission_ids#show'
+  get '/submission_id/:id', to: 'submission_ids#show', as: 'notice_by_sid'
   get '/original_notice_id/:id', to: 'original_notice_ids#show'
 
   resources :topics, only: [:show]
