@@ -202,6 +202,27 @@ feature 'Viewing notices' do
     end
   end
 
+  context 'files' do
+    it 'doesn\'t allow to download a supporting file from a hidden notice' do
+      notice = create(:dmca, :with_document)
+      file = notice.file_uploads.first
+
+      user = create(:user, :admin)
+      sign_in(user)
+
+      visit file.url
+
+      expect(page.body).to eq('Content')
+
+      notice.hidden = true
+      notice.save
+
+      visit file.url
+
+      expect(page).to have_content('You are not allowed to download this document.')
+    end
+  end
+  
   def check_full_works_urls
     within('#works') do
       expect(page).to have_content 'http://www.example.com/original_work.pdf'

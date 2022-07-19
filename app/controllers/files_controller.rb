@@ -27,6 +27,8 @@ class FilesController < ApplicationController
 
   def viewing_allowed?
     return false if @upload.nil? || @upload.notice.nil?
+    return false if @upload.notice.hidden
+    return false unless @upload.notice.published
     return true if can_see_full_notice_version?(@upload.notice) &&
                    general_files_access?
 

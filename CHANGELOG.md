@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.07d](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.07d) - 2022-07-19
+### Fixed
+* Disallow to download attachments of hidden notices.
+
 ## [22.07c](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.07c) - 2022-07-08
 ### Fixed
 * Fixed removing `file uploads` when creating `new notices` in the `admin`.
