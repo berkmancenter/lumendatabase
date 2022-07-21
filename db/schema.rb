@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_08_082925) do
+ActiveRecord::Schema.define(version: 2022_07_21_141020) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,7 +38,7 @@ ActiveRecord::Schema.define(version: 2022_07_08_082925) do
   end
 
   create_table "active_storage_variant_records", force: :cascade do |t|
-    t.bigint "blob_id", null: false
+    t.integer "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
@@ -138,7 +138,7 @@ ActiveRecord::Schema.define(version: 2022_07_08_082925) do
     t.index ["boolean"], name: "index_comfy_cms_fragments_on_boolean"
     t.index ["datetime"], name: "index_comfy_cms_fragments_on_datetime"
     t.index ["identifier"], name: "index_comfy_cms_fragments_on_identifier"
-    t.index ["record_type", "record_id"], name: "index_comfy_cms_fragments_on_record_type_and_record_id"
+    t.index ["record_type", "record_id"], name: "index_comfy_cms_fragments_on_record"
   end
 
   create_table "comfy_cms_layouts", force: :cascade do |t|
@@ -276,6 +276,7 @@ ActiveRecord::Schema.define(version: 2022_07_08_082925) do
     t.string "country_code_original"
     t.string "zip_original"
     t.string "url_original"
+    t.text "name_description"
     t.index ["address_line_1"], name: "index_entities_on_address_line_1"
     t.index ["ancestry"], name: "index_entities_on_ancestry"
     t.index ["city"], name: "index_entities_on_city"
@@ -581,7 +582,7 @@ ActiveRecord::Schema.define(version: 2022_07_08_082925) do
   end
 
   create_table "youtube_import_file_locations", force: :cascade do |t|
-    t.bigint "file_upload_id"
+    t.integer "file_upload_id"
     t.string "path", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

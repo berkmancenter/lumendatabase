@@ -21,6 +21,8 @@
 // Vendor
 @import 'select2';
 @import 'bootstrap-datepicker';
+@import 'tooltipster.min';
+@import 'cssgg.min';
 
 // Shared
 @import 'shared/fontello';
@@ -29,6 +31,7 @@
 @import 'shared/footer';
 @import 'shared/navigation';
 @import 'shared/flexnav';
+@import 'shared/tooltips';
 
 // Layouts
 @import 'layouts/application';

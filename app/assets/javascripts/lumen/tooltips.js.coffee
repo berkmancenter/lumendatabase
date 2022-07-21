@@ -1,0 +1,4 @@
+$ ->
+  $('.tooltipster').tooltipster(
+    trigger: 'click'
+  )

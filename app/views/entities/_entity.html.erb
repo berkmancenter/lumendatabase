@@ -1,7 +1,7 @@
 <% additional_css ||= '' %>
 <section class="<%= role %> <%= additional_css %>">
   <h5><%= role %></h5>
-  <h6>
+  <h6 class="entity-name">
     <% if [:sender, :principal].include?(role.to_sym) && notice.hide_identities? %>
       REDACTED
     <% else %>
@@ -11,6 +11,9 @@
           faceted_search_path("#{role}_name" => entity.name)
         )
       %>
+      <% if entity.name_description %>
+        <i class="tooltipster gg-lumen gg-info" title="<%= entity.name_description %>"></i>
+      <% end %>
     <% end %>
   </h6>
 

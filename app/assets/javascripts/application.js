@@ -18,6 +18,7 @@
 //= require select2
 //= require bootstrap-datepicker/core
 //= require jquery-placeholder
+//= require tooltipster.min
 //= require_tree ./comfy
 //= require_tree ./rails_admin
 //= require_tree ./lumen

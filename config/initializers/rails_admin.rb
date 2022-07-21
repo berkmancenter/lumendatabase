@@ -269,13 +269,29 @@ RailsAdmin.config do |config|
       configure(:notices) { hide }
       configure(:entity_notice_roles) { hide }
       configure(:ancestry) { hide }
-      # Unfortunately, there are too many entities to make parents editable
-      # via default rails_admin functionality.
-      # configure :parent_id, :enum do
-      #   enum_method do
-      #     :parent_enum
-      #   end
-      # end
+
+      field :name
+      field :name_description
+      field :kind
+      field :address_line_1
+      field :address_line_2
+      field :state
+      field :country_code
+      field :phone
+      field :email
+      field :url
+      field :city
+      field :zip
+      field :user
+      field :full_notice_only_researchers
+      field :full_notice_only_researchers_users
+      field :address_line_1_original
+      field :address_line_2_original
+      field :city_original
+      field :state_original
+      field :country_code_original
+      field :zip_original
+      field :url_original
     end
   end
 
