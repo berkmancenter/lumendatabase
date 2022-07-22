@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.07f](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.07f) - 2022-07-22
+### Fixed
+* Put the `name_original` field back to the `entity edit form` in the `admin`.
+
 ## [22.07e](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.07e) - 2022-07-21
 ### Added
 * Added a tooltip next to the `entity name` in the `notice view` showing additional entity information.

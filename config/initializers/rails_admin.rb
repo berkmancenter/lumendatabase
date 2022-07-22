@@ -285,6 +285,7 @@ RailsAdmin.config do |config|
       field :user
       field :full_notice_only_researchers
       field :full_notice_only_researchers_users
+      field :name_original
       field :address_line_1_original
       field :address_line_2_original
       field :city_original
