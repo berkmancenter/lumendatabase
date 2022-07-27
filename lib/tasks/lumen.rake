@@ -1013,4 +1013,39 @@ where works.id in (
       notice_update_call.update_attribute(:status, 'finished')
     end
   end
+
+  desc 'Merge entities with similar name and metadata'
+  task merge_similar_entities: :environment do |_t|
+    loggy = Loggy.new('rake lumen:merge_similar_entities', true)
+    entities_to_merge_in = Entity.where("id IN (#{ENV['ENTITIES_TO_MERGE']})")
+    entities_ids_to_skip = ENV['ENTITIES_TO_SKIP'].split(',') || []
+
+    entities_to_merge_in.each do |entity_to_merge_in|
+      entities_to_merge = Entity.where("name ILIKE '%#{ENV['SEARCH_NAME'] || entity_to_merge_in.name}%'")
+                                .where("id != #{entity_to_merge_in.id}")
+
+      entities_to_merge.each do |entity_to_merge|
+        next if entities_ids_to_skip.include?(entity_to_merge.id)
+
+        loggy.info "Merging [#{entity_to_merge.name}] [#{entity_to_merge.id}] into [#{entity_to_merge_in.name}] [#{entity_to_merge_in.id}]"
+
+        next if ENV['DRY_RUN']
+
+        ActiveRecord::Base.connection.execute("
+          UPDATE
+            entity_notice_roles
+          SET
+            entity_id=#{entity_to_merge_in.id}
+          WHERE
+            entity_id=#{entity_to_merge.id}
+        ")
+
+        ActiveRecord::Base.connection.execute("
+          DELETE
+            from entities
+          WHERE id=#{entity_to_merge.id}
+        ")
+      end
+    end
+  end
 end
