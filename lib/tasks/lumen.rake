@@ -1018,7 +1018,7 @@ where works.id in (
   task merge_similar_entities: :environment do |_t|
     loggy = Loggy.new('rake lumen:merge_similar_entities', true)
     entities_to_merge_in = Entity.where("id IN (#{ENV['ENTITIES_TO_MERGE']})")
-    entities_ids_to_skip = ENV['ENTITIES_TO_SKIP'].split(',') || []
+    entities_ids_to_skip = ENV['ENTITIES_TO_SKIP'].split(',').map(&:to_i) || []
 
     entities_to_merge_in.each do |entity_to_merge_in|
       entities_to_merge = Entity.where("name ILIKE '%#{ENV['SEARCH_NAME'] || entity_to_merge_in.name}%'")
