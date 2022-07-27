@@ -1018,11 +1018,19 @@ where works.id in (
   task merge_similar_entities: :environment do |_t|
     loggy = Loggy.new('rake lumen:merge_similar_entities', true)
     entities_to_merge_in = Entity.where("id IN (#{ENV['ENTITIES_TO_MERGE']})")
-    entities_ids_to_skip = ENV['ENTITIES_TO_SKIP'].split(',').map(&:to_i) || []
+    entities_ids_to_skip = ENV['ENTITIES_TO_SKIP'] || ''
+    entities_ids_to_skip = entities_ids_to_skip.split(',').map(&:to_i)
 
     entities_to_merge_in.each do |entity_to_merge_in|
-      entities_to_merge = Entity.where("name ILIKE '%#{ENV['SEARCH_NAME'] || entity_to_merge_in.name}%'")
-                                .where("id != #{entity_to_merge_in.id}")
+      search_name = ENV['SEARCH_NAME'] || entity_to_merge_in.name
+
+      entities_to_merge = if ENV['SEARCH_EXACT']
+                            Entity.where("name ILIKE '%#{search_name}%'")
+                          else
+                            Entity.where('name = ?', search_name)
+                          end
+
+      entities_to_merge = entities_to_merge.where("id != #{entity_to_merge_in.id}")
 
       entities_to_merge.each do |entity_to_merge|
         next if entities_ids_to_skip.include?(entity_to_merge.id)
