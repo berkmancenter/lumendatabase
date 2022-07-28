@@ -57,7 +57,10 @@ class NoticeBuilder
   def set_all_entities
     return unless !!user && !!(entity = user.entity)
 
-    set_entity(:submitter, entity) unless entity_present?(:submitter)
+    # Submitter should always be forced to be a linked entity of the current user
+    @notice.entity_notice_roles = @notice.entity_notice_roles.select { |entity_role| entity_role.name.to_sym != :submitter } if entity_present?(:submitter)
+
+    set_entity(:submitter, entity)
     set_entity(:recipient, entity) unless entity_present?(:recipient)
   end
 

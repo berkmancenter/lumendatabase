@@ -57,7 +57,7 @@ RSpec.describe NoticeBuilder, type: :model do
     expect(n.submitter).to eq user.entity
   end
 
-  it 'leaves existing submitters alone' do
+  it 'removes submitters that come from request params' do
     user = create(:user, :with_entity)
     enr = default_notice_hash[:entity_notice_roles_attributes]
     enr[0][:name] = 'submitter'
@@ -69,8 +69,7 @@ RSpec.describe NoticeBuilder, type: :model do
     ).build
     n.save
 
-    assert user.entity.name != 'The Googs'
-    expect(n.submitter.name).to eq 'The Googs'
+    expect(n.submitter).to eq user.entity
   end
 
   it 'sets recipient if unset' do

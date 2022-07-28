@@ -106,6 +106,35 @@ feature 'notice submission', js: true do
     expect(notice.recipient).to eq entity
   end
 
+  scenario 'submitting as a user with a linked entity and providing a submitter entity' do
+    user = create(:user, :submitter)
+    entity = create(:entity, user: user, name: 'Twitter')
+    notice_parameters = default_notice_hash(
+      title: 'A superduper title',
+      entity_notice_roles_attributes: [
+        {
+          name: 'recipient',
+          entity_attributes: {
+            name: 'The Googs'
+          }
+        },
+        {
+          name: 'submitter',
+          entity_attributes: {
+            name: 'Extra submitter entity will be discarded'
+          }
+        }
+      ]
+    )
+    parameters = request_hash(notice_parameters, user)
+
+    curb = post_api('/notices', parameters)
+
+    notice = Notice.last
+    expect(curb.response_code).to eq 201
+    expect(notice.submitter).to eq entity
+  end
+
   scenario 'submitting a notice with text file attachments' do
     parameters = request_hash(notice_hash_with_text_files)
 
