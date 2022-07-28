@@ -1,4 +1,5 @@
 $ ->
   $('.tooltipster').tooltipster(
-    trigger: 'click'
+    trigger: 'click',
+    maxWidth: '500'
   )

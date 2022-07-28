@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.07i](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.07i) - 2022-07-28
+### Changed
+* Set max width of system tooltips.
+
 ## [22.07h](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.07h) - 2022-07-28
 ### Changed
 * Forced a `submitter role entity` to always be a linked entity of a submitting user.
