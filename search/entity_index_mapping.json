@@ -1,0 +1,57 @@
+{
+  "mappings": {
+    "_doc": {
+      "dynamic": "false",
+      "properties": {
+        "address_line_1": {
+          "type": "text"
+        },
+        "address_line_2": {
+          "type": "text"
+        },
+        "ancestry": {
+          "type": "text"
+        },
+        "city": {
+          "type": "text"
+        },
+        "country_code": {
+          "type": "text"
+        },
+        "created_at": {
+          "type": "text"
+        },
+        "email": {
+          "type": "text"
+        },
+        "kind": {
+          "type": "text"
+        },
+        "name": {
+          "type": "text"
+        },
+        "parent_id": {
+          "type": "text"
+        },
+        "phone": {
+          "type": "text"
+        },
+        "state": {
+          "type": "text"
+        },
+        "updated_at": {
+          "type": "text"
+        },
+        "url": {
+          "type": "text"
+        },
+        "user_id": {
+          "type": "text"
+        },
+        "zip": {
+          "type": "text"
+        }
+      }
+    }
+  }
+}
