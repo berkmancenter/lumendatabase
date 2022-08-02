@@ -1,0 +1,23 @@
+.status-index {
+  .landing-content {
+    img:first-child {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+
+  .gg-shape-circle {
+    width: 2rem;
+    height: 2rem;
+    border: 0;
+    margin-bottom: 1rem;
+  }
+
+  .status-index-circle-ok {
+    background-color: #009900;
+  }
+
+  .status-index-circle-not-ok {
+    background-color: #cc0000;
+  }
+}

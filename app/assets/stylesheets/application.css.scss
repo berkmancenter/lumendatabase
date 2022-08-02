@@ -37,6 +37,7 @@
 @import 'layouts/application';
 @import 'layouts/home';
 @import 'layouts/sessions';
+@import 'layouts/landing';
 
 // Views
 @import 'home/index';
@@ -53,6 +54,7 @@
 @import 'media_mentions/index';
 @import 'api_submitter_requests/index';
 @import 'captcha_gateway/index';
+@import 'status/index';
 
 @import 'pages/pages';
 

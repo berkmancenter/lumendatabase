@@ -78,6 +78,8 @@ Rails.application.routes.draw do
 
   resources :captcha_gateway, only: :index
 
+  resources :status, only: :index
+
   root to: 'home#index', via: :get
   match '/', to: 'application#routing_error', via: ActionDispatch::Routing::HTTP_METHODS - [:get]
 

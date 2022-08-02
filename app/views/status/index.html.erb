@@ -1,0 +1,37 @@
+<%= title 'Status page' %>
+
+<% cache( 'lumendatabase-status-page', expires_in: 2.minutes ) do %>
+  <div class="landing-image-full">
+    <%= image_tag("network.jpg") %>
+  </div>
+
+  <p></p>
+
+  <p>
+    Something wrong with the API or the website? Contact us here: <a href="mailto:team@lumendatabase.org?subject=Issue with the system (from status page)">team@lumendatabase.org</a>.
+  </p>
+
+  <hr>
+
+  <h2>Current status</h2>
+  <h4>API</h4>
+  <% if LumenSetting.get('status_page_api_current_ok', cache: false) == '1' %>
+    <i class="gg-shape-circle status-index-circle-ok"></i>
+  <% else %>
+    <i class="gg-shape-circle status-index-circle-not-ok"></i>
+  <% end %>
+  <%= LumenSetting.get('status_page_api_current_text', cache: false).html_safe %>
+
+  <h4>Front-end</h4>
+  <% if LumenSetting.get('status_page_front_current_ok', cache: false) == '1' %>
+    <i class="gg-shape-circle status-index-circle-ok"></i>
+  <% else %>
+    <i class="gg-shape-circle status-index-circle-not-ok"></i>
+  <% end %>
+  <%= LumenSetting.get('status_page_front_current_text', cache: false).html_safe %>
+
+  <hr>
+
+  <h2>Planned maintenance</h2>
+  <%= LumenSetting.get('status_page_maintenance_text', cache: false).html_safe %>
+<% end %>
