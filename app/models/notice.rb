@@ -427,8 +427,7 @@ class Notice < ApplicationRecord
       json[:description_original] = work.description_original
     end
 
-    # FIXME Find a way to do this in the middleware to avoid Hash <> JSON conversion
-    JSON.parse(json.to_json.gsub(/\\u0000/, ''))
+    json
   end
 
   def prep_url_json(url_instance)

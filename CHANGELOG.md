@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.08a](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.08a) - 2022-08-26
+### Fixed
+* Started properly catching requests with null bytes.
+
 ## [22.08](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.08) - 2022-08-02
 ### Added
 * Created a system status page.
