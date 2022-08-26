@@ -85,6 +85,7 @@ Rails.application.routes.draw do
 
   comfy_route :cms_admin, path: '/cms_admin'
 
-  # Ensure that this route is defined last
-  comfy_route :cms, path: '/'
+  get '/(*cms_path)(.:format)', to: 'comfy/cms/content#show'
+
+  match '*unmatched', to: 'application#resource_not_found', via: :all
 end

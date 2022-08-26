@@ -35,6 +35,25 @@ class ApplicationController < ActionController::Base
     resource_not_found
   end
 
+  def resource_not_found(exception = false)
+    logger404s = Logger.new("#{Rails.root}/log/#{Rails.env}_404s.log")
+    logger404s.error(exception) if exception
+
+    set_default_format
+
+    respond_to do |format|
+      format.html do
+        render 'error_pages/404',
+               status: :not_found,
+               layout: false
+      end
+      format.json do
+        render json: 'Not Found',
+               status: :not_found
+      end
+    end
+  end
+
   private
 
   def layout_by_resource
@@ -81,25 +100,6 @@ class ApplicationController < ActionController::Base
               request.xhr?
 
     store_location_for(:user, request.fullpath)
-  end
-
-  def resource_not_found(exception = false)
-    logger404s = Logger.new("#{Rails.root}/log/#{Rails.env}_404s.log")
-    logger404s.error(exception) if exception
-
-    set_default_format
-
-    respond_to do |format|
-      format.html do
-        render 'error_pages/404',
-               status: :not_found,
-               layout: false
-      end
-      format.json do
-        render json: 'Not Found',
-               status: :not_found
-      end
-    end
   end
 
   def attachment_type_not_allowed
