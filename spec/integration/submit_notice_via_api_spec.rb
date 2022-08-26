@@ -270,6 +270,18 @@ feature 'notice submission', js: true do
     end
   end
 
+  scenario 'submitting a notice with null bytes' do
+    parameters = request_hash(
+      default_notice_hash({
+        title: 'A superduper\u0000 title'
+      })
+    )
+
+    curb = post_api('/notices', parameters)
+
+    expect(curb.response_code).to eq 400
+  end
+
   private
 
   def original_document_file(notice)
