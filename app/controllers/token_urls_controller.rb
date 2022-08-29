@@ -180,7 +180,7 @@ class TokenUrlsController < ApplicationController
   end
 
   def token_email_spam?
-    return true if BlockedTokenUrlDomain.where("'#{@original_email}' ~~* name").any?
+    return true if BlockedTokenUrlDomain.where('? ~~* name', @original_email).any?
 
     begin
       uri = URI("http://us.stopforumspam.org/api?email=#{@original_email}")

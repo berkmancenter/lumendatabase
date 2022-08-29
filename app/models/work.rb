@@ -78,10 +78,17 @@ class Work
     counted_urls = {}
 
     urls.each do |url|
-      uri = Addressable::URI.parse(url.url)
-
-      # get just domain
-      domain = uri.host
+      begin
+        # Valid URIs
+        uri = Addressable::URI.parse(url.url)
+        domain = uri.host
+      rescue Addressable::URI::InvalidURIError
+        # Invalid URIs
+        domain = url.url
+                    .split('/')[2]
+                    .split(' ')[0]
+                    .gsub(/^www\./, '')
+      end
 
       if counted_urls[domain].nil?
         counted_urls[domain] = {
