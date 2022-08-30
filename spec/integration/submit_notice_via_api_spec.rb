@@ -282,6 +282,102 @@ feature 'notice submission', js: true do
     expect(curb.response_code).to eq 400
   end
 
+  context 'redacting defamations' do
+    scenario 'sender name is redacted if there is no principal provided' do
+      original_text = <<-BODY
+        My name is Tonny Bastet, do something please!!!
+      BODY
+      redacted_text = <<-BODY
+        My name is [REDACTED], do something please!!!
+      BODY
+      original_infringing_url = 'http://disney.com/tonny_bastet.mp4'
+      redacted_infringing_url = 'http://disney.com/[REDACTED].mp4'
+
+      parameters = request_hash(
+        default_notice_hash(
+          type: 'Defamation',
+          body: original_text,
+          entity_notice_roles_attributes: [
+            {
+              name: 'recipient',
+              entity_attributes: {
+                name: 'The Googs'
+              }
+            },
+            {
+              name: 'sender',
+              entity_attributes: {
+                name: 'Tonny Bastet'
+              }
+            }
+          ],
+          works_attributes: [
+            {
+              description: original_text,
+              infringing_urls_attributes: [
+                {
+                  url: original_infringing_url
+                }
+              ]
+            }
+          ]
+        )
+      )
+
+      submit_and_test_defamation_redaction(parameters, original_text, redacted_text, original_infringing_url, redacted_infringing_url)
+    end
+
+    scenario 'principal name is redacted if there is principal provided' do
+      original_text = <<-BODY
+        My name not John Bastet, it's Tonny Kokosh, do something please!!!
+      BODY
+      redacted_text = <<-BODY
+        My name not John Bastet, it's [REDACTED], do something please!!!
+      BODY
+      original_infringing_url = 'http://disney.com/tonny_kokosh.mp4'
+      redacted_infringing_url = 'http://disney.com/[REDACTED].mp4'
+
+      parameters = request_hash(
+        default_notice_hash(
+          type: 'Defamation',
+          body: original_text,
+          entity_notice_roles_attributes: [
+            {
+              name: 'recipient',
+              entity_attributes: {
+                name: 'The Googs'
+              }
+            },
+            {
+              name: 'sender',
+              entity_attributes: {
+                name: 'John Bastet'
+              }
+            },
+            {
+              name: 'principal',
+              entity_attributes: {
+                name: 'Tonny Kokosh'
+              }
+            }
+          ],
+          works_attributes: [
+            {
+              description: original_text,
+              infringing_urls_attributes: [
+                {
+                  url: original_infringing_url
+                }
+              ]
+            }
+          ]
+        )
+      )
+
+      submit_and_test_defamation_redaction(parameters, original_text, redacted_text, original_infringing_url, redacted_infringing_url)
+    end
+  end
+
   private
 
   def original_document_file(notice)
@@ -352,5 +448,18 @@ feature 'notice submission', js: true do
       notice: notice_hash,
       authentication_token: user.authentication_token
     }
+  end
+
+  def submit_and_test_defamation_redaction(parameters, original_text, redacted_text, original_infringing_url, redacted_infringing_url)
+    post_api('/notices', parameters)
+
+    notice = Notice.last
+
+    expect(notice.body).to eq redacted_text
+    expect(notice.body_original).to eq original_text
+    expect(notice.works.first.description).to eq redacted_text
+    expect(notice.works.first.description_original).to eq original_text
+    expect(notice.works.first.infringing_urls.first.url).to eq redacted_infringing_url
+    expect(notice.works.first.infringing_urls.first.url_original).to eq original_infringing_url
   end
 end

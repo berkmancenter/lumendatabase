@@ -1,8 +1,14 @@
 class InstanceRedactor
-  def initialize(redactors = [PhoneNumberRedactor.new,
-                              SSNRedactor.new,
-                              EmailRedactor.new])
+  def initialize(
+    redactors = [
+      PhoneNumberRedactor.new,
+      SSNRedactor.new,
+      EmailRedactor.new
+    ],
+    options = {}
+  )
     @redactors = redactors
+    @options = options
   end
 
   def redact(instance, field_or_fields = Notice::REDACTABLE_FIELDS)
@@ -29,7 +35,7 @@ class InstanceRedactor
 
   def redact_field(instance, field, text)
     new_text = redactors.inject(text) do |result, redactor|
-      redactor.redact(result)
+      redactor.redact(result, @options)
     end
 
     return unless new_text != text
@@ -88,7 +94,7 @@ class InstanceRedactor
       @string_or_regex = string_or_regex
     end
 
-    def redact(content)
+    def redact(content, _options = {})
       content.gsub(@string_or_regex) { |s| STOP_WORDS.include?(s) ? s : mask }
     end
 
@@ -98,7 +104,7 @@ class InstanceRedactor
   end
 
   class PhoneNumberRedactor
-    def redact(text)
+    def redact(text, _options = {})
       redactor = ContentRedactor.new(
         /(\()?\b(\(?\d{3}\)?.?)?  # optional area code
          (\d{3}[^\d]?\d{4})|      # phone number, optional single-char separator
@@ -111,7 +117,7 @@ class InstanceRedactor
   end
 
   class SSNRedactor
-    def redact(text)
+    def redact(text, _options = {})
       redactor = ContentRedactor.new(
         /\b(\d{3})\D?(\d{2})\D?(\d{4})\b/x
       )
@@ -121,7 +127,7 @@ class InstanceRedactor
   end
 
   class EmailRedactor
-    def redact(text)
+    def redact(text, _options = {})
       redactor = ContentRedactor.new(
         /\S+@\S+\.\S+[^.\s]/i
       )
@@ -131,15 +137,16 @@ class InstanceRedactor
   end
 
   class EntityNameRedactor
-    def initialize(name)
-      match = name.gsub(/[-*+?\d]/, ' ').strip.split(/\s+/)
-      separator = (name =~ /[a-z]/mi ? '[^a-z]' : '\s')
+    def redact(text, options = {})
+      return text unless options[:entity_name].present?
+
+      match = options[:entity_name].gsub(/[^'0-9A-Za-z ]/, '').gsub(/[-*+?\d]/, ' ').strip.split(/\s+/)
+      separator = (options[:entity_name] =~ /[a-z]/mi ? '[^a-z]' : '\s')
       @regex_base = "(?:#{match.join('|')})(?:#{separator}*(?:#{match.join('|')}))*"
       @regex = /#{@regex_base}/mi
-    end
 
-    def redact(text)
       return text if @regex_base.blank?
+
       redactor = ContentRedactor.new(@regex)
 
       redactor.redact(text)

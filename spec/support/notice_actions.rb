@@ -1,10 +1,10 @@
 require 'support/sign_in'
 
 module NoticeActions
-  def submit_recent_notice(title = 'A title')
+  def submit_recent_notice(title = 'A title', type = 'DMCA')
     sign_in(create(:user, :submitter))
 
-    visit '/notices/new?type=DMCA'
+    visit "/notices/new?type=#{type}"
 
     fill_in 'Title', with: title
     fill_in 'Date received', with: Time.now

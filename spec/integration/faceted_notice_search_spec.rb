@@ -59,7 +59,6 @@ feature 'Faceted search of Notices', search: true do
       end
 
       open_dropdown_for_facet('date_received_facet')
-      page.save_screenshot(full: true)
       facet = page.find('ol.date_received_facet li:nth-child(3)').text
 
       within_faceted_search_results_for('title', :date_received_facet, facet) do
