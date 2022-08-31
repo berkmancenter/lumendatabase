@@ -42,10 +42,16 @@ class Defamation < Notice
       InstanceRedactor::EntityNameRedactor.new
     ]
 
+    entity_name = principal&.name || sender&.name
+
+    # Some submitters redact on their end using this phrase, let's avoid
+    # double-redaction
+    return if entity_name == '[REDACTED]'
+
     instance_redactor = InstanceRedactor.new(
       custom_redactors,
       {
-        entity_name: principal&.name || sender&.name
+        entity_name: entity_name
       }
     )
 

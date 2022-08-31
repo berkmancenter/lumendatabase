@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.08d](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.08d) - 2022-08-31
+### Fixed
+* Fixed double-redaction of senders/principals in defamations.
+
 ## [22.08c](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.08c) - 2022-08-30
 ### Changed
 * Started redacting sender and principal names in defamations.
