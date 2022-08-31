@@ -20,7 +20,20 @@ class ApplicationController < ActionController::Base
   after_action :include_auth_cookie
 
   if Rails.env.staging? || Rails.env.production?
-    [ActiveRecord::RecordNotFound, ActionController::RoutingError, ActionController::UnknownFormat].each do |exception_class|
+    [
+      ActiveRecord::RecordNotFound,
+      ActionController::RoutingError,
+      ActionController::UnknownFormat,
+      ActionController::UnknownHttpMethod,
+      ActionController::BadRequest,
+      ActionController::InvalidAuthenticityToken,
+      ActionController::InvalidCrossOriginRequest,
+      ActionController::MethodNotAllowed,
+      ActionController::NotImplemented,
+      ActionController::ParameterMissing,
+      ActionDispatch::Http::MimeNegotiation::InvalidType,
+      ActionDispatch::Http::Parameters::ParseError
+    ].each do |exception_class|
       rescue_from exception_class do |exception|
         resource_not_found(exception)
       end
