@@ -130,6 +130,13 @@ module NoticesHelper
     { selected: user.entity.kind }
   end
 
+  def work_url(url)
+    return url if SpecialDomain.where('? ~~* domain_name', url).where("why_special ? 'full_urls_only_for_researchers'").none? ||
+                  (Current.user && (Current.user.role?(Role.researcher) || Current.user.role?(Role.super_admin)))
+
+    Work.fqdn_from_url(url)
+  end
+
   private
 
   def confidential_order?(notice)

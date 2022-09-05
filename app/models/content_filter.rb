@@ -6,8 +6,6 @@ class ContentFilter < ApplicationRecord
   validates :name, presence: true
   validates :query, presence: true
 
-  serialize :actions, Array
-
   def actions_enum
     [
       ['Full notice version only for Lumen team', :full_notice_version_only_lumen_team]

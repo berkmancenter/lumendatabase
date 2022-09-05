@@ -41,12 +41,12 @@ class Work
     self.copyrighted_urls = urls.map { |url| valid_url(CopyrightedUrl, url) }.compact
   end
 
-  def infringing_urls_counted_by_domain
-    @infringing_urls_counted_by_domain  ||= count_by_domain(infringing_urls)
+  def infringing_urls_counted_by_fqdn
+    @infringing_urls_counted_by_fqdn  ||= count_by_fqdn(infringing_urls)
   end
 
-  def copyrighted_urls_counted_by_domain
-    @copyrighted_urls_counted_by_domain ||= count_by_domain(copyrighted_urls)
+  def copyrighted_urls_counted_by_fqdn
+    @copyrighted_urls_counted_by_fqdn ||= count_by_fqdn(copyrighted_urls)
   end
 
   def force_redactions
@@ -71,32 +71,38 @@ class Work
     }
   end
 
+  def self.fqdn_from_url(url)
+    begin
+      # Valid URIs
+      uri = Addressable::URI.parse(url)
+      fqdn = uri.host
+    rescue Addressable::URI::InvalidURIError
+      # Invalid URIs
+      fqdn = url
+             .split('/')[2]
+             .split(' ')[0]
+             .gsub(/^www\./, '')
+    end
+
+    fqdn
+  end
+
   # == Private Methods =========================================================
   private
 
-  def count_by_domain(urls)
+  def count_by_fqdn(urls)
     counted_urls = {}
 
     urls.each do |url|
-      begin
-        # Valid URIs
-        uri = Addressable::URI.parse(url.url)
-        domain = uri.host
-      rescue Addressable::URI::InvalidURIError
-        # Invalid URIs
-        domain = url.url
-                    .split('/')[2]
-                    .split(' ')[0]
-                    .gsub(/^www\./, '')
-      end
+      fqdn = Work.fqdn_from_url(url.url)
 
-      if counted_urls[domain].nil?
-        counted_urls[domain] = {
-          domain: domain,
+      if counted_urls[fqdn].nil?
+        counted_urls[fqdn] = {
+          fqdn: fqdn,
           count: 1
         }
       else
-        counted_urls[domain][:count] += 1
+        counted_urls[fqdn][:count] += 1
       end
     end
 

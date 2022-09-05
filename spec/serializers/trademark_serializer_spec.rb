@@ -28,7 +28,7 @@ describe TrademarkSerializer do
     mark = serialized_trademark[:marks].first
 
     expect(mark['infringing_urls']).to eq(
-      work.infringing_urls_counted_by_domain.as_json
+      work.infringing_urls_counted_by_fqdn.as_json
     )
   end
 

@@ -222,7 +222,63 @@ feature 'Viewing notices' do
       expect(page).to have_content('You are not allowed to download this document.')
     end
   end
-  
+
+  context 'special domains' do
+    scenario 'full_urls_only_for_researchers filter' do
+      notice = build(:dmca)
+      notice.works << Work.new(
+        description: 'lol',
+        infringing_urls: [
+          InfringingUrl.new(url: 'https://this-domain-is-so-special.com/hey-buddy/1122'),
+          InfringingUrl.new(url: 'https://not-so-special.com/hey-hey/1122')
+        ]
+      )
+      notice.save!
+
+      SpecialDomain.create!(
+        domain_name: '%this-domain-is-so-special.com%',
+        why_special: ['full_urls_only_for_researchers']
+      )
+
+      token_url = TokenUrl.create(
+        email: 'user@example.com',
+        notice: notice,
+        expiration_date: Time.now + LumenSetting.get_i('truncation_token_urls_active_period').seconds
+      )
+
+      visit notice_url(notice, access_token: token_url.token)
+
+      expect(page).to have_content('https://not-so-special.com/hey-hey/1122')
+      expect(page).to have_content('this-domain-is-so-special.com')
+      expect(page).not_to have_content('https://this-domain-is-so-special.com/hey-buddy/1122')
+
+      user = create(:user, :super_admin)
+      sign_in(user)
+
+      visit notice_url(notice)
+
+      expect(page).to have_content('https://not-so-special.com/hey-hey/1122')
+      expect(page).to have_content('https://this-domain-is-so-special.com/hey-buddy/1122')
+
+      sign_out
+
+      user = create(:user, :researcher)
+      sign_in(user)
+
+      visit notice_url(notice)
+
+      expect(page).to have_content('https://not-so-special.com/hey-hey/1122')
+      expect(page).to have_content('https://this-domain-is-so-special.com/hey-buddy/1122')
+
+      sign_out
+
+      visit notice_url(notice)
+
+      expect(page).not_to have_content('https://not-so-special.com/hey-hey/1122')
+      expect(page).not_to have_content('https://this-domain-is-so-special.com/hey-buddy/1122')
+    end
+  end
+
   def check_full_works_urls
     within('#works') do
       expect(page).to have_content 'http://www.example.com/original_work.pdf'

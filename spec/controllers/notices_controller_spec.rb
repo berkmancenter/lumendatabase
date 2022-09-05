@@ -147,7 +147,7 @@ describe NoticesController do
 
         json = JSON.parse(response.body)['dmca']['works'][0]['infringing_urls'][0]
         expect(json).to have_key('count')
-        expect(json).to have_key('domain')
+        expect(json).to have_key('fqdn')
 
         get :show, params: {
           id: 1, authentication_token: user.authentication_token, format: :json

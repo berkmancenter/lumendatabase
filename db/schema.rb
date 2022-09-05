@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_21_141020) do
+ActiveRecord::Schema.define(version: 2022_09_01_192200) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -493,6 +493,14 @@ ActiveRecord::Schema.define(version: 2022_07_21_141020) do
     t.integer "user_id"
     t.index ["role_id"], name: "index_roles_users_on_role_id"
     t.index ["user_id"], name: "index_roles_users_on_user_id"
+  end
+
+  create_table "special_domains", force: :cascade do |t|
+    t.string "domain_name"
+    t.text "notes"
+    t.jsonb "why_special"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "token_urls", id: :serial, force: :cascade do |t|

@@ -4,7 +4,7 @@
       <span class="label original-title"><%= original_title %></span>
       <ol class="list original-urls">
         <% if work.copyrighted_urls.each do |url| %>
-          <%= content_tag_for(:li, url) do %><%= url.url %><% end %>
+          <%= content_tag_for(:li, url) do %><%= work_url(url.url) %><% end %>
         <% end.empty? %>
           No copyrighted URLs were submitted.
         <% end %>
@@ -17,7 +17,7 @@
       <span class="label infringing-title"><%= infringing_title %></span>
       <ol class="list infringing-urls">
         <% if work.infringing_urls.each do |url| %>
-          <%= content_tag_for(:li, url) do %><%= url.url %><% end %>
+          <%= content_tag_for(:li, url) do %><%= work_url(url.url) %><% end %>
         <% end.empty? %>
           No infringing URLs were submitted.
         <% end %>
@@ -29,8 +29,8 @@
     <div class="row">
       <span class="label original-title"><%= original_title %></span>
       <ol class="list original-urls">
-        <% if work.copyrighted_urls_counted_by_domain.each do |domain| %>
-          <li class="copyrighted_url"><%= domain[:domain] %> - <%= domain[:count] %> <%= 'URL'.pluralize(domain[:count]) %></li>
+        <% if work.copyrighted_urls_counted_by_fqdn.each do |fqdn| %>
+          <li class="copyrighted_url"><%= fqdn[:fqdn] %> - <%= fqdn[:count] %> <%= 'URL'.pluralize(fqdn[:count]) %></li>
         <% end.empty? %>
           No copyrighted URLs were submitted.
         <% end %>
@@ -42,8 +42,8 @@
     <div class="row">
       <span class="label infringing-title"><%= infringing_title %></span>
       <ol class="list infringing-urls">
-        <% if work.infringing_urls_counted_by_domain.each do |domain| %>
-          <li class="infringing_url"><%= domain[:domain] %> - <%= domain[:count] %> <%= 'URL'.pluralize(domain[:count]) %></li>
+        <% if work.infringing_urls_counted_by_fqdn.each do |fqdn| %>
+          <li class="infringing_url"><%= fqdn[:fqdn] %> - <%= fqdn[:count] %> <%= 'URL'.pluralize(fqdn[:count]) %></li>
         <% end.empty? %>
           No infringing URLs were submitted.
         <% end %>

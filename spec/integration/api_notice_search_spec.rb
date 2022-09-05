@@ -144,7 +144,7 @@ feature "Searching for Notices via the API" do
       marks = notice.works.map do |work|
         {
           'description' => work.description,
-          'infringing_urls' => work.infringing_urls_counted_by_domain.as_json
+          'infringing_urls' => work.infringing_urls_counted_by_fqdn.as_json
         }
       end
 
@@ -429,7 +429,7 @@ feature "Searching for Notices via the API" do
       marks = notice.works.map do |work|
         {
           'description' => work.description,
-          'infringing_urls' => work.infringing_urls_counted_by_domain.as_json
+          'infringing_urls' => work.infringing_urls_counted_by_fqdn.as_json
         }
       end
 
