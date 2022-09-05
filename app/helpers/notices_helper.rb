@@ -2,9 +2,9 @@ module NoticesHelper
   # Determines whether 'click to request access' should be an option.
   # Yes, the messy function signature implies there is a lot going on with the
   # business logic.
-  def access_requestable?(notice, show_original, show_infringing)
+  def access_requestable?(notice, show_copyrighted, show_infringing)
     [
-      show_original || show_infringing,
+      show_copyrighted || show_infringing,
       # Additional access cannot be requested for confidential court orders
       # as there is nothing further to display.
       !confidential_order?(notice),
@@ -128,13 +128,6 @@ module NoticesHelper
     ].all?
 
     { selected: user.entity.kind }
-  end
-
-  def work_url(url)
-    return url if SpecialDomain.where('? ~~* domain_name', url).where("why_special ? 'full_urls_only_for_researchers'").none? ||
-                  (Current.user && (Current.user.role?(Role.researcher) || Current.user.role?(Role.super_admin)))
-
-    Work.fqdn_from_url(url)
   end
 
   private

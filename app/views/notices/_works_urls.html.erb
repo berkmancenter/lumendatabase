@@ -1,33 +1,12 @@
-<% if can_see_full_notice_version?(@notice) %>
-  <% if show_original %>
-    <div class="row">
-      <span class="label original-title"><%= original_title %></span>
-      <ol class="list original-urls">
-        <% if work.copyrighted_urls.each do |url| %>
-          <%= content_tag_for(:li, url) do %><%= work_url(url.url) %><% end %>
-        <% end.empty? %>
-          No copyrighted URLs were submitted.
-        <% end %>
-      </ol>
-    </div>
-  <% end %>
+<% copyrighted_title = copyrighted_title || '' %>
 
-  <% if show_infringing %>
-    <div class="row">
-      <span class="label infringing-title"><%= infringing_title %></span>
-      <ol class="list infringing-urls">
-        <% if work.infringing_urls.each do |url| %>
-          <%= content_tag_for(:li, url) do %><%= work_url(url.url) %><% end %>
-        <% end.empty? %>
-          No infringing URLs were submitted.
-        <% end %>
-      </ol>
-    </div>
-  <% end %>
+<% if can_see_full_notice_version?(@notice) %>
+  <%= render 'works_urls_type_list', type: 'copyrighted', show_copyrighted: show_copyrighted, copyrighted_title: copyrighted_title, work: work %>
+  <%= render 'works_urls_type_list', type: 'infringing', show_infringing: show_infringing, infringing_title: infringing_title, work: work %>
 <% else %>
-  <% if show_original %>
+  <% if show_copyrighted %>
     <div class="row">
-      <span class="label original-title"><%= original_title %></span>
+      <span class="label original-title"><%= copyrighted_title %></span>
       <ol class="list original-urls">
         <% if work.copyrighted_urls_counted_by_fqdn.each do |fqdn| %>
           <li class="copyrighted_url"><%= fqdn[:fqdn] %> - <%= fqdn[:count] %> <%= 'URL'.pluralize(fqdn[:count]) %></li>
@@ -60,7 +39,7 @@
       <% end %>
     </div>
   <% else %>
-    <% if access_requestable?(@notice, show_original, show_infringing) %>
+    <% if access_requestable?(@notice, show_copyrighted, show_infringing) %>
       <div class="row">
         <p><%= link_to 'Click here', request_access_notice_path(@notice) %> to request access and see full URLs.</p>
       </div>

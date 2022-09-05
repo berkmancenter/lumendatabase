@@ -6,6 +6,7 @@ class Url
   include ValidatesUrls
 
   attr_reader :url_original
+  attr_accessor :only_fqdn
 
   def [](index)
     self.instance_variable_get("@#{index}")

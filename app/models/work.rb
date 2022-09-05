@@ -87,6 +87,14 @@ class Work
     fqdn
   end
 
+  def infringing_urls_public
+    filter_urls(infringing_urls)
+  end
+
+  def copyrighted_urls_public
+    filter_urls(copyrighted_urls)
+  end
+
   # == Private Methods =========================================================
   private
 
@@ -166,5 +174,29 @@ class Work
 
   def not_valid_url_return(type)
     type.new(url: 'invalid')
+  end
+
+  def filter_urls(url_instances)
+    filtered_raw_urls = []
+    fqdns = []
+    user_allowed = (Current.user && (Current.user.role?(Role.researcher) || Current.user.role?(Role.super_admin)))
+
+    url_instances.each do |url_instance|
+      just_url = url_instance.url
+
+      filtered_raw_urls << url_instance and next if SpecialDomain.where('? ~~* domain_name', just_url).where("why_special ? 'full_urls_only_for_researchers'").none? ||
+                                                    user_allowed
+
+      fqdn = Work.fqdn_from_url(just_url)
+
+      next if fqdns.include?(fqdn)
+
+      fqdns << fqdn
+      url_instance.url = fqdn
+      url_instance.only_fqdn = true
+      filtered_raw_urls << url_instance
+    end
+
+    filtered_raw_urls.uniq
   end
 end
