@@ -99,5 +99,9 @@ module Chill
     config.default_sender = ENV['DEFAULT_SENDER'] || 'no-reply@example.com'
     config.return_path = ENV['RETURN_PATH'] || 'user@example.com'
     config.site_host = ENV['SITE_HOST'] || 'example.com'
+
+    # TODO: To make the CMS work, can be removed when the CMS is ready to work
+    # with the latest Rails version.
+    config.active_record.yaml_column_permitted_classes = [Symbol]
   end
 end
