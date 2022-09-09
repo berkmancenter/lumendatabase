@@ -34,8 +34,6 @@ StatisticsProc = Proc.new do
   @token_urls_per_day_from = params[:token_urls_per_day_from] || (Date.today - 1.month)
   @token_urls_per_day_to = params[:token_urls_per_day_to] || Date.today
   @notices_count = helper.fetch_formatted_count('notices')
-  @copyrighted_urls_count = helper.fetch_formatted_count('copyrighted_urls')
-  @infringing_urls_count = helper.fetch_formatted_count('infringing_urls')
 
   render @action.template_name
 end
