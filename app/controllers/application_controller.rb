@@ -32,7 +32,8 @@ class ApplicationController < ActionController::Base
       ActionController::NotImplemented,
       ActionController::ParameterMissing,
       ActionDispatch::Http::MimeNegotiation::InvalidType,
-      ActionDispatch::Http::Parameters::ParseError
+      ActionDispatch::Http::Parameters::ParseError,
+      ActionView::MissingTemplate
     ].each do |exception_class|
       rescue_from exception_class do |exception|
         resource_not_found(exception)
