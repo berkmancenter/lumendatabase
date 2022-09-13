@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.09b](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.09b) - 2022-09-13
+### Fixed
+* Set the proper type for `jsonb` fields to correctly render in the `admin`.
+
 ## [22.09a](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.09a) - 2022-09-05
 ### Fixed
 * Fixed duplicates of `special domains` when showing the full notice version.

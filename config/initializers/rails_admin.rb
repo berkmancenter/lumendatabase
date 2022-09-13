@@ -464,6 +464,18 @@ RailsAdmin.config do |config|
     end
   end
 
+  config.model 'ContentFilter' do
+    configure :actions, :enum do
+      multiple true
+    end
+  end
+
+  config.model 'SpecialDomain' do
+    configure :why_special, :enum do
+      multiple true
+    end
+  end
+
   # Hide unused models from the admin
   # == START ============================================================
   config.model 'ReindexRun' do
