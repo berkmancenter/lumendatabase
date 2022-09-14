@@ -93,7 +93,7 @@ class NoticesController < ApplicationController
   def request_pdf
     @pdf = FileUpload.find(params[:id])
     @pdf.toggle!(:pdf_requested)
-    render nothing: true
+    head :ok, content_type: 'text/html'
   end
 
   # This can't be in 'private' because it is invoke by JavaScript to add
