@@ -51,7 +51,18 @@ class ApplicationController < ActionController::Base
 
   def resource_not_found(exception = false)
     logger404s = Logger.new("#{Rails.root}/log/#{Rails.env}_404s.log")
-    logger404s.error(exception) if exception
+    if exception
+      logger404s.error(
+        format(
+          'Exception %s "%s" for %s at %s',
+          request.raw_request_method,
+          request.filtered_path,
+          request.remote_ip,
+          Time.now.to_default_s
+        )
+      )
+      logger404s.error(exception)
+    end
 
     set_default_format
 
