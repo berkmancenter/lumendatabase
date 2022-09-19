@@ -1,13 +1,13 @@
 <section class="notice-body">
   <% if notice.body.present? %>
-    <h5 class="title"><%= notice.customizations&.fetch('body_field_label') || 'Body' %></h5>
+    <h5 class="title"><%= notice.customizations&.fetch('body_field_label') || Translation.t('notice_show_counternotice_body') %></h5>
     <p class="body"><pre><%= notice.redacted(:body) %></pre></p>
   <% end %>
 </section>
 
 <% if notice.counternotice_for_id || notice.counternotice_for_sid %>
   <dl class="counternotice-for">
-      <span class="label">Counternotice for:</span>
+      <span class="label"><%= Translation.t('notice_show_counternotice_for') %>:</span>
       <span class="field">
         <% if notice.counternotice_for_id %>
           <% url = notice_url(id: notice.counternotice_for_id) %>

@@ -1,19 +1,19 @@
 <%= render 'notices/form_components/header',
-           label: 'Data Protection takedown notice' %>
+           label: Translation.t('notice_data_protection_header') %>
 <%= simple_form_for(notice) do |form| %>
   <section class="notice-body">
-    <h4><span>Step 1.</span> Describe the Notice</h4>
-    <p>Provide us with information about the Data Protection takedown notice you <em>sent</em> or <em>received</em>.</p>
+    <%= Translation.t('notice_new_step_1') %>
+    <%= format(Translation.t('notice_new_provide_us'), type: Translation.t('notice_data_protection_header')).html_safe %>
     <%= render 'notices/form_components/main_metadata',
                subject: false, topics: false, tag_list: false,
                form: form %>
     <%= render 'notices/form_components/additional_metadata',
-               label: 'Legal Complaint',
+               label: Translation.t('notice_new_data_protection_urls_metadata_label'),
                form: form %>
   </section>
 
   <section class="works">
-    <h4><span>Step 2.</span> URLs to be removed from search results.</h4>
+    <%= Translation.t('notice_new_data_protection_urls_step_2') %>
     <% form.object.works.each_with_index do |work, index| %>
       <%= form.simple_fields_for(:works) do |works_form| %>
         <div class="body-wrapper left">
@@ -25,13 +25,13 @@
       <% end %>
     <% end %>
     <div class="body-wrapper left">
-      <%= form.input :url_count, label: "Number of URLs", label_html: { class: 'url', data: {
-              tooltip: "Please indicate how many unique URLs the complainant requested be removed from search results."} } %>
+      <%= form.input :url_count, label: Translation.t('notice_new_data_protection_urls_count_label'), label_html: { class: 'url', data: {
+              tooltip: Translation.t('notice_new_data_protection_urls_count_tooltip')} } %>
     </div>
   </section>
 
   <%= render 'notices/form_components/roles',
-             label: 'Data Protection takedown notice',
+             label: Translation.t('notice_data_protection_header'),
              form: form %>
   <%= render 'notices/form_components/submit', form: form %>
 <% end %>

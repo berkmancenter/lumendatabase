@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Other < Notice
-  MASK = 'REDACTED'
   REDACTION_REGEX = /google|youtube/i
 
   define_elasticsearch_mapping(works: [:description])
@@ -16,7 +15,7 @@ class Other < Notice
 
   def sender_name
     if hide_identities?
-      MASK
+      Lumen::REDACTION_MASK
     else
       super
     end
@@ -24,7 +23,7 @@ class Other < Notice
 
   def principal_name
     if hide_identities?
-      MASK
+      Lumen::REDACTION_MASK
     else
       super
     end

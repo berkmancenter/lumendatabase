@@ -1,4 +1,4 @@
-<%= title 'Search' %>
+<%= title Translation.t('search_index_title') %>
 
 <%= cache(@searcher.cache_key) do %>
   <section class="search-results">
@@ -11,13 +11,11 @@
         </ol>
         <%= hidden_field_tag(:sort_by, params[:sort_by], class: 'sort_by_field', id: nil) %>
       <% end %>
-      <div class="results-context">
-        Filtering results using the above drop-down menus will change the listed results but not the listed totals in the drop-down menus.
-      </div>
+      <div class="results-context"><%= Translation.t('search_index_filtering') %></div>
       <div class="result-stats">
-        <span class="total-entries">Found <%= @searchdata.results.total %> results</span>
+        <span class="total-entries"><%= format(Translation.t('search_index_found'), total: @searchdata.results.total).html_safe %></span>
         <div class="dropdown sort-order">
-          Sort by: <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><%= sort_order_label(params[:sort_by], @model_class) %></a>
+          <%= Translation.t('search_index_sort') %> <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)"><%= sort_order_label(params[:sort_by], @model_class) %></a>
           <ol class="dropdown-menu" role="menu">
             <% @ordering_options.each do |ordering| %>
               <li class="facet">

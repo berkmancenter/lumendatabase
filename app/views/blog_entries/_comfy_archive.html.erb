@@ -1,5 +1,5 @@
 <% cache "blog_archive_#{params[:page]}" do %>
-  <% title 'Blog Archive' %>
+  <% title Translation.t('blog_archive_page_title') %>
 
   <% blog_entries = blog_posts(@cms_site) %>
 

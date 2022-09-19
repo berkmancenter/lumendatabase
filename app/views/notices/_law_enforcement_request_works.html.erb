@@ -2,17 +2,18 @@
   <ol id="works" class="copyright-claims">
     <% works.each_with_index do |work, idx| %>
       <%= content_tag_for(:li, work) do %>
-        <h4>Enforcement Request #<%= idx + 1 %></h4>
+        <%= format(Translation.t('notice_show_law_enf_works_label'), index: idx + 1).html_safe %>
+
         <div class="row">
           <div class="description">
-            <span class="label">Subject</span> <span class="field"><%= work.description %></span>
+            <span class="label"><%= Translation.t('notice_show_works_court_gov_law_enf_description') %></span> <span class="field"><%= work.description %></span>
           </div>
         </div>
 
         <%= render 'works_urls',
                     work: work,
-                    copyrighted_title: 'URLs of original work:',
-                    infringing_title: 'URLs mentioned in request:',
+                    copyrighted_title: "#{Translation.t('notice_works_urls_of_original')}:",
+                    infringing_title: "#{Translation.t('notice_new_works_urls_mentioned')}:",
                     show_copyrighted: true,
                     show_infringing: true
         %>

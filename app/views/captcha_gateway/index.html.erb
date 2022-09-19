@@ -3,8 +3,7 @@
 <article class="captcha-gateway">
   <section class="body">
     <div class="main">
-      <h4>We need to check if you are a human, resolve the captcha and hit the submit button, please.</h4>
-      <h4>You will be then redirected to your destination page.</h4>
+      <%= Translation.t('captcha_gateway_info') %>
 
       <form id="captcha-gateway-form" method="get">
         <input type="hidden" name="destination" value="<%= params[:destination] %>">

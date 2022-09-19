@@ -1,5 +1,5 @@
 <%= render 'entities/address', entity: entity %>
 
 <% if date_sent(notice) != date_received(notice) %>
-  <span class="date received">Received on <%= date_received(notice) %></span>
+  <span class="date received"><%= Translation.t('notice_entity_recipient_received') %> <%= date_received(notice) %></span>
 <% end %>

@@ -1,5 +1,5 @@
 RSpec.configure do |config|
-  tables_to_skip_clean = %w[lumen_settings]
+  tables_to_skip_clean = %w[lumen_settings translations]
 
   config.before(:suite) do
     DatabaseCleaner.clean_with(:deletion, except: tables_to_skip_clean)

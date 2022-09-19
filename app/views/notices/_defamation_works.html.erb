@@ -2,11 +2,11 @@
   <ol id="works" class="copyright-claims">
     <% works.each_with_index do |work, idx| %>
       <%= content_tag_for(:li, work) do %>
-        <h4>Defamation Claim #<%= idx + 1 %></h4>
+        <%= format(Translation.t('notice_show_defamation_works_header'), index: idx + 1).html_safe %>
 
         <%= render 'works_urls',
                     work: work,
-                    infringing_title: 'URLs of Allegedly Defamatory Material:',
+                    infringing_title: "#{Translation.t('notice_show_defamation_works_infringing_label')}:",
                     show_copyrighted: false,
                     show_infringing: true
         %>

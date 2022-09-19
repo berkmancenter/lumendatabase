@@ -1,10 +1,10 @@
 <section class="notice-body">
   <% if notice.body? %>
-    <h5 class="title"><%= notice.customizations&.fetch('body_field_label') || 'Alleged Infringement' %></h5>
+    <h5 class="title"><%= notice.customizations&.fetch('body_field_label') || Translation.t('notice_show_works_alleged_infrigement') %></h5>
     <p class="body"><pre><%= notice.redacted(:body) %></pre></p>
   <% end %>
   <% if notice.mark_registration_number? %>
-    <h5 class="title">Mark Registration Number</h5>
+    <h5 class="title"><%= Translation.t('notice_show_works_trademark_mrn') %></h5>
     <p class="mark_registration_number"><%= notice.mark_registration_number %></p>
   <% end %>
 </section>

@@ -25,16 +25,16 @@
     <%= form.simple_fields_for(:file_uploads) do |file_uploads_form| %>
       <h6>File attachments</h6>
 
-      <p>Any file you attach to this notice will be viewable by the public in the form in which you have attached it. It will not be reviewed by Lumen staff prior to being available to download.</p>
+      <%= Translation.t('submitter_widget_notice_new_file_uploads_info') %>
 
       <% if file_attachments_description %>
         <p><%= file_attachments_description %></p>
       <% end %>
 
       <div id="file_uploads_inputs">
-        <%= file_uploads_form.input :file, label: 'Attach file' %>
+        <%= file_uploads_form.input :file, label: Translation.t('notice_new_attach_file') %>
       </div>
-      <a href="javascript:void(0);" id="add-another" class="button">Attach another</a>
+      <a href="javascript:void(0);" id="add-another" class="button"><%= Translation.t('notice_new_attach_another') %></a>
     <% end %>
   </div>
 </div>

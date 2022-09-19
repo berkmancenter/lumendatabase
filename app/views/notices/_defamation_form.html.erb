@@ -1,9 +1,9 @@
 <%= render 'notices/form_components/header',
-           label: 'Defamation takedown notice' %>
+           label: Translation.t('notice_new_defamation_header') %>
 <%= simple_form_for(notice) do |form| %>
   <section class="notice-body">
-    <h4><span>Step 1.</span> Describe the Notice</h4>
-    <p>Provide us with information about the Defamation takedown notice you <em>sent</em> or <em>received</em>.</p>
+    <%= Translation.t('notice_new_step_1') %>
+    <%= format(Translation.t('notice_new_provide_us'), type: Translation.t('notice_new_defamation_header')).html_safe %>
     <%= render 'notices/form_components/main_metadata', form: form %>
     <%= render 'notices/form_components/additional_metadata',
                label: 'Legal Complaint',
@@ -11,8 +11,7 @@
   </section>
 
   <section class="works">
-    <h4><span>Step 2.</span> URLs of Allegedly Defamatory Material</h4>
-    <p>Please do not include links to unnecessary material. <b>Any URLs you enter will be republished on this site.</b></p>
+    <%= Translation.t('notice_new_defamation_step_2') %>
     <% form.object.works.each_with_index do |work, index| %>
       <%= form.simple_fields_for(:works) do |works_form| %>
         <div class="body-wrapper left">
@@ -26,7 +25,7 @@
   </section>
 
   <%= render 'notices/form_components/roles',
-             label: 'Defamation takedown notice',
+             label: Translation.t('notice_new_defamation_header'),
              form: form %>
   <%= render 'notices/form_components/submit', form: form %>
 <% end %>

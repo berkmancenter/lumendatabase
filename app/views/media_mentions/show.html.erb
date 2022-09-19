@@ -8,42 +8,42 @@
       <div class="media-mention-show-metadata">
         <% if @media_mention.source.present? %>
           <div class="media-mention-show-metadata-item">
-            <div class="label">Source</div>
+            <div class="label"><%= Translation.t('media_mentions_source') %></div>
             <div class="field"><%= @media_mention.source %></div>
           </div>
         <% end %>
 
         <% if @media_mention.description.present? %>
           <div class="media-mention-show-metadata-item">
-            <div class="label">Description</div>
+            <div class="label"><%= Translation.t('media_mentions_description') %></div>
             <div class="field"><%= @media_mention.description %></div>
           </div>
         <% end %>
 
         <% if @media_mention.link_to_source.present? %>
           <div class="media-mention-show-metadata-item">
-            <div class="label">Link to Source</div>
+            <div class="label"><%= Translation.t('media_mentions_link_source') %></div>
             <div class="field"><a href="<%= @media_mention.link_to_source %>" target="_blank"><%= @media_mention.link_to_source %></a></div>
           </div>
         <% end %>
 
         <% if @media_mention.date.present? %>
           <div class="media-mention-show-metadata-item">
-            <div class="label">Date Published</div>
+            <div class="label"><%= Translation.t('media_mentions_date_published') %></div>
             <div class="field"><%= @media_mention.date %></div>
           </div>
         <% end %>
 
         <% if @media_mention.document_type.present? %>
           <div class="media-mention-show-metadata-item">
-            <div class="label">Document Type</div>
+            <div class="label"><%= Translation.t('media_mentions_doc_type') %></div>
             <div class="field"><%= @media_mention.document_type %></div>
           </div>
         <% end %>
 
         <% if @media_mention.scale_of_mention.present? %>
           <div class="media-mention-show-metadata-item">
-            <div class="label">Scale of Mention</div>
+            <div class="label"><%= Translation.t('media_mentions_scale') %></div>
             <div class="field"><%= @media_mention.scale_of_mention %></div>
           </div>
         <% end %>

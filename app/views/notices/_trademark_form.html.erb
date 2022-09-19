@@ -1,19 +1,19 @@
 <%= render 'notices/form_components/header',
-           label: 'Trademark takedown notice' %>
+           label: Translation.t('submitter_widget_notice_new_trademark_header') %>
 <%= simple_form_for(notice) do |form| %>
   <section class="notice-body">
-    <h4><span>Step 1.</span> Describe the Notice</h4>
-    <p>Provide us with information about the Trademark takedown notice you <em>sent</em> or <em>received</em>.</p>
+    <%= Translation.t('notice_new_step_1') %>
+    <%= format(Translation.t('notice_new_provide_us'), type: Translation.t('submitter_widget_notice_new_trademark_header')).html_safe %>
     <%= render 'notices/form_components/main_metadata', form: form %>
     <%= render 'notices/form_components/additional_metadata',
-               label: 'Describe the alleged infringement of trademark',
+               label: Translation.t('notice_new_trademark_metadata_label'),
                mark_reg: true,
                form: form %>
   </section>
 
   <section class="works">
-    <h4><span>Step 2.</span> Original Works in Question</h4>
-    <p>Enter information about the original work(s) and allegedly infringing URL(s).</p>
+    <%= Translation.t('notice_new_works_step_2') %>
+    <%= Translation.t('notice_new_works_enter') %>
     <% form.object.works.each_with_index do |work, index| %>
       <%= form.simple_fields_for(:works) do |works_form| %>
         <div class="body-wrapper left">
@@ -25,9 +25,9 @@
         <div class="body-wrapper right">
           <%=
             works_form.input :description,
-              label: 'Mark',
+              label: Translation.t('submitter_widget_notice_new_trademark_works_description'),
               label_html: { data: {
-                tooltip: "Description of allegedly infringed mark"
+                tooltip: Translation.t('notice_show_works_trademark_description')
               }}
             %>
         </div>
@@ -36,7 +36,7 @@
   </section>
 
   <%= render 'notices/form_components/roles',
-             label: 'Trademark takedown notice',
+             label: Translation.t('submitter_widget_notice_new_trademark_header'),
              form: form %>
   <%= render 'notices/form_components/submit', form: form %>
 <% end %>

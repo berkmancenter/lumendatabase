@@ -370,7 +370,7 @@ feature 'notice submission' do
       expect(page).not_to have_css 'select#notice_body'
       expect(page).to have_css('textarea#notice_body')
       expect(page).to have_css('.notice_body label',
-                               text: 'Explanation of Court Order')
+                               text: Translation.t('notice_show_court_body'))
       expect(page).not_to have_css '#notice_request_type'
       expect(page).not_to have_css '#notice_mark_registration_number'
 
@@ -446,7 +446,7 @@ feature 'notice submission' do
       expect(page).not_to have_css 'select#notice_body'
       expect(page).to have_css('textarea#notice_body')
       expect(page).to have_css('.notice_body label',
-                               text: 'Explanation of Government Request')
+                               text: Translation.t('notice_new_works_gov_meta_label'))
       expect(page).to have_css '#notice_request_type'
       expect(page).not_to have_css '#notice_mark_registration_number'
 
@@ -484,7 +484,7 @@ feature 'notice submission' do
       expect(page).not_to have_css 'select#notice_body'
       expect(page).to have_css('textarea#notice_body')
       expect(page).to have_css('.notice_body label',
-                               text: 'Explanation of Complaint')
+                               text: Translation.t('notice_new_explanation'))
       expect(page).not_to have_css '#notice_request_type'
       expect(page).not_to have_css '#notice_mark_registration_number'
 
@@ -503,7 +503,7 @@ feature 'notice submission' do
       expect(page).not_to have_css 'select#notice_body'
       expect(page).to have_css('textarea#notice_body')
       expect(page).to have_css('.notice_body label',
-                               text: 'Explanation of Complaint')
+                               text: Translation.t('notice_new_explanation'))
       expect(page).not_to have_css '#notice_request_type'
       expect(page).not_to have_css '#notice_mark_registration_number'
 
@@ -522,7 +522,7 @@ feature 'notice submission' do
       expect(page).not_to have_css 'select#notice_body'
       expect(page).to have_css('textarea#notice_body')
       expect(page).to have_css('.notice_body label',
-                               text: 'Describe the alleged infringement of trademark')
+                               text: Translation.t('notice_new_trademark_metadata_label'))
       expect(page).not_to have_css '#notice_request_type'
       expect(page).to have_css '#notice_mark_registration_number'
 

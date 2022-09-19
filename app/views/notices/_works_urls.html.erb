@@ -11,7 +11,7 @@
         <% if work.copyrighted_urls_counted_by_fqdn.each do |fqdn| %>
           <li class="copyrighted_url"><%= fqdn[:fqdn] %> - <%= fqdn[:count] %> <%= 'URL'.pluralize(fqdn[:count]) %></li>
         <% end.empty? %>
-          No copyrighted URLs were submitted.
+          <%= Translation.t('notice_show_works_no_copyrighted') %>
         <% end %>
       </ol>
     </div>
@@ -24,7 +24,7 @@
         <% if work.infringing_urls_counted_by_fqdn.each do |fqdn| %>
           <li class="infringing_url"><%= fqdn[:fqdn] %> - <%= fqdn[:count] %> <%= 'URL'.pluralize(fqdn[:count]) %></li>
         <% end.empty? %>
-          No infringing URLs were submitted.
+          <%= Translation.t('notice_show_works_no_infringing') %>
         <% end %>
       </ol>
     </div>
@@ -33,15 +33,15 @@
   <% if access_just_for_researchers?(@notice) %>
     <div class="row">
       <% if access_just_for_specific_researchers?(@notice) %>
-        <p><%= cms_snippet_content('lumen_notice_only_full_for_specific_researchers').gsub!('###SUBMITTER_NAME###', @notice.submitter.name).html_safe %></p>
+        <p><%= format(Translation.t('notice_show_works_only_for_selected_researchers'), submitter_name: @notice.submitter.name).html_safe %></p>
       <% else %>
-        <p><%= cms_snippet_content('lumen_notice_only_full_for_researchers').gsub!('###SUBMITTER_NAME###', @notice.submitter.name).html_safe %></p>
+        <p><%= format(Translation.t('notice_show_works_only_for_researchers'), submitter_name: @notice.submitter.name).html_safe %></p>
       <% end %>
     </div>
   <% else %>
     <% if access_requestable?(@notice, show_copyrighted, show_infringing) %>
       <div class="row">
-        <p><%= link_to 'Click here', request_access_notice_path(@notice) %> to request access and see full URLs.</p>
+        <p><%= format(Translation.t('notice_show_works_request_access'), link: request_access_notice_path(@notice)).html_safe %></p>
       </div>
     <% end %>
   <% end %>

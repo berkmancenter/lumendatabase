@@ -1,8 +1,8 @@
 <%= render 'notices/form_components/header' %>
 <%= simple_form_for(notice) do |form| %>
   <section class="notice-body">
-    <h4><span>Step 1.</span> Describe the Notice</h4>
-    <p>Provide us with information about the Law Enforcement Request you <em>sent</em> or <em>received</em>.</p>
+    <%= Translation.t('notice_new_step_1') %>
+    <%= format(Translation.t('notice_new_provide_us'), type: 'Law Enforcement Request').html_safe %>
     <%= render 'notices/form_components/main_metadata', form: form %>
     <%= render 'notices/form_components/additional_metadata',
                label: 'Explanation of Law Enforcement Request',
@@ -11,8 +11,8 @@
   </section>
 
   <section class="works">
-    <h4><span>Step 2.</span> Original Works in Question</h4>
-    <p>Enter information about the original work(s) and infringing URL(s).</p>
+    <%= Translation.t('notice_new_works_step_2') %>
+    <%= format(Translation.t('notice_new_works_step_2_info'), urls_type: 'infringing').html_safe %>
     <% form.object.works.each_with_index do |work, index| %>
       <%= form.simple_fields_for(:works, work, child_index: index) do |works_form| %>
         <div class="body-wrapper left">
@@ -22,14 +22,14 @@
               locals: { notice: notice, assoc: assoc, works_form: works_form, index: index }
             ) %>
           <% end %>
-        <%= works_form.input :kind, label: "Kind of Work", placeholder: "Movie, Music, Book" %>
+        <%= works_form.input :kind, label: Translation.t('notice_works_kind'), placeholder: Translation.t('notice_new_kind_placeholder') %>
         </div>
         <div class="body-wrapper right">
-          <%= works_form.input :description, label: 'Subject of Enforcement Request' %>
+          <%= works_form.input :description, label: Translation.t('notice_new_works_gov_law_enf_desc') %>
         </div>
       <% end %>
     <% end %>
-    <%= form.input :regulation_list, label: 'Relevant laws or regulations', placeholder: 'A comma separated list' %>
+    <%= form.input :regulation_list, label: Translation.t('notice_new_works_gov_law_enf_regulations'), placeholder: Translation.t('notice_new_comma_separated') %>
   </section>
 
   <%= render 'notices/form_components/roles',

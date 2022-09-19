@@ -7,14 +7,14 @@
         <%= on_behalf_of(result.sender_name, result.principal_name) %>
       <% else %>
         <% if result.sender_name.present? %>
-          <%= link_to(result.sender_name, faceted_search_path(sender_name: result.sender_name), class: 'sender' )%>
+          <%= link_to(result.sender_name, faceted_search_path(sender_name: result.sender_name), class: 'sender')%>
         <% elsif result.principal_name.present? %>
-          <%= link_to(result.principal_name, faceted_search_path(principal_name: result.principal_name), class: 'principal' )%>
+          <%= link_to(result.principal_name, faceted_search_path(principal_name: result.principal_name), class: 'principal')%>
         <% end %>
       <% end %>
       <span class="arrow"><%= image_tag 'arrow-small.svg' %></span>
       <% if result.recipient_name.present? %>
-        <%= link_to(result.recipient_name, faceted_search_path(recipient_name: result.recipient_name), class: 'receiver' )%>
+        <%= link_to(result.recipient_name, faceted_search_path(recipient_name: result.recipient_name), class: 'receiver')%>
       <% end %>
     </div>
     <div class="date-submitted">Reported to Lumen: <%= date_submitted(result) %></div>

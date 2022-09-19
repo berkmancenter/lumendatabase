@@ -2,17 +2,17 @@
            label: 'notice' %>
 <%= simple_form_for(notice) do |form| %>
   <section class="notice-body">
-    <h4><span>Step 1.</span> Describe the Notice</h4>
-    <p>Provide us with information about the notice you <em>sent</em> or <em>received</em>.</p>
+    <%= Translation.t('notice_new_step_1') %>
+    <%= format(Translation.t('notice_new_provide_us'), type: 'notice').html_safe %>
     <%= render 'notices/form_components/main_metadata', form: form %>
     <%= render 'notices/form_components/additional_metadata',
-               label: 'Explanation of Complaint',
+               label: Translation.t('notice_new_explanation'),
                form: form %>
   </section>
 
   <section class="works">
-    <h4><span>Step 2.</span> Original Works in Question</h4>
-    <p>Enter information about the original work(s) and the problematic URL(s).</p>
+    <%= Translation.t('notice_new_works_step_2') %>
+    <%= format(Translation.t('notice_new_works_step_2_info'), urls_type: 'problematic').html_safe %>
     <% form.object.works.each_with_index do |work, index| %>
       <%= form.simple_fields_for(:works, work, child_index: index) do |works_form| %>
         <div class="body-wrapper left">

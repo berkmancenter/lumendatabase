@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Defamation < Notice
-  MASK = 'REDACTED'
   REDACTION_REGEX = /google|youtube/i
 
   define_elasticsearch_mapping(works: [:description])
@@ -16,7 +15,7 @@ class Defamation < Notice
 
   def sender_name
     if hide_identities?
-      MASK
+      Lumen::REDACTION_MASK
     else
       super
     end
@@ -24,7 +23,7 @@ class Defamation < Notice
 
   def principal_name
     if hide_identities?
-      MASK
+      Lumen::REDACTION_MASK
     else
       super
     end
@@ -46,7 +45,7 @@ class Defamation < Notice
 
     # Some submitters redact on their end using this phrase, let's avoid
     # double-redaction
-    return if entity_name == '[REDACTED]'
+    return if entity_name == Lumen::REDACTION_MASK
 
     instance_redactor = InstanceRedactor.new(
       custom_redactors,

@@ -89,7 +89,7 @@ FactoryBot.define do
     end
 
     trait :redactable do
-      body { 'Some [REDACTED] body' }
+      body { "Some #{Lumen::REDACTION_MASK} body" }
       body_original { 'Some sensitive body' }
       review_required { true }
     end

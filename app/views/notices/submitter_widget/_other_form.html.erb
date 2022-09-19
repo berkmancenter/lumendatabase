@@ -1,14 +1,14 @@
 <%= render 'notices/submitter_widget/form_components/header',
-           label: 'notice' %>
+           label: Translation.t('submitter_widget_notice_new_other_header') %>
 <%= simple_form_for(notice, url: submitter_widget_notices_path(widget_settings: @widget_settings)) do |form| %>
   <section class="notice-body">
-    <h4><span>Step 1.</span> Describe the Notice</h4>
+    <%= Translation.t('notice_new_step_1') %>
     <%= render 'notices/submitter_widget/form_components/main_metadata', form: form %>
   </section>
 
   <section class="works">
-    <h4><span>Step 2.</span> Original Works in Question</h4>
-    <p>Enter information about the original work(s) and the problematic URL(s).</p>
+    <%= Translation.t('notice_new_works_step_2') %>
+    <%= format(Translation.t('notice_new_works_step_2_info'), urls_type: 'problematic').html_safe %>
     <% form.object.works.each_with_index do |work, index| %>
       <%= form.simple_fields_for(:works, work, child_index: index) do |works_form| %>
         <div class="body-wrapper left">

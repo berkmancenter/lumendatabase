@@ -39,12 +39,12 @@ feature 'typed notice submissions' do
     expect(page).to have_words('Trademark notice to Recipient')
 
     within('#works') do
-      expect(page).to have_words('Description of allegedly infringed mark')
+      expect(page).to have_words(Translation.t('notice_show_works_trademark_description'))
       expect(page).to have_words('My trademark (TM)')
     end
 
     within('.notice-body') do
-      expect(page).to have_words('Alleged Infringement')
+      expect(page).to have_words(Translation.t('notice_show_works_alleged_infrigement'))
       expect(page).to have_words('They used my thing')
       expect(page).to have_words('1337')
     end
@@ -110,7 +110,7 @@ feature 'typed notice submissions' do
 
     submission.fill_in_form_with(
       'Legal Complaint' => 'I want to be forgotten',
-      'URL mentioned in request' => 'http://example.com/defamatory_url1'
+      Translation.t('notice_show_works_law_enf_gov_infringing_url_label') => 'http://example.com/defamatory_url1'
     )
 
     DataProtection::DEFAULT_ENTITY_NOTICE_ROLES.each do |role|
@@ -153,10 +153,10 @@ feature 'typed notice submissions' do
     submission.open_submission_form
 
     submission.fill_in_form_with(
-      'Subject of Court Order' => 'My sweet website', # works.description
+      Translation.t('notice_new_court_works_description_label') => 'My sweet website', # works.description
       'Targeted URL' => 'http://example.com/targeted_url', # infringing_urls
-      'Explanation of Court Order' => "I guess they don't like me", # notice.body
-      'Laws Referenced by Court Order' => 'USC foo bar 21'
+      Translation.t('notice_show_court_body') => "I guess they don't like me", # notice.body
+      Translation.t('notice_show_court_regulations_label') => 'USC foo bar 21'
     )
 
     CourtOrder::DEFAULT_ENTITY_NOTICE_ROLES.each do |role|
@@ -177,13 +177,13 @@ feature 'typed notice submissions' do
     expect(page).to have_words('Court Order notice to Recipient')
 
     within('.notice-body') do
-      expect(page).to have_content('Explanation of Court Order')
+      expect(page).to have_content(Translation.t('notice_show_court_body'))
       expect(page).to have_content("I guess they don't like me")
       expect(page).to have_content('USC foo bar 21')
     end
 
     within('#works') do
-      expect(page).to have_content('Targeted URLs')
+      expect(page).to have_content(Translation.t('notice_show_court_works_infringing_label'))
       expect(page).to have_content('example.com - 1 URL')
     end
 
@@ -205,11 +205,11 @@ feature 'typed notice submissions' do
     submission.open_submission_form
 
     submission.fill_in_form_with(
-      'Subject of Enforcement Request' => 'My Tiny Tim fansite', # works.description
-      'URL of original work' => 'http://example.com/original_object1', # copyrighted_urls
-      'URL mentioned in request' => 'http://example2.com/offending_url1', # infringing_urls
+      Translation.t('notice_new_works_gov_law_enf_desc') => 'My Tiny Tim fansite', # works.description
+      Translation.t('notice_show_works_law_enf_gov_copyrighted_url_label') => 'http://example.com/original_object1', # copyrighted_urls
+      Translation.t('notice_show_works_law_enf_gov_infringing_url_label') => 'http://example2.com/offending_url1', # infringing_urls
       'Explanation of Law Enforcement Request' => "I don't get it. He made sick music.", #notice.body
-      'Relevant laws or regulations' => 'USC foo bar 21'
+      Translation.t('notice_new_works_gov_law_enf_regulations') => 'USC foo bar 21'
     )
 
     submission.choose('Civil Subpoena', :request_type)
@@ -232,15 +232,15 @@ feature 'typed notice submissions' do
     expect(page).to have_words('Law Enforcement Request notice to Recipient')
 
     within('#works') do
-      expect(page).to have_content('URLs mentioned in request')
+      expect(page).to have_content(Translation.t('notice_new_works_urls_mentioned'))
       expect(page).to have_content('example.com - 1 URL')
-      expect(page).to have_content('URLs of original work')
+      expect(page).to have_content(Translation.t('notice_works_urls_of_original'))
       expect(page).to have_content('example2.com - 1 URL')
       expect(page).to have_content('My Tiny Tim fansite')
     end
 
     within('.notice-body') do
-      expect(page).to have_words('Explanation of Request')
+      expect(page).to have_words(Translation.t('notice_show_works_gov_law_enf_body'))
       expect(page).to have_words("I don't get it. He made sick music.")
       expect(page).to have_words('USC foo bar 21')
       expect(page).to have_words('Civil Subpoena')
@@ -269,9 +269,9 @@ feature 'typed notice submissions' do
     submission.open_submission_form
 
     submission.fill_in_form_with(
-      'Type of information' => 'These URLs disclose my existence', # works.description
+      Translation.t('notice_new_works_private_description') => 'These URLs disclose my existence', # works.description
       'URL with private information' => 'http://example.com/offending_url1', # infringing_urls
-      'Explanation of Complaint' => 'I am in witness protection', #notice.body
+      Translation.t('notice_new_explanation') => 'I am in witness protection', #notice.body
     )
 
     PrivateInformation::DEFAULT_ENTITY_NOTICE_ROLES.each do |role|
@@ -292,14 +292,14 @@ feature 'typed notice submissions' do
     expect(page).to have_words('Private Information notice to Recipient')
 
     within('.notice-body') do
-      expect(page).to have_content('Explanation of complaint')
+      expect(page).to have_content(Translation.t('notice_show_private_body'))
       expect(page).to have_content('I am in witness protection')
     end
 
     within('#works') do
-      expect(page).to have_content('URLs with private information')
+      expect(page).to have_content(Translation.t('notice_works_private_urls'))
       expect(page).to have_content('example.com - 1 URL')
-      expect(page).to have_content('URLs of original work')
+      expect(page).to have_content(Translation.t('notice_works_urls_of_original'))
       expect(page).to have_content('These URLs disclose my existence')
     end
 
@@ -322,7 +322,7 @@ feature 'typed notice submissions' do
       'Complaint' => 'These URLs are a serious problem', # works.description
       'Original Work URL' => 'http://example.com/original_object1', # copyrighted_urls
       'Problematic URL' => 'http://example2.com/offending_url1', # infringing_urls
-      'Explanation of Complaint' => 'I am complaining', # notice.body
+      Translation.t('notice_new_explanation') => 'I am complaining', # notice.body
     )
 
     Other::DEFAULT_ENTITY_NOTICE_ROLES.each do |role|
@@ -343,14 +343,14 @@ feature 'typed notice submissions' do
     expect(page).to have_words('Other notice to Recipient')
 
     within('.notice-body') do
-      expect(page).to have_content('Explanation of complaint')
+      expect(page).to have_content(Translation.t('notice_show_private_body'))
       expect(page).to have_content('I am complaining')
     end
 
     within('#works') do
-      expect(page).to have_content('Problematic URLs')
+      expect(page).to have_content(Translation.t('notice_show_works_problematic_urls'))
       expect(page).to have_content('example.com - 1 URL')
-      expect(page).to have_content('URLs of original work')
+      expect(page).to have_content(Translation.t('notice_works_urls_of_original'))
       expect(page).to have_content('example2.com - 1 URL')
       expect(page).to have_content('These URLs are a serious problem')
     end
@@ -414,7 +414,7 @@ feature 'typed notice submissions' do
     end
 
     within('#works') do
-      expect(page).to have_words('Allegedly Infringing Counterfeit URLs')
+      expect(page).to have_words(Translation.t('notice_show_counterfeit_works_infringing_label'))
       expect(page).to have_content('example.com - 1 URL')
       expect(page).to have_content('These URLs are a serious problem')
     end
