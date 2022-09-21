@@ -11,7 +11,7 @@ describe 'notices/select_type.html.erb' do
     it "displays the correct descriptive text for #{model} notices" do
       render
 
-      expect(rendered).to have_css( "div[data-id=#{model.name}]", text: ActionController::Base.helpers.strip_tags(t("type_descriptions.#{model.name}")))
+      expect(rendered).to have_css( "div[data-id=#{model.name}]", text: ActionController::Base.helpers.strip_tags(Translation.t("notice_type_descriptions_#{model.name}")))
     end
   end
 
@@ -20,6 +20,6 @@ describe 'notices/select_type.html.erb' do
 
     render
 
-    expect(rendered).not_to have_css( "div[data-id=#{model.name}]", text: ActionController::Base.helpers.strip_tags(t("type_descriptions.#{model.name}")))
+    expect(rendered).not_to have_css( "div[data-id=#{model.name}]", text: ActionController::Base.helpers.strip_tags(Translation.t("notice_type_descriptions_#{model.name}")))
   end
 end

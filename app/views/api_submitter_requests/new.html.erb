@@ -1,21 +1,19 @@
-<% title 'Apply for submitter JS plugin access' %>
+<% title Translation.t('api_submitter_widget_request_page_title') %>
 
 <article class="api-submitter-access-request">
   <section class="body">
-    <p>In order to use the submitter JS plugin you need to be verified and accepted.</p>
-    <p>Fill this simple form and wait for an email from us.</p>
-    <p>Integration documentation of the plugin is located here: <a href="https://github.com/berkmancenter/lumendatabase/blob/master/doc/submitter_javascript_widget.md" target="_blank">https://github.com/berkmancenter/lumendatabase/blob/master/doc/submitter_javascript_widget.md</a>.</p>
+    <%= Translation.t('api_submitter_widget_request_info') %>
 
     <%= simple_form_for(@api_submitter_request) do |f| %>
       <%= f.error_notification %>
 
       <div class="form-inputs">
-        <h3>General information</h2>
-        <%= f.input :email, label: 'Contact email address', hint: 'We will use this email address to contact you regarding your application.', required: true %>
-        <%= f.input :submissions_forward_email, label: 'Submissions forwarding email address', hint: 'We will send a copy of each submission to this email address.', required: true %>
-        <%= f.input :description, as: :text, label: 'Describe shortly your website/application', required: true %>
+        <h3><%= Translation.t('api_submitter_widget_request_general_information') %></h3>
+        <%= f.input :email, label: Translation.t('api_submitter_widget_request_contact_email'), hint: Translation.t('api_submitter_widget_request_contact_email_help_text'), required: true %>
+        <%= f.input :submissions_forward_email, label: Translation.t('api_submitter_widget_request_forward_email'), hint: Translation.t('api_submitter_widget_request_forward_email_help_text'), required: true %>
+        <%= f.input :description, as: :text, label: Translation.t('api_submitter_widget_request_description'), required: true %>
 
-        <h3>Your company/organization/personal data</h2>
+        <h3><%= Translation.t('api_submitter_widget_request_your_company') %></h3>
         <div class="required">
           <%= f.input :entity_name, label: 'Name', required: true %>
           <%= f.input :entity_kind, label: 'Type', prompt: nil, collection: Entity::KINDS, required: true %>
@@ -39,7 +37,7 @@
       </div>
 
       <div class="form-actions">
-        <%= f.submit 'Submit' %>
+        <%= f.submit Translation.t('api_submitter_widget_request_submit') %>
       </div>
     <% end %>
   </section>

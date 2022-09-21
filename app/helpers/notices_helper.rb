@@ -57,7 +57,7 @@ module NoticesHelper
   end
 
   def first_time_visitor_content
-    MarkdownParser.render(t('first_time_visitor'))
+    MarkdownParser.render(Translation.t('first_time_visitor'))
   end
 
   def label_for_url_input(url_type, notice)
@@ -89,7 +89,7 @@ module NoticesHelper
     sanitized_text = ActionView::Base.full_sanitizer.sanitize(text)
     redacted_text = sanitized_text.gsub(
       %r{(http[s]?://[w]*[\.]*[^/|$]*)(\S*)},
-      '\1/[REDACTED]'
+      "\\1/#{Lumen::REDACTION_MASK}"
     )
 
     words_to_highlight = params[:term]&.split(' ') || []
@@ -151,7 +151,7 @@ module NoticesHelper
     when ::CourtOrder
       'Targeted URL'
     when ::DataProtection, ::LawEnforcementRequest
-      'URL mentioned in request'
+      Translation.t('notice_show_works_law_enf_gov_infringing_url_label')
     when ::Defamation
       'Allegedly Defamatory URL'
     when ::Counterfeit
@@ -166,7 +166,7 @@ module NoticesHelper
     when ::DMCA, ::Other
       'Original Work URL'
     when ::LawEnforcementRequest
-      'URL of original work'
+      Translation.t('notice_show_works_law_enf_gov_copyrighted_url_label')
     end
   end
 

@@ -5,40 +5,39 @@
   <%# don't titleize the role until after the following line or it will break the css selector %>
   <section class="role <%= role.downcase %>">
     <% role = role.titleize %>
-    <h4><span>Step <%= step_number %>.</span> <%= role %> of the Notice</h4>
-    <p>Enter information about the <b><%= role %></b> of the <%= label %>.</p>
+    <%= format(Translation.t('notice_new_roles_info'), step_number: step_number, role: role, label: label).html_safe %>
     <%= roles_form.input :name, as: :hidden %>
     <%= roles_form.simple_fields_for(:entity) do |entity_form| %>
       <div class="body-wrapper left required">
-        <%= entity_form.input :name, label: "Name",
+        <%= entity_form.input :name, label: Translation.t('notice_new_roles_name'),
           input_html: placeholder_text(current_user, role, :name) %>
         <%= entity_form.input :kind,
-          { label: "#{role} Type", prompt: nil, collection: Entity::KINDS }
+          { label: format(Translation.t('notice_new_roles_kind').html_safe, role: role), prompt: nil, collection: Entity::KINDS }
             .merge(placeholder_kind(current_user, role))
         %>
       </div>
       <div class="body-wrapper right optional">
-        <%= entity_form.input :address_line_1, label: "Address Line 1",
+        <%= entity_form.input :address_line_1, label: Translation.t('notice_new_roles_address_1'),
           input_html: placeholder_text(current_user, role, :address_line_1) %>
-        <%= entity_form.input :address_line_2, label: "Address Line 2",
+        <%= entity_form.input :address_line_2, label: Translation.t('notice_new_roles_address_2'),
           input_html: placeholder_text(current_user, role, :address_line_2) %>
-        <%= entity_form.input :city, label: "City",
+        <%= entity_form.input :city, label: Translation.t('notice_new_roles_city'),
           input_html: placeholder_text(current_user, role, :city) %>
-        <%= entity_form.input :state, label: "State",
+        <%= entity_form.input :state, label: Translation.t('notice_new_roles_state'),
           label_html: { class: 'half-width' }, maxlength: "2",
           input_html: placeholder_text(current_user, role, :state) %>
-        <%= entity_form.input :zip, label: "Zip Code",
+        <%= entity_form.input :zip, label: Translation.t('notice_new_roles_zip_code'),
           label_html: { class: 'half-width' },
           input_html: placeholder_text(current_user, role, :zip) %>
         <%= entity_form.input :country_code,
-          { collection: iso_countries, label: "Country" }.merge(
+          { collection: iso_countries, label: Translation.t('notice_new_roles_country') }.merge(
             placeholder_country(current_user, role)
           ) %>
-        <%= entity_form.input :phone, label: "Phone",
+        <%= entity_form.input :phone, label: Translation.t('notice_new_roles_phone'),
           input_html: placeholder_text(current_user, role, :phone) %>
-        <%= entity_form.input :email, label: "Email",
+        <%= entity_form.input :email, label: Translation.t('notice_new_roles_email'),
           input_html: placeholder_text(current_user, role, :email) %>
-        <%= entity_form.input :url, label: "#{role} URL",
+        <%= entity_form.input :url, label: format(Translation.t('notice_new_roles_url').html_safe, role: role),
           input_html: placeholder_text(current_user, role, :url) %>
       </div>
     <% end %>

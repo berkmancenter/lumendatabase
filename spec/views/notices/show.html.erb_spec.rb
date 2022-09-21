@@ -234,7 +234,7 @@ describe 'notices/show.html.erb' do
 
     have_works(notice, true, false)
 
-    expect(rendered).to have_text 'No infringing URLs were submitted.'
+    expect(rendered).to have_text Translation.t('notice_show_works_no_infringing')
   end
 
   it 'displays a warning about copyrighted urls when expected but absent' do
@@ -289,7 +289,7 @@ describe 'notices/show.html.erb' do
 
     have_works(notice, false, true)
 
-    expect(rendered).to have_text 'No copyrighted URLs were submitted.'
+    expect(rendered).to have_text Translation.t('notice_show_works_no_copyrighted')
   end
 
   it 'displays the notice source' do

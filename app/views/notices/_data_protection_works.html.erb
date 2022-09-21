@@ -2,11 +2,11 @@
   <ol id="works" class="copyright-claims">
     <% works.each_with_index do |work, idx| %>
       <%= content_tag_for(:li, work) do %>
-        <h4>Requests for Removal from Search Results</h4>
+        <%= Translation.t('notice_show_data_protection_works_label').html_safe %>
 
         <%= render 'works_urls',
                     work: work,
-                    infringing_title: 'Location of Some of the Material Requested for Removal:',
+                    infringing_title: "#{Translation.t('notice_show_data_protection_works_infringing_label')}:",
                     show_copyrighted: false,
                     show_infringing: true
         %>

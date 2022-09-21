@@ -1,10 +1,7 @@
-<% title 'Report a Demand' %>
+<% title Translation.t('notice_new_report') %>
 
 <div class="inner-padding">
-  <h1>Which type of demand would you like to report?</h1>
-  <p>
-    <b>To help us serve you better, we ask that you submit only notices you have received, not items you have heard about second-hand, and that you add only information whose accuracy you can verify. We may mask additional identifying information before making the notice publicly viewable.</b>
-  </p>
+  <%= Translation.t('notice_new_select_info') %>
   <section class="notices-list">
     <ul>
       <% Notice.display_models.each do |model| %>
@@ -18,7 +15,7 @@
       <div data-id="<%= model.name %>">
         <article>
           <b><%= model.label %>:</b>
-          <%= raw t("type_descriptions.#{model.name}") %>
+          <%= raw Translation.t("notice_type_descriptions_#{model.name}") %>
         </article>
         <div class="button-wrapper">
           <%=

@@ -6,19 +6,19 @@
   </div>
   <div class="media-mention-result-meta">
     <% if result.author.present? %>
-      <div><label>Author</label> <%= result.author %></div>
+      <div><label><%= Translation.t('media_mentions_author') %></label> <%= result.author %></div>
     <% end %>
     <% if result.source.present? %>
-      <div><label>Source</label> <%= result.source %></div>
+      <div><label><%= Translation.t('media_mentions_source') %></label> <%= result.source %></div>
     <% end %>
     <% if result.document_type.present? %>
-      <div><label>Document Type</label> <%= result.document_type %></div>
+      <div><label><%= Translation.t('media_mentions_doc_type') %></label> <%= result.document_type %></div>
     <% end %>
     <% if result.date.present? %>
-      <div><label>Date Published</label> <%= result.date %></div>
+      <div><label><%= Translation.t('media_mentions_date_published') %></label> <%= result.date %></div>
     <% end %>
     <% if result.scale_of_mention.present? %>
-      <div><label>Scale of Mention</label> <%= result.scale_of_mention %></div>
+      <div><label><%= Translation.t('media_mentions_scale') %></label> <%= result.scale_of_mention %></div>
     <% end %>
   </div>
 <% end %>

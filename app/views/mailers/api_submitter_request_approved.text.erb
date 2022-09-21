@@ -1,10 +1,5 @@
-Hi,
-
-your submitter plugin access request has been approved.
-
-Your plugin private key is: <%= @user.widget_public_key %>
-
-You can use it to configure the plugin. Integration documentation of the plugin is located here: https://github.com/berkmancenter/lumendatabase/blob/master/doc/submitter_javascript_widget.md.
-
-Thank you,
-Lumen Database team
+<%= format(
+      Translation.t('mailers_api_submitter_request_approved'),
+      widget_public_key: @user.widget_public_key
+    ).html_safe
+%>

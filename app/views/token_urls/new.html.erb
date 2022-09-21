@@ -1,16 +1,16 @@
-<% title 'Request full access to ' + @notice.title %>
+<% title format(Translation.t('token_urls_request_title'), notice_title: @notice.title).html_safe %>
 
 <article class="notice-request-access">
   <section class="body">
-    <p>To get access to this notice enter your email address and solve the captcha. After submitting the form we will send you an email with a single-use link to the notice.</p>
+    <%= Translation.t('token_urls_request_info') %>
 
     <%= simple_form_for(@token_url) do |f| %>
       <%= f.error_notification %>
       <%= f.hidden_field :notice_id, value: @notice.id %>
 
       <div class="form-inputs">
-        <%= f.input :email, label: 'Email address', required: true %>
-        <%= f.input :documents_notification, as: :boolean, inline_label: 'Select to get a notification when new notice documents are added (or when existing notice documents are updated).', label: false %>
+        <%= f.input :email, label: Translation.t('token_urls_request_email'), required: true %>
+        <%= f.input :documents_notification, as: :boolean, inline_label: Translation.t('token_urls_request_doc_notifications'), label: false %>
 
         <%= recaptcha_tags %>
       </div>

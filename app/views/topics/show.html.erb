@@ -1,4 +1,4 @@
-<% title 'Topics', @topic.name %>
+<% title Translation.t('topics_home_page_title'), @topic.name %>
 
 <section class="topic-description">
   <h1><%= @topic.name %></h1>
@@ -11,7 +11,7 @@
   <% notices = recent_notice_metadata %>
   <% if notices.any? %>
     <section class="topic-notices">
-      <h4>Recent Notices</h4>
+      <h4><%= Translation.t('topics_home_recent') %></h4>
       <ol>
         <% notices.each do |notice| %>
           <li class="notice">
@@ -25,7 +25,7 @@
 
 <% cache "topic_#{@topic.id}_faqs" do %>
   <section class="topic-faqs" id="topic-faqs">
-    <h3 class="title">Frequently Asked Questions</h3>
+    <h3 class="title"><%= Translation.t('topics_home_faq') %></h3>
     <div class="wrapper">
     <% @topic.relevant_questions.each do |question| %>
       <article>

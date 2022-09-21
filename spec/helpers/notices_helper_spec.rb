@@ -71,13 +71,13 @@ describe NoticesHelper do
     expect(helper.label_for_url_input(:infringing_urls, court_order))
       .to eq 'Targeted URL'
     expect(helper.label_for_url_input(:infringing_urls, data_protection))
-      .to eq 'URL mentioned in request'
+      .to eq Translation.t('notice_show_works_law_enf_gov_infringing_url_label')
     expect(helper.label_for_url_input(:infringing_urls, defamation))
       .to eq 'Allegedly Defamatory URL'
     expect(helper.label_for_url_input(:infringing_urls, dmca))
       .to eq 'Allegedly Infringing URL'
     expect(helper.label_for_url_input(:infringing_urls, law_enforcement))
-      .to eq 'URL mentioned in request'
+      .to eq Translation.t('notice_show_works_law_enf_gov_infringing_url_label')
     expect(helper.label_for_url_input(:infringing_urls, other))
       .to eq 'Problematic URL'
     expect(helper.label_for_url_input(:infringing_urls, private_information))
@@ -88,7 +88,7 @@ describe NoticesHelper do
     expect(helper.label_for_url_input(:copyrighted_urls, dmca))
       .to eq 'Original Work URL'
     expect(helper.label_for_url_input(:copyrighted_urls, law_enforcement))
-      .to eq 'URL of original work'
+      .to eq Translation.t('notice_show_works_law_enf_gov_copyrighted_url_label')
     expect(helper.label_for_url_input(:copyrighted_urls, other))
       .to eq 'Original Work URL'
   end

@@ -1,7 +1,7 @@
 <% if !notice.hide_identities? %>
   <% if notice.on_behalf_of_principal? %>
     <h6>
-      <span class="on_behalf_of">on behalf of</span>
+      <span class="on_behalf_of"><%= Translation.t('notice_entity_sender_behalf') %></span>
       <%=
         link_to(
           notice.principal_name,
@@ -14,7 +14,7 @@
 <% end %>
 
 <% if date_sent(notice).present? %>
-  <span class="date sent">Sent on <%= date_sent(notice) %></span>
+  <span class="date sent"><%= Translation.t('notice_entity_sender_sent') %> <%= date_sent(notice) %></span>
 <% end %>
 
 <% if entity.country_code.present? %>

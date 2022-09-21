@@ -1,19 +1,19 @@
 <section class="notice-body">
   <% if notice.body.present? %>
-    <h5 class="title"><%= notice.customizations&.fetch('body_field_label') || 'Explanation of Request' %></h5>
+    <h5 class="title"><%= notice.customizations&.fetch('body_field_label') || Translation.t('notice_show_works_gov_law_enf_body') %></h5>
     <p class="body"><pre><%= notice.redacted(:body) %></pre></p>
   <% end %>
 
   <% if notice.request_type.present? %>
     <dl id="request_type">
-      <dt class="label">Type of Request:</dt>
+      <dt class="label"><%= Translation.t('notice_show_works_gov_law_enf_req_type') %>:</dt>
       <dd class="field"><%= notice.request_type %></dd>
     </dl>
   <% end %>
 
   <% if notice.regulations.present? %>
     <dl id="tags">
-      <dt class="label">Laws or Regulations:</dt>
+      <dt class="label"><%= Translation.t('notice_show_works_gov_law_enf_regulations') %>::</dt>
       <dd class="field"><%= render 'shared/tag_list', tags: notice.regulations %></dd>
     </dl>
   <% end %>

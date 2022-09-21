@@ -39,24 +39,24 @@ RSpec.describe Defamation, type: :model do
   it 'hides sender names when hide_identities is true' do
     defamation = build(:defamation)
     allow(defamation).to receive(:hide_identities?).and_return(true)
-    expect(defamation.sender_name).to eq described_class::MASK
+    expect(defamation.sender_name).to eq Lumen::REDACTION_MASK
   end
 
   it 'hides principal names when hide_identities is true' do
     defamation = build(:defamation)
     allow(defamation).to receive(:hide_identities?).and_return(true)
-    expect(defamation.principal_name).to eq described_class::MASK
+    expect(defamation.principal_name).to eq Lumen::REDACTION_MASK
   end
 
   it 'shows sender names when hide_identities is false' do
     defamation = build(:defamation)
     allow(defamation).to receive(:hide_identities?).and_return(true)
-    expect(defamation.sender_name).to eq described_class::MASK
+    expect(defamation.sender_name).to eq Lumen::REDACTION_MASK
   end
 
   it 'shows principal names when hide_identities is false' do
     defamation = build(:defamation)
     allow(defamation).to receive(:hide_identities?).and_return(true)
-    expect(defamation.principal_name).to eq described_class::MASK
+    expect(defamation.principal_name).to eq Lumen::REDACTION_MASK
   end
 end

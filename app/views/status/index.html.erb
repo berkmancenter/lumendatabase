@@ -1,15 +1,13 @@
 <%= title 'Status page' %>
 
-<% cache( 'lumendatabase-status-page', expires_in: 2.minutes ) do %>
+<% cache('lumendatabase-status-page', expires_in: 2.minutes ) do %>
   <div class="landing-image-full">
     <%= image_tag("network.jpg") %>
   </div>
 
   <p></p>
 
-  <p>
-    Something wrong with the API or the website? Contact us here: <a href="mailto:team@lumendatabase.org?subject=Issue with the system (from status page)">team@lumendatabase.org</a>.
-  </p>
+  <%= Translation.t('status_view_text') %>
 
   <hr>
 

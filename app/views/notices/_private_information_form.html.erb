@@ -1,18 +1,17 @@
 <%= render 'notices/form_components/header',
-           label: 'Private Information notice' %>
+           label: Translation.t('notice_new_works_private_label') %>
 <%= simple_form_for(notice) do |form| %>
   <section class="notice-body">
-    <h4><span>Step 1.</span> Describe the Notice</h4>
-    <p>Provide us with information about the Private Information notice you <em>sent</em> or <em>received</em>.</p>
+    <%= Translation.t('notice_new_step_1') %>
+    <%= format(Translation.t('notice_new_provide_us'), type: Translation.t('notice_new_works_private_label')).html_safe %>
     <%= render 'notices/form_components/main_metadata', form: form %>
     <%= render 'notices/form_components/additional_metadata',
-               label: 'Explanation of Complaint',
+               label: Translation.t('notice_new_explanation'),
                form: form %>
   </section>
 
   <section class="works">
-    <h4><span>Step 2.</span> URLs With Private Information</h4>
-    <p>Enter the URL with private information and a brief description of the information in question.</p>
+    <%= Translation.t('notice_new_works_private_info') %>
     <% form.object.works.each_with_index do |work, index| %>
       <%= form.simple_fields_for(:works, work, child_index: index) do |works_form| %>
         <div class="body-wrapper left">
@@ -22,14 +21,14 @@
           ) %>
         </div>
         <div class="body-wrapper right">
-          <%= works_form.input :description, label: "Type of information" %>
+          <%= works_form.input :description, label: Translation.t('notice_new_works_private_description') %>
         </div>
       <% end %>
     <% end %>
   </section>
 
   <%= render 'notices/form_components/roles',
-             label: 'Private Information notice',
+             label: Translation.t('notice_new_works_private_label'),
              form: form %>
   <%= render 'notices/form_components/submit', form: form %>
 <% end %>

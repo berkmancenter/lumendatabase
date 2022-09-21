@@ -1,19 +1,19 @@
 <%= render 'notices/form_components/header',
-           label: 'Court Order takedown notice' %>
+           label: Translation.t('notice_show_court_header') %>
 <%= simple_form_for(notice) do |form| %>
   <section class="notice-body">
-    <h4><span>Step 1.</span> Describe the Notice</h4>
-    <p>Provide us with information about the Court Order you <em>sent</em> or <em>received</em>.</p>
+    <%= Translation.t('notice_new_step_1') %>
+    <%= format(Translation.t('notice_new_provide_us'), type: 'Court Order').html_safe %>
     <%= render 'notices/form_components/main_metadata',
                form: form %>
     <%= render 'notices/form_components/additional_metadata',
-               label: 'Explanation of Court Order',
+               label: Translation.t('notice_show_court_body'),
                form: form %>
   </section>
 
   <section class="works">
-    <h4><span>Step 2.</span> Original Works in Question</h4>
-    <p>Enter information about the original work(s) and targeted URL(s).</p>
+    <%= Translation.t('notice_new_works_step_2') %>
+    <%= format(Translation.t('notice_new_works_step_2_info'), urls_type: 'targeted').html_safe %>
     <% form.object.works.each_with_index do |work, index| %>
       <%= form.simple_fields_for(:works) do |works_form| %>
         <div class="body-wrapper left">
@@ -23,11 +23,11 @@
           ) %>
         </div>
         <div class="body-wrapper right">
-          <%= works_form.input :description, label: 'Subject of Court Order' %>
+          <%= works_form.input :description, label: Translation.t('notice_new_court_works_description_label') %>
         </div>
       <% end %>
     <% end %>
-    <%= form.input :regulation_list, label: 'Laws Referenced by Court Order', placeholder: 'A comma separated list' %>
+    <%= form.input :regulation_list, label: Translation.t('notice_show_court_regulations_label'), placeholder: Translation.t('notice_new_comma_separated') %>
   </section>
 
   <%= render 'notices/form_components/roles', form: form %>

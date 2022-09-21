@@ -32,7 +32,7 @@ class FakeNotice
     @date_received = (0..100).to_a.sample.days.ago
 
     if rand(100) < 15
-      @body = 'Some [REDACTED] text'
+      @body = "Some #{Lumen::REDACTION_MASK} text"
       @body_original = 'Some sensitive text'
       @review_required = true
     else

@@ -1,14 +1,13 @@
 <%= render 'notices/submitter_widget/form_components/header',
-           label: 'Counterfeit notice' %>
+           label: Translation.t('notice_new_counterfeit_main_label') %>
 <%= simple_form_for(notice, url: submitter_widget_notices_path(widget_settings: @widget_settings)) do |form| %>
   <section class="notice-body">
-    <h4><span>Step 1.</span> Describe the Notice</h4>
+    <%= Translation.t('notice_new_step_1') %>
     <%= render 'notices/submitter_widget/form_components/main_metadata', form: form %>
   </section>
 
   <section class="works">
-    <h4><span>Step 2.</span> Original Products in Question</h4>
-    <p>Enter information about the original product(s) and allegedly infringing counterfeit URL(s).</p>
+    <%= Translation.t('submitter_widget_notice_new_counterfeit_step_2') %>
     <% form.object.works.each_with_index do |work, index| %>
       <%= form.simple_fields_for(:works, work, child_index: index) do |works_form| %>
         <div class="body-wrapper left">
@@ -16,7 +15,7 @@
             partial: 'url_input_group',
             locals: { notice: notice, assoc: :infringing_urls, works_form: works_form, index: index }
           ) %>
-          <%= works_form.input :kind, label: "Kind of Product", placeholder: "Movie, Music, Book" %>
+          <%= works_form.input :kind, label: Translation.t('submitter_widget_notice_new_counterfeit_kind_label'), placeholder: Translation.t('notice_new_kind_placeholder') %>
         </div>
         <div class="body-wrapper right">
           <%= works_form.input :description %>
@@ -27,7 +26,7 @@
   </section>
 
   <%= render 'notices/submitter_widget/form_components/roles',
-             label: 'Counterfeit notice',
+             label: Translation.t('notice_new_counterfeit_main_label'),
              form: form %>
 
   <%= recaptcha_tags %>

@@ -1,9 +1,9 @@
 xml.instruct! :xml, version: '1.0'
 xml.rss version: '2.0' do
   xml.channel do
-    xml.title 'Recent Notices from Lumen Database'
-    xml.author 'Lumen Database'
-    xml.description 'Lumen Database is an independent 3rd party research project studying cease and desist letters concerning online content.'
+    xml.title Translation.t('rss_recent_notices_title')
+    xml.author Translation.t('rss_recent_notices_author')
+    xml.description Translation.t('rss_recent_notices_description')
     xml.link 'https://www.lumendatabase.org/'
     xml.language 'en'
 

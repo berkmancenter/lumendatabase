@@ -1,8 +1,8 @@
 <%= content_tag_for(:li, work) do %>
-  <h4>Copyright claim #<%= work_counter %></h4>
+  <h4><%= Translation.t('notice_works_copyright_claim') %> #<%= work_counter %></h4>
   <div class="row">
     <div class="kind">
-      <span class="label">Kind of Work:</span> <span class="field"><%= work.kind %></span>
+      <span class="label"><%= Translation.t('notice_works_kind') %></span> <span class="field"><%= work.kind %></span>
     </div>
   </div>
   <div class="row">
@@ -13,7 +13,7 @@
 
   <% if work.copyrighted_urls.present? %>
     <div class="row">
-      <span class="label original-title">Original URLs:</span>
+      <span class="label original-title"><%= Translation.t('notice_works_original_urls') %>:</span>
       <ol class="list original-urls">
         <% work.copyrighted_urls.each do |url| %>
           <%= content_tag_for(:li, url) do %>
@@ -26,7 +26,7 @@
 
   <% if work.infringing_urls.present? %>
     <div class="row">
-      <span class="label infringing-title">Infringing URLs:</span>
+      <span class="label infringing-title"><%= Translation.t('notice_works_infringing_urls') %></span>
       <ol class="list infringing-urls">
         <% work.infringing_urls.each do |url| %>
           <%= content_tag_for(:li, url) do %>

@@ -4,7 +4,7 @@
 
   <% if has_children %>
     <ol class="dropdown-menu">
-      <li class="title">Subtopics</li>
+      <li class="title"><%= Translation.t('navigation_header_topics_sub') %></li>
       <% topic.children.ordered.each do |child| %>
         <%= render "shared/topic_dropdown", topic: child %>
       <% end %>

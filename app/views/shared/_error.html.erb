@@ -1,4 +1,4 @@
-<% title 'Error' %>
+<% title Translation.t('error_view_title') %>
 
 <div class='static-pages'>
   <section class="main-inner">
@@ -7,12 +7,7 @@
         <%= message %>
       </p>
     <% else %>
-      <p>
-        The URL you are attempting to reach cannot be found. We apologize for the inconvenience.
-      </p>
-      <p>
-        Many older Lumen URLS (.cgi, .xml, etc) have changed.  Please explore the site starting at our <a href="/">homepage</a>.
-      </p>
+      <%= Translation.t('error_view_text') %>
     <% end %>
   </section>
 </div>

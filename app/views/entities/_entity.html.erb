@@ -3,7 +3,7 @@
   <h5><%= role %></h5>
   <h6 class="entity-name">
     <% if [:sender, :principal].include?(role.to_sym) && notice.hide_identities? %>
-      REDACTED
+      <%= Lumen::REDACTION_MASK %>
     <% else %>
       <%=
         link_to(

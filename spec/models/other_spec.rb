@@ -39,24 +39,24 @@ RSpec.describe Other, type: :model do
   it 'hides sender names when hide_identities is true' do
     notice = build(:other)
     allow(notice).to receive(:hide_identities?).and_return(true)
-    expect(notice.sender_name).to eq described_class::MASK
+    expect(notice.sender_name).to eq Lumen::REDACTION_MASK
   end
 
   it 'hides principal names when hide_identities is true' do
     notice = build(:other)
     allow(notice).to receive(:hide_identities?).and_return(true)
-    expect(notice.principal_name).to eq described_class::MASK
+    expect(notice.principal_name).to eq Lumen::REDACTION_MASK
   end
 
   it 'shows sender names when hide_identities is false' do
     notice = build(:other)
     allow(notice).to receive(:hide_identities?).and_return(true)
-    expect(notice.sender_name).to eq described_class::MASK
+    expect(notice.sender_name).to eq Lumen::REDACTION_MASK
   end
 
   it 'shows principal names when hide_identities is false' do
     notice = build(:other)
     allow(notice).to receive(:hide_identities?).and_return(true)
-    expect(notice.principal_name).to eq described_class::MASK
+    expect(notice.principal_name).to eq Lumen::REDACTION_MASK
   end
 end
