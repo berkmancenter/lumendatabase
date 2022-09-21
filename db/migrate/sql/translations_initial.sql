@@ -77,6 +77,14 @@ INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) V
 INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) VALUES (77, 'views_counternotice_form_reasons_fair_use', NULL, 'The way I used the content is fair use', '2022-09-19 09:03:53.729735', '2022-09-19 09:03:53.729735');
 INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) VALUES (78, 'views_counternotice_form_reasons_removed', NULL, 'I have removed the content', '2022-09-19 09:04:10.797236', '2022-09-19 09:04:10.797236');
 INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) VALUES (34, 'notice_works_kind', NULL, 'Kind of Work', '2022-09-18 10:22:21.303604', '2022-09-19 19:50:55.419195');
+INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) VALUES (79, 'views_counternotice_form_reasons_not_used', NULL, 'I never used the content', '2022-09-19 09:04:27.347041', '2022-09-19 09:04:27.347041');
+INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) VALUES (80, 'views_counternotice_form_reasons_other', NULL, 'Other', '2022-09-19 09:04:40.518856', '2022-09-19 09:04:40.518856');
+INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) VALUES (81, 'media_mentions_author', NULL, 'Author', '2022-09-19 09:26:48.45336', '2022-09-19 09:26:48.45336');
+INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) VALUES (82, 'media_mentions_source', NULL, 'Source', '2022-09-19 09:27:15.925325', '2022-09-19 09:27:15.925325');
+INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) VALUES (85, 'media_mentions_scale', NULL, 'Scale of Mention', '2022-09-19 09:28:35.384605', '2022-09-19 09:29:20.075026');
+INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) VALUES (84, 'media_mentions_date_published', NULL, 'Date Published', '2022-09-19 09:28:26.223736', '2022-09-19 09:29:25.946836');
+INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) VALUES (83, 'media_mentions_doc_type', NULL, 'Document Type', '2022-09-19 09:27:26.88207', '2022-09-19 09:29:30.455367');
+INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) VALUES (86, 'media_mentions_description', NULL, 'Description', '2022-09-19 09:46:40.489092', '2022-09-19 09:46:40.489092');
 INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) VALUES (38, 'first_time_visitor', NULL, 'The information on this page represents either a request to remove material from an online site or a DMCA  (copyright) "counternotice," asking that material already removed be replaced.
 
 Lumen maintains an independent database of these notices and counternotices - we are not their senders or recipients. All of the notices and requests in the Lumen database have been shared with Lumen voluntarily by the companies or individuals responsible for either originally sending or receiving the notices. **Lumen is ___not___ responsible in any way for either removing or restoring on-line content from the web or search engine listings, or for "blocking" or restoring access to websites or URLs.**
@@ -120,14 +128,6 @@ INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) V
 INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) VALUES (65, 'submitter_widget_roles_header_intro_LawEnforcementRequest_Principal', NULL, 'Enter information about the law enforcement branch, department, or agency that has sent the takedown request.', '2022-09-18 13:55:52.861762', '2022-09-18 13:55:52.861762');
 INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) VALUES (66, 'submitter_widget_roles_header_intro_GovernmentRequest_Principal', NULL, 'Enter information about the governmental branch, department, or agency that has sent the takedown request.', '2022-09-18 13:56:47.602231', '2022-09-18 13:56:47.602231');
 INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) VALUES (67, 'views_notices_disclaimer', NULL, 'Please do not include phone numbers, email addresses, personal name, or other private information other than those of the complainant.', '2022-09-18 13:57:52.484753', '2022-09-18 13:57:52.484753');
-INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) VALUES (79, 'views_counternotice_form_reasons_not_used', NULL, 'I never used the content', '2022-09-19 09:04:27.347041', '2022-09-19 09:04:27.347041');
-INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) VALUES (80, 'views_counternotice_form_reasons_other', NULL, 'Other', '2022-09-19 09:04:40.518856', '2022-09-19 09:04:40.518856');
-INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) VALUES (81, 'media_mentions_author', NULL, 'Author', '2022-09-19 09:26:48.45336', '2022-09-19 09:26:48.45336');
-INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) VALUES (82, 'media_mentions_source', NULL, 'Source', '2022-09-19 09:27:15.925325', '2022-09-19 09:27:15.925325');
-INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) VALUES (85, 'media_mentions_scale', NULL, 'Scale of Mention', '2022-09-19 09:28:35.384605', '2022-09-19 09:29:20.075026');
-INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) VALUES (84, 'media_mentions_date_published', NULL, 'Date Published', '2022-09-19 09:28:26.223736', '2022-09-19 09:29:25.946836');
-INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) VALUES (83, 'media_mentions_doc_type', NULL, 'Document Type', '2022-09-19 09:27:26.88207', '2022-09-19 09:29:30.455367');
-INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) VALUES (86, 'media_mentions_description', NULL, 'Description', '2022-09-19 09:46:40.489092', '2022-09-19 09:46:40.489092');
 INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) VALUES (87, 'media_mentions_link_source', NULL, 'Link to Source', '2022-09-19 09:47:13.185618', '2022-09-19 09:47:13.185618');
 INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) VALUES (88, 'token_urls_request_info', NULL, '<p>To get access to this notice enter your email address and solve the captcha. After submitting the form we will send you an email with a single-use link to the notice.</p>', '2022-09-19 09:48:16.078765', '2022-09-19 09:48:16.078765');
 INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) VALUES (89, 'token_urls_request_email', NULL, 'Email address', '2022-09-19 09:49:18.327744', '2022-09-19 09:49:18.327744');
@@ -317,13 +317,14 @@ INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) V
 INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) VALUES (236, 'notice_show_other_works_label', NULL, '<h4>Complaint %{index}</h4>', '2022-09-21 08:10:29.967043', '2022-09-21 08:10:43.800484');
 INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) VALUES (237, 'notice_show_priv_inf_works_label', NULL, '<h4>Complaint %{index}</h4>', '2022-09-21 08:11:39.595988', '2022-09-21 08:11:39.595988');
 INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) VALUES (238, 'notice_show_tradem_works_label', NULL, '<h4>Complaint %{index}</h4>', '2022-09-21 08:12:24.438777', '2022-09-21 08:12:24.438777');
+INSERT INTO public.translations (id, key, notes, body, created_at, updated_at) VALUES (240, 'api_submitter_widget_request_page_title', NULL, 'Apply for submitter JS plugin access', '2022-09-21 10:08:42.999228', '2022-09-21 10:08:42.999228');
 
 
 --
 -- Name: translations_id_seq; Type: SEQUENCE SET; Schema: public; Owner: lumen
 --
 
-SELECT pg_catalog.setval('public.translations_id_seq', 239, true);
+SELECT pg_catalog.setval('public.translations_id_seq', 240, true);
 
 
 --

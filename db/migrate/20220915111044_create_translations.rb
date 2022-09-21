@@ -2,8 +2,8 @@ class CreateTranslations < ActiveRecord::Migration[6.1]
   def change
     create_table :translations do |t|
       t.string :key
-      t.text :notes
-      t.text :body
+      t.text :notes, default: ''
+      t.text :body, default: ''
 
       t.timestamps
     end
