@@ -69,7 +69,11 @@ Rails.application.routes.draw do
   get 'blog_feed', to: 'blog_feed#index'
 
   namespace :media_mentions do
-    resources :search, only: [:index]
+    resources :search, only: %i[index] do
+      collection do
+        get :facet
+      end
+    end
   end
 
   resources :media_mentions, only: :show

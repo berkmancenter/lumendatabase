@@ -1,5 +1,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.09e](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.09e) - 2022-09-23
+### Fixed
+* Enlarge the `work description` fields in the `admin`.
+* Made `search facets` work properly in the `media mentions` view.
+
 ## [22.09d](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.09d) - 2022-09-21
 ### Changed
 * Moved the `site language` to the `database`.

@@ -42,7 +42,7 @@ $('ol.results-facets .dropdown-toggle').on 'click', (event) ->
   list.html(loader)
 
   $.get(
-    facet_notices_search_index_path + window.location.search,
+    facet_search_index_path + window.location.search,
     { facet_id: clicked_elem.nextAll('input[type=hidden]').first().attr('id') },
     (response) ->
       new_facet_list = $(response).find('ol').html()

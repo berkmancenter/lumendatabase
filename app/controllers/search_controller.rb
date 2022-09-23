@@ -41,6 +41,24 @@ class SearchController < ApplicationController
     end
   end
 
+  def facet
+    filterable_field_facet = @filterable_fields.select { |filterable_field| filterable_field.parameter.to_s == params[:facet_id] }.first
+
+    resource_not_found and return if filterable_field_facet.nil?
+
+    @searcher = ElasticsearchQuery.new(params, @model_class).tap do |searcher|
+      @searchable_fields.each do |searched_field|
+        searcher.register searched_field
+      end
+
+      searcher.register(filterable_field_facet)
+    end
+
+    @searchdata = @searcher.search
+
+    render filterable_field_facet, locals: { results: @searchdata.response['aggregations'] }
+  end
+
   private
 
   def html_responder; end

@@ -59,10 +59,12 @@ class NoticeEditForm {
           'type': 'object',
           'properties': {
             'description': {
-              'type': 'string'
+              'type': 'string',
+              'format': 'html'
             },
             'description_original': {
-              'type': 'string'
+              'type': 'string',
+              'format': 'html'
             },
             'kind': {
               'type': 'string'

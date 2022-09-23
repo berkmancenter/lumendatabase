@@ -12,6 +12,7 @@ class MediaMentions::SearchController < SearchController
     @ordering_options = MediaMention::ORDERING_OPTIONS
     @url_root = URL_ROOT
     @search_all_placeholder = 'Search all research and media mentions...'
+    @facet_search_index_path = facet_media_mentions_search_index_path
   end
 
   def item_searcher
