@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.09f](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.09f) - 2022-09-27
+### Fixed
+* Made `textarea` fields in the `admin` wider generally.
+
 ## [22.09e](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.09e) - 2022-09-23
 ### Fixed
 * Enlarge the `work description` fields in the `admin`.

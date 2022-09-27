@@ -69,10 +69,12 @@ aside#redaction-tools {
   }
 }
 
-#edit_notice {
+[id^='edit_'],
+[id^='new_'] {
   textarea {
-    height: 400px;
-    width: 700px;
+    height: 400px !important;
+    width: 700px !important;
+    max-width: 100%;
   }
 
   label {
