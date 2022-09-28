@@ -77,10 +77,12 @@ class NoticeEditForm {
                 'type': 'object',
                 'properties': {
                   'url': {
-                    'type': 'string'
+                    'type': 'string',
+                    'format': 'html'
                   },
                   'url_original': {
-                    'type': 'string'
+                    'type': 'string',
+                    'format': 'html'
                   }
                 }
               }
@@ -93,10 +95,12 @@ class NoticeEditForm {
                 'type': 'object',
                 'properties': {
                   'url': {
-                    'type': 'string'
+                    'type': 'string',
+                    'format': 'html'
                   },
                   'url_original': {
-                    'type': 'string'
+                    'type': 'string',
+                    'format': 'html'
                   }
                 }
               }

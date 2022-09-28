@@ -72,13 +72,15 @@ aside#redaction-tools {
 [id^='edit_'],
 [id^='new_'] {
   textarea {
-    height: 400px !important;
-    width: 700px !important;
+    height: 300px !important;
+    width: 500px !important;
     max-width: 100%;
   }
 
-  label {
-    display: block;
+  td.compact {
+    textarea {
+      max-width: 90%;
+    }
   }
 }
 
