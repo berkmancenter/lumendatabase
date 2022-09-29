@@ -181,6 +181,7 @@ Most of these are optional and have sensible defaults (which may vary by environ
 - `GOOGLE_CUSTOM_BLOG_SEARCH_ID`
 - `IMPORT_NAME`
 - `LOG_ELASTICSEARCH` - only used in tests
+- `LOG_TO_LOGSTASH_FORMAT` - set to true if you want to log in the Logstash format
 - `LUMEN_USE_OINK`
 - `MAILER_DELIVERY_METHOD`
 - `NOTICE_COUNT` - how many fake notices to create when seeding the db
