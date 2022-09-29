@@ -5,5 +5,6 @@ class TopicsController < ApplicationController
 
   def show
     @topic = Topic.find(params[:id])
+    LumenLogger.log_metrics('VIEWED_TOPIC', topic: @topic.name, topic_id: @topic.id)
   end
 end

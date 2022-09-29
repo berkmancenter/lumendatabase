@@ -5,6 +5,8 @@ describe TopicsController do
     it 'loads the topic by ID' do
       topic = double('Topic').as_null_object
       expect(Topic).to receive(:find).with('42').and_return(topic)
+      expect(topic).to receive(:id).and_return(42)
+      expect(topic).to receive(:name).and_return('Test')
 
       get :show, params: { id: 42 }
 

@@ -316,6 +316,8 @@ describe NoticesController do
     def make_allowances
       allow(subject).to receive(:authorized_to_create?).and_return true
       allow(NoticeBuilder).to receive(:new).and_return @fake_notice
+      allow(@fake_notice).to receive(:id).and_return 1
+      allow(@fake_notice).to receive(:errors).and_return []
     end
 
     context 'format-independent logic' do

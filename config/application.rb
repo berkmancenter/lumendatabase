@@ -5,6 +5,8 @@ require_relative '../lib/handle_bad_encoding_parameters'
 require 'rails/all'
 require 'active_storage/engine'
 
+require_relative '../lib/lumen'
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
@@ -103,5 +105,6 @@ module Chill
     # TODO: To make the CMS work, can be removed when the CMS is ready to work
     # with the latest Rails version.
     config.active_record.yaml_column_permitted_classes = [Symbol]
+    config.logger = Lumen::LOGGER
   end
 end

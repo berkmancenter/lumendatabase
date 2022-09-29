@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
   before_action :authenticate_user_from_token!
   before_action :set_profiler_auth
   before_action :set_current_user
+  before_action :log_metrics
 
   rescue_from CanCan::AccessDenied do |ex|
     logger.warn "Unauthorized attempt to #{ex.action} #{ex.subject}"
@@ -49,7 +50,11 @@ class ApplicationController < ActionController::Base
   end
 
   def resource_not_found(exception = false)
-    logger404s = Logger.new("#{Rails.root}/log/#{Rails.env}_404s.log")
+    logger404s = LumenLogger.init(
+      path: "log/#{Rails.env}_404s.log",
+      customize_event: ->(event) { event['event_type'] = 'rails_log' }
+    )
+
     if exception
       logger404s.error(
         format(
@@ -148,6 +153,10 @@ class ApplicationController < ActionController::Base
 
   def set_current_user
     Current.user = current_user
+  end
+
+  def log_metrics
+    LumenLogger.log_metrics('VISIT_DETAILS', referrer: request.referrer, ip: request.remote_ip, url: request.original_url)
   end
 
   def set_default_format
