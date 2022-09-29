@@ -1,9 +1,6 @@
 require_relative './lumen_logger'
 
 module Lumen
-  REDACTION_MASK = '[REDACTED]'.freeze
-  TRUNCATION_TOKEN_URLS_ACTIVE_PERIOD = 24.hours
-
   # Application-wide loggers
   lumen_logger_event_customize = lambda do |event|
     event.remove('path')
