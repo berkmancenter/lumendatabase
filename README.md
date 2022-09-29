@@ -13,11 +13,11 @@ The main [Lumen Database instance](https://www.lumendatabase.org/) has an API th
 Development
 ===========
 
-#### Requirements
+#### Stack
 
-* ruby >= 2.5.x
-* PostgreSQL 9.6
-* Elasticsearch 7.7.x
+* ruby 3.0.2
+* PostgreSQL 13.6
+* Elasticsearch 7.17.x
 * Java Runtime Environment (OpenJDK works fine)
 * Piwik Tracking (only used in prod)
 * Mail server (SMTP, Sendmail)
