@@ -749,6 +749,7 @@ where works.id in (
     else
       Comfy::Cms::Site.create!(identifier: 'lumen_cms')
     end
+
     Rake::Task['comfy:cms_seeds:import'].execute(
       from: 'lumen_cms', to: 'lumen_cms'
     )
