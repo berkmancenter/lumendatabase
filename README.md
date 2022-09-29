@@ -150,10 +150,6 @@ Use rubocop and leave the code at least as clean as you found it. If you make li
   * available in dev by default
   * in use on prod, visible only to super_admins
   * in-depth memory profiling, stacktracing, and SQL queries; good for granular analysis
-* [bullet](https://github.com/flyerhzm/bullet)
-  * find N+1 queries and unused eager loading
-  * runs in dev
-  * logs to `log/bullet.log`
 * [oink](https://github.com/noahd1/oink)
   * memory usage, allocations
   * runs in dev by default; can run anywhere by setting `ENV[LUMEN_USE_OINK]` (ok to run in production)
