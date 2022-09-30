@@ -20,7 +20,9 @@ class LumenLogger
   end
 
   def self.log_metrics(action, **data)
-    Lumen::METRICS_LOGGER.info(
+    # There is no possiblity to set a custom log level per logger in
+    # logstash-logger, so we need to call error here, not great, not terrible.
+    Lumen::METRICS_LOGGER.error(
       LogStash::Event.new(
         action: action,
         **data,

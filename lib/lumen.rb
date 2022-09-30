@@ -1,4 +1,5 @@
 require_relative './lumen_logger'
+require 'dotenv/load'
 
 module Lumen
   # Application-wide loggers

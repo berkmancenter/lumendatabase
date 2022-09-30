@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.09h](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.09h) - 2022-09-30
+### Added
+* Made the application possible to log in the `Logstash` format.
+
 ## [22.09g](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.09g) - 2022-09-28
 ### Changed
 * Made url fields in the `admin` render as `textarea`.

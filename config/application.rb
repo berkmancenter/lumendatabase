@@ -105,6 +105,7 @@ module Chill
     # TODO: To make the CMS work, can be removed when the CMS is ready to work
     # with the latest Rails version.
     config.active_record.yaml_column_permitted_classes = [Symbol]
+
     config.logger = Lumen::LOGGER
   end
 end
