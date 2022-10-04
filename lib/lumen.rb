@@ -7,6 +7,7 @@ module Lumen
     event.remove('path')
     event.remove('host')
     event.remove('@version')
+    event['request_id'] = Current.request_id
   end
 
   LOGGER = LumenLogger.init(

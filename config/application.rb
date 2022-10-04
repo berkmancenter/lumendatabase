@@ -1,6 +1,7 @@
 require_relative 'boot'
 require_relative '../lib/catch_json_parsing_errors'
 require_relative '../lib/handle_bad_encoding_parameters'
+require_relative '../lib/set_request_id'
 
 require 'rails/all'
 require 'active_storage/engine'
@@ -81,6 +82,7 @@ module Chill
     config.assets.version = '1.0'
 
     config.middleware.insert_before 0, HandleBadEncodingParameters
+    config.middleware.use SetRequestId
     config.middleware.use CatchJsonParsingErrors
     config.middleware.use Rack::Attack
     config.middleware.use StackProf::Middleware, enabled: false,
