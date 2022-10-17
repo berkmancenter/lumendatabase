@@ -36,7 +36,7 @@ gem 'rack-attack'
 # we fall back to the earlier enable_rails_patches behavior.
 gem 'rack-mini-profiler', require: ['enable_rails_patches', 'rack-mini-profiler']
 gem 'rails', '~> 6.1.0'
-gem 'rails_admin'
+gem 'rails_admin', '~> 2.x'
 gem 'rails_admin_tag_list', '~> 0.2.1'
 gem 'recaptcha'
 gem 'recipient_interceptor', require: false
@@ -68,10 +68,10 @@ group :development, :test do
 end
 
 group :development, :test, :assets do
-  gem 'bourbon'
+  gem 'bourbon', '~> 3.x'
   gem 'coffee-rails'
   gem 'mini_racer'
-  gem 'neat'
+  gem 'neat', '~> 1.3.x'
   gem 'sassc-rails'
   gem 'terser'
 end

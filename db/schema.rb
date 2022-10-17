@@ -551,7 +551,7 @@ ActiveRecord::Schema.define(version: 2022_09_15_111044) do
   create_table "translations", force: :cascade do |t|
     t.string "key"
     t.text "notes", default: ""
-    t.text "body"
+    t.text "body", default: ""
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
