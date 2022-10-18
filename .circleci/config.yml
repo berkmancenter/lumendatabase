@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
   ruby: circleci/ruby@1.1.1
+  browser-tools: circleci/browser-tools@1.4.0
 
 jobs:
   build:
@@ -8,13 +9,13 @@ jobs:
     docker:
       # Use this image rather than the base because we need browsers for
       # integration testing.
-      - image: circleci/ruby:3.0.2-node-browsers
-      - image: circleci/postgres:9.6
+      - image: cimg/ruby:3.0.2-browsers
+      - image: cimg/postgres:9.6
         environment:
           POSTGRES_USER: postgres
           POSTGRES_DB: lumen_test
           POSTGRES_PASSWORD: postgres
-      - image: docker.elastic.co/elasticsearch/elasticsearch:7.16.1
+      - image: docker.elastic.co/elasticsearch/elasticsearch:7.17.0
         environment:
           - cluster.name: circleci-lumen
           - xpack.security.enabled: false
@@ -28,6 +29,8 @@ jobs:
       # CIRCLECI: true (which we use in tests) is set by circleci itself.
     executor: ruby/default
     steps:
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
       # Build app.
       - checkout
 

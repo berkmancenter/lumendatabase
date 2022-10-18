@@ -270,6 +270,7 @@ GEM
     kramdown (2.4.0)
       rexml
     libv8-node (16.10.0.0)
+    libv8-node (16.10.0.0-x86_64-linux)
     logstash-event (1.2.02)
     logstash-logger (0.26.1)
       logstash-event (~> 1.2)
@@ -304,6 +305,8 @@ GEM
     nio4r (2.5.8)
     nokogiri (1.13.8)
       mini_portile2 (~> 2.8.0)
+      racc (~> 1.4)
+    nokogiri (1.13.8-x86_64-linux)
       racc (~> 1.4)
     oink (0.10.1)
       activerecord
@@ -523,6 +526,7 @@ GEM
 
 PLATFORMS
   ruby
+  x86_64-linux
 
 DEPENDENCIES
   activerecord-import
