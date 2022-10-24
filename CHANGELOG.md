@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.10a](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.10a) - 2022-10-24
+### Changed
+* Updated multiple gems.
+
 ## [22.10](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.10) - 2022-10-04
 ### Added
 * Added a request id to log messages.
