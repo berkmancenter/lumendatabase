@@ -10,8 +10,8 @@ class LumenLogger
       LogStashLogger.new(**args, type: :file, path: aliased_path)
     elsif ENV['RAILS_LOG_TO_STDOUT']
       logger = ActiveSupport::Logger.new(STDOUT)
-      logger.formatter = config.log_formatter
-      config.logger = ActiveSupport::TaggedLogging.new(logger)
+      logger.formatter = ::Logger::Formatter.new
+      ActiveSupport::TaggedLogging.new(logger)
     else
       logger = ActiveSupport::Logger.new(file_path)
       logger.formatter = ::Logger::Formatter.new
