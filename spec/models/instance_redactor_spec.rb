@@ -91,6 +91,17 @@ describe InstanceRedactor::EmailRedactor do
       expect(redacted).to eq redacted_text
     end
   end
+
+  it "won't redact urls with at sign" do
+    original_text = 'Something with https://www.google.com/maps/reviews/@-27.5080239,153.0507613,17z/data=!3m1!4b1!4m6!14m5!1m4!2m3!1sChdDSUhNMGae36a338fe7071c4?hl=en-US and lol@lumendatabase.org'
+    redacted_text = 'Something with https://www.google.com/maps/reviews/@-27.5080239,153.0507613,17z/data=!3m1!4b1!4m6!14m5!1m4!2m3!1sChdDSUhNMGae36a338fe7071c4?hl=en-US and [REDACTED]'
+
+    redactor = described_class.new
+
+    redacted = redactor.redact(original_text)
+
+    expect(redacted).to eq redacted_text
+  end
 end
 
 describe InstanceRedactor do

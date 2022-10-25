@@ -1,5 +1,5 @@
 class NoticeBuilder
-  def initialize(model_class, params, user=nil)
+  def initialize(model_class, params, user = nil)
     @model_class = model_class
     @params = params
     @user = user
@@ -16,6 +16,7 @@ class NoticeBuilder
   end
 
   private
+
   attr_reader :model_class, :params, :json_params, :user
 
   # This ensures that the data structure we're working with will look like JSON
