@@ -25,7 +25,6 @@ gem 'jsonapi-serializer'
 gem 'kaminari'
 gem 'logstash-logger'
 gem 'mime-types'
-gem 'nested_form', git: 'https://github.com/berkmancenter/nested_form'
 gem 'oink'
 # Pinned because the next step is migrating to ActiveStorage.
 gem 'paperclip', '~> 5'

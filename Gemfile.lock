@@ -1,9 +1,3 @@
-GIT
-  remote: https://github.com/berkmancenter/nested_form
-  revision: 46f5f658c3477f79906880a43948514f311268d5
-  specs:
-    nested_form (0.3.2)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -302,6 +296,7 @@ GEM
     neat (1.6.0)
       bourbon (>= 3.1)
       sass (>= 3.3)
+    nested_form (0.3.2)
     nio4r (2.5.8)
     nokogiri (1.13.9)
       mini_portile2 (~> 2.8.0)
@@ -564,7 +559,6 @@ DEPENDENCIES
   mime-types
   mini_racer
   neat (~> 1.3.x)
-  nested_form!
   oink
   paperclip (~> 5)
   parallel_tests

@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.11](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.11) - 2022-11-17
+### Changed
+* Stopped using a fork of the `nested_form` gem.
+
 ## [22.10b](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.10b) - 2022-10-25
 ### Fixed
 * Made the `EmailRedactor` stop redacting urls.
