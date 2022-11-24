@@ -18,7 +18,7 @@ class SearchController < ApplicationController
   URL_ROOT = nil
 
   def index
-    if request.format.html? && current_user.nil? && !Rails.env.test?
+    if request.format.html? && current_user.nil? && !Rails.env.test? && !@skip_captcha
       permitted = false
 
       if session[:captcha_permission]

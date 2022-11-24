@@ -13,6 +13,7 @@ class MediaMentions::SearchController < SearchController
     @url_root = URL_ROOT
     @search_all_placeholder = 'Search all research and media mentions...'
     @facet_search_index_path = facet_media_mentions_search_index_path
+    @skip_captcha = true
   end
 
   def item_searcher
