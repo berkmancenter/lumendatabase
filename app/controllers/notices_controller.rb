@@ -44,9 +44,6 @@ class NoticesController < ApplicationController
         @notice.save
         @notice.mark_for_review
         flash.notice = "Notice created! It can be found at #{notice_url(@notice)}"
-
-        LumenLogger.log_metrics('CREATED_NEW_NOTICE', notice_id: @notice.id, notice_type: @notice.type)
-
         format.json { head :created, location: @notice }
         format.html { redirect_to new_notice_url }
       else
@@ -69,8 +66,6 @@ class NoticesController < ApplicationController
     @search_index_path = notices_search_index_path
 
     respond_to do |format|
-      LumenLogger.log_metrics('VIEWED_NOTICE', notice_id: @notice.id, notice_type: @notice.type)
-
       format.html do
         update_html_stats
         show_render_html
@@ -91,8 +86,6 @@ class NoticesController < ApplicationController
     end
 
     @recent_notices ||= Notice.where(id: notice_ids)
-
-    LumenLogger.log_metrics('VIEWED_RSS_FEED')
 
     respond_to do |format|
       format.rss { render layout: false }
@@ -287,7 +280,5 @@ class NoticesController < ApplicationController
 
     token_url = TokenUrl.find_by(token: params[:access_token])
     token_url.increment!(:views)
-
-    LumenLogger.log_metrics('VIEWED_NOTICE_BY_TOKEN', notice_id: @notice.id, notice_type: @notice.type, token_id: token_url.id)
   end
 end

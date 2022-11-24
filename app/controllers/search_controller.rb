@@ -26,8 +26,6 @@ class SearchController < ApplicationController
         permitted = true if time_permission > Time.now
       end
 
-      LumenLogger.log_metrics('VIEWED_SEARCH_CAPTCHA')
-
       unless permitted
         redirect_to(captcha_gateway_index_path(destination: CGI.escape(request.original_url))) and return
       end
