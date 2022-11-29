@@ -82,8 +82,8 @@ class Rack::Attack
     req.ip if req.path.include?('captcha_gateway')
   end
 
-  self.throttled_response = lambda do |_env|
-    Rails.logger.warn "[rack-attack] 429 issued for #{_env['rack.attack.match_discriminator']}"
+  self.throttled_responder = lambda do |req|
+    Rails.logger.warn "[rack-attack] 429 issued for #{req.env['rack.attack.match_discriminator']}"
     [
       429, # status
       { 'Content-Type' => 'text/plain' }, # headers
