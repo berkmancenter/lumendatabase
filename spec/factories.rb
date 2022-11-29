@@ -18,7 +18,7 @@ FactoryBot.define do
   end
 
   factory :notice_topic, class: 'Topic' do
-    sequence(:name) { |n| Notice::TOPICS[n % Notice::TOPICS.size - 1] }
+    sequence(:name) { |n| Lumen::TOPICS[n % Lumen::TOPICS.size - 1] }
   end
 
   factory :topic_manager do

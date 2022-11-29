@@ -1,0 +1,10 @@
+// Keep info and primary colors the same as Bootstrap 3
+$primary: #019CE0;
+$info: #5bc0de;
+
+// Force light color for top-nav links
+$navbar-dark-color: #ffffff;
+
+// Contrast ratio used to calculate color for text within elements (ie. buttons)
+// https://getbootstrap.com/docs/5.0/customize/sass/#color-contrast
+$min-contrast-ratio: 2;

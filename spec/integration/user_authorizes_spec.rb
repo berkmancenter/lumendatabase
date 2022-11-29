@@ -62,7 +62,7 @@ feature 'User authorization' do
 
     page_object.sign_in_and_edit(notice)
 
-    expect(page).to have_no_css('input#notice_review_required')
+    expect(page).to have_no_css('input#notice_review_required_0')
   end
 
   scenario 'Publishers+ can publish (admin)' do
@@ -76,7 +76,7 @@ feature 'User authorization' do
     page_objects.each do |obj|
       obj.sign_in_and_edit(notice)
 
-      expect(page).to have_css('input#notice_review_required')
+      expect(page).to have_css('input#notice_review_required_0')
     end
   end
 

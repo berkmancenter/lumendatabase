@@ -14,7 +14,7 @@ module RailsAdmin
     module Actions
       class ApproveApiSubmitterRequest < Base
         register_instance_option(:only) { 'ApiSubmitterRequest' }
-        register_instance_option(:link_icon) { 'icon-check' }
+        register_instance_option(:link_icon) { 'fas fa-check' }
         register_instance_option(:action_name) { :approve_api_submitter_request }
         register_instance_option(:member) { true }
         register_instance_option(:http_methods) { %i[get] }

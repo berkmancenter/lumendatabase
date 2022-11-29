@@ -70,26 +70,6 @@ class Notice < ApplicationRecord
 
   VALID_ACTIONS = %w[Yes No Partial Unspecified].freeze
 
-  OTHER_TOPIC = 'Uncategorized'.freeze
-
-  TYPES_TO_TOPICS = {
-    'DMCA'                  => 'Copyright',
-    'Counterfeit'           => 'Counterfeit',
-    'Counternotice'         => 'Copyright',
-    'CourtOrder'            => 'Court Orders',
-    'DataProtection'        => 'EU - Right to Be Forgotten',
-    'Defamation'            => 'Defamation',
-    'GovernmentRequest'     => 'Government Requests',
-    'LawEnforcementRequest' => 'Law Enforcement Requests',
-    'PrivateInformation'    => 'Right of Publicity',
-    'Trademark'             => 'Trademark',
-    'Other'                 => OTHER_TOPIC,
-    'Placeholder'           => OTHER_TOPIC
-  }.freeze
-
-  TYPES = TYPES_TO_TOPICS.keys
-  TOPICS = TYPES_TO_TOPICS.values
-
   # == Relationships ========================================================
   belongs_to :reviewer, class_name: 'User'
 
@@ -109,7 +89,7 @@ class Notice < ApplicationRecord
   # == Attributes ===========================================================
   delegate :country_code, to: :recipient, allow_nil: true
 
-  %i[sender principal recipient submitter attorney] .each do |entity|
+  %i[sender principal recipient submitter attorney].each do |entity|
     delegate :name, :country_code, to: entity, prefix: true, allow_nil: true
   end
 
@@ -156,11 +136,11 @@ class Notice < ApplicationRecord
   end
 
   def self.type_models
-    (TYPES - ['Counternotice']).map(&:constantize).freeze
+    (Lumen::TYPES - ['Counternotice']).map(&:constantize).freeze
   end
 
   def self.display_models
-    (TYPES - ['Placeholder']).map(&:constantize).freeze
+    (Lumen::TYPES - ['Placeholder']).map(&:constantize).freeze
   end
 
   def self.available_for_review
@@ -221,14 +201,14 @@ class Notice < ApplicationRecord
   end
 
   def reset_type=(value)
-    unless value.in?(TYPES)
+    unless value.in?(Lumen::TYPES)
       fail ActiveModel::MissingAttributeError.new("Cannot reset Notice type to: #{value}")
     end
     self[:type] = value
   end
 
   def reset_type_enum
-    TYPES
+    Lumen::TYPES
   end
 
   def language_enum
@@ -370,7 +350,7 @@ class Notice < ApplicationRecord
   end
 
   def notice_topic_map
-    topic = TYPES_TO_TOPICS.key?(self.type) ? TYPES_TO_TOPICS[self.type] : OTHER_TOPIC
+    topic = Lumen::TYPES_TO_TOPICS.key?(self.type) ? Lumen::TYPES_TO_TOPICS[self.type] : Lumen::OTHER_TOPIC
     Topic.find_or_create_by(name: topic)
   end
 

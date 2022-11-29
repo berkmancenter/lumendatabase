@@ -119,7 +119,7 @@ feature "Searching for Notices via the API" do
         title: "The Lion King on Youtube"
       )
       index_changed_instances
-      expected_topics = [topic.name, Notice::TYPES_TO_TOPICS[notice.type]].sort
+      expected_topics = [topic.name, Lumen::TYPES_TO_TOPICS[notice.type]].sort
 
       expect_api_search_to_find("king") do |json|
         json_item = json['notices'].first

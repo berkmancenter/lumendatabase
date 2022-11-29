@@ -1,3 +1,4 @@
+require 'lumen'
 require 'rails_admin/config/actions/redact_queue'
 require 'rails_admin/config/actions/redact_notice'
 require 'rails_admin/config/actions/pdf_requests'
@@ -6,6 +7,7 @@ require 'rails_admin/config/actions/approve_api_submitter_request'
 require 'rails_admin/config/actions/reject_api_submitter_request'
 require 'rails_admin/config/actions/top_notices_token_urls'
 require 'rails_admin/config/fields/types/datetime_timezoned'
+require 'rails_admin/extensions/history'
 
 # Monkeypatches
 RailsAdmin::Config::Fields::Types::Datetime.prepend RailsAdmin::Config::Fields::Types::DatetimeTimezoned
@@ -19,6 +21,8 @@ RailsAdmin.config do |config|
   config.current_user_method { current_user }
 
   config.authorize_with :cancancan
+
+  config.asset_source = :sprockets
 
   config.audit_with :history, 'User'
   config.audit_with :history, 'Role'
@@ -57,7 +61,7 @@ RailsAdmin.config do |config|
     top_notices_token_urls
   end
 
-  ['Notice', Notice::TYPES].flatten.each do |notice_type|
+  ['Notice', Lumen::TYPES].flatten.each do |notice_type|
     config.audit_with :history, notice_type
 
     config.model notice_type do
@@ -209,6 +213,10 @@ RailsAdmin.config do |config|
         configure(:works) do
           hide
         end
+
+        configure :documents_update_notification_notice do
+          hide
+        end
       end
     end
   end
@@ -306,6 +314,10 @@ RailsAdmin.config do |config|
         enum do
           %w[original supporting]
         end
+      end
+
+      configure :youtube_import_file_location do
+        hide
       end
     end
   end
@@ -536,6 +548,9 @@ RailsAdmin.config do |config|
     visible false
   end
   config.model 'Comfy::Cms::Translation' do
+    visible false
+  end
+  config.model 'RailsAdmin::History' do
     visible false
   end
   # == END ============================================================
