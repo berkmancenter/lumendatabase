@@ -116,7 +116,7 @@ class Notice < ApplicationRecord
   attr_accessor :works
 
   # == Extensions ===========================================================
-  accepts_nested_attributes_for :file_uploads,
+  accepts_nested_attributes_for :file_uploads, allow_destroy: true,
     reject_if: ->(attributes) { [attributes['file'], attributes[:pdf_request_fulfilled]].all?(&:blank?) }
 
   accepts_nested_attributes_for :entity_notice_roles, allow_destroy: true
