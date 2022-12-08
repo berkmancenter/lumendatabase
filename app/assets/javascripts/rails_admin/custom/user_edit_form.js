@@ -1,4 +1,4 @@
-$(document).on('pjax:complete', function(event, request) {
+$(document).on('turbo:render', function(event, request) {
   edit_user_form_actions();
 });
 

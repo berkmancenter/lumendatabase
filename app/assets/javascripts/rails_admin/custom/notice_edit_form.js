@@ -11,7 +11,7 @@ class NoticeEditForm {
   constructor() {
     let that = this;
 
-    $(document).on('pjax:complete', function(event, request) {
+    $(document).on('turbo:render', function(event, request) {
       that.notice_form_actions();
     });
 
@@ -48,6 +48,10 @@ class NoticeEditForm {
 
   set_works_editor() {
     let field_name = `${this.form_model_type}_works_json`;
+
+    if (document.querySelector(`#${field_name}_field`) == null) {
+      return;
+    }
 
     let editor = new JSONEditor(document.querySelector(`#${field_name}_field > div`), {
       ...this.notice_edit_form_default_editor_params,
@@ -134,6 +138,10 @@ class NoticeEditForm {
       let input_field_id = `${that.form_model_type}_${type}_list`;
       let field_id = `${type}_list_field`;
 
+      if (document.querySelector(`#${input_field_id}_field`) == null) {
+        return;
+      }
+
       let editor = new JSONEditor(document.querySelector(`#${input_field_id}_field > div`), {
         ...that.notice_edit_form_default_editor_params,
         schema: {
@@ -164,6 +172,10 @@ class NoticeEditForm {
 
   set_customizations_editor() {
     let field_name = `${this.form_model_type}_customizations`;
+
+    if (document.querySelector(`#${field_name}_field`) == null) {
+      return;
+    }
 
     let editor = new JSONEditor(document.querySelector(`#${field_name}_field > div`), {
       ...this.notice_edit_form_default_editor_params,

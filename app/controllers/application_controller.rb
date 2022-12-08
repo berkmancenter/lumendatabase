@@ -87,6 +87,8 @@ class ApplicationController < ActionController::Base
   def layout_by_resource
     if devise_controller?
       'sessions'
+    elsif self.class.name.include? 'RailsAdmin'
+      'rails_admin/application'
     else
       'application'
     end

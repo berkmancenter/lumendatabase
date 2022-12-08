@@ -14,7 +14,7 @@ module RailsAdmin
     module Actions
       class RejectApiSubmitterRequest < Base
         register_instance_option(:only) { 'ApiSubmitterRequest' }
-        register_instance_option(:link_icon) { 'icon-minus' }
+        register_instance_option(:link_icon) { 'fas fa-minus' }
         register_instance_option(:action_name) { :reject_api_submitter_request }
         register_instance_option(:member) { true }
         register_instance_option(:http_methods) { %i[get] }

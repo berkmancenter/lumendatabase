@@ -111,6 +111,7 @@ feature "Redaction queue" do
       queue.process_selected
 
       body_field = RedactableFieldOnPage.new(:body)
+      find('#notice_body', wait: 20)
       body_field.select
 
       queue.redact_everywhere
@@ -137,5 +138,4 @@ feature "Redaction queue" do
 
     queue
   end
-
 end

@@ -1,6 +1,8 @@
 module ValidatesAutomatically
   def self.included(model)
     model.instance_eval do
+      return unless self.table_exists?
+
       to_validate = self.columns.select do |col|
         %i[string text].include?(col.type)
       end

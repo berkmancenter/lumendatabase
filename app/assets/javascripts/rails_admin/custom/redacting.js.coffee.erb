@@ -62,5 +62,5 @@ requireType = ->
 
 $(document).ready -> addHandlers()
 $(document).ready -> requireType()
-$(document).on 'pjax:end', -> addHandlers()
-$(document).on 'pjax:end', -> requireType()
+$(document).on 'turbo:render', -> addHandlers()
+$(document).on 'turbo:render', -> requireType()
