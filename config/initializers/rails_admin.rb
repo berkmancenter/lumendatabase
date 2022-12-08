@@ -86,7 +86,6 @@ RailsAdmin.config do |config|
         field :body
         field :entities
         field :topics
-        field :works
         field :url_count
         field :action_taken
         field :reviewer_id

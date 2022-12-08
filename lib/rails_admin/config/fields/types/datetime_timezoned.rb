@@ -9,7 +9,7 @@ module RailsAdmin
           CUSTOM_RA_TIMEZONE = 'Eastern Time (US & Canada)'.freeze
 
           # Convert to the RA custom timezone
-          def form_value
+          def value
             return super if date_class?
 
             value_in_default_time_zone = bindings[:object].send(name)
@@ -20,6 +20,10 @@ module RailsAdmin
               Rails.application.config.time_zone,
               CUSTOM_RA_TIMEZONE
             )
+          end
+
+          def form_value
+            value
           end
 
           # Convert back to the default app timezone

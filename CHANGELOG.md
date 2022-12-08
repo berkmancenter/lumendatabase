@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.12a](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.12a) - 2022-12-08
+### Fixed
+* Made times in lists in the `admin` respect the custom timezone.
+
 ## [22.12](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.12) - 2022-12-08
 ### Changed
 * Upgraded the `rails_admin` gem to `3.x`.

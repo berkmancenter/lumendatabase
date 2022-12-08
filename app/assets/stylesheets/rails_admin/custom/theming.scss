@@ -133,3 +133,11 @@ aside#redaction-tools {
     margin-right: 10px;
   }
 }
+
+// Layout
+//************************************************************************//
+.rails_admin {
+  .sidebar {
+    flex-wrap: nowrap;
+  }
+}
