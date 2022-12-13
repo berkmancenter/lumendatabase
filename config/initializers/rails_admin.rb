@@ -7,10 +7,12 @@ require 'rails_admin/config/actions/approve_api_submitter_request'
 require 'rails_admin/config/actions/reject_api_submitter_request'
 require 'rails_admin/config/actions/top_notices_token_urls'
 require 'rails_admin/config/fields/types/datetime_timezoned'
+require 'rails_admin/config/fields/association_no_count'
 require 'rails_admin/extensions/history'
 
 # Monkeypatches
 RailsAdmin::Config::Fields::Types::Datetime.prepend RailsAdmin::Config::Fields::Types::DatetimeTimezoned
+RailsAdmin::Config::Fields::Association.prepend RailsAdmin::Config::Fields::AssociationNoCount
 
 # Config
 RailsAdmin.config do |config|
