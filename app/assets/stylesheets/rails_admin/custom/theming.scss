@@ -141,3 +141,16 @@ aside#redaction-tools {
     flex-wrap: nowrap;
   }
 }
+
+// Fields
+//************************************************************************//
+.boolean_type {
+  .btn-outline-secondary {
+    display: none;
+  }
+
+  .btn-outline-danger {
+    border-top-right-radius: 0.25rem !important;
+    border-bottom-right-radius: 0.25rem !important;
+  }
+}

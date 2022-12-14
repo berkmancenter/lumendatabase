@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_15_111044) do
+ActiveRecord::Schema.define(version: 2022_12_14_183651) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -60,7 +60,7 @@ ActiveRecord::Schema.define(version: 2022_09_15_111044) do
     t.string "entity_zip", default: ""
     t.text "admin_notes", default: ""
     t.bigint "user_id"
-    t.boolean "approved"
+    t.boolean "approved", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_api_submitter_requests_on_user_id"
@@ -72,8 +72,8 @@ ActiveRecord::Schema.define(version: 2022_09_15_111044) do
     t.bigint "notice_id"
     t.bigint "user_id"
     t.datetime "expiration_date"
-    t.boolean "valid_forever"
-    t.boolean "documents_notification"
+    t.boolean "valid_forever", default: false, null: false
+    t.boolean "documents_notification", default: false, null: false
     t.integer "views", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -268,7 +268,7 @@ ActiveRecord::Schema.define(version: 2022_09_15_111044) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string "name_original"
-    t.boolean "full_notice_only_researchers"
+    t.boolean "full_notice_only_researchers", default: false, null: false
     t.string "address_line_1_original"
     t.string "address_line_2_original"
     t.string "city_original"
@@ -314,8 +314,8 @@ ActiveRecord::Schema.define(version: 2022_09_15_111044) do
     t.integer "file_file_size"
     t.string "file_content_type"
     t.datetime "file_updated_at"
-    t.boolean "pdf_requested"
-    t.boolean "pdf_request_fulfilled", default: false
+    t.boolean "pdf_requested", default: false, null: false
+    t.boolean "pdf_request_fulfilled", default: false, null: false
     t.index ["notice_id"], name: "index_file_uploads_on_notice_id"
   end
 
@@ -349,7 +349,7 @@ ActiveRecord::Schema.define(version: 2022_09_15_111044) do
     t.date "date"
     t.string "document_type", limit: 100
     t.text "comments"
-    t.boolean "published", default: false
+    t.boolean "published", default: true, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "author"
@@ -381,7 +381,7 @@ ActiveRecord::Schema.define(version: 2022_09_15_111044) do
     t.datetime "updated_at"
     t.string "source"
     t.string "subject"
-    t.boolean "review_required"
+    t.boolean "review_required", default: false, null: false
     t.text "body_original"
     t.datetime "date_sent"
     t.integer "reviewer_id"
@@ -390,14 +390,14 @@ ActiveRecord::Schema.define(version: 2022_09_15_111044) do
     t.string "action_taken"
     t.string "type"
     t.integer "original_notice_id"
-    t.boolean "spam", default: false
-    t.boolean "hidden", default: false
+    t.boolean "spam", default: false, null: false
+    t.boolean "hidden", default: false, null: false
     t.string "request_type"
     t.integer "submission_id"
     t.string "mark_registration_number"
     t.boolean "published", default: true, null: false
     t.integer "url_count"
-    t.boolean "webform", default: false
+    t.boolean "webform", default: false, null: false
     t.text "notes"
     t.integer "counternotice_for_id"
     t.integer "counternotice_for_sid"
@@ -472,7 +472,7 @@ ActiveRecord::Schema.define(version: 2022_09_15_111044) do
   create_table "risk_trigger_conditions", id: :serial, force: :cascade do |t|
     t.string "field", null: false
     t.string "value", null: false
-    t.boolean "negated"
+    t.boolean "negated", default: false, null: false
     t.string "matching_type"
     t.integer "risk_trigger_id"
     t.index ["risk_trigger_id"], name: "index_risk_trigger_conditions_on_risk_trigger_id"
@@ -509,10 +509,10 @@ ActiveRecord::Schema.define(version: 2022_09_15_111044) do
     t.integer "notice_id", null: false
     t.integer "user_id"
     t.datetime "expiration_date"
-    t.boolean "valid_forever", default: false
+    t.boolean "valid_forever", default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean "documents_notification"
+    t.boolean "documents_notification", default: false, null: false
     t.integer "views", default: 0
     t.string "ip"
     t.index ["documents_notification"], name: "index_token_urls_on_documents_notification"
@@ -570,7 +570,7 @@ ActiveRecord::Schema.define(version: 2022_09_15_111044) do
     t.integer "viewed_notices", default: 0, null: false
     t.datetime "full_notice_time_limit"
     t.boolean "limit_notice_api_response", default: false, null: false
-    t.boolean "allow_generate_permanent_tokens_researchers_only_notices"
+    t.boolean "allow_generate_permanent_tokens_researchers_only_notices", default: false, null: false
     t.string "widget_submissions_forward_email"
     t.string "widget_public_key"
     t.text "notes"

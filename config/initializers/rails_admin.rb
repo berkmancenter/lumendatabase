@@ -30,8 +30,8 @@ RailsAdmin.config do |config|
   config.audit_with :history, 'Role'
   config.audit_with :history, 'Notice'
 
-  boolean_true_icon = '<span class="label label-success">&#x2713;</span>'.html_safe
-  boolean_false_icon = '<span class="label label-danger">&#x2718;</span>'.html_safe
+  boolean_true_icon = '<span class="badge bg-success"><span class="fas fa-check"></span></span>'.html_safe
+  boolean_false_icon = '<span class="badge bg-danger"><span class="fas fa-times"></span></span>'.html_safe
 
   config.actions do
     dashboard do
@@ -78,7 +78,7 @@ RailsAdmin.config do |config|
         field :title
         field(:date_sent)     { label 'Sent' }
         field(:date_received) { label 'Received' }
-        field(:created_at)    { label 'Submitted' }
+        field(:created_at)    { label 'Created' }
         field(:original_notice_id) { label 'Legacy NoticeID' }
         field :submission_id
         field :source
@@ -107,8 +107,13 @@ RailsAdmin.config do |config|
         field :title
         field :type
         field :published
-        field :date_received
-        field :date_sent
+        timestamps
+        field :date_received do
+          label 'Received'
+        end
+        field :date_sent do
+          label 'Sent'
+        end
         field :source
         field :subject
         field :review_required
@@ -211,11 +216,15 @@ RailsAdmin.config do |config|
           end
         end
 
-        configure(:works) do
+        configure :works do
           hide
         end
 
         configure :documents_update_notification_notice do
+          hide
+        end
+
+        configure :archived_token_urls do
           hide
         end
       end
@@ -583,6 +592,15 @@ RailsAdmin.config do |config|
       field :expiration_date
       field(:valid_forever) { label 'Permenent' }
       field :documents_notification
+    end
+  end
+
+  def timestamps
+    field :created_at do
+      label 'Created'
+    end
+    field :updated_at do
+      label 'Updated'
     end
   end
 end
