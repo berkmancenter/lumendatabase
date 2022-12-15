@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [22.12c](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.12c) - 2022-12-15
+### Fixed
+* Set default values for `boolean` db fields.
+
 ## [22.12b](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.12b) - 2022-12-13
 ### Fixed
 * Stopped running `.count` on associated models in the `edit view` in the `admin`.
