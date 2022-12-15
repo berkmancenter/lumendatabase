@@ -71,7 +71,7 @@ RailsAdmin.config do |config|
 
       list do
         # SELECT COUNT is slow when the number of instances is large; let's
-        # avoid calling it for Notice and its subclasses.
+        # avoid calling it.
         limited_pagination true
 
         field :id
@@ -263,6 +263,10 @@ RailsAdmin.config do |config|
         nested_form false
       end
     end
+
+    list do
+      limited_pagination true
+    end
   end
 
   config.model 'Entity' do
@@ -276,6 +280,7 @@ RailsAdmin.config do |config|
           parent && "#{parent.name} - ##{parent.id}"
         end
       end
+      limited_pagination true
     end
     edit do
       configure :kind, :enum do
@@ -329,6 +334,10 @@ RailsAdmin.config do |config|
       configure :youtube_import_file_location do
         hide
       end
+    end
+
+    list do
+      limited_pagination true
     end
   end
 
@@ -521,6 +530,12 @@ RailsAdmin.config do |config|
   config.model 'NoticeUpdateCall' do
     visible false
   end
+  config.model 'TopicAssignment' do
+    visible false
+  end
+  config.model 'TopicManager' do
+    visible false
+  end
   config.model 'ActiveStorage::Blob' do
     visible false
   end
@@ -571,6 +586,8 @@ RailsAdmin.config do |config|
 
   def token_url_config
     list do
+      limited_pagination true
+
       field :email
       field :user
       field :notice
