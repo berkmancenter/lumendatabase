@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_14_183651) do
+ActiveRecord::Schema.define(version: 2023_01_02_175424) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -316,6 +316,8 @@ ActiveRecord::Schema.define(version: 2022_12_14_183651) do
     t.datetime "file_updated_at"
     t.boolean "pdf_requested", default: false, null: false
     t.boolean "pdf_request_fulfilled", default: false, null: false
+    t.datetime "created_at", precision: 6
+    t.datetime "updated_at", precision: 6
     t.index ["notice_id"], name: "index_file_uploads_on_notice_id"
   end
 
@@ -338,6 +340,8 @@ ActiveRecord::Schema.define(version: 2022_12_14_183651) do
     t.string "name", null: false
     t.string "key", null: false
     t.string "value", null: false
+    t.datetime "created_at", precision: 6
+    t.datetime "updated_at", precision: 6
   end
 
   create_table "media_mentions", force: :cascade do |t|
@@ -460,6 +464,8 @@ ActiveRecord::Schema.define(version: 2022_12_14_183651) do
   create_table "relevant_questions", id: :serial, force: :cascade do |t|
     t.text "question", null: false
     t.text "answer", null: false
+    t.datetime "created_at", precision: 6
+    t.datetime "updated_at", precision: 6
   end
 
   create_table "relevant_questions_topics", id: :serial, force: :cascade do |t|
@@ -475,6 +481,8 @@ ActiveRecord::Schema.define(version: 2022_12_14_183651) do
     t.boolean "negated", default: false, null: false
     t.string "matching_type"
     t.integer "risk_trigger_id"
+    t.datetime "created_at", precision: 6
+    t.datetime "updated_at", precision: 6
     t.index ["risk_trigger_id"], name: "index_risk_trigger_conditions_on_risk_trigger_id"
   end
 
@@ -482,10 +490,14 @@ ActiveRecord::Schema.define(version: 2022_12_14_183651) do
     t.string "name", null: false
     t.string "matching_type", null: false
     t.string "comment"
+    t.datetime "created_at", precision: 6
+    t.datetime "updated_at", precision: 6
   end
 
   create_table "roles", id: :serial, force: :cascade do |t|
     t.string "name", null: false
+    t.datetime "created_at", precision: 6
+    t.datetime "updated_at", precision: 6
   end
 
   create_table "roles_users", id: :serial, force: :cascade do |t|
@@ -545,6 +557,8 @@ ActiveRecord::Schema.define(version: 2022_12_14_183651) do
     t.text "description", default: ""
     t.string "ancestry"
     t.integer "original_category_id"
+    t.datetime "created_at", precision: 6
+    t.datetime "updated_at", precision: 6
     t.index ["ancestry"], name: "index_topics_on_ancestry"
   end
 
