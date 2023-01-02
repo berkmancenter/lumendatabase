@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_02_175424) do
+ActiveRecord::Schema.define(version: 2023_01_02_190032) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -230,21 +230,6 @@ ActiveRecord::Schema.define(version: 2023_01_02_175424) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "copyrighted_urls", id: :serial, force: :cascade do |t|
-    t.string "url_original", limit: 8192, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string "url", limit: 8192
-    t.index ["url_original"], name: "index_copyrighted_urls_on_url_original", unique: true
-  end
-
-  create_table "copyrighted_urls_works", id: false, force: :cascade do |t|
-    t.integer "copyrighted_url_id", null: false
-    t.integer "work_id", null: false
-    t.index ["copyrighted_url_id"], name: "index_copyrighted_urls_works_on_copyrighted_url_id"
-    t.index ["work_id"], name: "index_copyrighted_urls_works_on_work_id"
-  end
-
   create_table "documents_update_notification_notices", id: :serial, force: :cascade do |t|
     t.integer "notice_id", null: false
     t.datetime "created_at"
@@ -319,21 +304,6 @@ ActiveRecord::Schema.define(version: 2023_01_02_175424) do
     t.datetime "created_at", precision: 6
     t.datetime "updated_at", precision: 6
     t.index ["notice_id"], name: "index_file_uploads_on_notice_id"
-  end
-
-  create_table "infringing_urls", force: :cascade do |t|
-    t.string "url_original", limit: 8192, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string "url", limit: 8192
-    t.index ["url_original"], name: "index_infringing_urls_on_url_original", unique: true
-  end
-
-  create_table "infringing_urls_works", id: false, force: :cascade do |t|
-    t.bigint "infringing_url_id", null: false
-    t.integer "work_id", null: false
-    t.index ["infringing_url_id"], name: "index_infringing_urls_works_on_infringing_url_id"
-    t.index ["work_id"], name: "index_infringing_urls_works_on_work_id"
   end
 
   create_table "lumen_settings", force: :cascade do |t|
@@ -429,13 +399,6 @@ ActiveRecord::Schema.define(version: 2023_01_02_175424) do
     t.integer "relevant_question_id"
     t.index ["notice_id"], name: "index_notices_relevant_questions_on_notice_id"
     t.index ["relevant_question_id"], name: "index_notices_relevant_questions_on_relevant_question_id"
-  end
-
-  create_table "notices_works", id: false, force: :cascade do |t|
-    t.integer "notice_id"
-    t.integer "work_id"
-    t.index ["notice_id"], name: "index_notices_works_on_notice_id"
-    t.index ["work_id"], name: "index_notices_works_on_work_id"
   end
 
   create_table "rails_admin_histories", id: :serial, force: :cascade do |t|
@@ -592,14 +555,6 @@ ActiveRecord::Schema.define(version: 2023_01_02_175424) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["widget_public_key"], name: "index_users_on_widget_public_key", unique: true
-  end
-
-  create_table "works", id: :serial, force: :cascade do |t|
-    t.text "description"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string "kind"
-    t.text "description_original"
   end
 
   create_table "youtube_import_errors", force: :cascade do |t|
