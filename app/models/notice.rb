@@ -124,6 +124,7 @@ class Notice < ApplicationRecord
 
   # == Scopes ===============================================================
   scope :top_notices_token_urls, -> { joins(:archived_token_urls).select('notices.*, COUNT(archived_token_urls.id) AS counted_archived_token_urls').group('notices.id') }
+  scope :with_attachments, -> { includes(:file_uploads).where.not(file_uploads: { id: nil }) }
 
   # == Aliases ==============================================================
   alias_attribute :tags, :tag_list

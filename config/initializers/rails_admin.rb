@@ -74,6 +74,8 @@ RailsAdmin.config do |config|
         # avoid calling it.
         limited_pagination true
 
+        scopes [nil, :with_attachments]
+
         field :id
         field :title
         field(:date_sent)     { label 'Sent' }
