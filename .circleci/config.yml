@@ -29,10 +29,11 @@ jobs:
       # CIRCLECI: true (which we use in tests) is set by circleci itself.
     executor: ruby/default
     steps:
-      - browser-tools/install-chrome
-      - browser-tools/install-chromedriver
       # Build app.
       - checkout
+
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
 
       # Install bundler dependencies.
       # We use handwritten commands rather than ruby/install-deps because:
