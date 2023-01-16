@@ -1,5 +1,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [23.01](https://github.com/berkmancenter/lumendatabase/releases/tag/2023.01) - 2023-01-03
+### Changed
+* Removed unused database tables.
+### Added
+* Added a new scope to the list `notices` view in the `admin` to be able to filter out notices with attachments only.
+
 ## [22.12c](https://github.com/berkmancenter/lumendatabase/releases/tag/2022.12c) - 2022-12-15
 ### Fixed
 * Set default values for `boolean` db fields.
