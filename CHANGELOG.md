@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [23.01a](https://github.com/berkmancenter/lumendatabase/releases/tag/2023.01a) - 2023-01-19
+### Changed
+* Updated the `rails` gem.
+
 ## [23.01](https://github.com/berkmancenter/lumendatabase/releases/tag/2023.01) - 2023-01-03
 ### Changed
 * Removed unused database tables.
