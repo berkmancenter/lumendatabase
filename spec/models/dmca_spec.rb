@@ -402,6 +402,6 @@ describe DMCA, type: :model do
 
         expect(notice).not_to be_on_behalf_of_principal
       end
-    end    
+    end
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_02_190032) do
+ActiveRecord::Schema.define(version: 2023_03_10_092957) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -267,7 +267,6 @@ ActiveRecord::Schema.define(version: 2023_01_02_190032) do
     t.index ["city"], name: "index_entities_on_city"
     t.index ["country_code"], name: "index_entities_on_country_code"
     t.index ["email"], name: "index_entities_on_email"
-    t.index ["name", "address_line_1", "city", "state", "zip", "country_code", "phone", "email"], name: "unique_entity_attribute_index", unique: true
     t.index ["name"], name: "index_entities_on_name"
     t.index ["phone"], name: "index_entities_on_phone"
     t.index ["state"], name: "index_entities_on_state"

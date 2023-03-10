@@ -108,6 +108,47 @@ describe Entity, type: :model do
     end
   end
 
+  context 'validating scoped name attribute' do
+    params = {
+      title: 'A title',
+      type: 'DMCA',
+      date_sent: '2013-05-22',
+      date_received: '2013-05-23',
+      works_attributes: [
+        {
+          description: 'The Lion King on YouTube',
+          infringing_urls_attributes: [
+            {
+              url: 'https://example.com'
+            }
+          ]
+        }
+      ],
+      entity_notice_roles_attributes: [
+        {
+          name: 'recipient',
+          entity_attributes: {
+            name: 'Google'
+          }
+        },
+        {
+          name: 'sender',
+          entity_attributes: {
+            name: 'The Sender'
+          }
+        }
+      ]
+    }
+
+    it 'doesn\'t validate a name of an existing entity when a duplicated entity is used but not updated' do
+      create_duplicated_entity
+
+      n = Notice.new(params)
+
+      expect(n.valid?).to eq true
+    end
+  end
+
   it_behaves_like 'an object with hierarchical relationships'
 
   private
@@ -125,5 +166,12 @@ describe Entity, type: :model do
 
     expect(entity.name).not_to include content
     expect(entity.name_original).to include content
+  end
+
+  def create_duplicated_entity
+    2.times do
+      e = Entity.new(name: 'The Sender')
+      e.save(validate: false)
+    end
   end
 end

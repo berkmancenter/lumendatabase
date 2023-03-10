@@ -50,8 +50,10 @@ class Entity < ApplicationRecord
   # == Validations ==========================================================
   validates :address_line_1, length: { maximum: 255 }
   validates_inclusion_of :kind, in: KINDS
-  validates_uniqueness_of :name,
-                          scope: ADDITIONAL_DEDUPLICATION_FIELDS
+  validates :name,
+            uniqueness: { scope: ADDITIONAL_DEDUPLICATION_FIELDS },
+            on: %i[create update],
+            if: -> { changed? || !persisted? }
 
   # == Callbacks ============================================================
   # Force search reindex on related notices
