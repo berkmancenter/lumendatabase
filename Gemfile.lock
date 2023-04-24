@@ -333,7 +333,7 @@ GEM
     parallel (1.22.1)
     parallel_tests (3.13.0)
       parallel
-    pg (1.1.4)
+    pg (1.5.1)
     pry (0.10.4)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -575,7 +575,7 @@ DEPENDENCIES
   oj
   paperclip (~> 5)
   parallel_tests
-  pg (~> 1.1.4)
+  pg
   pry (~> 0.10.4)
   pry-byebug
   pry-rails

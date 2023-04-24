@@ -29,7 +29,7 @@ gem 'oink'
 gem 'oj'
 # Pinned because the next step is migrating to ActiveStorage.
 gem 'paperclip', '~> 5'
-gem 'pg', '~> 1.1.4'
+gem 'pg'
 gem 'rack'
 gem 'rack-attack'
 gem 'rack-mini-profiler'
