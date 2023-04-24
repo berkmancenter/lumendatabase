@@ -178,10 +178,10 @@ GEM
     dotenv-rails (2.8.1)
       dotenv (= 2.8.1)
       railties (>= 3.2)
-    elasticsearch (7.17.1)
-      elasticsearch-api (= 7.17.1)
-      elasticsearch-transport (= 7.17.1)
-    elasticsearch-api (7.17.1)
+    elasticsearch (7.17.7)
+      elasticsearch-api (= 7.17.7)
+      elasticsearch-transport (= 7.17.7)
+    elasticsearch-api (7.17.7)
       multi_json
     elasticsearch-extensions (0.0.33)
       ansi
@@ -191,7 +191,7 @@ GEM
       elasticsearch (~> 7)
       hashie
     elasticsearch-rails (7.2.1)
-    elasticsearch-transport (7.17.1)
+    elasticsearch-transport (7.17.7)
       faraday (~> 1)
       multi_json
     erubi (1.12.0)
@@ -201,7 +201,7 @@ GEM
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
-    faraday (1.10.2)
+    faraday (1.10.3)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
       faraday-excon (~> 1.1)
@@ -301,7 +301,7 @@ GEM
     minitest (5.18.0)
     msgpack (1.6.0)
     multi_json (1.15.0)
-    multipart-post (2.2.3)
+    multipart-post (2.3.0)
     neat (1.6.0)
       bourbon (>= 3.1)
       sass (>= 3.3)
