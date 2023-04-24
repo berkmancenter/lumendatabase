@@ -54,6 +54,7 @@ gem 'elasticsearch-rails', '~> 7.0'
 
 group :development do
   gem 'allocation_tracer'
+  gem 'bundle-audit'
   gem 'derailed'
   gem 'memory_profiler'
 end
