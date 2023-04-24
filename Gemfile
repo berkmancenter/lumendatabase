@@ -26,6 +26,7 @@ gem 'kaminari'
 gem 'logstash-logger'
 gem 'mime-types'
 gem 'oink'
+gem 'oj'
 # Pinned because the next step is migrating to ActiveStorage.
 gem 'paperclip', '~> 5'
 gem 'pg', '~> 1.1.4'
