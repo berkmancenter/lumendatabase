@@ -55,8 +55,6 @@ describe Entity, type: :model do
 
       notice.reload
 
-      puts notice.inspect
-
       previous_updated_at = notice.updated_at
       entity = notice.entities.first
       entity.name = 'transparent change'
