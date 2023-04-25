@@ -51,7 +51,7 @@ namespace :lumen do
       ReindexRun.sweep_search_result_caches
 
       loggy.info "index_notices done hidden: true, count: #{count}, time: #{Time.now.to_i}"
-    rescue => e
+    rescue StandardError => e
       loggy.error "index_notices hidden: true, error: #{e.inspect}"
     end
   end
@@ -118,7 +118,7 @@ namespace :lumen do
       ReindexRun.sweep_search_result_caches
 
       loggy.info "index_notices done entity_id: #{args[:entity_id]}, count: #{count}, time: #{Time.now.to_i}"
-    rescue => e
+    rescue StandardError => e
       loggy.error "index_notices entity_id: #{args[:entity_id]}, error: #{e.inspect}"
     end
   end
@@ -143,19 +143,19 @@ namespace :lumen do
       ReindexRun.sweep_search_result_caches
 
       loggy.info "index_notices done date: #{args[:date]}, count: #{count}, time: #{Time.now.to_i}"
-    rescue => e
+    rescue StandardError => e
       loggy.error "index_notices error date: #{args[:date]}, error: #{e.inspect}"
     end
   end
 
   desc 'Recreate elasticsearch index for notices of a given month'
-  task :index_notices_by_month, [:month, :year] => :environment do |_t, args|
+  task :index_notices_by_month, %i[month year] => :environment do |_t, args|
     loggy = Loggy.new('rake lumen:index_notices_by_month', true)
 
     begin
       batch_size = (ENV['BATCH_SIZE'] || 192).to_i
 
-      notices = Notice.where("extract( year from created_at ) = #{args[:year]} and extract( month from created_at ) = #{args[ :month ]}")
+      notices = Notice.where("extract( year from created_at ) = #{args[:year]} and extract( month from created_at ) = #{args[:month]}")
       loggy.info "index_notices date: #{args[:year]}-#{args[:month]}, total: #{notices.count}"
 
       count = 0
@@ -168,7 +168,7 @@ namespace :lumen do
       ReindexRun.sweep_search_result_caches
 
       loggy.info "index_notices done date: #{args[:year]}-#{args[:month]}, count: #{count}, time: #{Time.now.to_i}"
-    rescue => e
+    rescue StandardError => e
       loggy.error "index_notices date: #{args[:year]}-#{args[:month]}, error: #{e.inspect}"
     end
   end
@@ -193,7 +193,7 @@ namespace :lumen do
       ReindexRun.sweep_search_result_caches
 
       loggy.info "index_notices done date: #{args[:year]}, count: #{count}, time: #{Time.now.to_i}"
-    rescue => e
+    rescue StandardError => e
       loggy.error "index_notices date: #{args[:year]}, error: #{e.inspect}"
     end
   end
@@ -218,7 +218,7 @@ namespace :lumen do
         end
       end
       ReindexRun.sweep_search_result_caches
-    rescue => e
+    rescue StandardError => e
       loggy.error "Reindexing did not succeed because: #{e.inspect}"
     end
   end
@@ -229,7 +229,7 @@ namespace :lumen do
 
     begin
       batch_size = (ENV['BATCH_SIZE'] || 100).to_i
-      from = Date.parse(ENV['from'], '%Y-%m-%d') if ENV['from']
+      from = Date.parse(ENV['RAKE_CREATE_ELASTICSEARCH_INDEX_FOR_UPDATED_INSTANCES_FROM'], '%Y-%m-%d') if ENV['RAKE_CREATE_ELASTICSEARCH_INDEX_FOR_UPDATED_INSTANCES_FROM']
 
       if from.nil?
         error = '"from" parameter is missing (correct format %Y-%m-%d)'
@@ -253,7 +253,7 @@ namespace :lumen do
         end
       end
       ReindexRun.sweep_search_result_caches
-    rescue => e
+    rescue StandardError => e
       loggy.error "Reindexing did not succeed because: #{e.inspect}"
     end
   end
@@ -280,7 +280,7 @@ namespace :lumen do
         notice.update_attribute(:title, new_title)
         puts '.'
       end
-    rescue => e
+    rescue StandardError => e
       loggy.warn "Titling did not succeed because: #{e.inspect}"
     end
   end
@@ -317,7 +317,7 @@ namespace :lumen do
         notice.hidden = true
         notice.save!
         successful += 1
-      rescue
+      rescue StandardError
         failed += 1
       end
 
@@ -386,7 +386,7 @@ namespace :lumen do
           obj.__elasticsearch__.index_document
         end
       end
-    rescue => e
+    rescue StandardError => e
       loggy.info "Reindexing did not succeed because: #{e.inspect}"
     end
   end
@@ -434,6 +434,7 @@ where notices.id in (
       notices.find_in_batches do |group|
         group.each do |notice|
           next unless notice.sender.present?
+
           redactor = InstanceRedactor::EntityNameRedactor.new(notice.sender.name)
           notice.works.each do |work|
             work.update(
@@ -448,7 +449,7 @@ where notices.id in (
           end
         end
       end
-    rescue => e
+    rescue StandardError => e
       loggy.warn "reassigning did not succeed because: #{e.inspect}"
     end
   end
@@ -459,7 +460,7 @@ where notices.id in (
 
     begin
       entities = Entity.where("entities.name ilike '%Google%'")
-      entities.each.with_index(1) do |e, i|
+      entities.each.with_index(1) do |e, _i|
         notices = e.notices.includes(
           works: %i[infringing_urls copyrighted_urls]
         ).where(
@@ -473,6 +474,7 @@ where notices.id in (
         notices.find_in_batches do |group|
           group.each do |notice|
             next unless notice.sender.present?
+
             redactor = InstanceRedactor::EntityNameRedactor.new(notice.sender.name)
             notice.works.each do |work|
               work.update(
@@ -490,7 +492,7 @@ where notices.id in (
         end
         p.finish unless p.finished?
       end
-    rescue => e
+    rescue StandardError => e
       loggy.warn "reassigning did not succeed because: #{e.inspect}"
     end
   end
@@ -708,9 +710,7 @@ where works.id in (
 
     loggy.info 'Starting a new task run'
 
-    if DocumentsUpdateNotificationNotice.all.empty?
-      loggy.info 'No scheduled notifications, nothing to process'
-    end
+    loggy.info 'No scheduled notifications, nothing to process' if DocumentsUpdateNotificationNotice.all.empty?
 
     DocumentsUpdateNotificationNotice.all.each do |doc_notification|
       loggy.info "Starting processing notice ##{doc_notification.notice.id}"
@@ -727,7 +727,8 @@ where works.id in (
           token_url.email, token_url, doc_notification.notice
         ).deliver_now
 
-        token_url.update_attribute(:expiration_date, Time.now + LumenSetting.get_i('truncation_token_urls_active_period').seconds)
+        token_url.update_attribute(:expiration_date,
+                                   Time.now + LumenSetting.get_i('truncation_token_urls_active_period').seconds)
       end
 
       loggy.info "Finishing processing notice ##{doc_notification.notice.id}"
@@ -773,9 +774,7 @@ where works.id in (
       end
     end
 
-    unless args[:entities_index_name].nil?
-      Entity.index_name args[:entities_index_name]
-    end
+    Entity.index_name args[:entities_index_name] unless args[:entities_index_name].nil?
 
     reindexing_timestamp_file = Rails.root.join('tmp', 'reindexing_timestamp')
     loggy = Loggy.new('rake lumen:run_catchup_es_indexing', true)
@@ -807,7 +806,7 @@ where works.id in (
         end
       end
       ReindexRun.sweep_search_result_caches
-    rescue => e
+    rescue StandardError => e
       loggy.error('Reindexing did not succeed because: ' + e.inspect)
     end
   end
@@ -830,7 +829,8 @@ where works.id in (
 
     batch_size = 100
 
-    TokenUrl.where(valid_forever: false).where('expiration_date < ?', Time.now).find_in_batches(batch_size: batch_size) do |token_urls|
+    TokenUrl.where(valid_forever: false).where('expiration_date < ?',
+                                               Time.now).find_in_batches(batch_size: batch_size) do |token_urls|
       # Force garbage collection to avoid OOM
       GC.start
       token_urls.each do |token_url|
@@ -866,9 +866,13 @@ where works.id in (
       loggy.info "Importing '#{row['Title']}'"
 
       date = ''
-      date = Date.strptime(row['Date'], '%m/%d/%Y') if row['Date'] if row['Date'] && row['Date'].count('/') == 2
-      date = Date.strptime("01/#{row['Date']}", '%d/%m/%Y') if row['Date'] if row['Date'] && row['Date'].count('/') == 1
-      date = Date.strptime("01/01/#{row['Date']}", '%m/%d/%Y') if row['Date'] if row['Date'] && row['Date'].length == 4
+      date = Date.strptime(row['Date'], '%m/%d/%Y') if row['Date'] && row['Date'].count('/') == 2 && (row['Date'])
+      if row['Date'] && row['Date'].count('/') == 1 && (row['Date'])
+        date = Date.strptime("01/#{row['Date']}", '%d/%m/%Y')
+      end
+      if row['Date'] && row['Date'].length == 4 && (row['Date'])
+        date = Date.strptime("01/01/#{row['Date']}", '%m/%d/%Y')
+      end
 
       new_mentions << {
         title: row['Title'],
@@ -955,10 +959,12 @@ where works.id in (
           urls = []
           notice.file_uploads.each do |file_upload|
             content = File.read(file_upload.file.path)
-            if content.include? 'url_box'
-              file_urls = content.scan(/^url_box:(.+?)\r\n/).flatten.select { |url_box_result| url_box_result.strip =~ URI::DEFAULT_PARSER.make_regexp }
-              urls.concat file_urls
+            next unless content.include? 'url_box'
+
+            file_urls = content.scan(/^url_box:(.+?)\r\n/).flatten.select do |url_box_result|
+              url_box_result.strip =~ URI::DEFAULT_PARSER.make_regexp
             end
+            urls.concat file_urls
           end
 
           urls.uniq!
@@ -988,7 +994,7 @@ where works.id in (
     batch_size = 100
 
     NoticeUpdateCall.where(status: 'new').each do |notice_update_call|
-      next unless ['work', 'entity', 'topic'].include?(notice_update_call.caller_type)
+      next unless %w[work entity topic].include?(notice_update_call.caller_type)
 
       loggy.info "Processing NoticeUpdateCall id=#{notice_update_call.id}"
 

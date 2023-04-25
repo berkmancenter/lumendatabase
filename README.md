@@ -124,7 +124,7 @@ may use chillingeffects.org rather than lumendatabase.org.
 The integration tests are quite slow; for some development purposes you may
 find it more convenient to `bundle exec rspec spec/ --exclude-pattern="spec/integration/*"`.
 
-If `elasticsearch` isn't on your $PATH, set `ENV['TEST_CLUSTER_COMMAND']=/path/to/elasticsearch`, and make sure permissions are set correctly for your test suite to run it.
+If `elasticsearch` isn't on your $PATH, set `ENV['TEST_ES_CLUSTER_COMMAND']=/path/to/elasticsearch`, and make sure permissions are set correctly for your test suite to run it.
 
 If you're running a subset of tests that you know don't require Elasticsearch,
 you can run them without setting it up via
@@ -152,7 +152,7 @@ Use rubocop and leave the code at least as clean as you found it. If you make li
   * in-depth memory profiling, stacktracing, and SQL queries; good for granular analysis
 * [oink](https://github.com/noahd1/oink)
   * memory usage, allocations
-  * runs in dev by default; can run anywhere by setting `ENV[LUMEN_USE_OINK]` (ok to run in production)
+  * runs in dev by default; can run anywhere by setting `ENV[USE_OINK]` (ok to run in production)
   * logs to `log/oink.log`
 
 #### Environment variables
@@ -166,24 +166,23 @@ Unless setting an environment variable on the command line in the context of a c
 Most of these are optional and have sensible defaults (which may vary by environment).
 
 - `BATCH_SIZE` - batch size of model items indexed during each run of Elasticsearch re-indexing
-- `BUNDLE_GEMFILE`
+- `BUNDLE_GEMFILE` - custom Gemfile location
 - `BROWSER_VALIDATIONS` - enable user html5 browser form validations
 - `DEFAULT_SENDER` - default mailer sender
-- `ELASTICSEARCH_URL`
-- `EMAIL_DOMAIN`
+- `ELASTICSEARCH_URL` - Elasticsearch host, e.g. https://127.0.0.1:9200
+- `EMAIL_DOMAIN` - default email domain in Action Mailer.
 - `ES_INDEX_SUFFIX` - can be used to specify a suffix for the name of elasticsearch indexes
 - `FILE_NAME` - name of csv file to import as blog entries
-- `from` - a date formatted `'%Y-%m-%d'` for use in recreating elasticsearch indexes after said date
-- `GOOGLE_CUSTOM_BLOG_SEARCH_ID`
-- `IMPORT_NAME`
-- `LOG_ELASTICSEARCH` - only used in tests
+- `RAKE_CREATE_ELASTICSEARCH_INDEX_FOR_UPDATED_INSTANCES_FROM` - a date formatted `'%Y-%m-%d'` for use in recreating elasticsearch indexes after said date
+- `GOOGLE_CUSTOM_BLOG_SEARCH_ID` - custom Google search ID used in the CMS
+- `LOG_ELASTICSEARCH` - enabled logging of Elasticsearch calls, only used in tests
 - `LOG_TO_LOGSTASH_FORMAT` - set to true if you want to log in the Logstash format
-- `LUMEN_USE_OINK`
-- `MAILER_DELIVERY_METHOD`
+- `USE_OINK` - enable the `oink` gem in the production environment
+- `MAILER_DELIVERY_METHOD` - sets the delivery method for emails sent by the application
 - `NOTICE_COUNT` - how many fake notices to create when seeding the db
 - `RACK_ENV` - don't use this; it's overridden by `RAILS_ENV`
-- `RAILS_ENV`
-- `RAILS_LOG_LEVEL`
+- `RAILS_ENV` - Rails environment
+- `RAILS_LOG_LEVEL` - log level for all the application loggers
 - `RAILS_SERVE_STATIC_FILES` - if present (with any value) will enable rails to serve static files
 - `RECAPTCHA_SITE_KEY` - reCAPTCHA public key
 - `RECAPTCHA_SECRET_KEY` - reCAPTCHA private key
@@ -198,21 +197,12 @@ Most of these are optional and have sensible defaults (which may vary by environ
 - `SMTP_USERNAME` - SMTP server username
 - `SMTP_PASSWORD` - SMTP server password
 - `SMTP_PORT` - SMTP server port
-- `SMTP_VERIFY_MODE`
-- `TEST_CLUSTER_COMMAND`
+- `SMTP_VERIFY_MODE` - value of the `openssl_verify_mode` option of the SMTP client
+- `TEST_ES_CLUSTER_COMMAND` - path to an Elasticsearch binary used during a test suite run
 - `USER_CRON_EMAIL` - for use in sending reports of court order files; can be a string or a list (in a JSON.parse-able format)
-- `USER_CRON_MAGIC_DIR`
+- `USER_CRON_MAGIC_DIR` - directory used in the court order reporter cron job
 - `WEB_CONCURRENCY` - number of Unicorn workers
 - `WEB_TIMEOUT` - Unicorn timeout
-- The following are used only for imports from oldchill:
-  - `BASE_DIRECTORY`
-  - `MYSQL_DATABASE`
-  - `MYSQL_HOST`
-  - `MYSQL_USERNAME`
-  - `MYSQL_PASSWORD`
-  - `MYSQL_PORT`
-  - `RESTART_SEQUENCE_WITH` - for compatibility between oldchill imports and new Lumen notices. Should not ever be needed at this point, nor have any effect in production.
-  - `WHERE`
 
 #### Email setup
 

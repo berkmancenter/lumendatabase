@@ -13,8 +13,8 @@ RSpec.configure do |config|
     cluster_name: "cluster#{ENV['TEST_ENV_NUMBER']}",
     path_data: "/tmp/elasticsearch_test#{ENV['TEST_ENV_NUMBER']}"
   }
-  if ENV['TEST_CLUSTER_COMMAND'].present?
-    es_options[:command] = ENV['TEST_CLUSTER_COMMAND']
+  if ENV['TEST_ES_CLUSTER_COMMAND'].present?
+    es_options[:command] = ENV['TEST_ES_CLUSTER_COMMAND']
   end
 
   searchable_models = [Notice, Entity]
