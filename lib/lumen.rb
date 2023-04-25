@@ -1,4 +1,6 @@
 require_relative './lumen_logger'
+require 'countries/version'
+require 'countries/iso3166'
 require 'dotenv/load'
 
 module Lumen
@@ -26,4 +28,6 @@ module Lumen
       lumen_logger_event_customize.call(event)
     end
   )
+
+  ISO_COUNTRIES_FOR_SELECT = ::ISO3166::Country.translations.invert.transform_values(&:downcase)
 end

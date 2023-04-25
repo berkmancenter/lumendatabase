@@ -402,7 +402,7 @@ feature 'typed notice submissions' do
 
     expect(page).to have_words('Notice Type: Counterfeit')
 
-    principal_country = ::CountrySelect::ISO_COUNTRIES_FOR_SELECT[
+    principal_country = Lumen::ISO_COUNTRIES_FOR_SELECT[
       countries['principal']
     ].upcase
 

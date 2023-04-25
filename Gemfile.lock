@@ -128,9 +128,8 @@ GEM
     comfy_bootstrap_form (4.0.9)
       rails (>= 5.0.0)
     concurrent-ruby (1.2.2)
-    countries (5.1.2)
-      sixarm_ruby_unaccent (~> 1.1)
-    country_select (1.2.0)
+    countries (5.4.0)
+      unaccent (~> 0.3)
     coveralls (0.8.23)
       json (>= 1.8, < 3)
       simplecov (~> 0.16.1)
@@ -475,7 +474,6 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
-    sixarm_ruby_unaccent (1.2.0)
     slop (3.6.0)
     sprockets (4.2.0)
       concurrent-ruby (~> 1.0)
@@ -511,6 +509,7 @@ GEM
       tilt (>= 1.4, < 3)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    unaccent (0.4.0)
     vcr (6.1.0)
     warden (1.2.9)
       rack (>= 2.0.9)
@@ -548,7 +547,6 @@ DEPENDENCIES
   coffee-rails
   comfortable_mexican_sofa
   countries
-  country_select (~> 1.2.0)
   coveralls (~> 0.8.0)
   curb
   database_cleaner

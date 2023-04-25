@@ -30,7 +30,7 @@
           label_html: { class: 'half-width' },
           input_html: placeholder_text(current_user, role, :zip) %>
         <%= entity_form.input :country_code,
-          { collection: iso_countries, label: Translation.t('notice_new_roles_country') }.merge(
+          { collection: Lumen::ISO_COUNTRIES_FOR_SELECT, label: Translation.t('notice_new_roles_country') }.merge(
             placeholder_country(current_user, role)
           ) %>
         <%= entity_form.input :phone, label: Translation.t('notice_new_roles_phone'),

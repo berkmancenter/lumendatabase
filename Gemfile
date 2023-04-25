@@ -7,12 +7,7 @@ gem 'bootsnap'
 gem 'bootstrap-datepicker-rails'
 gem 'cancancan'
 gem 'comfortable_mexican_sofa'
-gem 'countries'
-# country_select has breaking changes in 2.x:
-# https://github.com/stefanpenner/country_select/blob/master/UPGRADING.md
-# It also removes CountrySelect::ISO_COUNTRIES_FOR_SELECT in 1.3, which is a
-# breaking change for us.
-gem 'country_select', '~> 1.2.0'
+gem 'countries', require: false
 gem 'coveralls', '~> 0.8.0', require: false
 gem 'date_validator'
 gem 'devise'

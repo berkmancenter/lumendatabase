@@ -27,7 +27,7 @@
           <%= f.input :entity_zip, label: 'Zip Code',
             label_html: { class: 'half-width' } %>
           <%= f.input :entity_country_code,
-            { collection: ::CountrySelect::ISO_COUNTRIES_FOR_SELECT, label: 'Country' } %>
+            { collection: Lumen::ISO_COUNTRIES_FOR_SELECT, label: 'Country' } %>
           <%= f.input :entity_email, label: 'Email' %>
           <%= f.input :entity_phone, label: 'Phone' %>
           <%= f.input :entity_url, label: 'URL' %>
