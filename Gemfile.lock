@@ -439,7 +439,7 @@ GEM
       rspec-core (>= 2, < 4, != 2.12.0)
     rss (0.2.9)
       rexml
-    ruby-prof (1.4.3)
+    ruby-prof (1.6.3)
     ruby-statistics (3.0.0)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
@@ -612,4 +612,4 @@ DEPENDENCIES
   webrick
 
 BUNDLED WITH
-   2.2.25
+   2.4.12

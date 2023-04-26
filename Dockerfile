@@ -1,4 +1,4 @@
-FROM ruby:3.0.2
+FROM ruby:3.0.6
 
 WORKDIR /root
 
@@ -27,6 +27,10 @@ RUN groupadd --gid $USER_GID $USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
 
 USER $USERNAME
+
+# Use the latest bundler version
+RUN gem update --system
+RUN gem update bundler
 
 # Install and cache gems
 WORKDIR /

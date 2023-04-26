@@ -9,7 +9,7 @@ jobs:
     docker:
       # Use this image rather than the base because we need browsers for
       # integration testing.
-      - image: cimg/ruby:3.0.2-browsers
+      - image: cimg/ruby:3.0.6-browsers
       - image: cimg/postgres:9.6
         environment:
           POSTGRES_USER: postgres
