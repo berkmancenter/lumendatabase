@@ -1,5 +1,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [23.04b](https://github.com/berkmancenter/lumendatabase/releases/tag/2023.04b) - 2023-04-26
+### Changed
+* Started using a new `JSON parser` called `oj`.
+* Started a `Gemfile` cleanup.
+
 ## [23.04a](https://github.com/berkmancenter/lumendatabase/releases/tag/2023.04a) - 2023-04-17
 ### Changed
 * Updated minor versions of `nokogiri`, `rails_admin`, `devise` and `simple_form`.
