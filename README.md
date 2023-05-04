@@ -15,7 +15,7 @@ Development
 
 #### Stack
 
-* ruby 3.0.2
+* ruby 3.0.6
 * PostgreSQL 13.6
 * Elasticsearch 7.17.x
 * Java Runtime Environment (OpenJDK works fine)
@@ -165,51 +165,52 @@ Unless setting an environment variable on the command line in the context of a c
 
 Most of these are optional and have sensible defaults (which may vary by environment).
 
-- `BATCH_SIZE` - batch size of model items indexed during each run of Elasticsearch re-indexing
-- `BUNDLE_GEMFILE` - custom Gemfile location
-- `BROWSER_VALIDATIONS` - enable user html5 browser form validations
-- `DEFAULT_SENDER` - default mailer sender
-- `ELASTICSEARCH_URL` - Elasticsearch host, e.g. https://127.0.0.1:9200
-- `EMAIL_DOMAIN` - default email domain in Action Mailer.
-- `ES_INDEX_SUFFIX` - can be used to specify a suffix for the name of elasticsearch indexes
-- `FILE_NAME` - name of csv file to import as blog entries
-- `RAKE_CREATE_ELASTICSEARCH_INDEX_FOR_UPDATED_INSTANCES_FROM` - a date formatted `'%Y-%m-%d'` for use in recreating elasticsearch indexes after said date
-- `GOOGLE_CUSTOM_BLOG_SEARCH_ID` - custom Google search ID used in the CMS
-- `LOG_ELASTICSEARCH` - enabled logging of Elasticsearch calls, only used in tests
-- `LOG_TO_LOGSTASH_FORMAT` - set to true if you want to log in the Logstash format
-- `USE_OINK` - enable the `oink` gem in the production environment
-- `MAILER_DELIVERY_METHOD` - sets the delivery method for emails sent by the application
-- `NOTICE_COUNT` - how many fake notices to create when seeding the db
-- `RACK_ENV` - don't use this; it's overridden by `RAILS_ENV`
-- `RAILS_ENV` - Rails environment
-- `RAILS_LOG_LEVEL` - log level for all the application loggers
-- `RAILS_SERVE_STATIC_FILES` - if present (with any value) will enable rails to serve static files
-- `RECAPTCHA_SITE_KEY` - reCAPTCHA public key
-- `RECAPTCHA_SECRET_KEY` - reCAPTCHA private key
-- `RETURN_PATH` - default mailer return path
-- `SEARCH_SLEEP` - used in specs only, time out of Elasticsearch searches
-- `SECRET_KEY_BASE` - the Rails secret token; _required in prod_
-- `SERVER_TIME_ZONE` - name of the server's timezone eg. `Eastern Time (US & Canada)`
-- `SITE_HOST` - site host, used in mailer templates
-- `SKIP_FAKE_DATA` - don't generate fake data when seeding the database
-- `SMTP_ADDRESS` - SMTP server address
-- `SMTP_DOMAIN` - SMTP server domain
-- `SMTP_USERNAME` - SMTP server username
-- `SMTP_PASSWORD` - SMTP server password
-- `SMTP_PORT` - SMTP server port
-- `SMTP_VERIFY_MODE` - value of the `openssl_verify_mode` option of the SMTP client
-- `TEST_ES_CLUSTER_COMMAND` - path to an Elasticsearch binary used during a test suite run
-- `USER_CRON_EMAIL` - for use in sending reports of court order files; can be a string or a list (in a JSON.parse-able format)
-- `USER_CRON_MAGIC_DIR` - directory used in the court order reporter cron job
-- `WEB_CONCURRENCY` - number of Unicorn workers
-- `WEB_TIMEOUT` - Unicorn timeout
+| Variable name                                        | Description                                                                                                               |
+| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `BATCH_SIZE`                                         | Batch size of model items indexed during each run of Elasticsearch re-indexing                                          |
+| `BUNDLE_GEMFILE`                                     | Custom Gemfile location                                                                                                    |
+| `BROWSER_VALIDATIONS`                                | Enable user HTML5 browser form validations                                                                                |
+| `DEFAULT_SENDER`                                     | Default mailer sender                                                                                                      |
+| `ELASTICSEARCH_URL`                                  | Elasticsearch host, e.g. https://127.0.0.1:9200                                                                           |
+| `EMAIL_DOMAIN`                                       | Default email domain in Action Mailer                                                                                      |
+| `ES_INDEX_SUFFIX`                                    | Can be used to specify a suffix for the name of Elasticsearch indexes                                                      |
+| `FILE_NAME`                                          | Name of CSV file to import as blog entries                                                                                 |
+| `GOOGLE_CUSTOM_BLOG_SEARCH_ID`                       | Custom Google search ID used in the CMS                                                                                    |
+| `LOG_ELASTICSEARCH`                                  | Enabled logging of Elasticsearch calls, only used in tests                                                                 |
+| `LOG_TO_LOGSTASH_FORMAT`                             | Set to true if you want to log in the Logstash format                                                                      |
+| `USE_OINK`                                           | Enable the `oink` gem in the production environment                                                                       |
+| `MAILER_DELIVERY_METHOD`                             | Sets the delivery method for emails sent by the application                                                               |
+| `NOTICE_COUNT`                                       | How many fake notices to create when seeding the db                                                                        |
+| `RACK_ENV`                                           | Don't use this; it's overridden by `RAILS_ENV`                                                                             |
+| `RAILS_ENV`                                          | Rails environment                                                                                                          |
+| `RAILS_LOG_LEVEL`                                    | Log level for all the application loggers                                                                                  |
+| `RAILS_SERVE_STATIC_FILES`                           | If present (with any value) will enable Rails to serve static files                                                        |
+| `RECAPTCHA_SITE_KEY`                                 | reCAPTCHA public key                                                                                                       |
+| `RECAPTCHA_SECRET_KEY`                               | reCAPTCHA private key                                                                                                      |
+| `RETURN_PATH`                                        | Default mailer return path                                                                                                 |
+| `SEARCH_SLEEP`                                       | Used in specs only, time out of Elasticsearch searches                                                                     |
+| `SECRET_KEY_BASE`                                    | The Rails secret token; _required in prod_                                                                                 |
+| `SERVER_TIME_ZONE`                                   | Name of the server's timezone, e.g. `Eastern Time (US & Canada)`                                                           |
+| `SITE_HOST`                                          | Site host, used in mailer templates                                                                                         |
+| `SKIP_FAKE_DATA`                                     | Don't generate fake data when seeding the database                                                                         |
+| `SMTP_ADDRESS`                                       | SMTP server address                                                                                                        |
+| `SMTP_DOMAIN`                                        | SMTP server domain                                                                                                         |
+| `SMTP_USERNAME`                                      | SMTP server username                                                                                                       |
+| `SMTP_PASSWORD`                                      | SMTP server password                                                                                                       |
+| `SMTP_PORT`                                          | SMTP server port                                                                                                           |
+| `SMTP_VERIFY_MODE`                                   | Value of the `openssl_verify_mode` option of the SMTP client                                                               |
+| `TEST_ES_CLUSTER_COMMAND`                            | Path to an Elasticsearch binary used during a test suite run                                                                |
+| `USER_CRON_EMAIL`                                    | For use in sending reports of court order files; can be a string or a list (in a JSON.parse-able format)                   |
+| `USER_CRON_MAGIC_DIR`                                | Directory used in the court order reporter cron job                                                                        |
+| `WEB_CONCURRENCY`                                    | Number of Unicorn workers                                                                                                  |
+| `WEB_TIMEOUT`                                        | Unicorn timeout                                                                                                            |
 
 #### Email setup
 
 The application requires a mail server, in development it's best to use a local SMTP server that will catch all outgoing emails. [Mailcatcher](https://mailcatcher.me) is a good option.
 
-Ephemera
-========
+Blog custom search
+==================
 
 The `/blog_entries` page can contain a google custom search engine that
 searches the Lumen blog. To enable, create a custom search engine
