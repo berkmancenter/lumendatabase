@@ -7,6 +7,7 @@ require 'rails/all'
 require 'active_storage/engine'
 
 require_relative '../lib/lumen'
+require_relative '../lib/database_utils'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -109,5 +110,9 @@ module Chill
     config.active_record.yaml_column_permitted_classes = [Symbol]
 
     config.logger = Lumen::LOGGER
+
+    config.to_prepare do
+      ActiveRecord::Base.singleton_class.include(DatabaseUtils)
+    end
   end
 end

@@ -14,6 +14,8 @@ RSpec.configure do |config|
     path_data: "/tmp/elasticsearch_test#{ENV['TEST_ENV_NUMBER']}"
   }
   if ENV['TEST_ES_CLUSTER_COMMAND'].present?
+    # TEST_CLUSTER_COMMAND is read by the elasticsearch-rails gem
+    ENV['TEST_CLUSTER_COMMAND'] = ENV['TEST_ES_CLUSTER_COMMAND']
     es_options[:command] = ENV['TEST_ES_CLUSTER_COMMAND']
   end
 
