@@ -4,13 +4,14 @@ services:
   postgres:
     image: 'postgres:13.6-alpine'
     volumes:
-      - 'postgres:/var/lib/postgresql/data'
       - '.:/app'
+    tmpfs:
+      - '/var/lib/postgresql/data'
     env_file:
-      - '.env'
+      - '.env.test'
     environment:
-      POSTGRES_USER: ${DATABASE_DEV_USERNAME}
-      POSTGRES_PASSWORD: ${DATABASE_DEV_PASSWORD}
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
 
   website:
     depends_on:
@@ -21,11 +22,8 @@ services:
       - '1080:1080'
     volumes:
       - '.:/app'
-      - docker_website_bash_history:/home/lumen/hist
     env_file:
-      - '.env'
-    environment:
-      HISTFILE: /home/lumen/hist/.bash_history
+      - '.env.test'
 
   elasticsearch:
     image: elasticsearch:7.17.0
@@ -34,8 +32,8 @@ services:
       - transport.host=0.0.0.0
       - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
       - discovery.type=single-node
-    volumes:
-      - esdata:/usr/share/elasticsearch/data
+    tmpfs:
+      - /usr/share/elasticsearch/data
     ports:
       - 9200:9200
       - 9300:9300
@@ -57,19 +55,15 @@ services:
 
   logstash:
     env_file:
-      - '.env'
+      - '.env.test'
     depends_on:
       - 'elasticsearch'
+      - 'postgres'
     image: logstash:7.17.0
     command: logstash --path.settings /app/script/search_indexing/
     volumes:
       - '.:/app:ro'
-      - logstash:/usr/share/logstash/data
+    tmpfs:
+      - /user/share/logstash/data
     environment:
       LS_JAVA_OPTS: "-Xmx2g -Xms2g"
-
-volumes:
-  postgres:
-  esdata:
-  logstash:
-  docker_website_bash_history:

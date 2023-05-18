@@ -34,6 +34,7 @@ class SearchController < ApplicationController
     @searcher = item_searcher
     @searchdata = @searcher.search
     @wrapped_instances = wrap_instances
+    puts @searchdata.response.as_json
 
     LumenLogger.log_metrics('SEARCHED', search_details: meta_hash_for(@searchdata).except(:facets))
 

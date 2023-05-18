@@ -1,10 +1,11 @@
 module SearchHelpers
 
   def index_changed_instances
-    ReindexRun.index_changed_model_instances
+    #ReindexRun.index_changed_model_instances
     # wait for indexing to complete
-    Entity.__elasticsearch__.refresh_index!
-    Notice.__elasticsearch__.refresh_index!
+    #Entity.__elasticsearch__.refresh_index!
+    #Notice.__elasticsearch__.refresh_index!
+    sleep()
   end
 
   def submit_search(term)
