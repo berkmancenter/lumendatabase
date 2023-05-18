@@ -101,7 +101,7 @@ class Notice < ApplicationRecord
 
   accepts_nested_attributes_for :entity_notice_roles, allow_destroy: true
 
-  define_elasticsearch_mapping
+  #define_elasticsearch_mapping
 
   # == Validations ==========================================================
   validates_inclusion_of :action_taken, in: VALID_ACTIONS, allow_blank: true
