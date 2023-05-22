@@ -243,6 +243,9 @@
           }
         }
       },
+      "updated_at": {
+        "type": "date"
+      },
       "works": {
         "properties": {
           "copyrighted_urls": {

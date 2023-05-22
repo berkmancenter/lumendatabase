@@ -59,7 +59,7 @@
         "type": "text"
       },
       "updated_at": {
-        "type": "text"
+        "type": "date"
       },
       "url": {
         "type": "text"

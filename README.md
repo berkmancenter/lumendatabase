@@ -144,7 +144,7 @@ It will default to using the number of processors parallel_tests believes to be 
 
 While the Elasticsearch integration with Rails makes indexing objects into the Elasticsearch index easy, it is untenably slow with millions of objects. We avoid this by bypassing Rails and indexing from the database straight into Elasticsearch using Logstash.
 
-To start this indexing process, you'll need [Logstash](https://www.elastic.co/downloads/logstash), and the [PostgreSQL JDBC driver](https://jdbc.postgresql.org/download.html). You'll need to create a Logstash configuration that reads from Postgres and writes to Elasticsearch, similar to `script/search_indexing/logstash.conf.example`. Part of that configuration is the SQL query that should be used to fetch data from the database. An example, performant query is given in `script/search_indexing/query.sql`.
+To run this indexing process, you'll need [Logstash](https://www.elastic.co/downloads/logstash), and the [PostgreSQL JDBC driver](https://jdbc.postgresql.org/download.html). You'll need to create a Logstash configuration that reads from Postgres and writes to Elasticsearch. There is an example setup in `script/search_indexing/` that includes two pipelines, one that indexes notices and one that indexes entities. Those examples are setup to run in Docker through `docker-compose`. 
 
 Once setup, to run the indexing, simply run the logstash binary and point it to your configuration file, e.g. `bin/logstash -f logstash.conf`.
 

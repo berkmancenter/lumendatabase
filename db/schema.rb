@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_03_10_092957) do
+ActiveRecord::Schema.define(version: 2023_05_22_162653) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -413,14 +413,6 @@ ActiveRecord::Schema.define(version: 2023_03_10_092957) do
     t.index ["month"], name: "index_rails_admin_histories_on_month"
     t.index ["table"], name: "index_rails_admin_histories_on_table"
     t.index ["year"], name: "index_rails_admin_histories_on_year"
-  end
-
-  create_table "reindex_runs", id: :serial, force: :cascade do |t|
-    t.integer "entity_count", default: 0
-    t.integer "notice_count", default: 0
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.index ["created_at"], name: "index_reindex_runs_on_created_at"
   end
 
   create_table "relevant_questions", id: :serial, force: :cascade do |t|

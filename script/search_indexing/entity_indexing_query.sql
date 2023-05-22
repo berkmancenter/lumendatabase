@@ -24,7 +24,7 @@ SELECT
     e.url_original,
 	e.name_description
 FROM entities AS e
-	WHERE e.id > :sql_last_value
-	ORDER BY e.id ASC
+	WHERE e.updated_at > :sql_last_value
+	ORDER BY e.updated_at ASC
 	LIMIT :size 
 	OFFSET :offset

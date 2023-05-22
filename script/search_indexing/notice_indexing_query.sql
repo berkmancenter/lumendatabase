@@ -1,7 +1,8 @@
 WITH
     n AS NOT MATERIALIZED (
     	SELECT * FROM notices
-		ORDER BY notices.id ASC
+    	WHERE notices.updated_at > :sql_last_value
+		ORDER BY notices.updated_at ASC
 		LIMIT :size
 		OFFSET :offset
 	),
@@ -36,6 +37,7 @@ SELECT
     n.body,
     n.date_received at time zone 'utc' AS date_received,
 	n.created_at at time zone 'utc' AS created_at,
+	n.updated_at at time zone 'utc' AS updated_at,
     n.type as class_name,
     n.subject,
     n.language,
