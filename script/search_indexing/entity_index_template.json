@@ -1,6 +1,6 @@
 {
   "index_patterns": [
-    "chill_application_*_entity_*"
+    "chill_application_*_entity*"
   ],
   "order": 0,
   "mappings": {

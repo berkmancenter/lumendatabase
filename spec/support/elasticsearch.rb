@@ -26,6 +26,15 @@ RSpec.configure do |config|
     config.before :each, type: type do
       searchable_models.each do |model|
         begin
+          model.__elasticsearch__.create_index!
+        rescue Elasticsearch::Transport::Transport::Errors::BadRequest; # This can happen when the index is created too fast I think?
+        rescue Elasticsearch::Transport::Transport::Errors::NotFound; end
+      end
+    end
+
+    config.after :each, type: type do
+      searchable_models.each do |model|
+        begin
           if model.__elasticsearch__.index_exists? index: model.__elasticsearch__.index_name
             model.__elasticsearch__.client.delete_by_query(
               index: model.index_name,
@@ -36,10 +45,6 @@ RSpec.configure do |config|
             )
             model.__elasticsearch__.delete_index!
           end
-        rescue Elasticsearch::Transport::Transport::Errors::NotFound; end
-
-        begin
-          model.__elasticsearch__.create_index!
         rescue Elasticsearch::Transport::Transport::Errors::NotFound; end
       end
     end

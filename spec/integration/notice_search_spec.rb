@@ -96,7 +96,7 @@ feature 'Searching Notices', type: :feature do
     )
   end
 
-  scenario 'caching respects pagination', cache: true do
+  scenario 'caching respects pagination', cache: true, search: true do
     # Create enough notices to force pagination of results. The concern here
     # is that caching a search result page might inadvertently cause all pages
     # of a search to match the first viewed page - we want to make sure that
@@ -107,6 +107,7 @@ feature 'Searching Notices', type: :feature do
     search_for(term: 'paginate me', page: 2, per_page: 1)
 
     first_page = page.body
+    puts first_page
 
     find('.next a').click
 

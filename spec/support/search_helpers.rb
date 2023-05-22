@@ -5,7 +5,7 @@ module SearchHelpers
     # wait for indexing to complete
     #Entity.__elasticsearch__.refresh_index!
     #Notice.__elasticsearch__.refresh_index!
-    sleep(30)
+    sleep(2)
   end
 
   def submit_search(term)
