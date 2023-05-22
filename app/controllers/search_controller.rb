@@ -108,8 +108,7 @@ class SearchController < ApplicationController
     # Note that the search definition above is lazy; this is the first line
     # where anything with Elasticsearch actually gets executed.
     instances = @searchdata.records
-    results = instances.map { |r| augment_instance(r) }
-    results
+    instances.map { |r| augment_instance(r) }
   end
 
   # Elasticsearch cannot return more than 20_000 results in production (2000
