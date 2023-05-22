@@ -1,5 +1,7 @@
-Lumen.const_set :SETTINGS, LumenSetting.all rescue nil
-Lumen.const_set :UNKNOWN_WORK, Work.unknown rescue nil
+Rails.application.reloader.to_prepare do
+  Lumen.const_set :SETTINGS, LumenSetting.all rescue nil
+  Lumen.const_set :UNKNOWN_WORK, Work.unknown rescue nil
+end
 Lumen.const_set :TRUNCATION_TOKEN_URLS_ACTIVE_PERIOD, 24.hours
 Lumen.const_set :REDACTION_MASK, '[REDACTED]'.freeze
 Lumen.const_set :OTHER_TOPIC, 'Uncategorized'.freeze
