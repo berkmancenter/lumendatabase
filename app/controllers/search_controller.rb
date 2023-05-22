@@ -34,11 +34,6 @@ class SearchController < ApplicationController
     @searcher = item_searcher
     @searchdata = @searcher.search
     @wrapped_instances = wrap_instances
-    puts @searchdata.response.as_json
-    puts 'Records'
-    puts @searchdata.records
-    puts 'Wrapped'
-    puts @wrapped_instances
 
     LumenLogger.log_metrics('SEARCHED', search_details: meta_hash_for(@searchdata).except(:facets))
 
@@ -87,8 +82,6 @@ class SearchController < ApplicationController
   # Enrich the activerecord object with search-related metadata for display.
   # Return the enriched instance (or nil, if none was found).
   def augment_instance(instance)
-    puts 'Instance'
-    puts instance
     return unless instance.present?
 
     result = @searchdata.select { |datum| datum[:_id] == instance.id.to_s }.first
@@ -115,11 +108,7 @@ class SearchController < ApplicationController
     # Note that the search definition above is lazy; this is the first line
     # where anything with Elasticsearch actually gets executed.
     instances = @searchdata.records
-    puts 'Instances'
-    puts instances
     results = instances.map { |r| augment_instance(r) }
-    puts 'Results'
-    puts results
     results
   end
 
