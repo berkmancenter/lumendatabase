@@ -491,6 +491,26 @@ feature 'Searching Notices', type: :feature do
     expect_search_to_not_find('unpublished', unpublished)
   end
 
+  scenario 'updates results when notice changes', search: true do
+    notice = create(:dmca, title: 'Old title')
+
+    index_changed_instances
+
+    submit_search 'title'
+    expect(page).to have_n_results(1)
+    expect(page).to have_words('Old title')
+
+    notice.title = 'New title'
+    notice.save!
+
+    index_changed_instances
+
+    submit_search 'title'
+    expect(page).to have_n_results(1)
+    expect(page).to have_words('New title')
+    expect(page).not_to have_words('Old title')
+  end
+
   private
 
   def expect_search_to_not_find(term, notice)
