@@ -48,5 +48,6 @@ RSpec.configure do |config|
 
   config.after :each, file_cache: true do
     allow(Rails).to receive(:cache).and_call_original
+    system('rm -rf tmp/test_cache')
   end
 end
