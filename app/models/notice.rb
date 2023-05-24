@@ -101,7 +101,6 @@ class Notice < ApplicationRecord
 
   accepts_nested_attributes_for :entity_notice_roles, allow_destroy: true
 
-  #define_elasticsearch_mapping
   index_name [Rails.application.engine_name,
               Rails.env,
               'notice',
