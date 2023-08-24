@@ -1,19 +1,17 @@
 [![Build Status](https://circleci.com/gh/berkmancenter/lumendatabase.svg?style=shield)](https://circleci.com/gh/berkmancenter/lumendatabase)
 [![Code Climate](https://codeclimate.com/github/codeclimate/codeclimate/badges/gpa.svg)](https://codeclimate.com/github/berkmancenter/lumendatabase)
 
-Lumen Database
-================
+# Lumen Database
 
 The Lumen Database collects and analyzes legal complaints and requests for removal of online materials, helping Internet users to know their rights and understand the law. These data enable us to study the prevalence of legal threats and let Internet users see the source of content removals.
 
-Automated Submissions and Search Using the API
-===========
+## Automated Submissions and Search Using the API
+
 The main [Lumen Database instance](https://www.lumendatabase.org/) has an API that allows individuals and organizations that receive large numbers of notices to submit them without using the web interface. The API also provides an easy way for researchers to search the database. Members of the public can test the database, but will likely need to request an API key from the [Lumen team](mailto:team@lumendatabase.org) to receive a token that provides full access. To learn about the capabilities of the API, you can consult the [API documentation](https://github.com/berkmancenter/lumendatabase/wiki/Lumen-API-Documentation).
 
-Development
-===========
+## Development
 
-#### Stack
+### Stack
 
 * ruby 3.0.6
 * PostgreSQL 13.6
@@ -23,7 +21,7 @@ Development
 * Mail server (SMTP, Sendmail)
 * ChromeDriver (used only by test runner)
 
-#### Using Docker
+### Using Docker
 
 The easiest way to start is to use `Docker`. Make sure you have the `Docker Engine` and `docker-compose` installed.
 
@@ -63,7 +61,7 @@ rails s -b 0.0.0.0
 
 Lumen will be available at `http://localhost:8282`.
 
-#### Manual setup
+### Manual setup
 
 By default, the app will try to connect to Elasticsearch on `http://localhost:9200`. If you want to use a different host set the `ELASTICSEARCH_URL` environment variable.
 
@@ -86,13 +84,13 @@ rails db:setup
 rails lumen:set_up_cms
 ```
 
-###### Running the app
+### Running the app
 
 ```
 rails s
 ```
 
-###### Viewing the app
+### Viewing the app
 
 ```
 $BROWSER 'http://localhost:3000'
@@ -117,20 +115,16 @@ with corresponding privileges.
 If you seeded your database with an older version of `seeds.rb`, your username
 may use chillingeffects.org rather than lumendatabase.org.
 
-#### Running Tests
+### Running Tests
 
-    $ rspec
+Many of the tests require all of the services that make up the Lumen stack to be running. For that reason, the easiest way to run tests is in a docker-compose environment:
 
-The integration tests are quite slow; for some development purposes you may
-find it more convenient to `bundle exec rspec spec/ --exclude-pattern="spec/integration/*"`.
+    $ docker-compose -f docker-compose.test.yml up
+    $ docker-compose exec -e RAILS_ENV=test website bash -c "bundle install && rake db:drop db:create db:migrate && rspec"
 
-If `elasticsearch` isn't on your $PATH, set `ENV['TEST_ES_CLUSTER_COMMAND']=/path/to/elasticsearch`, and make sure permissions are set correctly for your test suite to run it.
+The integration tests are quite slow; for some development purposes you may find it more convenient to `...rspec spec/ --exclude-pattern="spec/integration/*"`.
 
-If you're running a subset of tests that you know don't require Elasticsearch,
-you can run them without setting it up via
-`TEST_WITH_ELASTICSEARCH=0 rspec path/to/tests`.
-
-#### Parallelizing Tests
+### Parallelizing Tests
 You can speed up tests by running them in parallel:
     $ rake parallel:spec
 
@@ -140,7 +134,7 @@ You will need to do some setup before the first time you run this:
 
 It will default to using the number of processors parallel_tests believes to be available, but you can change this by setting `ENV['PARALLEL_TEST_PROCESSORS']` to the desired number.
 
-#### Search Indexing
+### Search Indexing
 
 While the Elasticsearch integration with Rails makes indexing objects into the Elasticsearch index easy, it is untenably slow with millions of objects. We avoid this by bypassing Rails and indexing from the database straight into Elasticsearch using Logstash.
 
@@ -148,11 +142,11 @@ To run this indexing process, you'll need [Logstash](https://www.elastic.co/down
 
 Once setup, to run the indexing, simply run the logstash binary and point it to your configuration file, e.g. `bin/logstash -f logstash.conf`.
 
-#### Linting
+### Linting
 
 Use rubocop and leave the code at least as clean as you found it. If you make linting-only changes, it's considerate to your code reviewer to keep them in their own commit.
 
-####  Profiling
+###  Profiling
 
 * [mini-profiler](https://github.com/MiniProfiler/rack-mini-profiler)
   * available in dev by default
@@ -163,7 +157,7 @@ Use rubocop and leave the code at least as clean as you found it. If you make li
   * runs in dev by default; can run anywhere by setting `ENV[USE_OINK]` (ok to run in production)
   * logs to `log/oink.log`
 
-#### Environment variables
+### Environment variables
 
 Here are all the environment variables which Lumen recognizes. Find them in the code for documentation.
 
@@ -213,12 +207,11 @@ Most of these are optional and have sensible defaults (which may vary by environ
 | `WEB_CONCURRENCY`                                    | Number of Unicorn workers                                                                                                  |
 | `WEB_TIMEOUT`                                        | Unicorn timeout                                                                                                            |
 
-#### Email setup
+### Email setup
 
 The application requires a mail server, in development it's best to use a local SMTP server that will catch all outgoing emails. [Mailcatcher](https://mailcatcher.me) is a good option.
 
-Blog custom search
-==================
+## Blog custom search
 
 The `/blog_entries` page can contain a google custom search engine that
 searches the Lumen blog. To enable, create a custom search engine
@@ -228,18 +221,16 @@ the "cx" id from the javascript embed code and put it in the
 `GOOGLE_CUSTOM_BLOG_SEARCH_ID` environment variable. The blog search will
 appear after this variable has been configured.
 
-Lumen API
-=========
+## Lumen API
+
 You can search the database and, if you have a contributor token, add to the database using our API.
 
 The Lumen API is documented in our GitHub Wiki: https://github.com/berkmancenter/lumendatabase/wiki/Lumen-API-Documentation
 
-License
-=======
+## License
 
 Lumen Database is licensed under GPLv2. See LICENSE.txt for more information.
 
-Copyright
-=========
+## Copyright
 
 Copyright (c) 2016 President and Fellows of Harvard College
