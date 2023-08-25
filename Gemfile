@@ -8,7 +8,7 @@ gem 'bootstrap-datepicker-rails'
 gem 'cancancan'
 gem 'comfortable_mexican_sofa'
 gem 'countries', require: false
-gem 'coveralls', '~> 0.8.0', require: false
+gem 'coveralls_reborn', require: false
 gem 'date_validator'
 gem 'devise'
 gem 'dotenv-rails'
