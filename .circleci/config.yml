@@ -25,6 +25,7 @@ jobs:
           - discovery.type: single-node
     environment:
       PGHOST: 127.0.0.1
+      ELASTICSEARCH_URL: 127.0.0.1
       RAILS_ENV: test
       # CIRCLECI: true (which we use in tests) is set by circleci itself.
     executor: ruby/default
