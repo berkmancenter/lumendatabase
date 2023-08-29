@@ -83,12 +83,12 @@ group :test do
   gem 'rspec_junit_formatter'
   gem 'rspec-pride'
   gem 'rspec-rails'
+  gem 'selenium-webdriver'
   gem 'shoulda-matchers', '~> 4.0'
   gem 'simplecov', require: false
   gem 'test-prof'
   gem 'timecop'
   gem 'vcr'
-  gem 'webdrivers'
   gem 'webmock'
   gem 'webrick'
 end
