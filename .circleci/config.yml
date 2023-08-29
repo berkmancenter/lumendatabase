@@ -16,4 +16,5 @@ jobs:
           command: timeout 5m bash -c "until docker-compose -f docker-compose.test.yml exec postgres pg_isready ; do sleep 5 ; done"
       - run:
           name: Tests
-          command: docker-compose exec -e RAILS_ENV=test website bash -c "bundle install && rake db:drop db:create db:migrate && rspec"
+          command: docker-compose -f docker-compose.test.yml exec -e RAILS_ENV=test website bash -c "bundle install && rake db:drop db:create db:migrate && rspec"
+
