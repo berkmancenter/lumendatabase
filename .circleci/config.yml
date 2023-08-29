@@ -10,7 +10,7 @@ jobs:
       - checkout
       - run:
           name: Docker Compose
-          command: source .env.test && docker-compose -f docker-compose.test.yml up
+          command: docker-compose -f docker-compose.test.yml up
       - run:
           name: Wait for DB
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
