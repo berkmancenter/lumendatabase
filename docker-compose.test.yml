@@ -59,7 +59,6 @@ services:
     depends_on:
       - 'elasticsearch'
       - 'postgres'
-    image: logstash:7.17.0
     build:
       context: .
       dockerfile: Dockerfile-logstash
