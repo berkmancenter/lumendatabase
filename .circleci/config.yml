@@ -13,6 +13,8 @@ jobs:
           command: |
             cp config/database.yml.docker config/database.yml 
             cp .env.docker .env
+            chmod 777 .
+            chmod 777 db/schema.rb
       - run:
           name: Docker Compose
           command: docker-compose -f docker-compose.test.yml up -d
