@@ -1,5 +1,4 @@
 require 'capybara/rspec'
-require 'webdrivers/chromedriver'
 
 # https://docs.travis-ci.com/user/common-build-problems/#capybara-im-getting-errors-about-elements-not-being-found
 Capybara.default_max_wait_time = 15
