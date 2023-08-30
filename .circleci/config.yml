@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  browser-tools: circleci/browser-tools@1.4.4
 
 jobs:
   build:
@@ -7,6 +9,8 @@ jobs:
       docker_layer_caching: true
 
     steps:
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
       - checkout
       - run:
           name: Setup filesystem
