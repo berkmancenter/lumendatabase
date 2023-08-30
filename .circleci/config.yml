@@ -11,6 +11,8 @@ jobs:
     steps:
       - browser-tools/install-chrome:
           chrome-version: 98.0.4758.80
+          replace-existing: true
+      - browser-tools/install-chromedriver
       - checkout
       - run:
           name: Setup filesystem
