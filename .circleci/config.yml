@@ -9,7 +9,8 @@ jobs:
       docker_layer_caching: true
 
     steps:
-      - browser-tools/install-chrome
+      - browser-tools/install-chrome:
+          chrome-version: 98.0.4758.80
       - browser-tools/install-chromedriver
       - checkout
       - run:
@@ -23,7 +24,7 @@ jobs:
           name: Docker Compose
           command: |
             docker-compose -f docker-compose.test.yml up -d
-            sleep 120
+            sleep 60
       - run:
           name: Wait for DB
           command: timeout 5m bash -c "until docker-compose -f docker-compose.test.yml exec postgres pg_isready ; do sleep 5 ; done"
