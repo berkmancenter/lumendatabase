@@ -5,7 +5,7 @@ WORKDIR /root
 # Google-chrome needs an additional repository
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
     && echo 'deb http://dl.google.com/linux/chrome/deb/ stable main' >> /etc/apt/sources.list
-RUN wget https://chromedriver.storage.googleapis.com/98.0.4758.102/chromedriver_linux64.zip \
+RUN wget https://chromedriver.storage.googleapis.com/114.0.5735.90/chromedriver_linux64.zip \
     && unzip chromedriver_linux64.zip \
     && mv chromedriver /usr/local/share/ \
     && chmod +x /usr/local/share/chromedriver \
