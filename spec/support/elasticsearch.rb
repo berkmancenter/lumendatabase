@@ -1,5 +1,4 @@
-# See https://medium.com/@rowanoulton/testing-elasticsearch-in-rails-22a3296d989 .
-#require 'elasticsearch/extensions/test/cluster'
+# See https://medium.com/@rowanoulton/testing-elasticsearch-in-rails-22a3296d989
 
 RSpec.configure do |config|
   searchable_models = [Notice, Entity]

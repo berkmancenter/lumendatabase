@@ -3,7 +3,8 @@ FROM ruby:3.0.6
 WORKDIR /root
 
 RUN apt-get update \
-    && apt-get -y install tzdata git build-essential patch ruby-dev zlib1g-dev liblzma-dev default-jre sudo vim nano tmux
+    && apt-get -y install tzdata git build-essential patch ruby-dev zlib1g-dev liblzma-dev default-jre sudo vim nano tmux \
+    libxkbcommon-dev libgbm-dev # Needed to run Chrome
 
 # Container user and group
 ARG USERNAME=lumen
@@ -23,7 +24,7 @@ RUN gem update --system
 RUN gem update bundler
 
 # Install and cache gems
-WORKDIR /
+WORKDIR /app
 COPY Gemfile* /tmp/
 WORKDIR /tmp
 RUN bundle install

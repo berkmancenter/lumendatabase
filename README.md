@@ -201,7 +201,6 @@ Most of these are optional and have sensible defaults (which may vary by environ
 | `SMTP_PASSWORD`                                      | SMTP server password                                                                                                       |
 | `SMTP_PORT`                                          | SMTP server port                                                                                                           |
 | `SMTP_VERIFY_MODE`                                   | Value of the `openssl_verify_mode` option of the SMTP client                                                               |
-| `TEST_ES_CLUSTER_COMMAND`                            | Path to an Elasticsearch binary used during a test suite run                                                                |
 | `USER_CRON_EMAIL`                                    | For use in sending reports of court order files; can be a string or a list (in a JSON.parse-able format)                   |
 | `USER_CRON_MAGIC_DIR`                                | Directory used in the court order reporter cron job                                                                        |
 | `WEB_CONCURRENCY`                                    | Number of Unicorn workers                                                                                                  |

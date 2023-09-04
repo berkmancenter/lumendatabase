@@ -13,6 +13,7 @@ default_chrome_options = %w(
   --disable-password-manager-reauthentication
   --disable-popup-blocking
   --disable-save-password-bubble
+  --disable-dev-shm-usage
   --headless=new
   --ignore-certificate-errors
   --incognito
