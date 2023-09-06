@@ -40,7 +40,7 @@ RSpec.configure do |config|
   config.before(:each, js: true) do
     # The default window size is too narrow, and may cause elements to overlap
     # (and thus not be clickable) due to inadequately responsive design.
-    Capybara.page.driver.browser.manage.window.resize_to(2048, 600)
+    Capybara.page.driver.resize_window_to(Capybara.page.driver.current_window_handle, 2_048, 600)
   end
 
   config.before(:suite) do
