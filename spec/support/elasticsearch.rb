@@ -26,6 +26,7 @@ RSpec.configure do |config|
       searchable_models.each do |model|
         begin
           model.__elasticsearch__.create_index!
+          model.put_mapping
         rescue Elasticsearch::Transport::Transport::Errors::BadRequest; # This can happen when the index is created too fast I think?
         rescue Elasticsearch::Transport::Transport::Errors::NotFound; end
       end

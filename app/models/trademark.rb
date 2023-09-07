@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Trademark < Notice
-  define_elasticsearch_mapping
-
   def self.model_name
     Notice.model_name
   end

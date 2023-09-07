@@ -4,8 +4,6 @@ class LawEnforcementRequest < Notice
   DEFAULT_ENTITY_NOTICE_ROLES = (BASE_ENTITY_NOTICE_ROLES |
                                 %w[recipient sender principal]).freeze
 
-  define_elasticsearch_mapping
-
   VALID_REQUEST_TYPES = [
     'Agency',
     'Civil Subpoena',

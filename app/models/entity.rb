@@ -7,6 +7,7 @@ class Entity < ApplicationRecord
   include ValidatesAutomatically
   include HierarchicalRelationships
   include Elasticsearch::Model
+  include Searchability
 
   # == Constants ============================================================
   PER_PAGE = 10
@@ -31,21 +32,7 @@ class Entity < ApplicationRecord
   delegate :publication_delay, to: :user, allow_nil: true
 
   # == Extensions ===========================================================
-  index_name [Rails.application.engine_name,
-              Rails.env,
-              name.demodulize.downcase,
-              ENV['ES_INDEX_SUFFIX']].compact.join('_')
-
-  mappings dynamic: false do
-    Entity.columns
-          .map(&:name)
-          .reject { |name| DO_NOT_INDEX.include? name }
-          .each do |column_name|
-      indexes column_name
-    end
-
-    indexes :parent_id
-  end
+  load_elasticsearch_helpers
 
   # == Validations ==========================================================
   validates :address_line_1, length: { maximum: 255 }
