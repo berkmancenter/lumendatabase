@@ -17,7 +17,7 @@ feature 'Topics' do
   end
 
   context 'notices' do
-    it 'shows a list of notices' do
+    it 'shows a list of notices', search: true do
       make_notices(2)
       visit "/topics/#{@topic.id}"
 

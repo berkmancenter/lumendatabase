@@ -1,10 +1,8 @@
 module SearchHelpers
 
   def index_changed_instances
-    ReindexRun.index_changed_model_instances
-    # wait for indexing to complete
-    Entity.__elasticsearch__.refresh_index!
-    Notice.__elasticsearch__.refresh_index!
+    # Wait for Logstash to complete indexing
+    sleep(2)
   end
 
   def submit_search(term)

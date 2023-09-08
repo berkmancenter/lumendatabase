@@ -3,8 +3,6 @@
 class Defamation < Notice
   REDACTION_REGEX = /google|youtube/i
 
-  define_elasticsearch_mapping(works: [:description])
-
   def self.model_name
     Notice.model_name
   end
@@ -67,5 +65,17 @@ class Defamation < Notice
         instance_redactor.redact(url, %w[url])
       end
     end
+  end
+
+  def as_indexed_json(_options)
+    out = super(_options)
+
+    if out.key?('works')
+      out['works'] = out['works'].map do |work|
+        work.except('description')
+      end
+    end
+
+    out
   end
 end

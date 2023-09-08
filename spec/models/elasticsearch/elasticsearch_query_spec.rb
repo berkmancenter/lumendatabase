@@ -40,7 +40,7 @@ describe ElasticsearchQuery, type: :model do
             { match: { rescinded: { query: false, operator: 'AND' } } },
             { multi_match: {
               query: 'i give up',
-              fields: Searchability::MULTI_MATCH_FIELDS,
+              fields: Notice::MULTI_MATCH_FIELDS,
               type: :cross_fields,
               operator: 'AND'
             } }

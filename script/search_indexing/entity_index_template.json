@@ -1,0 +1,99 @@
+{
+  "index_patterns": [
+    "chill_application_*_entity*"
+  ],
+  "order": 0,
+  "mappings": {
+    "_source": {
+      "enabled": true
+    },
+    "dynamic": "false",
+    "properties": {
+      "address_line_1": {
+        "type": "text"
+      },
+      "address_line_2": {
+        "type": "text"
+      },
+      "ancestry": {
+        "type": "text"
+      },
+      "city": {
+        "type": "text"
+      },
+      "country_code": {
+        "type": "text",
+        "fields": {
+          "facet": {
+            "type": "keyword"
+          }
+        }
+      },
+      "created_at": {
+        "type": "text"
+      },
+      "email": {
+        "type": "text"
+      },
+      "full_notice_only_researchers": {
+        "type": "boolean"
+      },
+      "kind": {
+        "type": "text",
+        "fields": {
+          "facet": {
+            "type": "keyword"
+          }
+        }
+      },
+      "name": {
+        "type": "text"
+      },
+      "parent_id": {
+        "type": "text"
+      },
+      "phone": {
+        "type": "text"
+      },
+      "state": {
+        "type": "text"
+      },
+      "updated_at": {
+        "type": "date"
+      },
+      "url": {
+        "type": "text"
+      },
+      "user_id": {
+        "type": "text"
+      },
+      "zip": {
+        "type": "text"
+      },
+      "address_line_1_original": {
+        "type": "text"
+      },
+      "address_line_2_original": {
+        "type": "text"
+      },
+      "city_original": {
+        "type": "text"
+      },
+      "state_original": {
+        "type": "text"
+      },
+      "country_code_original": {
+        "type": "text"
+      },
+      "zip_original": {
+        "type": "text"
+      },
+      "url_original": {
+        "type": "text"
+      },
+      "name_description": {
+        "type": "text"
+      }
+    }
+  }
+}

@@ -6,7 +6,7 @@ feature 'Searching Notices', type: :feature do
   include SearchHelpers
   include ContainLink
 
-  scenario 'displays the results' do
+  scenario 'displays the results', search: true do
     create_list(:dmca, 5, title: 'Boy howdy')
     index_changed_instances
 
@@ -15,7 +15,7 @@ feature 'Searching Notices', type: :feature do
     expect(page).to have_css('.result', count: 5)
   end
 
-  scenario 'includes facets', js: true do
+  scenario 'includes facets', js: true, search: true do
     create(:dmca, :with_facet_data, title: 'Facet this')
 
     index_changed_instances
@@ -53,7 +53,7 @@ feature 'Searching Notices', type: :feature do
     expect(page).not_to have_css('.result', text: '/faceted_search')
   end
 
-  scenario 'includes the relevant notice data' do
+  scenario 'includes the relevant notice data', search: true do
     notice = create(
       :dmca,
       role_names: %w[sender principal recipient],
@@ -75,7 +75,7 @@ feature 'Searching Notices', type: :feature do
     end
   end
 
-  scenario 'includes excerpts' do
+  scenario 'includes excerpts', search: true do
     create(:dmca, title: 'foo bar baz')
     index_changed_instances
 
@@ -96,7 +96,7 @@ feature 'Searching Notices', type: :feature do
     )
   end
 
-  scenario 'caching respects pagination', cache: true do
+  scenario 'caching respects pagination', cache: true, search: true do
     # Create enough notices to force pagination of results. The concern here
     # is that caching a search result page might inadvertently cause all pages
     # of a search to match the first viewed page - we want to make sure that
@@ -107,6 +107,7 @@ feature 'Searching Notices', type: :feature do
     search_for(term: 'paginate me', page: 2, per_page: 1)
 
     first_page = page.body
+    puts first_page
 
     find('.next a').click
 
@@ -488,6 +489,26 @@ feature 'Searching Notices', type: :feature do
     expect_search_to_not_find('hidden', hidden)
     expect_search_to_not_find('spam', spam)
     expect_search_to_not_find('unpublished', unpublished)
+  end
+
+  scenario 'updates results when notice changes', search: true do
+    notice = create(:dmca, title: 'Old title')
+
+    index_changed_instances
+
+    submit_search 'title'
+    expect(page).to have_n_results(1)
+    expect(page).to have_words('Old title')
+
+    notice.title = 'New title'
+    notice.save!
+
+    index_changed_instances
+
+    submit_search 'title'
+    expect(page).to have_n_results(1)
+    expect(page).to have_words('New title')
+    expect(page).not_to have_words('Old title')
   end
 
   private

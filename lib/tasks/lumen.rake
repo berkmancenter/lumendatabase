@@ -25,11 +25,6 @@ namespace :lumen do
     collapser.collapse
   end
 
-  desc 'Incrementally index changed model instances'
-  task index_changed_model_instances: :environment do
-    ReindexRun.index_changed_model_instances
-  end
-
   desc 'Update index for all existing hidden notices '
   task index_hidden_notices: :environment do
     loggy = Loggy.new('rake lumen:index_hidden_notices', true)
@@ -48,7 +43,7 @@ namespace :lumen do
         loggy.info "index_notices hidden: true, count: #{count}, time: #{Time.now.to_i}"
       end
 
-      ReindexRun.sweep_search_result_caches
+      CacheSweeper.sweep_search_result_caches
 
       loggy.info "index_notices done hidden: true, count: #{count}, time: #{Time.now.to_i}"
     rescue StandardError => e
@@ -92,169 +87,9 @@ namespace :lumen do
       count += batch.count
       loggy.info "index_notices csv: #{input_csv}, count: #{count}, time: #{Time.now.to_i}"
 
-      ReindexRun.sweep_search_result_caches
+      CacheSweeper.sweep_search_result_caches
 
       loggy.info "index_notices done csv: #{input_csv}, count: #{count}, time: #{Time.now.to_i}"
-    end
-  end
-
-  desc 'Recreate elasticsearch index for notices with a given recipient entity_id'
-  task :index_notices_by_entity_id, [:entity_id] => :environment do |_t, args|
-    loggy = Loggy.new('rake lumen:index_notices_by_entity_id', true)
-
-    begin
-      batch_size = (ENV['BATCH_SIZE'] || 192).to_i
-
-      notices = Notice.where("id in ( select notice_id from entity_notice_roles where name = 'recipient' and entity_id = #{args[:entity_id]} )")
-      loggy.info "index_notices entity_id: #{args[:entity_id]}, total: #{notices.count}"
-
-      count = 0
-      notices.find_in_batches(batch_size: batch_size) do |batch|
-        Notice.import batch
-        count += batch.count
-        loggy.info "index_notices entity_id: #{args[:entity_id]}, count: #{count}, time: #{Time.now.to_i}"
-      end
-
-      ReindexRun.sweep_search_result_caches
-
-      loggy.info "index_notices done entity_id: #{args[:entity_id]}, count: #{count}, time: #{Time.now.to_i}"
-    rescue StandardError => e
-      loggy.error "index_notices entity_id: #{args[:entity_id]}, error: #{e.inspect}"
-    end
-  end
-
-  desc 'Recreate elasticsearch index for notices of a given date'
-  task :index_notices_by_date, [:date] => :environment do |_t, args|
-    loggy = Loggy.new('rake lumen:index_notices_by_date', true)
-
-    begin
-      batch_size = (ENV['BATCH_SIZE'] || 192).to_i
-
-      notices = Notice.where("created_at::date = '#{args[:date]}'")
-      loggy.info "index_notices date: #{args[:date]}, total: #{notices.count}"
-
-      count = 0
-      notices.find_in_batches(batch_size: batch_size) do |batch|
-        Notice.import batch
-        count += batch.count
-        loggy.info "index_notices date: #{args[:date]}, count: #{count}, time: #{Time.now.to_i}"
-      end
-
-      ReindexRun.sweep_search_result_caches
-
-      loggy.info "index_notices done date: #{args[:date]}, count: #{count}, time: #{Time.now.to_i}"
-    rescue StandardError => e
-      loggy.error "index_notices error date: #{args[:date]}, error: #{e.inspect}"
-    end
-  end
-
-  desc 'Recreate elasticsearch index for notices of a given month'
-  task :index_notices_by_month, %i[month year] => :environment do |_t, args|
-    loggy = Loggy.new('rake lumen:index_notices_by_month', true)
-
-    begin
-      batch_size = (ENV['BATCH_SIZE'] || 192).to_i
-
-      notices = Notice.where("extract( year from created_at ) = #{args[:year]} and extract( month from created_at ) = #{args[:month]}")
-      loggy.info "index_notices date: #{args[:year]}-#{args[:month]}, total: #{notices.count}"
-
-      count = 0
-      notices.find_in_batches(batch_size: batch_size) do |batch|
-        Notice.import batch
-        count += batch.count
-        loggy.info "index_notices date: #{args[:year]}-#{args[:month]}, count: #{count}, time: #{Time.now.to_i}"
-      end
-
-      ReindexRun.sweep_search_result_caches
-
-      loggy.info "index_notices done date: #{args[:year]}-#{args[:month]}, count: #{count}, time: #{Time.now.to_i}"
-    rescue StandardError => e
-      loggy.error "index_notices date: #{args[:year]}-#{args[:month]}, error: #{e.inspect}"
-    end
-  end
-
-  desc 'Recreate elasticsearch index for notices of a given year'
-  task :index_notices_by_year, [:year] => :environment do |_t, args|
-    loggy = Loggy.new('rake lumen:index_notices_by_year', true)
-
-    begin
-      batch_size = (ENV['BATCH_SIZE'] || 192).to_i
-
-      notices = Notice.where("extract( year from created_at ) = #{args[:year]}")
-      loggy.info "index_notices date: #{args[:year]}, total: #{notices.count}"
-
-      count = 0
-      notices.find_in_batches(batch_size: batch_size) do |batch|
-        Notice.import batch
-        count += batch.count
-        loggy.info "index_notices date: #{args[:year]}, count: #{count}, time: #{Time.now.to_i}"
-      end
-
-      ReindexRun.sweep_search_result_caches
-
-      loggy.info "index_notices done date: #{args[:year]}, count: #{count}, time: #{Time.now.to_i}"
-    rescue StandardError => e
-      loggy.error "index_notices date: #{args[:year]}, error: #{e.inspect}"
-    end
-  end
-
-  desc 'Recreate elasticsearch index memory efficiently'
-  task recreate_elasticsearch_index: :environment do
-    loggy = Loggy.new('rake lumen:recreate_elasticsearch_index', true)
-
-    begin
-      batch_size = (ENV['BATCH_SIZE'] || 100).to_i
-      [Notice, Entity].each do |klass|
-        klass.__elasticsearch__.create_index! force: true
-        count = 0
-        klass.find_in_batches(batch_size: batch_size) do |instances|
-          GC.start
-          instances.each do |instance|
-            instance.__elasticsearch__.index_document
-            count += 1
-            puts '.'
-          end
-          loggy.info "#{count} #{klass} instances indexed at #{Time.now.to_i}"
-        end
-      end
-      ReindexRun.sweep_search_result_caches
-    rescue StandardError => e
-      loggy.error "Reindexing did not succeed because: #{e.inspect}"
-    end
-  end
-
-  desc 'Recreate elasticsearch index memory efficiently'
-  task create_elasticsearch_index_for_updated_instances: :environment do
-    loggy = Loggy.new('rake lumen:create_elasticsearch_index_for_updated_instances', true)
-
-    begin
-      batch_size = (ENV['BATCH_SIZE'] || 100).to_i
-      from = Date.parse(ENV['RAKE_CREATE_ELASTICSEARCH_INDEX_FOR_UPDATED_INSTANCES_FROM'], '%Y-%m-%d') if ENV['RAKE_CREATE_ELASTICSEARCH_INDEX_FOR_UPDATED_INSTANCES_FROM']
-
-      if from.nil?
-        error = '"from" parameter is missing (correct format %Y-%m-%d)'
-        loggy.error error
-
-        return
-      end
-
-      [Notice, Entity].each do |klass|
-        klass.__elasticsearch__.create_index!
-        count = 0
-        klass.where('updated_at > ?', from)
-             .find_in_batches(batch_size: batch_size) do |instances|
-          GC.start
-          instances.each do |instance|
-            instance.__elasticsearch__.index_document
-            count += 1
-            puts '.'
-          end
-          loggy.info "#{count} #{klass} instances indexed at #{Time.now.to_i}"
-        end
-      end
-      ReindexRun.sweep_search_result_caches
-    rescue StandardError => e
-      loggy.error "Reindexing did not succeed because: #{e.inspect}"
     end
   end
 
@@ -355,39 +190,6 @@ namespace :lumen do
       notice.touch
       notice.save!
       puts '.'
-    end
-  end
-
-  desc 'Index non-indexed models'
-  task index_non_indexed: :environment do
-    loggy = Loggy.new('rake lumen:index_non_indexed', true)
-
-    begin
-      loggy.info "Indexing #{Notice.count} Notice instances..."
-      # do notices
-      Notice.find_in_batches do |group|
-        GC.start # force once per batch to avoid OOM
-        group.each do |obj|
-          puts '.'
-          next if ReindexRun.indexed?(Notice, obj.id)
-
-          loggy.info "Indexing Notice, #{obj.id}"
-          obj.__elasticsearch__.index_document
-        end
-      end
-
-      loggy.info "Indexing #{Entity.count} Entity instances..."
-      Entity.find_in_batches do |group|
-        group.each do |obj|
-          puts '.'
-          next if ReindexRun.indexed?(Entity, obj.id)
-
-          loggy.info "Indexing Entity, #{obj.id}"
-          obj.__elasticsearch__.index_document
-        end
-      end
-    rescue StandardError => e
-      loggy.info "Reindexing did not succeed because: #{e.inspect}"
     end
   end
 
@@ -760,56 +562,6 @@ where works.id in (
   # they were removed upon removal of the BlogEntry model, after having been
   # run to migrate production content. They were last available in commit
   # b45018d.
-
-  desc 'Run catchup ES indexing'
-  task :run_catchup_es_indexing, %i[notices_index_name entities_index_name] => :environment do |_t, args|
-    unless args[:notices_index_name].nil?
-      types_to_set = [
-        DMCA, Counterfeit, Counternotice, CourtOrder, DataProtection, Defamation,
-        GovernmentRequest, LawEnforcementRequest, PrivateInformation, Trademark,
-        Other
-      ]
-      types_to_set.each do |type_to_set|
-        type_to_set.index_name args[:notices_index_name]
-      end
-    end
-
-    Entity.index_name args[:entities_index_name] unless args[:entities_index_name].nil?
-
-    reindexing_timestamp_file = Rails.root.join('tmp', 'reindexing_timestamp')
-    loggy = Loggy.new('rake lumen:run_catchup_es_indexing', true)
-
-    unless File.exist?(reindexing_timestamp_file)
-      loggy.info 'tmp/reindexing_timestamp file doesn\'t exist'
-      exit
-    end
-
-    reindexing_start_date = File.mtime(reindexing_timestamp_file)
-    # Get extra 10 minutes, just to make sure that everything is indexed
-    reindexing_start_date -= 10.minutes
-    batch_size = (ENV['BATCH_SIZE'] || 100).to_i
-    number_of_all_items = Notice.where("updated_at > '#{reindexing_start_date}'").count + Entity.where("updated_at > '#{reindexing_start_date}'").count
-
-    # Index updated and new entities
-    begin
-      count = 0
-      [Notice, Entity].each do |klass|
-        klass.where("updated_at > '#{reindexing_start_date}'").order('id ASC').find_in_batches(batch_size: batch_size) do |instances|
-          # Force garbage collection to avoid OOM
-          GC.start
-          instances.each do |instance|
-            instance.__elasticsearch__.index_document
-            count += 1
-            loggy.info(klass.name + ' indexing id ' + instance.id.to_s)
-          end
-          loggy.info(count.to_s + '/' + number_of_all_items.to_s + ' instances indexed')
-        end
-      end
-      ReindexRun.sweep_search_result_caches
-    rescue StandardError => e
-      loggy.error('Reindexing did not succeed because: ' + e.inspect)
-    end
-  end
 
   desc 'Import YT notices'
   task import_yt_notices: :environment do

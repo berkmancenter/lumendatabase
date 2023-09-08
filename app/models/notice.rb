@@ -13,8 +13,19 @@ class Notice < ApplicationRecord
     works.description works.infringing_urls.url works.copyrighted_urls.url
   ].freeze
 
+  # Default fields to search with a multimatch query. Weights some of the
+  # fields, based purely on intuition from reading logs.
+  # Before Elasticsearch 6.x this was an `_all` query, but `_all` is no longer
+  # supported. Instead, we define base_search and preferred_search fields which
+  # contain all the fields we actually searched via _all, and copy fields to
+  # those during indexing (in a mutually exclusive way: fields get copied to
+  # one or the other, not both). This lets us do simple weighting.
+  # We could simply list all of the fields we would have searched, but that
+  # scoring proves to be incredibly slow.
+  MULTI_MATCH_FIELDS = %w(base_search preferred_search^2)
+
   SEARCHABLE_FIELDS = [
-    TermSearch.new(:term, Searchability::MULTI_MATCH_FIELDS, 'All Fields'),
+    TermSearch.new(:term, MULTI_MATCH_FIELDS, 'All Fields'),
     TermSearch.new(:title, :title, 'Title'),
     TermSearch.new(:topics, 'topics.name', 'Topics'),
     TermSearch.new(:tags, :tag_list, 'Tags'),
@@ -101,7 +112,7 @@ class Notice < ApplicationRecord
 
   accepts_nested_attributes_for :entity_notice_roles, allow_destroy: true
 
-  define_elasticsearch_mapping
+  load_elasticsearch_helpers
 
   # == Validations ==========================================================
   validates_inclusion_of :action_taken, in: VALID_ACTIONS, allow_blank: true
@@ -473,5 +484,51 @@ class Notice < ApplicationRecord
     return value.split(',').map(&:strip) if value.is_a? String
 
     value
+  end
+
+  # the "as" attribute is not implemented in elasticsearch-rails
+  # according to https://github.com/elastic/elasticsearch-rails/issues/21
+  # it's the best workaround
+  def as_indexed_json(_options)
+    out = as_json(except: [:jurisdiction_list, :regulation_list, :tag_list, :works_json])
+
+    attributes_to_skip = %w[review_required reviewer_id url_count
+                            webform notes views_overall views_by_notice_viewer
+                            works_json]
+    out.except!(*attributes_to_skip)
+
+    out['class_name'] = self.class.name
+    out['sender_name_facet'] = sender_name
+    out['sender_name'] = sender_name
+    out['principal_name_facet'] = principal_name
+    out['principal_name'] = principal_name
+    out['submitter_name_facet'] = submitter_name
+    out['submitter_name'] = submitter_name
+    out['submitter_country_code_facet'] = submitter_country_code
+    out['submitter_country_code'] = submitter_country_code
+    out['tag_list_facet'] = tags
+    out['tag_list'] = tags
+    out['date_received_facet'] = date_received
+    out['jurisdiction_list_facet'] = jurisdictions
+    out['jurisdiction_list'] = jurisdictions
+    out['recipient_name_facet'] = recipient_name
+    out['recipient_name'] = recipient_name
+    out['country_code_facet'] = country_code
+    out['language_facet'] = language
+    out['action_taken_facet'] = action_taken
+    out['topic_facet'] = topics.map(&:name)
+    out['topics'] = topics.map do |topic|
+      { id: topic[:id], name: topic[:name] }
+    end
+    out['works'] = works.map do |work|
+      {
+        description: work.description,
+        infringing_urls: work.infringing_urls.map { |iurl| { url: iurl.url } },
+        copyrighted_urls: work.copyrighted_urls.map { |curl| { url: curl.url } }
+      }
+    end
+    out['entities_country_codes'] = entities_country_codes
+
+    out
   end
 end

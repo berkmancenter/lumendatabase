@@ -1,85 +1,26 @@
 version: 2.1
-orbs:
-  ruby: circleci/ruby@1.1.1
-  browser-tools: circleci/browser-tools@1.4.4
 
 jobs:
   build:
-    parallelism: 3
-    docker:
-      # Use this image rather than the base because we need browsers for
-      # integration testing.
-      - image: cimg/ruby:3.0.6-browsers
-      - image: cimg/postgres:9.6
-        environment:
-          POSTGRES_USER: postgres
-          POSTGRES_DB: lumen_test
-          POSTGRES_PASSWORD: postgres
-      - image: docker.elastic.co/elasticsearch/elasticsearch:7.17.0
-        environment:
-          - cluster.name: circleci-lumen
-          - xpack.security.enabled: false
-          - transport.host: localhost
-          - network.host: 127.0.0.1
-          - http.port: 9250
-          - discovery.type: single-node
-    environment:
-      PGHOST: 127.0.0.1
-      RAILS_ENV: test
-      # CIRCLECI: true (which we use in tests) is set by circleci itself.
-    executor: ruby/default
+    machine:
+      image: ubuntu-2204:current
+      docker_layer_caching: true
+
     steps:
-      # Build app.
       - checkout
-
-      - browser-tools/install-chrome:
-          chrome-version: 116.0.5845.96 # TODO: remove until: https://github.com/CircleCI-Public/browser-tools-orb/issues/75
-          replace-existing: true # TODO: remove until: https://github.com/CircleCI-Public/browser-tools-orb/issues/75
-      - browser-tools/install-chromedriver
-
-      # Install bundler dependencies.
-      # We use handwritten commands rather than ruby/install-deps because:
-      #  - install-deps doesn't capture the rails_admin_tag_list, which is
-      #    built from a github commit rather than from rubygems.
-      #  - this lets us cache.
       - run:
+          name: Setup filesystem
           command: |
-            gem install bundler
-      - restore_cache:
-          keys:
-            - gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
+            cp config/database.yml.docker config/database.yml
+            sudo chown -R 1000 .
       - run:
-          name: Install dependencies
+          name: Docker Compose
           command: |
-            bundle check || bundle install
-      - save_cache:
-          key: gem-cache-v1-{{ arch }}-{{ .Branch }}-{{ checksum "Gemfile.lock" }}
-          paths:
-            - vendor/bundle
-            - ~/.bundle
-
-      # Prepare database.
+            docker-compose -f docker-compose.test.yml --env-file .env.test up -d
+            sleep 60
       - run:
           name: Wait for DB
-          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+          command: timeout 5m bash -c "until docker-compose -f docker-compose.test.yml --env-file .env.test exec postgres pg_isready ; do sleep 5 ; done"
       - run:
-          name: Database setup
-          command: |
-            cp config/database.yml.circle config/database.yml
-            bundle exec rails db:drop db:create db:migrate RAILS_ENV=test
-      - run: mkdir -p tmp/cache
-
-      # Precompile assets to speed up tests.
-      - restore_cache:
-          keys:
-            - v1-asset-cache-{{ arch }}-{{ .Branch }}
-      - run: bundle exec rails lumen:set_up_cms # Needed for precompilation.
-      - run: bundle exec rake assets:precompile
-      - save_cache:
-          key: v1-asset-cache-{{ arch }}-{{ .Branch }}
-          paths:
-            - public/assets
-            - tmp/cache/assets/sprockets
-
-      # Finally: Run tests! Use native command for ease of parallelization.
-      - ruby/rspec-test
+          name: Tests
+          command: docker-compose -f docker-compose.test.yml --env-file .env.test exec -e RAILS_ENV=test website bash -c "bundle install && rake db:drop db:create db:migrate && rspec"

@@ -4,6 +4,9 @@ class MediaMention < ApplicationRecord
   include ValidatesAutomatically
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
+  include Searchability
+
+  load_elasticsearch_helpers
 
   PER_PAGE = 10
 

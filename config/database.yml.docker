@@ -7,11 +7,11 @@ default: &default
 
 test:
   <<: *default
-  username: <%= ENV['DATABASE_DEV_USERNAME'] %>
-  password: <%= ENV['DATABASE_DEV_PASSWORD'] %>
-  host: <%= ENV['DATABASE_DEV_HOST'] %>
-  port: <%= ENV['DATABASE_DEV_PORT'].to_i %>
-  database: lumen_test
+  username: <%= ENV['DATABASE_USERNAME'] %>
+  password: <%= ENV['DATABASE_PASSWORD'] %>
+  database: <%= ENV['DATABASE_DB_NAME'] %>
+  host: <%= ENV['DATABASE_HOST'] %>
+  port: <%= ENV['DATABASE_PORT'].to_i %>
 
 development:
   <<: *default

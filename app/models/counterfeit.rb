@@ -2,7 +2,6 @@
 
 class Counterfeit < Notice
   after_create :set_jurisdiction
-  define_elasticsearch_mapping
 
   DEFAULT_ENTITY_NOTICE_ROLES = (BASE_ENTITY_NOTICE_ROLES |
                                 %w[recipient sender principal]).freeze

@@ -39,4 +39,15 @@ RSpec.configure do |config|
   config.after :each, cache: true do
     allow(Rails).to receive(:cache).and_call_original
   end
+
+  config.before :each, file_cache: true do
+    allow(Rails).to receive(:cache).and_return(
+      ActiveSupport::Cache::FileStore.new 'tmp/test_cache'
+    )
+  end
+
+  config.after :each, file_cache: true do
+    allow(Rails).to receive(:cache).and_call_original
+    system('rm -rf tmp/test_cache')
+  end
 end

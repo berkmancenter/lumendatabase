@@ -8,7 +8,7 @@ gem 'bootstrap-datepicker-rails'
 gem 'cancancan'
 gem 'comfortable_mexican_sofa'
 gem 'countries', require: false
-gem 'coveralls', '~> 0.8.0', require: false
+gem 'coveralls_reborn', require: false
 gem 'date_validator'
 gem 'devise'
 gem 'dotenv-rails'
@@ -83,12 +83,12 @@ group :test do
   gem 'rspec_junit_formatter'
   gem 'rspec-pride'
   gem 'rspec-rails'
+  gem 'selenium-webdriver'
   gem 'shoulda-matchers', '~> 4.0'
   gem 'simplecov', require: false
   gem 'test-prof'
   gem 'timecop'
   gem 'vcr'
-  gem 'webdrivers'
   gem 'webmock'
   gem 'webrick'
 end

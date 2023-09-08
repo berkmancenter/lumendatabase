@@ -1,0 +1,12 @@
+# This file is where you define your pipelines. You can define multiple.
+# For more information on multiple pipelines, see the documentation:
+#   https://www.elastic.co/guide/en/logstash/current/multiple-pipelines.html
+
+- pipeline.id: notice_indexing 
+  path.config: "/app/script/search_indexing/notice_indexing.conf" 
+  pipeline.workers: 4 
+  pipeline.batch.size: 1000 
+- pipeline.id: entity_indexing 
+  path.config: "/app/script/search_indexing/entity_indexing.conf" 
+  pipeline.workers: 4 
+  pipeline.batch.size: 1000 

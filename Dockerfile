@@ -2,18 +2,9 @@ FROM ruby:3.0.6
 
 WORKDIR /root
 
-# Google-chrome needs an additional repository
-RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
-    && echo 'deb http://dl.google.com/linux/chrome/deb/ stable main' >> /etc/apt/sources.list
-RUN wget https://chromedriver.storage.googleapis.com/98.0.4758.102/chromedriver_linux64.zip \
-    && unzip chromedriver_linux64.zip \
-    && mv chromedriver /usr/local/share/ \
-    && chmod +x /usr/local/share/chromedriver \
-    && ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver \
-    && ln -s /usr/local/share/chromedriver /usr/bin/chromedriver
-
 RUN apt-get update \
-    && apt-get -y install tzdata git build-essential patch ruby-dev zlib1g-dev liblzma-dev default-jre sudo google-chrome-stable vim nano tmux
+    && apt-get -y install tzdata git build-essential patch ruby-dev zlib1g-dev liblzma-dev default-jre sudo vim nano tmux \
+    libxkbcommon-dev libgbm-dev # Needed to run Chrome
 
 # Container user and group
 ARG USERNAME=lumen
@@ -33,16 +24,10 @@ RUN gem update --system
 RUN gem update bundler
 
 # Install and cache gems
-WORKDIR /
+WORKDIR /app
 COPY Gemfile* /tmp/
 WORKDIR /tmp
 RUN bundle install
-
-# Download a standalone version of Elasticsearch, will be used by rspec
-WORKDIR /elasticsearch_test
-RUN sudo wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.17.0-linux-x86_64.tar.gz \
-    && sudo tar -xvf elasticsearch-7.17.0-linux-x86_64.tar.gz
-RUN sudo chown -R $USERNAME:$USERNAME /elasticsearch_test
 
 # To be able to create a .bash_history
 WORKDIR /home/lumen/hist

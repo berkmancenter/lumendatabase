@@ -5,8 +5,6 @@ class CourtOrder < Notice
                                 %w[recipient sender principal issuing_court
                                    plaintiff defendant]).freeze
 
-  define_elasticsearch_mapping
-
   def self.model_name
     Notice.model_name
   end
