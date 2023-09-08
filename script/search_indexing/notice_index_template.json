@@ -9,11 +9,11 @@
     },
     "dynamic": "false",
     "properties": {
-	  "@timestamp": {
-		"type": "date"
+      "@timestamp": {
+        "type": "date"
       },
-	  "@version": {
-		"type": "short"
+      "@version": {
+        "type": "short"
       },
       "action_taken": {
         "type": "keyword",
