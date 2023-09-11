@@ -119,7 +119,7 @@ may use chillingeffects.org rather than lumendatabase.org.
 
 Many of the tests require all of the services that make up the Lumen stack to be running. For that reason, the easiest way to run tests is in a docker-compose environment:
 
-    $ docker-compose -f docker-compose.test.yml up
+    $ docker-compose -f docker-compose.test.yml --env-file .env.test up
     $ docker-compose exec -e RAILS_ENV=test website bash -c "bundle install && rake db:drop db:create db:migrate && rspec"
 
 The integration tests are quite slow; for some development purposes you may find it more convenient to `...rspec spec/ --exclude-pattern="spec/integration/*"`.
