@@ -1,11 +1,11 @@
 WITH
     n AS NOT MATERIALIZED (
-    	SELECT * FROM notices
-    	WHERE notices.updated_at > :sql_last_value
-		ORDER BY notices.updated_at ASC
-		LIMIT :size
-		OFFSET :offset
-	),
+      SELECT * FROM notices
+      WHERE notices.updated_at > :sql_last_value
+    ORDER BY notices.updated_at ASC
+    LIMIT :size
+    OFFSET :offset
+  ),
     roles AS NOT MATERIALIZED (
         SELECT
             enr.notice_id,
@@ -36,8 +36,8 @@ SELECT
     n.title,
     n.body,
     n.date_received at time zone 'utc' AS date_received,
-	n.created_at at time zone 'utc' AS created_at,
-	n.updated_at at time zone 'utc' AS updated_at,
+  n.created_at at time zone 'utc' AS created_at,
+  n.updated_at at time zone 'utc' AS updated_at,
     n.type as class_name,
     n.subject,
     n.language,
@@ -51,7 +51,7 @@ SELECT
     n.counternotice_for_id,
     n.counternotice_for_sid,
     (
-		SELECT json_agg( 
+    SELECT json_agg( 
             json_build_object( 
                 'description', w -> 'description', 
                 'infringing_urls', ( 

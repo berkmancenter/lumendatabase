@@ -1,388 +1,272 @@
 {
   "mappings": {
-    "_doc": {
-      "properties": {
-        "action_taken": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
+    "_source": {
+      "enabled": true
+    },
+    "dynamic": "false",
+    "properties": {
+      "@timestamp": {
+        "type": "date"
+      },
+      "@version": {
+        "type": "short"
+      },
+      "action_taken": {
+        "type": "keyword",
+        "fields": {
+          "facet": {
+            "type": "keyword"
           }
-        },
-        "action_taken_facet": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
+        }
+      },
+      "action_taken_facet": {
+        "type": "alias",
+        "path": "action_taken.facet"
+      },
+      "base_search": {
+        "type": "text"
+      },
+      "body": {
+        "type": "text",
+        "copy_to": [
+          "base_search"
+        ]
+      },
+      "class_name": {
+        "type": "keyword"
+      },
+      "country_code": {
+        "type": "keyword"
+      },
+      "country_code_facet": {
+        "type": "alias",
+        "path": "country_code"
+      },
+      "created_at": {
+        "type": "date"
+      },
+      "date_received": {
+        "type": "date",
+        "fields": {
+          "facet": {
+            "type": "date"
           }
-        },
-        "body": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
+        }
+      },
+      "date_received_facet": {
+        "type": "alias",
+        "path": "date_received.facet"
+      },
+      "entities_country_codes": {
+        "type": "keyword"
+      },
+      "hidden": {
+        "type": "boolean"
+      },
+      "id": {
+        "type": "keyword"
+      },
+      "jurisdiction_list": {
+        "type": "text",
+        "copy_to": [
+          "base_search"
+        ],
+        "fields": {
+          "facet": {
+            "type": "keyword"
           }
-        },
-        "body_original": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
+        }
+      },
+      "jurisdiction_list_facet": {
+        "type": "alias",
+        "path": "jurisdiction_list.facet"
+      },
+      "language": {
+        "type": "keyword",
+        "fields": {
+          "facet": {
+            "type": "keyword"
           }
-        },
-        "class_name": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
+        }
+      },
+      "language_facet": {
+        "type": "alias",
+        "path": "language.facet"
+      },
+      "mark_registration_number": {
+        "type": "keyword",
+        "copy_to": [
+          "base_search"
+        ]
+      },
+      "preferred_search": {
+        "type": "text"
+      },
+      "principal_name": {
+        "type": "text",
+        "copy_to": [
+          "base_search"
+        ],
+        "fields": {
+          "facet": {
+            "type": "keyword"
           }
-        },
-        "country_code_facet": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
+        }
+      },
+      "principal_name_facet": {
+        "type": "alias",
+        "path": "principal_name.facet"
+      },
+      "published": {
+        "type": "boolean"
+      },
+      "recipient_name": {
+        "type": "text",
+        "copy_to": [
+          "preferred_search"
+        ],
+        "fields": {
+          "facet": {
+            "type": "keyword"
           }
-        },
-        "created_at": {
-          "type": "date"
-        },
-        "date_received": {
-          "type": "date"
-        },
-        "date_received_facet": {
-          "type": "date"
-        },
-        "date_sent": {
-          "type": "date"
-        },
-        "entities_country_codes": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
+        }
+      },
+      "recipient_name_facet": {
+        "type": "alias",
+        "path": "recipient_name.facet"
+      },
+      "request_type": {
+        "type": "keyword",
+        "copy_to": [
+          "base_search"
+        ]
+      },
+      "rescinded": {
+        "type": "boolean"
+      },
+      "sender_name": {
+        "type": "text",
+        "copy_to": [
+          "preferred_search"
+        ],
+        "fields": {
+          "facet": {
+            "type": "keyword"
           }
-        },
-        "hidden": {
-          "type": "boolean"
-        },
-        "id": {
-          "type": "long"
-        },
-        "jurisdiction_list": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
+        }
+      },
+      "sender_name_facet": {
+        "type": "alias",
+        "path": "sender_name.facet"
+      },
+      "spam": {
+        "type": "boolean"
+      },
+      "subject": {
+        "type": "text",
+        "copy_to": [
+          "base_search"
+        ]
+      },
+      "submitter_country_code": {
+        "type": "text",
+        "copy_to": [
+          "base_search"
+        ],
+        "fields": {
+          "facet": {
+            "type": "keyword"
           }
-        },
-        "jurisdiction_list_facet": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
+        }
+      },
+      "submitter_country_code_facet": {
+        "type": "alias",
+        "path": "submitter_country_code.facet"
+      },
+      "submitter_name": {
+        "type": "text",
+        "copy_to": [
+          "base_search"
+        ],
+        "fields": {
+          "facet": {
+            "type": "keyword"
           }
-        },
-        "language": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
+        }
+      },
+      "submitter_name_facet": {
+        "type": "alias",
+        "path": "submitter_name.facet"
+      },
+      "tag_list": {
+        "type": "text",
+        "copy_to": [
+          "base_search"
+        ],
+        "fields": {
+          "facet": {
+            "type": "keyword"
           }
-        },
-        "language_facet": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
+        }
+      },
+      "tag_list_facet": {
+        "type": "alias",
+        "path": "tag_list.facet"
+      },
+      "title": {
+        "type": "text",
+        "copy_to": [
+          "preferred_search"
+        ]
+      },
+      "topic_list": {
+        "type": "keyword"
+      },
+      "topic_facet": {
+        "type": "alias",
+        "path": "topic_list"
+      },
+      "topics": {
+        "properties": {
+          "name": {
+            "type": "text",
+            "copy_to": [
+              "base_search"
+            ]
+          },
+          "id": {
+            "type": "keyword"
           }
-        },
-        "local_jurisdiction_laws": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "mark_registration_number": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "original_notice_id": {
-          "type": "long"
-        },
-        "principal_name": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "principal_name_facet": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "published": {
-          "type": "boolean"
-        },
-        "recipient_name": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "recipient_name_facet": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "regulation_list": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "request_type": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "rescinded": {
-          "type": "boolean"
-        },
-        "review_required": {
-          "type": "boolean"
-        },
-        "sender_name": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "sender_name_facet": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "source": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "spam": {
-          "type": "boolean"
-        },
-        "subject": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "submission_id": {
-          "type": "long"
-        },
-        "submitter_country_code": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "submitter_country_code_facet": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "submitter_name": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "submitter_name_facet": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "tag_list": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "tag_list_facet": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "title": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "topic_facet": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
-        },
-        "topics": {
-          "properties": {
-            "id": {
-              "type": "long"
-            },
-            "name": {
-              "type": "text",
-              "fields": {
-                "keyword": {
-                  "type": "keyword",
-                  "ignore_above": 256
-                }
+        }
+      },
+      "updated_at": {
+        "type": "date"
+      },
+      "works": {
+        "properties": {
+          "copyrighted_urls": {
+            "properties": {
+              "url": {
+                "type": "text",
+                "copy_to": [
+                  "base_search"
+                ]
               }
             }
-          }
-        },
-        "updated_at": {
-          "type": "date"
-        },
-        "url_count": {
-          "type": "long"
-        },
-        "views_by_notice_viewer": {
-          "type": "long"
-        },
-        "views_overall": {
-          "type": "long"
-        },
-        "webform": {
-          "type": "boolean"
-        },
-        "works": {
-          "properties": {
-            "copyrighted_urls": {
-              "properties": {
-                "url": {
-                  "type": "text",
-                  "fields": {
-                    "keyword": {
-                      "type": "keyword",
-                      "ignore_above": 256
-                    }
-                  }
-                }
-              }
-            },
-            "description": {
-              "type": "text",
-              "fields": {
-                "keyword": {
-                  "type": "keyword",
-                  "ignore_above": 256
-                }
-              }
-            },
-            "infringing_urls": {
-              "properties": {
-                "url": {
-                  "type": "text",
-                  "fields": {
-                    "keyword": {
-                      "type": "keyword",
-                      "ignore_above": 256
-                    }
-                  }
-                }
+          },
+          "description": {
+            "type": "text",
+            "copy_to": [
+              "preferred_search"
+            ]
+          },
+          "infringing_urls": {
+            "properties": {
+              "url": {
+                "type": "text",
+                "copy_to": [
+                  "base_search"
+                ]
               }
             }
           }
