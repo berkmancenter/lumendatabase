@@ -1,5 +1,5 @@
 module ProxyCache
-  CLEAR_HEADER = ENV['PROXY_CACHE_CLEAR_HEADER']
+  CLEAR_HEADER = ENV['PROXY_CACHE_CLEAR_HEADER'] || 'LUMEN_CLEAR_PROXY_CACHE'
   REQUEST_SLEEP_SECONDS = 5
 
   def self.clear_notice(notice_ids)
