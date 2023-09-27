@@ -404,4 +404,23 @@ describe DMCA, type: :model do
       end
     end
   end
+
+  context 'proxy cache clearing' do
+    let(:notice) { FactoryBot.create(:dmca) }
+
+    it 'sends an HTTP request with specific header after updating the notice' do
+      url = "#{ENV['SITE_HOST']}/notices/#{notice.id}"
+      stub_request(:get, url)
+        .with(headers: { ENV['PROXY_CACHE_CLEAR_HEADER'] => 'yolo' })
+        .to_return(status: 200, body: 'Response Body')
+
+      notice.update(title: 'Updated Title')
+
+      sleep(1)
+
+      expect(a_request(:get, url).with(
+        headers: { ENV['PROXY_CACHE_CLEAR_HEADER'] => 'yolo' }
+      )).to have_been_made.once
+    end
+  end
 end
