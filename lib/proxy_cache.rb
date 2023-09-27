@@ -1,5 +1,5 @@
 module ProxyCache
-  CLEAR_HEADER = ENV['PROXY_CACHE_CLEAR_HEADER'] || 'LUMEN_CLEAR_PROXY_CACHE'
+  CLEAR_HEADER = ENV['PROXY_CACHE_CLEAR_HEADER']
   REQUEST_SLEEP_SECONDS = 5
 
   def self.clear_notice(notice_ids)
@@ -12,8 +12,18 @@ module ProxyCache
     end
   end
 
-  def self.call(url, timeout = '')
-    spawn("#{timeout} curl #{url} -k -s -m 60 -X GET -H '#{CLEAR_HEADER}: yolo' > /dev/null &")
+  def self.call(url, timeout = nil)
+    uri = URI(url)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = (uri.scheme == 'https')
+    request = Net::HTTP::Get.new(uri.request_uri)
+    request['Host'] = uri.host
+    request[CLEAR_HEADER] = 'yolo'
+
+    Thread.new do
+      sleep(timeout.to_i) if timeout
+      http.request(request)
+    end
   end
 
   def self.call_many(notice_ids)
@@ -22,7 +32,7 @@ module ProxyCache
     notice_ids.each do |notice_id|
       call(
         notice_url(notice_id),
-        "sleep #{i * REQUEST_SLEEP_SECONDS} && "
+        i * REQUEST_SLEEP_SECONDS
       )
 
       i += 1
