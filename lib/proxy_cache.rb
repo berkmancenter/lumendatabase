@@ -5,29 +5,17 @@ module ProxyCache
   def self.clear_notice(notice_ids)
     return if CLEAR_HEADER.nil?
 
-    if notice_ids.is_a? Array
-      call_many(notice_ids)
-    else
-      call(notice_url(notice_ids))
-    end
+    notice_ids = [notice_ids] unless notice_ids.is_a? Array
+
+    call_many(notice_ids)
   end
 
-  def self.call(url, timeout = nil)
-    uri = URI(url)
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = (uri.scheme == 'https')
-    request = Net::HTTP::Get.new(uri.request_uri)
-    request['Host'] = uri.host
-    request[CLEAR_HEADER] = 'yolo'
-
-    Thread.new do
-      sleep(timeout.to_i) if timeout
-      http.request(request)
-    end
+  def self.call(url, delay = 0)
+    ClearCacheJob.set(wait: delay.seconds).perform_later(url)
   end
 
   def self.call_many(notice_ids)
-    i = 1
+    i = 0
 
     notice_ids.each do |notice_id|
       call(

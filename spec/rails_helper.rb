@@ -1,5 +1,7 @@
 ENV['RAILS_ENV'] ||= 'test'
 
+SITE_URL = "http://#{ENV['SITE_HOST']}"
+
 # Prevent things in config/environment from being reloaded if they have
 # already been loaded in a previous test. HTTP_ERRORS is chosen at
 # random from things initialized in that directory.
