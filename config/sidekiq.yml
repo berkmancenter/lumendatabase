@@ -1,0 +1,5 @@
+:concurrency: <%= ENV.fetch("SIDEKIQ_CONCURRENCY") { 5 }.to_i %>
+:timeout: <%= ENV.fetch("SIDEKIQ_TIMEOUT", 8).to_i %>
+:verbose: <%= ENV.fetch("SIDEKIQ_VERBOSE", false) %>
+:logfile: <%= ENV.fetch("SIDEKIQ_LOGFILE", "log/sidekiq.log") %>
+:pidfile: <%= ENV.fetch("SIDEKIQ_PIDFILE", "tmp/pids/sidekiq.pid") %>

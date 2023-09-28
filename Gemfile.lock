@@ -127,6 +127,7 @@ GEM
     comfy_bootstrap_form (4.0.9)
       rails (>= 5.0.0)
     concurrent-ruby (1.2.2)
+    connection_pool (2.4.1)
     countries (5.4.0)
       unaccent (~> 0.3)
     coveralls_reborn (0.14.0)
@@ -406,6 +407,8 @@ GEM
     record_tag_helper (1.0.1)
       actionview (>= 5)
     redcarpet (3.5.1)
+    redis-client (0.17.0)
+      connection_pool
     regexp_parser (2.8.1)
     responders (3.1.0)
       actionpack (>= 5.2)
@@ -466,6 +469,11 @@ GEM
       rack
     shoulda-matchers (4.5.1)
       activesupport (>= 4.2.0)
+    sidekiq (7.1.4)
+      concurrent-ruby (< 2)
+      connection_pool (>= 2.3.0)
+      rack (>= 2.2.4)
+      redis-client (>= 0.14.0)
     simple_form (5.2.0)
       actionpack (>= 5.2)
       activemodel (>= 5.2)
@@ -596,6 +604,7 @@ DEPENDENCIES
   selenium-webdriver
   sham_rack
   shoulda-matchers (~> 4.0)
+  sidekiq
   simple_form
   simplecov
   stackprof
