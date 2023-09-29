@@ -56,6 +56,10 @@ rake db:seed
 ```
 
 ```
+bundle exec sidekiq &
+```
+
+```
 rails s -b 0.0.0.0
 ```
 
@@ -184,6 +188,7 @@ Most of these are optional and have sensible defaults (which may vary by environ
 | `MAILER_DELIVERY_METHOD` | Sets the delivery method for emails sent by the application |
 | `NOTICE_COUNT` | How many fake notices to create when seeding the db |
 | `PROXY_CACHE_CLEAR_HEADER` | Name of a request header that is used clear cache on a proxy cache server like `Varnish` |
+| `PROXY_CACHE_CLEAR_SITE_HOST` | Needed just in `development` to reach the application from a Docker container |
 | `RACK_ENV` | Don't use this; it's overridden by `RAILS_ENV` |
 | `RAILS_ENV` | Rails environment |
 | `RAILS_LOG_LEVEL` | Log level for all the application loggers |
@@ -194,6 +199,7 @@ Most of these are optional and have sensible defaults (which may vary by environ
 | `SEARCH_SLEEP` | Used in specs only, time out of Elasticsearch searches |
 | `SECRET_KEY_BASE` | The Rails secret token; _required in prod_ |
 | `SERVER_TIME_ZONE` | Name of the server's timezone, e.g. `Eastern Time (US & Canada)` |
+| `SIDEKIQ_REDIS_URL` | `Redis` location used by `Sidekiq` |
 | `SITE_HOST` | Site host, used in mailer templates |
 | `SKIP_FAKE_DATA` | Don't generate fake data when seeding the database |
 | `SMTP_ADDRESS` | SMTP server address |
