@@ -1,6 +1,7 @@
 module ProxyCache
   CLEAR_HEADER = ENV['PROXY_CACHE_CLEAR_HEADER']
-  REQUEST_SLEEP_SECONDS = 5
+  REQUEST_SLEEP_SECONDS = ENV['PROXY_CACHE_CLEAR_DELAY'] || 5
+  SITE_HOST = ENV['PROXY_CACHE_CLEAR_SITE_HOST'] || Chill::Application.config.site_host
 
   def self.clear_notice(notice_ids)
     return if CLEAR_HEADER.nil?
@@ -29,7 +30,7 @@ module ProxyCache
 
   def self.notice_url(notice_id)
     Rails.application.routes.url_helpers.notice_url(
-      host: Chill::Application.config.site_host,
+      host: SITE_HOST,
       id: notice_id
     )
   end
