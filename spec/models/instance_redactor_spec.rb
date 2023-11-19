@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe InstanceRedactor::ContentRedactor do
+describe ContentRedactor do
   it "redacts a literal string" do
     redactor = described_class.new('sens[itive]')
 
@@ -18,7 +18,7 @@ describe InstanceRedactor::ContentRedactor do
   end
 end
 
-describe InstanceRedactor::PhoneNumberRedactor do
+describe PhoneNumberRedactor do
   PHONE_NUMBERS = %w(
     123-456-7890
     123.456.7890
@@ -54,7 +54,7 @@ describe InstanceRedactor::PhoneNumberRedactor do
   end
 end
 
-describe InstanceRedactor::SSNRedactor do
+describe SsnRedactor do
   SSNS = %w(
     123-45-6789
     123.45.6789
@@ -73,7 +73,7 @@ describe InstanceRedactor::SSNRedactor do
   end
 end
 
-describe InstanceRedactor::EmailRedactor do
+describe EmailRedactor do
   EMAILS = %w(
     test@example.com
     someone@cyber.law.harvard.edu
@@ -109,8 +109,8 @@ describe InstanceRedactor do
     it "passes the field's text through all redactors" do
       notice = build(:dmca, body: 'sensitive-a and sensitive-b')
       redactor = InstanceRedactor.new([
-        InstanceRedactor::ContentRedactor.new('sensitive-a'),
-        InstanceRedactor::ContentRedactor.new('sensitive-b')
+        ContentRedactor.new('sensitive-a'),
+        ContentRedactor.new('sensitive-b')
       ])
 
       redactor.redact(notice, :body)
@@ -121,7 +121,7 @@ describe InstanceRedactor do
     it "preserves the original text" do
       notice = build(:dmca, body: 'Some sensitive text')
       redactor = InstanceRedactor.new([
-        InstanceRedactor::ContentRedactor.new('sensitive')
+        ContentRedactor.new('sensitive')
       ])
 
       redactor.redact(notice, :body)
@@ -136,7 +136,7 @@ describe InstanceRedactor do
         body_original: "Some sensitive text"
       )
       redactor = InstanceRedactor.new([
-        InstanceRedactor::ContentRedactor.new('sensitive')
+        ContentRedactor.new('sensitive')
       ])
 
       redactor.redact(notice, :body)
@@ -149,7 +149,7 @@ describe InstanceRedactor do
       notice = build(
         :dmca,
         body: "Text with the stopwords")
-      redactor = InstanceRedactor.new([InstanceRedactor::ContentRedactor.new('the')])
+      redactor = InstanceRedactor.new([ContentRedactor.new('the')])
 
       redactor.redact(notice, :body)
 
@@ -163,7 +163,7 @@ describe InstanceRedactor do
       notice_two = create(:dmca, body: 'Two sensitive thing')
       unaffected = create(:dmca, body: 'Three sensitive thing')
       redactor = InstanceRedactor.new([
-        InstanceRedactor::ContentRedactor.new('sensitive')
+        ContentRedactor.new('sensitive')
       ])
 
       redactor.redact_all([notice_one.id, notice_two.id], :body)
@@ -175,7 +175,7 @@ describe InstanceRedactor do
   end
 
   def simple_redactor(from, to)
-    redactor = InstanceRedactor::ContentRedactor.new(from)
+    redactor = ContentRedactor.new(from)
     allow(redactor).to receive(:mask).and_return(to)
 
     redactor

@@ -171,7 +171,7 @@ describe 'RedactNoticeProc' do
         params[:next_notices]  = %w[2 3 4]
         redactor = expect_new(InstanceRedactor,
                               [
-                                expect_new(InstanceRedactor::ContentRedactor,
+                                expect_new(ContentRedactor,
                                            'Sensitive thing')
                               ])
         review_required_ids = [@object.id] + redactable_notices.map(&:id)

@@ -33,10 +33,10 @@ class Defamation < Notice
 
   def auto_redact
     custom_redactors = [
-      InstanceRedactor::PhoneNumberRedactor.new,
-      InstanceRedactor::SSNRedactor.new,
-      InstanceRedactor::EmailRedactor.new,
-      InstanceRedactor::EntityNameRedactor.new
+      PhoneNumberRedactor.new,
+      SsnRedactor.new,
+      EmailRedactor.new,
+      EntityNameRedactor.new
     ]
 
     entity_name = principal&.name || sender&.name

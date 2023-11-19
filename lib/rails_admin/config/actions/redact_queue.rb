@@ -26,10 +26,10 @@ RedactQueueProc = Proc.new do
         next_notices: next_notices
       )
 
-      redirect_to(redact_path) 
+      redirect_to(redact_path)
     else
       flash["error"] = "Please select at least one notice."
-      redirect_to(:back)  
+      redirect_to(:back)
     end
   else
     @refill = refill
