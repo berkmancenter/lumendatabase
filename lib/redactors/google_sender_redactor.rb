@@ -2,16 +2,20 @@ class GoogleSenderRedactor
   REDACTION_REGEX = /google|youtube/i
 
   def redact(instance)
+    return if instance.recipient.nil?
     return unless (instance.recipient_name =~ REDACTION_REGEX).present?
 
-    need_save = redact_entity(instance.sender) || redact_entity(instance.principal)
+    sender_redacted = redact_entity(instance.sender)
+    principal_redacted = redact_entity(instance.principal)
 
-    instance.save if need_save
+    instance.save if sender_redacted || principal_redacted
   end
 
   private
 
   def redact_entity(entity)
+    return if entity.nil?
+
     if entity.name != Lumen::REDACTION_MASK
       entity.name_original = entity.name
       entity.name = Lumen::REDACTION_MASK
