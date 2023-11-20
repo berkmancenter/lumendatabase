@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Other < Notice
-  REDACTION_REGEX = /google|youtube/i
-
   def self.model_name
     Notice.model_name
   end
@@ -11,24 +9,9 @@ class Other < Notice
     'notices/notice'
   end
 
-  def sender_name
-    if hide_identities?
-      Lumen::REDACTION_MASK
-    else
-      super
-    end
-  end
-
-  def principal_name
-    if hide_identities?
-      Lumen::REDACTION_MASK
-    else
-      super
-    end
-  end
-
-  def hide_identities?
-    (recipient_name =~ REDACTION_REGEX).present?
+  def auto_redact
+    InstanceRedactor.new.redact(self)
+    GoogleSenderRedactor.new.redact(self)
   end
 
   def as_indexed_json(_options)

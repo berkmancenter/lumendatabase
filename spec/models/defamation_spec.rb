@@ -15,48 +15,16 @@ RSpec.describe Defamation, type: :model do
     expect(described_class.model_name).to eq 'Notice'
   end
 
-  it 'hides identities when the recipient is google' do
-    recipient_name = 'Google'
-    defamation = create(:defamation, :with_facet_data)
-    defamation.recipient.name = recipient_name
-    defamation.recipient.save
+  it 'hides identities when the recipient is google or youtube' do
+    recipient_names = ['Google', 'Google, Inc.', 'Google LLC', 'YouTube LLC']
+    notice = create(:defamation, :with_facet_data)
 
-    expect(defamation.hide_identities?).to be true
+    recipient_names.each do |recipient_name|
+      notice.recipient.name = recipient_name
+      notice.auto_redact
+      notice.recipient.save
 
-    recipient_name = 'Google, Inc.'
-    defamation.recipient.name = recipient_name
-    defamation.recipient.save
-
-    expect(defamation.hide_identities?).to be true
-
-    recipient_name = 'Google LLC'
-    defamation.recipient.name = recipient_name
-    defamation.recipient.save
-
-    expect(defamation.hide_identities?).to be true
-  end
-
-  it 'hides sender names when hide_identities is true' do
-    defamation = build(:defamation)
-    allow(defamation).to receive(:hide_identities?).and_return(true)
-    expect(defamation.sender_name).to eq Lumen::REDACTION_MASK
-  end
-
-  it 'hides principal names when hide_identities is true' do
-    defamation = build(:defamation)
-    allow(defamation).to receive(:hide_identities?).and_return(true)
-    expect(defamation.principal_name).to eq Lumen::REDACTION_MASK
-  end
-
-  it 'shows sender names when hide_identities is false' do
-    defamation = build(:defamation)
-    allow(defamation).to receive(:hide_identities?).and_return(true)
-    expect(defamation.sender_name).to eq Lumen::REDACTION_MASK
-  end
-
-  it 'shows principal names when hide_identities is false' do
-    defamation = build(:defamation)
-    allow(defamation).to receive(:hide_identities?).and_return(true)
-    expect(defamation.principal_name).to eq Lumen::REDACTION_MASK
+      expect(notice.sender.name).to eq Lumen::REDACTION_MASK
+    end
   end
 end

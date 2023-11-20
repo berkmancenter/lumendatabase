@@ -15,48 +15,16 @@ RSpec.describe Other, type: :model do
     expect(described_class.model_name).to eq 'Notice'
   end
 
-  it 'hides identities when the recipient is google' do
-    recipient_name = 'Google'
+  it 'hides identities when the recipient is google or youtube' do
+    recipient_names = ['Google', 'Google, Inc.', 'Google LLC', 'YouTube LLC']
     notice = create(:other, :with_facet_data)
-    notice.recipient.name = recipient_name
-    notice.recipient.save
 
-    expect(notice.hide_identities?).to be true
+    recipient_names.each do |recipient_name|
+      notice.recipient.name = recipient_name
+      notice.auto_redact
+      notice.recipient.save
 
-    recipient_name = 'Google, Inc.'
-    notice.recipient.name = recipient_name
-    notice.recipient.save
-
-    expect(notice.hide_identities?).to be true
-
-    recipient_name = 'Google LLC'
-    notice.recipient.name = recipient_name
-    notice.recipient.save
-
-    expect(notice.hide_identities?).to be true
-  end
-
-  it 'hides sender names when hide_identities is true' do
-    notice = build(:other)
-    allow(notice).to receive(:hide_identities?).and_return(true)
-    expect(notice.sender_name).to eq Lumen::REDACTION_MASK
-  end
-
-  it 'hides principal names when hide_identities is true' do
-    notice = build(:other)
-    allow(notice).to receive(:hide_identities?).and_return(true)
-    expect(notice.principal_name).to eq Lumen::REDACTION_MASK
-  end
-
-  it 'shows sender names when hide_identities is false' do
-    notice = build(:other)
-    allow(notice).to receive(:hide_identities?).and_return(true)
-    expect(notice.sender_name).to eq Lumen::REDACTION_MASK
-  end
-
-  it 'shows principal names when hide_identities is false' do
-    notice = build(:other)
-    allow(notice).to receive(:hide_identities?).and_return(true)
-    expect(notice.principal_name).to eq Lumen::REDACTION_MASK
+      expect(notice.sender.name).to eq Lumen::REDACTION_MASK
+    end
   end
 end

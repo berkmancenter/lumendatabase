@@ -1,34 +1,12 @@
 # frozen_string_literal: true
 
 class Defamation < Notice
-  REDACTION_REGEX = /google|youtube/i
-
   def self.model_name
     Notice.model_name
   end
 
   def to_partial_path
     'notices/notice'
-  end
-
-  def sender_name
-    if hide_identities?
-      Lumen::REDACTION_MASK
-    else
-      super
-    end
-  end
-
-  def principal_name
-    if hide_identities?
-      Lumen::REDACTION_MASK
-    else
-      super
-    end
-  end
-
-  def hide_identities?
-    (recipient_name =~ REDACTION_REGEX).present?
   end
 
   def auto_redact
@@ -65,6 +43,8 @@ class Defamation < Notice
         instance_redactor.redact(url, %w[url])
       end
     end
+
+    GoogleSenderRedactor.new.redact(self)
   end
 
   def as_indexed_json(_options)
