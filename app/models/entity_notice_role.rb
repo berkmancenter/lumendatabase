@@ -37,7 +37,7 @@ class EntityNoticeRole < ApplicationRecord
       # validated). To support this, we explicitly save the records as
       # part of validation. There is a small and accepted risk of
       # unnecessary saves and/or orphan entities.
-      entity.save
+      entity.save if entity.id.nil?
     end
   end
 

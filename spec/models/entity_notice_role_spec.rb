@@ -31,7 +31,6 @@ describe EntityNoticeRole, type: :model do
   context '#entities' do
     it "does not create duplicate entities" do
       entity_notice_role_with_entity_attrs do |existing_entity, entity_notice_role|
-
         entity_notice_role.save
         entity_notice_role.reload
 
@@ -41,12 +40,37 @@ describe EntityNoticeRole, type: :model do
 
     it "creates additional entities when fields vary only slightly" do
       entity_notice_role_with_entity_attrs(state: 'CA') do |existing_entity, entity_notice_role|
-
         entity_notice_role.save
         entity_notice_role.reload
 
         expect(entity_notice_role.entity).not_to eq existing_entity
       end
+    end
+
+    it "does not use existing entities when entity_notice_role uses also existing entity when redacting using GoogleSenderRedactor" do
+      existing_redacted_entity = create(:entity, { name: '[REDACTED]' })
+      google_entity = create(:entity, { name: 'Google Inc.' })
+      sender_entity = create(:entity, { name: 'Sender' })
+      principal_entity = create(:entity, { name: 'Principal' })
+
+      notice = build(:other)
+      notice.entity_notice_roles = [
+        EntityNoticeRole.new(name: 'recipient', entity: google_entity),
+        EntityNoticeRole.new(name: 'submitter', entity: google_entity),
+        EntityNoticeRole.new(name: 'principal', entity: principal_entity),
+        EntityNoticeRole.new(name: 'sender', entity: sender_entity)
+      ]
+      notice.save
+      notice_id = notice.id
+
+      GoogleSenderRedactor.new.redact(notice)
+
+      notice = Notice.find(notice_id)
+
+      expect(sender_entity.id).to eq notice.sender.id
+      expect(principal_entity.id).to eq notice.principal.id
+      expect(notice.sender.name).to eq '[REDACTED]'
+      expect(notice.principal.name).to eq '[REDACTED]'
     end
 
     it "validates entities correctly when multiple are used at once" do
