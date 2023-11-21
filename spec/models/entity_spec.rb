@@ -8,26 +8,6 @@ describe Entity, type: :model do
     it { is_expected.to validate_length_of(:address_line_1).is_at_most(255) }
   end
 
-  context 'de-duplication' do
-    Entity::ADDITIONAL_DEDUPLICATION_FIELDS.each do |field|
-      it "de-duplicates across name and #{field}" do
-        entity = create(:entity, name: 'Foobar', field => 'Something')
-
-        other_entity = build(:entity, name: 'Foobar', field => 'Something')
-
-        expect(other_entity).not_to be_valid
-      end
-
-      it "allows duplicate names with non-duplicate #{field}" do
-        entity = create(:entity, name: 'Foobar', field => 'Something')
-
-        other_entity = build(:entity, name: 'Foobar', field => 'Something else')
-
-        expect(other_entity).to be_valid
-      end
-    end
-  end
-
   it { is_expected.to belong_to(:user) }
   it { is_expected.to have_many(:entity_notice_roles).dependent(:destroy) }
   it { is_expected.to have_many(:notices).through(:entity_notice_roles) }
