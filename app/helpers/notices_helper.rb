@@ -8,7 +8,8 @@ module NoticesHelper
       # Additional access cannot be requested for confidential court orders
       # as there is nothing further to display.
       !confidential_order?(notice),
-      !ContentFilter.notice_has_action?(notice, :full_notice_version_only_lumen_team)
+      !ContentFilter.notice_has_action?(notice, :full_notice_version_only_lumen_team),
+      !ContentFilter.notice_has_action?(notice, :full_notice_version_only_researchers)
     ].all?
   end
 

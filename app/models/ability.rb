@@ -5,12 +5,14 @@ class Ability
     # anonymous user
     can :request_access_token, Notice do |notice|
       !notice&.submitter&.full_notice_only_researchers &&
-        !ContentFilter.notice_has_action?(notice, :full_notice_version_only_lumen_team)
+        !ContentFilter.notice_has_action?(notice, :full_notice_version_only_lumen_team) &&
+        !ContentFilter.notice_has_action?(notice, :full_notice_version_only_researchers)
     end
 
     can :create_access_token, Notice do |notice|
       !notice&.submitter&.full_notice_only_researchers &&
-        !ContentFilter.notice_has_action?(notice, :full_notice_version_only_lumen_team)
+        !ContentFilter.notice_has_action?(notice, :full_notice_version_only_lumen_team) &&
+        !ContentFilter.notice_has_action?(notice, :full_notice_version_only_researchers)
     end
 
     return unless user
@@ -139,8 +141,17 @@ class Ability
     if can_view_full_version
       can :view_full_version, Notice do |notice|
         only_lumen_team = ContentFilter.notice_has_action?(notice, :full_notice_version_only_lumen_team)
+        only_researchers = ContentFilter.notice_has_action?(notice, :full_notice_version_only_researchers)
 
-        full_notice_only_researchers?(notice, user) && (!only_lumen_team || (only_lumen_team && (user.role?(Role.admin) || user.role?(Role.super_admin))))
+        full_notice_only_researchers?(notice, user) &&
+          (
+            !only_lumen_team ||
+            (only_lumen_team && (user.role?(Role.admin) || user.role?(Role.super_admin)))
+          ) &&
+          (
+            !only_researchers ||
+            (only_researchers && user.role?(Role.researcher))
+          )
       end
     end
   end
