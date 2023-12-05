@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Defamation < Notice
+  load_elasticsearch_helpers
+
   def self.model_name
     Notice.model_name
   end
@@ -11,10 +13,10 @@ class Defamation < Notice
 
   def auto_redact
     custom_redactors = [
-      PhoneNumberRedactor.new,
-      SsnRedactor.new,
-      EmailRedactor.new,
-      EntityNameRedactor.new
+      Redactors::PhoneNumberRedactor.new,
+      Redactors::SsnRedactor.new,
+      Redactors::EmailRedactor.new,
+      Redactors::EntityNameRedactor.new
     ]
 
     entity_name = principal&.name || sender&.name
@@ -44,7 +46,7 @@ class Defamation < Notice
       end
     end
 
-    GoogleSenderRedactor.new.redact(self)
+    Redactors::GoogleSenderRedactor.new.redact(self)
   end
 
   def as_indexed_json(_options)

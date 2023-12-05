@@ -4,6 +4,8 @@ class GovernmentRequest < Notice
   DEFAULT_ENTITY_NOTICE_ROLES = (BASE_ENTITY_NOTICE_ROLES |
                                 %w[recipient sender principal submitter]).freeze
 
+  load_elasticsearch_helpers
+
   VALID_REQUEST_TYPES = [
     'Agency',
     'Civil Subpoena',

@@ -3,9 +3,9 @@ class InstanceRedactor
 
   def initialize(
     redactors = [
-      PhoneNumberRedactor.new,
-      SsnRedactor.new,
-      EmailRedactor.new
+      Redactors::PhoneNumberRedactor.new,
+      Redactors::SsnRedactor.new,
+      Redactors::EmailRedactor.new
     ],
     options = {}
   )

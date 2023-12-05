@@ -40,7 +40,6 @@ module Chill
     additional_autoload_paths = %W(
       #{config.root}/app/models/elasticsearch
       #{config.root}/lib
-      #{config.root}/lib/redactors
     )
     config.autoload_paths += additional_autoload_paths
     config.eager_load_paths += additional_autoload_paths

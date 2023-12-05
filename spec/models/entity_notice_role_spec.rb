@@ -47,7 +47,7 @@ describe EntityNoticeRole, type: :model do
       end
     end
 
-    it "does not use existing entities when entity_notice_role uses also existing entity when redacting using GoogleSenderRedactor" do
+    it "does not use existing entities when entity_notice_role uses also existing entity when redacting using Redactors::GoogleSenderRedactor" do
       existing_redacted_entity = create(:entity, { name: '[REDACTED]' })
       google_entity = create(:entity, { name: 'Google Inc.' })
       sender_entity = create(:entity, { name: 'Sender' })
@@ -63,7 +63,7 @@ describe EntityNoticeRole, type: :model do
       notice.save
       notice_id = notice.id
 
-      GoogleSenderRedactor.new.redact(notice)
+      Redactors::GoogleSenderRedactor.new.redact(notice)
 
       notice = Notice.find(notice_id)
 

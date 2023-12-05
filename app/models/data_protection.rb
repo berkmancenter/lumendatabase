@@ -4,6 +4,8 @@ class DataProtection < Notice
   DEFAULT_ENTITY_NOTICE_ROLES = (BASE_ENTITY_NOTICE_ROLES |
                                  %w[recipient]).freeze
 
+  load_elasticsearch_helpers
+
   def self.model_name
     Notice.model_name
   end

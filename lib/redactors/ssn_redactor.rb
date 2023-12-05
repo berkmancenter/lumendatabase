@@ -1,9 +1,11 @@
-class SsnRedactor
-  def redact(text, _options = {})
-    redactor = ContentRedactor.new(
-      /\b(\d{3})\D?(\d{2})\D?(\d{4})\b/x
-    )
+module Redactors
+  class Redactors::SsnRedactor
+    def redact(text, _options = {})
+      redactor = Redactors::ContentRedactor.new(
+        /\b(\d{3})\D?(\d{2})\D?(\d{4})\b/x
+      )
 
-    redactor.redact(text)
+      redactor.redact(text)
+    end
   end
 end

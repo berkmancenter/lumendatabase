@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Other < Notice
+  load_elasticsearch_helpers
+
   def self.model_name
     Notice.model_name
   end
@@ -11,7 +13,7 @@ class Other < Notice
 
   def auto_redact
     InstanceRedactor.new.redact(self)
-    GoogleSenderRedactor.new.redact(self)
+    Redactors::GoogleSenderRedactor.new.redact(self)
   end
 
   def as_indexed_json(_options)

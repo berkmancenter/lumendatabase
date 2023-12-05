@@ -237,7 +237,7 @@ where notices.id in (
         group.each do |notice|
           next unless notice.sender.present?
 
-          redactor = EntityNameRedactor.new(notice.sender.name)
+          redactor = Redactors::EntityNameRedactor.new(notice.sender.name)
           notice.works.each do |work|
             work.update(
               description: redactor.redact(work.description)
@@ -277,7 +277,7 @@ where notices.id in (
           group.each do |notice|
             next unless notice.sender.present?
 
-            redactor = EntityNameRedactor.new(notice.sender.name)
+            redactor = Redactors::EntityNameRedactor.new(notice.sender.name)
             notice.works.each do |work|
               work.update(
                 description: redactor.redact(work.description)

@@ -4,6 +4,8 @@ class DMCA < Notice
   DEFAULT_ENTITY_NOTICE_ROLES = (BASE_ENTITY_NOTICE_ROLES |
                                 %w[recipient sender principal]).freeze
 
+  load_elasticsearch_helpers
+
   validates :title, length: { maximum: 255 }
 
   def self.model_name

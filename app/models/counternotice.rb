@@ -6,6 +6,8 @@ class Counternotice < Notice
 
   REASONS = %w[owner authorized no_right fair_use removed not_used other].freeze
 
+  load_elasticsearch_helpers
+
   validates :title, length: { maximum: 255 }
 
   def self.model_name

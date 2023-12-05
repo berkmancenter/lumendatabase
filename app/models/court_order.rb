@@ -5,6 +5,8 @@ class CourtOrder < Notice
                                 %w[recipient sender principal issuing_court
                                    plaintiff defendant]).freeze
 
+  load_elasticsearch_helpers
+
   def self.model_name
     Notice.model_name
   end

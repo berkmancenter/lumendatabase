@@ -4,6 +4,7 @@ class LawEnforcementRequest < Notice
   DEFAULT_ENTITY_NOTICE_ROLES = (BASE_ENTITY_NOTICE_ROLES |
                                 %w[recipient sender principal]).freeze
 
+                                
   VALID_REQUEST_TYPES = [
     'Agency',
     'Civil Subpoena',
@@ -12,6 +13,8 @@ class LawEnforcementRequest < Notice
     'Subpoena',
     'Warrant'
   ].freeze
+
+  load_elasticsearch_helpers
 
   validates_inclusion_of :request_type,
                          in: VALID_REQUEST_TYPES,

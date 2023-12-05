@@ -7,7 +7,7 @@ class PostResponder < ActionResponder
   def handle(params)
     if params[:selected_text].present?
       redactor = InstanceRedactor.new(
-        [ContentRedactor.new(params[:selected_text])]
+        [Redactors::ContentRedactor.new(params[:selected_text])]
       )
 
       review_required_ids = Notice.where(review_required: true).pluck(:id)
