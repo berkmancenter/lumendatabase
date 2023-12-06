@@ -1,3 +1,5 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   get 'file_uploads/files/:id/*file_path', to: 'files#show'
 
@@ -83,6 +85,10 @@ Rails.application.routes.draw do
   resources :captcha_gateway, only: :index
 
   resources :status, only: :index
+
+  authenticate :user, lambda { |u| u.role?(Role.super_admin) } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 
   root to: 'home#index', via: :get
   match '/', to: 'application#routing_error', via: ActionDispatch::Routing::HTTP_METHODS - [:get]
