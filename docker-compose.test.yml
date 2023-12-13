@@ -70,3 +70,9 @@ services:
       - /user/share/logstash/data
     environment:
       LS_JAVA_OPTS: "-Xmx2g -Xms2g"
+
+  redis:
+    image: 'redis:7.2'
+    command: redis-server
+    tmpfs:
+      - /data

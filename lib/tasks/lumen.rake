@@ -761,6 +761,8 @@ where works.id in (
 
         itx = 1
         related_object.notices.find_in_batches(batch_size: batch_size) do |notices|
+          ProxyCache.clear_notice(notices.map(&:id))
+
           notices.each do |notice|
             loggy.info "Processing #{notice_update_call.caller_type} id=#{notice_update_call.caller_id} #{itx}/#{number_of_notices}"
             notice.touch

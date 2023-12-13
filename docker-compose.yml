@@ -68,8 +68,15 @@ services:
     environment:
       LS_JAVA_OPTS: "-Xmx2g -Xms2g"
 
+  redis:
+    image: 'redis:7.2'
+    command: redis-server
+    volumes:
+      - 'redis:/data'
+
 volumes:
   postgres:
   esdata:
   logstash:
   docker_website_bash_history:
+  redis:

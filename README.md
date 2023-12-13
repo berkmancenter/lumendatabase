@@ -56,6 +56,10 @@ rake db:seed
 ```
 
 ```
+bundle exec sidekiq &
+```
+
+```
 rails s -b 0.0.0.0
 ```
 
@@ -167,44 +171,47 @@ Unless setting an environment variable on the command line in the context of a c
 
 Most of these are optional and have sensible defaults (which may vary by environment).
 
-| Variable name                                        | Description                                                                                                               |
-| ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `BATCH_SIZE`                                         | Batch size of model items indexed during each run of Elasticsearch re-indexing                                          |
-| `BUNDLE_GEMFILE`                                     | Custom Gemfile location                                                                                                    |
-| `BROWSER_VALIDATIONS`                                | Enable user HTML5 browser form validations                                                                                |
-| `DEFAULT_SENDER`                                     | Default mailer sender                                                                                                      |
-| `ELASTICSEARCH_URL`                                  | Elasticsearch host, e.g. https://127.0.0.1:9200                                                                           |
-| `EMAIL_DOMAIN`                                       | Default email domain in Action Mailer                                                                                      |
-| `ES_INDEX_SUFFIX`                                    | Can be used to specify a suffix for the name of Elasticsearch indexes                                                      |
-| `FILE_NAME`                                          | Name of CSV file to import as blog entries                                                                                 |
-| `GOOGLE_CUSTOM_BLOG_SEARCH_ID`                       | Custom Google search ID used in the CMS                                                                                    |
-| `LOG_ELASTICSEARCH`                                  | Enabled logging of Elasticsearch calls, only used in tests                                                                 |
-| `LOG_TO_LOGSTASH_FORMAT`                             | Set to true if you want to log in the Logstash format                                                                      |
-| `USE_OINK`                                           | Enable the `oink` gem in the production environment                                                                       |
-| `MAILER_DELIVERY_METHOD`                             | Sets the delivery method for emails sent by the application                                                               |
-| `NOTICE_COUNT`                                       | How many fake notices to create when seeding the db                                                                        |
-| `RACK_ENV`                                           | Don't use this; it's overridden by `RAILS_ENV`                                                                             |
-| `RAILS_ENV`                                          | Rails environment                                                                                                          |
-| `RAILS_LOG_LEVEL`                                    | Log level for all the application loggers                                                                                  |
-| `RAILS_SERVE_STATIC_FILES`                           | If present (with any value) will enable Rails to serve static files                                                        |
-| `RECAPTCHA_SITE_KEY`                                 | reCAPTCHA public key                                                                                                       |
-| `RECAPTCHA_SECRET_KEY`                               | reCAPTCHA private key                                                                                                      |
-| `RETURN_PATH`                                        | Default mailer return path                                                                                                 |
-| `SEARCH_SLEEP`                                       | Used in specs only, time out of Elasticsearch searches                                                                     |
-| `SECRET_KEY_BASE`                                    | The Rails secret token; _required in prod_                                                                                 |
-| `SERVER_TIME_ZONE`                                   | Name of the server's timezone, e.g. `Eastern Time (US & Canada)`                                                           |
-| `SITE_HOST`                                          | Site host, used in mailer templates                                                                                         |
-| `SKIP_FAKE_DATA`                                     | Don't generate fake data when seeding the database                                                                         |
-| `SMTP_ADDRESS`                                       | SMTP server address                                                                                                        |
-| `SMTP_DOMAIN`                                        | SMTP server domain                                                                                                         |
-| `SMTP_USERNAME`                                      | SMTP server username                                                                                                       |
-| `SMTP_PASSWORD`                                      | SMTP server password                                                                                                       |
-| `SMTP_PORT`                                          | SMTP server port                                                                                                           |
-| `SMTP_VERIFY_MODE`                                   | Value of the `openssl_verify_mode` option of the SMTP client                                                               |
-| `USER_CRON_EMAIL`                                    | For use in sending reports of court order files; can be a string or a list (in a JSON.parse-able format)                   |
-| `USER_CRON_MAGIC_DIR`                                | Directory used in the court order reporter cron job                                                                        |
-| `WEB_CONCURRENCY`                                    | Number of Unicorn workers                                                                                                  |
-| `WEB_TIMEOUT`                                        | Unicorn timeout                                                                                                            |
+| Variable name | Description |
+| --- | --- |
+| `BATCH_SIZE` | Batch size of model items indexed during each run of Elasticsearch re-indexing |
+| `BUNDLE_GEMFILE` | Custom Gemfile location |
+| `BROWSER_VALIDATIONS` | Enable user HTML5 browser form validations |
+| `DEFAULT_SENDER` | Default mailer sender |
+| `ELASTICSEARCH_URL` | Elasticsearch host, e.g. https://127.0.0.1:9200 |
+| `EMAIL_DOMAIN` | Default email domain in Action Mailer |
+| `ES_INDEX_SUFFIX` | Can be used to specify a suffix for the name of Elasticsearch indexes |
+| `FILE_NAME` | Name of CSV file to import as blog entries |
+| `GOOGLE_CUSTOM_BLOG_SEARCH_ID` | Custom Google search ID used in the CMS |
+| `LOG_ELASTICSEARCH` | Enabled logging of Elasticsearch calls, only used in tests |
+| `LOG_TO_LOGSTASH_FORMAT` | Set to true if you want to log in the Logstash format |
+| `USE_OINK` | Enable the `oink` gem in the production environment |
+| `MAILER_DELIVERY_METHOD` | Sets the delivery method for emails sent by the application |
+| `NOTICE_COUNT` | How many fake notices to create when seeding the db |
+| `PROXY_CACHE_CLEAR_HEADER` | Name of a request header that is used clear cache on a proxy cache server like `Varnish` |
+| `PROXY_CACHE_CLEAR_SITE_HOST` | Needed just in `development` to reach the application from a Docker container |
+| `RACK_ENV` | Don't use this; it's overridden by `RAILS_ENV` |
+| `RAILS_ENV` | Rails environment |
+| `RAILS_LOG_LEVEL` | Log level for all the application loggers |
+| `RAILS_SERVE_STATIC_FILES` | If present (with any value) will enable Rails to serve static files |
+| `RECAPTCHA_SITE_KEY` | reCAPTCHA public key |
+| `RECAPTCHA_SECRET_KEY` | reCAPTCHA private key |
+| `RETURN_PATH` | Default mailer return path |
+| `SEARCH_SLEEP` | Used in specs only, time out of Elasticsearch searches |
+| `SECRET_KEY_BASE` | The Rails secret token; _required in prod_ |
+| `SERVER_TIME_ZONE` | Name of the server's timezone, e.g. `Eastern Time (US & Canada)` |
+| `SIDEKIQ_REDIS_URL` | `Redis` location used by `Sidekiq` |
+| `SITE_HOST` | Site host, used in mailer templates |
+| `SKIP_FAKE_DATA` | Don't generate fake data when seeding the database |
+| `SMTP_ADDRESS` | SMTP server address |
+| `SMTP_DOMAIN` | SMTP server domain |
+| `SMTP_USERNAME` | SMTP server username |
+| `SMTP_PASSWORD` | SMTP server password |
+| `SMTP_PORT` | SMTP server port |
+| `SMTP_VERIFY_MODE` | Value of the `openssl_verify_mode` option of the SMTP client |
+| `USER_CRON_EMAIL` | For use in sending reports of court order files; can be a string or a list (in a JSON.parse-able format) |
+| `USER_CRON_MAGIC_DIR` | Directory used in the court order reporter cron job |
+| `WEB_CONCURRENCY` | Number of Unicorn workers |
+| `WEB_TIMEOUT` | Unicorn timeout |
 
 ### Email setup
 
