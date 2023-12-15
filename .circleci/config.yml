@@ -16,6 +16,7 @@ jobs:
       - run:
           name: Docker Compose
           command: |
+            export BUILDKIT_PROGRESS=plain
             docker-compose -f docker-compose.test.yml --env-file .env.test up -d
             sleep 60
       - run:

@@ -20,7 +20,7 @@ RUN groupadd --gid $USER_GID $USERNAME \
 USER $USERNAME
 
 # Use the latest bundler version
-RUN gem update --system
+RUN sudo gem update --system
 RUN gem update bundler
 
 # Install and cache gems
