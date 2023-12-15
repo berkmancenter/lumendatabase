@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [23.12a](https://github.com/berkmancenter/lumendatabase/releases/tag/2023.12a) - 2023-12-15
+### Changed
+* Stopped redacting phone numbers in defamation urls.
+
 ## [23.12](https://github.com/berkmancenter/lumendatabase/releases/tag/2023.12) - 2023-12-13
 ### Added
 * Installed and configured `Sidekiq` for background jobs.
