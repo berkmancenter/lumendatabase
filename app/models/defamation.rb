@@ -34,6 +34,19 @@ class Defamation < Notice
 
     instance_redactor.redact(self)
 
+    custom_works_redactors = [
+      Redactors::SsnRedactor.new,
+      Redactors::EmailRedactor.new,
+      Redactors::EntityNameRedactor.new
+    ]
+
+    instance_redactor = InstanceRedactor.new(
+      custom_works_redactors,
+      {
+        entity_name: entity_name
+      }
+    )
+
     works.each do |work|
       instance_redactor.redact(work, %w[description])
 

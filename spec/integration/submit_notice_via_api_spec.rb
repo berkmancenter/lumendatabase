@@ -378,6 +378,30 @@ feature 'notice submission', js: true do
     end
   end
 
+  scenario 'submitting problamatic urls' do
+    works_url_1 = [
+      {
+        description: 'Heyo',
+        infringing_urls_attributes: [
+          {
+            url: 'https://www.google.com/maps/place/WW+AUTO/@43.7808951,4.2929117,15z/data=!4m6!3m5!1s0x12b4293642723a93:0xa720e27e0e9f38fc!8m2!3d43.7808951!4d4.2929117!16s%2Fg%2F11gzq2dnz5?entry=ttu'
+          }
+        ]
+      }
+    ]
+
+    parameters = request_hash(default_notice_hash({
+      type: 'Defamation',
+      works_attributes: works_url_1
+    }))
+
+    curb = post_api('/notices', parameters)
+
+    puts curb.body_str.inspect
+
+    expect(curb.response_code).to eq 201
+  end
+
   private
 
   def original_document_file(notice)
