@@ -397,8 +397,6 @@ feature 'notice submission', js: true do
 
     curb = post_api('/notices', parameters)
 
-    puts curb.body_str.inspect
-
     expect(curb.response_code).to eq 201
   end
 
