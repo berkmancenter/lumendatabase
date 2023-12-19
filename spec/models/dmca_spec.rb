@@ -311,6 +311,18 @@ describe DMCA, type: :model do
         expect(notice.sender.kind).to eq('individual')
       end
 
+      it 'sets the default jurisdiction to the sender country code' do
+        notice = create(:dmca, role_names: %w[principal])
+        notice.entity_notice_roles << create(
+          :entity_notice_role,
+          entity: create(:entity, country_code: 'ES'),
+          name: 'sender'
+        )
+        notice.save
+
+        expect(notice.jurisdiction_list).to eq(['ES'])
+      end
+
       context 'with entities' do
         described_class::DEFAULT_ENTITY_NOTICE_ROLES.each do |role_name|
           context "##{role_name}" do

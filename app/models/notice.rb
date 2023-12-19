@@ -133,6 +133,7 @@ class Notice < ApplicationRecord
     __elasticsearch__.delete_document ignore: 404
   end
   after_update :clear_proxy_cache
+  after_save :set_default_jurisdiction
 
   # == Scopes ===============================================================
   scope :top_notices_token_urls, -> { joins(:archived_token_urls).select('notices.*, COUNT(archived_token_urls.id) AS counted_archived_token_urls').group('notices.id') }
@@ -535,5 +536,12 @@ class Notice < ApplicationRecord
 
   def clear_proxy_cache
     ProxyCache.clear_notice(id)
+  end
+
+  def set_default_jurisdiction
+    return if jurisdictions.present?
+    return unless sender&.country_code.present?
+
+    self.jurisdiction_list = [sender.country_code]
   end
 end
