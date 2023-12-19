@@ -30,8 +30,7 @@ class Notice < ApplicationRecord
     TermSearch.new(:topics, 'topics.name', 'Topics'),
     TermSearch.new(:tags, :tag_list, 'Tags'),
     TermSearch.new(:jurisdictions, :jurisdiction_list, 'Jurisdictions'),
-    # It's not fully indexed in
-    # TermSearch.new(:entities_country_codes, :entities_country_codes, 'Entity Country Code'),
+    TermSearch.new(:entities_country_codes, :entities_country_codes, 'Entity Country Code'),
     TermSearch.new(:sender_name, :sender_name, 'Sender Name'),
     TermSearch.new(:principal_name, :principal_name, 'Principal Name'),
     TermSearch.new(:recipient_name, :recipient_name, 'Recipient Name'),
