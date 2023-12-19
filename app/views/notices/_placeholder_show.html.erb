@@ -1,13 +1,13 @@
 <section class="notice-body">
   <% if notice.body.present? %>
-    <h5 class="title"><%= notice.customizations&.fetch('body_field_label') || Translation.t('notice_show_private_body') %></h5>
+    <h5 class="title"><%= notice.customizations&.fetch('body_field_label', nil) || Translation.t('notice_show_private_body') %></h5>
     <p class="body"><pre><%= notice.redacted(:body) %></pre></p>
   <% end %>
 </section>
 
-<%= notice.customizations&.fetch('static_works_text')&.html_safe %>
+<%= notice.customizations&.fetch('static_works_text', nil)&.html_safe %>
 
-<% unless notice.customizations&.fetch('hide_works') %>
+<% unless notice.customizations&.fetch('hide_works', nil) %>
   <section class="works">
     <dl class="urls">
       <dt class="label"><%= Translation.t('notice_show_works_problematic_urls') %></dt>

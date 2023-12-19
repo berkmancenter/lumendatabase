@@ -1,6 +1,6 @@
 <section class="notice-body">
   <% if notice.body.present? %>
-    <h5 class="title"><%= notice.customizations&.fetch('body_field_label') || 'Body' %></h5>
+    <h5 class="title"><%= notice.customizations&.fetch('body_field_label', nil) || 'Body' %></h5>
     <p class="body"><pre><%= notice.redacted(:body) %></pre></p>
   <% end %>
 </section>
