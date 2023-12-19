@@ -1,5 +1,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [23.12b](https://github.com/berkmancenter/lumendatabase/releases/tag/2023.12b) - 2023-12-19
+### Changed
+* Enabled the `entities_country_codes` search field.
+* Set the default notice jurisdiction to the sender country code when not explicitly provided.
+
 ## [23.12a](https://github.com/berkmancenter/lumendatabase/releases/tag/2023.12a) - 2023-12-15
 ### Changed
 * Stopped redacting phone numbers in defamation urls.
