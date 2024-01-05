@@ -55,7 +55,7 @@ group :development do
 end
 
 group :development, :test do
-  gem 'pry', '~> 0.10.4'
+  gem 'pry'
   gem 'pry-byebug'
   gem 'pry-rails'
   gem 'ruby-prof'
