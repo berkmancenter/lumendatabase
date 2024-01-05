@@ -20,6 +20,14 @@ module Chill
     config.railties_order = [ActiveStorage::Engine, :main_app, :all]
     config.autoloader = :zeitwerk
 
+    config.load_defaults 7.0
+
+    # TODO: Release a version which uses the 7.0 defaults as specified above,
+    # but preserves the 6.1 cache format as set below. In a subsequent change,
+    # remove this line setting to 6.1 cache format, and then release another version.
+    # https://guides.rubyonrails.org/upgrading_ruby_on_rails.html#new-activesupport-cache-serialization-format
+    config.active_support.cache_format_version = 6.1
+
     config.active_record.default_timezone = :utc
     I18n.config.enforce_available_locales = true
 
@@ -30,6 +38,8 @@ module Chill
       generate.javascript_engine false
       generate.view_specs false
     end
+
+    config.autoload_lib(ignore: %w(assets tasks))
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers

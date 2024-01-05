@@ -253,7 +253,7 @@ feature 'CMS blog entries' do
       @blog.children.last(10).each do |post|
         expect(page).to have_content cms_fragment_content('title', post)
         expect(page).to have_content cms_fragment_content('author', post)
-        expect(page).to have_content post.created_at.to_s(:rfc822)
+        expect(page).to have_content post.created_at.to_fs(:rfc822)
         expect(page).to have_content post.url
         expect(page).to have_content cms_fragment_content('content', post)
         expect(page).to have_content cms_fragment_content('abstract', post)

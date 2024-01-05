@@ -5,7 +5,7 @@ class TokenUrl < ApplicationRecord
 
   before_create :generate_token
 
-  belongs_to :user
+  belongs_to :user, optional: true
   belongs_to :notice
 
   validates :notice, presence: true

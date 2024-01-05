@@ -30,7 +30,7 @@ class BlogFeedController < ApplicationController
     OpenStruct.new(
       title: cms_fragment_content('title', post),
       author: cms_fragment_content('author', post),
-      pubDate: post.created_at.to_s(:rfc822),
+      pubDate: post.created_at.to_fs(:rfc822),
       link: post.url,
       guid: post.id.to_s,
       content: cms_fragment_content('content', post),

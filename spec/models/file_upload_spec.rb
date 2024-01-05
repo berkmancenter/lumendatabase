@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe FileUpload, type: :model do
   it { is_expected.to have_attached_file(:file) }
-  it { is_expected.to belong_to :notice }
+  it { is_expected.to belong_to(:notice).optional }
   it { is_expected.to have_db_index :notice_id }
   it { is_expected.to validate_inclusion_of(:kind).in_array %w( original supporting ) }
 

@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_12_19_100545) do
-
+ActiveRecord::Schema[7.1].define(version: 2024_01_05_192005) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -20,7 +19,7 @@ ActiveRecord::Schema.define(version: 2023_12_19_100545) do
     t.string "record_type", null: false
     t.bigint "record_id", null: false
     t.bigint "blob_id", null: false
-    t.datetime "created_at", null: false
+    t.datetime "created_at", precision: nil, null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
@@ -31,8 +30,8 @@ ActiveRecord::Schema.define(version: 2023_12_19_100545) do
     t.string "content_type"
     t.text "metadata"
     t.bigint "byte_size", null: false
-    t.string "checksum", null: false
-    t.datetime "created_at", null: false
+    t.string "checksum"
+    t.datetime "created_at", precision: nil, null: false
     t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
@@ -61,8 +60,8 @@ ActiveRecord::Schema.define(version: 2023_12_19_100545) do
     t.text "admin_notes", default: ""
     t.bigint "user_id"
     t.boolean "approved", default: false, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["user_id"], name: "index_api_submitter_requests_on_user_id"
   end
 
@@ -71,12 +70,12 @@ ActiveRecord::Schema.define(version: 2023_12_19_100545) do
     t.string "token"
     t.bigint "notice_id"
     t.bigint "user_id"
-    t.datetime "expiration_date"
+    t.datetime "expiration_date", precision: nil
     t.boolean "valid_forever", default: false, null: false
     t.boolean "documents_notification", default: false, null: false
     t.integer "views", default: 0
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "ip"
     t.index ["documents_notification"], name: "index_archived_token_urls_on_documents_notification"
     t.index ["email"], name: "index_archived_token_urls_on_email"
@@ -88,16 +87,16 @@ ActiveRecord::Schema.define(version: 2023_12_19_100545) do
   create_table "blocked_token_url_domains", force: :cascade do |t|
     t.string "name"
     t.string "comments"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["name"], name: "index_blocked_token_url_domains_on_name"
   end
 
   create_table "blocked_token_url_ips", force: :cascade do |t|
     t.string "address"
     t.string "comments"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["address"], name: "index_blocked_token_url_ips_on_address"
   end
 
@@ -120,8 +119,8 @@ ActiveRecord::Schema.define(version: 2023_12_19_100545) do
     t.string "label", default: "", null: false
     t.text "description"
     t.integer "position", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["site_id", "position"], name: "index_comfy_cms_files_on_site_id_and_position"
   end
 
@@ -132,9 +131,9 @@ ActiveRecord::Schema.define(version: 2023_12_19_100545) do
     t.string "tag", default: "text", null: false
     t.text "content"
     t.boolean "boolean", default: false, null: false
-    t.datetime "datetime"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "datetime", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["boolean"], name: "index_comfy_cms_fragments_on_boolean"
     t.index ["datetime"], name: "index_comfy_cms_fragments_on_datetime"
     t.index ["identifier"], name: "index_comfy_cms_fragments_on_identifier"
@@ -151,8 +150,8 @@ ActiveRecord::Schema.define(version: 2023_12_19_100545) do
     t.text "css"
     t.text "js"
     t.integer "position", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["parent_id", "position"], name: "index_comfy_cms_layouts_on_parent_id_and_position"
     t.index ["site_id", "identifier"], name: "index_comfy_cms_layouts_on_site_id_and_identifier", unique: true
   end
@@ -169,8 +168,8 @@ ActiveRecord::Schema.define(version: 2023_12_19_100545) do
     t.integer "position", default: 0, null: false
     t.integer "children_count", default: 0, null: false
     t.boolean "is_published", default: true, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["is_published"], name: "index_comfy_cms_pages_on_is_published"
     t.index ["parent_id", "position"], name: "index_comfy_cms_pages_on_parent_id_and_position"
     t.index ["site_id", "full_path"], name: "index_comfy_cms_pages_on_site_id_and_full_path"
@@ -180,7 +179,7 @@ ActiveRecord::Schema.define(version: 2023_12_19_100545) do
     t.string "record_type", null: false
     t.integer "record_id", null: false
     t.text "data"
-    t.datetime "created_at"
+    t.datetime "created_at", precision: nil
     t.index ["record_type", "record_id", "created_at"], name: "index_cms_revisions_on_rtype_and_rid_and_created_at"
   end
 
@@ -190,8 +189,8 @@ ActiveRecord::Schema.define(version: 2023_12_19_100545) do
     t.string "hostname", null: false
     t.string "path"
     t.string "locale", default: "en", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["hostname"], name: "index_comfy_cms_sites_on_hostname"
   end
 
@@ -201,8 +200,8 @@ ActiveRecord::Schema.define(version: 2023_12_19_100545) do
     t.string "identifier", null: false
     t.text "content"
     t.integer "position", default: 0, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["site_id", "identifier"], name: "index_comfy_cms_snippets_on_site_id_and_identifier", unique: true
     t.index ["site_id", "position"], name: "index_comfy_cms_snippets_on_site_id_and_position"
   end
@@ -214,8 +213,8 @@ ActiveRecord::Schema.define(version: 2023_12_19_100545) do
     t.string "label", null: false
     t.text "content_cache"
     t.boolean "is_published", default: true, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["is_published"], name: "index_comfy_cms_translations_on_is_published"
     t.index ["locale"], name: "index_comfy_cms_translations_on_locale"
     t.index ["page_id"], name: "index_comfy_cms_translations_on_page_id"
@@ -226,14 +225,14 @@ ActiveRecord::Schema.define(version: 2023_12_19_100545) do
     t.string "query"
     t.text "notes"
     t.jsonb "actions"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "documents_update_notification_notices", id: :serial, force: :cascade do |t|
     t.integer "notice_id", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
   end
 
   create_table "entities", id: :serial, force: :cascade do |t|
@@ -250,8 +249,8 @@ ActiveRecord::Schema.define(version: 2023_12_19_100545) do
     t.string "city", default: ""
     t.string "zip", default: ""
     t.integer "user_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "name_original"
     t.boolean "full_notice_only_researchers", default: false, null: false
     t.string "address_line_1_original"
@@ -285,8 +284,8 @@ ActiveRecord::Schema.define(version: 2023_12_19_100545) do
     t.integer "entity_id", null: false
     t.integer "notice_id", null: false
     t.string "name", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["entity_id"], name: "index_entity_notice_roles_on_entity_id"
     t.index ["notice_id"], name: "index_entity_notice_roles_on_notice_id"
   end
@@ -297,11 +296,11 @@ ActiveRecord::Schema.define(version: 2023_12_19_100545) do
     t.string "file_file_name"
     t.integer "file_file_size"
     t.string "file_content_type"
-    t.datetime "file_updated_at"
+    t.datetime "file_updated_at", precision: nil
     t.boolean "pdf_requested", default: false, null: false
     t.boolean "pdf_request_fulfilled", default: false, null: false
-    t.datetime "created_at", precision: 6
-    t.datetime "updated_at", precision: 6
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.index ["notice_id"], name: "index_file_uploads_on_notice_id"
   end
 
@@ -309,8 +308,8 @@ ActiveRecord::Schema.define(version: 2023_12_19_100545) do
     t.string "name", null: false
     t.string "key", null: false
     t.string "value", null: false
-    t.datetime "created_at", precision: 6
-    t.datetime "updated_at", precision: 6
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "media_mentions", force: :cascade do |t|
@@ -323,8 +322,8 @@ ActiveRecord::Schema.define(version: 2023_12_19_100545) do
     t.string "document_type", limit: 100
     t.text "comments"
     t.boolean "published", default: true, null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "author"
   end
 
@@ -334,29 +333,29 @@ ActiveRecord::Schema.define(version: 2023_12_19_100545) do
     t.string "message", limit: 16384
     t.string "stacktrace", limit: 2048
     t.string "import_set_name", limit: 1024
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
   end
 
   create_table "notice_update_calls", force: :cascade do |t|
     t.integer "caller_id"
     t.string "caller_type"
     t.string "status"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "notices", id: :serial, force: :cascade do |t|
     t.string "title"
     t.text "body"
-    t.datetime "date_received"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "date_received", precision: nil
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.string "source"
     t.string "subject"
     t.boolean "review_required", default: false, null: false
     t.text "body_original"
-    t.datetime "date_sent"
+    t.datetime "date_sent", precision: nil
     t.integer "reviewer_id"
     t.string "language"
     t.boolean "rescinded", default: false, null: false
@@ -390,7 +389,7 @@ ActiveRecord::Schema.define(version: 2023_12_19_100545) do
     t.index ["submission_id"], name: "index_notices_on_submission_id"
     t.index ["type"], name: "index_notices_on_type"
     t.index ["updated_at"], name: "index_notices_on_updated_at"
-    t.check_constraint nil, name: "notices_works_json_check"
+    t.check_constraint "validate_works_json(works_json)", name: "notices_works_json_check"
   end
 
   create_table "notices_relevant_questions", id: :serial, force: :cascade do |t|
@@ -407,8 +406,8 @@ ActiveRecord::Schema.define(version: 2023_12_19_100545) do
     t.string "table"
     t.integer "month", limit: 2
     t.bigint "year"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["item"], name: "index_rails_admin_histories_on_item"
     t.index ["month"], name: "index_rails_admin_histories_on_month"
     t.index ["table"], name: "index_rails_admin_histories_on_table"
@@ -418,8 +417,8 @@ ActiveRecord::Schema.define(version: 2023_12_19_100545) do
   create_table "relevant_questions", id: :serial, force: :cascade do |t|
     t.text "question", null: false
     t.text "answer", null: false
-    t.datetime "created_at", precision: 6
-    t.datetime "updated_at", precision: 6
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "relevant_questions_topics", id: :serial, force: :cascade do |t|
@@ -435,8 +434,8 @@ ActiveRecord::Schema.define(version: 2023_12_19_100545) do
     t.boolean "negated", default: false, null: false
     t.string "matching_type"
     t.integer "risk_trigger_id"
-    t.datetime "created_at", precision: 6
-    t.datetime "updated_at", precision: 6
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.index ["risk_trigger_id"], name: "index_risk_trigger_conditions_on_risk_trigger_id"
   end
 
@@ -444,14 +443,14 @@ ActiveRecord::Schema.define(version: 2023_12_19_100545) do
     t.string "name", null: false
     t.string "matching_type", null: false
     t.string "comment"
-    t.datetime "created_at", precision: 6
-    t.datetime "updated_at", precision: 6
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "roles", id: :serial, force: :cascade do |t|
     t.string "name", null: false
-    t.datetime "created_at", precision: 6
-    t.datetime "updated_at", precision: 6
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "roles_users", id: :serial, force: :cascade do |t|
@@ -465,8 +464,8 @@ ActiveRecord::Schema.define(version: 2023_12_19_100545) do
     t.string "domain_name"
     t.text "notes"
     t.jsonb "why_special"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "token_urls", id: :serial, force: :cascade do |t|
@@ -474,10 +473,10 @@ ActiveRecord::Schema.define(version: 2023_12_19_100545) do
     t.string "token"
     t.integer "notice_id", null: false
     t.integer "user_id"
-    t.datetime "expiration_date"
+    t.datetime "expiration_date", precision: nil
     t.boolean "valid_forever", default: false, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.boolean "documents_notification", default: false, null: false
     t.integer "views", default: 0
     t.string "ip"
@@ -511,8 +510,8 @@ ActiveRecord::Schema.define(version: 2023_12_19_100545) do
     t.text "description", default: ""
     t.string "ancestry"
     t.integer "original_category_id"
-    t.datetime "created_at", precision: 6
-    t.datetime "updated_at", precision: 6
+    t.datetime "created_at"
+    t.datetime "updated_at"
     t.index ["ancestry"], name: "index_topics_on_ancestry"
   end
 
@@ -520,23 +519,23 @@ ActiveRecord::Schema.define(version: 2023_12_19_100545) do
     t.string "key"
     t.text "notes", default: ""
     t.text "body", default: ""
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", id: :serial, force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
+    t.datetime "reset_password_sent_at", precision: nil
     t.string "authentication_token"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.integer "publication_delay", default: 0, null: false
     t.boolean "can_generate_permanent_notice_token_urls", default: false, null: false
     t.integer "full_notice_views_limit", default: 1
     t.integer "viewed_notices", default: 0, null: false
-    t.datetime "full_notice_time_limit"
+    t.datetime "full_notice_time_limit", precision: nil
     t.boolean "limit_notice_api_response", default: false, null: false
     t.boolean "allow_generate_permanent_tokens_researchers_only_notices", default: false, null: false
     t.string "widget_submissions_forward_email"
@@ -553,21 +552,21 @@ ActiveRecord::Schema.define(version: 2023_12_19_100545) do
     t.text "message"
     t.string "filename", limit: 1024
     t.text "stacktrace"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "youtube_import_file_locations", force: :cascade do |t|
     t.bigint "file_upload_id"
     t.string "path", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["file_upload_id"], name: "index_youtube_import_file_locations_on_file_upload_id"
   end
 
   create_table "yt_imports", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

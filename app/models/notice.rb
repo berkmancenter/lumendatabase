@@ -81,7 +81,7 @@ class Notice < ApplicationRecord
   VALID_ACTIONS = %w[Yes No Partial Unspecified].freeze
 
   # == Relationships ========================================================
-  belongs_to :reviewer, class_name: 'User'
+  belongs_to :reviewer, class_name: 'User', optional: true
 
   has_many :topic_assignments, dependent: :destroy
   has_many :topics, through: :topic_assignments

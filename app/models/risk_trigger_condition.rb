@@ -10,7 +10,7 @@ class RiskTriggerCondition < ApplicationRecord
 
   ALLOWED_MATCHING_TYPES = %w[exact broad].freeze
 
-  belongs_to :risk_trigger
+  belongs_to :risk_trigger, optional: true
 
   validates_presence_of :field, :value
   validates_inclusion_of :field, in: ALLOWED_FIELDS
