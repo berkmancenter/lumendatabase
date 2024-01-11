@@ -10,6 +10,10 @@ class ClearCacheJob < ApplicationJob
     request['Host'] = uri.host
     request[ProxyCache::CLEAR_HEADER] = 'yolo'
 
-    http.request(request)
+    begin
+      http.request(request)
+    rescue StandardError => e
+      logger.error(e.message)
+    end
   end
 end
