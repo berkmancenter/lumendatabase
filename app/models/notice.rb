@@ -138,11 +138,6 @@ class Notice < ApplicationRecord
   scope :top_notices_token_urls, -> { joins(:archived_token_urls).select('notices.*, COUNT(archived_token_urls.id) AS counted_archived_token_urls').group('notices.id') }
   scope :with_attachments, -> { includes(:file_uploads).where.not(file_uploads: { id: nil }) }
 
-  # == Aliases ==============================================================
-  alias_attribute :tags, :tag_list
-  alias_attribute :jurisdictions, :jurisdiction_list
-  alias_attribute :regulations, :regulation_list
-
   # == Class Methods ========================================================
   def self.label
     name.titleize
@@ -292,6 +287,30 @@ class Notice < ApplicationRecord
       .where('id > ? and review_required = ?', id, true)
       .order('id asc')
       .first
+  end
+
+  def tags
+    tag_list
+  end
+
+  def jurisdictions
+    jurisdiction_list
+  end
+
+  def regulations
+    regulation_list
+  end
+
+  def tags=(value = '')
+    tag_list = value
+  end
+
+  def jurisdictions=(value = '')
+    jurisdiction_list = value
+  end
+
+  def regulations=(value = '')
+    regulation_list = value
   end
 
   def jurisdiction_list=(value = '')
