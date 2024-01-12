@@ -19,6 +19,9 @@ require 'rspec/rails'
 require 'webmock/rspec'
 require 'rspec/mocks'
 require 'hasher'
+require 'sidekiq/testing'
+
+Sidekiq::Testing.inline!
 
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 

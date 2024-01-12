@@ -31,6 +31,6 @@ describe 'rails_admin/application/redact_queue.html.erb' do
     expect(rendered).to have_words(notice.sender_name)
     expect(rendered).to have_words(notice.recipient_name)
     expect(rendered).to have_words(notice.submitter_name)
-    expect(rendered).to have_words(notice.date_received.to_s(:simple))
+    expect(rendered).to have_words(notice.date_received.to_fs(:simple))
   end
 end

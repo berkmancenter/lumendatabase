@@ -21,7 +21,7 @@ class Entity < ApplicationRecord
   REDACTABLE_FIELDS = %w[name address_line_1 address_line_2 city state country_code url].freeze
 
   # == Relationships ========================================================
-  belongs_to :user
+  belongs_to :user, optional: true
   has_many :entity_notice_roles, dependent: :destroy
   has_many :notices, through: :entity_notice_roles
   has_and_belongs_to_many :full_notice_only_researchers_users,

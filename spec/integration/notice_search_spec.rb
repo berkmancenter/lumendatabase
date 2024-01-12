@@ -67,7 +67,7 @@ feature 'Searching Notices', type: :feature do
     submit_search 'A notice'
     expect(page).to have_link(notice.title, href: notice_path(notice))
     expect(page).to have_css(
-      '.result .date-received', text: notice.date_received.to_s(:simple)
+      '.result .date-received', text: notice.date_received.to_fs(:simple)
     )
     expect(page).to have_words(on_behalf_of)
     notice.topics.each do |topic|
@@ -441,10 +441,10 @@ feature 'Searching Notices', type: :feature do
   scenario 'cache does not break date filter', cache: true, js: true do
     last_year = Time.at(
       Time.now.beginning_of_day - 12.months
-    ).to_datetime.to_s(:simple)
+    ).to_datetime.to_fs(:simple)
     last_month = Time.at(
       Time.now.beginning_of_day - 1.month
-    ).to_datetime.to_s(:simple)
+    ).to_datetime.to_fs(:simple)
 
     create(:dmca, title: 'Ancient History', date_received: 100.days.ago)
     create(:dmca, title: 'Modern History', date_received: 1.day.ago)

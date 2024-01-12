@@ -14,7 +14,7 @@ class FileUpload < ApplicationRecord
             length: { maximum: 255 },
             inclusion: { in: ALLOWED_KINDS }
 
-  belongs_to :notice
+  belongs_to :notice, optional: true
   has_one :youtube_import_file_location
   has_attached_file :file,
     path: ':rails_root/paperclip/:class/:attachment/:id_partition/:style/:filename',

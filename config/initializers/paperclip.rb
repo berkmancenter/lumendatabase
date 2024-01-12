@@ -14,7 +14,7 @@ module Paperclip
         Addressable::URI.encode_component(
           url,
           Addressable::URI::CharacterClasses::QUERY
-        ).gsub(escape_regex) { |m| "%#{m.ord.to_s(16).upcase}" }
+        ).gsub(escape_regex) { |m| "%#{m.ord.to_fs(16).upcase}" }
       end
     end
   end

@@ -1,7 +1,7 @@
 Devise.setup do |config|
   require 'devise/orm/active_record'
 
-  config.secret_key = Rails.application.secrets.devise_secret
+  config.secret_key = Rails.application.secret_key_base
   config.mailer_sender = 'admin@lumendatabase.org'
   config.skip_session_storage = [:http_auth]
   config.stretches = Rails.env.test? ? 1 : 10

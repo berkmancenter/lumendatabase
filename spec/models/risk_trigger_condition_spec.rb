@@ -5,7 +5,7 @@ describe RiskTriggerCondition, type: :model do
   it { is_expected.to validate_presence_of :value }
   it { is_expected.to validate_inclusion_of(:field).in_array(RiskTriggerCondition::ALLOWED_FIELDS) }
   it { is_expected.to validate_inclusion_of(:matching_type).in_array(RiskTriggerCondition::ALLOWED_MATCHING_TYPES) }
-  it { is_expected.to belong_to(:risk_trigger) }
+  it { is_expected.to belong_to(:risk_trigger).optional }
 
   it 'sees a risky notice as risky' do
     notice = double('Notice')

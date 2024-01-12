@@ -136,7 +136,7 @@ module NoticesHelper
 
   def display_date_field(record, field)
     return unless record && (date = record.send(field))
-    time_tag date, date.to_s(:simple)
+    time_tag date, date.to_fs(:simple)
   end
 
   def infringing_url_label(notice)
