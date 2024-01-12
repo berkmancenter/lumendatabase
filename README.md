@@ -13,7 +13,7 @@ The main [Lumen Database instance](https://www.lumendatabase.org/) has an API th
 
 ### Stack
 
-* ruby 3.0.6
+* ruby 3.2.2
 * PostgreSQL 13.6
 * Elasticsearch 7.17.x
 * Java Runtime Environment (OpenJDK works fine)
