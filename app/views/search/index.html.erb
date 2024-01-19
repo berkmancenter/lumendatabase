@@ -1,6 +1,6 @@
 <%= title Translation.t('search_index_title') %>
 
-<%= cache(@searcher.cache_key) do %>
+<%= cache_unless(Current.user&.role?(Role.super_admin), @searcher.cache_key) do %>
   <section class="search-results">
     <header class="app">
       <%= form_tag(@search_index_path, method: :get, id: 'facets-form') do %>

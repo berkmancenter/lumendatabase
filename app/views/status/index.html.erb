@@ -1,6 +1,6 @@
 <%= title 'Status page' %>
 
-<% cache('lumendatabase-status-page', expires_in: 2.minutes ) do %>
+<% cache_unless(Current.user&.role?(Role.super_admin), 'lumendatabase-status-page', expires_in: 2.minutes ) do %>
   <div class="landing-image-full">
     <%= image_tag("network.jpg") %>
   </div>

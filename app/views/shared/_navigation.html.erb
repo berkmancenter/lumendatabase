@@ -5,7 +5,7 @@
       <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= Translation.t('navigation_header_topics') %></a>
       <div id="dropdown-topics" class="dropdown-menu" role="menu">
         <ol>
-          <% cache('dropdown-topics') do %>
+          <% cache_unless(Current.user&.role?(Role.super_admin), 'dropdown-topics') do %>
             <%= render partial: 'shared/topic_dropdown', collection: topic_roots,
                 as: :topic %>
           <% end %>
