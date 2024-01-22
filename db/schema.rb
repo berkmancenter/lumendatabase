@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_05_192005) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_17_193022) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -346,7 +346,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_05_192005) do
   end
 
   create_table "notices", id: :serial, force: :cascade do |t|
-    t.string "title"
+    t.text "title"
     t.text "body"
     t.datetime "date_received", precision: nil
     t.datetime "created_at", precision: nil
@@ -381,7 +381,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_05_192005) do
     t.jsonb "tag_list", default: []
     t.jsonb "jurisdiction_list", default: []
     t.jsonb "regulation_list", default: []
-    t.jsonb "customizations", default: {}
+    t.jsonb "customizations", default: []
     t.index ["created_at"], name: "index_notices_on_created_at"
     t.index ["original_notice_id"], name: "index_notices_on_original_notice_id"
     t.index ["published"], name: "index_notices_on_published"
