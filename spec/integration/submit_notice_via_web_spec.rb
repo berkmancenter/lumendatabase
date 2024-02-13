@@ -194,7 +194,7 @@ feature 'notice submission' do
   scenario 'submitting as a user with a linked entity prefills form' do
     user = create(:user, :submitter)
     entity = create(
-      :entity, user: user, kind: 'organization',
+      :entity, users: [user], kind: 'organization',
       address_line_1: '23 Everett St.', address_line_2: '2nd Floor',
       city: 'Cambridge', state: 'MA', zip: '02138', phone: '(617) 495-7547',
       country_code: 'US', email: 'totallyfake@cyber.harvard.edu',

@@ -307,7 +307,7 @@ RailsAdmin.config do |config|
       field :url
       field :city
       field :zip
-      field :user
+      field :users
       field :full_notice_only_researchers
       field :full_notice_only_researchers_users
       field :name_original

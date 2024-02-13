@@ -93,7 +93,7 @@ feature 'notice submission', js: true do
 
   scenario 'submitting as a user with a linked entity' do
     user = create(:user, :submitter)
-    entity = create(:entity, user: user, name: 'Twitter')
+    entity = create(:entity, users: [user], name: 'Twitter')
     notice_parameters = default_notice_hash(title: 'A superduper title')
     notice_parameters.delete(:entity_notice_roles_attributes)
     parameters = request_hash(notice_parameters, user)
@@ -108,7 +108,7 @@ feature 'notice submission', js: true do
 
   scenario 'submitting as a user with a linked entity and providing a submitter entity' do
     user = create(:user, :submitter)
-    entity = create(:entity, user: user, name: 'Twitter')
+    entity = create(:entity, users: [user], name: 'Twitter')
     notice_parameters = default_notice_hash(
       title: 'A superduper title',
       entity_notice_roles_attributes: [

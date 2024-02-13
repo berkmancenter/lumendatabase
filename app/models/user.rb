@@ -2,7 +2,7 @@ class User < ApplicationRecord
   extend Devise::Models
 
   # == Relationships ========================================================
-  has_one :entity
+  belongs_to :entity, optional: true
   has_and_belongs_to_many :roles
   has_many :token_urls
   has_and_belongs_to_many :full_notice_only_researchers_entities,
