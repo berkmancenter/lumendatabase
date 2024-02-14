@@ -72,7 +72,14 @@ class Entity < ApplicationRecord
   end
 
   def force_redactions
+    # We don't want to ever redact entities linked with users with the submitter role
+    return if submitter_user_entity?
+
     InstanceRedactor.new.redact(self, REDACTABLE_FIELDS)
+  end
+
+  def submitter_user_entity?
+    self.users.joins(:roles).where(roles: { name: 'submitter' }).any?
   end
 
   def publication_delay

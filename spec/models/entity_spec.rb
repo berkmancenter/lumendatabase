@@ -84,6 +84,38 @@ describe Entity, type: :model do
       expect(entity).to receive(:force_redactions)
       entity.save
     end
+
+    context 'redaction of submitter entities' do
+      it "doesn't redact entities linked to users with submitter role" do
+        params = { name: 'Test if we redact' }
+        entity = Entity.new(params)
+        entity.save
+
+        create(:user, :submitter, entity: entity)
+
+        entity.name = 'Test if we redact me@example.com'
+        entity.save
+
+        expect(entity.name).to include 'me@example.com'
+      end
+
+      it "doesn't redact entities linked to users with submitter role using GoogleSenderRedactor" do
+        params = { name: 'Test if we redact' }
+        entity = Entity.new(params)
+        entity.save
+
+        create(:user, :submitter, entity: entity)
+
+        notice = create(:defamation, :with_facet_data)
+        notice.entity_notice_roles = notice.entity_notice_roles.select { |entity_role| entity_role.name.to_sym != :sender }
+        notice.entity_notice_roles << create(:entity_notice_role, entity: entity, name: 'sender')
+        notice.recipient.name = 'Google'
+        notice.auto_redact
+        notice.recipient.save
+
+        expect(notice.sender.name).not_to eq Lumen::REDACTION_MASK
+      end
+    end
   end
 
   context 'validating scoped name attribute' do

@@ -15,6 +15,7 @@ module Redactors
     private
 
     def redact_entity(entity)
+      return if entity.submitter_user_entity?
       return if entity.nil?
 
       if entity.name != Lumen::REDACTION_MASK
