@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_17_193022) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_13_124042) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -381,7 +381,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_17_193022) do
     t.jsonb "tag_list", default: []
     t.jsonb "jurisdiction_list", default: []
     t.jsonb "regulation_list", default: []
-    t.jsonb "customizations", default: []
+    t.jsonb "customizations", default: {}
     t.index ["created_at"], name: "index_notices_on_created_at"
     t.index ["original_notice_id"], name: "index_notices_on_original_notice_id"
     t.index ["published"], name: "index_notices_on_published"
@@ -541,8 +541,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_17_193022) do
     t.string "widget_submissions_forward_email"
     t.string "widget_public_key"
     t.text "notes"
+    t.integer "entity_id"
     t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["entity_id"], name: "index_users_on_entity_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["widget_public_key"], name: "index_users_on_widget_public_key", unique: true
   end
