@@ -755,12 +755,12 @@ where works.id in (
       loggy.info "Processing #{notice_update_call.caller_type} id=#{notice_update_call.caller_id}"
 
       related_object = notice_update_call.caller_type.classify.constantize.find_by(id: notice_update_call.caller_id)
-      number_of_notices = related_object.notices.count
+      number_of_notices = related_object.notices.group(:id).count
       if related_object.present?
         loggy.info "Processing #{notice_update_call.caller_type} id=#{notice_update_call.caller_id} #{number_of_notices} items to process"
 
         itx = 1
-        related_object.notices.find_in_batches(batch_size: batch_size) do |notices|
+        related_object.notices.group(:id).find_in_batches(batch_size: batch_size) do |notices|
           ProxyCache.clear_notice(notices.map(&:id))
 
           notices.each do |notice|
