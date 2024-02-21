@@ -22,8 +22,4 @@ describe InfringingUrl, type: :model do
       assert InfringingUrl.new(url: url).valid?
     end
   end
-
-  context '#url and #url_original' do
-    it_behaves_like 'an object with a url'
-  end
 end

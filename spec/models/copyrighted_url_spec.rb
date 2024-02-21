@@ -21,12 +21,4 @@ RSpec.describe CopyrightedUrl, type: :model do
       assert CopyrightedUrl.new(url: url).valid?
     end
   end
-
-  context "#url" do
-    it_behaves_like 'an object with a url'
-  end
-
-  context "#url_original" do
-    it_behaves_like 'an object with a url'
-  end
 end

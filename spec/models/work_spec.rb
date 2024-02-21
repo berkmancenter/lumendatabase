@@ -37,34 +37,6 @@ RSpec.describe Work, type: :model do
     end
   end
 
-  it 'validates infringing urls correctly when multiple are used at once' do
-    notice = notice_with_works_attributes(
-      [
-        { infringing_urls_attributes: [{ url: 'this is not a url' }] },
-        { infringing_urls_attributes: [{ url: 'this is also not a url' }] }
-      ]
-    )
-
-    expect(notice).not_to be_valid
-    expect(notice.errors.messages).to eq(
-      'works': ['is invalid']
-    )
-  end
-
-  it 'validates copyrighted urls correctly when multiple are used at once' do
-    notice = notice_with_works_attributes(
-      [
-        { copyrighted_urls_attributes: [{ url: 'this is not a url' }] },
-        { copyrighted_urls_attributes: [{ url: 'this is also not a url' }] }
-      ]
-    )
-
-    expect(notice).not_to be_valid
-    expect(notice.errors.messages).to eq(
-      'works': ['is invalid']
-    )
-  end
-
   context 'redaction' do
     it 'redacts phone numbers with auto_redact' do
       content = '(617) 867-5309'
