@@ -179,7 +179,8 @@ describe 'notices/show.html.erb' do
     notice = Notice.new(params[:notice])
     notice.save
 
-    have_works(notice, true, true)
+    have_works_full(notice, true, true)
+    have_works_truncated(notice, true, true)
   end
 
   it 'displays a warning about infringing urls when expected but absent' do
@@ -232,7 +233,8 @@ describe 'notices/show.html.erb' do
     notice = Notice.new(params[:notice])
     notice.save
 
-    have_works(notice, true, false)
+    have_works_full(notice, true, false)
+    have_works_truncated(notice, true, false)
 
     expect(rendered).to have_text Translation.t('notice_show_works_no_infringing')
   end
@@ -287,7 +289,8 @@ describe 'notices/show.html.erb' do
     notice = Notice.new(params[:notice])
     notice.save
 
-    have_works(notice, false, true)
+    have_works_full(notice, false, true)
+    have_works_truncated(notice, false, true)
 
     expect(rendered).to have_text Translation.t('notice_show_works_no_copyrighted')
   end
@@ -410,32 +413,32 @@ describe 'notices/show.html.erb' do
     )
   end
 
-  def have_works(notice, with_copyrighted, with_infringing)
+  def have_works_full(notice, with_copyrighted, with_infringing)
     assign(:notice, notice)
-    allow(controller).to receive(:current_user).and_return(create(:user, :admin))
-    @ability.can :view_full_version, Notice
+    allow(controller).to receive(:current_user).and_return(nil)
+    @ability.cannot :view_full_version, Notice
 
     render
 
     notice.works.each do |work|
-      expect(rendered).to have_css(".description",
-                                   text: work.description)
+      expect(rendered).to have_css(".description", text: work.description)
 
       if with_copyrighted
-        work.copyrighted_urls.each do |url|
-          expect(rendered).to have_css("li.copyrighted_url",
-                                       text: url.url)
-        end
+        uri = URI.parse(work.copyrighted_urls.first.url)
+        domain = uri.host
+        expect(rendered).to have_css("li.copyrighted_url", text: domain + ' - 3 URLs')
       end
 
       if with_infringing
-        work.infringing_urls.each do |url|
-          expect(rendered).to have_css("li.infringing_url",
-                                       text: url.url)
-        end
+        uri = URI.parse(work.infringing_urls.first.url)
+        domain = uri.host
+        expect(rendered).to have_css("li.infringing_url", text: domain + ' - 3 URLs')
       end
     end
+  end
 
+  def have_works_truncated(notice, with_copyrighted, with_infringing)
+    assign(:notice, notice)
     allow(controller).to receive(:current_user).and_return(nil)
     @ability.cannot :view_full_version, Notice
 
