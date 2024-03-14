@@ -48,6 +48,25 @@ RSpec.describe NoticeBuilder, type: :model do
     expect(n.body).not_to include '123-45-6789'
   end
 
+  it 'redacts urls' do
+    recipient_names = ['Google', 'Google, Inc.', 'Google LLC', 'YouTube LLC']
+    notice = create(:dmca, :with_facet_data)
+
+    notice.works = [
+      Work.new(
+        infringing_urls: [
+          InfringingUrl.new(url: 'yo@example.com')
+        ]
+      )
+    ]
+
+    notice.auto_redact
+    notice.save
+
+    expect(notice.works.first.infringing_urls.first.url).to eq Lumen::REDACTION_MASK
+    expect(notice.works.first.infringing_urls.first.url_original).to eq 'yo@example.com'
+  end
+
   it 'sets submitter if unset' do
     user = create(:user, :with_entity)
     n = NoticeBuilder.new(CourtOrder, default_notice_hash, user).build

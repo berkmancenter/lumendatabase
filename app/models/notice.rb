@@ -260,6 +260,7 @@ class Notice < ApplicationRecord
 
   def auto_redact
     InstanceRedactor.new.redact(self)
+    redact_urls
   end
 
   def mark_for_review
@@ -561,5 +562,28 @@ class Notice < ApplicationRecord
     return unless sender&.country_code.present?
 
     self.jurisdiction_list = [sender.country_code]
+  end
+
+  def redact_urls
+    custom_works_redactors = [
+      Redactors::SsnRedactor.new,
+      Redactors::EmailRedactor.new
+    ]
+
+    instance_redactor = InstanceRedactor.new(
+      custom_works_redactors
+    )
+
+    works.each do |work|
+      instance_redactor.redact(work, %w[description])
+
+      work.infringing_urls.each do |url|
+        instance_redactor.redact(url, %w[url])
+      end
+
+      work.copyrighted_urls.each do |url|
+        instance_redactor.redact(url, %w[url])
+      end
+    end
   end
 end

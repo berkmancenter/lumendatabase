@@ -14,6 +14,7 @@ class Other < Notice
   def auto_redact
     InstanceRedactor.new.redact(self)
     Redactors::GoogleSenderRedactor.new.redact(self)
+    redact_urls
   end
 
   def as_indexed_json(_options)

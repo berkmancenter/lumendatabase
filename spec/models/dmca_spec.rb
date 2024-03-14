@@ -65,7 +65,7 @@ describe DMCA, type: :model do
         notice = DMCA.new
         redactor = InstanceRedactor.new
         expect(redactor).to receive(:redact).with(notice)
-        expect(InstanceRedactor).to receive(:new).and_return(redactor)
+        expect(InstanceRedactor).to receive(:new).exactly(2).times.and_return(redactor)
 
         notice.auto_redact
       end
