@@ -21,7 +21,7 @@
       left: 15px;
       line-height: 1em;
       position: absolute;
-      top: 6px;
+      top: 15px;
       width: 20px;
       z-index: 1;
     }
@@ -45,6 +45,10 @@
         color: $search-input-color;
       }
     }
+  }
+
+  &.advanced-search div.input:before {
+    display: none !important;
   }
 
   div.submit {
