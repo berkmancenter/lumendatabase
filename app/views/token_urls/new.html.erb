@@ -10,7 +10,6 @@
 
       <div class="form-inputs">
         <%= f.input :email, label: Translation.t('token_urls_request_email'), required: true %>
-        <%= f.input :documents_notification, as: :boolean, inline_label: Translation.t('token_urls_request_doc_notifications'), label: false %>
 
         <%= recaptcha_tags %>
       </div>
