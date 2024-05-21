@@ -60,11 +60,15 @@ services:
       - '.env'
     depends_on:
       - 'elasticsearch'
-    image: logstash:7.17.0
+      - 'postgres'
+    build:
+      context: .
+      dockerfile: Dockerfile-logstash
     command: logstash --path.settings /app/script/search_indexing/
     volumes:
       - '.:/app:ro'
-      - logstash:/usr/share/logstash/data
+    tmpfs:
+      - /user/share/logstash/data
     environment:
       LS_JAVA_OPTS: "-Xmx2g -Xms2g"
 
