@@ -159,6 +159,23 @@ header.app {
         width: $search-button-width;
       }
     }
+
+    .search-exact-search {
+      margin-top: 5px;
+      font-size: 16px;
+      text-align: left;
+      display: flex;
+
+      input {
+        margin-right: 0.5em;
+      }
+
+      label {
+        color: #fff;
+        margin: 0;
+        font-weight: 600;
+      }
+    }
   }
 }
 

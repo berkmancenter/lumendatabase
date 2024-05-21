@@ -20,6 +20,7 @@ class ElasticsearchQuery
     @params = params
     @page = params[:page] || 1
     @per_page = params[:per_page] || model_class::PER_PAGE
+    @term_exact_search = (params['term'] && params['term'][0] == '"' && params['term'][-1] == '"')
   end
 
   # This adds TermFilters and TermSearches to the registry. They will be
@@ -46,6 +47,7 @@ class ElasticsearchQuery
     add_registered_elements_to_query
     add_exact_match_requirements
     define_search
+    apply_term_exact_search
   end
 
   # The body of the search to be sent to Elasticsearch.
@@ -184,6 +186,18 @@ class ElasticsearchQuery
       limitation = { k => { query: v, operator: 'AND' } }
 
       search_config[:query][:bool][:must] << { match: limitation }
+    end
+  end
+
+  def apply_term_exact_search
+    return unless @term_exact_search
+
+    search_definition[:query][:bool][:must].map! do |query_item|
+      unless query_item[:multi_match].nil?
+        query_item[:multi_match][:type] = :phrase
+      end
+
+      query_item
     end
   end
 

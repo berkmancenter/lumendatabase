@@ -21,5 +21,25 @@ $('.results-context-toggle').click ->
     duration: 'fast'
     easing: 'easeOutCirc'
 
+$('#term-exact-search').on 'change', ->
+  searchTerm = $('#search').val()
+  searchTermArray = Array.from(searchTerm)
+
+  if $('#term-exact-search').is(':checked')
+    if searchTermArray[0] != '"' && searchTermArray.at(-1) != '"'
+      $('#search').val('"' + searchTerm + '"')
+  else
+    if searchTermArray[0] == '"' && searchTermArray.at(-1) == '"'
+      $('#search').val(searchTermArray.slice(1, -1).join(''))
+
+$('#search').on 'change', ->
+  searchTerm = $('#search').val()
+  searchTermArray = Array.from(searchTerm)
+
+  if searchTermArray[0] == '"' && searchTermArray.at(-1) == '"'
+    $('#term-exact-search').prop('checked', true)
+  else
+    $('#term-exact-search').prop('checked', false)
+
 $ ->
   $rows.displayActiveFields()

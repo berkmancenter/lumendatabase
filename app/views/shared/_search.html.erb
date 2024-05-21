@@ -9,6 +9,11 @@
         <a id="toggle-advanced-search" href="" class="dropdown-toggle" data-toggle="dropdown"><%= Translation.t('search_advanced_open') %></a>
       </div>
     </div>
+    <div class="search-exact-search">
+      <%= check_box_tag 'term-exact-search', true, params['term-exact-search'] %>
+      <label for="term-exact-search">Exact search</label>
+    </div>
+
     <%= hidden_field_tag(:sort_by, params[:sort_by], class: 'sort_by_field', id: nil) %>
   <% end %>
 </div>

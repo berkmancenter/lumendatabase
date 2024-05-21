@@ -137,6 +137,39 @@ feature 'Searching Notices', type: :feature do
     end
   end
 
+  scenario 'exact search', search: true do
+    notice = create(:dmca, title: 'The Lion King on Youtube')
+    notice_2 = create(:dmca, title: 'The Lion King on Vimeo Youtube')
+    trademark = create(:trademark, title: "Coke - Lion it's the King thing on Youtube")
+    index_changed_instances
+
+    within_search_results_for('"Lion King"') do
+      expect(page).to have_n_results(2)
+      expect(page).to have_words(notice.title)
+      expect(page).to have_words(notice_2.title)
+    end
+
+    within_search_results_for('Lion King') do
+      expect(page).to have_n_results(3)
+      expect(page).to have_words(notice.title)
+      expect(page).to have_words(notice_2.title)
+      expect(page).to have_words(trademark.title)
+    end
+
+    within_search_results_for('"on Youtube"') do
+      expect(page).to have_n_results(2)
+      expect(page).to have_words(notice.title)
+      expect(page).to have_words(trademark.title)
+    end
+
+    within_search_results_for('on Youtube') do
+      expect(page).to have_n_results(3)
+      expect(page).to have_words(notice.title)
+      expect(page).to have_words(notice_2.title)
+      expect(page).to have_words(trademark.title)
+    end
+  end
+
   scenario 'based on action taken', search: true do
     notices = [
       create(:dmca, action_taken: 'No'),
