@@ -88,8 +88,17 @@ module NoticesHelper
       %r{(http[s]?://[w]*[\.]*[^/|$]*)(\S*)},
       "\\1/#{Lumen::REDACTION_MASK}"
     )
+    term_exact_search = (params['term'] && params['term'][0] == '"' && params['term'][-1] == '"')
 
-    words_to_highlight = params[:term]&.split(' ') || []
+    if params[:term].instance_of?(String)
+      if term_exact_search
+        words_to_highlight = [params[:term].gsub('"', '')]
+      else
+        words_to_highlight = params[:term].split(' ')
+      end
+    else
+      words_to_highlight = []
+    end
 
     highlight(redacted_text, words_to_highlight, highlighter: '<em>\1</em>')
   end
