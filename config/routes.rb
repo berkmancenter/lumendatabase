@@ -23,6 +23,9 @@ Rails.application.routes.draw do
       put :request_pdf
       get :request_access, to: 'token_urls#new'
       post :generate_permanent_full_url, to: 'token_urls#generate_permanent'
+      post :start_receive_document_notifications
+      post :stop_receive_document_notifications
+      get :disable_document_notification
     end
   end
 

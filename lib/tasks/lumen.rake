@@ -512,31 +512,30 @@ where works.id in (
 
     loggy.info 'Starting a new task run'
 
-    loggy.info 'No scheduled notifications, nothing to process' if DocumentsUpdateNotificationNotice.all.empty?
+    loggy.info 'No scheduled notifications, nothing to process' if DocumentsUpdateNotificationNotice.where(status: 0).empty?
 
-    DocumentsUpdateNotificationNotice.all.each do |doc_notification|
-      loggy.info "Starting processing notice ##{doc_notification.notice.id}"
+    DocumentsUpdateNotificationNotice.where(status: 0).each do |doc_notification|
+      notice = doc_notification.notice
 
-      TokenUrl.where(
-        notice: doc_notification.notice,
-        documents_notification: true
-      ).each do |token_url|
-        next unless token_url.email.present?
+      loggy.info "Starting processing notice ##{notice.id}"
 
-        loggy.info "Sending a notification about notice ##{doc_notification.notice.id} to #{token_url.email}"
+      DocumentNotificationEmail.where(
+        notice: notice,
+        status: 1,
+      ).each do |document_notification_email|
+        loggy.info "Sending a notification about notice #{notice.id} to #{document_notification_email.email_address}"
 
-        TokenUrlsMailer.notice_file_uploads_updates_notification(
-          token_url.email, token_url, doc_notification.notice
-        ).deliver_now
-
-        token_url.update_attribute(:expiration_date,
-                                   Time.now + LumenSetting.get_i('truncation_token_urls_active_period').seconds)
+        DocumentNotificationsMailer.notice_file_uploads_updates_notification(
+          document_notification_email.email_address,
+          notice,
+          document_notification_email,
+        ).deliver_later
       end
+
+      doc_notification.update(status: 1)
 
       loggy.info "Finishing processing notice ##{doc_notification.notice.id}"
     end
-
-    DocumentsUpdateNotificationNotice.delete_all
 
     loggy.info 'Finishing the task'
   end

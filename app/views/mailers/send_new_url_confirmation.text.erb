@@ -6,11 +6,4 @@
     ).html_safe
 %>
 
-<% if @token_url.documents_notification %>
-<%= format(
-      Translation.t('mailers_new_token_url_part_2'),
-      disable_notifications_link: disable_documents_notification_token_url_url(@token_url, host: Chill::Application.config.site_host, token: @token_url.token)
-    )
-%>
-<% end %>
 <%= Translation.t('mailers_new_token_url_part_3') %>

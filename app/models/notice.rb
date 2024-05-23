@@ -93,7 +93,7 @@ class Notice < ApplicationRecord
   has_many :token_urls, dependent: :destroy
   has_many :archived_token_urls, dependent: :destroy
   has_and_belongs_to_many :relevant_questions
-  has_one :documents_update_notification_notice
+  has_many :documents_update_notification_notice
   has_many :file_uploads
 
   # == Attributes ===========================================================

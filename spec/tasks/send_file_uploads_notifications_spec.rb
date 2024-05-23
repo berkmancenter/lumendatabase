@@ -6,24 +6,23 @@ describe 'rake lumen:send_file_uploads_notifications', type: :task do
   before(:each) { DocumentsUpdateNotificationNotice.destroy_all }
 
   it 'sends file uploads notifications to a single user' do
-    create_token_with_enabled_notifications
+    create_document_notification_email
 
     trigger_notification
 
     expect_to_deliver_specific_number_of_emails(1)
 
     expect(last_email.to).to include('user@example.com')
-    expect(last_email.subject).to include("Documents updates for #{ notice.title }")
+    expect(last_email.subject).to include("Document updates for notice #{ notice.id }")
   end
 
   it 'sends file uploads notifications to multiple users' do
-    create_token_with_enabled_notifications
+    create_document_notification_email
 
     create(
-      :token_url,
-      documents_notification: true,
+      :document_notification_email,
       notice: notice,
-      email: 'user2@example.com'
+      email_address: 'user2@example.com'
     )
     trigger_notification
 
@@ -32,11 +31,11 @@ describe 'rake lumen:send_file_uploads_notifications', type: :task do
     emails = ActionMailer::Base.deliveries.last(2)
 
     expect(emails.map(&:to).flatten).to eq(['user@example.com', 'user2@example.com'])
-    expect(emails.map(&:subject).uniq).to eq(["Documents updates for #{ notice.title }"])
+    expect(emails.map(&:subject).uniq).to eq(["Document updates for notice #{ notice.id }"])
   end
 
   it "won't send duplicate notifications when the trigger has been run multiple times" do
-    create_token_with_enabled_notifications
+    create_document_notification_email
 
     trigger_notification
     trigger_notification
@@ -45,7 +44,7 @@ describe 'rake lumen:send_file_uploads_notifications', type: :task do
   end
 
   it "won't send notifications again on the next task run" do
-    create_token_with_enabled_notifications
+    create_document_notification_email
 
     trigger_notification
 
@@ -54,13 +53,13 @@ describe 'rake lumen:send_file_uploads_notifications', type: :task do
   end
 
   it "won't send file uploads notifications for token urls with the document notification setting disabled" do
-    create_token_with_enabled_notifications
+    create_document_notification_email
 
     create(
-      :token_url,
-      documents_notification: false,
+      :document_notification_email,
+      status: 0,
       notice: notice,
-      email: 'user2@example.com'
+      email_address: 'user2@example.com'
     )
     trigger_notification
 
@@ -83,10 +82,10 @@ describe 'rake lumen:send_file_uploads_notifications', type: :task do
     expect{ task.execute }.to change { ActionMailer::Base.deliveries.count }.by(number)
   end
 
-  def create_token_with_enabled_notifications
+  def create_document_notification_email
     create(
-      :token_url,
-      documents_notification: true,
+      :document_notification_email,
+      email_address: 'user@example.com',
       notice: notice
     )
   end

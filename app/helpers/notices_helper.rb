@@ -82,6 +82,16 @@ module NoticesHelper
     false
   end
 
+  def receive_document_notifications(notice, current_user)
+    DocumentNotificationEmail
+      .where(
+        notice: notice,
+        email_address: current_user.email,
+        status: 1,
+      )
+      .any?
+  end
+
   def with_redacted_urls(text)
     sanitized_text = ActionView::Base.full_sanitizer.sanitize(text)
     redacted_text = sanitized_text.gsub(

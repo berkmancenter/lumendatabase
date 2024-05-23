@@ -92,20 +92,6 @@ class TokenUrlsController < ApplicationController
     end
   end
 
-  def disable_documents_notification
-    token_url = TokenUrl.find_by_id(params[:id])
-    errors = disable_documents_notification_errors(token_url)
-
-    return redirect_to(root_path, alert: errors) if errors.present?
-
-    token_url.update_attribute(:documents_notification, false)
-
-    redirect_to(
-      root_path,
-      notice: 'Documents notification has been disabled.'
-    )
-  end
-
   private
 
   def token_url_params
@@ -174,11 +160,6 @@ class TokenUrlsController < ApplicationController
     end
 
     { status: true }
-  end
-
-  def disable_documents_notification_errors(token_url)
-    return 'Token url was not found.' if token_url.nil?
-    return 'Wrong token provided.' unless token_url.token == params[:token]
   end
 
   def token_email_spam?

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_13_124042) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_23_120401) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -229,10 +229,21 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_13_124042) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "document_notification_emails", force: :cascade do |t|
+    t.bigint "notice_id", null: false
+    t.string "email_address", null: false
+    t.string "token", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "status", default: 1
+    t.index ["notice_id"], name: "index_document_notification_emails_on_notice_id"
+  end
+
   create_table "documents_update_notification_notices", id: :serial, force: :cascade do |t|
     t.integer "notice_id", null: false
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
+    t.integer "status", default: 0
   end
 
   create_table "entities", id: :serial, force: :cascade do |t|

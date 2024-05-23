@@ -262,4 +262,9 @@ FactoryBot.define do
     email { 'user@example.com' }
     notice { build(:dmca) }
   end
+
+  factory :document_notification_email do
+    email_address { 'user@example.com' }
+    notice { build(:dmca) }
+  end
 end

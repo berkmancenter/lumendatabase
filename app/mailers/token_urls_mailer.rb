@@ -11,17 +11,4 @@ class TokenUrlsMailer < ApplicationMailer
       subject: subject
     )
   end
-
-  def notice_file_uploads_updates_notification(recipient, token_url, notice)
-    @token_url = token_url
-    @notice = notice
-    @hours_active = LumenSetting.get_i('truncation_token_urls_active_period') / 3600
-
-    subject = "Documents updates for #{@notice.title}"
-
-    mail(
-      to: recipient,
-      subject: subject
-    )
-  end
 end

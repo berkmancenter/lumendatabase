@@ -111,6 +111,64 @@ class NoticesController < ApplicationController
     build_works(notice)
   end
 
+  def start_receive_document_notifications
+    return resource_not_found("Can't fing notice with id=#{params[:id]}") unless (@notice = Notice.find_by(id: params[:id]))
+    return unless current_user
+
+    existing = DocumentNotificationEmail
+      .where(
+        notice_id: params[:id],
+        email_address: current_user.email,
+      )
+      .first
+
+    if (existing.present?)
+      existing.update(status: 1)
+    else
+      DocumentNotificationEmail
+        .create(
+          notice_id: params[:id],
+          email_address: current_user.email,
+        )
+    end
+
+    redirect_to(
+      notice_path(@notice),
+      notice: 'You have started watching this notice.'
+    )
+  end
+
+  def stop_receive_document_notifications
+    return resource_not_found("Can't fing notice with id=#{params[:id]}") unless (@notice = Notice.find_by(id: params[:id]))
+    return unless current_user
+
+    DocumentNotificationEmail
+      .where(
+        notice_id: params[:id],
+        email_address: current_user.email,
+      )
+      .update(status: 0)
+
+    redirect_to(
+      notice_path(@notice),
+      notice: 'You have stopped watching this notice.'
+    )
+  end
+
+  def disable_document_notification
+    document_notification_email = DocumentNotificationEmail.find_by_token(params[:token])
+    errors = disable_documents_notification_errors(document_notification_email)
+
+    return redirect_to(root_path, alert: errors) if errors.present?
+
+    document_notification_email.update(status: 0)
+
+    redirect_to(
+      root_path,
+      notice: "Document notifications for notice #{document_notification_email.notice.id} have been disabled."
+    )
+  end
+
   private
 
   def unauthorized_response
@@ -280,5 +338,9 @@ class NoticesController < ApplicationController
 
     token_url = TokenUrl.find_by(token: params[:access_token])
     token_url.increment!(:views)
+  end
+
+  def disable_documents_notification_errors(document_notification_email)
+    return 'Documents notification was not found.' if document_notification_email.nil?
   end
 end

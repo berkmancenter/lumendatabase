@@ -1,8 +1,7 @@
 <%= format(
       Translation.t('mailers_notice_file_uploads_notifications'),
-      single_use_link: notice_url(@notice, access_token: @token_url.token, host: Chill::Application.config.site_host),
-      time: pluralize(@hours_active, 'hour'),
-      disable_notification_link: disable_documents_notification_token_url_url(@token_url, host: Chill::Application.config.site_host, token: @token_url.token),
-      notice_title: @notice.title
+      notice_link: notice_url(@notice, host: Chill::Application.config.site_host),
+      disable_notification_link: disable_document_notification_notice_url(@notice, host: Chill::Application.config.site_host, token: @document_notification_email.token),
+      notice_id: @notice.id
     ).html_safe
 %>

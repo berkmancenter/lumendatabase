@@ -18,6 +18,18 @@
     </div>
   <% end %>
 
+  <% if current_user %>
+    <div class="notice-watch-url">
+      <% if receive_document_notifications(@notice, current_user) %>
+        <%= link_to Translation.t('notice_stop_documents_notifications'), stop_receive_document_notifications_notice_path(@notice), method: :post %>
+        <i class="tooltipster gg-lumen gg-info" title="<%= Translation.t('notice_stop_documents_notifications_tooltip') %>"></i>
+      <% else %>
+        <%= link_to Translation.t('notice_start_documents_notifications'), start_receive_document_notifications_notice_path(@notice), method: :post %>
+        <i class="tooltipster gg-lumen gg-info" title="<%= Translation.t('notice_start_documents_notifications_tooltip') %>"></i>
+      <% end %>
+    </div>
+  <% end %>
+
   <% cache_unless(Current.user&.role?(Role.super_admin), notice_cache_key(@notice, can_see_full_notice_version?(@notice))) do %>
     <%= content_tag('section', class: 'first-time-visitor', style: 'display: none;', 'data-content': first_time_visitor_content) do %>
       <div class="first-time-visitor-content">
