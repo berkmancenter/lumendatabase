@@ -1,5 +1,38 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [24.05](https://github.com/berkmancenter/lumendatabase/releases/tag/2024.05) - 2024-05-31
+### Changed
+* Allowed to make exect searches.
+* Made logged-in users able to watch notices for new documents.
+* Applied security updates.
+
+## [24.03b](https://github.com/berkmancenter/lumendatabase/releases/tag/2024.03b) - 2024-03-29
+### Changed
+* Set the rack's `multipart_total_part_limit` setting to unlimited.
+
+## [24.03a](https://github.com/berkmancenter/lumendatabase/releases/tag/2024.03a) - 2024-03-27
+### Changed
+* Applied a security update to the `rdoc` gem.
+
+## [24.03](https://github.com/berkmancenter/lumendatabase/releases/tag/2024.03) - 2024-03-15
+### Changed
+* Stopped strictly validating urls, allowing any (redacted) string.
+* Applied security updates.
+
+## [24.02a](https://github.com/berkmancenter/lumendatabase/releases/tag/2024.02a) - 2024-02-20
+### Changed
+* Updated the `nokogiri` gem.
+### Fixed
+* Fixed a position of the magnifier icon in the advanced search form.
+
+## [24.02](https://github.com/berkmancenter/lumendatabase/releases/tag/2024.02) - 2024-02-15
+### Changed
+* Allowed longer notices title.
+* Stopped caching for super admins.
+* Allowed entities to be linked with many users.
+### Fixed
+* Made sure an entity linked with submitter users is never redacted.
+
 ## [24.01a](https://github.com/berkmancenter/lumendatabase/releases/tag/2024.01a) - 2024-01-12
 ### Changed
 * Upgraded `Rails` to `7.2`.
