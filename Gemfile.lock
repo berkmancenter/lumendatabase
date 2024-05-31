@@ -596,7 +596,7 @@ DEPENDENCIES
   logstash-logger
   memory_profiler
   mime-types
-  mini_racer (= 0.9)
+  mini_racer
   neat (~> 1.3.x)
   oink
   oj
