@@ -1,6 +1,6 @@
 <%= render 'notices/submitter_widget/form_components/header',
            label: Translation.t('submitter_widget_notice_new_counternotice_header') %>
-<%= simple_form_for(notice) do |form| %>
+<%= simple_form_for(notice, url: submitter_widget_notices_path(widget_settings: @widget_settings)) do |form| %>
   <section class="notice-body">
     <h4><span>Step 1.</span> <%= Translation.t('views_counternotice_form_step1_h') %></h4>
     <p><%= raw(Translation.t('views_counternotice_form_step1_info')) %></p>
