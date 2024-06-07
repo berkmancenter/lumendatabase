@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_07_153830) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_07_173351) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -59,7 +59,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_07_153830) do
     t.string "entity_zip", default: ""
     t.text "admin_notes", default: ""
     t.bigint "user_id"
-    t.boolean "approved", default: false, null: false
+    t.boolean "approved"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.index ["user_id"], name: "index_api_submitter_requests_on_user_id"
