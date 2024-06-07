@@ -10,7 +10,7 @@
     <p><b><%= Translation.t('views_counternotice_form_reason_h') %></b></p>
     <div class="body-wrapper main">
       <%= form.input :body,
-        collection: Counternotice::REASONS.map { |r| Translation.t("views_counternotice_form_reasons.#{r}") },
+        collection: Counternotice::REASONS.map { |r| Translation.t("views_counternotice_form_reasons_#{r}") },
         label: Translation.t('views_counternotice_form_body_label'),
         required: true
       %>

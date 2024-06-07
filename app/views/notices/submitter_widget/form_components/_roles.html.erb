@@ -3,14 +3,14 @@
 
 <%= form.simple_fields_for(:entity_notice_roles) do |roles_form| %>
   <% role = roles_form.object.name.titleize %>
-  <% custom_role_header_title = Translation.t("submitter_widget_roles_title_#{@notice.class.name}.#{role}", default: '') %>
-  <% custom_roles_header_intro = Translation.t("submitter_widget_roles_header_intro_#{@notice.class.name}.#{role}", default: '') %>
-  <% custom_roles_header_intro = Translation.t("submitter_widget_roles_header_intro_#{role}", default: '') unless custom_roles_header_intro.present? %>
+  <% custom_role_header_title = Translation.t("submitter_widget_roles_title_#{@notice.class.name}.#{role}") %>
+  <% custom_roles_header_intro = Translation.t("submitter_widget_roles_header_intro_#{@notice.class.name}.#{role}") %>
+  <% custom_roles_header_intro = Translation.t("submitter_widget_roles_header_intro_#{role}") unless custom_roles_header_intro.present? %>
   <% role_header_title = custom_role_header_title.present? ? custom_role_header_title : role %>
 
   <%# don't titleize the role until after the following line or it will break the css selector %>
   <section class="role <%= role.downcase %> <%= roles_form.object.entity.kind %>">
-    <%= format(Translation.t('submitter_widget_notice_new_roles_info'), step_number: step_number, role_header_title: role_header_title).html_safe %>
+    <%= format(Translation.t('submitter_widget_notice_new_roles_info_header'), step_number: step_number, role_header_title: role_header_title).html_safe %>
 
     <% if custom_roles_header_intro.present? %>
       <p><%= raw custom_roles_header_intro %></p>
@@ -24,7 +24,7 @@
         <%= entity_form.input :name, label: Translation.t('notice_new_roles_name'),
           input_html: placeholder_text(current_user, role, :name) %>
         <%= entity_form.input :kind,
-          { label: Translation.t('notice_new_roles_kind').html_safe, prompt: nil, collection: Entity::KINDS }
+          { label: format(Translation.t('notice_new_roles_kind'), role: role).html_safe, prompt: nil, collection: Entity::KINDS }
             .merge(placeholder_kind(current_user, role))
         %>
       </div>

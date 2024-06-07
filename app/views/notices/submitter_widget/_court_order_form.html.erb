@@ -22,7 +22,7 @@
         </div>
       <% end %>
     <% end %>
-    <%= form.input :regulation_list, label: Translation.t('notice_show_court_regulations_label'), placeholder: Translation.t('notice_new_comma_separated') %>
+    <%= form.input :regulation_list, label: Translation.t('notice_show_court_regulations_label'), placeholder: Translation.t('notice_new_comma_separated'), input_html: { value: '' }, as: :string %>
   </section>
 
   <%= render 'notices/submitter_widget/form_components/roles', form: form %>
