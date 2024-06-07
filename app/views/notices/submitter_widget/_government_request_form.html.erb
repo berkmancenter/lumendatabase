@@ -19,7 +19,7 @@
         <%= works_form.input :kind, label: Translation.t('notice_works_kind'), placeholder: Translation.t('notice_new_kind_placeholder') %>
       </div>
       <div class="body-wrapper right">
-        <%= works_form.input :description, label: Translation.t('notice_new_works_gov_desc_label') %> %>
+        <%= works_form.input :description, label: Translation.t('notice_new_works_gov_desc_label') %>
       </div>
     <% end %>
     <%= form.input :regulation_list, label: Translation.t('notice_new_works_gov_law_enf_regulations'), placeholder: Translation.t('notice_new_comma_separated'), input_html: { value: '' }, as: :string %>
