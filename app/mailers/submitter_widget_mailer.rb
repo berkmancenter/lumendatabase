@@ -17,7 +17,7 @@ class SubmitterWidgetMailer < ApplicationMailer
     end
 
     mail(
-      to: notice.submitter.user.widget_submissions_forward_email,
+      to: notice.submitter.users.first.widget_submissions_forward_email,
       subject: subject
     )
   end
@@ -27,7 +27,7 @@ class SubmitterWidgetMailer < ApplicationMailer
   def notice_for_email(notice)
     entities_fields = %w[name kind address_line_1 address_line_2 state country_code phone email url city zip]
 
-    notice.as_json(
+    json = notice.as_json(
       only: %w[id title body created_at subject language jurisdictions tags type mark_registration_number],
       include: {
         submitters: {
@@ -44,16 +44,19 @@ class SubmitterWidgetMailer < ApplicationMailer
         },
         attorneys: {
           only: entities_fields
-        },
-        works: {
-          only: [:description],
-          include: {
-            infringing_urls: { only: %i[url] },
-            copyrighted_urls: { only: %i[url] }
-          }
         }
       }
     )
+
+    json[:works] = notice.works.map do |work|
+      {
+        description: work.description,
+        infringing_urls: work.infringing_urls.map(&:url),
+        copyrighted_urls: work.copyrighted_urls.map(&:url)
+      }
+    end
+
+    json
   end
 
   def json_to_html(hash)
