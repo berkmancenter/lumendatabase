@@ -7,6 +7,7 @@ require 'comfy/blog_post_factory'
 require 'loggy'
 require 'court_order_reporter'
 require 'yt_importer/yt_importer'
+require 'gh_importer/gh_importer'
 require 'fileutils'
 require 'uri'
 
@@ -572,6 +573,19 @@ where works.id in (
     importer.import
 
     loggy.info('Finished importing YT notices from old chill')
+  end
+
+  # A cron job to fetch any new notices from the Github DMCA public repo
+  desc 'Import Github notices'
+  task import_github_notices: :environment do
+    loggy = Loggy.new('rake lumen:import_github_notices', true, true)
+
+    loggy.info('Starting import of Github notices from DMCA repo')
+
+    importer = GithubImporter::GithubImporter.new
+    importer.import
+
+    loggy.info('Finished import of Github notices from DMCA repo')
   end
 
   desc 'Archive expired token urls'
