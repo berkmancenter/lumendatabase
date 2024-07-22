@@ -1,5 +1,3 @@
-
-# TODO (zoe): share class with YtImporter
 module GithubImporter
   class EntityNoticeRoleBuilder
     def initialize(role_name, name, address = {})

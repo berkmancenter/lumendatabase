@@ -5,6 +5,7 @@ module GithubImporter
     class DMCA
       NOTICE_TYPE_LABEL = 'DMCA'
       GITHUB = 'Github'
+      URLS_TO_IGNORE = ['https://github.com/github/dmca/blob/master/README.md#anatomy-of-a-takedown-notice).', 'https://docs.github.com/en/github/site-policy/dmca-takedown-policy#a-how-does-this-actually-work).', 'https://docs.github.com/en/articles/guide-to-submitting-a-dmca-counter-notice).']
 
       def initialize(notice_text, filename)
         @notice_text = notice_text
@@ -145,8 +146,9 @@ module GithubImporter
 
         urls = URI.extract(infringing_url_text, ['http', 'https'])
         infringing_urls = urls.map do |url|
-          InfringingUrl.new(url: url)
+          InfringingUrl.new(url: url) if !URLS_TO_IGNORE.include?(url)
         end
+        infringing_urls.compact!
 
         copyrighted_url_text = @notice_text[/Please provide a detailed description of the original copyrighted work that has allegedly been infringed\. If possible, include a URL to where it is posted online\.(.*?)What files should be taken down/mio, 1] || ''
 

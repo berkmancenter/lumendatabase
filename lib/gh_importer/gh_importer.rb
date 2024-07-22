@@ -92,16 +92,11 @@ module GithubImporter
         language: mapped_notice_data.language,
         local_jurisdiction_laws: mapped_notice_data.local_jurisdiction_laws
       }
-      # TODO (zoe): Remove
-      puts notice_params
 
       new_notice = NoticeBuilder.new(
         mapped_notice_data.notice_type, notice_params
       ).build
       new_notice.save!
-
-      # TODO (zoe): Remove
-      puts new_notice
 
       new_notice.reload.id
       new_notice.submission_id = new_notice.id
