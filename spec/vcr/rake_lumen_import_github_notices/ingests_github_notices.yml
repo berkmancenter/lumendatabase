@@ -1,0 +1,285 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.github.com/repos/github/dmca/commits?since=2024-07-19T00:00:00Z
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - api.github.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 22 Jul 2024 15:48:12 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Vary:
+      - Accept,Accept-Encoding, Accept, X-Requested-With
+      Etag:
+      - W/"95bb71982327f3b4e4eb817b1c2a4f65231d8ff785dbc6e9145e7947204b0c02"
+      Last-Modified:
+      - Fri, 19 Jul 2024 17:51:34 GMT
+      X-Github-Media-Type:
+      - github.v3; format=json
+      X-Github-Api-Version-Selected:
+      - '2022-11-28'
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes,
+        X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO,
+        X-GitHub-Request-Id, Deprecation, Sunset
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - '0'
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      Server:
+      - github.com
+      X-Ratelimit-Limit:
+      - '60'
+      X-Ratelimit-Remaining:
+      - '57'
+      X-Ratelimit-Reset:
+      - '1721666585'
+      X-Ratelimit-Resource:
+      - core
+      X-Ratelimit-Used:
+      - '3'
+      Accept-Ranges:
+      - bytes
+      Content-Length:
+      - '12063'
+      X-Github-Request-Id:
+      - F74F:D092F:43F409:7F7423:669E7F3C
+    body:
+      encoding: ASCII-8BIT
+      string: '[{"sha":"6d42309968e2ddfe34ef9a86d2f97fa1d5f89ae2","node_id":"C_kwDOABPootoAKDZkNDIzMDk5NjhlMmRkZmUzNGVmOWE4NmQyZjk3ZmExZDVmODlhZTI","commit":{"author":{"name":"DMCA
+        Sync Bot","email":"89167002+dmca-sync-bot@users.noreply.github.com","date":"2024-07-19T17:51:34Z"},"committer":{"name":"GitHub","email":"noreply@github.com","date":"2024-07-19T17:51:34Z"},"message":"Merge
+        pull request #15959 from github/updates\n\nAdded 2024/07/2024-07-18-codility.md","tree":{"sha":"20aabe4ec14220460c637ff8f57674559c3db6e9","url":"https://api.github.com/repos/github/dmca/git/trees/20aabe4ec14220460c637ff8f57674559c3db6e9"},"url":"https://api.github.com/repos/github/dmca/git/commits/6d42309968e2ddfe34ef9a86d2f97fa1d5f89ae2","comment_count":0,"verification":{"verified":true,"reason":"valid","signature":"-----BEGIN
+        PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJmmqemCRC1aQ7uu5UhlAAArlIQAICAB/XyMVudji77A1lgaQC5\nJnu3WEtf/YeRPWC6hcw416+JWsluNBpe/1/Lq4ozaOX8S9rbPCYPjTPXBNyWxRup\nrlmNRra+UJGULiJ3gh4+DWMYUsqqE2xYuCW1+EewTqpG2fTmCypp3229e7AUnL7m\nsRNd2jvo1zFPpbQirG55p/Xig/KmWAhVKo5ItH9KFL3Z5+d+PuEqogwGz5kmLDNT\n9sO77NSo7BpojCOllbx684g8Knv0fHCZWtNn56rvvXy6cuavIDspReQznzoMnzs4\nzXdiF3tBCNhguVZ7aZIKIu+ogSGwu/xBbmmXXfpSFXd+PAYE/rdbwXTAa46rPfX4\ncsBYMx/HW26uMCKzkl6fRSt/jNaS5U+sClgtgrGNEM1MEBOJUbWksCt6KQB83eux\n7LxovC0YFWOa+FbFFZDLePoyuZirqDH4Bn/uH6AlX7xG2zpRRPH3YJuxJDzdgRnJ\nEQjo/dcebbT5ZKSn0ybS0KXP8ZnjTfUZiCz8dpK155W+I+p3eYow8UrokTRcKVp9\nLaxCn/d2W9RU7OoAKGpP10pM2IlLR1Z3+LIRBJ8/yp7ZaYdPx6Ip6VurqOje1PyL\nGA0pF3q1oc9ZQAuHyLnf9m3w4zgGgdmdsTqHEZ8RgCI3wymePhpsrwZvInv/In18\n67eUTSfcQviQrzdrdVil\n=5p93\n-----END
+        PGP SIGNATURE-----\n","payload":"tree 20aabe4ec14220460c637ff8f57674559c3db6e9\nparent
+        0f274716599fee385a75dacda35d43b9d9e3d528\nparent 19424d53cc44e61f0a18ea7afb2f90552bb18d46\nauthor
+        DMCA Sync Bot <89167002+dmca-sync-bot@users.noreply.github.com> 1721411494
+        -0700\ncommitter GitHub <noreply@github.com> 1721411494 -0700\n\nMerge pull
+        request #15959 from github/updates\n\nAdded 2024/07/2024-07-18-codility.md"}},"url":"https://api.github.com/repos/github/dmca/commits/6d42309968e2ddfe34ef9a86d2f97fa1d5f89ae2","html_url":"https://github.com/github/dmca/commit/6d42309968e2ddfe34ef9a86d2f97fa1d5f89ae2","comments_url":"https://api.github.com/repos/github/dmca/commits/6d42309968e2ddfe34ef9a86d2f97fa1d5f89ae2/comments","author":{"login":"dmca-sync-bot","id":89167002,"node_id":"MDQ6VXNlcjg5MTY3MDAy","avatar_url":"https://avatars.githubusercontent.com/u/89167002?v=4","gravatar_id":"","url":"https://api.github.com/users/dmca-sync-bot","html_url":"https://github.com/dmca-sync-bot","followers_url":"https://api.github.com/users/dmca-sync-bot/followers","following_url":"https://api.github.com/users/dmca-sync-bot/following{/other_user}","gists_url":"https://api.github.com/users/dmca-sync-bot/gists{/gist_id}","starred_url":"https://api.github.com/users/dmca-sync-bot/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/dmca-sync-bot/subscriptions","organizations_url":"https://api.github.com/users/dmca-sync-bot/orgs","repos_url":"https://api.github.com/users/dmca-sync-bot/repos","events_url":"https://api.github.com/users/dmca-sync-bot/events{/privacy}","received_events_url":"https://api.github.com/users/dmca-sync-bot/received_events","type":"User","site_admin":false},"committer":{"login":"web-flow","id":19864447,"node_id":"MDQ6VXNlcjE5ODY0NDQ3","avatar_url":"https://avatars.githubusercontent.com/u/19864447?v=4","gravatar_id":"","url":"https://api.github.com/users/web-flow","html_url":"https://github.com/web-flow","followers_url":"https://api.github.com/users/web-flow/followers","following_url":"https://api.github.com/users/web-flow/following{/other_user}","gists_url":"https://api.github.com/users/web-flow/gists{/gist_id}","starred_url":"https://api.github.com/users/web-flow/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/web-flow/subscriptions","organizations_url":"https://api.github.com/users/web-flow/orgs","repos_url":"https://api.github.com/users/web-flow/repos","events_url":"https://api.github.com/users/web-flow/events{/privacy}","received_events_url":"https://api.github.com/users/web-flow/received_events","type":"User","site_admin":false},"parents":[{"sha":"0f274716599fee385a75dacda35d43b9d9e3d528","url":"https://api.github.com/repos/github/dmca/commits/0f274716599fee385a75dacda35d43b9d9e3d528","html_url":"https://github.com/github/dmca/commit/0f274716599fee385a75dacda35d43b9d9e3d528"},{"sha":"19424d53cc44e61f0a18ea7afb2f90552bb18d46","url":"https://api.github.com/repos/github/dmca/commits/19424d53cc44e61f0a18ea7afb2f90552bb18d46","html_url":"https://github.com/github/dmca/commit/19424d53cc44e61f0a18ea7afb2f90552bb18d46"}]},{"sha":"19424d53cc44e61f0a18ea7afb2f90552bb18d46","node_id":"C_kwDOABPootoAKDE5NDI0ZDUzY2M0NGU2MWYwYTE4ZWE3YWZiMmY5MDU1MmJiMThkNDY","commit":{"author":{"name":"dmca-sync-bot","email":"dmca-sync-bot@github.com","date":"2024-07-19T17:51:29Z"},"committer":{"name":"dmca-sync-bot","email":"dmca-sync-bot@github.com","date":"2024-07-19T17:51:29Z"},"message":"Process
+        DMCA request","tree":{"sha":"20aabe4ec14220460c637ff8f57674559c3db6e9","url":"https://api.github.com/repos/github/dmca/git/trees/20aabe4ec14220460c637ff8f57674559c3db6e9"},"url":"https://api.github.com/repos/github/dmca/git/commits/19424d53cc44e61f0a18ea7afb2f90552bb18d46","comment_count":0,"verification":{"verified":false,"reason":"unsigned","signature":null,"payload":null}},"url":"https://api.github.com/repos/github/dmca/commits/19424d53cc44e61f0a18ea7afb2f90552bb18d46","html_url":"https://github.com/github/dmca/commit/19424d53cc44e61f0a18ea7afb2f90552bb18d46","comments_url":"https://api.github.com/repos/github/dmca/commits/19424d53cc44e61f0a18ea7afb2f90552bb18d46/comments","author":null,"committer":null,"parents":[{"sha":"0f274716599fee385a75dacda35d43b9d9e3d528","url":"https://api.github.com/repos/github/dmca/commits/0f274716599fee385a75dacda35d43b9d9e3d528","html_url":"https://github.com/github/dmca/commit/0f274716599fee385a75dacda35d43b9d9e3d528"}]},{"sha":"0f274716599fee385a75dacda35d43b9d9e3d528","node_id":"C_kwDOABPootoAKDBmMjc0NzE2NTk5ZmVlMzg1YTc1ZGFjZGEzNWQ0M2I5ZDllM2Q1Mjg","commit":{"author":{"name":"DMCA
+        Sync Bot","email":"89167002+dmca-sync-bot@users.noreply.github.com","date":"2024-07-19T15:13:50Z"},"committer":{"name":"GitHub","email":"noreply@github.com","date":"2024-07-19T15:13:50Z"},"message":"Merge
+        pull request #15958 from github/updates\n\nAdded 2024/07/2024-07-19-ketchep.md","tree":{"sha":"7c0c564b6f98ad16ada79f52a71739351b2b1cab","url":"https://api.github.com/repos/github/dmca/git/trees/7c0c564b6f98ad16ada79f52a71739351b2b1cab"},"url":"https://api.github.com/repos/github/dmca/git/commits/0f274716599fee385a75dacda35d43b9d9e3d528","comment_count":0,"verification":{"verified":true,"reason":"valid","signature":"-----BEGIN
+        PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJmmoKuCRC1aQ7uu5UhlAAAcxUQAHptrhSzcPzDzG/d8YHqyEsM\njEFrj0TowC684BJt/anBIM5WHH2W+IKsI2pFkOKF/LR9S+b4llbieH/6nTHkhGf2\ne1EcWcPyquR5Ymq9D6uB67X/9r29PC9DLiji22conOHMKB6Xxtzgn9NjXVWD7j+f\npbmFFXPHYRTqSXsGn7nl8YkINDUa7AEEp4u5TH/Os2oATRBCBDhhg0KQWy5mvAZ/\nFuyKwq8KZJ7cSsd5JCkrboMvrujxlAPRRomRAu3xfWuC/zAnT+hI34WmtJduph92\nAT/lsP8yxeeZNgOAssu8sJUOYaGO0CjWtAZ1vtIAcAqhCMnEh94rRiTm3c5MymnM\nPan2FuzaFktAD24UH62akP9MqdR/TnrfSn9aSb2//pJJ84AtSiXcgsp75Z7iEf4J\n6iH0xXEocaa3jIMM9wmDUXEt8K5pGa/wZ1g1UxyBiSvXpXHL/iOUzgE6p2N8CZTa\nQP/9yzxHUO1K9Yv3ogvp+YYI5+V8stkJYd8AFxK27cjf8kDoRLZ9lS2/2sGkPofr\ncGKHO0bBC+llfNt/iC2F4EpFpfm7wAvmMy8TrA94aX4RbvRhizkvlFaEg7j2b6q/\nzoZ2/Mx+b3+uuvfO+ZeS50uQX8IE14SKiZZkrvo1kvxfPOqIUu6gADwD+IWqst+p\nyRsUkRj//Ix8qeulCugS\n=U4C4\n-----END
+        PGP SIGNATURE-----\n","payload":"tree 7c0c564b6f98ad16ada79f52a71739351b2b1cab\nparent
+        c31d42845217875ef436f6d9994ec17a4a353e3e\nparent e04b322a3a4d5a6bf1c458eb8269a7ee599ca65d\nauthor
+        DMCA Sync Bot <89167002+dmca-sync-bot@users.noreply.github.com> 1721402030
+        -0700\ncommitter GitHub <noreply@github.com> 1721402030 -0700\n\nMerge pull
+        request #15958 from github/updates\n\nAdded 2024/07/2024-07-19-ketchep.md"}},"url":"https://api.github.com/repos/github/dmca/commits/0f274716599fee385a75dacda35d43b9d9e3d528","html_url":"https://github.com/github/dmca/commit/0f274716599fee385a75dacda35d43b9d9e3d528","comments_url":"https://api.github.com/repos/github/dmca/commits/0f274716599fee385a75dacda35d43b9d9e3d528/comments","author":{"login":"dmca-sync-bot","id":89167002,"node_id":"MDQ6VXNlcjg5MTY3MDAy","avatar_url":"https://avatars.githubusercontent.com/u/89167002?v=4","gravatar_id":"","url":"https://api.github.com/users/dmca-sync-bot","html_url":"https://github.com/dmca-sync-bot","followers_url":"https://api.github.com/users/dmca-sync-bot/followers","following_url":"https://api.github.com/users/dmca-sync-bot/following{/other_user}","gists_url":"https://api.github.com/users/dmca-sync-bot/gists{/gist_id}","starred_url":"https://api.github.com/users/dmca-sync-bot/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/dmca-sync-bot/subscriptions","organizations_url":"https://api.github.com/users/dmca-sync-bot/orgs","repos_url":"https://api.github.com/users/dmca-sync-bot/repos","events_url":"https://api.github.com/users/dmca-sync-bot/events{/privacy}","received_events_url":"https://api.github.com/users/dmca-sync-bot/received_events","type":"User","site_admin":false},"committer":{"login":"web-flow","id":19864447,"node_id":"MDQ6VXNlcjE5ODY0NDQ3","avatar_url":"https://avatars.githubusercontent.com/u/19864447?v=4","gravatar_id":"","url":"https://api.github.com/users/web-flow","html_url":"https://github.com/web-flow","followers_url":"https://api.github.com/users/web-flow/followers","following_url":"https://api.github.com/users/web-flow/following{/other_user}","gists_url":"https://api.github.com/users/web-flow/gists{/gist_id}","starred_url":"https://api.github.com/users/web-flow/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/web-flow/subscriptions","organizations_url":"https://api.github.com/users/web-flow/orgs","repos_url":"https://api.github.com/users/web-flow/repos","events_url":"https://api.github.com/users/web-flow/events{/privacy}","received_events_url":"https://api.github.com/users/web-flow/received_events","type":"User","site_admin":false},"parents":[{"sha":"c31d42845217875ef436f6d9994ec17a4a353e3e","url":"https://api.github.com/repos/github/dmca/commits/c31d42845217875ef436f6d9994ec17a4a353e3e","html_url":"https://github.com/github/dmca/commit/c31d42845217875ef436f6d9994ec17a4a353e3e"},{"sha":"e04b322a3a4d5a6bf1c458eb8269a7ee599ca65d","url":"https://api.github.com/repos/github/dmca/commits/e04b322a3a4d5a6bf1c458eb8269a7ee599ca65d","html_url":"https://github.com/github/dmca/commit/e04b322a3a4d5a6bf1c458eb8269a7ee599ca65d"}]},{"sha":"e04b322a3a4d5a6bf1c458eb8269a7ee599ca65d","node_id":"C_kwDOABPootoAKGUwNGIzMjJhM2E0ZDVhNmJmMWM0NThlYjgyNjlhN2VlNTk5Y2E2NWQ","commit":{"author":{"name":"dmca-sync-bot","email":"dmca-sync-bot@github.com","date":"2024-07-19T15:13:43Z"},"committer":{"name":"dmca-sync-bot","email":"dmca-sync-bot@github.com","date":"2024-07-19T15:13:43Z"},"message":"Process
+        DMCA request","tree":{"sha":"7c0c564b6f98ad16ada79f52a71739351b2b1cab","url":"https://api.github.com/repos/github/dmca/git/trees/7c0c564b6f98ad16ada79f52a71739351b2b1cab"},"url":"https://api.github.com/repos/github/dmca/git/commits/e04b322a3a4d5a6bf1c458eb8269a7ee599ca65d","comment_count":0,"verification":{"verified":false,"reason":"unsigned","signature":null,"payload":null}},"url":"https://api.github.com/repos/github/dmca/commits/e04b322a3a4d5a6bf1c458eb8269a7ee599ca65d","html_url":"https://github.com/github/dmca/commit/e04b322a3a4d5a6bf1c458eb8269a7ee599ca65d","comments_url":"https://api.github.com/repos/github/dmca/commits/e04b322a3a4d5a6bf1c458eb8269a7ee599ca65d/comments","author":null,"committer":null,"parents":[{"sha":"c31d42845217875ef436f6d9994ec17a4a353e3e","url":"https://api.github.com/repos/github/dmca/commits/c31d42845217875ef436f6d9994ec17a4a353e3e","html_url":"https://github.com/github/dmca/commit/c31d42845217875ef436f6d9994ec17a4a353e3e"}]}]'
+  recorded_at: Mon, 22 Jul 2024 15:48:12 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/github/dmca/commits/6d42309968e2ddfe34ef9a86d2f97fa1d5f89ae2
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - api.github.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 22 Jul 2024 15:48:12 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Vary:
+      - Accept,Accept-Encoding, Accept, X-Requested-With
+      Etag:
+      - W/"a74cd690dfb596be810c3069b32a2bce4cfc9508dd332a22221f234160f50294"
+      Last-Modified:
+      - Fri, 19 Jul 2024 17:51:34 GMT
+      X-Github-Media-Type:
+      - github.v3; format=json
+      X-Github-Api-Version-Selected:
+      - '2022-11-28'
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes,
+        X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO,
+        X-GitHub-Request-Id, Deprecation, Sunset
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - '0'
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      Server:
+      - github.com
+      X-Ratelimit-Limit:
+      - '60'
+      X-Ratelimit-Remaining:
+      - '56'
+      X-Ratelimit-Reset:
+      - '1721666585'
+      X-Ratelimit-Resource:
+      - core
+      X-Ratelimit-Used:
+      - '4'
+      Accept-Ranges:
+      - bytes
+      Content-Length:
+      - '7482'
+      X-Github-Request-Id:
+      - F750:151B8:43C023:7F3728:669E7F3C
+    body:
+      encoding: ASCII-8BIT
+      string: '{"sha":"6d42309968e2ddfe34ef9a86d2f97fa1d5f89ae2","node_id":"C_kwDOABPootoAKDZkNDIzMDk5NjhlMmRkZmUzNGVmOWE4NmQyZjk3ZmExZDVmODlhZTI","commit":{"author":{"name":"DMCA
+        Sync Bot","email":"89167002+dmca-sync-bot@users.noreply.github.com","date":"2024-07-19T17:51:34Z"},"committer":{"name":"GitHub","email":"noreply@github.com","date":"2024-07-19T17:51:34Z"},"message":"Merge
+        pull request #15959 from github/updates\n\nAdded 2024/07/2024-07-18-codility.md","tree":{"sha":"20aabe4ec14220460c637ff8f57674559c3db6e9","url":"https://api.github.com/repos/github/dmca/git/trees/20aabe4ec14220460c637ff8f57674559c3db6e9"},"url":"https://api.github.com/repos/github/dmca/git/commits/6d42309968e2ddfe34ef9a86d2f97fa1d5f89ae2","comment_count":0,"verification":{"verified":true,"reason":"valid","signature":"-----BEGIN
+        PGP SIGNATURE-----\n\nwsFcBAABCAAQBQJmmqemCRC1aQ7uu5UhlAAArlIQAICAB/XyMVudji77A1lgaQC5\nJnu3WEtf/YeRPWC6hcw416+JWsluNBpe/1/Lq4ozaOX8S9rbPCYPjTPXBNyWxRup\nrlmNRra+UJGULiJ3gh4+DWMYUsqqE2xYuCW1+EewTqpG2fTmCypp3229e7AUnL7m\nsRNd2jvo1zFPpbQirG55p/Xig/KmWAhVKo5ItH9KFL3Z5+d+PuEqogwGz5kmLDNT\n9sO77NSo7BpojCOllbx684g8Knv0fHCZWtNn56rvvXy6cuavIDspReQznzoMnzs4\nzXdiF3tBCNhguVZ7aZIKIu+ogSGwu/xBbmmXXfpSFXd+PAYE/rdbwXTAa46rPfX4\ncsBYMx/HW26uMCKzkl6fRSt/jNaS5U+sClgtgrGNEM1MEBOJUbWksCt6KQB83eux\n7LxovC0YFWOa+FbFFZDLePoyuZirqDH4Bn/uH6AlX7xG2zpRRPH3YJuxJDzdgRnJ\nEQjo/dcebbT5ZKSn0ybS0KXP8ZnjTfUZiCz8dpK155W+I+p3eYow8UrokTRcKVp9\nLaxCn/d2W9RU7OoAKGpP10pM2IlLR1Z3+LIRBJ8/yp7ZaYdPx6Ip6VurqOje1PyL\nGA0pF3q1oc9ZQAuHyLnf9m3w4zgGgdmdsTqHEZ8RgCI3wymePhpsrwZvInv/In18\n67eUTSfcQviQrzdrdVil\n=5p93\n-----END
+        PGP SIGNATURE-----\n","payload":"tree 20aabe4ec14220460c637ff8f57674559c3db6e9\nparent
+        0f274716599fee385a75dacda35d43b9d9e3d528\nparent 19424d53cc44e61f0a18ea7afb2f90552bb18d46\nauthor
+        DMCA Sync Bot <89167002+dmca-sync-bot@users.noreply.github.com> 1721411494
+        -0700\ncommitter GitHub <noreply@github.com> 1721411494 -0700\n\nMerge pull
+        request #15959 from github/updates\n\nAdded 2024/07/2024-07-18-codility.md"}},"url":"https://api.github.com/repos/github/dmca/commits/6d42309968e2ddfe34ef9a86d2f97fa1d5f89ae2","html_url":"https://github.com/github/dmca/commit/6d42309968e2ddfe34ef9a86d2f97fa1d5f89ae2","comments_url":"https://api.github.com/repos/github/dmca/commits/6d42309968e2ddfe34ef9a86d2f97fa1d5f89ae2/comments","author":{"login":"dmca-sync-bot","id":89167002,"node_id":"MDQ6VXNlcjg5MTY3MDAy","avatar_url":"https://avatars.githubusercontent.com/u/89167002?v=4","gravatar_id":"","url":"https://api.github.com/users/dmca-sync-bot","html_url":"https://github.com/dmca-sync-bot","followers_url":"https://api.github.com/users/dmca-sync-bot/followers","following_url":"https://api.github.com/users/dmca-sync-bot/following{/other_user}","gists_url":"https://api.github.com/users/dmca-sync-bot/gists{/gist_id}","starred_url":"https://api.github.com/users/dmca-sync-bot/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/dmca-sync-bot/subscriptions","organizations_url":"https://api.github.com/users/dmca-sync-bot/orgs","repos_url":"https://api.github.com/users/dmca-sync-bot/repos","events_url":"https://api.github.com/users/dmca-sync-bot/events{/privacy}","received_events_url":"https://api.github.com/users/dmca-sync-bot/received_events","type":"User","site_admin":false},"committer":{"login":"web-flow","id":19864447,"node_id":"MDQ6VXNlcjE5ODY0NDQ3","avatar_url":"https://avatars.githubusercontent.com/u/19864447?v=4","gravatar_id":"","url":"https://api.github.com/users/web-flow","html_url":"https://github.com/web-flow","followers_url":"https://api.github.com/users/web-flow/followers","following_url":"https://api.github.com/users/web-flow/following{/other_user}","gists_url":"https://api.github.com/users/web-flow/gists{/gist_id}","starred_url":"https://api.github.com/users/web-flow/starred{/owner}{/repo}","subscriptions_url":"https://api.github.com/users/web-flow/subscriptions","organizations_url":"https://api.github.com/users/web-flow/orgs","repos_url":"https://api.github.com/users/web-flow/repos","events_url":"https://api.github.com/users/web-flow/events{/privacy}","received_events_url":"https://api.github.com/users/web-flow/received_events","type":"User","site_admin":false},"parents":[{"sha":"0f274716599fee385a75dacda35d43b9d9e3d528","url":"https://api.github.com/repos/github/dmca/commits/0f274716599fee385a75dacda35d43b9d9e3d528","html_url":"https://github.com/github/dmca/commit/0f274716599fee385a75dacda35d43b9d9e3d528"},{"sha":"19424d53cc44e61f0a18ea7afb2f90552bb18d46","url":"https://api.github.com/repos/github/dmca/commits/19424d53cc44e61f0a18ea7afb2f90552bb18d46","html_url":"https://github.com/github/dmca/commit/19424d53cc44e61f0a18ea7afb2f90552bb18d46"}],"stats":{"total":38,"additions":38,"deletions":0},"files":[{"sha":"3137afdc32b2caabbc045f068d83d71122191d92","filename":"2024/07/2024-07-18-codility.md","status":"added","additions":38,"deletions":0,"changes":38,"blob_url":"https://github.com/github/dmca/blob/6d42309968e2ddfe34ef9a86d2f97fa1d5f89ae2/2024%2F07%2F2024-07-18-codility.md","raw_url":"https://github.com/github/dmca/raw/6d42309968e2ddfe34ef9a86d2f97fa1d5f89ae2/2024%2F07%2F2024-07-18-codility.md","contents_url":"https://api.github.com/repos/github/dmca/contents/2024%2F07%2F2024-07-18-codility.md?ref=6d42309968e2ddfe34ef9a86d2f97fa1d5f89ae2","patch":"@@
+        -0,0 +1,38 @@\n+Before disabling any content in relation to this takedown
+        notice, GitHub\n+- contacted the owners of some or all of the affected repositories
+        to give them an opportunity to [make changes](https://docs.github.com/en/github/site-policy/dmca-takedown-policy#a-how-does-this-actually-work).\n+-
+        provided information on how to [submit a DMCA Counter Notice](https://docs.github.com/en/articles/guide-to-submitting-a-dmca-counter-notice).\n+\n+To
+        learn about when and why GitHub may process some notices this way, please
+        visit our [README](https://github.com/github/dmca/blob/master/README.md#anatomy-of-a-takedown-notice).\n+\n+---\n+\n+DMCA
+        Notification  \n+The following information is presented for the purposes of
+        removing web content that infringes on our copyright per the Digital Millennium
+        Copyright Act. We appreciate your enforcement of copyright law and support
+        of our rights in this matter.\n+\n+Identification of Copyrighted Work  \n+The
+        copyrighted work at issue is the text that appears on codility.com and its
+        related pages. The pages in question contain a clear copyright notification
+        and are the intellectual property of the complainant.\n+\n+Identification
+        of Infringed Material  \n+The following copyrighted paragraphs have been allegedly
+        copied from the copyrighted work:\n+\n+1) Link: https://github.com/manasch/placements/blob/main/placements/egnyte.md  \n+Text
+        starting from: \"There is an array A of N integers and three\"  \n+to: \"function
+        should return 15. Only one tile can be used\"\n+\n+\n+Notifying Party\n+\n+Codility
+        Limited  \n+Attn: [private]  \n+[private]  \n+[private]  \n+[private]  \n+[private]  \n+[private]  \n+[private]  \n+\n+[private]  \n+Copyright
+        Owners Statement\n+\n+I have a good faith belief that use of the copyrighted
+        materials described above on the allegedly infringing web pages is not authorized
+        by the copyright owner, its agent, or the law.  \n+I have taken fair use into
+        consideration. I swear, under penalty of perjury, that the information in
+        the notification is accurate and that I am authorized to act on behalf of
+        the copyright owner of an exclusive right that is allegedly infringed."}]}'
+  recorded_at: Mon, 22 Jul 2024 15:48:12 GMT
+- request:
+    method: get
+    uri: https://api.github.com/repos/github/dmca/commits/0f274716599fee385a75dacda35d43b9d9e3d528
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - api.github.com
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Mon, 22 Jul 2024 15:48:12 GMT
+      Content-Type:
+      - application/json; charset=utf-8
+      Cache-Control:
+      - public, max-age=60, s-maxage=60
+      Vary:
+      - Accept,Accept-Encoding, Accept, X-Requested-With
+      Etag:
+      - W/"fd9e2347a52fa5bbeb86e4eab2343a313b9f795bb0168865864068edb11b41f1"
+      Last-Modified:
+      - Fri, 19 Jul 2024 15:13:50 GMT
+      X-Github-Media-Type:
+      - github.v3; format=json
+      X-Github-Api-Version-Selected:
+      - '2022-11-28'
+      Access-Control-Expose-Headers:
+      - ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining,
+        X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes,
+        X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO,
+        X-GitHub-Request-Id, Deprecation, Sunset
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubdomains; preload
+      X-Frame-Options:
+      - deny
+      X-Content-Type-Options:
+      - nosniff
+      X-Xss-Protection:
+      - '0'
+      Referrer-Policy:
+      - origin-when-cross-origin, strict-origin-when-cross-origin
+      Content-Security-Policy:
+      - default-src 'none'
+      Server:
+      - github.com
+      X-Ratelimit-Limit:
+      - '60'
+      X-Ratelimit-Remaining:
+      - '55'
+      X-Ratelimit-Reset:
+      - '1721666585'
+      X-Ratelimit-Resource:
+      - core
+      X-Ratelimit-Used:
+      - '5'
+      Accept-Ranges:
+      - bytes
+      Transfer-Encoding:
+      - chunked
+      X-Github-Request-Id:
+      - F751:3837A9:43A696:7F14D4:669E7F3C
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        eyJzaGEiOiIwZjI3NDcxNjU5OWZlZTM4NWE3NWRhY2RhMzVkNDNiOWQ5ZTNkNTI4Iiwibm9kZV9pZCI6IkNfa3dET0FCUG9vdG9BS0RCbU1qYzBOekUyTlRrNVptVmxNemcxWVRjMVpHRmpaR0V6TldRME0ySTVaRGxsTTJRMU1qZyIsImNvbW1pdCI6eyJhdXRob3IiOnsibmFtZSI6IkRNQ0EgU3luYyBCb3QiLCJlbWFpbCI6Ijg5MTY3MDAyK2RtY2Etc3luYy1ib3RAdXNlcnMubm9yZXBseS5naXRodWIuY29tIiwiZGF0ZSI6IjIwMjQtMDctMTlUMTU6MTM6NTBaIn0sImNvbW1pdHRlciI6eyJuYW1lIjoiR2l0SHViIiwiZW1haWwiOiJub3JlcGx5QGdpdGh1Yi5jb20iLCJkYXRlIjoiMjAyNC0wNy0xOVQxNToxMzo1MFoifSwibWVzc2FnZSI6Ik1lcmdlIHB1bGwgcmVxdWVzdCAjMTU5NTggZnJvbSBnaXRodWIvdXBkYXRlc1xuXG5BZGRlZCAyMDI0LzA3LzIwMjQtMDctMTkta2V0Y2hlcC5tZCIsInRyZWUiOnsic2hhIjoiN2MwYzU2NGI2Zjk4YWQxNmFkYTc5ZjUyYTcxNzM5MzUxYjJiMWNhYiIsInVybCI6Imh0dHBzOi8vYXBpLmdpdGh1Yi5jb20vcmVwb3MvZ2l0aHViL2RtY2EvZ2l0L3RyZWVzLzdjMGM1NjRiNmY5OGFkMTZhZGE3OWY1MmE3MTczOTM1MWIyYjFjYWIifSwidXJsIjoiaHR0cHM6Ly9hcGkuZ2l0aHViLmNvbS9yZXBvcy9naXRodWIvZG1jYS9naXQvY29tbWl0cy8wZjI3NDcxNjU5OWZlZTM4NWE3NWRhY2RhMzVkNDNiOWQ5ZTNkNTI4IiwiY29tbWVudF9jb3VudCI6MCwidmVyaWZpY2F0aW9uIjp7InZlcmlmaWVkIjp0cnVlLCJyZWFzb24iOiJ2YWxpZCIsInNpZ25hdHVyZSI6Ii0tLS0tQkVHSU4gUEdQIFNJR05BVFVSRS0tLS0tXG5cbndzRmNCQUFCQ0FBUUJRSm1tb0t1Q1JDMWFRN3V1NVVobEFBQWN4VVFBSHB0cmhTemNQekR6Ry9kOFlIcXlFc01cbmpFRnJqMFRvd0M2ODRCSnQvYW5CSU01V0hIMlcrSUtzSTJwRmtPS0YvTFI5UytiNGxsYmllSC82blRIa2hHZjJcbmUxRWNXY1B5cXVSNVltcTlENnVCNjdYLzlyMjlQQzlETGlqaTIyY29uT0hNS0I2WHh0emduOU5qWFZXRDdqK2ZcbnBibUZGWFBIWVJUcVNYc0duN25sOFlrSU5EVWE3QUVFcDR1NVRIL09zMm9BVFJCQ0JEaGhnMEtRV3k1bXZBWi9cbkZ1eUt3cThLWko3Y1NzZDVKQ2tyYm9NdnJ1anhsQVBSUm9tUkF1M3hmV3VDL3pBblQraEkzNFdtdEpkdXBoOTJcbkFUL2xzUDh5eGVlWk5nT0Fzc3U4c0pVT1lhR08wQ2pXdEFaMXZ0SUFjQXFoQ01uRWg5NHJSaVRtM2M1TXltbk1cblBhbjJGdXphRmt0QUQyNFVINjJha1A5TXFkUi9UbnJmU245YVNiMi8vcEpKODRBdFNpWGNnc3A3NVo3aUVmNEpcbjZpSDB4WEVvY2FhM2pJTU05d21EVVhFdDhLNXBHYS93WjFnMVV4eUJpU3ZYcFhITC9pT1V6Z0U2cDJOOENaVGFcblFQLzl5enhIVU8xSzlZdjNvZ3ZwK1lZSTUrVjhzdGtKWWQ4QUZ4SzI3Y2pmOGtEb1JMWjlsUzIvMnNHa1BvZnJcbmNHS0hPMGJCQytsbGZOdC9pQzJGNEVwRnBmbTd3QXZtTXk4VHJBOTRhWDRSYnZSaGl6a3ZsRmFFZzdqMmI2cS9cbnpvWjIvTXgrYjMrdXV2Zk8rWmVTNTB1UVg4SUUxNFNLaVpaa3J2bzFrdnhmUE9xSVV1NmdBRHdEK0lXcXN0K3BcbnlSc1VrUmovL0l4OHFldWxDdWdTXG49VTRDNFxuLS0tLS1FTkQgUEdQIFNJR05BVFVSRS0tLS0tXG4iLCJwYXlsb2FkIjoidHJlZSA3YzBjNTY0YjZmOThhZDE2YWRhNzlmNTJhNzE3MzkzNTFiMmIxY2FiXG5wYXJlbnQgYzMxZDQyODQ1MjE3ODc1ZWY0MzZmNmQ5OTk0ZWMxN2E0YTM1M2UzZVxucGFyZW50IGUwNGIzMjJhM2E0ZDVhNmJmMWM0NThlYjgyNjlhN2VlNTk5Y2E2NWRcbmF1dGhvciBETUNBIFN5bmMgQm90IDw4OTE2NzAwMitkbWNhLXN5bmMtYm90QHVzZXJzLm5vcmVwbHkuZ2l0aHViLmNvbT4gMTcyMTQwMjAzMCAtMDcwMFxuY29tbWl0dGVyIEdpdEh1YiA8bm9yZXBseUBnaXRodWIuY29tPiAxNzIxNDAyMDMwIC0wNzAwXG5cbk1lcmdlIHB1bGwgcmVxdWVzdCAjMTU5NTggZnJvbSBnaXRodWIvdXBkYXRlc1xuXG5BZGRlZCAyMDI0LzA3LzIwMjQtMDctMTkta2V0Y2hlcC5tZCJ9fSwidXJsIjoiaHR0cHM6Ly9hcGkuZ2l0aHViLmNvbS9yZXBvcy9naXRodWIvZG1jYS9jb21taXRzLzBmMjc0NzE2NTk5ZmVlMzg1YTc1ZGFjZGEzNWQ0M2I5ZDllM2Q1MjgiLCJodG1sX3VybCI6Imh0dHBzOi8vZ2l0aHViLmNvbS9naXRodWIvZG1jYS9jb21taXQvMGYyNzQ3MTY1OTlmZWUzODVhNzVkYWNkYTM1ZDQzYjlkOWUzZDUyOCIsImNvbW1lbnRzX3VybCI6Imh0dHBzOi8vYXBpLmdpdGh1Yi5jb20vcmVwb3MvZ2l0aHViL2RtY2EvY29tbWl0cy8wZjI3NDcxNjU5OWZlZTM4NWE3NWRhY2RhMzVkNDNiOWQ5ZTNkNTI4L2NvbW1lbnRzIiwiYXV0aG9yIjp7ImxvZ2luIjoiZG1jYS1zeW5jLWJvdCIsImlkIjo4OTE2NzAwMiwibm9kZV9pZCI6Ik1EUTZWWE5sY2pnNU1UWTNNREF5IiwiYXZhdGFyX3VybCI6Imh0dHBzOi8vYXZhdGFycy5naXRodWJ1c2VyY29udGVudC5jb20vdS84OTE2NzAwMj92PTQiLCJncmF2YXRhcl9pZCI6IiIsInVybCI6Imh0dHBzOi8vYXBpLmdpdGh1Yi5jb20vdXNlcnMvZG1jYS1zeW5jLWJvdCIsImh0bWxfdXJsIjoiaHR0cHM6Ly9naXRodWIuY29tL2RtY2Etc3luYy1ib3QiLCJmb2xsb3dlcnNfdXJsIjoiaHR0cHM6Ly9hcGkuZ2l0aHViLmNvbS91c2Vycy9kbWNhLXN5bmMtYm90L2ZvbGxvd2VycyIsImZvbGxvd2luZ191cmwiOiJodHRwczovL2FwaS5naXRodWIuY29tL3VzZXJzL2RtY2Etc3luYy1ib3QvZm9sbG93aW5ney9vdGhlcl91c2VyfSIsImdpc3RzX3VybCI6Imh0dHBzOi8vYXBpLmdpdGh1Yi5jb20vdXNlcnMvZG1jYS1zeW5jLWJvdC9naXN0c3svZ2lzdF9pZH0iLCJzdGFycmVkX3VybCI6Imh0dHBzOi8vYXBpLmdpdGh1Yi5jb20vdXNlcnMvZG1jYS1zeW5jLWJvdC9zdGFycmVkey9vd25lcn17L3JlcG99Iiwic3Vic2NyaXB0aW9uc191cmwiOiJodHRwczovL2FwaS5naXRodWIuY29tL3VzZXJzL2RtY2Etc3luYy1ib3Qvc3Vic2NyaXB0aW9ucyIsIm9yZ2FuaXphdGlvbnNfdXJsIjoiaHR0cHM6Ly9hcGkuZ2l0aHViLmNvbS91c2Vycy9kbWNhLXN5bmMtYm90L29yZ3MiLCJyZXBvc191cmwiOiJodHRwczovL2FwaS5naXRodWIuY29tL3VzZXJzL2RtY2Etc3luYy1ib3QvcmVwb3MiLCJldmVudHNfdXJsIjoiaHR0cHM6Ly9hcGkuZ2l0aHViLmNvbS91c2Vycy9kbWNhLXN5bmMtYm90L2V2ZW50c3svcHJpdmFjeX0iLCJyZWNlaXZlZF9ldmVudHNfdXJsIjoiaHR0cHM6Ly9hcGkuZ2l0aHViLmNvbS91c2Vycy9kbWNhLXN5bmMtYm90L3JlY2VpdmVkX2V2ZW50cyIsInR5cGUiOiJVc2VyIiwic2l0ZV9hZG1pbiI6ZmFsc2V9LCJjb21taXR0ZXIiOnsibG9naW4iOiJ3ZWItZmxvdyIsImlkIjoxOTg2NDQ0Nywibm9kZV9pZCI6Ik1EUTZWWE5sY2pFNU9EWTBORFEzIiwiYXZhdGFyX3VybCI6Imh0dHBzOi8vYXZhdGFycy5naXRodWJ1c2VyY29udGVudC5jb20vdS8xOTg2NDQ0Nz92PTQiLCJncmF2YXRhcl9pZCI6IiIsInVybCI6Imh0dHBzOi8vYXBpLmdpdGh1Yi5jb20vdXNlcnMvd2ViLWZsb3ciLCJodG1sX3VybCI6Imh0dHBzOi8vZ2l0aHViLmNvbS93ZWItZmxvdyIsImZvbGxvd2Vyc191cmwiOiJodHRwczovL2FwaS5naXRodWIuY29tL3VzZXJzL3dlYi1mbG93L2ZvbGxvd2VycyIsImZvbGxvd2luZ191cmwiOiJodHRwczovL2FwaS5naXRodWIuY29tL3VzZXJzL3dlYi1mbG93L2ZvbGxvd2luZ3svb3RoZXJfdXNlcn0iLCJnaXN0c191cmwiOiJodHRwczovL2FwaS5naXRodWIuY29tL3VzZXJzL3dlYi1mbG93L2dpc3Rzey9naXN0X2lkfSIsInN0YXJyZWRfdXJsIjoiaHR0cHM6Ly9hcGkuZ2l0aHViLmNvbS91c2Vycy93ZWItZmxvdy9zdGFycmVkey9vd25lcn17L3JlcG99Iiwic3Vic2NyaXB0aW9uc191cmwiOiJodHRwczovL2FwaS5naXRodWIuY29tL3VzZXJzL3dlYi1mbG93L3N1YnNjcmlwdGlvbnMiLCJvcmdhbml6YXRpb25zX3VybCI6Imh0dHBzOi8vYXBpLmdpdGh1Yi5jb20vdXNlcnMvd2ViLWZsb3cvb3JncyIsInJlcG9zX3VybCI6Imh0dHBzOi8vYXBpLmdpdGh1Yi5jb20vdXNlcnMvd2ViLWZsb3cvcmVwb3MiLCJldmVudHNfdXJsIjoiaHR0cHM6Ly9hcGkuZ2l0aHViLmNvbS91c2Vycy93ZWItZmxvdy9ldmVudHN7L3ByaXZhY3l9IiwicmVjZWl2ZWRfZXZlbnRzX3VybCI6Imh0dHBzOi8vYXBpLmdpdGh1Yi5jb20vdXNlcnMvd2ViLWZsb3cvcmVjZWl2ZWRfZXZlbnRzIiwidHlwZSI6IlVzZXIiLCJzaXRlX2FkbWluIjpmYWxzZX0sInBhcmVudHMiOlt7InNoYSI6ImMzMWQ0Mjg0NTIxNzg3NWVmNDM2ZjZkOTk5NGVjMTdhNGEzNTNlM2UiLCJ1cmwiOiJodHRwczovL2FwaS5naXRodWIuY29tL3JlcG9zL2dpdGh1Yi9kbWNhL2NvbW1pdHMvYzMxZDQyODQ1MjE3ODc1ZWY0MzZmNmQ5OTk0ZWMxN2E0YTM1M2UzZSIsImh0bWxfdXJsIjoiaHR0cHM6Ly9naXRodWIuY29tL2dpdGh1Yi9kbWNhL2NvbW1pdC9jMzFkNDI4NDUyMTc4NzVlZjQzNmY2ZDk5OTRlYzE3YTRhMzUzZTNlIn0seyJzaGEiOiJlMDRiMzIyYTNhNGQ1YTZiZjFjNDU4ZWI4MjY5YTdlZTU5OWNhNjVkIiwidXJsIjoiaHR0cHM6Ly9hcGkuZ2l0aHViLmNvbS9yZXBvcy9naXRodWIvZG1jYS9jb21taXRzL2UwNGIzMjJhM2E0ZDVhNmJmMWM0NThlYjgyNjlhN2VlNTk5Y2E2NWQiLCJodG1sX3VybCI6Imh0dHBzOi8vZ2l0aHViLmNvbS9naXRodWIvZG1jYS9jb21taXQvZTA0YjMyMmEzYTRkNWE2YmYxYzQ1OGViODI2OWE3ZWU1OTljYTY1ZCJ9XSwic3RhdHMiOnsidG90YWwiOjg0LCJhZGRpdGlvbnMiOjg0LCJkZWxldGlvbnMiOjB9LCJmaWxlcyI6W3sic2hhIjoiZDMwNzQ1YTk5ODA1MDg5YmM1MjMxOTFiMTkzMGNhM2RiNmFiYTgwOCIsImZpbGVuYW1lIjoiMjAyNC8wNy8yMDI0LTA3LTE5LWtldGNoZXAubWQiLCJzdGF0dXMiOiJhZGRlZCIsImFkZGl0aW9ucyI6ODQsImRlbGV0aW9ucyI6MCwiY2hhbmdlcyI6ODQsImJsb2JfdXJsIjoiaHR0cHM6Ly9naXRodWIuY29tL2dpdGh1Yi9kbWNhL2Jsb2IvMGYyNzQ3MTY1OTlmZWUzODVhNzVkYWNkYTM1ZDQzYjlkOWUzZDUyOC8yMDI0JTJGMDclMkYyMDI0LTA3LTE5LWtldGNoZXAubWQiLCJyYXdfdXJsIjoiaHR0cHM6Ly9naXRodWIuY29tL2dpdGh1Yi9kbWNhL3Jhdy8wZjI3NDcxNjU5OWZlZTM4NWE3NWRhY2RhMzVkNDNiOWQ5ZTNkNTI4LzIwMjQlMkYwNyUyRjIwMjQtMDctMTkta2V0Y2hlcC5tZCIsImNvbnRlbnRzX3VybCI6Imh0dHBzOi8vYXBpLmdpdGh1Yi5jb20vcmVwb3MvZ2l0aHViL2RtY2EvY29udGVudHMvMjAyNCUyRjA3JTJGMjAyNC0wNy0xOS1rZXRjaGVwLm1kP3JlZj0wZjI3NDcxNjU5OWZlZTM4NWE3NWRhY2RhMzVkNDNiOWQ5ZTNkNTI4IiwicGF0Y2giOiJAQCAtMCwwICsxLDg0IEBAXG4rV2hpbGUgR2l0SHViIGRpZCBub3QgZmluZCBzdWZmaWNpZW50IGluZm9ybWF0aW9uIHRvIGRldGVybWluZSBhIHZhbGlkIGFudGktY2lyY3VtdmVudGlvbiBjbGFpbSwgd2UgZGV0ZXJtaW5lZCB0aGF0IHRoaXMgdGFrZWRvd24gbm90aWNlIGNvbnRhaW5zIG90aGVyIHZhbGlkIGNvcHlyaWdodCBjbGFpbShzKS5cbitcbistLS1cbitcbisqKkFyZSB5b3UgdGhlIGNvcHlyaWdodCBob2xkZXIgb3IgYXV0aG9yaXplZCB0byBhY3Qgb24gdGhlIGNvcHlyaWdodCBvd25lcidzIGJlaGFsZj8qKlxuK1xuK1llcywgSSBhbSB0aGUgY29weXJpZ2h0IGhvbGRlci5cbitcbisqKkFyZSB5b3Ugc3VibWl0dGluZyBhIHJldmlzZWQgRE1DQSBub3RpY2UgYWZ0ZXIgR2l0SHViIFRydXN0ICYgU2FmZXR5IHJlcXVlc3RlZCB5b3UgbWFrZSBjaGFuZ2VzIHRvIHlvdXIgb3JpZ2luYWwgbm90aWNlPyoqXG4rXG4rTm9cbitcbisqKkRvZXMgeW91ciBjbGFpbSBpbnZvbHZlIGNvbnRlbnQgb24gR2l0SHViIG9yIG5wbS5qcz8qKlxuK1xuK0dpdEh1YlxuK1xuKyoqUGxlYXNlIGRlc2NyaWJlIHRoZSBuYXR1cmUgb2YgeW91ciBjb3B5cmlnaHQgb3duZXJzaGlwIG9yIGF1dGhvcml6YXRpb24gdG8gYWN0IG9uIHRoZSBvd25lcidzIGJlaGFsZi4qKlxuK1xuK0kgYW0gdGhlIFtwcml2YXRlXSBhbmQgW3ByaXZhdGVdIG9mIEtldGNoZXAuY29tLCBMTEMuXG4rXG4rS2V0Y2hlcC5jb20sIExMQyBpcyB0aGUgc29sZSBjb3B5cmlnaHQsIHRyYWRlbWFyaywgYW5kIGludGVsbGVjdHVhbCBwcm9wZXJ0eSBvd25lciBvZiB0aGUgaU9TIGFwcCBcIkRlZmxlY3Rpb24gUHJvXCIgYXMgd2VsbCBhcyBpdHMgdHJhZGVtYXJrcywgbWFya2V0aW5nIG1hdGVyaWFscywgYW5kIGFzc29jaWF0ZWQgYXNzZXRzLCBzdWNoIGFzIHRoZSBhcHAncyBsb2dvLlxuK1xuK0tldGNoZXAuY29tLCBMTEMgb25seSBkaXN0cmlidXRlcyBcIkRlZmxlY3Rpb24gUHJvXCIgdGhyb3VnaCB0aGUgQXBwbGUgQXBwIFN0b3JlIGFuZCBoYXMgbm90IGF1dGhvcml6ZWQgZGlzdHJpYnV0aW9uIG9mIHRoZSBhcHAgdGhyb3VnaCBhbnkgb3RoZXIgY2hhbm5lbHMuIFBlciB0aGUgRE1DQSwgS2V0Y2hlcC5jb20sIExMQyByZXF1ZXN0cyB0aGF0IGdpdGh1Yi5jb20gY2Vhc2VzIHRvIGhvc3QgYW5kIGRpc3RyaWJ1dGUgY29waWVzIG9mIHRoZSBhcHAgYXMgd2VsbCBhcyB0aGUgYXBwJ3MgbWFya2V0aW5nIGFzc2V0cyBwZXJtYW5lbnRseSBhbmQgaW1tZWRpYXRlbHkuXG4rXG4rKipQbGVhc2UgcHJvdmlkZSBhIGRldGFpbGVkIGRlc2NyaXB0aW9uIG9mIHRoZSBvcmlnaW5hbCBjb3B5cmlnaHRlZCB3b3JrIHRoYXQgaGFzIGFsbGVnZWRseSBiZWVuIGluZnJpbmdlZC4gSWYgcG9zc2libGUsIGluY2x1ZGUgYSBVUkwgdG8gd2hlcmUgaXQgaXMgcG9zdGVkIG9ubGluZS4qKlxuK1xuK1wiRGVmbGVjdGlvbiBQcm9cIiBpcyBhIHBhaWQgaU9TIGFwcCB0aGF0IGlzIGRpc3RyaWJ1dGVkIG9ubHkgdGhyb3VnaCB0aGUgQXBwbGUgQXBwIFN0b3JlIGJ5IEtldGNoZXAuY29tLCBMTEMgYXMgXCJCbHVlIEtldGNoZXBcIi5cbitcbitodHRwczovL2FwcHMuYXBwbGUuY29tL3VzL2FwcC9kZWZsZWN0aW9uLXByby9pZDEyMTcxNjAyMDM/cGxhdGZvcm09aXBob25lXG4rXG4rS2V0Y2hlcC5jb20sIExMQyBvd25zIHRoZSBhcHAgbG9nbywgYWxsIHRyYWRlbWFya3MsIG1hcmtldGluZyBtYXRlcmlhbHMsIGFuZCBhc3NldHMgdGhhdCBhcmUgYnVuZGxlZCB3aXRoIHRoZSBhcHAuIFRoZSBhcHAncyBsb2dvIGlzIGEgZ3JheXNjYWxlIEkgYmVhbSB3aXRoIGEgZG93bndhcmQgYXJyb3cgYW5kIGRhcmsgYmFja2dyb3VuZCBhbmQgaXQgY2FuIGJlIGZvdW5kIHdpdGhpbiB0aGUgSVBBIGZpbGUgYXMgd2VsbCBhcyBvbiB0aGUgQXBwbGUgQXBwIFN0b3JlLlxuK1xuK1RoZSBkaXN0cmlidXRpb24gb2YgdGhlIGFwcCdzIGxvZ28gaW4gdGhpcyByZXBvc2l0b3J5IGRvZXMgbm90IGNvbnN0aXR1dGUgXCJmYWlyIHVzZVwiLCBzaW5jZSB0aGUgbG9nbyBpcyBiZWluZyB1c2VkIHNvbGVseSB0byBzdXBwb3J0IHRoZSB1bmF1dGhvcml6ZWQgZGlzdHJpYnV0aW9uIG9mIHRoZSBwaXJhdGVkIHNvZnR3YXJlLiBUaGlzIHJlcG9zaXRvcnkgaXMgYmVpbmcgdXNlZCBhcyBhIENETiBmb3IgdGhlIGlwYXVuaXZlcnNlLmNvbS4gVGhlIGFwcCdzIGxvZ28gKGhvc3RlZCBvbiBnaXRodWIpIGlzIGJlaW5nIHVzZWQgaW4gdGhpcyBwYWdlIHRvIGhlbHAgdXNlcnMgZmluZCBwaXJhdGVkIGNvcGllcyBvZiB0aGUgYXBwOiBodHRwczovL3d3dy5pcGF1bml2ZXJzZS5jb20vMjAyNC8wNC9kZWZsZWN0aW9uLXByby12OTAwLmh0bWxcbitcbisqKldoYXQgZmlsZXMgc2hvdWxkIGJlIHRha2VuIGRvd24/IFBsZWFzZSBwcm92aWRlIFVSTHMgZm9yIGVhY2ggZmlsZSwgb3IgaWYgdGhlIGVudGlyZSByZXBvc2l0b3J5LCB0aGUgcmVwb3NpdG9yeeKAmXMgVVJMLioqXG4rXG4raHR0cHM6Ly9naXRodWIuY29tL2lwYXVuaXZlcnNlL0lQQVVuaXZlcnNlL3JlbGVhc2VzL2Rvd25sb2FkL3YyMDI0MDcxNTIwMjIwMy9EZWZsZWN0aW9uX1Byby12OS4wLjFfSVBBVW5pdmVyc2UuaXBhICBcbitodHRwczovL3Jhdy5naXRodWJ1c2VyY29udGVudC5jb20vSVBBVW5pdmVyc2UvaXBhdW5pdmVyc2UvbWFpbi9pY29ucy9EZWZsZWN0aW9uJTIwUHJvXzIwMjQwNzE1MjAyMjAxLnBuZ1xuK1xuKyoqRG8geW91IGNsYWltIHRvIGhhdmUgYW55IHRlY2hub2xvZ2ljYWwgbWVhc3VyZXMgaW4gcGxhY2UgdG8gY29udHJvbCBhY2Nlc3MgdG8geW91ciBjb3B5cmlnaHRlZCBjb250ZW50PyBQbGVhc2Ugc2VlIG91ciA8YSBocmVmPVwiaHR0cHM6Ly9kb2NzLmdpdGh1Yi5jb20vYXJ0aWNsZXMvZ3VpZGUtdG8tc3VibWl0dGluZy1hLWRtY2EtdGFrZWRvd24tbm90aWNlI2NvbXBsYWludHMtYWJvdXQtYW50aS1jaXJjdW12ZW50aW9uLXRlY2hub2xvZ3lcIj5Db21wbGFpbnRzIGFib3V0IEFudGktQ2lyY3VtdmVudGlvbiBUZWNobm9sb2d5PC9hPiBpZiB5b3UgYXJlIHVuc3VyZS4qKlxuK1xuK1llc1xuK1xuKyoqV2hhdCB0ZWNobm9sb2dpY2FsIG1lYXN1cmVzIGRvIHlvdSBoYXZlIGluIHBsYWNlIGFuZCBob3cgZG8gdGhleSBlZmZlY3RpdmVseSBjb250cm9sIGFjY2VzcyB0byB5b3VyIGNvcHlyaWdodGVkIG1hdGVyaWFsPyoqXG4rXG4rVGhlIGFwcCB1c2VzIHRoZSBkZWZhdWx0IERSTSB0ZWNobm9sb2d5IHRoYXQgaXMgaW50ZWdyYXRlZCB3aXRoIHRoZSBBcHBsZSBBcHAgU3RvcmUgZGlzdHJpYnV0aW9uIHByb2Nlc3Nlcy5cbitcbisqKkhvdyBpcyB0aGUgYWNjdXNlZCBwcm9qZWN0IGRlc2lnbmVkIHRvIGNpcmN1bXZlbnQgeW91ciB0ZWNobm9sb2dpY2FsIHByb3RlY3Rpb24gbWVhc3VyZXM/KipcbitcbitUaGUgSVBBIGZpbGUgaGFzIGJlZW4gXCJjcmFja2VkXCIgaW4gb3JkZXIgdG8gZGlzYWJsZSBBcHBsZSdzIERSTSBtZWNoYW5pc21zIGFuZCBhbGxvdyBpbnN0YWxsYXRpb24gb2YgdGhlIGFwcCBvbiBhbnkgZGV2aWNlLlxuK1xuKyoqPGEgaHJlZj1cImh0dHBzOi8vZG9jcy5naXRodWIuY29tL2FydGljbGVzL2RtY2EtdGFrZWRvd24tcG9saWN5I2Itd2hhdC1hYm91dC1mb3Jrcy1vci13aGF0cy1hLWZvcmtcIj5IYXZlIHlvdSBzZWFyY2hlZCBmb3IgYW55IGZvcmtzPC9hPiBvZiB0aGUgYWxsZWdlZGx5IGluZnJpbmdpbmcgZmlsZXMgb3IgcmVwb3NpdG9yaWVzPyBFYWNoIGZvcmsgaXMgYSBkaXN0aW5jdCByZXBvc2l0b3J5IGFuZCBtdXN0IGJlIGlkZW50aWZpZWQgc2VwYXJhdGVseSBpZiB5b3UgYmVsaWV2ZSBpdCBpcyBpbmZyaW5naW5nIGFuZCB3aXNoIHRvIGhhdmUgaXQgdGFrZW4gZG93bi4qKlxuK1xuK0lmIGFueSBvdGhlciBjb3BpZXMgaW4gZm9ya3MgYXJlIGlkZW50aWZpZWQsIHRoZXkgd2lsbCBiZSByZXBvcnRlZCBpbiB0aGUgZnV0dXJlLlxuK1xuKyoqSXMgdGhlIHdvcmsgbGljZW5zZWQgdW5kZXIgYW4gb3BlbiBzb3VyY2UgbGljZW5zZT8qKlxuK1xuK05vXG4rXG4rKipXaGF0IHdvdWxkIGJlIHRoZSBiZXN0IHNvbHV0aW9uIGZvciB0aGUgYWxsZWdlZCBpbmZyaW5nZW1lbnQ/KipcbitcbitSZXBvcnRlZCBjb250ZW50IG11c3QgYmUgcmVtb3ZlZFxuK1xuKyoqRG8geW91IGhhdmUgdGhlIGFsbGVnZWQgaW5mcmluZ2Vy4oCZcyBjb250YWN0IGluZm9ybWF0aW9uPyBJZiBzbywgcGxlYXNlIHByb3ZpZGUgaXQuKipcbitcbitbcHJpdmF0ZV0gIFxuK1twcml2YXRlXSAgXG4rXG4rKipJIGhhdmUgYSBnb29kIGZhaXRoIGJlbGllZiB0aGF0IHVzZSBvZiB0aGUgY29weXJpZ2h0ZWQgbWF0ZXJpYWxzIGRlc2NyaWJlZCBhYm92ZSBvbiB0aGUgaW5mcmluZ2luZyB3ZWIgcGFnZXMgaXMgbm90IGF1dGhvcml6ZWQgYnkgdGhlIGNvcHlyaWdodCBvd25lciwgb3IgaXRzIGFnZW50LCBvciB0aGUgbGF3LioqXG4rXG4rKipJIGhhdmUgdGFrZW4gPGEgaHJlZj1cImh0dHBzOi8vd3d3Lmx1bWVuZGF0YWJhc2Uub3JnL3RvcGljcy8yMlwiPmZhaXIgdXNlPC9hPiBpbnRvIGNvbnNpZGVyYXRpb24uKipcbitcbisqKkkgc3dlYXIsIHVuZGVyIHBlbmFsdHkgb2YgcGVyanVyeSwgdGhhdCB0aGUgaW5mb3JtYXRpb24gaW4gdGhpcyBub3RpZmljYXRpb24gaXMgYWNjdXJhdGUgYW5kIHRoYXQgSSBhbSB0aGUgY29weXJpZ2h0IG93bmVyLCBvciBhbSBhdXRob3JpemVkIHRvIGFjdCBvbiBiZWhhbGYgb2YgdGhlIG93bmVyLCBvZiBhbiBleGNsdXNpdmUgcmlnaHQgdGhhdCBpcyBhbGxlZ2VkbHkgaW5mcmluZ2VkLioqXG4rXG4rKipJIGhhdmUgcmVhZCBhbmQgdW5kZXJzdGFuZCBHaXRIdWIncyA8YSBocmVmPVwiaHR0cHM6Ly9kb2NzLmdpdGh1Yi5jb20vYXJ0aWNsZXMvZ3VpZGUtdG8tc3VibWl0dGluZy1hLWRtY2EtdGFrZWRvd24tbm90aWNlL1wiPkd1aWRlIHRvIFN1Ym1pdHRpbmcgYSBETUNBIFRha2Vkb3duIE5vdGljZTwvYT4uKipcbitcbisqKlNvIHRoYXQgd2UgY2FuIGdldCBiYWNrIHRvIHlvdSwgcGxlYXNlIHByb3ZpZGUgZWl0aGVyIHlvdXIgdGVsZXBob25lIG51bWJlciBvciBwaHlzaWNhbCBhZGRyZXNzLioqXG4rXG4rcGhvbmU6IFtwcml2YXRlXSAgXG4rYWRkcmVzczogW3ByaXZhdGVdICBcbitcbisqKlBsZWFzZSB0eXBlIHlvdXIgZnVsbCBsZWdhbCBuYW1lIGJlbG93IHRvIHNpZ24gdGhpcyByZXF1ZXN0LioqXG4rXG4rW3ByaXZhdGVdICAifV19
+  recorded_at: Mon, 22 Jul 2024 15:48:12 GMT
+recorded_with: VCR 6.2.0
