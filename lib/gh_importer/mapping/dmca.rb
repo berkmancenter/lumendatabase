@@ -4,7 +4,7 @@ module GithubImporter
   module Mapping
     class DMCA
       NOTICE_TYPE_LABEL = 'DMCA'
-      GITHUB = 'Github'
+      GITHUB = 'GitHub'
       URLS_TO_IGNORE = ['https://github.com/github/dmca/blob/master/README.md#anatomy-of-a-takedown-notice).', 'https://docs.github.com/en/github/site-policy/dmca-takedown-policy#a-how-does-this-actually-work).', 'https://docs.github.com/en/articles/guide-to-submitting-a-dmca-counter-notice).']
 
       def initialize(notice_text, filename)
@@ -112,8 +112,9 @@ module GithubImporter
       end
 
       def github_entity_role(role_name)
+        gh_email = LumenSetting.get('github_user_email')
         existing_entity = EntityNoticeRole.new(
-          entity: Entity.where(name: 'GitHub').first,
+          entity: User.where(email: gh_email).first,
           name: role_name
         )
         return build_role(role_name, GITHUB) if existing_entity.id.nil?
