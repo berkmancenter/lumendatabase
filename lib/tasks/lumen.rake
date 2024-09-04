@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'rake'
 require 'collapses_topics'
 require 'csv'
 require 'comfy/blog_post_factory'

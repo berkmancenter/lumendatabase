@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'rake'
 
 feature "Publishing notices via rails task" do
   def notice_statuses
@@ -19,8 +18,6 @@ feature "Publishing notices via rails task" do
       end
 
       expect(Notice.pluck(:published)).to match_array([false, false, false])
-
-      Chill::Application.load_tasks
 
       Timecop.freeze(30.seconds.from_now) do
         Rake::Task['lumen:publish_embargoed'].invoke

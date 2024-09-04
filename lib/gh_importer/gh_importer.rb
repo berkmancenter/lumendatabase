@@ -27,9 +27,9 @@ module GithubImporter
       ENV['GH_IMPORT_DATE_FROM'] || DateTime.yesterday.iso8601
     end
 
-
     def generate_gh_new_commits_list
       start = import_date_from
+
       uri = URI("https://api.github.com/repos/#{REPO_OWNER}/#{REPO}/commits?since=#{start}")
       res = Net::HTTP.get_response(uri)
       res_json = JSON.parse(res.read_body)

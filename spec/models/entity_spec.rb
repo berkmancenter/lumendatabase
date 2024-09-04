@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'rake'
 
 describe Entity, type: :model do
   context 'automatic validations' do

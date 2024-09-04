@@ -32,6 +32,6 @@ RSpec.configure do |config|
   config.include TaskExampleGroup, type: :task
 
   config.before(:suite) do
-    Rails.application.load_tasks
+    Chill::Application.load_tasks if Rake::Task.tasks.empty?
   end
 end
