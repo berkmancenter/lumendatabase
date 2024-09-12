@@ -28,6 +28,8 @@ class Aggregator
 
   def setup_aggregations
     @registered_filters.each do |field|
+      next if field[:skip_aggregation] == true
+
       add_field_type_to_config(field)
     end
   end

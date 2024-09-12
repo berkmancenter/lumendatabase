@@ -444,6 +444,32 @@ feature "Searching for Notices via the API" do
     end
   end
 
+  context 'Searching by date_submitted' do
+    scenario 'returns notices submitted on a specific date range', js: true, search: true do
+      notice = create(:dmca, title: 'Foobar')
+      older_notice = create(:dmca, title: 'Foobar')
+      older_notice.update_column(:created_at, Time.now - 10.days)
+
+      index_changed_instances
+
+      expect_api_search_to_find('Foobar', date_submitted: "#{notice.created_at.to_i - 60.seconds}000..#{notice.created_at.to_i + 60.seconds}000") do |json|
+        expect(json['notices'].length).to eq(1)
+        expect(json['notices'].first['id']).to eq(notice.id)
+      end
+
+      expect_api_search_to_find('Foobar', date_submitted: "#{notice.created_at.to_i - 10.days - 60.seconds}000..#{notice.created_at.to_i - 10.days + 60.seconds}000") do |json|
+        expect(json['notices'].length).to eq(1)
+        expect(json['notices'].first['id']).to eq(older_notice.id)
+      end
+
+      expect_api_search_to_find('Foobar', date_submitted: "#{notice.created_at.to_i - 10.days - 60.seconds}000..#{notice.created_at.to_i + 60.seconds}000") do |json|
+        expect(json['notices'].length).to eq(2)
+        expect(json['notices'].first['id']).to eq(notice.id)
+        expect(json['notices'].last['id']).to eq(older_notice.id)
+      end
+    end
+  end
+
   def expect_api_search_to_find(term, options = {})
     with_curb_get_for_json(
       "notices/search.json",

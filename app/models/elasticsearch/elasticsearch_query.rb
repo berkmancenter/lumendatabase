@@ -129,6 +129,7 @@ class ElasticsearchQuery
   def add_exact_match_requirements
     search_config[:processed_elements].each do |field|
       next unless @params[field[:local_parameter]].present?
+      next if field[:local_parameter] != field[:local_indexed_attribute]
 
       search_config[:query][:bool][:filter] <<
         create_exact_term_query(field, @params[field[:local_parameter]])

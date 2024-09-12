@@ -6,7 +6,9 @@
       <%= form_tag(@search_index_path, method: :get, id: 'facets-form') do %>
         <ol class="results-facets">
           <% @filterable_fields.each do |filterable_field| %>
-            <%= render filterable_field, results: @searchdata.response['aggregations'] %>
+            <% unless filterable_field.skip_frontend %>
+              <%= render filterable_field, results: @searchdata.response['aggregations'] %>
+            <% end %>
           <% end %>
         </ol>
         <%= hidden_field_tag(:sort_by, params[:sort_by], class: 'sort_by_field', id: nil) %>

@@ -28,6 +28,8 @@ class NoticeSerializer < BaseSerializer
 
   attribute :jurisdictions, &:jurisdiction_list
 
+  attribute :date_submitted, &:created_at
+
   attribute :score, if: proc { |record|
     record.respond_to?(:_score)
   } do |object|

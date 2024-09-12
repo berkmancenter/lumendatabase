@@ -2,13 +2,15 @@
 
 class DateRangeFilter
 
-  attr_reader :title, :parameter
+  attr_reader :title, :parameter, :skip_frontend
 
-  def initialize(parameter, indexed_attribute = nil, title = '', ranges = default_ranges)
+  def initialize(parameter, indexed_attribute = nil, title = '', ranges = default_ranges, skip_frontend = false, skip_aggregation = false)
     @parameter = parameter
     @title = title
     @indexed_attribute = indexed_attribute || parameter
-    @ranges = ranges
+    @ranges = ranges || default_ranges
+    @skip_frontend = skip_frontend
+    @skip_aggregation = skip_aggregation
   end
 
   def to_partial_path
@@ -26,7 +28,8 @@ class DateRangeFilter
       type: :date_range,
       local_parameter:  @parameter,
       local_indexed_attribute: @indexed_attribute,
-      local_ranges: @ranges
+      local_ranges: @ranges,
+      skip_aggregation: @skip_aggregation,
     }
   end
 

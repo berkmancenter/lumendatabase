@@ -37,7 +37,7 @@ class Notice < ApplicationRecord
     TermSearch.new(:submitter_name, :submitter_name, 'Submitter Name'),
     TermSearch.new(:submitter_country_code, :submitter_country_code, 'Submitter Country'),
     TermSearch.new(:works, 'works.description', 'Works Descriptions'),
-    TermSearch.new(:action_taken, :action_taken, 'Action taken')
+    TermSearch.new(:action_taken, :action_taken, 'Action taken'),
   ].freeze
 
   FILTERABLE_FIELDS = [
@@ -51,7 +51,8 @@ class Notice < ApplicationRecord
     TermFilter.new(:language_facet, 'Language'),
     TermFilter.new(:submitter_country_code_facet, 'Submitter Country'),
     UnspecifiedTermFilter.new(:action_taken_facet, 'Action taken'),
-    DateRangeFilter.new(:date_received_facet, :date_received, 'Date')
+    DateRangeFilter.new(:date_received_facet, :date_received, 'Date'),
+    DateRangeFilter.new(:date_submitted, :created_at, '', nil, true, true)
   ].freeze
 
   ORDERING_OPTIONS = [

@@ -2,12 +2,13 @@
 
 class TermFilter
 
-  attr_reader :title, :parameter
+  attr_reader :title, :parameter, :skip_frontend
 
-  def initialize(parameter, title = '', indexed_attribute = nil)
+  def initialize(parameter, title = '', indexed_attribute = nil, skip_frontend = false)
     @parameter = parameter
     @title = title
     @indexed_attribute = indexed_attribute || parameter
+    @skip_frontend = skip_frontend
   end
 
   def to_partial_path
