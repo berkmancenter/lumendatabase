@@ -1,5 +1,5 @@
 require 'loggy'
-require 'gh_importer/mapping/dmca'
+require 'github_importer/mapping/dmca'
 
 module GithubImporter
   class GithubImporter

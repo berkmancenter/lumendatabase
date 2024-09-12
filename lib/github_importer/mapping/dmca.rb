@@ -1,4 +1,4 @@
-require 'gh_importer/entity_notice_role_builder'
+require 'github_importer/entity_notice_role_builder'
 
 module GithubImporter
   module Mapping

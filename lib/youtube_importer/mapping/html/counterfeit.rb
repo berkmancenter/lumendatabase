@@ -1,6 +1,6 @@
-require 'yt_importer/mapping/html/trademark_d'
+require 'youtube_importer/mapping/html/trademark_d'
 
-module YtImporter
+module YoutubeImporter
   module Mapping
     module Html
       class Counterfeit < TrademarkD

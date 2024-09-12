@@ -1,22 +1,19 @@
-require 'yt_importer/mapping/html/trademark_d'
+require 'youtube_importer/mapping/html/base'
 
-module YtImporter
+module YoutubeImporter
   module Mapping
     module Html
-      class OtherLegal < TrademarkD
-        NOTICE_TYPE_LABEL = 'Other Legal'
+      class TrademarkD < Base
+        NOTICE_TYPE_LABEL = 'Trademark'
 
         def notice_type
-          ::Other
+          ::Trademark
         end
-
-        private
 
         def work_description
           [
             data_field_without_field_label(@notice_paragraphs.fetch(@urls_index + 1, nil)&.content),
-            data_field_without_field_label(@notice_paragraphs.fetch(@urls_index + 2, nil)&.content),
-            data_field_without_field_label(@notice_paragraphs.fetch(@urls_index + 3, nil)&.content)
+            data_field_without_field_label(@notice_paragraphs.fetch(@urls_index + 2, nil)&.content)
           ].reject { |val| val.blank? }.join("\n").strip
         end
 
@@ -31,7 +28,7 @@ module YtImporter
         end
 
         def sender
-          name = @notice_paragraphs.fetch(6, nil)&.content
+          name = @notice_paragraphs.fetch(1, nil)&.content
 
           return nil if name.nil?
 

@@ -1,6 +1,6 @@
-require 'yt_importer/mapping/html/base'
+require 'youtube_importer/mapping/html/base'
 
-module YtImporter
+module YoutubeImporter
   module Mapping
     module Html
       class Defamation < Base

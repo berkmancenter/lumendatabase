@@ -1,6 +1,6 @@
-require 'yt_importer/entity_notice_role_builder'
+require 'youtube_importer/entity_notice_role_builder'
 
-module YtImporter
+module YoutubeImporter
   module Mapping
     class Base
       def initialize(notice_text, raw_file_path)

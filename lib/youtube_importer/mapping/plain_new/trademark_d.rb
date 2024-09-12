@@ -1,6 +1,6 @@
-require 'yt_importer/mapping/plain_new/base'
+require 'youtube_importer/mapping/plain_new/base'
 
-module YtImporter
+module YoutubeImporter
   module Mapping
     module PlainNew
       class TrademarkD < Base

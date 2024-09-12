@@ -1,10 +1,10 @@
-require 'yt_importer/mapping/base'
+require 'youtube_importer/mapping/base'
 require 'uri'
 
-module YtImporter
+module YoutubeImporter
   module Mapping
     module PlainNew
-      class Base < YtImporter::Mapping::Base
+      class Base < YoutubeImporter::Mapping::Base
         def language
           get_single_line_field('Language')
         end

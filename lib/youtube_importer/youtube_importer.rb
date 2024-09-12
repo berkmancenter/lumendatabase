@@ -1,20 +1,20 @@
 require 'loggy'
-require 'yt_importer/mapping/html/counterfeit'
-require 'yt_importer/mapping/html/defamation'
-require 'yt_importer/mapping/html/other_legal'
-require 'yt_importer/mapping/html/trademark_d'
-require 'yt_importer/mapping/plain_new/counterfeit'
-require 'yt_importer/mapping/plain_new/defamation'
-require 'yt_importer/mapping/plain_new/other_legal'
-require 'yt_importer/mapping/plain_new/trademark_d'
+require 'youtube_importer/mapping/html/counterfeit'
+require 'youtube_importer/mapping/html/defamation'
+require 'youtube_importer/mapping/html/other_legal'
+require 'youtube_importer/mapping/html/trademark_d'
+require 'youtube_importer/mapping/plain_new/counterfeit'
+require 'youtube_importer/mapping/plain_new/defamation'
+require 'youtube_importer/mapping/plain_new/other_legal'
+require 'youtube_importer/mapping/plain_new/trademark_d'
 
-module YtImporter
-  class YtImporter
+module YoutubeImporter
+  class YoutubeImporter
     FILES_DIRECTORY = ENV['BASE_DIRECTORY']
     IMPORT_FILE_BATCH_SIZE = 500
 
     def initialize
-      @logger = Loggy.new('YtImporter', true, true)
+      @logger = Loggy.new('YoutubeImporter', true, true)
 
       if FILES_DIRECTORY.nil?
         @logger.info('The BASE_DIRECTORY env variable must be set to continue')
@@ -53,7 +53,7 @@ module YtImporter
     end
 
     def import_files_list_file
-      ENV['YT_IMPORT_FILES_LIST_FILE'] || 'tmp/yt_importer_files_list'
+      ENV['YT_IMPORT_FILES_LIST_FILE'] || 'tmp/youtube_importer_files_list'
     end
 
     def generate_yt_files_list
@@ -90,10 +90,10 @@ module YtImporter
       file_data = read_file(file_to_process)
 
       mapper_class = nil
-      mapper_class = "YtImporter::Mapping::#{format_class}::Counterfeit" if system("grep -q '<counterfeit\+' #{file_to_process}")
-      mapper_class = "YtImporter::Mapping::#{format_class}::Defamation" if system("grep -q '<defamation\+' #{file_to_process}")
-      mapper_class = "YtImporter::Mapping::#{format_class}::OtherLegal" if system("grep -q '<other-legal\+' #{file_to_process}")
-      mapper_class = "YtImporter::Mapping::#{format_class}::TrademarkD" if system("grep -q '<trademark\+' #{file_to_process}")
+      mapper_class = "YoutubeImporter::Mapping::#{format_class}::Counterfeit" if system("grep -q '<counterfeit\+' #{file_to_process}")
+      mapper_class = "YoutubeImporter::Mapping::#{format_class}::Defamation" if system("grep -q '<defamation\+' #{file_to_process}")
+      mapper_class = "YoutubeImporter::Mapping::#{format_class}::OtherLegal" if system("grep -q '<other-legal\+' #{file_to_process}")
+      mapper_class = "YoutubeImporter::Mapping::#{format_class}::TrademarkD" if system("grep -q '<trademark\+' #{file_to_process}")
 
       if mapper_class.nil?
         @number_failed_imports += 1

@@ -1,4 +1,4 @@
-module YtImporter
+module YoutubeImporter
   class EntityNoticeRoleBuilder
     def initialize(role_name, name, address = {})
       @role_name = role_name

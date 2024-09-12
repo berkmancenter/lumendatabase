@@ -5,8 +5,8 @@ require 'csv'
 require 'comfy/blog_post_factory'
 require 'loggy'
 require 'court_order_reporter'
-require 'yt_importer/yt_importer'
-require 'gh_importer/gh_importer'
+require 'youtube_importer/youtube_importer'
+require 'github_importer/github_importer'
 require 'fileutils'
 require 'uri'
 
@@ -568,7 +568,7 @@ where works.id in (
 
     loggy.info('Starting importing YT notices from old chill')
 
-    importer = YtImporter::YtImporter.new
+    importer = YoutubeImporter::YoutubeImporter.new
     importer.import
 
     loggy.info('Finished importing YT notices from old chill')
