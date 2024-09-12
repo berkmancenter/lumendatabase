@@ -1,5 +1,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [24.09](https://github.com/berkmancenter/lumendatabase/releases/tag/2024.09) - 2024-09-12
+### Added
+* Created an importer of GitHub notices.
+### Changed
+* Updated the gems.
+* Allowed to search by the `date_submitted` (`created_at`) field.
+
 ## [24.06a](https://github.com/berkmancenter/lumendatabase/releases/tag/2024.06a) - 2024-06-07
 ### Fixed
 * Made the submitter widget operational again.
