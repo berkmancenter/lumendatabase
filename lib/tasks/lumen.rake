@@ -776,7 +776,6 @@ where works.id in (
           ProxyCache.clear_notice(notices.map(&:id))
 
           notices.each do |notice|
-            loggy.info "Processing #{notice_update_call.caller_type} id=#{notice_update_call.caller_id} #{itx}/#{number_of_notices}"
             notice.touch
             itx += 1
           end
