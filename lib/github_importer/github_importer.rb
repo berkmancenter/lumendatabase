@@ -3,8 +3,6 @@ require 'github_importer/mapping/dmca'
 
 module GithubImporter
   class GithubImporter
-    FILES_DIRECTORY = ENV['BASE_DIRECTORY']
-    IMPORT_FILE_BATCH_SIZE = 500
     REPO = 'dmca'
     REPO_OWNER = 'github'
 
@@ -39,7 +37,8 @@ module GithubImporter
 
       @number_to_import = commits.size
       @logger.info("Found #{commits.size} new commits since #{start}")
-      return commits
+
+      commits
     end
 
     # Import a list of github/dmca commits as notices
@@ -57,7 +56,7 @@ module GithubImporter
       uri = URI("https://api.github.com/repos/#{REPO_OWNER}/#{REPO}/commits/#{sha_to_process}")
       res = Net::HTTP.get_response(uri)
       res_json = JSON.parse(res.read_body)
-      commit_file = res_json["files"][0]\
+      commit_file = res_json["files"][0]
 
       # Remove the diff chars
       content = commit_file["patch"].gsub(/(@@.*@@\n)/, '').tr('+', ' ').tr('*', '')
