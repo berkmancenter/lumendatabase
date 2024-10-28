@@ -5,6 +5,29 @@ GIT
     jquery-ui-rails (7.0.0)
       railties (>= 3.2.16)
 
+GIT
+  remote: https://github.com/zombocom/derailed_benchmarks.git
+  revision: 897a2a9ad5a328cf3c194ec582b53899f056eb87
+  specs:
+    derailed_benchmarks (2.2.1)
+      base64
+      benchmark-ips (~> 2)
+      bigdecimal
+      drb
+      get_process_mem
+      heapy (~> 0)
+      logger
+      memory_profiler (>= 0, < 2)
+      mini_histogram (>= 0.3.0)
+      mutex_m
+      ostruct
+      rack (>= 1)
+      rack-test
+      rake (> 10, < 14)
+      ruby-statistics (>= 4.0.1)
+      ruby2_keywords
+      thor (>= 0.19, < 2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -171,21 +194,6 @@ GEM
     date_validator (0.12.0)
       activemodel (>= 3)
       activesupport (>= 3)
-    dead_end (4.0.0)
-    derailed (0.1.0)
-      derailed_benchmarks
-    derailed_benchmarks (2.1.2)
-      benchmark-ips (~> 2)
-      dead_end
-      get_process_mem (~> 0)
-      heapy (~> 0)
-      memory_profiler (>= 0, < 2)
-      mini_histogram (>= 0.3.0)
-      rack (>= 1)
-      rack-test
-      rake (> 10, < 14)
-      ruby-statistics (>= 2.1)
-      thor (>= 0.19, < 2)
     devise (4.9.4)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -231,7 +239,8 @@ GEM
       net-http
     ffi (1.17.0)
     flutie (2.2.0)
-    get_process_mem (0.2.7)
+    get_process_mem (1.0.0)
+      bigdecimal (>= 2.0)
       ffi (~> 1.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
@@ -309,6 +318,7 @@ GEM
     minitest (5.25.1)
     msgpack (1.7.2)
     multi_json (1.15.0)
+    mutex_m (0.2.0)
     neat (1.6.0)
       bourbon (>= 3.1)
       sass (>= 3.3)
@@ -469,6 +479,7 @@ GEM
       rexml
     ruby-prof (1.7.0)
     ruby-statistics (4.0.1)
+    ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
@@ -586,7 +597,7 @@ DEPENDENCIES
   curb
   database_cleaner
   date_validator
-  derailed
+  derailed_benchmarks!
   devise
   dotenv-rails
   elasticsearch-extensions

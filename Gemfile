@@ -50,7 +50,8 @@ gem 'elasticsearch-rails', '~> 7.0'
 group :development do
   gem 'allocation_tracer'
   gem 'bundle-audit'
-  gem 'derailed'
+  # Use main until https://github.com/zombocom/derailed_benchmarks/pull/241 is released.
+  gem 'derailed_benchmarks', git: 'https://github.com/zombocom/derailed_benchmarks.git'
   gem 'memory_profiler'
 end
 
