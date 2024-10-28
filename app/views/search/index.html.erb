@@ -12,6 +12,7 @@
           <% end %>
         </ol>
         <%= hidden_field_tag(:sort_by, params[:sort_by], class: 'sort_by_field', id: nil) %>
+        <%= hidden_field_tag('term-exact-search', params['term-exact-search'], class: 'term-exact-search-adv', id: nil) %>
       <% end %>
       <div class="results-context"><%= Translation.t('search_index_filtering') %></div>
       <div class="result-stats">

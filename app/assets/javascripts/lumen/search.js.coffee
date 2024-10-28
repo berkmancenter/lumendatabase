@@ -37,9 +37,9 @@ $('#search').on 'change', ->
   searchTermArray = Array.from(searchTerm)
 
   if searchTermArray[0] == '"' && searchTermArray.at(-1) == '"'
-    $('#term-exact-search').prop('checked', true)
+    $('#term-exact-search, .term-exact-search-adv').prop('checked', true)
   else
-    $('#term-exact-search').prop('checked', false)
+    $('#term-exact-search, .term-exact-search-adv').prop('checked', false)
 
 $ ->
   $rows.displayActiveFields()
