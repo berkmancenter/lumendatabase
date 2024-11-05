@@ -3,6 +3,9 @@ require 'rails_helper'
 describe 'rake lumen:import_github_notices', type: :task, vcr: true do
   before :all do
     create(:court_order, :with_document)
+    user = create(:user, :submitter, email: LumenSetting.get('github_user_email'))
+    create(:entity, name: 'GitHub', users: [user])
+
     ENV['GH_IMPORT_DATE_FROM'] = '2024-07-19T00:00:00Z'
   end
 

@@ -35,7 +35,7 @@ Entity.create!(
   state: 'CA',
   zip: '94043',
   country_code: 'US',
-  user: google
+  users: [google]
 )
 
 Entity.create!(
@@ -46,5 +46,5 @@ Entity.create!(
   state: 'ON',
   zip: 'FFF 222',
   country_code: 'CA',
-  user: twitter
+  users: [twitter]
 )

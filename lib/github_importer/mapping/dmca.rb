@@ -7,10 +7,16 @@ module GithubImporter
       GITHUB = 'GitHub'
       URLS_TO_IGNORE = ['https://github.com/github/dmca/blob/master/README.md#anatomy-of-a-takedown-notice).', 'https://docs.github.com/en/github/site-policy/dmca-takedown-policy#a-how-does-this-actually-work).', 'https://docs.github.com/en/articles/guide-to-submitting-a-dmca-counter-notice).']
 
-      def initialize(notice_text, filename)
-        @notice_text = notice_text
+      def initialize(commit_file)
         @notice_type = DMCA
-        @filename = filename
+        @commit_file = commit_file
+        process_commit_file
+      end
+
+      def process_commit_file
+        @notice_text = @commit_file['patch'].gsub(/(@@.*@@\n)/, '').tr('+', ' ').tr('*', '')
+        @filename = @commit_file['filename']
+        @filename_without_dir = @filename.split('/').last
       end
 
       def notice_type
@@ -30,7 +36,20 @@ module GithubImporter
       end
 
       def file_uploads
-        []
+        dir_path = Rails.root.join('tmp', 'github_importer')
+        FileUtils.mkdir_p(dir_path)
+        file_path = dir_path.join(@filename_without_dir)
+        File.open(file_path, 'w') do |file|
+          file.puts URI.open(@commit_file['raw_url']).read
+        end
+        file = File.open(file_path, 'rb')
+
+        [
+          FileUpload.new(
+            kind: 'original',
+            file: file,
+          )
+        ]
       end
 
       def mark_registration_number
@@ -69,7 +88,7 @@ module GithubImporter
       end
 
       def body_original
-        ''
+        @notice_text
       end
 
       def jurisdiction
@@ -86,6 +105,10 @@ module GithubImporter
 
       def local_jurisdiction_laws
         ''
+      end
+
+      def date_sent
+        @filename[/(\d{4}-\d{2}-\d{2})/m]
       end
 
       private
@@ -114,7 +137,7 @@ module GithubImporter
       def github_entity_role(role_name)
         gh_email = LumenSetting.get('github_user_email')
         existing_entity = EntityNoticeRole.new(
-          entity: User.where(email: gh_email).first,
+          entity: User.where(email: gh_email).first.entity,
           name: role_name
         )
         return build_role(role_name, GITHUB) if existing_entity.id.nil?

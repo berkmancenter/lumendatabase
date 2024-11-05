@@ -1,5 +1,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [24.11](https://github.com/berkmancenter/lumendatabase/releases/tag/2024.11) - 2024-11-05
+### Changed
+* Updated the gems.
+### Added
+* Added a pagination to the `Github` notices importer.
+
 ## [24.09](https://github.com/berkmancenter/lumendatabase/releases/tag/2024.09) - 2024-09-12
 ### Added
 * Created an importer of GitHub notices.

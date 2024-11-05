@@ -11,11 +11,38 @@ module GithubImporter
       @number_to_import = 0
       @number_imported = 0
       @number_failed_imports = 0
+      @github_token = LumenSetting.get('github_api_token')
     end
 
     def import
-      shas = generate_gh_new_commits_list
-      import_commits(shas)
+      start = import_date_from
+      page = 1
+      commits = []
+
+      loop do
+        uri = URI("https://api.github.com/repos/#{REPO_OWNER}/#{REPO}/commits?since=#{start}&per_page=100&page=#{page}")
+        req = Net::HTTP::Get.new(uri)
+        req['Authorization'] = "Bearer #{@github_token}"
+        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+          http.request(req)
+        end
+
+        res_json = JSON.parse(res.body)
+
+        break if res_json.empty?
+
+        unique_commits = res_json.select { |x| x['commit']['message'].match(/^Merge/) }
+        commit_shas = unique_commits.map { |x| x['sha'] }
+        commits.concat(commit_shas)
+
+        commits.each do |sha|
+          import_single_commit(sha)
+        end
+
+        page += 1
+      end
+
+      commits
     end
 
     private
@@ -25,46 +52,25 @@ module GithubImporter
       ENV['GH_IMPORT_DATE_FROM'] || DateTime.yesterday.iso8601
     end
 
-    def generate_gh_new_commits_list
-      start = import_date_from
-
-      uri = URI("https://api.github.com/repos/#{REPO_OWNER}/#{REPO}/commits?since=#{start}")
-      res = Net::HTTP.get_response(uri)
-      res_json = JSON.parse(res.read_body)
-
-      unique_commits = res_json.select {|x|x["commit"]["message"].match(/^Merge/)}
-      commits = unique_commits.map {|x| x["sha"] }
-
-      @number_to_import = commits.size
-      @logger.info("Found #{commits.size} new commits since #{start}")
-
-      commits
-    end
-
-    # Import a list of github/dmca commits as notices
-    def import_commits(x)
-      x.each do |sha|
-        import_single_commit(sha)
-      end
-    end
-
     # For single commit sha, fetch the file contents and convert that to a notice in our DB
     def import_single_commit(sha_to_process)
-      @logger.info("Importing --- #{@number_imported + @number_failed_imports}/#{@number_to_import} ---")
+      @logger.info("Importing --- #{@number_imported} imported #{@number_failed_imports} failed ---")
       @logger.info("Importing https://github.com/github/dmca/commit/#{sha_to_process}")
 
       uri = URI("https://api.github.com/repos/#{REPO_OWNER}/#{REPO}/commits/#{sha_to_process}")
-      res = Net::HTTP.get_response(uri)
+      req = Net::HTTP::Get.new(uri)
+      req['Authorization'] = "Bearer #{@github_token}"
+      res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+        http.request(req)
+      end
       res_json = JSON.parse(res.read_body)
       commit_file = res_json["files"][0]
-
-      # Remove the diff chars
-      content = commit_file["patch"].gsub(/(@@.*@@\n)/, '').tr('+', ' ').tr('*', '')
-      filename = commit_file["filename"]
-      filename_creation_time = filename[/(\d{4}-\d{2}-\d{2})/m]
       commit_time = res_json["commit"]["author"]["date"]
 
-      mapped_notice_data = Mapping::DMCA.new(content, filename)
+      # Some commits just rename files, so we can skip those
+      return unless commit_file['patch']
+
+      mapped_notice_data = Mapping::DMCA.new(commit_file)
 
       notice_params = {
         title: mapped_notice_data.title,
@@ -74,7 +80,7 @@ module GithubImporter
         action_taken: mapped_notice_data.action_taken,
         created_at: commit_time,
         updated_at: commit_time,
-        date_sent: filename_creation_time,
+        date_sent: mapped_notice_data.date_sent,
         date_received: commit_time,
         file_uploads: mapped_notice_data.file_uploads,
         works: mapped_notice_data.works,
@@ -104,6 +110,8 @@ module GithubImporter
 
       @number_imported += 1
     rescue StandardError, NameError => e
+      puts sha_to_process
+      puts commit_file
       @number_failed_imports += 1
       @logger.error("#{e.backtrace}: #{e.message} (#{e.class}) [#{sha_to_process}]")
     end
