@@ -17,9 +17,9 @@ module GithubImporter
     def import
       start = import_date_from
       page = 1
-      commits = []
 
       loop do
+        commits = []
         uri = URI("https://api.github.com/repos/#{REPO_OWNER}/#{REPO}/commits?since=#{start}&per_page=100&page=#{page}")
         req = Net::HTTP::Get.new(uri)
         req['Authorization'] = "Bearer #{@github_token}"
