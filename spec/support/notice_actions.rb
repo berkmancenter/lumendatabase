@@ -34,6 +34,7 @@ module NoticeActions
 
   def open_recent_notice
     visit '/'
+    expect(page).to have_css('#recent-notices', visible: true)
     within('#recent-notices li:nth-child(1)') { find('a').click }
   end
 

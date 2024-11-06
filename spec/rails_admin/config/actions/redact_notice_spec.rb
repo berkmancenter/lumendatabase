@@ -177,10 +177,11 @@ describe 'RedactNoticeProc' do
         review_required_ids = [@object.id] + redactable_notices.map(&:id)
         expect(redactor).to receive(:redact_all)
           .with(contain_exactly(*review_required_ids))
-        should_receive(:redact_notice_path)
+
+        expect(self).to receive(:redact_notice_path)
           .with(@abstract_model, 1, next_notices: %w[2 3 4])
           .and_return(:some_path)
-        should_receive(:redirect_to).with(:some_path)
+        expect(self).to receive(:redirect_to).with(:some_path)
 
         post_responder.handle(params)
       end

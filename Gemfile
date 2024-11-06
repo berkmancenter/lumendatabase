@@ -73,6 +73,7 @@ group :development, :test, :assets do
 end
 
 group :test do
+  gem 'capybara-screenshot'
   gem 'capybara-selenium'
   gem 'curb'
   gem 'database_cleaner'

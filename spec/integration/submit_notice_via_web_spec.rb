@@ -78,6 +78,8 @@ feature 'notice submission' do
       add_document
     end
 
+    expect(page).to have_words('Notice created')
+
     notice = Notice.last
 
     expect(notice).to have(1).supporting_document
@@ -89,6 +91,8 @@ feature 'notice submission' do
       add_document
       add_document
     end
+
+    expect(page).to have_words('Notice created')
 
     open_recent_notice
 
@@ -216,6 +220,7 @@ feature 'notice submission' do
   scenario 'submitting notices with duplicate items' do
     submit_recent_notice
     submit_recent_notice
+    expect(page).to have_words('Notice created')
 
     expect(Notice.count).to eq 2
     expect(Entity.count).to eq 4

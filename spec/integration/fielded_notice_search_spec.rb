@@ -158,6 +158,7 @@ feature 'Fielded searches of Notices' do
 
       open_and_select_facet(:sender_name_facet, notice.sender_name)
 
+      expect(page).to have_visible_advanced_search_controls
       expect(page).to have_active_facet(:sender_name_facet, notice.sender_name)
       expect(page).to have_n_results 1
       search_on_page.within_fielded_searches do
@@ -189,6 +190,7 @@ feature 'Fielded searches of Notices' do
         search_on_page.add_fielded_search_for(title_field, 'lion')
 
         search_on_page.run_search
+        expect(page).to have_visible_advanced_search_controls
         search_on_page.open_advanced_search
 
         search_on_page.within_fielded_searches do
@@ -248,6 +250,7 @@ feature 'Fielded searches of Notices' do
         search_on_page = init_search_on_page
         search_on_page.add_fielded_search_for(title_field, 'lion')
         search_on_page.run_search
+        expect(page).to have_visible_advanced_search_controls
 
         search_on_page.within_fielded_searches do
           # existing field is made disabled, and the new select should

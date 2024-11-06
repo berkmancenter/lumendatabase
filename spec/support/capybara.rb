@@ -1,7 +1,8 @@
 require 'capybara/rspec'
+require 'capybara-screenshot/rspec'
 
 # https://docs.travis-ci.com/user/common-build-problems/#capybara-im-getting-errors-about-elements-not-being-found
-Capybara.default_max_wait_time = 15
+Capybara.default_max_wait_time = 60
 
 default_chrome_options = %w(
   --blink-settings=imagesEnabled=false
@@ -26,7 +27,7 @@ chrome_options = Selenium::WebDriver::Chrome::Options.new
 default_chrome_options.each { |o| chrome_options.add_argument(o) }
 client = Selenium::WebDriver::Remote::Http::Default.new(open_timeout: nil, read_timeout: 120)
 
-Capybara.register_driver :headless do |app|
+Capybara.register_driver :selenium do |app|
   Capybara::Selenium::Driver.new(
     app,
     browser: :chrome,
@@ -37,7 +38,7 @@ Capybara.register_driver :headless do |app|
   )
 end
 
-Capybara.javascript_driver = :headless
+Capybara.javascript_driver = :selenium
 Capybara.server = :webrick
 
 Capybara.configure do |config|
