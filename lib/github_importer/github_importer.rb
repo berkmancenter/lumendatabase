@@ -15,37 +15,43 @@ module GithubImporter
     end
 
     def import
-      start = import_date_from
+      start_date = import_date_from
       page = 1
 
       loop do
-        commits = []
-        uri = URI("https://api.github.com/repos/#{REPO_OWNER}/#{REPO}/commits?since=#{start}&per_page=100&page=#{page}")
-        req = Net::HTTP::Get.new(uri)
-        req['Authorization'] = "Bearer #{@github_token}"
-        res = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
-          http.request(req)
-        end
+        commits = fetch_commits(start_date, page)
+        break if commits.empty?
 
-        res_json = JSON.parse(res.body)
-
-        break if res_json.empty?
-
-        unique_commits = res_json.select { |x| x['commit']['message'].match(/^Merge/) }
-        commit_shas = unique_commits.map { |x| x['sha'] }
-        commits.concat(commit_shas)
-
-        commits.each do |sha|
-          import_single_commit(sha)
-        end
+        unique_commit_shas = extract_unique_commit_shas(commits)
+        process_commits(unique_commit_shas)
 
         page += 1
       end
-
-      commits
     end
 
     private
+
+    def fetch_commits(start_date, page)
+      uri = URI("https://api.github.com/repos/#{REPO_OWNER}/#{REPO}/commits")
+      uri.query = URI.encode_www_form(since: start_date, per_page: 100, page: page)
+      request = Net::HTTP::Get.new(uri)
+      request['Authorization'] = "Bearer #{@github_token}"
+
+      response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) { |http| http.request(request) }
+      JSON.parse(response.body)
+    end
+
+    def extract_unique_commit_shas(commits)
+      commits
+        .select { |commit| commit['commit']['message'].match(/^Merge/) }
+        .map { |commit| commit['sha'] }
+    end
+
+    def process_commits(commit_shas)
+      commit_shas.each do |sha|
+        import_single_commit(sha)
+      end
+    end
 
     # Format YYYY-MM-DDT00:00:00Z
     def import_date_from
