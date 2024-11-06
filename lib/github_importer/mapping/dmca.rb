@@ -136,12 +136,10 @@ module GithubImporter
 
       def github_entity_role(role_name)
         gh_email = LumenSetting.get('github_user_email')
-        existing_entity = EntityNoticeRole.new(
+        EntityNoticeRole.new(
           entity: User.where(email: gh_email).first.entity,
           name: role_name
         )
-        return build_role(role_name, GITHUB) if existing_entity.id.nil?
-        existing_entity
       end
 
       def build_role(role_name, name, address = {})

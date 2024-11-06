@@ -70,6 +70,14 @@ module GithubImporter
       # Some commits just rename files, so we can skip those
       return unless commit_file['patch']
 
+      # Skip if already imported
+      filename = commit_file['filename']
+      filename_without_dir = filename.split('/').last
+      existing_file = FileUpload.where(file_file_name: filename_without_dir).first
+      if existing_file.present?
+        return if existing_file.notice.entity_notice_roles.where(name: 'submitter').first&.entity&.users&.first&.email == LumenSetting.get('github_user_email')
+      end
+
       mapped_notice_data = Mapping::DMCA.new(commit_file)
 
       notice_params = {
@@ -110,8 +118,6 @@ module GithubImporter
 
       @number_imported += 1
     rescue StandardError, NameError => e
-      puts sha_to_process
-      puts commit_file
       @number_failed_imports += 1
       @logger.error("#{e.backtrace}: #{e.message} (#{e.class}) [#{sha_to_process}]")
     end
