@@ -2,6 +2,7 @@ require_relative '../page_object'
 
 class FieldedSearchOnPage < PageObject
   def open_advanced_search
+    has_selector?('.container.advanced-search', visible: :all)
     node = first('.container.advanced-search', visible: :all)
     find('a#toggle-advanced-search').click unless node.visible?
   end
