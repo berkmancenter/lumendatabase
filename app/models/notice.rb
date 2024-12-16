@@ -200,6 +200,23 @@ class Notice < ApplicationRecord
     ActiveRecord::Base.connection.execute("SELECT reltuples FROM pg_class WHERE relname = 'notices'").getvalue(0, 0).to_i
   end
 
+  def self.search_index_settings
+    {
+      analysis: {
+        analyzer: {
+          custom_standard_analyzer: {
+            type: "custom",
+            tokenizer: "standard",
+            filter: [
+              "lowercase",
+              "word_delimiter_graph",
+            ],
+          },
+        },
+      },
+    }
+  end
+
   # == Instance Methods =====================================================
 
   # Using reset_type because type is ALWAYS protected (deep in the Rails code).

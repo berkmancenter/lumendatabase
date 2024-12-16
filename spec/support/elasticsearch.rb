@@ -25,8 +25,12 @@ RSpec.configure do |config|
     config.before :each, type: type do
       searchable_models.each do |model|
         begin
-          model.__elasticsearch__.create_index!
-          model.put_mapping
+          settings = model.search_index_settings if model.respond_to?(:search_index_settings)
+
+          model.__elasticsearch__.create_index!({
+            settings: settings,
+            mappings: JSON.parse(File.read(Rails.root.join('search', "#{model.name.downcase}_index_mapping.json"))),
+          })
         rescue Elasticsearch::Transport::Transport::Errors::BadRequest; # This can happen when the index is created too fast I think?
         rescue Elasticsearch::Transport::Transport::Errors::NotFound; end
       end

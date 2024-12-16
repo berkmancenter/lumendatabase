@@ -1,273 +1,272 @@
 {
-  "mappings": {
-    "_source": {
-      "enabled": true
+  "_source": {
+    "enabled": true
+  },
+  "dynamic": "false",
+  "properties": {
+    "@timestamp": {
+      "type": "date"
     },
-    "dynamic": "false",
-    "properties": {
-      "@timestamp": {
-        "type": "date"
-      },
-      "@version": {
-        "type": "short"
-      },
-      "action_taken": {
-        "type": "keyword",
-        "fields": {
-          "facet": {
-            "type": "keyword"
-          }
+    "@version": {
+      "type": "short"
+    },
+    "action_taken": {
+      "type": "keyword",
+      "fields": {
+        "facet": {
+          "type": "keyword"
         }
-      },
-      "action_taken_facet": {
-        "type": "alias",
-        "path": "action_taken.facet"
-      },
-      "base_search": {
-        "type": "text"
-      },
-      "body": {
-        "type": "text",
-        "copy_to": [
-          "base_search"
-        ]
-      },
-      "class_name": {
-        "type": "keyword"
-      },
-      "country_code": {
-        "type": "keyword"
-      },
-      "country_code_facet": {
-        "type": "alias",
-        "path": "country_code"
-      },
-      "created_at": {
-        "type": "date"
-      },
-      "date_received": {
-        "type": "date",
-        "fields": {
-          "facet": {
-            "type": "date"
-          }
+      }
+    },
+    "action_taken_facet": {
+      "type": "alias",
+      "path": "action_taken.facet"
+    },
+    "base_search": {
+      "type": "text",
+      "analyzer": "custom_standard_analyzer"
+    },
+    "body": {
+      "type": "text",
+      "copy_to": [
+        "base_search"
+      ]
+    },
+    "class_name": {
+      "type": "keyword"
+    },
+    "country_code": {
+      "type": "keyword"
+    },
+    "country_code_facet": {
+      "type": "alias",
+      "path": "country_code"
+    },
+    "created_at": {
+      "type": "date"
+    },
+    "date_received": {
+      "type": "date",
+      "fields": {
+        "facet": {
+          "type": "date"
         }
-      },
-      "date_received_facet": {
-        "type": "alias",
-        "path": "date_received.facet"
-      },
-      "entities_country_codes": {
-        "type": "keyword"
-      },
-      "hidden": {
-        "type": "boolean"
-      },
-      "id": {
-        "type": "keyword"
-      },
-      "jurisdiction_list": {
-        "type": "text",
-        "copy_to": [
-          "base_search"
-        ],
-        "fields": {
-          "facet": {
-            "type": "keyword"
-          }
+      }
+    },
+    "date_received_facet": {
+      "type": "alias",
+      "path": "date_received.facet"
+    },
+    "entities_country_codes": {
+      "type": "keyword"
+    },
+    "hidden": {
+      "type": "boolean"
+    },
+    "id": {
+      "type": "keyword"
+    },
+    "jurisdiction_list": {
+      "type": "text",
+      "copy_to": [
+        "base_search"
+      ],
+      "fields": {
+        "facet": {
+          "type": "keyword"
         }
-      },
-      "jurisdiction_list_facet": {
-        "type": "alias",
-        "path": "jurisdiction_list.facet"
-      },
-      "language": {
-        "type": "keyword",
-        "fields": {
-          "facet": {
-            "type": "keyword"
-          }
+      }
+    },
+    "jurisdiction_list_facet": {
+      "type": "alias",
+      "path": "jurisdiction_list.facet"
+    },
+    "language": {
+      "type": "keyword",
+      "fields": {
+        "facet": {
+          "type": "keyword"
         }
-      },
-      "language_facet": {
-        "type": "alias",
-        "path": "language.facet"
-      },
-      "mark_registration_number": {
-        "type": "keyword",
-        "copy_to": [
-          "base_search"
-        ]
-      },
-      "preferred_search": {
-        "type": "text"
-      },
-      "principal_name": {
-        "type": "text",
-        "copy_to": [
-          "base_search"
-        ],
-        "fields": {
-          "facet": {
-            "type": "keyword"
-          }
+      }
+    },
+    "language_facet": {
+      "type": "alias",
+      "path": "language.facet"
+    },
+    "mark_registration_number": {
+      "type": "keyword",
+      "copy_to": [
+        "base_search"
+      ]
+    },
+    "preferred_search": {
+      "type": "text"
+    },
+    "principal_name": {
+      "type": "text",
+      "copy_to": [
+        "base_search"
+      ],
+      "fields": {
+        "facet": {
+          "type": "keyword"
         }
-      },
-      "principal_name_facet": {
-        "type": "alias",
-        "path": "principal_name.facet"
-      },
-      "published": {
-        "type": "boolean"
-      },
-      "recipient_name": {
-        "type": "text",
-        "copy_to": [
-          "preferred_search"
-        ],
-        "fields": {
-          "facet": {
-            "type": "keyword"
-          }
+      }
+    },
+    "principal_name_facet": {
+      "type": "alias",
+      "path": "principal_name.facet"
+    },
+    "published": {
+      "type": "boolean"
+    },
+    "recipient_name": {
+      "type": "text",
+      "copy_to": [
+        "preferred_search"
+      ],
+      "fields": {
+        "facet": {
+          "type": "keyword"
         }
-      },
-      "recipient_name_facet": {
-        "type": "alias",
-        "path": "recipient_name.facet"
-      },
-      "request_type": {
-        "type": "keyword",
-        "copy_to": [
-          "base_search"
-        ]
-      },
-      "rescinded": {
-        "type": "boolean"
-      },
-      "sender_name": {
-        "type": "text",
-        "copy_to": [
-          "preferred_search"
-        ],
-        "fields": {
-          "facet": {
-            "type": "keyword"
-          }
+      }
+    },
+    "recipient_name_facet": {
+      "type": "alias",
+      "path": "recipient_name.facet"
+    },
+    "request_type": {
+      "type": "keyword",
+      "copy_to": [
+        "base_search"
+      ]
+    },
+    "rescinded": {
+      "type": "boolean"
+    },
+    "sender_name": {
+      "type": "text",
+      "copy_to": [
+        "preferred_search"
+      ],
+      "fields": {
+        "facet": {
+          "type": "keyword"
         }
-      },
-      "sender_name_facet": {
-        "type": "alias",
-        "path": "sender_name.facet"
-      },
-      "spam": {
-        "type": "boolean"
-      },
-      "subject": {
-        "type": "text",
-        "copy_to": [
-          "base_search"
-        ]
-      },
-      "submitter_country_code": {
-        "type": "text",
-        "copy_to": [
-          "base_search"
-        ],
-        "fields": {
-          "facet": {
-            "type": "keyword"
-          }
+      }
+    },
+    "sender_name_facet": {
+      "type": "alias",
+      "path": "sender_name.facet"
+    },
+    "spam": {
+      "type": "boolean"
+    },
+    "subject": {
+      "type": "text",
+      "copy_to": [
+        "base_search"
+      ]
+    },
+    "submitter_country_code": {
+      "type": "text",
+      "copy_to": [
+        "base_search"
+      ],
+      "fields": {
+        "facet": {
+          "type": "keyword"
         }
-      },
-      "submitter_country_code_facet": {
-        "type": "alias",
-        "path": "submitter_country_code.facet"
-      },
-      "submitter_name": {
-        "type": "text",
-        "copy_to": [
-          "base_search"
-        ],
-        "fields": {
-          "facet": {
-            "type": "keyword"
-          }
+      }
+    },
+    "submitter_country_code_facet": {
+      "type": "alias",
+      "path": "submitter_country_code.facet"
+    },
+    "submitter_name": {
+      "type": "text",
+      "copy_to": [
+        "base_search"
+      ],
+      "fields": {
+        "facet": {
+          "type": "keyword"
         }
-      },
-      "submitter_name_facet": {
-        "type": "alias",
-        "path": "submitter_name.facet"
-      },
-      "tag_list": {
-        "type": "text",
-        "copy_to": [
-          "base_search"
-        ],
-        "fields": {
-          "facet": {
-            "type": "keyword"
-          }
+      }
+    },
+    "submitter_name_facet": {
+      "type": "alias",
+      "path": "submitter_name.facet"
+    },
+    "tag_list": {
+      "type": "text",
+      "copy_to": [
+        "base_search"
+      ],
+      "fields": {
+        "facet": {
+          "type": "keyword"
         }
-      },
-      "tag_list_facet": {
-        "type": "alias",
-        "path": "tag_list.facet"
-      },
-      "title": {
-        "type": "text",
-        "copy_to": [
-          "preferred_search"
-        ]
-      },
-      "topic_list": {
-        "type": "keyword"
-      },
-      "topic_facet": {
-        "type": "alias",
-        "path": "topic_list"
-      },
-      "topics": {
-        "properties": {
-          "name": {
-            "type": "text",
-            "copy_to": [
-              "base_search"
-            ]
-          },
-          "id": {
-            "type": "keyword"
-          }
+      }
+    },
+    "tag_list_facet": {
+      "type": "alias",
+      "path": "tag_list.facet"
+    },
+    "title": {
+      "type": "text",
+      "copy_to": [
+        "preferred_search"
+      ]
+    },
+    "topic_list": {
+      "type": "keyword"
+    },
+    "topic_facet": {
+      "type": "alias",
+      "path": "topic_list"
+    },
+    "topics": {
+      "properties": {
+        "name": {
+          "type": "text",
+          "copy_to": [
+            "base_search"
+          ]
+        },
+        "id": {
+          "type": "keyword"
         }
-      },
-      "updated_at": {
-        "type": "date"
-      },
-      "works": {
-        "properties": {
-          "copyrighted_urls": {
-            "properties": {
-              "url": {
-                "type": "text",
-                "copy_to": [
-                  "base_search"
-                ]
-              }
+      }
+    },
+    "updated_at": {
+      "type": "date"
+    },
+    "works": {
+      "properties": {
+        "copyrighted_urls": {
+          "properties": {
+            "url": {
+              "type": "text",
+              "copy_to": [
+                "base_search"
+              ]
             }
-          },
-          "description": {
-            "type": "text",
-            "copy_to": [
-              "preferred_search"
-            ]
-          },
-          "infringing_urls": {
-            "properties": {
-              "url": {
-                "type": "text",
-                "copy_to": [
-                  "base_search"
-                ]
-              }
+          }
+        },
+        "description": {
+          "type": "text",
+          "copy_to": [
+            "preferred_search"
+          ]
+        },
+        "infringing_urls": {
+          "properties": {
+            "url": {
+              "type": "text",
+              "copy_to": [
+                "base_search"
+              ]
             }
           }
         }

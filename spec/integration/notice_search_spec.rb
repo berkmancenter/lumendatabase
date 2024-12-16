@@ -328,12 +328,17 @@ feature 'Searching Notices', type: :feature do
         url_original: 'https://redacted.example.com/hey_i_need_to_be_redacted'
       )
 
+      i_url_3 = InfringingUrl.new(
+        url: 'https://gogo-team.harvard.edu/something/something.pdf',
+        url_original: 'https://gogo-team.harvard.edu/something/something.pdf',
+      )
+
       c_url = CopyrightedUrl.new(
         url: 'https://foo.bar',
         url_original: 'https://sharklasers.com'
       )
 
-      work1 = Work.new(infringing_urls: [i_url, i_url_2])
+      work1 = Work.new(infringing_urls: [i_url, i_url_2, i_url_3])
       work2 = Work.new(copyrighted_urls: [c_url])
       notice = create(:dmca, works: [work1, work2])
       index_changed_instances
@@ -361,16 +366,11 @@ feature 'Searching Notices', type: :feature do
         expect(page).to have_words('https://redacted.example.com/[REDACTED]')
       end
 
-      # This isn't found, because the standard analyzer's tokenizer only splits
-      # on periods which are followed by whitespace. You can switch to the
-      # simple or stop analyzer and this will be found, but it also changes how
-      # highlighting works -- e.g. since "infringing_url" becomes two tokens,
-      # a test elsewhere that searching for that term produces appropriately
-      # highlighted results breaks. This was a bug in our Elasticsearch 5.x
-      # implementation that wasn't caught until testing of 6.x; I'm carrying it
-      # over because I'm aiming for feature parity in the upgrade. --ay 22 May 2020
+      within_search_results_for('harvard.edu') do
+        expect(page).to have_n_results(1)
+      end
+
       within_search_results_for('foo') do
-        pending 'tokenizer does not split URLs'
         expect(page).to have_n_results(1)
         expect(page).not_to have_words('sharklasers')
       end

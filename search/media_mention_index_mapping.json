@@ -1,72 +1,70 @@
 {
-  "mappings": {
-    "_doc": {
-      "dynamic": "false",
-      "properties": {
-        "author": {
-          "type": "text",
-          "copy_to": [
-            "base_search"
-          ]
-        },
-        "base_search": {
-          "type": "text"
-        },
-        "date": {
-          "type": "date",
-          "copy_to": [
-            "base_search",
-            "date_facet"
-          ]
-        },
-        "date_facet": {
-          "type": "date"
-        },
-        "description": {
-          "type": "text",
-          "copy_to": [
-            "base_search"
-          ]
-        },
-        "document_type": {
-          "type": "text",
-          "copy_to": [
-            "base_search",
-            "document_type_facet"
-          ]
-        },
-        "document_type_facet": {
-          "type": "keyword"
-        },
-        "published": {
-          "type": "boolean"
-        },
-        "scale_of_mention": {
-          "type": "text",
-          "copy_to": [
-            "base_search",
-            "scale_of_mention_facet"
-          ]
-        },
-        "scale_of_mention_facet": {
-          "type": "keyword"
-        },
-        "source": {
-          "type": "text",
-          "copy_to": [
-            "base_search",
-            "source_facet"
-          ]
-        },
-        "source_facet": {
-          "type": "keyword"
-        },
-        "title": {
-          "type": "text",
-          "copy_to": [
-            "base_search"
-          ]
-        }
+  "_doc": {
+    "dynamic": "false",
+    "properties": {
+      "author": {
+        "type": "text",
+        "copy_to": [
+          "base_search"
+        ]
+      },
+      "base_search": {
+        "type": "text"
+      },
+      "date": {
+        "type": "date",
+        "copy_to": [
+          "base_search",
+          "date_facet"
+        ]
+      },
+      "date_facet": {
+        "type": "date"
+      },
+      "description": {
+        "type": "text",
+        "copy_to": [
+          "base_search"
+        ]
+      },
+      "document_type": {
+        "type": "text",
+        "copy_to": [
+          "base_search",
+          "document_type_facet"
+        ]
+      },
+      "document_type_facet": {
+        "type": "keyword"
+      },
+      "published": {
+        "type": "boolean"
+      },
+      "scale_of_mention": {
+        "type": "text",
+        "copy_to": [
+          "base_search",
+          "scale_of_mention_facet"
+        ]
+      },
+      "scale_of_mention_facet": {
+        "type": "keyword"
+      },
+      "source": {
+        "type": "text",
+        "copy_to": [
+          "base_search",
+          "source_facet"
+        ]
+      },
+      "source_facet": {
+        "type": "keyword"
+      },
+      "title": {
+        "type": "text",
+        "copy_to": [
+          "base_search"
+        ]
       }
     }
   }
