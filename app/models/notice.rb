@@ -9,8 +9,7 @@ class Notice < ApplicationRecord
 
   # == Constants ============================================================
   HIGHLIGHTS = %i[
-    title body tag_list topics.name sender_name recipient_name
-    works.description works.infringing_urls.url works.copyrighted_urls.url
+    base_search preferred_search
   ].freeze
 
   # Default fields to search with a multimatch query. Weights some of the

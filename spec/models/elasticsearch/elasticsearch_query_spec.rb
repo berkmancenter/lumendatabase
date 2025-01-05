@@ -89,15 +89,8 @@ describe ElasticsearchQuery, type: :model do
         require_field_match: false,
         max_analyzed_offset: 999_999,
         fields: {
-          body: {},
-          title: {},
-          tag_list: {},
-          :'topics.name' => {},
-          sender_name: {},
-          recipient_name: {},
-          :'works.description' => {},
-          :'works.infringing_urls.url' => {},
-          :'works.copyrighted_urls.url' => {}
+          :base_search=>{},
+          :preferred_search=>{}
         }
       },
       size: 10,

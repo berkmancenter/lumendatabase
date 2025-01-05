@@ -409,13 +409,13 @@ feature 'Searching Notices', type: :feature do
       within_search_results_for('infringing_url') do
         expect(page).to have_n_results(1)
         expect(page).to have_words(notice.title)
-        expect(page.html).to have_excerpt('infringing_url')
+        expect(page.html).to have_excerpt('infringing')
       end
 
       within_search_results_for('copyrighted_url') do
         expect(page).to have_n_results(1)
         expect(page).to have_words(notice.title)
-        expect(page.html).to have_excerpt('copyrighted_url')
+        expect(page.html).to have_excerpt('copyrighted')
       end
     end
   end
