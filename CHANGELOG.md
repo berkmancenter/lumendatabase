@@ -1,5 +1,10 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [25.01](https://github.com/berkmancenter/lumendatabase/releases/tag/2025.01) - 2025-01-20
+### Changed
+* Added a filter (`word_delimiter_graph`) to the `base_search` field in the search index to better handle searching in urls.
+* Updated the gems.
+
 ## [24.11](https://github.com/berkmancenter/lumendatabase/releases/tag/2024.11) - 2024-11-05
 ### Changed
 * Updated the gems.
