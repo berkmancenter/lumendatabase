@@ -87,13 +87,6 @@ describe 'Rack::Attack::Request' do
     expect(req.authenticated?).to be true
   end
 
-  it 'recognizes when users are authenticated by special IP' do
-    env = spec_env
-    req = Rack::Attack::Request.new(env)
-    allow(req).to receive(:special_ip?).and_return true
-    expect(req.authenticated?).to be true
-  end
-
   it 'extracts tokens from headers' do
     token = 'beep'
     req = Rack::Attack::Request.new(

@@ -9,12 +9,6 @@ class Rack::Attack::Request < ::Rack::Request
     ['127.0.0.1', '::1'].include? ip
   end
 
-  def additional_allowed?
-    return false if ENV['RACK_ATTACK_SAFELISTED_IPS'].nil?
-
-    ENV['RACK_ATTACK_SAFELISTED_IPS'].split(',').include? ip
-  end
-
   def admin?
     return false unless user
     (user.roles.include? Role.admin) || (user.roles.include? Role.super_admin)
@@ -27,7 +21,7 @@ class Rack::Attack::Request < ::Rack::Request
   end
 
   def authenticated?
-    !!user || special_ip?
+    !!user
   end
 
   def token
@@ -51,8 +45,7 @@ class Rack::Attack::Request < ::Rack::Request
   # Used by the throttle to calculate the number of hits from a distinct
   # entity. Should only be used when authenticated? is true; it is the caller's
   # responsibility to check. This function is here because authenticated users
-  # are not guaranteed to be logged in (they may be behind special IPs) but
-  # are also not guaranteed to come from a single computer (they may be running
+  # are not guaranteed to come from a single computer (they may be running
   # processes using auth tokens on multiple computers), so we want to use
   # user ID when present but IP when not.
   # This is used only by the 'permissioned API limit' throttle and thus makes
@@ -61,6 +54,16 @@ class Rack::Attack::Request < ::Rack::Request
   # `authenticated?` need to be reconsidered).
   def discriminator
     user&.id || ip
+  end
+
+  # IP addresses of known legitimate researchers who might otherwise be
+  # caught up in low rate limits.
+  def special_ip?
+    if defined? SafelistedIps::IPS
+      SafelistedIps::IPS.map { |iprange| iprange.include? ip }.any?
+    else
+      false
+    end
   end
 
   private
@@ -75,15 +78,5 @@ class Rack::Attack::Request < ::Rack::Request
 
   def user_from_token
     User.find_by_authentication_token(token)
-  end
-
-  # IP addresses of known legitimate researchers who might otherwise be
-  # caught up in low rate limits.
-  def special_ip?
-    if defined? SafelistedIps::IPS
-      SafelistedIps::IPS.map { |iprange| iprange.include? ip }.any?
-    else
-      false
-    end
   end
 end

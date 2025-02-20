@@ -30,7 +30,7 @@ class Rack::Attack
   end
 
   safelist('allow from custom ips') do |req|
-    req.additional_allowed?
+    req.special_ip?
   end
 
   # Disable the API for users without tokens.
