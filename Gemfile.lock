@@ -190,7 +190,7 @@ GEM
       rexml
     crass (1.0.6)
     csv (3.3.2)
-    curb (1.0.8)
+    curb (1.0.9)
     database_cleaner (2.1.0)
       database_cleaner-active_record (>= 2, < 3)
     database_cleaner-active_record (2.2.0)
@@ -207,7 +207,7 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
-    diff-lcs (1.5.1)
+    diff-lcs (1.6.0)
     docile (1.4.1)
     dotenv (3.1.7)
     dotenv-rails (3.1.7)
@@ -299,7 +299,7 @@ GEM
       childprocess (~> 5.0)
       logger (~> 1.6)
     libv8-node (22.7.0.4)
-    logger (1.6.5)
+    logger (1.6.6)
     logstash-event (1.2.02)
     logstash-logger (0.26.1)
       logstash-event (~> 1.2)
@@ -318,7 +318,7 @@ GEM
     mime-types (3.6.0)
       logger
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2025.0204)
+    mime-types-data (3.2025.0220)
     mimemagic (0.3.10)
       nokogiri (~> 1)
       rake
@@ -350,7 +350,7 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     nio4r (2.7.4)
-    nokogiri (1.18.2)
+    nokogiri (1.18.3)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     oink (0.10.1)
@@ -368,7 +368,7 @@ GEM
       mimemagic (~> 0.3.0)
       terrapin (~> 0.6.0)
     parallel (1.26.3)
-    parallel_tests (4.9.0)
+    parallel_tests (4.9.1)
       parallel
     pg (1.5.9)
     pp (0.6.2)
@@ -466,7 +466,7 @@ GEM
     responders (3.1.1)
       actionpack (>= 5.2)
       railties (>= 5.2)
-    rexml (3.4.0)
+    rexml (3.4.1)
     rspec (3.13.0)
       rspec-core (~> 3.13.0)
       rspec-expectations (~> 3.13.0)
@@ -515,7 +515,7 @@ GEM
       tilt
     securerandom (0.4.1)
     select2-rails (4.0.13)
-    selenium-webdriver (4.28.0)
+    selenium-webdriver (4.29.0)
       base64 (~> 0.2)
       logger (~> 1.4)
       rexml (~> 3.2, >= 3.2.5)
@@ -525,7 +525,7 @@ GEM
       rack
     shoulda-matchers (4.5.1)
       activesupport (>= 4.2.0)
-    sidekiq (7.3.8)
+    sidekiq (7.3.9)
       base64
       connection_pool (>= 2.3.0)
       logger
@@ -548,7 +548,7 @@ GEM
       activesupport (>= 6.1)
       sprockets (>= 3.0.0)
     stackprof (0.2.27)
-    stringio (3.1.2)
+    stringio (3.1.4)
     sync (0.5.0)
     temple (0.10.3)
     term-ansicolor (1.11.2)
@@ -594,7 +594,7 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.7.1)
+    zeitwerk (2.7.2)
 
 PLATFORMS
   ruby
