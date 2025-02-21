@@ -1,5 +1,14 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [25.02a](https://github.com/berkmancenter/lumendatabase/releases/tag/2025.02a) - 2025-02-21
+### Changed
+* Updated the gems.
+* Removed the `RACK_ATTACK_SAFELISTED_IPS` environment config setting. Its functionality was duplicating the safelist_ips.rb config file logic.
+
+## [25.02](https://github.com/berkmancenter/lumendatabase/releases/tag/2025.02) - 2025-02-12
+### Changed
+* Updated the gems.
+
 ## [25.01](https://github.com/berkmancenter/lumendatabase/releases/tag/2025.01) - 2025-01-20
 ### Changed
 * Added a filter (`word_delimiter_graph`) to the `base_search` field in the search index to better handle searching in urls.
