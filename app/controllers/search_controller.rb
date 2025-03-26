@@ -19,14 +19,7 @@ class SearchController < ApplicationController
 
   def index
     if request.format.html? && current_user.nil? && !Rails.env.test? && !@skip_captcha
-      permitted = false
-
-      if session[:captcha_permission]
-        time_permission = session[:captcha_permission]
-        permitted = true if time_permission > Time.now
-      end
-
-      unless permitted
+      unless captcha_permitted?
         redirect_to(captcha_gateway_index_path(destination: CGI.escape(request.original_url))) and return
       end
     end
@@ -44,7 +37,7 @@ class SearchController < ApplicationController
   end
 
   def facet
-    filterable_field_facet = @filterable_fields.select { |filterable_field| filterable_field.parameter.to_s == params[:facet_id] }.first
+    filterable_field_facet = @filterable_fields.find { |field| field.parameter.to_s == params[:facet_id] }
 
     resource_not_found and return if filterable_field_facet.nil?
 
@@ -62,6 +55,13 @@ class SearchController < ApplicationController
   end
 
   private
+
+  def captcha_permitted?
+    return false unless session[:captcha_permission]
+
+    time_permission = session[:captcha_permission]
+    time_permission > Time.now
+  end
 
   def html_responder; end
 
@@ -146,33 +146,71 @@ class SearchController < ApplicationController
   end
 
   def num_results
-    params[:page].to_i * (params[:per_page] || 10 ).to_i
+    current_page * per_page
   end
 
   def meta_hash_for(results)
-    %i[
-      current_page next_page offset per_page
-      previous_page total_entries total_pages
-    ].each_with_object(query_meta(results)) do |attribute, memo|
-      begin
-        memo[attribute] = results.send(attribute)
-      rescue
-        memo[attribute] = nil
-      end
-    end
+    meta = query_meta(results)
+    total_entries = total_entries(results)
+    total_pages = calculate_total_pages(total_entries)
+
+    # Add pagination data to meta hash
+    meta[:current_page] = current_page
+    meta[:next_page] = calculate_next_page(total_pages)
+    meta[:previous_page] = calculate_previous_page
+    meta[:per_page] = per_page
+    meta[:total_entries] = total_entries
+    meta[:total_pages] = total_pages
+    meta[:offset] = calculate_offset
+
+    meta
+  end
+
+  def current_page
+    (params[:page] || 1).to_i
+  end
+
+  def per_page
+    (params[:per_page] || 10).to_i
+  end
+
+  def total_entries(results)
+    results.raw_response['hits']['total']['value']
+  end
+
+  def calculate_total_pages(total_entries)
+    (total_entries.to_f / per_page).ceil
+  end
+
+  def calculate_next_page(total_pages)
+    current_page < total_pages ? current_page + 1 : nil
+  end
+
+  def calculate_previous_page
+    current_page > 1 ? current_page - 1 : nil
+  end
+
+  def calculate_offset
+    (current_page - 1) * per_page
   end
 
   def query_meta(results)
     {
       query: {
         term: params[:term]
-      }.merge(facet_query_meta(results) || {}),
-      facets: results.response.aggregations
-    }
+      }.merge(facet_query_meta(results) || {})
+    }.tap do |meta|
+      # Only add facets if aggregations exist
+      if results.response&.aggregations.present?
+        meta[:facets] = results.response.aggregations
+      end
+    end
   end
 
   def facet_query_meta(results)
-    results.response.aggregations && results.response.aggregations.keys.each_with_object({}) do |facet, memo|
+    return {} unless results.response&.aggregations&.keys
+
+    results.response.aggregations.keys.each_with_object({}) do |facet, memo|
       memo[facet.to_sym] = params[facet.to_sym] if params[facet.to_sym].present?
     end
   end

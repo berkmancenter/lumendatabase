@@ -15,6 +15,18 @@ feature "Searching for Notices via the API" do
       expect(metadata).to have_key('query').with_value("term" => "king")
       expect(json).to have_key('notices')
     end
+
+    50.times do |i|
+      create(:dmca, title: "The Lion King on Youtube #{i}")
+    end
+    index_changed_instances
+
+    expect_api_search_to_find("king", page: 3) do |json|
+      metadata = json['meta']
+      expect(metadata).to have_key('current_page').with_value(3)
+      expect(metadata).to have_key('next_page').with_value(4)
+      expect(metadata).to have_key('total_pages').with_value(6)
+    end
   end
 
   context "facets" do
