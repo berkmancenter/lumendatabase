@@ -61,7 +61,7 @@ class ApplicationController < ActionController::Base
           request.raw_request_method,
           request.filtered_path,
           request.remote_ip,
-          Time.now.to_default_s
+          Time.now.to_s
         )
       )
       logger404s.error(exception)
