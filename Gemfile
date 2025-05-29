@@ -67,7 +67,6 @@ end
 group :development, :test, :assets do
   gem 'bourbon', '~> 3.x'
   gem 'coffee-rails'
-  gem 'mini_racer'
   gem 'neat', '~> 1.3.x'
   gem 'sassc-rails'
   gem 'terser'
