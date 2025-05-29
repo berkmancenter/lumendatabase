@@ -20,7 +20,8 @@ gem 'jsonapi-serializer'
 gem 'kaminari'
 gem 'logstash-logger'
 gem 'mime-types'
-gem 'nokogiri', '~> 1.18', force_ruby_platform: true
+# Pinned because newer versions of this gem require Ruby 3.2+.
+gem 'nokogiri', '~> 1.18.6', force_ruby_platform: true
 gem 'oink'
 gem 'oj'
 # Pinned because the next step is migrating to ActiveStorage.
@@ -67,6 +68,7 @@ end
 group :development, :test, :assets do
   gem 'bourbon', '~> 3.x'
   gem 'coffee-rails'
+  gem 'mini_racer', platforms: :ruby
   gem 'neat', '~> 1.3.x'
   gem 'sassc-rails'
   gem 'terser'

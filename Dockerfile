@@ -27,6 +27,7 @@ RUN gem update bundler
 WORKDIR /app
 COPY Gemfile* /tmp/
 WORKDIR /tmp
+RUN sudo chown -R $USERNAME:$USERNAME /tmp
 RUN bundle install
 
 # To be able to create a .bash_history
@@ -35,6 +36,8 @@ RUN sudo chown -R $USERNAME:$USERNAME /home/lumen/hist
 
 # Code mounted as a volume
 WORKDIR /app
+
+COPY config/database.yml.docker config/database.yml
 
 # Just to keep the containder running
 CMD (while true; do sleep 1; done;)
