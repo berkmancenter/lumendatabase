@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [25.05](https://github.com/berkmancenter/lumendatabase/releases/tag/2025.05) - 2025-05-23
+### Changed
+* Applied security updates.
+
 ## [25.03](https://github.com/berkmancenter/lumendatabase/releases/tag/2025.03) - 2025-03-27
 ### Changed
 * Made the search controller build search metadata related to paging manually.
