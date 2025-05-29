@@ -20,7 +20,6 @@ gem 'jsonapi-serializer'
 gem 'kaminari'
 gem 'logstash-logger'
 gem 'mime-types'
-gem 'nokogiri', '~> 1.18.6', platforms: :ruby
 gem 'oink'
 gem 'oj'
 # Pinned because the next step is migrating to ActiveStorage.
