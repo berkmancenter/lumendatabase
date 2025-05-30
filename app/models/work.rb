@@ -78,10 +78,9 @@ class Work
       fqdn = uri.host
     rescue Addressable::URI::InvalidURIError
       # Invalid URIs
-      fqdn = url
-             .split('/')[2]
-             .split(' ')[0]
-             .gsub(/^www\./, '')
+      part = url.split('/')[2]
+      fqdn = part&.split(' ')&.first || url
+      fqdn = fqdn.gsub(/^www\./, '')
     end
 
     fqdn
@@ -102,6 +101,8 @@ class Work
     counted_urls = {}
 
     urls.each do |url|
+      next if url.url.nil?
+
       fqdn = Work.fqdn_from_url(url.url)
 
       if counted_urls[fqdn].nil?
