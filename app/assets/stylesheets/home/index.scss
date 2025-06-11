@@ -119,21 +119,6 @@ section.home-search-form {
       width: auto;
     }
 
-    &.tweets {
-      border-left: 3px solid $home-background-color;
-
-      @include media($mobile) {
-        border: 0;
-        width: 100%;
-      }
-
-      a {
-        display: inline;
-      }
-
-      @include span-columns(6);
-    }
-
     &.recent-notices {
       @include span-columns(3 of 6);
       @include omega();
@@ -146,12 +131,13 @@ section.home-search-form {
     }
 
     &.news-snippets {
-      @include span-columns(6 of 6);
+      @include span-columns(6);
 
       border-top: 3px solid $home-background-color;
 
         @include media($mobile) {
           border: 0;
+          width: 100%;
         }
     }
   }

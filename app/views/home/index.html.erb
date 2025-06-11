@@ -14,12 +14,6 @@
     </ol>
     <a href="notices_feed?format=rss"><%= image_tag("feed_icon.png", :size => "14x14") %></a>
   </section>
-  <% cache_unless(Current.user&.role?(Role.super_admin), 'lumendatabase-tweets', expires_in: 5.minutes ) { %>
-    <section class="tweets">
-      <h2><%= Translation.t('home_lumendatabase_on_twitter') %></h2>
-      <a class="twitter-timeline" data-height="380" href="https://twitter.com/lumendatabase?ref_src=twsrc%5Etfw"><%= Translation.t('home_tweets_by_lumendatabase') %></a> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-    </section>
-  <% } %>
   <section class="news-snippets">
     <h2><%= Translation.t('home_from_the_blog') %></h2>
     <ol id="recent-blog-entries">
