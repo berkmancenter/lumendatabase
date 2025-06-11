@@ -640,7 +640,6 @@ DEPENDENCIES
   mime-types
   mini_racer (= 0.18.0)
   neat (~> 1.3.x)
-  nokogiri (~> 1.18.6)
   oink
   oj
   paperclip (~> 5)
