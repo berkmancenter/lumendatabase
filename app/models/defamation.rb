@@ -60,6 +60,7 @@ class Defamation < Notice
     end
 
     Redactors::GoogleSenderRedactor.new.redact(self)
+    redact_tld_only_urls_for_google_submitter
   end
 
   def as_indexed_json(_options)

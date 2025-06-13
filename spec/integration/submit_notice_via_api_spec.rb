@@ -400,6 +400,50 @@ feature 'notice submission', js: true do
     expect(curb.response_code).to eq 201
   end
 
+  context 'redacting Google TLD-only URLs' do
+    scenario 'redacts single-letter as well as multi-letter domains' do
+      parameters = request_hash(
+        default_notice_hash(
+          type: 'Defamation',
+          entity_notice_roles_attributes: [
+            {
+              name: 'submitter',
+              entity_attributes: { name: 'Google LLC' }
+            },
+            {
+              name: 'recipient',
+              entity_attributes: { name: 'Google LLC' }
+            },
+            {
+              name: 'sender',
+              entity_attributes: { name: 'Tonny Bastet' }
+            }
+          ],
+          works_attributes: [
+            {
+              description: 'Test',
+              infringing_urls_attributes: [
+                { url: 'http://example.com' },
+                { url: 'http://x.io' },
+                { url: 'http://www.example.com' },
+                { url: 'http://single.org/page' }
+              ]
+            }
+          ]
+        )
+      )
+
+      post_api('/notices', parameters)
+      notice = Notice.last
+      urls = notice.works.first.infringing_urls.map(&:url)
+
+      expect(urls[0]).to eq('http://e[redacted]e.com')
+      expect(urls[1]).to eq('http://x[redacted].io')
+      expect(urls[2]).to eq('http://www.e[redacted]e.com')
+      expect(urls[3]).to eq('http://single.org/page')
+    end
+  end
+
   private
 
   def original_document_file(notice)

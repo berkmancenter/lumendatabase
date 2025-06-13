@@ -278,6 +278,7 @@ class Notice < ApplicationRecord
   def auto_redact
     InstanceRedactor.new.redact(self)
     redact_urls
+    redact_tld_only_urls_for_google_submitter
   end
 
   def mark_for_review
@@ -602,5 +603,51 @@ class Notice < ApplicationRecord
         instance_redactor.redact(url, %w[url])
       end
     end
+  end
+
+  def google_submitter?
+    submitter && submitter.name =~ /\bgoogle\b/i
+  end
+
+  def redact_tld_only_urls_for_google_submitter
+    return unless google_submitter?
+
+    works.each do |work|
+      all_urls = (work.infringing_urls + work.copyrighted_urls)
+      all_urls.each do |url|
+        if tld_only_url?(url.url)
+          url.url_original = url.url if url.url_original.blank?
+          url.url = redact_fqdn(url.url)
+        end
+      end
+    end
+  end
+
+  def tld_only_url?(url)
+    url =~ %r{\Ahttps?://[^/\\?#]+\.[a-z]{2,}(?::\d+)?\z}i
+  end
+
+  def redact_fqdn(url)
+    uri = URI.parse(url)
+    host_parts = uri.host.split('.')
+    return url if host_parts.size < 2
+    tld = host_parts.pop
+    domain = host_parts.pop
+    subdomain = host_parts.any? ? host_parts.join('.') : nil
+
+    if domain && domain.length > 1
+      redacted_domain = "#{domain[0]}[redacted]#{domain[-1]}"
+    elsif domain # single-letter domain
+      redacted_domain = "#{domain}[redacted]"
+    else
+      redacted_domain = domain
+    end
+
+    redacted_host = [subdomain, redacted_domain, tld].compact.reject(&:empty?).join('.')
+    redacted_url = "#{uri.scheme}://#{redacted_host}"
+    redacted_url += ":#{uri.port}" if uri.port && ![80,443].include?(uri.port)
+    redacted_url
+  rescue
+    url
   end
 end
