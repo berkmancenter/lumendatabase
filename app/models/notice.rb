@@ -624,7 +624,7 @@ class Notice < ApplicationRecord
   end
 
   def tld_only_url?(url)
-    url =~ %r{\Ahttps?://[^/\\?#]+\.[a-z]{2,}(?::\d+)?\z}i
+    url =~ %r{\Ahttps?://[^/\\?#]+\.[a-z]{2,}(?::\d+)?/?\z}i
   end
 
   def redact_fqdn(url)

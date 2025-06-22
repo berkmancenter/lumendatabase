@@ -117,6 +117,16 @@ RSpec.describe Defamation, type: :model do
 
         expect(url.url).to eq('http://x[redacted].io')
       end
+
+      it 'redacts URLs with trailing slashes' do
+        url = build(:infringing_url, url: 'http://example.com/')
+        work.infringing_urls << url
+
+        subject
+
+        expect(url.url).to eq('http://e[redacted]e.com')
+        expect(url.url_original).to eq('http://example.com/')
+      end
     end
 
     context 'when notice is NOT from Google' do
