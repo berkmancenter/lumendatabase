@@ -142,5 +142,19 @@ RSpec.describe Defamation, type: :model do
         expect(url.url_original).to eq('http://example.com')
       end
     end
+
+    context 'when second level is used' do
+      let(:entity_name) { 'Google LLC' }
+
+      it 'redacts TLD-only URLs with second level domains' do
+        url = build(:infringing_url, url: 'http://example.co.uk')
+        work.infringing_urls << url
+
+        subject
+
+        expect(url.url).to eq('http://e[redacted]e.co.uk')
+        expect(url.url_original).to eq('http://example.co.uk')
+      end
+    end
   end
 end

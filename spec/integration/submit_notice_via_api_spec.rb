@@ -427,7 +427,8 @@ feature 'notice submission', js: true do
                 { url: 'http://x.io' },
                 { url: 'http://www.example.com' },
                 { url: 'http://single.org/page' },
-                { url: 'http://single.org/' }
+                { url: 'http://single.org/' },
+                { url: 'http://single.co.uk/' }
               ]
             }
           ]
@@ -443,6 +444,7 @@ feature 'notice submission', js: true do
       expect(urls[2]).to eq('http://www.e[redacted]e.com')
       expect(urls[3]).to eq('http://single.org/page')
       expect(urls[4]).to eq('http://s[redacted]e.org')
+      expect(urls[5]).to eq('http://s[redacted]e.co.uk')
     end
   end
 

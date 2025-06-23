@@ -628,26 +628,33 @@ class Notice < ApplicationRecord
   end
 
   def redact_fqdn(url)
-    uri = URI.parse(url)
-    host_parts = uri.host.split('.')
-    return url if host_parts.size < 2
-    tld = host_parts.pop
-    domain = host_parts.pop
-    subdomain = host_parts.any? ? host_parts.join('.') : nil
+    begin
+      uri = URI.parse(url)
+      return url unless uri.host
 
-    if domain && domain.length > 1
-      redacted_domain = "#{domain[0]}[redacted]#{domain[-1]}"
-    elsif domain # single-letter domain
-      redacted_domain = "#{domain}[redacted]"
-    else
-      redacted_domain = domain
+      domain = PublicSuffix.parse(uri.host)
+      return url if domain.sld.nil?
+
+      # Split the domain part we want to redact
+      main_domain = domain.sld
+
+      if main_domain.length > 1
+        redacted = "#{main_domain[0]}[redacted]#{main_domain[-1]}"
+      else
+        redacted = "#{main_domain}[redacted]"
+      end
+
+      # Rebuild the host
+      if domain.trd
+        new_host = "#{domain.trd}.#{redacted}.#{domain.tld}"
+      else
+        new_host = "#{redacted}.#{domain.tld}"
+      end
+
+      # Reconstruct the URL
+      "#{uri.scheme}://#{new_host}"
+    rescue PublicSuffix::DomainNotAllowed, PublicSuffix::DomainInvalid, URI::InvalidURIError
+      url  # Return original if any parsing fails
     end
-
-    redacted_host = [subdomain, redacted_domain, tld].compact.reject(&:empty?).join('.')
-    redacted_url = "#{uri.scheme}://#{redacted_host}"
-    redacted_url += ":#{uri.port}" if uri.port && ![80,443].include?(uri.port)
-    redacted_url
-  rescue
-    url
   end
 end

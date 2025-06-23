@@ -648,6 +648,7 @@ DEPENDENCIES
   pry
   pry-byebug
   pry-rails
+  public_suffix
   rack
   rack-attack
   rack-mini-profiler

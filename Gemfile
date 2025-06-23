@@ -25,6 +25,7 @@ gem 'oj'
 # Pinned because the next step is migrating to ActiveStorage.
 gem 'paperclip', '~> 5'
 gem 'pg'
+gem 'public_suffix'
 gem 'rack'
 gem 'rack-attack'
 gem 'rack-mini-profiler'
