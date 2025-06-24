@@ -1,5 +1,12 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [25.06](https://github.com/berkmancenter/lumendatabase/releases/tag/2025.06) - 2025-06-24
+### Added
+* Added additional URL redaction for Google notices.
+### Changed
+* Removed unused gems and cleaned up Gemfile groups.
+* Updated gems for production compatibility and improved error handling on invalid URLs.
+
 ## [25.05](https://github.com/berkmancenter/lumendatabase/releases/tag/2025.05) - 2025-05-23
 ### Changed
 * Applied security updates.
