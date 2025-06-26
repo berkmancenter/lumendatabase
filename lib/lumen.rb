@@ -1,4 +1,5 @@
 require_relative './lumen_logger'
+require_relative '../app/models/current'
 require 'countries/version'
 require 'countries/iso3166'
 require 'dotenv/load'
