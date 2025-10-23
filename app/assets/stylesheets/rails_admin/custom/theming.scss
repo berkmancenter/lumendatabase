@@ -134,6 +134,14 @@ aside#redaction-tools {
   }
 }
 
+// Notice History                                                                                                                   
+//************************************************************************//                                                        
+
+#history td {
+  word-wrap: break-word;
+  white-space: normal;
+}
+
 // Layout
 //************************************************************************//
 .rails_admin {
