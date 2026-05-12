@@ -1,5 +1,3 @@
-version: '2'
-
 services:
   postgres:
     image: 'postgres:13.6-alpine'
