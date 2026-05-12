@@ -8,9 +8,9 @@ services:
     env_file:
       - '.env.test'
     environment:
-      POSTGRES_USER: ${DATABASE_USERNAME}
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
-      POSTGRES_DB: ${DATABASE_DB_NAME}
+      POSTGRES_USER: ${DATABASE_TEST_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_TEST_PASSWORD}
+      POSTGRES_DB: ${DATABASE_TEST_DB_NAME}
 
   website:
     depends_on:
@@ -61,7 +61,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile-logstash
-    command: logstash --path.settings /app/script/search_indexing/
     volumes:
       - '.:/app:ro'
     tmpfs:

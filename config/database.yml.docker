@@ -7,26 +7,26 @@ default: &default
 
 test:
   <<: *default
-  username: <%= ENV['DATABASE_USERNAME'] %>
-  password: <%= ENV['DATABASE_PASSWORD'] %>
-  database: <%= ENV['DATABASE_DB_NAME'] %>
-  host: <%= ENV['DATABASE_HOST'] %>
-  port: <%= ENV['DATABASE_PORT'].to_i %>
+  username: <%= ENV['DATABASE_TEST_USERNAME'] %>
+  password: <%= ENV['DATABASE_TEST_PASSWORD'] %>
+  database: <%= ENV['DATABASE_TEST_DB_NAME'] %>
+  host: <%= ENV['DATABASE_TEST_HOST'] %>
+  port: <%= ENV['DATABASE_TEST_PORT'].to_i %>
 
 development:
   <<: *default
-  username: <%= ENV['DATABASE_DEV_USERNAME'] %>
-  password: <%= ENV['DATABASE_DEV_PASSWORD'] %>
-  database: <%= ENV['DATABASE_DEV_DB_NAME'] %>
-  host: <%= ENV['DATABASE_DEV_HOST'] %>
-  port: <%= ENV['DATABASE_DEV_PORT'].to_i %>
-  timeout: <%= (ENV['DATABASE_DEV_TIMEOUT'] || 5000).to_i %>
+  username: <%= ENV['DATABASE_DEVELOPMENT_USERNAME'] %>
+  password: <%= ENV['DATABASE_DEVELOPMENT_PASSWORD'] %>
+  database: <%= ENV['DATABASE_DEVELOPMENT_DB_NAME'] %>
+  host: <%= ENV['DATABASE_DEVELOPMENT_HOST'] %>
+  port: <%= ENV['DATABASE_DEVELOPMENT_PORT'].to_i %>
+  timeout: <%= (ENV['DATABASE_DEVELOPMENT_TIMEOUT'] || 5000).to_i %>
 
 production:
   <<: *default
-  username: <%= ENV['DATABASE_PROD_USERNAME'] %>
-  password: <%= ENV['DATABASE_PROD_PASSWORD'] %>
-  database: <%= ENV['DATABASE_PROD_DB_NAME'] %>
-  host: <%= ENV['DATABASE_PROD_HOST'] %>
-  port: <%= ENV['DATABASE_PROD_PORT'].to_i %>
-  timeout: <%= (ENV['DATABASE_PROD_TIMEOUT'] || 5000).to_i %>
+  username: <%= ENV['DATABASE_PRODUCTION_USERNAME'] %>
+  password: <%= ENV['DATABASE_PRODUCTION_PASSWORD'] %>
+  database: <%= ENV['DATABASE_PRODUCTION_DB_NAME'] %>
+  host: <%= ENV['DATABASE_PRODUCTION_HOST'] %>
+  port: <%= ENV['DATABASE_PRODUCTION_PORT'].to_i %>
+  timeout: <%= (ENV['DATABASE_PRODUCTION_TIMEOUT'] || 5000).to_i %>
