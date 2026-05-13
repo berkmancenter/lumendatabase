@@ -49,7 +49,6 @@ gem 'elasticsearch-model', '~> 7.0'
 gem 'elasticsearch-rails', '~> 7.0'
 
 group :development do
-  gem 'allocation_tracer'
   gem 'bundle-audit'
   # Use main until https://github.com/zombocom/derailed_benchmarks/pull/241 is released.
   gem 'derailed_benchmarks', git: 'https://github.com/zombocom/derailed_benchmarks.git'
