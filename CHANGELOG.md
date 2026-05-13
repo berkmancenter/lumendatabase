@@ -1,5 +1,9 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/). It uses [CalVer](https://calver.org/) as of May 2019.
 
+## [26.05](https://github.com/berkmancenter/lumendatabase/releases/tag/2026.05) - 2026-05-13
+### Changed
+* Upgraded `rails` to `7.2.3` and `ruby` to `3.3.11`.
+
 ## [25.06](https://github.com/berkmancenter/lumendatabase/releases/tag/2025.06) - 2025-06-24
 ### Added
 * Added additional URL redaction for Google notices.
