@@ -267,4 +267,32 @@ FactoryBot.define do
     email_address { 'user@example.com' }
     notice { build(:dmca) }
   end
+
+  factory :api_submitter_request do
+    email { 'requester@example.com' }
+    submissions_forward_email { 'forward@example.com' }
+    approved { false }
+    user { nil }
+
+    entity_name { 'Test Corp' }
+    entity_kind { 'organization' }
+    entity_address_line_1 { 'Address 1' }
+    entity_address_line_2 { 'Address 2' }
+    entity_city { 'City' }
+    entity_state { 'State' }
+    entity_zip { '01222' }
+    entity_country_code { 'US' }
+    entity_phone { '555-555-1212' }
+    entity_url { 'http://www.example.com' }
+    entity_email { 'entity@example.com' }
+
+    trait :approved do
+      approved { true }
+      user
+    end
+
+    trait :with_user do
+      user
+    end
+  end
 end

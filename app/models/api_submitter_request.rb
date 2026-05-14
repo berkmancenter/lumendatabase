@@ -29,21 +29,29 @@ class ApiSubmitterRequest < ApplicationRecord
       zip: self.entity_zip
     )
 
-    password = SecureRandom.hex
-    new_user = User.create!(
-      email: self.email,
-      widget_submissions_forward_email: self.submissions_forward_email,
-      roles: [Role.submitter],
-      password: password,
-      entity: new_entity
-    )
+    user = User.find_by(email: self.email)
 
-    self.user = new_user
+    if user
+      user.update!(
+        entity: new_entity,
+        roles: (user.roles | [Role.submitter])
+      )
+    else
+      password = SecureRandom.hex
+      user = User.create!(
+        email: self.email,
+        widget_submissions_forward_email: self.submissions_forward_email,
+        roles: [Role.submitter],
+        password: password,
+        entity: new_entity
+      )
+    end
+
+    self.user = user
     self.approved = true
     self.save!
 
-    ApiSubmitterRequestsMailer.api_submitter_request_approved(new_user)
-                              .deliver_later
+    ApiSubmitterRequestsMailer.api_submitter_request_approved(user).deliver_later
   end
 
   def reject_request
