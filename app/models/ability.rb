@@ -4,15 +4,15 @@ class Ability
   def initialize(user)
     # anonymous user
     can :request_access_token, Notice do |notice|
-      !notice&.submitter&.full_notice_only_researchers &&
+      !notice_restricted_to_researchers?(notice) &&
         !ContentFilter.notice_has_action?(notice, :full_notice_version_only_lumen_team) &&
-        !ContentFilter.notice_has_action?(notice, :full_notice_version_only_researchers)
+        !content_filter_restricted_to_researchers?(notice)
     end
 
     can :create_access_token, Notice do |notice|
-      !notice&.submitter&.full_notice_only_researchers &&
+      !notice_restricted_to_researchers?(notice) &&
         !ContentFilter.notice_has_action?(notice, :full_notice_version_only_lumen_team) &&
-        !ContentFilter.notice_has_action?(notice, :full_notice_version_only_researchers)
+        !content_filter_restricted_to_researchers?(notice)
     end
 
     return unless user
@@ -141,7 +141,9 @@ class Ability
     if can_view_full_version
       can :view_full_version, Notice do |notice|
         only_lumen_team = ContentFilter.notice_has_action?(notice, :full_notice_version_only_lumen_team)
-        only_researchers = ContentFilter.notice_has_action?(notice, :full_notice_version_only_researchers)
+        only_researchers =
+          notice_restricted_to_researchers?(notice) ||
+          content_filter_restricted_to_researchers?(notice)
 
         full_notice_only_researchers?(notice, user) &&
           (
@@ -154,5 +156,14 @@ class Ability
           )
       end
     end
+  end
+
+  def notice_restricted_to_researchers?(notice)
+    notice&.full_notice_version_only_researchers? ||
+      notice&.submitter&.full_notice_only_researchers
+  end
+
+  def content_filter_restricted_to_researchers?(notice)
+    ContentFilter.notice_has_action?(notice, :full_notice_version_only_researchers)
   end
 end

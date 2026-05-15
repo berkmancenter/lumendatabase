@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_11_04_214041) do
+ActiveRecord::Schema[7.2].define(version: 2026_05_15_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -393,6 +393,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_11_04_214041) do
     t.jsonb "jurisdiction_list", default: []
     t.jsonb "regulation_list", default: []
     t.jsonb "customizations", default: {}
+    t.boolean "full_notice_version_only_researchers", default: false, null: false
     t.index ["created_at"], name: "index_notices_on_created_at"
     t.index ["original_notice_id"], name: "index_notices_on_original_notice_id"
     t.index ["published"], name: "index_notices_on_published"

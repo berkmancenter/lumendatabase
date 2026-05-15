@@ -9,12 +9,13 @@ module NoticesHelper
       # as there is nothing further to display.
       !confidential_order?(notice),
       !ContentFilter.notice_has_action?(notice, :full_notice_version_only_lumen_team),
+      !notice&.full_notice_version_only_researchers?,
       !ContentFilter.notice_has_action?(notice, :full_notice_version_only_researchers)
     ].all?
   end
 
   def access_just_for_researchers?(notice)
-    notice&.submitter&.full_notice_only_researchers
+    notice&.restricted_to_researchers?
   end
 
   def access_just_for_specific_researchers?(notice)

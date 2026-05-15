@@ -86,6 +86,9 @@ RailsAdmin.config do |config|
         field :source
         field :review_required
         field :published
+        field :full_notice_version_only_researchers do
+          label 'Researchers only'
+        end
         field :time_to_publish
         field :body
         field :entities
@@ -119,6 +122,9 @@ RailsAdmin.config do |config|
         field :source
         field :subject
         field :review_required
+        field :full_notice_version_only_researchers do
+          label 'Researchers only'
+        end
         field :language
         field :rescinded
         field :spam
@@ -216,6 +222,11 @@ RailsAdmin.config do |config|
             ability = Ability.new(bindings[:view]._current_user)
             ability.can? :rescind, Notice
           end
+        end
+
+        configure :full_notice_version_only_researchers do
+          label 'Researchers only'
+          help 'When checked, the full notice version is viewable only by users with a Lumen researcher credential.'
         end
 
         configure :works do

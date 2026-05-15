@@ -472,7 +472,9 @@ class Notice < ApplicationRecord
   end
 
   def restricted_to_researchers?
-    submitter&.full_notice_only_researchers
+    full_notice_version_only_researchers? ||
+      submitter&.full_notice_only_researchers ||
+      ContentFilter.notice_has_action?(self, :full_notice_version_only_researchers)
   end
 
   def token_urls_count

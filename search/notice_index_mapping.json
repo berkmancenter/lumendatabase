@@ -63,6 +63,9 @@
     "hidden": {
       "type": "boolean"
     },
+    "full_notice_version_only_researchers": {
+      "type": "boolean"
+    },
     "id": {
       "type": "keyword"
     },

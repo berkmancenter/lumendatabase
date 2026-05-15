@@ -68,6 +68,12 @@ describe Ability do
     it "can see full notice urls" do
       expect(subject.can? :view_full_version, Notice).to be true
     end
+
+    it "can't see full notice urls for a researchers-only notice" do
+      researchers_only_notice = build(:dmca, full_notice_version_only_researchers: true)
+
+      expect(subject.can? :view_full_version, researchers_only_notice).to be false
+    end
   end
 
   context "a notice viewer with the can_generate_permanent_notice_token_urls setting on" do
@@ -123,6 +129,22 @@ describe Ability do
     subject { Ability.new(build(:user, :researcher)) }
 
     it_behaves_like 'a user that can\'t generate new notice permanent token urls'
+
+    it "can see full notice urls for a researchers-only notice" do
+      researchers_only_notice = build(:dmca, full_notice_version_only_researchers: true)
+
+      expect(subject.can? :view_full_version, researchers_only_notice).to be true
+    end
+  end
+
+  context "an anonymous user" do
+    subject { Ability.new(nil) }
+
+    it "can't request an access token for a researchers-only notice" do
+      researchers_only_notice = build(:dmca, full_notice_version_only_researchers: true)
+
+      expect(subject.can? :request_access_token, researchers_only_notice).to be false
+    end
   end
 
   context "a researcher_truncated_urls" do
