@@ -31,6 +31,8 @@ RSpec.describe Defamation, type: :model do
   describe 'TLD-only URL redaction' do
     let(:notice) { create(:defamation) }
     let(:entity) { create(:entity, name: entity_name) }
+    let(:sender_country_code) { 'TW' }
+    let(:sender) { create(:entity, country_code: sender_country_code) }
     let(:work) do
       Work.new(
         description: 'Test',
@@ -42,6 +44,7 @@ RSpec.describe Defamation, type: :model do
     before do
       notice.works << work
       create(:entity_notice_role, notice: notice, entity: entity, name: 'submitter')
+      create(:entity_notice_role, notice: notice, entity: sender, name: 'sender')
       notice.reload
     end
 
@@ -126,6 +129,20 @@ RSpec.describe Defamation, type: :model do
 
         expect(url.url).to eq('http://e[redacted]e.com')
         expect(url.url_original).to eq('http://example.com/')
+      end
+
+      context 'when the sender is not from Taiwan' do
+        let(:sender_country_code) { 'US' }
+
+        it 'does not redact TLD-only URLs' do
+          url = build(:infringing_url, url: 'http://example.com')
+          work.infringing_urls << url
+
+          subject
+
+          expect(url.url).to eq('http://example.com')
+          expect(url.url_original).to eq('http://example.com')
+        end
       end
     end
 

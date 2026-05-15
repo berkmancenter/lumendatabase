@@ -416,7 +416,7 @@ feature 'notice submission', js: true do
             },
             {
               name: 'sender',
-              entity_attributes: { name: 'Tonny Bastet' }
+              entity_attributes: { name: 'Tonny Bastet', country_code: 'TW' }
             }
           ],
           works_attributes: [
@@ -445,6 +445,42 @@ feature 'notice submission', js: true do
       expect(urls[3]).to eq('http://single.org/page')
       expect(urls[4]).to eq('http://s[redacted]e.org')
       expect(urls[5]).to eq('http://s[redacted]e.co.uk')
+    end
+
+    scenario 'does not redact domains when the sender is not from Taiwan' do
+      parameters = request_hash(
+        default_notice_hash(
+          type: 'Defamation',
+          entity_notice_roles_attributes: [
+            {
+              name: 'submitter',
+              entity_attributes: { name: 'Google LLC' }
+            },
+            {
+              name: 'recipient',
+              entity_attributes: { name: 'Google LLC' }
+            },
+            {
+              name: 'sender',
+              entity_attributes: { name: 'Tonny Bastet', country_code: 'US' }
+            }
+          ],
+          works_attributes: [
+            {
+              description: 'Test',
+              infringing_urls_attributes: [
+                { url: 'http://example.com' }
+              ]
+            }
+          ]
+        )
+      )
+
+      post_api('/notices', parameters)
+      notice = Notice.last
+      urls = notice.works.first.infringing_urls.map(&:url)
+
+      expect(urls[0]).to eq('http://example.com')
     end
   end
 

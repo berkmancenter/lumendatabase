@@ -611,8 +611,12 @@ class Notice < ApplicationRecord
     submitter && submitter.name =~ /\bgoogle\b/i
   end
 
+  def taiwan_sender?
+    sender&.country_code&.casecmp?('TW')
+  end
+
   def redact_tld_only_urls_for_google_submitter
-    return unless google_submitter?
+    return unless google_submitter? && taiwan_sender?
 
     works.each do |work|
       all_urls = (work.infringing_urls + work.copyrighted_urls)
