@@ -509,6 +509,30 @@ RailsAdmin.config do |config|
   end
 
   config.model 'ContentFilter' do
+    edit do
+      field :name
+      field :query do
+        label 'SQL query'
+        help 'Optional when URL text is present. Existing filters can continue to use notice IDs, entity names, or other SQL conditions.'
+      end
+      field :url_text do
+        label 'URL text'
+        help 'Matches notices with an infringing or copyrighted URL containing this text, case-insensitively.'
+      end
+      field :actions, :enum do
+        multiple true
+      end
+      field :notes
+    end
+
+    list do
+      field :name
+      field :query
+      field :url_text
+      field :actions
+      field :updated_at
+    end
+
     configure :actions, :enum do
       multiple true
     end
