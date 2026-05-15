@@ -7,6 +7,10 @@
     <h5 class="title"><%= Translation.t('notice_show_works_trademark_mrn') %></h5>
     <p class="mark_registration_number"><%= notice.mark_registration_number %></p>
   <% end %>
+  <% if notice.regulation_list.present? %>
+    <h5 class="title"><%= Translation.t('notice_show_works_gov_law_enf_regulations') %></h5>
+    <p class="regulations"><%= render 'shared/tag_list', tags: notice.regulations %></p>
+  <% end %>
 </section>
 
 <%= render 'works', notice: notice %>

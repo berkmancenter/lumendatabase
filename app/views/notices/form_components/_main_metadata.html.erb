@@ -1,6 +1,7 @@
 <%# Displays the right-hand column of the top of a notice form.
     Required: form
-    Optional: action_taken, subject, topics, tag_list (default: true)
+    Optional: action_taken, subject, topics, tag_list (default: true),
+              regulation_list (default: false)
     The optional parameters, if false, will suppress display of associated
     sections.
     #%>
@@ -8,6 +9,7 @@
 <% subject = true if local_assigns[:subject].nil? %>
 <% topics = true if local_assigns[:topics].nil? %>
 <% tag_list = true if local_assigns[:tag_list].nil? %>
+<% regulation_list = false if local_assigns[:regulation_list].nil? %>
 <div class="body-wrapper left main">
   <%= form.input :type, as: :hidden %>
   <%=
@@ -36,6 +38,9 @@
   <% end %>
   <%= form.input :language, collection: Language.all, label_method: :label, value_method: :code %>
   <%= form.input :jurisdiction_list, label: "Jurisdiction", placeholder: 'a list of countries - US, CA, etc.', input_html: { value: jsonb_array_input(form.object, :jurisdiction_list) } %>
+  <% if regulation_list %>
+    <%= form.input :regulation_list, label: Translation.t('notice_new_works_gov_law_enf_regulations'), placeholder: Translation.t('notice_new_comma_separated'), input_html: { value: jsonb_array_input(form.object, :regulation_list) } %>
+  <% end %>
   <% if action_taken %>
     <%=
       form.input :action_taken,

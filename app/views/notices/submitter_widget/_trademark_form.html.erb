@@ -3,7 +3,7 @@
 <%= simple_form_for(notice, url: submitter_widget_notices_path(widget_settings: @widget_settings)) do |form| %>
   <section class="notice-body">
     <%= Translation.t('notice_new_step_1') %>
-    <%= render 'notices/submitter_widget/form_components/main_metadata', form: form, mark_reg: true %>
+    <%= render 'notices/submitter_widget/form_components/main_metadata', form: form, mark_reg: true, regulation_list: true %>
   </section>
 
   <section class="works">

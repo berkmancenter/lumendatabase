@@ -89,6 +89,26 @@ describe 'notices/show.html.erb' do
     expect(rendered).to have_facet_link(:tags, 'a_tag')
   end
 
+  it 'displays DMCA regulations' do
+    notice = build(:dmca, regulation_list: 'Article 17, Digital Services Act')
+    assign(:notice, notice)
+
+    render
+
+    expect(rendered).to include 'Article 17'
+    expect(rendered).to include 'Digital Services Act'
+  end
+
+  it 'displays Trademark regulations' do
+    notice = build(:trademark, regulation_list: 'Article 9, EU 2017/1001')
+    assign(:notice, notice)
+
+    render
+
+    expect(rendered).to include 'Article 9'
+    expect(rendered).to include 'EU 2017/1001'
+  end
+
   it 'displays a notice with default entities' do
     notice = create(:dmca, role_names: %w[sender recipient])
     _sender = notice.sender

@@ -3,6 +3,10 @@
     <h5 class="title"><%= notice.customizations&.fetch('body_field_label', nil) || Translation.t('notice_show_dcma_body') %></h5>
     <p class="body"><pre><%= redact_url_paths_unless_full_notice(@notice, notice.redacted(:body)) %></pre></p>
   <% end %>
+  <% if notice.regulation_list.present? %>
+    <h5 class="title"><%= Translation.t('notice_show_works_gov_law_enf_regulations') %></h5>
+    <p class="regulations"><%= render 'shared/tag_list', tags: notice.regulations %></p>
+  <% end %>
 </section>
 
 <%= render 'works', notice: notice %>

@@ -32,4 +32,10 @@ describe TrademarkSerializer do
     )
   end
 
+  it 'includes regulations' do
+    trademark = build(:trademark, regulation_list: 'Article 17, DSA')
+    serialized_trademark = described_class.new(trademark).as_json
+
+    expect(serialized_trademark[:regulations]).to match_array(['Article 17', 'DSA'])
+  end
 end

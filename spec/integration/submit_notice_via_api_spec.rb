@@ -32,6 +32,7 @@ feature 'notice submission', js: true do
     parameters = request_hash(
       default_notice_hash({
         title: 'A superduper title',
+        regulation_list: 'Article 17, Digital Services Act',
         works_attributes: [{
           description: 'A work',
           infringing_urls_attributes: [{
@@ -51,6 +52,9 @@ feature 'notice submission', js: true do
     notice = Notice.last
 
     expect(notice.title).to eq 'A superduper title'
+    expect(notice.regulation_list).to match_array(
+      ['Article 17', 'Digital Services Act']
+    )
     expect(notice.recipient.kind).to eq 'individual'
     notice.works.each_with_index do |work, index|
       json_work = notice.works_json[index]
@@ -58,6 +62,24 @@ feature 'notice submission', js: true do
       expect(json_work['infringing_urls'][0]['url']).to eq work.infringing_urls.first.url
       expect(json_work['copyrighted_urls'][0]['url']).to eq work.copyrighted_urls.first.url
     end
+  end
+
+  scenario 'submitting a trademark notice with regulations' do
+    parameters = request_hash(
+      default_notice_hash(
+        type: 'Trademark',
+        regulation_list: 'EU 2017/1001, Article 9'
+      )
+    )
+
+    curb = post_api('/notices', parameters)
+
+    expect(curb.response_code).to eq 201
+
+    notice = Notice.last
+
+    expect(notice).to be_a Trademark
+    expect(notice.regulation_list).to match_array(['EU 2017/1001', 'Article 9'])
   end
 
   scenario 'submitting a notice with token in header' do

@@ -321,15 +321,15 @@ class Notice < ApplicationRecord
   end
 
   def tags=(value = '')
-    tag_list = value
+    self.tag_list = value
   end
 
   def jurisdictions=(value = '')
-    jurisdiction_list = value
+    self.jurisdiction_list = value
   end
 
   def regulations=(value = '')
-    regulation_list = value
+    self.regulation_list = value
   end
 
   def jurisdiction_list=(value = '')

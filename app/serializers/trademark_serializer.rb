@@ -1,5 +1,9 @@
 class TrademarkSerializer < NoticeSerializer
-  attributes :marks, :mark_registration_number
+  attributes :marks, :mark_registration_number, :regulations
+
+  attribute :regulations do |object|
+    object.regulation_list
+  end
 
   attributes_to_serialize.delete(:works)
 

@@ -4,7 +4,7 @@
   <section class="notice-body">
     <%= Translation.t('notice_new_step_1') %>
     <%= format(Translation.t('notice_new_provide_us'), type: Translation.t('submitter_widget_notice_new_trademark_header')).html_safe %>
-    <%= render 'notices/form_components/main_metadata', form: form %>
+    <%= render 'notices/form_components/main_metadata', form: form, regulation_list: true %>
     <%= render 'notices/form_components/additional_metadata',
                label: Translation.t('notice_new_trademark_metadata_label'),
                mark_reg: true,

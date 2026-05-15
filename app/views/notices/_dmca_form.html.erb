@@ -4,7 +4,7 @@
   <section class="notice-body">
     <%= Translation.t('notice_new_step_1') %>
     <%= format(Translation.t('notice_new_provide_us'), type: Translation.t('notice_new_dcma_header')).html_safe %>
-    <%= render 'notices/form_components/main_metadata', form: form %>
+    <%= render 'notices/form_components/main_metadata', form: form, regulation_list: true %>
     <%= render 'notices/form_components/additional_metadata',
                form: form %>
   </section>
