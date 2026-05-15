@@ -16,6 +16,49 @@ describe 'notices/show.html.erb' do
     expect(rendered).to include notice.title
   end
 
+  it 'redacts URL paths in rendered body and work descriptions' do
+    notice = build(
+      :dmca,
+      body: 'Body http://some-tld.com/private/page?token=123',
+      works: [
+        build(
+          :work,
+          description: 'Work https://example.com/secret/file.pdf'
+        )
+      ]
+    )
+    assign(:notice, notice)
+
+    render
+
+    expect(rendered).to include 'Body http://some-tld.com/[REDACTED]'
+    expect(rendered).to include 'Work https://example.com/[REDACTED]'
+    expect(rendered).not_to include 'private/page?token=123'
+    expect(rendered).not_to include 'secret/file.pdf'
+  end
+
+  it 'shows full body and work description URLs when full notice can be seen' do
+    notice = build(
+      :dmca,
+      body: 'Body http://some-tld.com/private/page?token=123',
+      works: [
+        build(
+          :work,
+          description: 'Work https://example.com/secret/file.pdf'
+        )
+      ]
+    )
+    assign(:notice, notice)
+    @ability.can :view_full_version, Notice
+
+    render
+
+    expect(rendered).to include 'Body http://some-tld.com/private/page?token=123'
+    expect(rendered).to include 'Work https://example.com/secret/file.pdf'
+    expect(rendered).not_to include 'http://some-tld.com/[REDACTED]'
+    expect(rendered).not_to include 'https://example.com/[REDACTED]'
+  end
+
   it 'displays the date sent in the proper format' do
     notice = build(:dmca, date_sent: Time.zone.local(2013, 5, 4))
     allow(notice).to receive(:sender).and_return(build(:entity))

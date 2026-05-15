@@ -11,7 +11,7 @@
         </div>
         <div class="row">
           <div class="description">
-            <span class="label"><%= Translation.t('notice_works_complaint') %></span> <span class="field"><%= work.description %></span>
+            <span class="label"><%= Translation.t('notice_works_complaint') %></span> <span class="field"><%= redact_url_paths_unless_full_notice(@notice, work.description) %></span>
           </div>
         </div>
 

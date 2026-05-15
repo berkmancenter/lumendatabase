@@ -93,12 +93,24 @@ module NoticesHelper
       .any?
   end
 
+  def redact_url_paths(text)
+    text.to_s.gsub(%r{\bhttps?://[^\s<>"']+}i) do |url|
+      trailing_punctuation = url[/[.,;:!?)]*\z/]
+      clean_url = url.delete_suffix(trailing_punctuation)
+
+      redact_url_path(clean_url) + trailing_punctuation
+    end
+  end
+
+  def redact_url_paths_unless_full_notice(notice, text)
+    return text if can_see_full_notice_version?(notice)
+
+    redact_url_paths(text)
+  end
+
   def with_redacted_urls(text)
     sanitized_text = ActionView::Base.full_sanitizer.sanitize(text)
-    redacted_text = sanitized_text.gsub(
-      %r{(http[s]?://[w]*[\.]*[^/|$]*)(\S*)},
-      "\\1/#{Lumen::REDACTION_MASK}"
-    )
+    redacted_text = redact_url_paths(sanitized_text)
     term_exact_search = (params['term'] && params['term'][0] == '"' && params['term'][-1] == '"')
 
     if params[:term].instance_of?(String)
@@ -148,6 +160,17 @@ module NoticesHelper
   end
 
   private
+
+  def redact_url_path(url)
+    uri = Addressable::URI.parse(url)
+    return url unless uri&.host
+
+    port = uri.port ? ":#{uri.port}" : ''
+
+    "#{uri.scheme}://#{uri.host}#{port}/#{Lumen::REDACTION_MASK}"
+  rescue Addressable::URI::InvalidURIError
+    url
+  end
 
   def confidential_order?(notice)
     notice.is_a?(CourtOrder) &&

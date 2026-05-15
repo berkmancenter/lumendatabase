@@ -99,6 +99,42 @@ describe NoticesHelper do
       .to raise_error(RuntimeError)
   end
 
+  it 'redacts URL paths in rendered text' do
+    text = 'Body URL: http://some-tld.com/private/page?token=123.'
+
+    expect(helper.redact_url_paths(text))
+      .to eq 'Body URL: http://some-tld.com/[REDACTED].'
+  end
+
+  it 'redacts multiple rendered URLs while preserving each host' do
+    text = 'See https://example.com/a and http://media.example.org/video.mp4'
+    redacted_text =
+      'See https://example.com/[REDACTED] and http://media.example.org/[REDACTED]'
+
+    expect(helper.redact_url_paths(text)).to eq redacted_text
+  end
+
+  it 'does not redact URL paths when the full notice can be seen' do
+    notice = build(:dmca)
+    text = 'Body URL: http://some-tld.com/private/page?token=123.'
+    allow(helper).to receive(:can_see_full_notice_version?)
+      .with(notice)
+      .and_return(true)
+
+    expect(helper.redact_url_paths_unless_full_notice(notice, text)).to eq text
+  end
+
+  it 'redacts URL paths when the full notice cannot be seen' do
+    notice = build(:dmca)
+    text = 'Body URL: http://some-tld.com/private/page?token=123.'
+    allow(helper).to receive(:can_see_full_notice_version?)
+      .with(notice)
+      .and_return(false)
+
+    expect(helper.redact_url_paths_unless_full_notice(notice, text))
+      .to eq 'Body URL: http://some-tld.com/[REDACTED].'
+  end
+
   context 'permanent_url_full_notice' do
     let(:notice) { build(:dmca) }
     let(:user) { build(:user) }

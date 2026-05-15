@@ -7,7 +7,7 @@
   </div>
   <div class="row">
     <div class="description">
-      <span class="label"><%= t("#{notice.type}.works.description") %></span> <span class="field"><%= work.description %></span>
+      <span class="label"><%= t("#{notice.type}.works.description") %></span> <span class="field"><%= redact_url_paths_unless_full_notice(notice, work.description) %></span>
     </div>
   </div>
 
