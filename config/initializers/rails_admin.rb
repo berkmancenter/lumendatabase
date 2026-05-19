@@ -509,6 +509,10 @@ RailsAdmin.config do |config|
   end
 
   config.model 'ContentFilter' do
+    configure :url_text do
+      help 'Case-insensitive text to match against infringing and copyrighted URLs.'
+    end
+
     configure :actions, :enum do
       multiple true
     end

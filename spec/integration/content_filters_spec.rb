@@ -61,6 +61,33 @@ feature 'content filters' do
         expect(page).to have_content('https://example.com/dude')
       end
 
+      scenario 'filtered notice by URL text doesn\'t show a link to request a token' do
+        create_content_filter_for_action(action_data[0], query: nil, url_text: 'sensitive-name')
+
+        work = Work.new(infringing_urls: [InfringingUrl.new(url: 'https://example.com/Sensitive-Name/profile')])
+        notice = create(:dmca, role_names: %w[sender principal submitter])
+        notice.works = [work]
+        notice.save
+
+        visit notice_url(notice)
+
+        expect(page).not_to have_content('to request access and see full URLs')
+      end
+
+      scenario 'permitted user can see URL text filtered content' do
+        create_content_filter_for_action(action_data[0], query: nil, url_text: 'sensitive-name')
+
+        work = Work.new(infringing_urls: [InfringingUrl.new(url: 'https://example.com/Sensitive-Name/profile')])
+        notice = create(:dmca, role_names: %w[sender principal submitter])
+        notice.works = [work]
+        notice.save
+
+        sign_in(create(:user, action_data[1], full_notice_views_limit: nil))
+        visit notice_url(notice)
+
+        expect(page).to have_content('https://example.com/Sensitive-Name/profile')
+      end
+
       scenario 'not filtered notice shows a link to request a token' do
         create_content_filter_for_action(action_data[0])
 
@@ -77,10 +104,11 @@ feature 'content filters' do
 
   private
 
-  def create_content_filter_for_action(filter_name)
-    ContentFilter.create(
+  def create_content_filter_for_action(filter_name, query: '"entities"."name" = \'Stop\' ', url_text: nil)
+    ContentFilter.create!(
       name: 'Test',
-      query: '"entities"."name" = \'Stop\' ',
+      query: query,
+      url_text: url_text,
       actions: [filter_name]
     )
   end
