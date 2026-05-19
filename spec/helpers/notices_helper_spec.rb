@@ -64,6 +64,7 @@ describe NoticesHelper do
     defamation = build(:defamation)
     dmca = build(:dmca)
     law_enforcement = build(:law_enforcement_request)
+    local_law = build(:local_law)
     other = build(:other)
     private_information = build(:private_information)
     trademark = build(:trademark)
@@ -78,6 +79,8 @@ describe NoticesHelper do
       .to eq 'Allegedly Infringing URL'
     expect(helper.label_for_url_input(:infringing_urls, law_enforcement))
       .to eq Translation.t('notice_show_works_law_enf_gov_infringing_url_label')
+    expect(helper.label_for_url_input(:infringing_urls, local_law))
+      .to eq Translation.t('notice_show_works_problematic_urls')
     expect(helper.label_for_url_input(:infringing_urls, other))
       .to eq 'Problematic URL'
     expect(helper.label_for_url_input(:infringing_urls, private_information))

@@ -126,6 +126,7 @@ FactoryBot.define do
     factory :defamation, class: 'Defamation'
     factory :government_request, class: 'GovernmentRequest'
     factory :law_enforcement_request, class: 'LawEnforcementRequest'
+    factory :local_law, class: 'LocalLaw'
     factory :other, class: 'Other'
     factory :private_information, class: 'PrivateInformation'
     factory :trademark, class: 'Trademark'

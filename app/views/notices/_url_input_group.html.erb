@@ -6,17 +6,18 @@
 ) %>
 <%= works_form.simple_fields_for(assoc) do |urls_form| %>
   <% if assoc == :copyrighted_urls %>
-	  <%= urls_form.input(
-	    :url,
-	    label: label_for_url_input(assoc, notice),
-	    placeholder: "https://",
-	    required: false
-	  ) %>
-	<% else %>
-		<%= urls_form.input(
-		  :url,
-		  label: label_for_url_input(assoc, notice),
-		  placeholder: "https://"
-		) %>
-	<% end %>
+    <%= urls_form.input(
+      :url,
+      label: label_for_url_input(assoc, notice),
+      placeholder: "https://",
+      required: false
+    ) %>
+  <% else %>
+    <%= urls_form.input(
+      :url,
+      label: label_for_url_input(assoc, notice),
+      placeholder: "https://",
+      required: !notice.is_a?(LocalLaw)
+    ) %>
+  <% end %>
 <% end %>

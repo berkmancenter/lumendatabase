@@ -367,6 +367,46 @@ feature 'typed notice submissions' do
     end
   end
 
+  scenario 'User submits and views a Local Law notice' do
+    submission = NoticeSubmissionOnPage.new(LocalLaw, create(:user, :submitter))
+    submission.open_submission_form
+
+    submission.fill_in_form_with(
+      Translation.t('notice_new_explanation') => 'This violates local law',
+      'Problematic URLs' => ''
+    )
+
+    LocalLaw::DEFAULT_ENTITY_NOTICE_ROLES.each do |role|
+      submission.fill_in_entity_form_with(
+        role,
+        'Name' => role.capitalize
+      )
+    end
+
+    submission.submit
+
+    sign_out
+
+    visit '/'
+
+    within('#recent-notices li:nth-child(1)') { find('a').click }
+
+    expect(page).to have_words('Local Law notice to Recipient')
+    expect(page).to have_words('Notice Type: Local Law')
+
+    within('.notice-body') do
+      expect(page).to have_content(Translation.t('notice_show_private_body'))
+      expect(page).to have_content('This violates local law')
+    end
+
+    within('.works') do
+      expect(page).to have_content(Translation.t('notice_show_works_problematic_urls'))
+      expect(page).to have_content(Lumen::REDACTION_MASK)
+      expect(page).not_to have_content(Translation.t('notice_works_urls_of_original'))
+      expect(page).not_to have_content('Complaint')
+    end
+  end
+
   scenario 'User submits and views a Counterfeit notice' do
     submission = NoticeSubmissionOnPage.new(Counterfeit, create(:user, :submitter))
     submission.open_submission_form

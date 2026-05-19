@@ -196,6 +196,8 @@ module NoticesHelper
       'Allegedly Defamatory URL'
     when ::Counterfeit
       'Allegedly Infringing Counterfeit URL'
+    when ::LocalLaw
+      Translation.t('notice_show_works_problematic_urls')
     when ::Other
       'Problematic URL'
     end

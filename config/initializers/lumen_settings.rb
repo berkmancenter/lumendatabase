@@ -14,6 +14,7 @@ Lumen.const_set :TYPES_TO_TOPICS, {
   'Defamation'            => 'Defamation',
   'GovernmentRequest'     => 'Government Requests',
   'LawEnforcementRequest' => 'Law Enforcement Requests',
+  'LocalLaw'              => 'International',
   'PrivateInformation'    => 'Right of Publicity',
   'Trademark'             => 'Trademark',
   'Other'                 => Lumen::OTHER_TOPIC,

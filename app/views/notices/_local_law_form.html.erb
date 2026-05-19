@@ -1,0 +1,42 @@
+<%= render 'notices/form_components/header',
+           label: 'Local Law notice' %>
+<%= simple_form_for(notice) do |form| %>
+  <section class="notice-body">
+    <%= Translation.t('notice_new_step_1') %>
+    <%= format(Translation.t('notice_new_provide_us'), type: 'Local Law notice').html_safe %>
+    <%= render 'notices/form_components/main_metadata', form: form %>
+    <%= render 'notices/form_components/additional_metadata',
+               label: Translation.t('notice_new_explanation'),
+               form: form %>
+  </section>
+
+  <section class="works">
+    <%= Translation.t('notice_new_works_step_2') %>
+    <%= format(Translation.t('notice_new_works_step_2_info'), urls_type: 'problematic').html_safe %>
+    <% form.object.works.each_with_index do |work, index| %>
+      <%= form.simple_fields_for(:works, work, child_index: index) do |works_form| %>
+        <div class="body-wrapper left">
+          <%= button_tag(
+            "Add Another URL",
+            type: 'button',
+            class: 'add-another-url',
+            data: { target: url_input_notices_path(type: notice.class, url_type: :infringing_urls, index: index) }
+          ) %>
+          <%= works_form.simple_fields_for(:infringing_urls) do |urls_form| %>
+            <%= urls_form.input(
+              :url,
+              label: Translation.t('notice_show_works_problematic_urls'),
+              placeholder: "https://",
+              required: false
+            ) %>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+  </section>
+
+  <%= render 'notices/form_components/roles',
+             label: 'Notice',
+             form: form %>
+  <%= render 'notices/form_components/submit', form: form %>
+<% end %>
