@@ -42,6 +42,14 @@ module ApplicationHelper
     TokenUrl.valid?(params[:access_token], notice)
   end
 
+  def can_see_enterprise_notice_version?(notice)
+    current_user.present? && can?(:view_enterprise_version, notice)
+  end
+
+  def client_area?
+    controller_path.to_s.start_with?('client/')
+  end
+
   def footer_links
     ids = Comfy::Cms::Fragment.where(identifier: 'link_in_footer', boolean: true)
                               .pluck(:record_id)

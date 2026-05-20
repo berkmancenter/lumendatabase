@@ -1,0 +1,27 @@
+<% title 'Client Settings', @enterprise_account.name %>
+
+<div class="inner-padding">
+  <p><%= link_to 'Back to notices', client_my_notices_path %></p>
+
+  <h2>Reports</h2>
+  <%= form_with model: @enterprise_account, url: client_settings_path, method: :patch, local: true do |form| %>
+    <p>
+      <%= form.label :report_frequency, 'Cadence' %>
+      <%= form.select :report_frequency, EnterpriseAccount::REPORT_FREQUENCIES.map { |frequency| [frequency.titleize, frequency] } %>
+    </p>
+
+    <p>
+      <%= form.label :report_recipient_email, 'Delivery email' %>
+      <%= form.email_field :report_recipient_email, placeholder: current_user.email %>
+    </p>
+
+    <p><%= form.submit 'Save report settings' %></p>
+  <% end %>
+
+  <h2>Verified Domains</h2>
+  <ol>
+    <% @verified_domains.each do |enterprise_domain| %>
+      <li><%= enterprise_domain.domain %></li>
+    <% end %>
+  </ol>
+</div>

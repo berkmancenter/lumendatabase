@@ -1,24 +1,32 @@
-<% cache '_navigation' do %>
+<% if client_area? %>
   <nav class="main-nav">
-    <div class="nav-item search"><%= link_to(Translation.t('navigation_header_search'), root_path) %></div>
-    <div class="nav-item topics dropdown">
-      <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= Translation.t('navigation_header_topics') %></a>
-      <div id="dropdown-topics" class="dropdown-menu" role="menu">
-        <ol>
-          <% cache_unless(Current.user&.role?(Role.super_admin), 'dropdown-topics') do %>
-            <%= render partial: 'shared/topic_dropdown', collection: topic_roots,
-                as: :topic %>
-          <% end %>
-        </ol>
-      </div>
-    </div>
-    <div class="nav-item">
-      <%= link_to Translation.t('navigation_header_media_mentions'), media_mentions_search_index_path %>
-    </div>
-    <% header_links.each do |link| %>
-      <div class="nav-item">
-        <%= link_to cms_fragment_content('page_title', link), link.full_path %>
-      </div>
-    <% end %>
+    <div class="nav-item"><%= link_to 'My notices', client_my_notices_path %></div>
+    <div class="nav-item"><%= link_to 'Settings', client_settings_path %></div>
+    <div class="nav-item"><%= link_to 'Log out', destroy_user_session_path %></div>
   </nav>
+<% else %>
+  <% cache '_navigation' do %>
+    <nav class="main-nav">
+      <div class="nav-item search"><%= link_to(Translation.t('navigation_header_search'), root_path) %></div>
+      <div class="nav-item topics dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= Translation.t('navigation_header_topics') %></a>
+        <div id="dropdown-topics" class="dropdown-menu" role="menu">
+          <ol>
+            <% cache_unless(Current.user&.role?(Role.super_admin), 'dropdown-topics') do %>
+              <%= render partial: 'shared/topic_dropdown', collection: topic_roots,
+                  as: :topic %>
+            <% end %>
+          </ol>
+        </div>
+      </div>
+      <div class="nav-item">
+        <%= link_to Translation.t('navigation_header_media_mentions'), media_mentions_search_index_path %>
+      </div>
+      <% header_links.each do |link| %>
+        <div class="nav-item">
+          <%= link_to cms_fragment_content('page_title', link), link.full_path %>
+        </div>
+      <% end %>
+    </nav>
+  <% end %>
 <% end %>

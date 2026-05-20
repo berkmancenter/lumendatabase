@@ -3,7 +3,28 @@ require 'rails_helper'
 describe 'shared/_navigation.html.erb' do
   include Comfy::ComfyHelper
 
+  it 'shows client links in the client area' do
+    allow(view).to receive(:client_area?).and_return(true)
+    allow(view).to receive(:client_my_notices_path)
+      .and_return(client_notices_search_index_path(sort_by: 'created_at desc'))
+
+    render
+
+    expect(rendered).to contain_link(
+      client_notices_search_index_path(sort_by: 'created_at desc'),
+      'My notices'
+    )
+    expect(rendered).to contain_link(client_settings_path)
+    expect(rendered).to contain_link(destroy_user_session_path)
+    expect(rendered).to have_css('.main-nav .nav-item:nth-child(1)', text: 'My notices')
+    expect(rendered).to have_css('.main-nav .nav-item:nth-child(2)', text: 'Settings')
+    expect(rendered).not_to include(Translation.t('navigation_header_search'))
+    expect(rendered).not_to include(Translation.t('navigation_header_topics'))
+    expect(rendered).not_to include(Translation.t('navigation_header_media_mentions'))
+  end
+
   it 'has links to all topics' do
+    allow(view).to receive(:client_area?).and_return(false)
     topics = create_list(:topic, 3)
 
     render
@@ -14,6 +35,7 @@ describe 'shared/_navigation.html.erb' do
   end
 
   it 'shows topics in alphabetical order' do
+    allow(view).to receive(:client_area?).and_return(false)
     first_topic = create(:topic, name: 'AA topic')
     third_topic = create(:topic, name: 'CC topic')
     second_topic = create(:topic, name: 'BB topic')

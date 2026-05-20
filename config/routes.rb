@@ -7,6 +7,19 @@ Rails.application.routes.draw do
 
   mount RailsAdmin::Engine => '/admin'
 
+  namespace :client do
+    root to: 'dashboard#index'
+    resource :settings, only: %i[show update]
+
+    namespace :notices do
+      resources :search, only: %i[index] do
+        collection do
+          get :facet
+        end
+      end
+    end
+  end
+
   namespace :notices do
     resources :search, only: %i[index] do
       collection do
