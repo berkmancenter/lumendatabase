@@ -157,6 +157,47 @@ describe Ability do
     end
   end
 
+  context "an enterprise user" do
+    let(:enterprise_account) { create(:enterprise_account) }
+    let(:enterprise_user) { create(:user, :enterprise, enterprise_account: enterprise_account) }
+    subject { Ability.new(enterprise_user) }
+
+    before do
+      create(:enterprise_domain, enterprise_account: enterprise_account, domain: 'business.example', verified: true)
+    end
+
+    it_behaves_like 'a non-admin'
+
+    it "can see the enterprise version of matching notices" do
+      notice = build(
+        :dmca,
+        works: [
+          Work.new(
+            infringing_urls: [InfringingUrl.new(url: 'https://business.example/path')],
+            copyrighted_urls: []
+          )
+        ]
+      )
+
+      expect(subject.can? :view_enterprise_version, notice).to be true
+    end
+
+    it "cannot see the enterprise version of researchers-only notices" do
+      notice = build(
+        :dmca,
+        full_notice_version_only_researchers: true,
+        works: [
+          Work.new(
+            infringing_urls: [InfringingUrl.new(url: 'https://business.example/path')],
+            copyrighted_urls: []
+          )
+        ]
+      )
+
+      expect(subject.can? :view_enterprise_version, notice).to be false
+    end
+  end
+
   context "a researcher with the can_generate_permanent_notice_token_urls setting on" do
     subject { Ability.new(build(:user, :researcher, can_generate_permanent_notice_token_urls: true)) }
 

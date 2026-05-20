@@ -15,6 +15,15 @@ class TrademarkSerializer < NoticeSerializer
           infringing_urls: work.infringing_urls.map(&:url)
         }
       end.as_json
+    elsif Current.user && Ability.new(Current.user).can?(:view_enterprise_version, object)
+      access = EnterpriseNoticeAccess.new(Current.user, object)
+
+      object.works.map do |work|
+        {
+          description: work.description,
+          infringing_urls: access.serialized_urls(work.infringing_urls, reveal_full: true)
+        }
+      end.as_json
     else
       object.works.map do |work|
         {

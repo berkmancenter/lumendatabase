@@ -95,6 +95,13 @@ class Ability
     if user.role?(Role.researcher_truncated_urls)
       can :read, Notice
     end
+
+    # enterprise role
+    if user.role?(Role.enterprise)
+      can :view_enterprise_version, Notice do |notice|
+        EnterpriseNoticeAccess.allowed?(user, notice)
+      end
+    end
   end
 
   private

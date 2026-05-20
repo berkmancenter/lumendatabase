@@ -3,6 +3,19 @@
 <% if can_see_full_notice_version?(@notice) %>
   <%= render 'works_urls_type_list', type: 'copyrighted', show_copyrighted: show_copyrighted, copyrighted_title: copyrighted_title, work: work %>
   <%= render 'works_urls_type_list', type: 'infringing', show_infringing: show_infringing, infringing_title: infringing_title, work: work %>
+<% elsif can_see_enterprise_notice_version?(@notice) %>
+  <%= render 'works_urls_type_list',
+              type: 'copyrighted',
+              show_copyrighted: show_copyrighted,
+              copyrighted_title: copyrighted_title,
+              work: work,
+              enterprise_rows: enterprise_url_rows(work, 'copyrighted', @notice) %>
+  <%= render 'works_urls_type_list',
+              type: 'infringing',
+              show_infringing: show_infringing,
+              infringing_title: infringing_title,
+              work: work,
+              enterprise_rows: enterprise_url_rows(work, 'infringing', @notice) %>
 <% else %>
   <% if show_copyrighted %>
     <div class="row">

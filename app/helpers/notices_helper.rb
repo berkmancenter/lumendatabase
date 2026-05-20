@@ -108,6 +108,15 @@ module NoticesHelper
     redact_url_paths(text)
   end
 
+  def enterprise_url_rows(work, type, notice)
+    url_instances = work.send("#{type}_urls")
+    reveal_full = type.to_s == 'infringing'
+
+    EnterpriseNoticeAccess
+      .new(current_user, notice)
+      .url_rows(url_instances, reveal_full: reveal_full)
+  end
+
   def with_redacted_urls(text)
     sanitized_text = ActionView::Base.full_sanitizer.sanitize(text)
     redacted_text = redact_url_paths(sanitized_text)
@@ -221,10 +230,13 @@ module NoticesHelper
   end
 
   def notice_cache_key(notice, can_see_full)
-    key_part = "#{notice.cache_key}_#{params[:access_token]}"
+    enterprise_key = can_see_enterprise_notice_version?(notice) ? current_user.enterprise_cache_key : 'no-enterprise'
+    key_part = "#{notice.cache_key}_#{params[:access_token]}_#{enterprise_key}"
 
     if can_see_full
       "untruncated_#{key_part}"
+    elsif can_see_enterprise_notice_version?(notice)
+      "enterprise_#{key_part}"
     elsif access_just_for_researchers?(notice)
       "truncated_just_researchers_#{key_part}"
     else

@@ -58,6 +58,16 @@ class NoticeSerializer < BaseSerializer
           copyrighted_urls: work.copyrighted_urls.map { |curl| { url: curl.url } }
         }
       end.as_json
+    elsif defined?(Current.user) && Current.user && Ability.new(Current.user).can?(:view_enterprise_version, object)
+      access = EnterpriseNoticeAccess.new(Current.user, object)
+
+      base_works = object.works.map do |work|
+        {
+          description: work.description,
+          infringing_urls: access.serialized_urls(work.infringing_urls, reveal_full: true),
+          copyrighted_urls: access.serialized_urls(work.copyrighted_urls, reveal_full: false)
+        }
+      end.as_json
     else
       base_works = object.works.map do |work|
         {
