@@ -154,6 +154,33 @@ describe ElasticsearchQuery, type: :model do
       expect(must).to include( { match: { published: { query: true, operator: "AND" } } } )
       expect(must).to include( { match: { rescinded: { query: false, operator: "AND" } } } )
     end
+
+    it 'can restrict results to notices with matching enterprise domains' do
+      obj = described_class.new
+
+      obj.restrict_to_enterprise_domains(['Example.com'])
+      obj.prepare
+
+      expect(obj.search_definition[:query][:bool][:filter]).to include(
+        bool: {
+          should: [
+            { match_phrase: { 'works.infringing_urls.url': 'example.com' } }
+          ],
+          minimum_should_match: 1
+        }
+      )
+    end
+
+    it 'fails closed when enterprise domain restriction has no domains' do
+      obj = described_class.new
+
+      obj.restrict_to_enterprise_domains([])
+      obj.prepare
+
+      expect(obj.search_definition[:query][:bool][:filter]).to include(
+        term: { id: '__no_enterprise_domains__' }
+      )
+    end
   end
 
   context 'faceting searches' do
@@ -279,6 +306,19 @@ describe ElasticsearchQuery, type: :model do
       searcher_page2 = described_class.new(params2)
 
       expect(searcher_page1.cache_key).not_to eq searcher_page2.cache_key
+    end
+
+    it 'is different for enterprise domain restrictions' do
+      params = { utf8: '✓', term: 'lion', sort_by: '',
+                 controller: 'notices/search', action: 'index' }
+
+      searcher1 = described_class.new(params)
+      searcher1.restrict_to_enterprise_domains(['example.com'])
+
+      searcher2 = described_class.new(params)
+      searcher2.restrict_to_enterprise_domains(['example.org'])
+
+      expect(searcher1.cache_key).not_to eq searcher2.cache_key
     end
   end
 end

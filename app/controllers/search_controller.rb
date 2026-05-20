@@ -42,6 +42,8 @@ class SearchController < ApplicationController
     resource_not_found and return if filterable_field_facet.nil?
 
     @searcher = ElasticsearchQuery.new(params, @model_class).tap do |searcher|
+      configure_searcher(searcher)
+
       @searchable_fields.each do |searched_field|
         searcher.register searched_field
       end
@@ -66,6 +68,8 @@ class SearchController < ApplicationController
   def html_responder; end
 
   def item_searcher; end
+
+  def configure_searcher(_searcher); end
 
   def json_renderer
     # The self.class incantation is necessary to make instances look up their

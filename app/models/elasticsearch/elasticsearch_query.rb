@@ -46,6 +46,7 @@ class ElasticsearchQuery
     limit_to_visible_items
     add_registered_elements_to_query
     add_exact_match_requirements
+    limit_to_enterprise_domains
     define_search
     apply_term_exact_search
   end
@@ -65,6 +66,11 @@ class ElasticsearchQuery
     search_response
   end
 
+  def restrict_to_enterprise_domains(domains)
+    @enterprise_domain_restricted = true
+    @enterprise_domains = Array(domains).map { |domain| EnterpriseDomain.normalize(domain) }.reject(&:blank?).uniq
+  end
+
   # The date is part of the cache key because our filesystem cache does not have
   # a proper cache expiration strategy; we're just deleting everything
   # periodically unless it's been recently accessed. However, this means that
@@ -73,7 +79,14 @@ class ElasticsearchQuery
   # Adding a datestamp guarantees that the cache_key eventually expires.
   def cache_key
     is_super_admin = Current.user&.role?(Role.super_admin)
-    @cache_key ||= "search-result-#{Digest::MD5.hexdigest(params.except('g-recaptcha-response-data', 'g-recaptcha-response').values.to_s)}-#{Date.today}-#{is_super_admin}"
+    enterprise_cache_key = Current.user&.enterprise_cache_key
+    digest_values = params
+                    .except('g-recaptcha-response-data', 'g-recaptcha-response')
+                    .values
+                    .push(enterprise_cache_key, @enterprise_domains)
+                    .to_s
+
+    @cache_key ||= "search-result-#{Digest::MD5.hexdigest(digest_values)}-#{Date.today}-#{is_super_admin}"
   end
 
   private
@@ -188,6 +201,26 @@ class ElasticsearchQuery
 
       search_config[:query][:bool][:must] << { match: limitation }
     end
+  end
+
+  def limit_to_enterprise_domains
+    return unless @enterprise_domain_restricted
+
+    if @enterprise_domains.blank?
+      search_config[:query][:bool][:filter] << { term: { id: '__no_enterprise_domains__' } }
+      return
+    end
+
+    domain_queries = @enterprise_domains.map do |domain|
+      { match_phrase: { 'works.infringing_urls.url': domain } }
+    end
+
+    search_config[:query][:bool][:filter] << {
+      bool: {
+        should: domain_queries,
+        minimum_should_match: 1
+      }
+    }
   end
 
   def apply_term_exact_search

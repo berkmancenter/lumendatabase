@@ -18,6 +18,8 @@ class Notices::SearchController < SearchController
 
   def item_searcher
     ElasticsearchQuery.new(params).tap do |searcher|
+      configure_searcher(searcher)
+
       Notice::SEARCHABLE_FIELDS.each do |searched_field|
         searcher.register searched_field
       end
@@ -38,4 +40,6 @@ class Notices::SearchController < SearchController
       searcher.sort_by = sort_by(params[:sort_by]) if params[:sort_by]
     end
   end
+
+  def configure_searcher(_searcher); end
 end
