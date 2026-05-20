@@ -222,6 +222,23 @@ FactoryBot.define do
     trait :researcher_truncated_urls do
       roles { [Role.researcher_truncated_urls] }
     end
+
+    trait :enterprise do
+      roles { [Role.enterprise] }
+      enterprise_account
+    end
+  end
+
+  factory :enterprise_account do
+    name { 'Example Business' }
+    active { true }
+    report_frequency { 'none' }
+  end
+
+  factory :enterprise_domain do
+    enterprise_account
+    domain { 'example.com' }
+    verified { true }
   end
 
   factory :relevant_question do

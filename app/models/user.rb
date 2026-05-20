@@ -3,8 +3,10 @@ class User < ApplicationRecord
 
   # == Relationships ========================================================
   belongs_to :entity, optional: true
+  belongs_to :enterprise_account, optional: true
   has_and_belongs_to_many :roles
   has_many :token_urls
+  has_many :enterprise_domains, through: :enterprise_account
   has_and_belongs_to_many :full_notice_only_researchers_entities,
                           join_table: :entities_full_notice_only_researchers_users,
                           class_name: 'Entity'
@@ -31,6 +33,29 @@ class User < ApplicationRecord
   # == Instance Methods =====================================================
   def role?(role)
     roles.include?(role)
+  end
+
+  def enterprise?
+    role?(Role.enterprise)
+  end
+
+  def active_enterprise_account
+    enterprise_account if enterprise? && enterprise_account&.active?
+  end
+
+  def enterprise_cache_key
+    return 'no-enterprise' unless active_enterprise_account
+
+    domains_updated_at = active_enterprise_account
+                         .enterprise_domains
+                         .maximum(:updated_at)
+                         &.to_i
+
+    [
+      'enterprise',
+      active_enterprise_account.cache_key_with_version,
+      domains_updated_at
+    ].join('-')
   end
 
   def ensure_authentication_token

@@ -8,6 +8,7 @@ class Role < ApplicationRecord
     researcher
     researcher_truncated_urls
     notice_viewer
+    enterprise
   ].freeze
 
   NAMES.each do |name|

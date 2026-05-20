@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_05_19_130000) do
+ActiveRecord::Schema[7.2].define(version: 2026_05_20_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -245,6 +245,30 @@ ActiveRecord::Schema[7.2].define(version: 2026_05_19_130000) do
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.integer "status", default: 0
+  end
+
+  create_table "enterprise_accounts", force: :cascade do |t|
+    t.string "name", null: false
+    t.boolean "active", default: true, null: false
+    t.string "report_frequency", default: "none", null: false
+    t.string "report_recipient_email"
+    t.datetime "last_report_sent_at"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "enterprise_domains", force: :cascade do |t|
+    t.bigint "enterprise_account_id", null: false
+    t.string "domain", null: false
+    t.boolean "verified", default: false, null: false
+    t.datetime "verified_at"
+    t.text "notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["domain"], name: "index_enterprise_domains_on_domain"
+    t.index ["enterprise_account_id", "domain"], name: "index_enterprise_domains_on_account_and_domain", unique: true
+    t.index ["enterprise_account_id"], name: "index_enterprise_domains_on_enterprise_account_id"
   end
 
   create_table "entities", id: :serial, force: :cascade do |t|
@@ -555,8 +579,10 @@ ActiveRecord::Schema[7.2].define(version: 2026_05_19_130000) do
     t.string "widget_public_key"
     t.text "notes"
     t.integer "entity_id"
+    t.bigint "enterprise_account_id"
     t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["enterprise_account_id"], name: "index_users_on_enterprise_account_id"
     t.index ["entity_id"], name: "index_users_on_entity_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["widget_public_key"], name: "index_users_on_widget_public_key", unique: true
@@ -586,4 +612,6 @@ ActiveRecord::Schema[7.2].define(version: 2026_05_19_130000) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "enterprise_domains", "enterprise_accounts"
+  add_foreign_key "users", "enterprise_accounts"
 end

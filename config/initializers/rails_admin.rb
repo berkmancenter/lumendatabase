@@ -29,6 +29,8 @@ RailsAdmin.config do |config|
   config.audit_with :history, 'User'
   config.audit_with :history, 'Role'
   config.audit_with :history, 'Notice'
+  config.audit_with :history, 'EnterpriseAccount'
+  config.audit_with :history, 'EnterpriseDomain'
 
   boolean_true_icon = '<span class="badge bg-success"><span class="fas fa-check"></span></span>'.html_safe
   boolean_false_icon = '<span class="badge bg-danger"><span class="fas fa-times"></span></span>'.html_safe
@@ -384,6 +386,7 @@ RailsAdmin.config do |config|
       field :viewed_notices
       field :limit_notice_api_response
       field :entity
+      field :enterprise_account
       field :roles
       field :full_notice_only_researchers_entities
       field :widget_submissions_forward_email
@@ -394,9 +397,52 @@ RailsAdmin.config do |config|
 
       field :email
       field :entity
+      field :enterprise_account
       field :roles
       field :created_at
       field :full_notice_time_limit
+    end
+  end
+
+  config.model 'EnterpriseAccount' do
+    object_label_method { :name }
+
+    edit do
+      field :name
+      field :active
+      field :report_frequency
+      field :report_recipient_email
+      field :last_report_sent_at
+      field :notes
+      field :users
+      field :enterprise_domains
+    end
+
+    list do
+      field :name
+      field :active
+      field :report_frequency
+      field :report_recipient_email
+      field :updated_at
+    end
+  end
+
+  config.model 'EnterpriseDomain' do
+    object_label_method { :domain }
+
+    edit do
+      field :enterprise_account
+      field :domain
+      field :verified
+      field :verified_at
+      field :notes
+    end
+
+    list do
+      field :domain
+      field :enterprise_account
+      field :verified
+      field :updated_at
     end
   end
 
