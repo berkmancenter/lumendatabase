@@ -1,0 +1,12 @@
+Lumen notice report for <%= @enterprise_account.name %>
+
+<%= @report.starts_at.to_fs(:simple) %> through <%= @report.ends_at.to_fs(:simple) %>
+
+<% @notices.each do |notice| %>
+Notice #<%= notice.id %>: <%= notice.title %>
+<%= notice_url(notice, host: Chill::Application.config.site_host) %>
+<% EnterpriseNoticeAccess.for_account(@enterprise_account, notice).matching_infringing_urls.each do |url| %>
+- <%= url.url %>
+<% end %>
+
+<% end %>
