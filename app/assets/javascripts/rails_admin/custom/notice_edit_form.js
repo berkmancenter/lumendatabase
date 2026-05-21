@@ -24,7 +24,7 @@ class NoticeEditForm {
     let forms = ['new', 'edit'];
     let notice_types = ['notice', 'dmca', 'counterfeit', 'counternotice', 'court_order',
       'data_protection', 'defamation', 'government_request', 'law_enforcement_request',
-      'private_information', 'trademark', 'other', 'placeholder'
+      'private_information', 'trademark', 'other', 'placeholder', 'local_law',
     ];
 
     let selectors = '';
