@@ -1,4 +1,7 @@
-class LocalLawSerializer < OtherSerializer
+class LocalLawSerializer < NoticeSerializer
+  attributes_to_serialize.delete(:body)
+  attribute :explanation, &:body
+
   attribute :works do |_object|
     [
       {
