@@ -1,7 +1,7 @@
 module SearchHelpers
 
   def index_changed_instances
-    # Wait for Logstash to complete indexing
+    # Wait for Logstash to complete indexing.
     sleep(2)
   end
 

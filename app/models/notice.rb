@@ -539,25 +539,15 @@ class Notice < ApplicationRecord
     out.except!(*attributes_to_skip)
 
     out['class_name'] = self.class.name
-    out['sender_name_facet'] = sender_name
     out['sender_name'] = sender_name
-    out['principal_name_facet'] = principal_name
     out['principal_name'] = principal_name
-    out['submitter_name_facet'] = submitter_name
     out['submitter_name'] = submitter_name
-    out['submitter_country_code_facet'] = submitter_country_code
     out['submitter_country_code'] = submitter_country_code
-    out['tag_list_facet'] = tags
     out['tag_list'] = tags
-    out['date_received_facet'] = date_received
-    out['jurisdiction_list_facet'] = jurisdictions
     out['jurisdiction_list'] = jurisdictions
-    out['recipient_name_facet'] = recipient_name
     out['recipient_name'] = recipient_name
-    out['country_code_facet'] = country_code
-    out['language_facet'] = language
-    out['action_taken_facet'] = action_taken
-    out['topic_facet'] = topics.map(&:name)
+    out['country_code'] = country_code
+    out['topic_list'] = topics.map(&:name)
     out['topics'] = topics.map do |topic|
       { id: topic[:id], name: topic[:name] }
     end

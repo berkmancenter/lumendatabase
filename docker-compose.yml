@@ -69,6 +69,22 @@ services:
     environment:
       LS_JAVA_OPTS: "-Xmx2g -Xms2g"
 
+  logstash_test:
+    env_file:
+      - '.env.test'
+    depends_on:
+      - 'elasticsearch'
+      - 'postgres'
+    build:
+      context: .
+      dockerfile: Dockerfile-logstash
+    volumes:
+      - '.:/app:ro'
+    tmpfs:
+      - /user/share/logstash/data
+    environment:
+      LS_JAVA_OPTS: "-Xmx512m -Xms512m"
+
   redis:
     image: 'redis:7.2'
     command: redis-server
