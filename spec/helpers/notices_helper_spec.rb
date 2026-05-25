@@ -117,6 +117,71 @@ describe NoticesHelper do
     expect(helper.redact_url_paths(text)).to eq redacted_text
   end
 
+  it 'does not redact URL paths for configured domains' do
+    text = 'See https://business.example/private and https://other.example/private.'
+    redacted_text =
+      'See https://business.example/private and https://other.example/[REDACTED].'
+
+    expect(helper.redact_url_paths(text, unredacted_domains: ['business.example']))
+      .to eq redacted_text
+  end
+
+  it 'does not redact verified enterprise domains in client search highlights' do
+    enterprise_account = create(:enterprise_account)
+    create(
+      :enterprise_domain,
+      enterprise_account: enterprise_account,
+      domain: 'business.example',
+      verified: true
+    )
+    create(
+      :enterprise_domain,
+      enterprise_account: enterprise_account,
+      domain: 'pending.example',
+      verified: false
+    )
+    user = create(:user, :enterprise, enterprise_account: enterprise_account)
+    highlight = 'URLs https://business.example/<em>private</em> ' \
+                'https://pending.example/private https://other.example/private'
+
+    allow(helper).to receive(:can?)
+      .with(:view_full_version, Notice)
+      .and_return(false)
+    allow(helper).to receive(:client_area?).and_return(true)
+    allow(helper).to receive(:current_user).and_return(user)
+    allow(helper).to receive(:params)
+      .and_return({ term: 'private' }.with_indifferent_access)
+
+    result = helper.search_result_highlight_text(highlight)
+
+    expect(result).to include('https://business.example/<em>private</em>')
+    expect(result).to include('https://pending.example/[REDACTED]')
+    expect(result).to include('https://other.example/[REDACTED]')
+  end
+
+  it 'redacts verified enterprise domains outside client search highlights' do
+    enterprise_account = create(:enterprise_account)
+    create(
+      :enterprise_domain,
+      enterprise_account: enterprise_account,
+      domain: 'business.example',
+      verified: true
+    )
+    user = create(:user, :enterprise, enterprise_account: enterprise_account)
+    highlight = 'URL https://business.example/<em>private</em>'
+
+    allow(helper).to receive(:can?)
+      .with(:view_full_version, Notice)
+      .and_return(false)
+    allow(helper).to receive(:client_area?).and_return(false)
+    allow(helper).to receive(:current_user).and_return(user)
+    allow(helper).to receive(:params)
+      .and_return({ term: 'private' }.with_indifferent_access)
+
+    expect(helper.search_result_highlight_text(highlight))
+      .to include('https://business.example/[REDACTED]')
+  end
+
   it 'does not redact URL paths when the full notice can be seen' do
     notice = build(:dmca)
     text = 'Body URL: http://some-tld.com/private/page?token=123.'

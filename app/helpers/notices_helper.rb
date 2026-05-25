@@ -93,12 +93,19 @@ module NoticesHelper
       .any?
   end
 
-  def redact_url_paths(text)
+  def redact_url_paths(text, unredacted_domains: [])
     text.to_s.gsub(%r{\bhttps?://[^\s<>"']+}i) do |url|
       trailing_punctuation = url[/[.,;:!?)]*\z/]
       clean_url = url.delete_suffix(trailing_punctuation)
 
-      redact_url_path(clean_url) + trailing_punctuation
+      visible_url =
+        if unredacted_url_path?(clean_url, unredacted_domains)
+          clean_url
+        else
+          redact_url_path(clean_url)
+        end
+
+      visible_url + trailing_punctuation
     end
   end
 
@@ -117,9 +124,21 @@ module NoticesHelper
       .url_rows(url_instances, reveal_full: reveal_full)
   end
 
-  def with_redacted_urls(text)
+  def search_result_highlight_text(highlight_elem)
+    return highlight_elem if can?(:view_full_version, Notice)
+
+    with_redacted_urls(
+      highlight_elem,
+      unredacted_domains: client_search_highlight_unredacted_domains
+    )
+  end
+
+  def with_redacted_urls(text, unredacted_domains: [])
     sanitized_text = ActionView::Base.full_sanitizer.sanitize(text)
-    redacted_text = redact_url_paths(sanitized_text)
+    redacted_text = redact_url_paths(
+      sanitized_text,
+      unredacted_domains: unredacted_domains
+    )
     term_exact_search = (params['term'] && params['term'][0] == '"' && params['term'][-1] == '"')
 
     if params[:term].instance_of?(String)
@@ -169,6 +188,18 @@ module NoticesHelper
   end
 
   private
+
+  def client_search_highlight_unredacted_domains
+    return [] unless client_area?
+
+    current_user&.active_enterprise_account&.verified_domain_names || []
+  end
+
+  def unredacted_url_path?(url, unredacted_domains)
+    domains = Array(unredacted_domains)
+
+    domains.any? && EnterpriseDomain.matches_url?(url, domains)
+  end
 
   def redact_url_path(url)
     uri = Addressable::URI.parse(url)
