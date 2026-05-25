@@ -1,5 +1,10 @@
 class EnterpriseAccount < ApplicationRecord
   REPORT_FREQUENCIES = %w[none daily weekly].freeze
+  REPORT_FREQUENCY_OPTIONS = [
+    ['Off', 'none'],
+    ['Daily', 'daily'],
+    ['Weekly', 'weekly']
+  ].freeze
 
   has_many :users
   has_many :enterprise_domains, dependent: :destroy

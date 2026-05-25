@@ -4,15 +4,25 @@
   <p><%= link_to 'Back to notices', client_my_notices_path %></p>
 
   <h2>Reports</h2>
-  <%= form_with model: @enterprise_account, url: client_settings_path, method: :patch, local: true do |form| %>
+  <% report_delivery_off = @enterprise_account.report_frequency == 'none' %>
+  <%= form_with(
+        model: @enterprise_account,
+        url: client_settings_path,
+        method: :patch,
+        local: true
+      ) do |form| %>
     <p>
-      <%= form.label :report_frequency, 'Cadence' %>
-      <%= form.select :report_frequency, EnterpriseAccount::REPORT_FREQUENCIES.map { |frequency| [frequency.titleize, frequency] } %>
+      <%= form.label :report_frequency, 'Status' %>
+      <%= form.select :report_frequency, EnterpriseAccount::REPORT_FREQUENCY_OPTIONS %>
     </p>
 
-    <p>
+    <p id="enterprise-report-recipient" <%= 'hidden' if report_delivery_off %>>
       <%= form.label :report_recipient_email, 'Delivery email' %>
-      <%= form.email_field :report_recipient_email, placeholder: current_user.email %>
+      <%= form.email_field(
+            :report_recipient_email,
+            placeholder: current_user.email,
+            disabled: report_delivery_off
+          ) %>
     </p>
 
     <p><%= form.submit 'Save report settings' %></p>
