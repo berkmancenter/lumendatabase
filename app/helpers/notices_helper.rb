@@ -116,12 +116,11 @@ module NoticesHelper
   end
 
   def enterprise_url_rows(work, type, notice)
-    url_instances = work.send("#{type}_urls")
-    reveal_full = type.to_s == 'infringing'
+    url_instances = work.send("#{type}_urls_public")
 
     EnterpriseNoticeAccess
       .new(current_user, notice)
-      .url_rows(url_instances, reveal_full: reveal_full)
+      .url_rows(url_instances)
   end
 
   def search_result_highlight_text(highlight_elem)

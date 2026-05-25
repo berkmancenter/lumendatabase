@@ -9,7 +9,7 @@ describe EnterpriseNoticeAccess do
   end
 
   describe '#allowed?' do
-    it 'allows an enterprise user when a visible unrestricted notice has a matching infringing URL' do
+    it 'allows an enterprise user when an unrestricted notice has a matching infringing URL' do
       notice = build_notice_with_urls(
         infringing_urls: [
           'https://business.example/path',
@@ -48,8 +48,8 @@ describe EnterpriseNoticeAccess do
     end
   end
 
-  describe '#serialized_urls' do
-    it 'reveals only matching infringing URLs and keeps other URLs aggregated' do
+  describe '#url_rows' do
+    it 'reveals matching URLs and keeps other URLs aggregated' do
       notice = build_notice_with_urls(
         infringing_urls: [
           'https://business.example/path',
@@ -59,20 +59,36 @@ describe EnterpriseNoticeAccess do
       )
       access = described_class.new(user, notice)
 
-      expect(access.serialized_urls(notice.works.first.infringing_urls, reveal_full: true)).to eq [
-        { url: 'https://business.example/path' },
-        { fqdn: 'other.example', count: 2 }
+      expect(access.url_rows(notice.works.first.infringing_urls)).to eq [
+        {
+          text: 'https://business.example/path',
+          url: 'https://business.example/path',
+          full: true,
+          only_fqdn: false
+        },
+        {
+          fqdn: 'other.example',
+          count: 2,
+          full: false,
+          only_fqdn: true,
+          text: 'other.example - 2 URLs'
+        }
       ]
     end
 
-    it 'does not reveal copyrighted URLs even when the domain matches' do
+    it 'reveals matching copyrighted URLs' do
       notice = build_notice_with_urls(
         copyrighted_urls: ['https://business.example/original']
       )
       access = described_class.new(user, notice)
 
-      expect(access.serialized_urls(notice.works.first.copyrighted_urls, reveal_full: false)).to eq [
-        { fqdn: 'business.example', count: 1 }
+      expect(access.url_rows(notice.works.first.copyrighted_urls)).to eq [
+        {
+          text: 'https://business.example/original',
+          url: 'https://business.example/original',
+          full: true,
+          only_fqdn: false
+        }
       ]
     end
 
@@ -93,12 +109,17 @@ describe EnterpriseNoticeAccess do
       )
       access = described_class.new(user, notice)
 
-      expect(access.serialized_urls(notice.works.first.infringing_urls, reveal_full: true)).to eq [
-        { url: 'https://business.example/[REDACTED]' }
+      expect(access.url_rows(notice.works.first.infringing_urls)).to eq [
+        {
+          text: 'https://business.example/[REDACTED]',
+          url: 'https://business.example/[REDACTED]',
+          full: true,
+          only_fqdn: false
+        }
       ]
     end
 
-    it 'does not reveal special-domain URLs that are limited to researchers' do
+    it 'lists filtered special-domain URL values when they match verified domains' do
       notice = build_notice_with_urls(
         infringing_urls: ['https://business.example/researchers-only']
       )
@@ -108,8 +129,30 @@ describe EnterpriseNoticeAccess do
       )
       access = described_class.new(user, notice)
 
-      expect(access.serialized_urls(notice.works.first.infringing_urls, reveal_full: true)).to eq [
-        { fqdn: 'business.example', count: 1 }
+      expect(access.url_rows(notice.works.first.infringing_urls_public)).to eq [
+        {
+          text: 'business.example',
+          url: 'business.example',
+          full: true,
+          only_fqdn: false
+        }
+      ]
+    end
+  end
+
+  describe '#serialized_urls' do
+    it 'serializes URL rows for API responses' do
+      notice = build_notice_with_urls(
+        infringing_urls: [
+          'https://business.example/path',
+          'https://other.example/path'
+        ]
+      )
+      access = described_class.new(user, notice)
+
+      expect(access.serialized_urls(notice.works.first.infringing_urls)).to eq [
+        { url: 'https://business.example/path' },
+        { fqdn: 'other.example', count: 1 }
       ]
     end
   end

@@ -19,7 +19,6 @@ class EnterpriseNoticeAccess
     enterprise_account.present? &&
       enterprise_account.active? &&
       enterprise_domains.any? &&
-      notice_visible? &&
       !restricted_notice? &&
       matching_infringing_urls.any?
   end
@@ -28,18 +27,18 @@ class EnterpriseNoticeAccess
     return [] unless notice
 
     notice.works.flat_map(&:infringing_urls).select do |url|
-      reveal_url?(url.url)
+      EnterpriseDomain.matches_url?(url.url, enterprise_domains)
     end
   end
 
-  def url_rows(url_instances, reveal_full:)
+  def url_rows(url_instances)
     grouped_rows = {}
     rows = []
 
     url_instances.each do |url_instance|
       url = url_instance.url.to_s
 
-      if reveal_full && reveal_url?(url)
+      if EnterpriseDomain.matches_url?(url, enterprise_domains)
         rows << {
           text: url,
           url: url,
@@ -64,14 +63,14 @@ class EnterpriseNoticeAccess
       end
     end
 
-    rows.map do |row|
+    rows.sort_by { |row| [row[:full] ? 0 : 1, -(row[:count] || 1)] }.map do |row|
       row[:text] ||= "#{row[:fqdn]} - #{row[:count]} #{'URL'.pluralize(row[:count])}"
       row
     end
   end
 
-  def serialized_urls(url_instances, reveal_full:)
-    url_rows(url_instances, reveal_full: reveal_full).map do |row|
+  def serialized_urls(url_instances)
+    url_rows(url_instances).map do |row|
       if row[:full]
         { url: row[:url] }
       else
@@ -97,28 +96,8 @@ class EnterpriseNoticeAccess
     @enterprise_domains ||= enterprise_account&.verified_domain_names || []
   end
 
-  def notice_visible?
-    notice.present? &&
-      !notice.hidden? &&
-      !notice.spam? &&
-      notice.published? &&
-      !notice.rescinded?
-  end
-
   def restricted_notice?
     notice.restricted_to_researchers? ||
       ContentFilter.notice_has_action?(notice, :full_notice_version_only_lumen_team)
-  end
-
-  def reveal_url?(url)
-    EnterpriseDomain.matches_url?(url, enterprise_domains) &&
-      !researchers_only_url?(url)
-  end
-
-  def researchers_only_url?(url)
-    SpecialDomain
-      .where('? ~~* domain_name', url)
-      .where("why_special ? 'full_urls_only_for_researchers'")
-      .any?
   end
 end

@@ -64,8 +64,8 @@ class NoticeSerializer < BaseSerializer
       base_works = object.works.map do |work|
         {
           description: work.description,
-          infringing_urls: access.serialized_urls(work.infringing_urls, reveal_full: true),
-          copyrighted_urls: access.serialized_urls(work.copyrighted_urls, reveal_full: false)
+          infringing_urls: access.serialized_urls(work.infringing_urls_public),
+          copyrighted_urls: access.serialized_urls(work.copyrighted_urls_public)
         }
       end.as_json
     else

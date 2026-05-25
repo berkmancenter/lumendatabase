@@ -33,7 +33,7 @@ describe NoticeSerializer do
     expect(score).to eq 2
   end
 
-  it 'reveals only matching infringing URLs for enterprise users' do
+  it 'reveals matching URLs for enterprise users' do
     enterprise_account = create(:enterprise_account)
     create(:enterprise_domain, enterprise_account: enterprise_account, domain: 'business.example', verified: true)
     Current.user = create(:user, :enterprise, enterprise_account: enterprise_account)
@@ -60,7 +60,7 @@ describe NoticeSerializer do
       { 'fqdn' => 'other.example', 'count' => 1 }
     ]
     expect(work_json['copyrighted_urls']).to eq [
-      { 'fqdn' => 'business.example', 'count' => 1 }
+      { 'url' => 'https://business.example/original' }
     ]
   ensure
     Current.user = nil

@@ -1,29 +1,19 @@
 <% if binding.local_variable_get("show_#{type}") %>
+  <% enterprise_rows = local_assigns[:enterprise_rows] %>
+  <% url_rows = enterprise_rows || work.send("#{type}_urls_public") %>
+
   <div class="row">
     <span class="label <%= type %>-title"><%= binding.local_variable_get("#{type}_title") %></span>
     <ol class="list <%= type %>-urls">
-      <% if local_assigns[:enterprise_rows] %>
-        <% if enterprise_rows.each do |url_row| %>
-          <li class="<%= type %>_url">
-            <%= url_row[:text] %>
-            <% if url_row[:only_fqdn] %>
-              <i class="tooltipster gg-lumen gg-info" title="<%= Translation.t('notice_show_works_urls_full_only_researchers_tooltip') %>"></i>
-            <% end %>
-          </li>
-        <% end.empty? %>
-          <%= format(Translation.t('notice_show_works_no_urls'), type: type) %>
-        <% end %>
-      <% else %>
-        <% if work.send("#{type}_urls_public").each do |url_instance| %>
-          <li class="<%= type %>_url">
-            <%= url_instance.url %>
-            <% if url_instance.only_fqdn %>
-              <i class="tooltipster gg-lumen gg-info" title="<%= Translation.t('notice_show_works_urls_full_only_researchers_tooltip') %>"></i>
-            <% end %>
-          </li>
-        <% end.empty? %>
-          <%= format(Translation.t('notice_show_works_no_urls'), type: type) %>
-        <% end %>
+      <% if url_rows.each do |url_row| %>
+        <li class="<%= type %>_url">
+          <%= enterprise_rows ? url_row[:text] : url_row.url %>
+          <% if enterprise_rows ? url_row[:only_fqdn] : url_row.only_fqdn %>
+            <i class="tooltipster gg-lumen gg-info" title="<%= Translation.t('notice_show_works_urls_full_only_researchers_tooltip') %>"></i>
+          <% end %>
+        </li>
+      <% end.empty? %>
+        <%= format(Translation.t('notice_show_works_no_urls'), type: type) %>
       <% end %>
     </ol>
   </div>

@@ -182,6 +182,34 @@ describe NoticesHelper do
       .to include('https://business.example/[REDACTED]')
   end
 
+  it 'reveals matching enterprise rows for copyrighted URLs' do
+    enterprise_account = create(:enterprise_account)
+    create(
+      :enterprise_domain,
+      enterprise_account: enterprise_account,
+      domain: 'business.example',
+      verified: true
+    )
+    user = create(:user, :enterprise, enterprise_account: enterprise_account)
+    work = Work.new(
+      copyrighted_urls: [
+        CopyrightedUrl.new(url: 'https://business.example/original')
+      ]
+    )
+    notice = build(:dmca, works: [work])
+
+    allow(helper).to receive(:current_user).and_return(user)
+
+    expect(helper.enterprise_url_rows(work, 'copyrighted', notice)).to eq [
+      {
+        text: 'https://business.example/original',
+        url: 'https://business.example/original',
+        full: true,
+        only_fqdn: false
+      }
+    ]
+  end
+
   it 'does not redact URL paths when the full notice can be seen' do
     notice = build(:dmca)
     text = 'Body URL: http://some-tld.com/private/page?token=123.'

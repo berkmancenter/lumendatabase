@@ -32,6 +32,37 @@ describe TrademarkSerializer do
     )
   end
 
+  it 'reveals matching URLs for enterprise users' do
+    enterprise_account = create(:enterprise_account)
+    create(
+      :enterprise_domain,
+      enterprise_account: enterprise_account,
+      domain: 'business.example',
+      verified: true
+    )
+    Current.user = create(:user, :enterprise, enterprise_account: enterprise_account)
+    trademark = build(
+      :trademark,
+      works: [
+        Work.new(
+          infringing_urls: [
+            InfringingUrl.new(url: 'https://business.example/path'),
+            InfringingUrl.new(url: 'https://other.example/path')
+          ]
+        )
+      ]
+    )
+
+    mark = described_class.new(trademark).as_json[:marks].first
+
+    expect(mark['infringing_urls']).to eq [
+      { 'url' => 'https://business.example/path' },
+      { 'fqdn' => 'other.example', 'count' => 1 }
+    ]
+  ensure
+    Current.user = nil
+  end
+
   it 'includes regulations' do
     trademark = build(:trademark, regulation_list: 'Article 17, DSA')
     serialized_trademark = described_class.new(trademark).as_json

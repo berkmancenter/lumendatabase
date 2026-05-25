@@ -21,7 +21,7 @@ class TrademarkSerializer < NoticeSerializer
       object.works.map do |work|
         {
           description: work.description,
-          infringing_urls: access.serialized_urls(work.infringing_urls, reveal_full: true)
+          infringing_urls: access.serialized_urls(work.infringing_urls_public)
         }
       end.as_json
     else

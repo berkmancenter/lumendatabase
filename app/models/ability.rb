@@ -98,9 +98,7 @@ class Ability
 
     # enterprise role
     if user.role?(Role.enterprise)
-      can :view_enterprise_version, Notice do |notice|
-        EnterpriseNoticeAccess.allowed?(user, notice)
-      end
+      can_view_enterprise_version?(user)
     end
   end
 
@@ -147,22 +145,33 @@ class Ability
 
     if can_view_full_version
       can :view_full_version, Notice do |notice|
-        only_lumen_team = ContentFilter.notice_has_action?(notice, :full_notice_version_only_lumen_team)
-        only_researchers =
-          notice_restricted_to_researchers?(notice) ||
-          content_filter_restricted_to_researchers?(notice)
-
-        full_notice_only_researchers?(notice, user) &&
-          (
-            !only_lumen_team ||
-            (only_lumen_team && (user.role?(Role.admin) || user.role?(Role.super_admin)))
-          ) &&
-          (
-            !only_researchers ||
-            (only_researchers && user.role?(Role.researcher))
-          )
+        full_notice_accessible?(notice, user)
       end
     end
+  end
+
+  def can_view_enterprise_version?(user)
+    can :view_enterprise_version, Notice do |notice|
+      full_notice_accessible?(notice, user) &&
+        EnterpriseNoticeAccess.allowed?(user, notice)
+    end
+  end
+
+  def full_notice_accessible?(notice, user)
+    only_lumen_team = ContentFilter.notice_has_action?(notice, :full_notice_version_only_lumen_team)
+    only_researchers =
+      notice_restricted_to_researchers?(notice) ||
+      content_filter_restricted_to_researchers?(notice)
+
+    full_notice_only_researchers?(notice, user) &&
+      (
+        !only_lumen_team ||
+        (only_lumen_team && (user.role?(Role.admin) || user.role?(Role.super_admin)))
+      ) &&
+      (
+        !only_researchers ||
+        (only_researchers && user.role?(Role.researcher))
+      )
   end
 
   def notice_restricted_to_researchers?(notice)
