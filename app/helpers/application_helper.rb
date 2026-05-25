@@ -50,6 +50,24 @@ module ApplicationHelper
     controller_path.to_s.start_with?('client/')
   end
 
+  def application_header_classes
+    ['app', ('search-header' if client_settings?)].compact.join(' ')
+  end
+
+  def client_navigation?
+    client_area? || enterprise_notice_view?
+  end
+
+  def client_settings?
+    controller_path == 'client/settings'
+  end
+
+  def enterprise_notice_view?
+    controller_path == 'notices' &&
+      action_name == 'show' &&
+      current_user&.active_enterprise_account.present?
+  end
+
   def footer_links
     ids = Comfy::Cms::Fragment.where(identifier: 'link_in_footer', boolean: true)
                               .pluck(:record_id)

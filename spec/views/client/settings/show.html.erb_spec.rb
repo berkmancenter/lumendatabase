@@ -18,6 +18,7 @@ describe 'client/settings/show.html.erb' do
 
     render
 
+    expect(rendered).to have_css('div.inner-padding')
     expect(rendered).to have_css(
       'label[for="enterprise_account_report_frequency"]',
       text: 'Status'
