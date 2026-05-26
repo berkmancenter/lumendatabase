@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe Client::SettingsController do
+  render_views
+
   let(:enterprise_account) { create(:enterprise_account) }
   let(:user) { create(:user, :enterprise, enterprise_account: enterprise_account) }
 
@@ -10,14 +12,16 @@ describe Client::SettingsController do
   end
 
   describe '#show' do
-    it 'lists verified domains for the current client' do
+    it 'lists domains for the current client' do
       verified_domain = create(:enterprise_domain, enterprise_account: enterprise_account, domain: 'example.com')
-      create(:enterprise_domain, enterprise_account: enterprise_account, domain: 'pending.example', verified: false)
+      pending_domain = create(:enterprise_domain, enterprise_account: enterprise_account, domain: 'pending.example', verified: false)
 
       get :show
 
       expect(response).to be_successful
-      expect(assigns(:verified_domains)).to eq([verified_domain])
+      expect(assigns(:enterprise_domains)).to eq([verified_domain, pending_domain])
+      expect(response.body).to include(pending_domain.verification_filename)
+      expect(response.body).to include(pending_domain.verification_file_content)
     end
   end
 

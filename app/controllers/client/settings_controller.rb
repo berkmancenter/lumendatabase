@@ -1,7 +1,7 @@
 class Client::SettingsController < Client::BaseController
   def show
     @enterprise_account = enterprise_account
-    @verified_domains = @enterprise_account.verified_domains.order(:domain)
+    @enterprise_domains = @enterprise_account.enterprise_domains.order(:domain)
   end
 
   def update

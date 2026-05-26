@@ -1,6 +1,7 @@
 class EnterpriseDomain < ApplicationRecord
   belongs_to :enterprise_account
 
+  before_validation :ensure_verification_token, on: :create
   before_validation :normalize_domain
 
   validates :domain,
@@ -10,8 +11,30 @@ class EnterpriseDomain < ApplicationRecord
               with: /\A[a-z0-9][a-z0-9.-]*\.[a-z0-9-]{2,}\z/,
               message: 'must be a domain name'
             }
+  validates :verification_token, presence: true, uniqueness: true
 
   scope :verified, -> { where(verified: true) }
+
+  def verification_filename
+    "lumen-domain-verification-#{verification_token}.txt"
+  end
+
+  def verification_file_content
+    "lumen-domain-verification=#{verification_token}"
+  end
+
+  def verify!
+    return true if verified?
+
+    file_present = verification_file_present?
+
+    update!(
+      verified: file_present,
+      verified_at: file_present ? Time.current : nil
+    )
+
+    verified?
+  end
 
   def self.normalize(value)
     raw_value = value.to_s.strip.downcase
@@ -57,6 +80,14 @@ class EnterpriseDomain < ApplicationRecord
   end
 
   private
+
+  def verification_file_present?
+    EnterpriseDomainVerification.new(self).verified?
+  end
+
+  def ensure_verification_token
+    self.verification_token ||= SecureRandom.hex(16)
+  end
 
   def normalize_domain
     self.domain = self.class.normalize(domain)

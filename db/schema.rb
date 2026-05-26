@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_05_20_120000) do
+ActiveRecord::Schema[7.2].define(version: 2026_05_26_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -266,9 +266,11 @@ ActiveRecord::Schema[7.2].define(version: 2026_05_20_120000) do
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "verification_token", null: false
     t.index ["domain"], name: "index_enterprise_domains_on_domain"
     t.index ["enterprise_account_id", "domain"], name: "index_enterprise_domains_on_account_and_domain", unique: true
     t.index ["enterprise_account_id"], name: "index_enterprise_domains_on_enterprise_account_id"
+    t.index ["verification_token"], name: "index_enterprise_domains_on_verification_token", unique: true
   end
 
   create_table "entities", id: :serial, force: :cascade do |t|

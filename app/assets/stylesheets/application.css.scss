@@ -65,3 +65,33 @@
     outline: none;
   }
 }
+
+.enterprise-domain-row {
+  margin-bottom: 1em;
+}
+
+.enterprise-domain-row-header {
+  align-items: center;
+  display: flex;
+  gap: 0.75em;
+}
+
+.enterprise-domain-row-actions {
+  display: inline-flex;
+  gap: 0.4em;
+
+  form {
+    margin: 0;
+  }
+}
+
+.enterprise-domain-badge {
+  margin-left: 0.4em;
+  vertical-align: middle;
+}
+
+button.small-button,
+input[type="submit"].small-button {
+  font-size: $base-font-size-small-1;
+  padding: 0.25em 0.75em;
+}

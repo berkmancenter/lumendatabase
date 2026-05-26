@@ -1,8 +1,6 @@
-<% title 'Client Settings', @enterprise_account.name %>
+<% title 'Client settings', @enterprise_account.name %>
 
 <div class="inner-padding">
-  <p><%= link_to 'Back to notices', client_my_notices_path %></p>
-
   <h2>Reports</h2>
   <% report_delivery_off = @enterprise_account.report_frequency == 'none' %>
   <%= form_with(
@@ -28,10 +26,60 @@
     <p><%= form.submit 'Save report settings' %></p>
   <% end %>
 
-  <h2>Verified Domains</h2>
+  <h2>Domains</h2>
+  <%= form_with(
+        model: EnterpriseDomain.new,
+        url: client_enterprise_domains_path,
+        local: true
+      ) do |form| %>
+    <p>
+      <%= form.label :domain, 'Add domain' %>
+      <%= form.text_field :domain, placeholder: 'example.com' %>
+    </p>
+
+    <p><%= form.submit 'Add domain' %></p>
+  <% end %>
+
+  <h2>Domains list</h2>
   <ol>
-    <% @verified_domains.each do |enterprise_domain| %>
-      <li><%= enterprise_domain.domain %></li>
+    <% @enterprise_domains.each do |enterprise_domain| %>
+      <li class="enterprise-domain-row">
+        <div class="enterprise-domain-row-header">
+          <span>
+            <strong><%= enterprise_domain.domain %></strong>
+            <% if enterprise_domain.verified? %>
+              <span class="lumen-badge enterprise-domain-badge">Verified</span>
+            <% end %>
+          </span>
+
+          <span class="enterprise-domain-row-actions">
+            <% unless enterprise_domain.verified? %>
+              <%= button_to(
+                    'Verify now',
+                    verify_client_enterprise_domain_path(enterprise_domain),
+                    method: :post,
+                    class: 'small-button'
+                  ) %>
+            <% end %>
+            <%= button_to(
+                  'Remove',
+                  client_enterprise_domain_path(enterprise_domain),
+                  method: :delete,
+                  class: 'small-button',
+                  data: { confirm: 'Remove this domain?' }
+                ) %>
+          </span>
+        </div>
+
+        <% unless enterprise_domain.verified? %>
+          <p>
+            Create
+            <code>/<%= enterprise_domain.verification_filename %></code>
+            on this domain with this exact content:
+          </p>
+          <pre><%= enterprise_domain.verification_file_content %></pre>
+        <% end %>
+      </li>
     <% end %>
   </ol>
 </div>

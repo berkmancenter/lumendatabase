@@ -10,6 +10,11 @@ Rails.application.routes.draw do
   namespace :client do
     root to: 'dashboard#index'
     resource :settings, only: %i[show update]
+    resources :enterprise_domains, only: %i[create destroy] do
+      member do
+        post :verify
+      end
+    end
 
     namespace :notices do
       resources :search, only: %i[index] do

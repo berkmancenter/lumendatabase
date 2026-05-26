@@ -7,7 +7,7 @@ describe 'client/settings/show.html.erb' do
     allow(view).to receive(:current_user).and_return(current_user)
     allow(view).to receive(:client_my_notices_path)
       .and_return(client_notices_search_index_path(sort_by: 'created_at desc'))
-    assign(:verified_domains, [])
+    assign(:enterprise_domains, [])
   end
 
   it 'labels report frequency as Status with Off, Daily, and Weekly options' do
