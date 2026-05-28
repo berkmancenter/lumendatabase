@@ -70,7 +70,7 @@ describe EnterpriseNoticeAccess do
           fqdn: 'other.example',
           count: 2,
           full: false,
-          only_fqdn: true,
+          only_fqdn: false,
           text: 'other.example - 2 URLs'
         }
       ]

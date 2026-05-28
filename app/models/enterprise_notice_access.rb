@@ -54,7 +54,7 @@ class EnterpriseNoticeAccess
             fqdn: fqdn,
             count: 0,
             full: false,
-            only_fqdn: true
+            only_fqdn: false
           }
           rows << grouped_rows[key]
         end
