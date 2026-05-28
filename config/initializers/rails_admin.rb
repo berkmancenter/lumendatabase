@@ -88,8 +88,8 @@ RailsAdmin.config do |config|
         field :source
         field :review_required
         field :published
-        field :full_notice_version_only_researchers do
-          label 'Researchers only'
+        field :full_notice_version_view_permission do
+          label 'Full notice view permission'
         end
         field :time_to_publish
         field :body
@@ -124,8 +124,8 @@ RailsAdmin.config do |config|
         field :source
         field :subject
         field :review_required
-        field :full_notice_version_only_researchers do
-          label 'Researchers only'
+        field :full_notice_version_view_permission do
+          label 'Full notice view permission'
         end
         field :language
         field :rescinded
@@ -134,6 +134,12 @@ RailsAdmin.config do |config|
         field :restricted_to_researchers do
           formatted_value do
             bindings[:object].restricted_to_researchers? ? boolean_true_icon : boolean_false_icon
+          end
+        end
+        field :restricted_to_lumen_team do
+          label 'Restricted to admins'
+          formatted_value do
+            bindings[:object].restricted_to_lumen_team? ? boolean_true_icon : boolean_false_icon
           end
         end
         field :webform
@@ -226,10 +232,16 @@ RailsAdmin.config do |config|
           end
         end
 
-        configure :full_notice_version_only_researchers do
-          label 'Researchers only'
-          help 'When checked, visitors cannot request access to the full notice version.'
+        field :full_notice_version_view_permission, :enum do
+          label 'Full notice view permission'
+          enum do
+            Notice::FULL_NOTICE_VERSION_VIEW_PERMISSIONS.map { |value, label| [label, value] }
+          end
+          help 'Controls who can view the full notice version.'
         end
+
+        configure(:full_notice_version_only_researchers) { hide }
+        configure(:full_notice_version_only_lumen_team) { hide }
 
         configure :works do
           hide

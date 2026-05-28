@@ -74,6 +74,24 @@ describe Ability do
 
       expect(subject.can? :view_full_version, researchers_only_notice).to be false
     end
+
+    it "can't see full notice urls for an admins-only notice" do
+      admins_only_notice = build(:dmca, full_notice_version_only_lumen_team: true)
+
+      expect(subject.can? :view_full_version, admins_only_notice).to be false
+    end
+
+    it "can't see full notice urls in the API for an admins-only notice" do
+      admins_only_notice = build(:dmca, full_notice_version_only_lumen_team: true)
+
+      expect(subject.can? :view_full_version_api, admins_only_notice).to be false
+    end
+
+    it "can't request an access token for an admins-only notice" do
+      admins_only_notice = build(:dmca, full_notice_version_only_lumen_team: true)
+
+      expect(subject.can? :request_access_token, admins_only_notice).to be false
+    end
   end
 
   context "a notice viewer with the can_generate_permanent_notice_token_urls setting on" do
@@ -135,6 +153,24 @@ describe Ability do
 
       expect(subject.can? :view_full_version, researchers_only_notice).to be true
     end
+
+    it "can't see full notice urls for an admins-only notice" do
+      admins_only_notice = build(:dmca, full_notice_version_only_lumen_team: true)
+
+      expect(subject.can? :view_full_version, admins_only_notice).to be false
+    end
+
+    it "can't see full notice urls in the API for an admins-only notice" do
+      admins_only_notice = build(:dmca, full_notice_version_only_lumen_team: true)
+
+      expect(subject.can? :view_full_version_api, admins_only_notice).to be false
+    end
+
+    it "can't request an access token for an admins-only notice" do
+      admins_only_notice = build(:dmca, full_notice_version_only_lumen_team: true)
+
+      expect(subject.can? :request_access_token, admins_only_notice).to be false
+    end
   end
 
   context "an anonymous user" do
@@ -144,6 +180,12 @@ describe Ability do
       researchers_only_notice = build(:dmca, full_notice_version_only_researchers: true)
 
       expect(subject.can? :request_access_token, researchers_only_notice).to be false
+    end
+
+    it "can't request an access token for an admins-only notice" do
+      admins_only_notice = build(:dmca, full_notice_version_only_lumen_team: true)
+
+      expect(subject.can? :request_access_token, admins_only_notice).to be false
     end
   end
 
@@ -202,6 +244,12 @@ describe Ability do
     subject { Ability.new(build(:user, :researcher, can_generate_permanent_notice_token_urls: true)) }
 
     it_behaves_like 'a user that can generate new notice permanent token urls'
+
+    it "can't generate a permanent token url for an admins-only notice" do
+      admins_only_notice = build(:dmca, full_notice_version_only_lumen_team: true)
+
+      expect(subject.can? :generate_permanent_notice_token_urls, admins_only_notice).to be false
+    end
   end
 
   context "an admin" do
@@ -234,6 +282,12 @@ describe Ability do
       %i[create read update].each do |action|
         expect(subject.can? action, MediaMention.new).to be true
       end
+    end
+
+    it "can see full notice urls for an admins-only notice" do
+      admins_only_notice = build(:dmca, full_notice_version_only_lumen_team: true)
+
+      expect(subject.can? :view_full_version, admins_only_notice).to be true
     end
   end
 

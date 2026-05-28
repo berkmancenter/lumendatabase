@@ -109,7 +109,7 @@ feature 'Viewing notices' do
       visit notice_url(Notice.last)
 
       check_limited_works_urls
-      expect(page).to have_content("Thanks for your interest, but URLs from submitter #{notice.submitter.name} are viewable only by users with a Lumen researcher credential.")
+      expect(page).to have_content("Thanks for your interest, but URLs from submitter #{notice.submitter.name} are viewable only by selected accredited researchers.")
     end
 
     scenario 'as a researcher included in the allowed users list viewing a notice with full access restricted to researchers only' do

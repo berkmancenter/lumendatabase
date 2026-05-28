@@ -40,6 +40,15 @@ describe EnterpriseNoticeAccess do
       expect(described_class.new(user, notice)).not_to be_allowed
     end
 
+    it 'does not allow access to notice-level admins-only notices' do
+      notice = build_notice_with_urls(
+        infringing_urls: ['https://business.example/path'],
+        full_notice_version_only_lumen_team: true
+      )
+
+      expect(described_class.new(user, notice)).not_to be_allowed
+    end
+
     it 'does not allow access through unverified domains' do
       enterprise_account.enterprise_domains.update_all(verified: false)
       notice = build_notice_with_urls(infringing_urls: ['https://business.example/path'])

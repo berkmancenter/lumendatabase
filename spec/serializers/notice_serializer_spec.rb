@@ -65,4 +65,33 @@ describe NoticeSerializer do
   ensure
     Current.user = nil
   end
+
+  it 'does not reveal full URLs to researchers for Lumen-team-only notices' do
+    Current.user = create(:user, :researcher)
+    notice = build(
+      :dmca,
+      full_notice_version_only_lumen_team: true,
+      works: [
+        Work.new(
+          infringing_urls: [
+            InfringingUrl.new(url: 'https://restricted.example/path')
+          ],
+          copyrighted_urls: [
+            CopyrightedUrl.new(url: 'https://restricted.example/original')
+          ]
+        )
+      ]
+    )
+
+    work_json = described_class.new(notice).as_json[:works].first
+
+    expect(work_json['infringing_urls']).to eq [
+      { 'fqdn' => 'restricted.example', 'count' => 1 }
+    ]
+    expect(work_json['copyrighted_urls']).to eq [
+      { 'fqdn' => 'restricted.example', 'count' => 1 }
+    ]
+  ensure
+    Current.user = nil
+  end
 end

@@ -68,6 +68,11 @@ class Notice < ApplicationRecord
 
   UNDER_REVIEW_VALUE = 'Under review'.freeze
   RANGE_SEPARATOR = '..'.freeze
+  FULL_NOTICE_VERSION_VIEW_PERMISSIONS = {
+    public: 'Public',
+    researchers: 'Researchers only',
+    admins: 'Admins only'
+  }.freeze
 
   # Base entity notice roles allow us to define additional roles on subclasses
   # without having to keep track of what they are on notice. As long as
@@ -475,6 +480,26 @@ class Notice < ApplicationRecord
     full_notice_version_only_researchers? ||
       submitter&.full_notice_only_researchers ||
       ContentFilter.notice_has_action?(self, :full_notice_version_only_researchers)
+  end
+
+  def restricted_to_lumen_team?
+    full_notice_version_only_lumen_team? ||
+      ContentFilter.notice_has_action?(self, :full_notice_version_only_lumen_team)
+  end
+
+  def full_notice_version_view_permission
+    if full_notice_version_only_lumen_team?
+      :admins
+    elsif full_notice_version_only_researchers?
+      :researchers
+    else
+      :public
+    end
+  end
+
+  def full_notice_version_view_permission=(permission)
+    self.full_notice_version_only_researchers = permission.to_s == 'researchers'
+    self.full_notice_version_only_lumen_team = permission.to_s == 'admins'
   end
 
   def token_urls_count

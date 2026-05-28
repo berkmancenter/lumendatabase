@@ -31,12 +31,14 @@ module ApplicationHelper
   end
 
   def can_see_full_notice_version?(notice)
+    # Cancancan abilities
+    return true if can?(:view_full_version, notice)
+
     # Safelisted notices
     safelisted_notices = (ENV['SAFELISTED_NOTICES_FULL'] || []).split(',')
     return true if safelisted_notices.include?(notice.id.to_s)
 
-    # Cancancan abilities
-    return true if can?(:view_full_version, notice)
+    return false if notice&.restricted_to_lumen_team?
 
     # Token validation
     TokenUrl.valid?(params[:access_token], notice)

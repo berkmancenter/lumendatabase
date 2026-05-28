@@ -5,13 +5,13 @@ class Ability
     # anonymous user
     can :request_access_token, Notice do |notice|
       !notice_restricted_to_researchers?(notice) &&
-        !ContentFilter.notice_has_action?(notice, :full_notice_version_only_lumen_team) &&
+        !notice_restricted_to_lumen_team?(notice) &&
         !content_filter_restricted_to_researchers?(notice)
     end
 
     can :create_access_token, Notice do |notice|
       !notice_restricted_to_researchers?(notice) &&
-        !ContentFilter.notice_has_action?(notice, :full_notice_version_only_lumen_team) &&
+        !notice_restricted_to_lumen_team?(notice) &&
         !content_filter_restricted_to_researchers?(notice)
     end
 
@@ -20,7 +20,8 @@ class Ability
     # general
     if user.can_generate_permanent_notice_token_urls
       can :generate_permanent_notice_token_urls, Notice do |notice|
-        full_notice_only_researchers?(notice, user)
+        full_notice_only_researchers?(notice, user) &&
+          lumen_team_notice_accessible?(notice, user)
       end
     end
 
@@ -125,7 +126,7 @@ class Ability
     return if user.limit_notice_api_response
 
     can :view_full_version_api, Notice do |notice|
-      full_notice_only_researchers?(notice, user)
+      full_notice_api_accessible?(notice, user)
     end
   end
 
@@ -158,7 +159,7 @@ class Ability
   end
 
   def full_notice_accessible?(notice, user)
-    only_lumen_team = ContentFilter.notice_has_action?(notice, :full_notice_version_only_lumen_team)
+    only_lumen_team = notice_restricted_to_lumen_team?(notice)
     only_researchers =
       notice_restricted_to_researchers?(notice) ||
       content_filter_restricted_to_researchers?(notice)
@@ -174,9 +175,35 @@ class Ability
       )
   end
 
+  def full_notice_api_accessible?(notice, user)
+    only_researchers =
+      notice_restricted_to_researchers?(notice) ||
+      content_filter_restricted_to_researchers?(notice)
+
+    full_notice_only_researchers?(notice, user) &&
+      lumen_team_notice_accessible?(notice, user) &&
+      (
+        !only_researchers ||
+        user.role?(Role.researcher) ||
+        user.role?(Role.admin) ||
+        user.role?(Role.super_admin)
+      )
+  end
+
+  def lumen_team_notice_accessible?(notice, user)
+    !notice_restricted_to_lumen_team?(notice) ||
+      user.role?(Role.admin) ||
+      user.role?(Role.super_admin)
+  end
+
   def notice_restricted_to_researchers?(notice)
     notice&.full_notice_version_only_researchers? ||
       notice&.submitter&.full_notice_only_researchers
+  end
+
+  def notice_restricted_to_lumen_team?(notice)
+    notice&.full_notice_version_only_lumen_team? ||
+      ContentFilter.notice_has_action?(notice, :full_notice_version_only_lumen_team)
   end
 
   def content_filter_restricted_to_researchers?(notice)

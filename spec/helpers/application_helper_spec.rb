@@ -31,6 +31,29 @@ describe ApplicationHelper do
       expect(result).to eq(true)
     end
 
+    it 'returns false for a Lumen-team-only notice when the token is valid' do
+      notice.full_notice_version_only_lumen_team = true
+      allow_any_instance_of(ApplicationHelper).to receive(:params).and_return({access_token: token_url.token})
+      allow_any_instance_of(ApplicationHelper).to receive(:can?).and_return(false)
+
+      result = can_see_full_notice_version?(notice)
+
+      expect(result).to eq(false)
+    end
+
+    it 'returns true for a Lumen-team-only safelisted notice' do
+      notice.id = 1234
+      notice.full_notice_version_only_lumen_team = true
+      allow(ENV).to receive(:[]).and_call_original
+      allow(ENV).to receive(:[]).with('SAFELISTED_NOTICES_FULL').and_return('1234')
+      allow_any_instance_of(ApplicationHelper).to receive(:params).and_return({})
+      allow_any_instance_of(ApplicationHelper).to receive(:can?).and_return(false)
+
+      result = can_see_full_notice_version?(notice)
+
+      expect(result).to eq(true)
+    end
+
     it 'returns true when the user is allowed to see the full notice version and the token is not valid' do
       allow_any_instance_of(ApplicationHelper).to receive(:params).and_return({access_token: 'WHATEVER'})
       allow_any_instance_of(ApplicationHelper).to receive(:can?).and_return(true)

@@ -42,6 +42,64 @@ feature 'content filters' do
     end
   end
 
+  context 'notice-level admins-only flag' do
+    scenario 'flagged notice doesn\'t show a link to request a token' do
+      notice = create(
+        :dmca,
+        :with_infringing_urls,
+        full_notice_version_only_lumen_team: true,
+        role_names: %w[sender principal submitter]
+      )
+
+      visit notice_url(notice)
+
+      expect(page).not_to have_content('to request access and see full URLs')
+    end
+
+    scenario 'researcher cannot see flagged notice full URLs' do
+      work = Work.new(infringing_urls: [InfringingUrl.new(url: 'https://example.com/admins-only')])
+      notice = create(:dmca, full_notice_version_only_lumen_team: true, role_names: %w[sender principal submitter])
+      notice.works = [work]
+      notice.save
+
+      sign_in(create(:user, :researcher, full_notice_views_limit: nil))
+      visit notice_url(notice)
+
+      expect(page).not_to have_content('https://example.com/admins-only')
+      expect(page).to have_content('example.com - 1 URL')
+    end
+
+    scenario 'valid token cannot reveal flagged notice full URLs' do
+      work = Work.new(infringing_urls: [InfringingUrl.new(url: 'https://example.com/token-bypass')])
+      notice = create(:dmca, full_notice_version_only_lumen_team: true, role_names: %w[sender principal submitter])
+      notice.works = [work]
+      notice.save
+      token_url = create(
+        :token_url,
+        notice: notice,
+        expiration_date: Time.now + LumenSetting.get_i('truncation_token_urls_active_period').seconds
+      )
+
+      visit notice_url(notice, access_token: token_url.token)
+
+      expect(page).not_to have_content('https://example.com/token-bypass')
+      expect(page).to have_content('example.com - 1 URL')
+    end
+
+    scenario 'safelisted notice ID reveals flagged notice full URLs' do
+      work = Work.new(infringing_urls: [InfringingUrl.new(url: 'https://example.com/safelisted')])
+      notice = create(:dmca, full_notice_version_only_lumen_team: true, role_names: %w[sender principal submitter])
+      notice.works = [work]
+      notice.save
+      allow(ENV).to receive(:[]).and_call_original
+      allow(ENV).to receive(:[]).with('SAFELISTED_NOTICES_FULL').and_return(notice.id.to_s)
+
+      visit notice_url(notice)
+
+      expect(page).to have_content('https://example.com/safelisted')
+    end
+  end
+
   [
     ['full_notice_version_only_lumen_team', :admin],
     ['full_notice_version_only_researchers', :researcher],

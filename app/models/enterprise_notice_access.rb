@@ -98,6 +98,6 @@ class EnterpriseNoticeAccess
 
   def restricted_notice?
     notice.restricted_to_researchers? ||
-      ContentFilter.notice_has_action?(notice, :full_notice_version_only_lumen_team)
+      notice.restricted_to_lumen_team?
   end
 end
