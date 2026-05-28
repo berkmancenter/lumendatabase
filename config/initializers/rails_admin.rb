@@ -228,7 +228,7 @@ RailsAdmin.config do |config|
 
         configure :full_notice_version_only_researchers do
           label 'Researchers only'
-          help 'When checked, the full notice version is viewable only by users with a Lumen researcher credential.'
+          help 'When checked, visitors cannot request access to the full notice version.'
         end
 
         configure :works do

@@ -13,7 +13,20 @@ feature 'content filters' do
       visit notice_url(notice)
 
       expect(page).not_to have_content('to request access and see full URLs')
-      expect(page).to have_content('viewable only by users with a Lumen researcher credential')
+      expect(page).to have_content('The full version of this notice is viewable only by users with a Lumen researcher credential.')
+    end
+
+    scenario 'flagged notice without a submitter still renders the notice-level researchers-only message' do
+      notice = create(
+        :dmca,
+        :with_infringing_urls,
+        full_notice_version_only_researchers: true,
+        role_names: %w[sender principal]
+      )
+
+      visit notice_url(notice)
+
+      expect(page).to have_content('The full version of this notice is viewable only by users with a Lumen researcher credential.')
     end
 
     scenario 'researcher can see flagged notice content' do
