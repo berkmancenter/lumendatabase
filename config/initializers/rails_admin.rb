@@ -195,34 +195,124 @@ RailsAdmin.config do |config|
           nested_form false
         end
 
-        configure :action_taken, :enum do
+        configure(:type) do
+          hide
+        end
+
+        field :title
+
+        field :reset_type, :enum do
+          label 'Type'
+          required true
+        end
+
+        field :notes
+        field :subject
+        field :body
+        field :body_original
+
+        field :full_notice_version_view_permission, :enum do
+          label 'Full notice view permission'
+          enum do
+            Notice::FULL_NOTICE_VERSION_VIEW_PERMISSIONS.map { |value, label| [label, value] }
+          end
+          help 'Controls who can view the full notice version.'
+        end
+
+        field :published
+        field :hidden
+
+        field :rescinded do
+          visible do
+            ability = Ability.new(bindings[:view]._current_user)
+            ability.can? :rescind, Notice
+          end
+        end
+
+        field :spam
+
+        field :review_required do
+          visible do
+            ability = Ability.new(bindings[:view]._current_user)
+            ability.can? :publish, Notice
+          end
+        end
+
+        field :entity_notice_roles
+        field :date_received
+        field :date_sent
+        field :works_json
+        field :tag_list
+        field :jurisdiction_list
+        field :regulation_list
+        field :customizations
+        field :local_jurisdiction_laws
+        field :file_uploads
+        field :source
+        field :counternotice_for_id
+        field :counternotice_for_sid
+        field :mark_registration_number
+        field :case_id_number
+        field :language
+
+        field :action_taken, :enum do
           enum do
             %w[Yes No Partial Unspecified]
           end
           default_value 'Unspecified'
         end
 
-        configure(:type) do
-          hide
-        end
+        field :views_overall
+        field :views_by_notice_viewer
+        field :webform
+        field :relevant_questions
+        field :request_type
+        field :original_notice_id
+        field :submission_id
+        field :url_count
+        field :reviewer
 
-        configure :reset_type, :enum do
-          label 'Type'
-          required true
-        end
-
-        exclude_fields :topic_assignments,
-                       :topic_relevant_questions,
-                       :infringing_urls,
-                       :copyrighted_urls,
-                       :token_urls,
-                       :entities
-
-        configure :review_required do
-          visible do
-            ability = Ability.new(bindings[:view]._current_user)
-            ability.can? :publish, Notice
-          end
+        [
+          :title,
+          :reset_type,
+          :notes,
+          :subject,
+          :body,
+          :body_original,
+          :full_notice_version_view_permission,
+          :published,
+          :hidden,
+          :rescinded,
+          :spam,
+          :review_required,
+          :entity_notice_roles,
+          :date_received,
+          :date_sent,
+          :works_json,
+          :tag_list,
+          :jurisdiction_list,
+          :regulation_list,
+          :customizations,
+          :local_jurisdiction_laws,
+          :file_uploads,
+          :source,
+          :counternotice_for_id,
+          :counternotice_for_sid,
+          :mark_registration_number,
+          :case_id_number,
+          :language,
+          :action_taken,
+          :views_overall,
+          :views_by_notice_viewer,
+          :webform,
+          :relevant_questions,
+          :request_type,
+          :original_notice_id,
+          :submission_id,
+          :url_count,
+          :reviewer
+        ].each_with_index do |field_name, index|
+          configure(field_name) { self.order = index }
         end
 
         configure :rescinded do
@@ -232,12 +322,11 @@ RailsAdmin.config do |config|
           end
         end
 
-        field :full_notice_version_view_permission, :enum do
-          label 'Full notice view permission'
-          enum do
-            Notice::FULL_NOTICE_VERSION_VIEW_PERMISSIONS.map { |value, label| [label, value] }
+        configure :review_required do
+          visible do
+            ability = Ability.new(bindings[:view]._current_user)
+            ability.can? :publish, Notice
           end
-          help 'Controls who can view the full notice version.'
         end
 
         configure(:full_notice_version_only_researchers) { hide }
