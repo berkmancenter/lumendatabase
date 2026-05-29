@@ -49,13 +49,48 @@ class NoticeSerializer < BaseSerializer
     base_works
   end
 
+  def self.full_urls(notice, url_instances, content_filters: nil, permissions: nil)
+    content_filters ||= ContentFilter.url_filters_matching_notice(notice)
+    permissions ||= ContentFilter.user_permissions(Current.user)
+
+    url_instances.filter_map do |url_instance|
+      case ContentFilter.url_action(
+        notice,
+        url_instance,
+        Current.user,
+        content_filters: content_filters,
+        permissions: permissions
+      )
+      when :hidden
+        nil
+      when :restricted
+        { fqdn: Work.fqdn_from_url(url_instance.url).presence || url_instance.url, count: 1 }
+      else
+        { url: url_instance.url }
+      end
+    end
+  end
+
   def self.works(object)
     if defined?(Current.user) && Current.user && Ability.new(Current.user).can?(:view_full_version_api, object)
+      content_filters = ContentFilter.url_filters_matching_notice(object)
+      permissions = ContentFilter.user_permissions(Current.user)
+
       base_works = object.works.map do |work|
         {
           description: work.description,
-          infringing_urls: work.infringing_urls.map { |iurl| { url: iurl.url } },
-          copyrighted_urls: work.copyrighted_urls.map { |curl| { url: curl.url } }
+          infringing_urls: full_urls(
+            object,
+            work.infringing_urls,
+            content_filters: content_filters,
+            permissions: permissions
+          ),
+          copyrighted_urls: full_urls(
+            object,
+            work.copyrighted_urls,
+            content_filters: content_filters,
+            permissions: permissions
+          )
         }
       end.as_json
     elsif defined?(Current.user) && Current.user && Ability.new(Current.user).can?(:view_enterprise_version, object)

@@ -574,6 +574,8 @@ RailsAdmin.config do |config|
     configure :actions, :enum do
       multiple true
     end
+
+    configure :granularity, :enum
   end
 
   config.model 'SpecialDomain' do

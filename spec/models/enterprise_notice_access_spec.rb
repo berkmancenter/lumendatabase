@@ -67,22 +67,14 @@ describe EnterpriseNoticeAccess do
         ]
       )
       access = described_class.new(user, notice)
+      rows = access.url_rows(notice.works.first.infringing_urls)
 
-      expect(access.url_rows(notice.works.first.infringing_urls)).to eq [
-        {
-          text: 'https://business.example/path',
-          url: 'https://business.example/path',
-          full: true,
-          only_fqdn: false
-        },
-        {
-          fqdn: 'other.example',
-          count: 2,
-          full: false,
-          only_fqdn: false,
-          text: 'other.example - 2 URLs'
-        }
-      ]
+      expect(rows.map(&:text)).to eq ['https://business.example/path', 'other.example - 2 URLs']
+      expect(rows.map(&:url)).to eq ['https://business.example/path', nil]
+      expect(rows.map(&:full)).to eq [true, false]
+      expect(rows.map(&:only_fqdn)).to eq [false, false]
+      expect(rows.map(&:fqdn)).to eq [nil, 'other.example']
+      expect(rows.map(&:count)).to eq [nil, 2]
     end
 
     it 'reveals matching copyrighted URLs' do
@@ -90,15 +82,12 @@ describe EnterpriseNoticeAccess do
         copyrighted_urls: ['https://business.example/original']
       )
       access = described_class.new(user, notice)
+      rows = access.url_rows(notice.works.first.copyrighted_urls)
 
-      expect(access.url_rows(notice.works.first.copyrighted_urls)).to eq [
-        {
-          text: 'https://business.example/original',
-          url: 'https://business.example/original',
-          full: true,
-          only_fqdn: false
-        }
-      ]
+      expect(rows.map(&:text)).to eq ['https://business.example/original']
+      expect(rows.map(&:url)).to eq ['https://business.example/original']
+      expect(rows.map(&:full)).to eq [true]
+      expect(rows.map(&:only_fqdn)).to eq [false]
     end
 
     it 'reveals the redacted URL value rather than url_original' do
@@ -117,15 +106,12 @@ describe EnterpriseNoticeAccess do
         ]
       )
       access = described_class.new(user, notice)
+      rows = access.url_rows(notice.works.first.infringing_urls)
 
-      expect(access.url_rows(notice.works.first.infringing_urls)).to eq [
-        {
-          text: 'https://business.example/[REDACTED]',
-          url: 'https://business.example/[REDACTED]',
-          full: true,
-          only_fqdn: false
-        }
-      ]
+      expect(rows.map(&:text)).to eq ['https://business.example/[REDACTED]']
+      expect(rows.map(&:url)).to eq ['https://business.example/[REDACTED]']
+      expect(rows.map(&:full)).to eq [true]
+      expect(rows.map(&:only_fqdn)).to eq [false]
     end
 
     it 'lists filtered special-domain URL values when they match verified domains' do
@@ -137,15 +123,12 @@ describe EnterpriseNoticeAccess do
         why_special: ['full_urls_only_for_researchers']
       )
       access = described_class.new(user, notice)
+      rows = access.url_rows(notice.works.first.infringing_urls_public)
 
-      expect(access.url_rows(notice.works.first.infringing_urls_public)).to eq [
-        {
-          text: 'business.example',
-          url: 'business.example',
-          full: true,
-          only_fqdn: false
-        }
-      ]
+      expect(rows.map(&:text)).to eq ['business.example']
+      expect(rows.map(&:url)).to eq ['business.example']
+      expect(rows.map(&:full)).to eq [true]
+      expect(rows.map(&:only_fqdn)).to eq [false]
     end
   end
 

@@ -67,7 +67,7 @@ describe NoticeSerializer do
   end
 
   it 'does not reveal full URLs to researchers for Lumen-team-only notices' do
-    Current.user = create(:user, :researcher)
+    Current.user = create(:user, :researcher, limit_notice_api_response: false)
     notice = build(
       :dmca,
       full_notice_version_only_lumen_team: true,
@@ -90,6 +90,65 @@ describe NoticeSerializer do
     ]
     expect(work_json['copyrighted_urls']).to eq [
       { 'fqdn' => 'restricted.example', 'count' => 1 }
+    ]
+  ensure
+    Current.user = nil
+  end
+
+  it 'redacts only matching researcher-only URL-granularity content filter URLs in full API responses' do
+    ContentFilter.delete_all
+    Current.user = nil
+    ContentFilter.create!(
+      name: 'Sensitive URL',
+      url_text: 'sensitive-name',
+      granularity: 'urls',
+      actions: ['full_notice_version_only_researchers']
+    )
+    notice = create(:dmca, role_names: %w[sender principal submitter])
+    notice.works = [
+      Work.new(
+        infringing_urls: [
+          InfringingUrl.new(url: 'https://example.com/sensitive-name/profile'),
+          InfringingUrl.new(url: 'https://example.org/public')
+        ]
+      )
+    ]
+    notice.save!
+
+    urls_json = described_class.full_urls(notice, notice.works.first.infringing_urls).as_json
+
+    expect(urls_json).to eq [
+      { 'fqdn' => 'example.com', 'count' => 1 },
+      { 'url' => 'https://example.org/public' }
+    ]
+  ensure
+    Current.user = nil
+  end
+
+  it 'hides matching Lumen-team-only URL-granularity content filter URLs in full API responses' do
+    ContentFilter.delete_all
+    Current.user = create(:user, :researcher, limit_notice_api_response: false)
+    ContentFilter.create!(
+      name: 'Sensitive URL',
+      url_text: 'sensitive-name',
+      granularity: 'urls',
+      actions: ['full_notice_version_only_lumen_team']
+    )
+    notice = create(:dmca, role_names: %w[sender principal submitter])
+    notice.works = [
+      Work.new(
+        infringing_urls: [
+          InfringingUrl.new(url: 'https://example.com/sensitive-name/profile'),
+          InfringingUrl.new(url: 'https://example.org/public')
+        ]
+      )
+    ]
+    notice.save!
+
+    urls_json = described_class.full_urls(notice, notice.works.first.infringing_urls).as_json
+
+    expect(urls_json).to eq [
+      { 'url' => 'https://example.org/public' }
     ]
   ensure
     Current.user = nil

@@ -27,56 +27,26 @@ class EnterpriseNoticeAccess
     return [] unless notice
 
     notice.works.flat_map(&:infringing_urls).select do |url|
-      EnterpriseDomain.matches_url?(url.url, enterprise_domains)
+      full_url_visible?(url.url)
     end
   end
 
   def url_rows(url_instances)
-    grouped_rows = {}
-    rows = []
-
-    url_instances.each do |url_instance|
-      url = url_instance.url.to_s
-
-      if EnterpriseDomain.matches_url?(url, enterprise_domains)
-        rows << {
-          text: url,
-          url: url,
-          full: true,
-          only_fqdn: false
-        }
-      else
-        fqdn = Work.fqdn_from_url(url).presence || url
-        key = fqdn.downcase
-
-        unless grouped_rows.key?(key)
-          grouped_rows[key] = {
-            fqdn: fqdn,
-            count: 0,
-            full: false,
-            only_fqdn: false
-          }
-          rows << grouped_rows[key]
-        end
-
-        grouped_rows[key][:count] += 1
-      end
-    end
-
-    rows.sort_by { |row| [row[:full] ? 0 : 1, -(row[:count] || 1)] }.map do |row|
-      row[:text] ||= "#{row[:fqdn]} - #{row[:count]} #{'URL'.pluralize(row[:count])}"
-      row
-    end
+    WorkUrlRows.enterprise_rows(url_instances, enterprise_access: self)
   end
 
   def serialized_urls(url_instances)
     url_rows(url_instances).map do |row|
-      if row[:full]
-        { url: row[:url] }
+      if row.full
+        { url: row.url }
       else
-        { fqdn: row[:fqdn], count: row[:count] }
+        { fqdn: row.fqdn, count: row.count }
       end
     end
+  end
+
+  def full_url_visible?(url)
+    EnterpriseDomain.matches_url?(url.to_s, enterprise_domains)
   end
 
   private
@@ -89,7 +59,7 @@ class EnterpriseNoticeAccess
   end
 
   def enterprise_user?
-    user&.role?(Role.enterprise)
+    user&.role?(:enterprise)
   end
 
   def enterprise_domains

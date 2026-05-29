@@ -140,6 +140,29 @@ module NoticesHelper
       .url_rows(url_instances)
   end
 
+  def content_filter_url_rows(work, type, notice)
+    WorkUrlRows.new(
+      work: work,
+      type: type,
+      notice: notice,
+      user: current_user
+    ).content_filter_rows
+  end
+
+  def works_url_rows(work, type, url_rows: nil)
+    return WorkUrlRows.normalize_collection(url_rows) if url_rows
+
+    WorkUrlRows.new(work: work, type: type).rows
+  end
+
+  def notice_version_url_rows(work, type, notice)
+    if can_see_full_notice_version?(notice)
+      content_filter_url_rows(work, type, notice)
+    elsif can_see_enterprise_notice_version?(notice)
+      enterprise_url_rows(work, type, notice)
+    end
+  end
+
   def search_result_highlight_text(highlight_elem)
     return highlight_elem if can?(:view_full_version, Notice)
 

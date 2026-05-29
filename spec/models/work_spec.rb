@@ -63,6 +63,27 @@ RSpec.describe Work, type: :model do
     end
   end
 
+  context '#infringing_urls_public' do
+    it 'loads special-domain patterns once for all URLs' do
+      work = Work.new(
+        infringing_urls: [
+          InfringingUrl.new(url: 'https://example.com/private'),
+          InfringingUrl.new(url: 'https://example.org/public')
+        ]
+      )
+
+      expect(SpecialDomain)
+        .to receive(:full_urls_only_for_researchers_patterns)
+        .once
+        .and_return(['%example.com%'])
+
+      expect(work.infringing_urls_public.map(&:url)).to eq [
+        'example.com',
+        'https://example.org/public'
+      ]
+    end
+  end
+
   private
 
   def notice_with_works_attributes(attributes)

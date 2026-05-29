@@ -11,7 +11,7 @@ describe 'notices/_works_urls_type_list.html.erb' do
              show_infringing: true,
              infringing_title: 'Infringing URLs',
              work: Work.new,
-             enterprise_rows: [
+             url_rows: [
                {
                  text: 'other.example - 2 URLs',
                  only_fqdn: false

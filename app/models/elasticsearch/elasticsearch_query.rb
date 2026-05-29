@@ -78,7 +78,7 @@ class ElasticsearchQuery
   # forever, which makes it impossible to redact things from search results.
   # Adding a datestamp guarantees that the cache_key eventually expires.
   def cache_key
-    is_super_admin = Current.user&.role?(Role.super_admin)
+    is_super_admin = Current.user&.role?(:super_admin)
     enterprise_cache_key = Current.user&.enterprise_cache_key
     digest_values = params
                     .except('g-recaptcha-response-data', 'g-recaptcha-response')

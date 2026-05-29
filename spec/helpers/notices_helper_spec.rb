@@ -200,14 +200,12 @@ describe NoticesHelper do
 
     allow(helper).to receive(:current_user).and_return(user)
 
-    expect(helper.enterprise_url_rows(work, 'copyrighted', notice)).to eq [
-      {
-        text: 'https://business.example/original',
-        url: 'https://business.example/original',
-        full: true,
-        only_fqdn: false
-      }
-    ]
+    rows = helper.enterprise_url_rows(work, 'copyrighted', notice)
+
+    expect(rows.map(&:text)).to eq ['https://business.example/original']
+    expect(rows.map(&:url)).to eq ['https://business.example/original']
+    expect(rows.map(&:full)).to eq [true]
+    expect(rows.map(&:only_fqdn)).to eq [false]
   end
 
   it 'does not redact URL paths when the full notice can be seen' do

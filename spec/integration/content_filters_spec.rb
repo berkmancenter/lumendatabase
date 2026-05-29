@@ -145,6 +145,58 @@ feature 'content filters' do
         expect(page).not_to have_content('to request access and see full URLs')
       end
 
+      scenario 'URL-granularity filter still allows requesting full notice access' do
+        create_content_filter_for_action(
+          action_data[0],
+          query: nil,
+          url_text: 'sensitive-name',
+          granularity: 'urls'
+        )
+
+        work = Work.new(infringing_urls: [InfringingUrl.new(url: 'https://example.com/Sensitive-Name/profile')])
+        notice = create(:dmca, role_names: %w[sender principal submitter])
+        notice.works = [work]
+        notice.save
+
+        visit notice_url(notice)
+
+        expect(page).to have_content('to request access and see full URLs')
+      end
+
+      scenario 'URL-granularity filter handles only matching URLs in the full notice' do
+        create_content_filter_for_action(
+          action_data[0],
+          query: nil,
+          url_text: 'sensitive-name',
+          granularity: 'urls'
+        )
+
+        work = Work.new(
+          infringing_urls: [
+            InfringingUrl.new(url: 'https://example.com/Sensitive-Name/profile'),
+            InfringingUrl.new(url: 'https://example.org/public')
+          ]
+        )
+        notice = create(:dmca, role_names: %w[sender principal submitter])
+        notice.works = [work]
+        notice.save
+        token_url = create(
+          :token_url,
+          notice: notice,
+          expiration_date: Time.now + LumenSetting.get_i('truncation_token_urls_active_period').seconds
+        )
+
+        visit notice_url(notice, access_token: token_url.token)
+
+        expect(page).not_to have_content('https://example.com/Sensitive-Name/profile')
+        if action_data[0] == 'full_notice_version_only_lumen_team'
+          expect(page).not_to have_content('example.com - 1 URL')
+        else
+          expect(page).to have_content('example.com - 1 URL')
+        end
+        expect(page).to have_content('https://example.org/public')
+      end
+
       scenario 'permitted user can see URL text filtered content' do
         create_content_filter_for_action(action_data[0], query: nil, url_text: 'sensitive-name')
 
@@ -194,11 +246,12 @@ feature 'content filters' do
 
   private
 
-  def create_content_filter_for_action(filter_name, query: '"entities"."name" = \'Stop\' ', url_text: nil)
+  def create_content_filter_for_action(filter_name, query: '"entities"."name" = \'Stop\' ', url_text: nil, granularity: 'notice')
     ContentFilter.create!(
       name: 'Test',
       query: query,
       url_text: url_text,
+      granularity: granularity,
       actions: [filter_name]
     )
   end

@@ -180,13 +180,15 @@ class Work
   def filter_urls(url_instances)
     filtered_raw_urls = []
     fqdns = []
-    user_allowed = (Current.user && (Current.user.role?(Role.researcher) || Current.user.role?(Role.super_admin)))
+    user_allowed = full_urls_only_for_researchers_user_allowed?
 
     url_instances.each do |url_instance|
       just_url = url_instance.url
+      full_urls_only_for_researchers = full_urls_only_for_researchers_patterns.any? do |pattern|
+        SpecialDomain.matches_pattern?(just_url, pattern)
+      end
 
-      filtered_raw_urls << url_instance and next if SpecialDomain.where('? ~~* domain_name', just_url).where("why_special ? 'full_urls_only_for_researchers'").none? ||
-                                                    user_allowed
+      filtered_raw_urls << url_instance and next if !full_urls_only_for_researchers || user_allowed
 
       fqdn = Work.fqdn_from_url(just_url)
 
@@ -199,5 +201,16 @@ class Work
     end
 
     filtered_raw_urls.uniq
+  end
+
+  def full_urls_only_for_researchers_user_allowed?
+    return @full_urls_only_for_researchers_user_allowed if defined?(@full_urls_only_for_researchers_user_allowed)
+
+    @full_urls_only_for_researchers_user_allowed =
+      Current.user && (Current.user.role?(:researcher) || Current.user.role?(:super_admin))
+  end
+
+  def full_urls_only_for_researchers_patterns
+    @full_urls_only_for_researchers_patterns ||= SpecialDomain.full_urls_only_for_researchers_patterns
   end
 end

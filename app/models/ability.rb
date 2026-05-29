@@ -26,21 +26,21 @@ class Ability
     end
 
     # notice_viewer role
-    if user.role?(Role.notice_viewer)
+    if user.role?(:notice_viewer)
       can_view_full_version?(user)
     end
 
     # submitter role
-    can :submit, Notice if user.role?(Role.submitter)
+    can :submit, Notice if user.role?(:submitter)
 
     # redactor role
-    if user.role?(Role.redactor)
+    if user.role?(:redactor)
       grant_admin_access
       grant_redact
     end
 
     # publisher role
-    if user.role?(Role.publisher)
+    if user.role?(:publisher)
       grant_admin_access
       grant_redact
 
@@ -48,7 +48,7 @@ class Ability
     end
 
     # admin role
-    if user.role?(Role.admin)
+    if user.role?(:admin)
       grant_admin_access
       grant_redact
       grant_full_notice_api_response(user)
@@ -71,7 +71,7 @@ class Ability
     end
 
     # super_admin role
-    if user.role?(Role.super_admin)
+    if user.role?(:super_admin)
       grant_full_notice_api_response(user)
 
       can :manage, :all
@@ -79,7 +79,7 @@ class Ability
     end
 
     # researcher role
-    if user.role?(Role.researcher)
+    if user.role?(:researcher)
       grant_full_notice_api_response(user)
 
       can :read, Notice
@@ -93,12 +93,12 @@ class Ability
     end
 
     # researcher_truncated_urls role
-    if user.role?(Role.researcher_truncated_urls)
+    if user.role?(:researcher_truncated_urls)
       can :read, Notice
     end
 
     # enterprise role
-    if user.role?(Role.enterprise)
+    if user.role?(:enterprise)
       can_view_enterprise_version?(user)
     end
   end
@@ -167,11 +167,11 @@ class Ability
     full_notice_only_researchers?(notice, user) &&
       (
         !only_lumen_team ||
-        (only_lumen_team && (user.role?(Role.admin) || user.role?(Role.super_admin)))
+        (only_lumen_team && (user.role?(:admin) || user.role?(:super_admin)))
       ) &&
       (
         !only_researchers ||
-        (only_researchers && user.role?(Role.researcher))
+        (only_researchers && user.role?(:researcher))
       )
   end
 
@@ -184,16 +184,16 @@ class Ability
       lumen_team_notice_accessible?(notice, user) &&
       (
         !only_researchers ||
-        user.role?(Role.researcher) ||
-        user.role?(Role.admin) ||
-        user.role?(Role.super_admin)
+        user.role?(:researcher) ||
+        user.role?(:admin) ||
+        user.role?(:super_admin)
       )
   end
 
   def lumen_team_notice_accessible?(notice, user)
     !notice_restricted_to_lumen_team?(notice) ||
-      user.role?(Role.admin) ||
-      user.role?(Role.super_admin)
+      user.role?(:admin) ||
+      user.role?(:super_admin)
   end
 
   def notice_restricted_to_researchers?(notice)

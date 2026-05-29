@@ -36,6 +36,38 @@ describe ContentFilter do
       expect(filter.matches_notice?(notice)).to be true
     end
 
+    it 'defaults to notice granularity' do
+      filter = described_class.new(
+        name: 'URL text',
+        url_text: 'sensitive-name',
+        actions: ['full_notice_version_only_researchers']
+      )
+
+      filter.valid?
+
+      expect(filter.granularity).to eq('notice')
+    end
+
+    it 'does not apply URL-granularity filters as notice-wide actions' do
+      filter = described_class.create!(
+        name: 'URL text',
+        url_text: 'sensitive-name',
+        granularity: 'urls',
+        actions: ['full_notice_version_only_researchers']
+      )
+      work = Work.new(
+        infringing_urls: [
+          InfringingUrl.new(url: 'https://example.com/Sensitive-Name/profile')
+        ]
+      )
+      notice = create(:dmca, role_names: %w[sender principal submitter])
+      notice.works = [work]
+      notice.save!
+
+      expect(filter.matches_notice?(notice)).to be true
+      expect(described_class.notice_has_action?(notice, :full_notice_version_only_researchers)).to be false
+    end
+
     it 'requires all configured criteria to match' do
       filter = described_class.new(
         name: 'URL text and query',

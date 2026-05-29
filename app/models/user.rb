@@ -32,11 +32,13 @@ class User < ApplicationRecord
 
   # == Instance Methods =====================================================
   def role?(role)
-    roles.include?(role)
+    role_name = role.respond_to?(:name) ? role.name : role.to_s
+
+    role_names.include?(role_name)
   end
 
   def enterprise?
-    role?(Role.enterprise)
+    role?(:enterprise)
   end
 
   def active_enterprise_account
@@ -71,6 +73,10 @@ class User < ApplicationRecord
   end
 
   private
+
+  def role_names
+    @role_names ||= roles.map(&:name)
+  end
 
   def generate_authentication_token
     loop do

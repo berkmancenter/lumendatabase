@@ -10,9 +10,11 @@ class TrademarkSerializer < NoticeSerializer
   attribute :marks do |object|
     if Current.user && Ability.new(Current.user).can?(:view_full_version_api, object)
       object.works.map do |work|
+        infringing_urls = NoticeSerializer.full_urls(object, work.infringing_urls)
+
         {
           description: work.description,
-          infringing_urls: work.infringing_urls.map(&:url)
+          infringing_urls: infringing_urls.any? { |url| url[:fqdn] } ? infringing_urls : work.infringing_urls.map(&:url)
         }
       end.as_json
     elsif Current.user && Ability.new(Current.user).can?(:view_enterprise_version, object)
