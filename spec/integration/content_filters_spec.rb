@@ -173,6 +173,25 @@ feature 'content filters' do
     end
   end
 
+  context 'full_notice_version_only_lumen_team content filter' do
+    scenario 'researcher cannot see filtered full URLs or request access' do
+      create_content_filter_for_action('full_notice_version_only_lumen_team')
+
+      work = Work.new(infringing_urls: [InfringingUrl.new(url: 'https://example.com/lumen-team-filtered')])
+      notice = create(:dmca, role_names: %w[sender principal submitter])
+      notice.works = [work]
+      notice.submitter.name = 'Stop'
+      notice.save
+
+      sign_in(create(:user, :researcher, full_notice_views_limit: nil))
+      visit notice_url(notice)
+
+      expect(page).not_to have_content('https://example.com/lumen-team-filtered')
+      expect(page).to have_content('example.com - 1 URL')
+      expect(page).not_to have_content('to request access and see full URLs')
+    end
+  end
+
   private
 
   def create_content_filter_for_action(filter_name, query: '"entities"."name" = \'Stop\' ', url_text: nil)
