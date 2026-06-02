@@ -140,7 +140,7 @@ module NoticesHelper
       .url_rows(url_instances)
   end
 
-  def content_filter_url_rows(work, type, notice)
+  def full_notice_url_rows(work, type, notice)
     WorkUrlRows.new(
       work: work,
       type: type,
@@ -157,7 +157,7 @@ module NoticesHelper
 
   def notice_version_url_rows(work, type, notice)
     if can_see_full_notice_version?(notice)
-      content_filter_url_rows(work, type, notice)
+      full_notice_url_rows(work, type, notice)
     elsif can_see_enterprise_notice_version?(notice)
       enterprise_url_rows(work, type, notice)
     end

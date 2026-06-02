@@ -52,21 +52,36 @@ class NoticeSerializer < BaseSerializer
   def self.full_urls(notice, url_instances, content_filters: nil, permissions: nil)
     content_filters ||= ContentFilter.url_filters_matching_notice(notice)
     permissions ||= ContentFilter.user_permissions(Current.user)
+    grouped_urls = {}
 
     url_instances.filter_map do |url_instance|
+      matching_filters = ContentFilter.matching_url_filters(
+        notice,
+        url_instance,
+        content_filters: content_filters
+      )
+
       case ContentFilter.url_action(
         notice,
         url_instance,
         Current.user,
-        content_filters: content_filters,
+        content_filters: matching_filters,
         permissions: permissions
       )
       when :hidden
         nil
       when :restricted
-        { fqdn: Work.fqdn_from_url(url_instance.url).presence || url_instance.url, count: 1 }
+        grouped_url(url_instance.url, grouped_urls)
       else
-        { url: url_instance.url }
+        if lumen_team_filtered_for_admin?(matching_filters, permissions)
+          grouped_url(
+            url_instance.url,
+            grouped_urls,
+            redaction_filters: matching_filters
+          )
+        else
+          { url: url_instance.url }
+        end
       end
     end
   end
@@ -113,5 +128,30 @@ class NoticeSerializer < BaseSerializer
       end.as_json
     end
     cleaned_works(base_works)
+  end
+
+  def self.grouped_url(url, grouped_urls, redaction_filters: [])
+    fqdn = Work.fqdn_from_url(url).presence || url
+    fqdn = redact_fqdn_filter_text(fqdn, redaction_filters)
+    key = fqdn.downcase
+
+    grouped_urls[key] ||= { fqdn: fqdn, count: 0 }
+    grouped_urls[key][:count] += 1
+
+    grouped_urls[key] if grouped_urls[key][:count] == 1
+  end
+
+  def self.lumen_team_filtered_for_admin?(matching_filters, permissions)
+    permissions[:lumen_team] &&
+      matching_filters.any? { |content_filter| content_filter.has_action?(:full_notice_version_only_lumen_team) }
+  end
+
+  def self.redact_fqdn_filter_text(fqdn, filters)
+    filters.reduce(fqdn) do |redacted_fqdn, content_filter|
+      next redacted_fqdn unless content_filter.has_action?(:full_notice_version_only_lumen_team)
+      next redacted_fqdn if content_filter.url_text.blank?
+
+      redacted_fqdn.gsub(/#{Regexp.escape(content_filter.url_text)}/i, '[REDACTED]')
+    end
   end
 end

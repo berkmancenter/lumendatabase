@@ -153,4 +153,72 @@ describe NoticeSerializer do
   ensure
     Current.user = nil
   end
+
+  it 'returns counted domains for admin Lumen-team-only URL-granularity path matches in full API responses' do
+    ContentFilter.delete_all
+    ContentFilter.create!(
+      name: 'Sensitive Path',
+      url_text: 'sensitive-name',
+      granularity: 'urls',
+      actions: ['full_notice_version_only_lumen_team']
+    )
+    notice = create(:dmca, role_names: %w[sender principal submitter])
+    notice.works = [
+      Work.new(
+        infringing_urls: [
+          InfringingUrl.new(url: 'https://example.com/sensitive-name/profile'),
+          InfringingUrl.new(url: 'https://example.com/sensitive-name/about'),
+          InfringingUrl.new(url: 'https://example.org/public')
+        ]
+      )
+    ]
+    notice.save!
+
+    urls_json = described_class.full_urls(
+      notice,
+      notice.works.first.infringing_urls,
+      permissions: { lumen_team: true, researcher: true }
+    ).as_json
+
+    expect(urls_json).to eq [
+      { 'fqdn' => 'example.com', 'count' => 2 },
+      { 'url' => 'https://example.org/public' }
+    ]
+  ensure
+    Current.user = nil
+  end
+
+  it 'redacts counted domains for admin Lumen-team-only URL-granularity domain matches in full API responses' do
+    ContentFilter.delete_all
+    ContentFilter.create!(
+      name: 'Sensitive Domain',
+      url_text: 'sensitive',
+      granularity: 'urls',
+      actions: ['full_notice_version_only_lumen_team']
+    )
+    notice = create(:dmca, role_names: %w[sender principal submitter])
+    notice.works = [
+      Work.new(
+        infringing_urls: [
+          InfringingUrl.new(url: 'https://sensitive-domain.com/profile'),
+          InfringingUrl.new(url: 'https://sensitive-domain.com/about'),
+          InfringingUrl.new(url: 'https://example.org/public')
+        ]
+      )
+    ]
+    notice.save!
+
+    urls_json = described_class.full_urls(
+      notice,
+      notice.works.first.infringing_urls,
+      permissions: { lumen_team: true, researcher: true }
+    ).as_json
+
+    expect(urls_json).to eq [
+      { 'fqdn' => '[REDACTED]-domain.com', 'count' => 2 },
+      { 'url' => 'https://example.org/public' }
+    ]
+  ensure
+    Current.user = nil
+  end
 end

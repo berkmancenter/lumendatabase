@@ -17,34 +17,37 @@ class WorkUrlRows
     grouped_rows = {}
 
     url_instances.each do |url_instance|
+      matching_filters = ContentFilter.matching_url_filters(
+        notice,
+        url_instance,
+        content_filters: content_filters
+      )
+
       case ContentFilter.url_action(
         notice,
         url_instance,
         user,
-        content_filters: content_filters,
+        content_filters: matching_filters,
         permissions: user_permissions
       )
       when :hidden
         next
       when :restricted
-        fqdn = Work.fqdn_from_url(url_instance.url).presence || url_instance.url
-        key = fqdn.downcase
-
-        unless grouped_rows.key?(key)
-          grouped_rows[key] = {
-            fqdn: fqdn,
-            count: 0,
-            only_fqdn: true
-          }
-          rows << grouped_rows[key]
-        end
-
-        grouped_rows[key][:count] += 1
+        add_grouped_row(rows, grouped_rows, url_instance.url)
       else
-        rows << {
-          text: url_instance.url,
-          only_fqdn: url_instance.only_fqdn
-        }
+        if lumen_team_filtered_for_admin?(matching_filters)
+          add_grouped_row(
+            rows,
+            grouped_rows,
+            url_instance.url,
+            redaction_filters: matching_filters
+          )
+        else
+          rows << {
+            text: url_instance.url,
+            only_fqdn: url_instance.only_fqdn
+          }
+        end
       end
     end
 
@@ -131,5 +134,36 @@ class WorkUrlRows
 
   def user_permissions
     @user_permissions ||= ContentFilter.user_permissions(user)
+  end
+
+  def add_grouped_row(rows, grouped_rows, url, redaction_filters: [])
+    fqdn = Work.fqdn_from_url(url).presence || url
+    fqdn = redact_fqdn_filter_text(fqdn, redaction_filters)
+    key = fqdn.downcase
+
+    unless grouped_rows.key?(key)
+      grouped_rows[key] = {
+        fqdn: fqdn,
+        count: 0,
+        only_fqdn: true
+      }
+      rows << grouped_rows[key]
+    end
+
+    grouped_rows[key][:count] += 1
+  end
+
+  def lumen_team_filtered_for_admin?(matching_filters)
+    user_permissions[:lumen_team] &&
+      matching_filters.any? { |content_filter| content_filter.has_action?(:full_notice_version_only_lumen_team) }
+  end
+
+  def redact_fqdn_filter_text(fqdn, filters)
+    filters.reduce(fqdn) do |redacted_fqdn, content_filter|
+      next redacted_fqdn unless content_filter.has_action?(:full_notice_version_only_lumen_team)
+      next redacted_fqdn if content_filter.url_text.blank?
+
+      redacted_fqdn.gsub(/#{Regexp.escape(content_filter.url_text)}/i, '[REDACTED]')
+    end
   end
 end

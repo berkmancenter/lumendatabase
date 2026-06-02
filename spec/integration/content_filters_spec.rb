@@ -226,6 +226,57 @@ feature 'content filters' do
   end
 
   context 'full_notice_version_only_lumen_team content filter' do
+    scenario 'admin sees URL-granularity filtered path matches as counted domain rows' do
+      create_content_filter_for_action(
+        'full_notice_version_only_lumen_team',
+        query: nil,
+        url_text: 'sensitive-name',
+        granularity: 'urls'
+      )
+
+      work = Work.new(
+        infringing_urls: [
+          InfringingUrl.new(url: 'https://example.com/sensitive-name/profile'),
+          InfringingUrl.new(url: 'https://example.com/sensitive-name/about')
+        ]
+      )
+      notice = create(:dmca, role_names: %w[sender principal submitter])
+      notice.works = [work]
+      notice.save
+
+      sign_in(create(:user, :admin, full_notice_views_limit: nil))
+      visit notice_url(notice)
+
+      expect(page).not_to have_content('https://example.com/sensitive-name/profile')
+      expect(page).to have_content('example.com - 2 URLs')
+    end
+
+    scenario 'admin sees URL-granularity filtered domain matches as redacted counted domain rows' do
+      create_content_filter_for_action(
+        'full_notice_version_only_lumen_team',
+        query: nil,
+        url_text: 'sensitive',
+        granularity: 'urls'
+      )
+
+      work = Work.new(
+        infringing_urls: [
+          InfringingUrl.new(url: 'https://sensitive-domain.com/profile'),
+          InfringingUrl.new(url: 'https://sensitive-domain.com/about')
+        ]
+      )
+      notice = create(:dmca, role_names: %w[sender principal submitter])
+      notice.works = [work]
+      notice.save
+
+      sign_in(create(:user, :admin, full_notice_views_limit: nil))
+      visit notice_url(notice)
+
+      expect(page).not_to have_content('https://sensitive-domain.com/profile')
+      expect(page).not_to have_content('sensitive-domain.com - 2 URLs')
+      expect(page).to have_content('[REDACTED]-domain.com - 2 URLs')
+    end
+
     scenario 'researcher cannot see filtered full URLs or request access' do
       create_content_filter_for_action('full_notice_version_only_lumen_team')
 

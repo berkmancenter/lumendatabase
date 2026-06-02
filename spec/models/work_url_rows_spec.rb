@@ -57,7 +57,7 @@ describe WorkUrlRows do
       expect(rows.map(&:text)).to eq ['https://example.org/public']
     end
 
-    it 'shows Lumen-team-only matching URLs to admins' do
+    it 'shows Lumen-team-only matching URLs to admins as counted domain rows' do
       ContentFilter.create!(
         name: 'Sensitive URL',
         url_text: 'sensitive-name',
@@ -80,7 +80,61 @@ describe WorkUrlRows do
         user: create(:user, :admin)
       ).content_filter_rows
 
-      expect(rows.map(&:text)).to eq ['https://example.com/sensitive-name/profile']
+      expect(rows.map(&:text)).to eq ['example.com - 1 URL']
+    end
+
+    it 'does not redact counted domain rows for admins when filter text only matches the path' do
+      ContentFilter.create!(
+        name: 'Sensitive Path',
+        url_text: 'sensitive-name',
+        granularity: 'urls',
+        actions: ['full_notice_version_only_lumen_team']
+      )
+      notice = create(:dmca, role_names: %w[sender principal submitter])
+      work = Work.new(
+        infringing_urls: [
+          InfringingUrl.new(url: 'https://example.com/sensitive-name/profile'),
+          InfringingUrl.new(url: 'https://example.com/sensitive-name/about')
+        ]
+      )
+      notice.works = [work]
+      notice.save!
+
+      rows = described_class.new(
+        work: work,
+        type: 'infringing',
+        notice: notice,
+        user: create(:user, :admin)
+      ).content_filter_rows
+
+      expect(rows.map(&:text)).to eq ['example.com - 2 URLs']
+    end
+
+    it 'redacts Lumen-team-only filter text from counted domain rows for admins' do
+      ContentFilter.create!(
+        name: 'Sensitive Domain',
+        url_text: 'sensitive',
+        granularity: 'urls',
+        actions: ['full_notice_version_only_lumen_team']
+      )
+      notice = create(:dmca, role_names: %w[sender principal submitter])
+      work = Work.new(
+        infringing_urls: [
+          InfringingUrl.new(url: 'https://sensitive-domain.com/profile'),
+          InfringingUrl.new(url: 'https://sensitive-domain.com/about')
+        ]
+      )
+      notice.works = [work]
+      notice.save!
+
+      rows = described_class.new(
+        work: work,
+        type: 'infringing',
+        notice: notice,
+        user: create(:user, :admin)
+      ).content_filter_rows
+
+      expect(rows.map(&:text)).to eq ['[REDACTED]-domain.com - 2 URLs']
     end
 
     it 'loads matching notice filters once for all URLs' do
