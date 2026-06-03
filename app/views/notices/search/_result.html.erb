@@ -21,7 +21,7 @@
     <ol class="excerpt">
       <% result.highlight.each do |highlight_elem| %>
         <li class="excerpt">
-          <%= sanitize(search_result_highlight_text(highlight_elem), tags: ['em']) %>
+          <%= sanitize(search_result_highlight_text(highlight_elem, result), tags: ['em']) %>
         </li>
       <% end %>
     </ol>

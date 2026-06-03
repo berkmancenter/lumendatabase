@@ -163,19 +163,30 @@ module NoticesHelper
     end
   end
 
-  def search_result_highlight_text(highlight_elem)
-    return highlight_elem if can?(:view_full_version, Notice)
+  def search_result_highlight_text(highlight_elem, notice = nil)
+    if can?(:view_full_version, Notice)
+      return highlight_elem unless content_filter_highlight_redaction_needed?(highlight_elem, notice)
+
+      return with_redacted_urls(
+        highlight_elem,
+        notice: notice,
+        redact_all_url_paths: false
+      )
+    end
 
     with_redacted_urls(
       highlight_elem,
+      notice: notice,
       unredacted_domains: client_search_highlight_unredacted_domains
     )
   end
 
-  def with_redacted_urls(text, unredacted_domains: [])
+  def with_redacted_urls(text, notice: nil, unredacted_domains: [], redact_all_url_paths: true)
     sanitized_text = ActionView::Base.full_sanitizer.sanitize(text)
-    redacted_text = redact_url_paths(
+    redacted_text = redact_highlight_urls(
       sanitized_text,
+      notice: notice,
+      redact_all_url_paths: redact_all_url_paths,
       unredacted_domains: unredacted_domains
     )
     term_exact_search = (params['term'] && params['term'][0] == '"' && params['term'][-1] == '"')
@@ -238,6 +249,74 @@ module NoticesHelper
     domains = Array(unredacted_domains)
 
     domains.any? && EnterpriseDomain.matches_url?(url, domains)
+  end
+
+  def redact_highlight_urls(text, notice:, redact_all_url_paths:, unredacted_domains: [])
+    text.to_s.gsub(%r{\bhttps?://[^\s<>"']+}i) do |url|
+      trailing_punctuation = url[/[.,;:!?)]*\z/]
+      clean_url = url.delete_suffix(trailing_punctuation)
+      matching_filters = content_filter_highlight_url_filters(notice, clean_url)
+      redaction_filters = content_filter_highlight_redaction_filters(matching_filters)
+      redact_filtered_url = redaction_filters.any?
+
+      visible_url =
+        if redact_filtered_url ||
+           (redact_all_url_paths && !unredacted_url_path?(clean_url, unredacted_domains))
+          redact_url_path(clean_url)
+        else
+          clean_url
+        end
+
+      redact_content_filter_url_text(visible_url, redaction_filters) + trailing_punctuation
+    end
+  end
+
+  def content_filter_highlight_redaction_needed?(highlight_elem, notice)
+    sanitized_text = ActionView::Base.full_sanitizer.sanitize(highlight_elem)
+
+    sanitized_text.to_s.scan(%r{\bhttps?://[^\s<>"']+}i).any? do |url|
+      clean_url = url.delete_suffix(url[/[.,;:!?)]*\z/])
+
+      content_filter_highlight_redaction_filters(
+        content_filter_highlight_url_filters(notice, clean_url)
+      ).any?
+    end
+  end
+
+  def content_filter_highlight_url_filters(notice, url)
+    return [] unless notice
+
+    url_instance = Url.new(url: url, url_original: url)
+
+    content_filter_highlight_notice_filters(notice).select do |content_filter|
+      content_filter.matches_url?(url_instance)
+    end
+  end
+
+  def content_filter_highlight_notice_filters(notice)
+    @content_filter_highlight_notice_filters ||= {}
+    @content_filter_highlight_notice_filters[notice.id || notice.object_id] ||=
+      ContentFilter.url_filters_matching_notice(notice)
+  end
+
+  def content_filter_highlight_redaction_filters(filters)
+    permissions = ContentFilter.user_permissions(current_user)
+
+    filters.select do |content_filter|
+      content_filter.restricts_user?(current_user, permissions: permissions) ||
+        (
+          permissions[:lumen_team] &&
+            content_filter.has_action?(:full_notice_version_only_lumen_team)
+        )
+    end
+  end
+
+  def redact_content_filter_url_text(url, filters)
+    filters.reduce(url) do |redacted_url, content_filter|
+      next redacted_url if content_filter.url_text.blank?
+
+      redacted_url.gsub(/#{Regexp.escape(content_filter.url_text)}/i, Lumen::REDACTION_MASK)
+    end
   end
 
   def redact_url_path(url)

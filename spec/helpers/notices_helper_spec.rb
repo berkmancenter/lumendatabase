@@ -182,6 +182,68 @@ describe NoticesHelper do
       .to include('https://business.example/[REDACTED]')
   end
 
+  it 'redacts search highlight URLs matching Lumen-team-only filters for admins' do
+    ContentFilter.create!(
+      name: 'Sensitive Domain',
+      url_text: 'sensitive',
+      granularity: 'urls',
+      actions: ['full_notice_version_only_lumen_team']
+    )
+    work = Work.new(
+      infringing_urls: [
+        InfringingUrl.new(url: 'https://sensitive-domain.com/private')
+      ]
+    )
+    notice = create(:dmca, role_names: %w[sender principal submitter])
+    notice.works = [work]
+    notice.save!
+    user = create(:user, :admin)
+    highlight = 'URL https://<em>sensitive</em>-domain.com/private'
+
+    allow(helper).to receive(:can?)
+      .with(:view_full_version, Notice)
+      .and_return(true)
+    allow(helper).to receive(:current_user).and_return(user)
+    allow(helper).to receive(:params)
+      .and_return({ term: 'sensitive' }.with_indifferent_access)
+
+    result = helper.search_result_highlight_text(highlight, notice)
+
+    expect(result).to include('https://[REDACTED]-domain.com/[REDACTED]')
+    expect(result).not_to include('sensitive-domain.com/private')
+  end
+
+  it 'redacts search highlight URLs matching researcher-only filters for public users' do
+    ContentFilter.create!(
+      name: 'Sensitive Domain',
+      url_text: 'sensitive',
+      granularity: 'urls',
+      actions: ['full_notice_version_only_researchers']
+    )
+    work = Work.new(
+      infringing_urls: [
+        InfringingUrl.new(url: 'https://sensitive-domain.com/private')
+      ]
+    )
+    notice = create(:dmca, role_names: %w[sender principal submitter])
+    notice.works = [work]
+    notice.save!
+    highlight = 'URL https://<em>sensitive</em>-domain.com/private'
+
+    allow(helper).to receive(:can?)
+      .with(:view_full_version, Notice)
+      .and_return(false)
+    allow(helper).to receive(:current_user).and_return(nil)
+    allow(helper).to receive(:client_area?).and_return(false)
+    allow(helper).to receive(:params)
+      .and_return({ term: 'sensitive' }.with_indifferent_access)
+
+    result = helper.search_result_highlight_text(highlight, notice)
+
+    expect(result).to include('https://[REDACTED]-domain.com/[REDACTED]')
+    expect(result).not_to include('sensitive-domain.com/private')
+  end
+
   it 'reveals matching enterprise rows for copyrighted URLs' do
     enterprise_account = create(:enterprise_account)
     create(

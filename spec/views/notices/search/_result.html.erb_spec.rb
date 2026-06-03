@@ -39,4 +39,34 @@ describe 'notices/search/_result.html.erb' do
     expect(rendered).to include('https://pending.example/[REDACTED]')
     expect(rendered).to include('https://other.example/[REDACTED]')
   end
+
+  it 'redacts filtered URL text in highlights' do
+    ContentFilter.create!(
+      name: 'Sensitive Domain',
+      url_text: 'sensitive',
+      granularity: 'urls',
+      actions: ['full_notice_version_only_researchers']
+    )
+    work = Work.new(
+      infringing_urls: [
+        InfringingUrl.new(url: 'https://sensitive-domain.com/private')
+      ]
+    )
+    result = create(:dmca, role_names: %w[sender principal submitter])
+    result.works = [work]
+    result.save!
+
+    allow(result).to receive(:highlight).and_return([
+      'URL https://<em>sensitive</em>-domain.com/private'
+    ])
+    allow(view).to receive(:client_area?).and_return(false)
+    allow(view).to receive(:current_user).and_return(nil)
+    allow(view).to receive(:params)
+      .and_return({ term: 'sensitive' }.with_indifferent_access)
+
+    render partial: 'notices/search/result', locals: { result: result }
+
+    expect(rendered).to include('https://[REDACTED]-domain.com/[REDACTED]')
+    expect(rendered).not_to include('sensitive-domain.com/private')
+  end
 end
