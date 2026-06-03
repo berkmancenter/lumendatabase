@@ -9,7 +9,8 @@ module NoticesHelper
       # as there is nothing further to display.
       !confidential_order?(notice),
       !notice&.restricted_to_lumen_team?,
-      !notice&.restricted_to_researchers?
+      !notice&.restricted_to_researchers?,
+      !EnterpriseNoticeAccess.allowed?(current_user, notice)
     ].all?
   end
 

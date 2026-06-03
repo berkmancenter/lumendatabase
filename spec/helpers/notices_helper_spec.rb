@@ -102,6 +102,43 @@ describe NoticesHelper do
       .to raise_error(RuntimeError)
   end
 
+  describe '#access_requestable?' do
+    it 'allows request access when a limited notice has requestable URLs' do
+      notice = build(:dmca)
+
+      allow(helper).to receive(:confidential_order?).with(notice).and_return(false)
+      allow(helper).to receive(:current_user).and_return(nil)
+
+      expect(helper.access_requestable?(notice, false, true)).to be true
+    end
+
+    it 'does not allow request access for an enterprise user viewing their domain notice' do
+      enterprise_account = create(:enterprise_account)
+      create(
+        :enterprise_domain,
+        enterprise_account: enterprise_account,
+        domain: 'business.example',
+        verified: true
+      )
+      user = create(:user, :enterprise, enterprise_account: enterprise_account)
+      notice = build(
+        :dmca,
+        works: [
+          Work.new(
+            infringing_urls: [
+              InfringingUrl.new(url: 'https://business.example/private')
+            ]
+          )
+        ]
+      )
+
+      allow(helper).to receive(:confidential_order?).with(notice).and_return(false)
+      allow(helper).to receive(:current_user).and_return(user)
+
+      expect(helper.access_requestable?(notice, false, true)).to be false
+    end
+  end
+
   it 'redacts URL paths in rendered text' do
     text = 'Body URL: http://some-tld.com/private/page?token=123.'
 
