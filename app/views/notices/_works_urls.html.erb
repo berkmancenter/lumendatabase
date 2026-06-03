@@ -1,59 +1,31 @@
 <% copyrighted_title = local_assigns.fetch(:copyrighted_title, '') %>
 
-<% if can_see_full_notice_version?(@notice) || can_see_enterprise_notice_version?(@notice) %>
-  <% if show_copyrighted %>
-    <%= render 'works_urls_type_list',
-                type: 'copyrighted',
-                show_copyrighted: show_copyrighted,
-                copyrighted_title: copyrighted_title,
-                work: work,
-                url_rows: notice_version_url_rows(work, 'copyrighted', @notice) %>
-  <% end %>
+<% if show_copyrighted %>
+  <%= render 'works_urls_type_list',
+              type: 'copyrighted',
+              show_copyrighted: show_copyrighted,
+              copyrighted_title: copyrighted_title,
+              work: work,
+              url_rows: notice_version_url_rows(work, 'copyrighted', @notice) %>
+<% end %>
 
-  <% if show_infringing %>
-    <%= render 'works_urls_type_list',
-                type: 'infringing',
-                show_infringing: show_infringing,
-                infringing_title: infringing_title,
-                work: work,
-                url_rows: notice_version_url_rows(work, 'infringing', @notice) %>
-  <% end %>
+<% if show_infringing %>
+  <%= render 'works_urls_type_list',
+              type: 'infringing',
+              show_infringing: show_infringing,
+              infringing_title: infringing_title,
+              work: work,
+              url_rows: notice_version_url_rows(work, 'infringing', @notice) %>
+<% end %>
+
+<% if access_just_for_researchers?(@notice) %>
+  <div class="row">
+    <p><%= researchers_only_notice_message(@notice) %></p>
+  </div>
 <% else %>
-  <% if show_copyrighted %>
+  <% if access_requestable?(@notice, show_copyrighted, show_infringing) %>
     <div class="row">
-      <span class="label original-title"><%= copyrighted_title %></span>
-      <ol class="list original-urls">
-        <% if work.copyrighted_urls_counted_by_fqdn.each do |fqdn| %>
-          <li class="copyrighted_url"><%= fqdn[:fqdn] %> - <%= fqdn[:count] %> <%= 'URL'.pluralize(fqdn[:count]) %></li>
-        <% end.empty? %>
-          <%= Translation.t('notice_show_works_no_copyrighted') %>
-        <% end %>
-      </ol>
+      <p><%= format(Translation.t('notice_show_works_request_access'), link: request_access_notice_path(@notice)).html_safe %></p>
     </div>
-  <% end %>
-
-  <% if show_infringing %>
-    <div class="row">
-      <span class="label infringing-title"><%= infringing_title %></span>
-      <ol class="list infringing-urls">
-        <% if work.infringing_urls_counted_by_fqdn.each do |fqdn| %>
-          <li class="infringing_url"><%= fqdn[:fqdn] %> - <%= fqdn[:count] %> <%= 'URL'.pluralize(fqdn[:count]) %></li>
-        <% end.empty? %>
-          <%= Translation.t('notice_show_works_no_infringing') %>
-        <% end %>
-      </ol>
-    </div>
-  <% end %>
-
-  <% if access_just_for_researchers?(@notice) %>
-    <div class="row">
-      <p><%= researchers_only_notice_message(@notice) %></p>
-    </div>
-  <% else %>
-    <% if access_requestable?(@notice, show_copyrighted, show_infringing) %>
-      <div class="row">
-        <p><%= format(Translation.t('notice_show_works_request_access'), link: request_access_notice_path(@notice)).html_safe %></p>
-      </div>
-    <% end %>
   <% end %>
 <% end %>

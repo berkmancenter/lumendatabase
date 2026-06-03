@@ -134,19 +134,7 @@ module NoticesHelper
 
   def enterprise_url_rows(work, type, notice)
     url_instances = work.send("#{type}_urls_public")
-
-    EnterpriseNoticeAccess
-      .new(current_user, notice)
-      .url_rows(url_instances)
-  end
-
-  def full_notice_url_rows(work, type, notice)
-    WorkUrlRows.new(
-      work: work,
-      type: type,
-      notice: notice,
-      user: current_user
-    ).content_filter_rows
+    EnterpriseNoticeAccess.new(current_user, notice).url_rows(url_instances)
   end
 
   def works_url_rows(work, type, url_rows: nil)
@@ -156,10 +144,17 @@ module NoticesHelper
   end
 
   def notice_version_url_rows(work, type, notice)
-    if can_see_full_notice_version?(notice)
-      full_notice_url_rows(work, type, notice)
-    elsif can_see_enterprise_notice_version?(notice)
-      enterprise_url_rows(work, type, notice)
+    rows_obj = WorkUrlRows.new(work: work, type: type, notice: notice, user: current_user)
+
+    if can_see_full_notice_version?(notice) || can_see_enterprise_notice_version?(notice)
+      enterprise_access = can_see_enterprise_notice_version?(notice) ?
+        EnterpriseNoticeAccess.new(current_user, notice) : nil
+      rows_obj.visible_rows(
+        enterprise_access: enterprise_access,
+        bypass_restrictions: notice_safelisted?(notice)
+      )
+    else
+      rows_obj.limited_rows
     end
   end
 
@@ -239,6 +234,10 @@ module NoticesHelper
 
   private
 
+  def notice_safelisted?(notice)
+    (ENV['SAFELISTED_NOTICES_FULL'] || '').split(',').include?(notice.id.to_s)
+  end
+
   def client_search_highlight_unredacted_domains
     return [] unless client_area?
 
@@ -252,34 +251,39 @@ module NoticesHelper
   end
 
   def redact_highlight_urls(text, notice:, redact_all_url_paths:, unredacted_domains: [])
+    permissions = ContentFilter.user_permissions(current_user)
+    notice_filters = highlight_notice_redaction_filters(notice, permissions)
+    notice_forces_redaction = highlight_notice_forces_redaction?(notice, permissions)
+
     text.to_s.gsub(%r{\bhttps?://[^\s<>"']+}i) do |url|
       trailing_punctuation = url[/[.,;:!?)]*\z/]
       clean_url = url.delete_suffix(trailing_punctuation)
-      matching_filters = content_filter_highlight_url_filters(notice, clean_url)
-      redaction_filters = content_filter_highlight_redaction_filters(matching_filters)
-      redact_filtered_url = redaction_filters.any?
+      url_filters = content_filter_highlight_url_filters(notice, clean_url)
+      url_redaction_filters = url_filters.select { |f| f.restricts_user?(current_user, permissions: permissions) }
+      all_filters = notice_filters + url_redaction_filters
 
       visible_url =
-        if redact_filtered_url ||
+        if notice_forces_redaction || all_filters.any? ||
            (redact_all_url_paths && !unredacted_url_path?(clean_url, unredacted_domains))
           redact_url_path(clean_url)
         else
           clean_url
         end
 
-      redact_content_filter_url_text(visible_url, redaction_filters) + trailing_punctuation
+      redact_content_filter_url_text(visible_url, all_filters) + trailing_punctuation
     end
   end
 
   def content_filter_highlight_redaction_needed?(highlight_elem, notice)
-    sanitized_text = ActionView::Base.full_sanitizer.sanitize(highlight_elem)
+    permissions = ContentFilter.user_permissions(current_user)
+    return true if highlight_notice_forces_redaction?(notice, permissions)
+    return true if highlight_notice_redaction_filters(notice, permissions).any?
 
+    sanitized_text = ActionView::Base.full_sanitizer.sanitize(highlight_elem)
     sanitized_text.to_s.scan(%r{\bhttps?://[^\s<>"']+}i).any? do |url|
       clean_url = url.delete_suffix(url[/[.,;:!?)]*\z/])
-
-      content_filter_highlight_redaction_filters(
-        content_filter_highlight_url_filters(notice, clean_url)
-      ).any?
+      url_filters = content_filter_highlight_url_filters(notice, clean_url)
+      url_filters.any? { |f| f.restricts_user?(current_user, permissions: permissions) }
     end
   end
 
@@ -288,27 +292,32 @@ module NoticesHelper
 
     url_instance = Url.new(url: url, url_original: url)
 
-    content_filter_highlight_notice_filters(notice).select do |content_filter|
+    highlight_url_level_filters(notice).select do |content_filter|
       content_filter.matches_url?(url_instance)
     end
   end
 
-  def content_filter_highlight_notice_filters(notice)
-    @content_filter_highlight_notice_filters ||= {}
-    @content_filter_highlight_notice_filters[notice.id || notice.object_id] ||=
+  def highlight_url_level_filters(notice)
+    @highlight_url_level_filters ||= {}
+    @highlight_url_level_filters[notice.id || notice.object_id] ||=
       ContentFilter.url_filters_matching_notice(notice)
   end
 
-  def content_filter_highlight_redaction_filters(filters)
-    permissions = ContentFilter.user_permissions(current_user)
+  def highlight_notice_redaction_filters(notice, permissions)
+    return [] unless notice
 
-    filters.select do |content_filter|
-      content_filter.restricts_user?(current_user, permissions: permissions) ||
-        (
-          permissions[:lumen_team] &&
-            content_filter.has_action?(:full_notice_version_only_lumen_team)
-        )
-    end
+    @highlight_notice_redaction_filters ||= {}
+    @highlight_notice_redaction_filters[notice.id || notice.object_id] ||=
+      ContentFilter.notice_filters_matching_notice(notice).select do |f|
+        f.restricts_user?(current_user, permissions: permissions)
+      end
+  end
+
+  def highlight_notice_forces_redaction?(notice, permissions)
+    return false unless notice
+
+    (notice.restricted_to_lumen_team? && !permissions[:lumen_team]) ||
+      (notice.restricted_to_researchers? && !permissions[:researcher])
   end
 
   def redact_content_filter_url_text(url, filters)

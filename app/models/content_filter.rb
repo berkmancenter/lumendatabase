@@ -44,6 +44,13 @@ class ContentFilter < ApplicationRecord
     criteria.any? && criteria.all?
   end
 
+  def restricts_user?(user = nil, permissions: nil)
+    permissions ||= self.class.user_permissions(user)
+
+    (has_action?(:full_notice_version_only_lumen_team) && !permissions[:lumen_team]) ||
+      (has_action?(:full_notice_version_only_researchers) && !permissions[:researcher])
+  end
+
   def self.notice_has_action?(notice_instance, action_id)
     return false unless notice_instance
 
@@ -55,44 +62,6 @@ class ContentFilter < ApplicationRecord
     end
 
     false
-  end
-
-  def self.url_restricted?(notice_instance, url_instance, user = nil, content_filters: nil, permissions: nil)
-    url_action(
-      notice_instance,
-      url_instance,
-      user,
-      content_filters: content_filters,
-      permissions: permissions
-    ) != :visible
-  end
-
-  def self.url_hidden?(notice_instance, url_instance, user = nil, content_filters: nil, permissions: nil)
-    url_action(
-      notice_instance,
-      url_instance,
-      user,
-      content_filters: content_filters,
-      permissions: permissions
-    ) == :hidden
-  end
-
-  def self.url_action(notice_instance, url_instance, user = nil, content_filters: nil, permissions: nil)
-    matching_filters = matching_url_filters(
-      notice_instance,
-      url_instance,
-      content_filters: content_filters
-    )
-    permissions ||= user_permissions(user)
-
-    return :hidden if matching_filters.any? do |content_filter|
-      content_filter.hides_url_from_user?(permissions: permissions)
-    end
-    return :restricted if matching_filters.any? do |content_filter|
-      content_filter.redacts_url_from_user?(permissions: permissions)
-    end
-
-    :visible
   end
 
   def self.matching_url_filters(notice_instance, url_instance, content_filters: nil)
@@ -111,6 +80,14 @@ class ContentFilter < ApplicationRecord
     end
   end
 
+  def self.notice_filters_matching_notice(notice_instance)
+    return [] unless notice_instance
+
+    ContentFilter.where(granularity: 'notice').select do |content_filter|
+      content_filter.matches_notice?(notice_instance)
+    end
+  end
+
   def self.user_permissions(user)
     lumen_team = user&.role?(:admin) || user&.role?(:super_admin)
 
@@ -118,29 +95,6 @@ class ContentFilter < ApplicationRecord
       lumen_team: lumen_team,
       researcher: lumen_team || user&.role?(:researcher)
     }
-  end
-
-  def restricts_user?(user, permissions: nil)
-    permissions ||= self.class.user_permissions(user)
-
-    hides_url_from_user?(permissions: permissions) ||
-      redacts_url_from_user?(permissions: permissions)
-  end
-
-  def hides_url_from_user?(user = nil, permissions: nil)
-    permissions ||= self.class.user_permissions(user)
-
-    (
-      has_action?(:full_notice_version_only_lumen_team) &&
-        !permissions[:lumen_team]
-    )
-  end
-
-  def redacts_url_from_user?(user = nil, permissions: nil)
-    permissions ||= self.class.user_permissions(user)
-
-    has_action?(:full_notice_version_only_researchers) &&
-      !permissions[:researcher]
   end
 
   def matches_notice_query?(notice_instance)
@@ -200,5 +154,4 @@ class ContentFilter < ApplicationRecord
   def set_default_granularity
     self.granularity = 'notice' if granularity.blank?
   end
-
 end

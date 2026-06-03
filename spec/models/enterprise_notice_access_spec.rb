@@ -72,7 +72,7 @@ describe EnterpriseNoticeAccess do
       expect(rows.map(&:text)).to eq ['https://business.example/path', 'other.example - 2 URLs']
       expect(rows.map(&:url)).to eq ['https://business.example/path', nil]
       expect(rows.map(&:full)).to eq [true, false]
-      expect(rows.map(&:only_fqdn)).to eq [false, false]
+      expect(rows.map(&:researchers_only)).to eq [false, false]
       expect(rows.map(&:fqdn)).to eq [nil, 'other.example']
       expect(rows.map(&:count)).to eq [nil, 2]
     end
@@ -87,7 +87,7 @@ describe EnterpriseNoticeAccess do
       expect(rows.map(&:text)).to eq ['https://business.example/original']
       expect(rows.map(&:url)).to eq ['https://business.example/original']
       expect(rows.map(&:full)).to eq [true]
-      expect(rows.map(&:only_fqdn)).to eq [false]
+      expect(rows.map(&:researchers_only)).to eq [false]
     end
 
     it 'reveals the redacted URL value rather than url_original' do
@@ -111,7 +111,7 @@ describe EnterpriseNoticeAccess do
       expect(rows.map(&:text)).to eq ['https://business.example/[REDACTED]']
       expect(rows.map(&:url)).to eq ['https://business.example/[REDACTED]']
       expect(rows.map(&:full)).to eq [true]
-      expect(rows.map(&:only_fqdn)).to eq [false]
+      expect(rows.map(&:researchers_only)).to eq [false]
     end
 
     it 'lists filtered special-domain URL values when they match verified domains' do
@@ -128,7 +128,7 @@ describe EnterpriseNoticeAccess do
       expect(rows.map(&:text)).to eq ['business.example']
       expect(rows.map(&:url)).to eq ['business.example']
       expect(rows.map(&:full)).to eq [true]
-      expect(rows.map(&:only_fqdn)).to eq [false]
+      expect(rows.map(&:researchers_only)).to eq [false]
     end
   end
 

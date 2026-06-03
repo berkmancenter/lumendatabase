@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe WorkUrlRows do
-  describe '#content_filter_rows' do
+  describe '#visible_rows' do
     it 'redacts researcher-only matching URLs to domain rows and leaves other URLs full' do
       ContentFilter.create!(
         name: 'Sensitive URL',
@@ -24,13 +24,13 @@ describe WorkUrlRows do
         type: 'infringing',
         notice: notice,
         user: nil
-      ).content_filter_rows
+      ).visible_rows
 
       expect(rows.map(&:text)).to eq ['example.com - 1 URL', 'https://example.org/public']
-      expect(rows.map(&:only_fqdn)).to eq [true, nil]
+      expect(rows.map(&:researchers_only)).to eq [true, nil]
     end
 
-    it 'hides Lumen-team-only matching URLs and leaves other URLs full' do
+    it 'shows Lumen-team-only matching URLs as domain rows for non-admins' do
       ContentFilter.create!(
         name: 'Sensitive URL',
         url_text: 'sensitive-name',
@@ -52,12 +52,13 @@ describe WorkUrlRows do
         type: 'infringing',
         notice: notice,
         user: create(:user, :researcher)
-      ).content_filter_rows
+      ).visible_rows
 
-      expect(rows.map(&:text)).to eq ['https://example.org/public']
+      expect(rows.map(&:text)).to eq ['example.com - 1 URL', 'https://example.org/public']
+      expect(rows.map(&:researchers_only)).to eq [false, nil]
     end
 
-    it 'shows Lumen-team-only matching URLs to admins as counted domain rows' do
+    it 'shows admins full URLs for Lumen-team-only filtered content' do
       ContentFilter.create!(
         name: 'Sensitive URL',
         url_text: 'sensitive-name',
@@ -78,39 +79,13 @@ describe WorkUrlRows do
         type: 'infringing',
         notice: notice,
         user: create(:user, :admin)
-      ).content_filter_rows
+      ).visible_rows
 
-      expect(rows.map(&:text)).to eq ['example.com - 1 URL']
+      expect(rows.map(&:text)).to eq ['https://example.com/sensitive-name/profile']
+      expect(rows.map(&:full)).to eq [true]
     end
 
-    it 'does not redact counted domain rows for admins when filter text only matches the path' do
-      ContentFilter.create!(
-        name: 'Sensitive Path',
-        url_text: 'sensitive-name',
-        granularity: 'urls',
-        actions: ['full_notice_version_only_lumen_team']
-      )
-      notice = create(:dmca, role_names: %w[sender principal submitter])
-      work = Work.new(
-        infringing_urls: [
-          InfringingUrl.new(url: 'https://example.com/sensitive-name/profile'),
-          InfringingUrl.new(url: 'https://example.com/sensitive-name/about')
-        ]
-      )
-      notice.works = [work]
-      notice.save!
-
-      rows = described_class.new(
-        work: work,
-        type: 'infringing',
-        notice: notice,
-        user: create(:user, :admin)
-      ).content_filter_rows
-
-      expect(rows.map(&:text)).to eq ['example.com - 2 URLs']
-    end
-
-    it 'redacts Lumen-team-only filter text from counted domain rows for admins' do
+    it 'redacts filter url_text from domain rows when it appears in the domain' do
       ContentFilter.create!(
         name: 'Sensitive Domain',
         url_text: 'sensitive',
@@ -131,10 +106,134 @@ describe WorkUrlRows do
         work: work,
         type: 'infringing',
         notice: notice,
-        user: create(:user, :admin)
-      ).content_filter_rows
+        user: create(:user, :researcher)
+      ).visible_rows
 
       expect(rows.map(&:text)).to eq ['[REDACTED]-domain.com - 2 URLs']
+    end
+
+    it 'redacts filter url_text from researcher-only domain rows' do
+      ContentFilter.create!(
+        name: 'Sensitive Domain',
+        url_text: 'sensitive',
+        granularity: 'urls',
+        actions: ['full_notice_version_only_researchers']
+      )
+      notice = create(:dmca, role_names: %w[sender principal submitter])
+      work = Work.new(
+        infringing_urls: [
+          InfringingUrl.new(url: 'https://sensitive-domain.com/profile')
+        ]
+      )
+      notice.works = [work]
+      notice.save!
+
+      rows = described_class.new(
+        work: work,
+        type: 'infringing',
+        notice: notice,
+        user: nil
+      ).visible_rows
+
+      expect(rows.map(&:text)).to eq ['[REDACTED]-domain.com - 1 URL']
+    end
+
+    it 'groups all URLs by domain when notice has full_notice_version_only_lumen_team flag for non-admins' do
+      notice = create(:dmca,
+        role_names: %w[sender principal submitter],
+        full_notice_version_only_lumen_team: true
+      )
+      work = Work.new(
+        infringing_urls: [
+          InfringingUrl.new(url: 'https://example.com/path'),
+          InfringingUrl.new(url: 'https://other.com/path')
+        ]
+      )
+      notice.works = [work]
+      notice.save!
+
+      rows = described_class.new(
+        work: work,
+        type: 'infringing',
+        notice: notice,
+        user: create(:user, :researcher)
+      ).visible_rows
+
+      expect(rows.map(&:text)).to eq ['example.com - 1 URL', 'other.com - 1 URL']
+      expect(rows.map(&:researchers_only)).to eq [false, false]
+    end
+
+    it 'shows admins full URLs even when notice has full_notice_version_only_lumen_team flag' do
+      notice = create(:dmca,
+        role_names: %w[sender principal submitter],
+        full_notice_version_only_lumen_team: true
+      )
+      work = Work.new(
+        infringing_urls: [InfringingUrl.new(url: 'https://example.com/path')]
+      )
+      notice.works = [work]
+      notice.save!
+
+      rows = described_class.new(
+        work: work,
+        type: 'infringing',
+        notice: notice,
+        user: create(:user, :admin)
+      ).visible_rows
+
+      expect(rows.map(&:text)).to eq ['https://example.com/path']
+      expect(rows.map(&:full)).to eq [true]
+    end
+
+    it 'groups all URLs by domain when a notice-granularity lumen_team filter matches, redacting url_text in domain' do
+      ContentFilter.create!(
+        name: 'Sensitive Notice',
+        url_text: 'secret',
+        granularity: 'notice',
+        actions: ['full_notice_version_only_lumen_team']
+      )
+      notice = create(:dmca, role_names: %w[sender principal submitter])
+      work = Work.new(
+        infringing_urls: [
+          InfringingUrl.new(url: 'https://secret-corp.com/page'),
+          InfringingUrl.new(url: 'https://other.com/page')
+        ]
+      )
+      notice.works = [work]
+      notice.save!
+
+      rows = described_class.new(
+        work: work,
+        type: 'infringing',
+        notice: notice,
+        user: create(:user, :researcher)
+      ).visible_rows
+
+      expect(rows.map(&:text)).to eq ['[REDACTED]-corp.com - 1 URL', 'other.com - 1 URL']
+    end
+
+    it 'groups all URLs by domain when notice has full_notice_version_only_researchers flag for non-researchers' do
+      notice = create(:dmca,
+        role_names: %w[sender principal submitter],
+        full_notice_version_only_researchers: true
+      )
+      work = Work.new(
+        infringing_urls: [
+          InfringingUrl.new(url: 'https://example.com/path')
+        ]
+      )
+      notice.works = [work]
+      notice.save!
+
+      rows = described_class.new(
+        work: work,
+        type: 'infringing',
+        notice: notice,
+        user: nil
+      ).visible_rows
+
+      expect(rows.map(&:text)).to eq ['example.com - 1 URL']
+      expect(rows.map(&:researchers_only)).to eq [true]
     end
 
     it 'loads matching notice filters once for all URLs' do
@@ -165,7 +264,7 @@ describe WorkUrlRows do
         type: 'infringing',
         notice: notice,
         user: create(:user, :researcher)
-      ).content_filter_rows
+      ).visible_rows
     end
   end
 
@@ -178,18 +277,18 @@ describe WorkUrlRows do
       url_row = described_class.new(work: work, type: 'infringing').rows.first
 
       expect(url_row.text).to eq 'https://example.com/path'
-      expect(url_row.only_fqdn).to be true
+      expect(url_row.researchers_only).to be true
     end
   end
 
   describe '.normalize_collection' do
     it 'normalizes hash rows to a common view row shape' do
       row = described_class.normalize_collection(
-        [{ text: 'example.org - 2 URLs', only_fqdn: false }]
+        [{ text: 'example.org - 2 URLs', researchers_only: false }]
       ).first
 
       expect(row.text).to eq 'example.org - 2 URLs'
-      expect(row.only_fqdn).to be false
+      expect(row.researchers_only).to be false
     end
   end
 

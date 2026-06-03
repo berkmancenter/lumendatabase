@@ -95,130 +95,65 @@ describe NoticeSerializer do
     Current.user = nil
   end
 
-  it 'redacts only matching researcher-only URL-granularity content filter URLs in full API responses' do
-    ContentFilter.delete_all
-    Current.user = nil
-    ContentFilter.create!(
-      name: 'Sensitive URL',
-      url_text: 'sensitive-name',
-      granularity: 'urls',
-      actions: ['full_notice_version_only_researchers']
-    )
-    notice = create(:dmca, role_names: %w[sender principal submitter])
-    notice.works = [
-      Work.new(
-        infringing_urls: [
-          InfringingUrl.new(url: 'https://example.com/sensitive-name/profile'),
-          InfringingUrl.new(url: 'https://example.org/public')
-        ]
-      )
-    ]
-    notice.save!
+  describe '.serialize_url_rows' do
+    it 'maps full URL rows to {url:} and grouped rows to {fqdn:, count:}' do
+      rows = [
+        WorkUrlRows::Row.new(text: 'https://example.com/path', url: 'https://example.com/path', full: true, researchers_only: false),
+        WorkUrlRows::Row.new(text: 'other.com - 2 URLs', fqdn: 'other.com', count: 2, full: false, researchers_only: true)
+      ]
 
-    urls_json = described_class.full_urls(notice, notice.works.first.infringing_urls).as_json
-
-    expect(urls_json).to eq [
-      { 'fqdn' => 'example.com', 'count' => 1 },
-      { 'url' => 'https://example.org/public' }
-    ]
-  ensure
-    Current.user = nil
+      expect(described_class.serialize_url_rows(rows)).to eq [
+        { url: 'https://example.com/path' },
+        { fqdn: 'other.com', count: 2 }
+      ]
+    end
   end
 
-  it 'hides matching Lumen-team-only URL-granularity content filter URLs in full API responses' do
-    ContentFilter.delete_all
-    Current.user = create(:user, :researcher, limit_notice_api_response: false)
-    ContentFilter.create!(
-      name: 'Sensitive URL',
-      url_text: 'sensitive-name',
-      granularity: 'urls',
-      actions: ['full_notice_version_only_lumen_team']
-    )
-    notice = create(:dmca, role_names: %w[sender principal submitter])
-    notice.works = [
-      Work.new(
-        infringing_urls: [
-          InfringingUrl.new(url: 'https://example.com/sensitive-name/profile'),
-          InfringingUrl.new(url: 'https://example.org/public')
-        ]
+  context 'with content-filtered URLs in a full API response' do
+    let(:researcher) { create(:user, :researcher, limit_notice_api_response: false) }
+    let(:admin) { create(:user, :admin) }
+    let(:notice) do
+      n = create(:dmca, role_names: %w[sender principal submitter])
+      n.works = [Work.new(infringing_urls: [
+        InfringingUrl.new(url: 'https://sensitive-name.example.com/profile'),
+        InfringingUrl.new(url: 'https://example.org/public')
+      ])]
+      n.save!
+      n
+    end
+
+    before do
+      ContentFilter.delete_all
+      ContentFilter.create!(
+        name: 'Sensitive URL',
+        url_text: 'sensitive-name',
+        granularity: 'urls',
+        actions: ['full_notice_version_only_lumen_team']
       )
-    ]
-    notice.save!
+      allow_any_instance_of(Ability).to receive(:can?).with(:view_full_version_api, anything).and_return(true)
+      allow_any_instance_of(Ability).to receive(:can?).with(:view_enterprise_version, anything).and_return(false)
+    end
 
-    urls_json = described_class.full_urls(notice, notice.works.first.infringing_urls).as_json
+    it 'groups Lumen-team-only filtered URLs as domain counts for researchers' do
+      allow_any_instance_of(Current).to receive(:user).and_return(researcher)
 
-    expect(urls_json).to eq [
-      { 'url' => 'https://example.org/public' }
-    ]
-  ensure
-    Current.user = nil
-  end
+      work_json = described_class.new(notice).as_json[:works].first
 
-  it 'returns counted domains for admin Lumen-team-only URL-granularity path matches in full API responses' do
-    ContentFilter.delete_all
-    ContentFilter.create!(
-      name: 'Sensitive Path',
-      url_text: 'sensitive-name',
-      granularity: 'urls',
-      actions: ['full_notice_version_only_lumen_team']
-    )
-    notice = create(:dmca, role_names: %w[sender principal submitter])
-    notice.works = [
-      Work.new(
-        infringing_urls: [
-          InfringingUrl.new(url: 'https://example.com/sensitive-name/profile'),
-          InfringingUrl.new(url: 'https://example.com/sensitive-name/about'),
-          InfringingUrl.new(url: 'https://example.org/public')
-        ]
-      )
-    ]
-    notice.save!
+      expect(work_json['infringing_urls']).to eq [
+        { 'fqdn' => '[REDACTED].example.com', 'count' => 1 },
+        { 'url' => 'https://example.org/public' }
+      ]
+    end
 
-    urls_json = described_class.full_urls(
-      notice,
-      notice.works.first.infringing_urls,
-      permissions: { lumen_team: true, researcher: true }
-    ).as_json
+    it 'shows admins full URLs for Lumen-team-only filtered content' do
+      allow_any_instance_of(Current).to receive(:user).and_return(admin)
 
-    expect(urls_json).to eq [
-      { 'fqdn' => 'example.com', 'count' => 2 },
-      { 'url' => 'https://example.org/public' }
-    ]
-  ensure
-    Current.user = nil
-  end
+      work_json = described_class.new(notice).as_json[:works].first
 
-  it 'redacts counted domains for admin Lumen-team-only URL-granularity domain matches in full API responses' do
-    ContentFilter.delete_all
-    ContentFilter.create!(
-      name: 'Sensitive Domain',
-      url_text: 'sensitive',
-      granularity: 'urls',
-      actions: ['full_notice_version_only_lumen_team']
-    )
-    notice = create(:dmca, role_names: %w[sender principal submitter])
-    notice.works = [
-      Work.new(
-        infringing_urls: [
-          InfringingUrl.new(url: 'https://sensitive-domain.com/profile'),
-          InfringingUrl.new(url: 'https://sensitive-domain.com/about'),
-          InfringingUrl.new(url: 'https://example.org/public')
-        ]
-      )
-    ]
-    notice.save!
-
-    urls_json = described_class.full_urls(
-      notice,
-      notice.works.first.infringing_urls,
-      permissions: { lumen_team: true, researcher: true }
-    ).as_json
-
-    expect(urls_json).to eq [
-      { 'fqdn' => '[REDACTED]-domain.com', 'count' => 2 },
-      { 'url' => 'https://example.org/public' }
-    ]
-  ensure
-    Current.user = nil
+      expect(work_json['infringing_urls']).to eq [
+        { 'url' => 'https://sensitive-name.example.com/profile' },
+        { 'url' => 'https://example.org/public' }
+      ]
+    end
   end
 end

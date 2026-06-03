@@ -8,17 +8,25 @@ class TrademarkSerializer < NoticeSerializer
   attributes_to_serialize.delete(:works)
 
   attribute :marks do |object|
-    if Current.user && Ability.new(Current.user).can?(:view_full_version_api, object)
+    user = Current.user
+    ability = user && Ability.new(user)
+
+    if user && ability.can?(:view_full_version_api, object)
+      enterprise_access = ability.can?(:view_enterprise_version, object) ?
+        EnterpriseNoticeAccess.new(user, object) : nil
+
       object.works.map do |work|
-        infringing_urls = NoticeSerializer.full_urls(object, work.infringing_urls)
+        rows = WorkUrlRows.new(work: work, type: 'infringing', notice: object, user: user)
+          .visible_rows(enterprise_access: enterprise_access)
+        api_rows = serialize_url_rows(rows)
 
         {
           description: work.description,
-          infringing_urls: infringing_urls.any? { |url| url[:fqdn] } ? infringing_urls : work.infringing_urls.map(&:url)
+          infringing_urls: api_rows.any? { |r| r[:fqdn] } ? api_rows : work.infringing_urls.map(&:url)
         }
       end.as_json
-    elsif Current.user && Ability.new(Current.user).can?(:view_enterprise_version, object)
-      access = EnterpriseNoticeAccess.new(Current.user, object)
+    elsif user && ability.can?(:view_enterprise_version, object)
+      access = EnterpriseNoticeAccess.new(user, object)
 
       object.works.map do |work|
         {

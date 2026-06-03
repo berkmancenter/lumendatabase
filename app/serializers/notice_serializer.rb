@@ -49,67 +49,35 @@ class NoticeSerializer < BaseSerializer
     base_works
   end
 
-  def self.full_urls(notice, url_instances, content_filters: nil, permissions: nil)
-    content_filters ||= ContentFilter.url_filters_matching_notice(notice)
-    permissions ||= ContentFilter.user_permissions(Current.user)
-    grouped_urls = {}
-
-    url_instances.filter_map do |url_instance|
-      matching_filters = ContentFilter.matching_url_filters(
-        notice,
-        url_instance,
-        content_filters: content_filters
-      )
-
-      case ContentFilter.url_action(
-        notice,
-        url_instance,
-        Current.user,
-        content_filters: matching_filters,
-        permissions: permissions
-      )
-      when :hidden
-        nil
-      when :restricted
-        grouped_url(url_instance.url, grouped_urls)
-      else
-        if lumen_team_filtered_for_admin?(matching_filters, permissions)
-          grouped_url(
-            url_instance.url,
-            grouped_urls,
-            redaction_filters: matching_filters
-          )
-        else
-          { url: url_instance.url }
-        end
-      end
+  def self.serialize_url_rows(rows)
+    rows.map do |row|
+      row.full ? { url: row.url || row.text } : { fqdn: row.fqdn, count: row.count }
     end
   end
 
   def self.works(object)
-    if defined?(Current.user) && Current.user && Ability.new(Current.user).can?(:view_full_version_api, object)
-      content_filters = ContentFilter.url_filters_matching_notice(object)
-      permissions = ContentFilter.user_permissions(Current.user)
+    user = Current.user
+    ability = user && Ability.new(user)
+
+    if user && ability.can?(:view_full_version_api, object)
+      enterprise_access = ability.can?(:view_enterprise_version, object) ?
+        EnterpriseNoticeAccess.new(user, object) : nil
 
       base_works = object.works.map do |work|
         {
           description: work.description,
-          infringing_urls: full_urls(
-            object,
-            work.infringing_urls,
-            content_filters: content_filters,
-            permissions: permissions
+          infringing_urls: serialize_url_rows(
+            WorkUrlRows.new(work: work, type: 'infringing', notice: object, user: user)
+              .visible_rows(enterprise_access: enterprise_access)
           ),
-          copyrighted_urls: full_urls(
-            object,
-            work.copyrighted_urls,
-            content_filters: content_filters,
-            permissions: permissions
+          copyrighted_urls: serialize_url_rows(
+            WorkUrlRows.new(work: work, type: 'copyrighted', notice: object, user: user)
+              .visible_rows(enterprise_access: enterprise_access)
           )
         }
       end.as_json
-    elsif defined?(Current.user) && Current.user && Ability.new(Current.user).can?(:view_enterprise_version, object)
-      access = EnterpriseNoticeAccess.new(Current.user, object)
+    elsif user && ability.can?(:view_enterprise_version, object)
+      access = EnterpriseNoticeAccess.new(user, object)
 
       base_works = object.works.map do |work|
         {
@@ -127,31 +95,7 @@ class NoticeSerializer < BaseSerializer
         }
       end.as_json
     end
+
     cleaned_works(base_works)
-  end
-
-  def self.grouped_url(url, grouped_urls, redaction_filters: [])
-    fqdn = Work.fqdn_from_url(url).presence || url
-    fqdn = redact_fqdn_filter_text(fqdn, redaction_filters)
-    key = fqdn.downcase
-
-    grouped_urls[key] ||= { fqdn: fqdn, count: 0 }
-    grouped_urls[key][:count] += 1
-
-    grouped_urls[key] if grouped_urls[key][:count] == 1
-  end
-
-  def self.lumen_team_filtered_for_admin?(matching_filters, permissions)
-    permissions[:lumen_team] &&
-      matching_filters.any? { |content_filter| content_filter.has_action?(:full_notice_version_only_lumen_team) }
-  end
-
-  def self.redact_fqdn_filter_text(fqdn, filters)
-    filters.reduce(fqdn) do |redacted_fqdn, content_filter|
-      next redacted_fqdn unless content_filter.has_action?(:full_notice_version_only_lumen_team)
-      next redacted_fqdn if content_filter.url_text.blank?
-
-      redacted_fqdn.gsub(/#{Regexp.escape(content_filter.url_text)}/i, '[REDACTED]')
-    end
   end
 end

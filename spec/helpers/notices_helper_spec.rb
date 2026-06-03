@@ -182,7 +182,7 @@ describe NoticesHelper do
       .to include('https://business.example/[REDACTED]')
   end
 
-  it 'redacts search highlight URLs matching Lumen-team-only filters for admins' do
+  it 'does not redact search highlight URLs matching Lumen-team-only filters for admins' do
     ContentFilter.create!(
       name: 'Sensitive Domain',
       url_text: 'sensitive',
@@ -209,8 +209,8 @@ describe NoticesHelper do
 
     result = helper.search_result_highlight_text(highlight, notice)
 
-    expect(result).to include('https://[REDACTED]-domain.com/[REDACTED]')
-    expect(result).not_to include('sensitive-domain.com/private')
+    expect(result).to include('https://<em>sensitive</em>-domain.com/private')
+    expect(result).not_to include('[REDACTED]')
   end
 
   it 'redacts search highlight URLs matching researcher-only filters for public users' do
@@ -244,6 +244,59 @@ describe NoticesHelper do
     expect(result).not_to include('sensitive-domain.com/private')
   end
 
+  it 'forces path redaction on all highlight URLs when notice has full_notice_version_only_lumen_team flag for non-admins' do
+    notice = build(:dmca, full_notice_version_only_lumen_team: true)
+    highlight = 'URLs https://example.com/private https://other.org/private'
+
+    allow(helper).to receive(:can?)
+      .with(:view_full_version, Notice)
+      .and_return(true)
+    allow(helper).to receive(:current_user).and_return(create(:user, :researcher))
+    allow(helper).to receive(:params)
+      .and_return({ term: 'private' }.with_indifferent_access)
+
+    result = helper.search_result_highlight_text(highlight, notice)
+
+    expect(result).to include('https://example.com/[REDACTED]')
+    expect(result).to include('https://other.org/[REDACTED]')
+    expect(result).not_to include('https://example.com/private')
+    expect(result).not_to include('https://other.org/private')
+  end
+
+  it 'redacts domain url_text from notice-granularity researchers filter for public users' do
+    ContentFilter.create!(
+      name: 'Sensitive Notice',
+      url_text: 'secret',
+      granularity: 'notice',
+      actions: ['full_notice_version_only_researchers']
+    )
+    work = Work.new(
+      infringing_urls: [
+        InfringingUrl.new(url: 'https://secret-corp.com/private'),
+        InfringingUrl.new(url: 'https://other.org/private')
+      ]
+    )
+    notice = create(:dmca, role_names: %w[sender principal submitter])
+    notice.works = [work]
+    notice.save!
+    highlight = 'URLs https://secret-corp.com/private https://other.org/private'
+
+    allow(helper).to receive(:can?)
+      .with(:view_full_version, Notice)
+      .and_return(false)
+    allow(helper).to receive(:current_user).and_return(nil)
+    allow(helper).to receive(:client_area?).and_return(false)
+    allow(helper).to receive(:params)
+      .and_return({ term: 'private' }.with_indifferent_access)
+
+    result = helper.search_result_highlight_text(highlight, notice)
+
+    expect(result).to include('https://[REDACTED]-corp.com/[REDACTED]')
+    expect(result).to include('https://other.org/[REDACTED]')
+    expect(result).not_to include('secret-corp.com')
+    expect(result).not_to include('/private')
+  end
+
   it 'reveals matching enterprise rows for copyrighted URLs' do
     enterprise_account = create(:enterprise_account)
     create(
@@ -267,7 +320,7 @@ describe NoticesHelper do
     expect(rows.map(&:text)).to eq ['https://business.example/original']
     expect(rows.map(&:url)).to eq ['https://business.example/original']
     expect(rows.map(&:full)).to eq [true]
-    expect(rows.map(&:only_fqdn)).to eq [false]
+    expect(rows.map(&:researchers_only)).to eq [false]
   end
 
   it 'does not redact URL paths when the full notice can be seen' do

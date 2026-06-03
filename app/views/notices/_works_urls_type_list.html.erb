@@ -11,7 +11,7 @@
       <% if url_rows.each do |url_row| %>
         <li class="<%= type %>_url">
           <%= url_row.text %>
-          <% if url_row.only_fqdn %>
+          <% if url_row.researchers_only %>
             <i class="tooltipster gg-lumen gg-info" title="<%= Translation.t('notice_show_works_urls_full_only_researchers_tooltip') %>"></i>
           <% end %>
         </li>
