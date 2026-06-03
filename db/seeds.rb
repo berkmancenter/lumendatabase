@@ -13,6 +13,7 @@ seed_files = %w[
   risk_triggers.rb
   users.rb
   enterprise_accounts.rb
+  enterprise_test_accounts.rb
 ]
 
 seed_files.each { |file| load("db/seeds/#{file}") }
