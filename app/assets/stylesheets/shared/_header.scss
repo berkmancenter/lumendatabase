@@ -53,9 +53,49 @@ header.app {
 
   a#root {
     display: inline-block;
+
+    &:link,
+    &:visited,
+    &:hover,
+    &:active,
+    &:focus {
+      text-decoration: none;
+    }
   }
+
   #root img {
     display: block;
+  }
+
+  .brand-mark {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .enterprise-version-indicator {
+    background: $header-background-1;
+    border-radius: 2px;
+    color: #fff;
+    display: block;
+    font-size: $base-font-size-small-2;
+    font-weight: 700;
+    line-height: 1;
+    margin-top: 5px;
+    padding: 5px 8px;
+    text-align: center;
+    text-decoration: none;
+    text-transform: uppercase;
+    width: 100%;
+
+    &:link,
+    &:visited,
+    &:hover,
+    &:active,
+    &:focus {
+      color: #fff;
+      text-decoration: none;
+    }
   }
 }
 

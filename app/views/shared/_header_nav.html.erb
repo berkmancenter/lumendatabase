@@ -1,7 +1,10 @@
 <div class="nav-wrapper">
-  <div>
+  <div class="brand-mark">
     <%= link_to root_path, id: "root" do %>
       <%= image_tag("logo_2x.png", size: "265x64") %>
+    <% end %>
+    <% if current_user&.active_enterprise_account.present? %>
+      <%= link_to 'Enterprise', client_my_notices_path, class: 'enterprise-version-indicator' %>
     <% end %>
   </div>
   <div class="flex-end">

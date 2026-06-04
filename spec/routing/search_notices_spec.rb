@@ -15,13 +15,6 @@ describe 'Notices::Searches' do
     )
   end
 
-  it "routes client to Client::DashboardController#index" do
-    expect(get: 'client').to route_to(
-      controller: 'client/dashboard',
-      action: 'index'
-    )
-  end
-
   it "routes client/settings to Client::SettingsController#show" do
     expect(get: 'client/settings').to route_to(
       controller: 'client/settings',

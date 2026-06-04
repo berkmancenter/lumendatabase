@@ -18,10 +18,42 @@ section.home-search-form {
     text-align: center;
 
     img {
+      display: block;
+      margin: 0 auto;
+
       @include media($mobile) {
         $size: 88%;
         width: $size;
         height: $size;
+      }
+    }
+
+    .enterprise-version-indicator {
+      background: $header-background-1;
+      border-radius: 2px;
+      color: #fff;
+      display: block;
+      font-size: $base-font-size-small-2;
+      font-weight: 700;
+      line-height: 1;
+      margin: 8px auto 0;
+      padding: 5px 8px;
+      text-align: center;
+      text-decoration: none;
+      text-transform: uppercase;
+      width: 340px;
+
+      &:link,
+      &:visited,
+      &:hover,
+      &:active,
+      &:focus {
+        color: #fff;
+        text-decoration: none;
+      }
+
+      @include media($mobile) {
+        width: 88%;
       }
     }
   }

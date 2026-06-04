@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   mount RailsAdmin::Engine => '/admin'
 
   namespace :client do
-    root to: 'dashboard#index'
+    root to: redirect('/client/notices/search?sort_by=created_at%20desc')
     resource :settings, only: %i[show update]
     resources :enterprise_domains, only: %i[create destroy] do
       member do
