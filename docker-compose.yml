@@ -32,6 +32,7 @@ services:
       - transport.host=0.0.0.0
       - "ES_JAVA_OPTS=-Xms2g -Xmx2g"
       - discovery.type=single-node
+      - cluster.routing.allocation.disk.threshold_enabled=false
     volumes:
       - esdata:/usr/share/elasticsearch/data
     ports:
