@@ -94,4 +94,16 @@ describe EnterpriseAccount, type: :model do
       expect(EnterpriseAccount.reporting_enabled).to eq([pro_with_reports])
     end
   end
+
+  describe 'destroying an account' do
+    it 'detaches its users instead of deleting them or raising a foreign key error' do
+      account = create(:enterprise_account)
+      user = create(:user, :enterprise, enterprise_account: account)
+
+      expect { account.destroy! }.not_to raise_error
+
+      expect(User.exists?(user.id)).to be true
+      expect(user.reload.enterprise_account_id).to be_nil
+    end
+  end
 end

@@ -16,7 +16,9 @@ class EnterpriseAccount < ApplicationRecord
     ['Weekly', 'weekly']
   ].freeze
 
-  has_many :users
+  # Detach users when the account is deleted (they may keep other roles/logins)
+  # rather than blocking the delete on the users foreign key.
+  has_many :users, dependent: :nullify
   has_many :enterprise_domains, dependent: :destroy
 
   accepts_nested_attributes_for :enterprise_domains, allow_destroy: true
