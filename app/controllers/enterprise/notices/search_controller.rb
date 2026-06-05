@@ -1,4 +1,4 @@
-class Client::Notices::SearchController < Notices::SearchController
+class Enterprise::Notices::SearchController < Notices::SearchController
   before_action :authenticate_user!
   before_action :require_enterprise_account!
 
@@ -7,8 +7,8 @@ class Client::Notices::SearchController < Notices::SearchController
   def set_model_specific_variables
     super
 
-    @search_index_path = client_notices_search_index_path
-    @facet_search_index_path = facet_client_notices_search_index_path
+    @search_index_path = enterprise_notices_search_index_path
+    @facet_search_index_path = facet_enterprise_notices_search_index_path
     @search_all_placeholder = 'Search your domain notices...'
   end
 
@@ -19,7 +19,7 @@ class Client::Notices::SearchController < Notices::SearchController
   def require_enterprise_account!
     return if current_user&.active_enterprise_account
 
-    redirect_to root_path, alert: 'Client access is not active for this account.'
+    redirect_to root_path, alert: 'Enterprise access is not active for this account.'
   end
 
   def enterprise_account

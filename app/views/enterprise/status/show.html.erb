@@ -1,0 +1,39 @@
+<% title 'Your Lumen Enterprise account' %>
+
+<div class="inner-padding">
+  <article class="enterprise-account-status">
+    <section class="body">
+      <h1>Your Lumen Enterprise account isn't active yet</h1>
+
+      <% case @enterprise_account&.payment_method %>
+      <% when 'credit_card' %>
+        <p>
+          Your account is set up to pay by credit card. Your Pro access unlocks as
+          soon as your card payment has been processed.
+        </p>
+        <p>
+          If you haven't finished paying, or you think this is a mistake, contact us
+          at <%= mail_to 'team@lumendatabase.org' %> and we'll help you complete your
+          card payment.
+        </p>
+      <% when 'invoice' %>
+        <p>
+          Your account is set up to be invoiced. Lumen will follow up with you about
+          invoicing, and your Pro access unlocks once the invoice has been paid.
+        </p>
+        <p>
+          Have a question about your invoice? Contact us at
+          <%= mail_to 'team@lumendatabase.org' %>.
+        </p>
+      <% else %>
+        <p>
+          Your account isn't active yet. Contact us at
+          <%= mail_to 'team@lumendatabase.org' %> to finish setting up your Lumen
+          Enterprise plan.
+        </p>
+      <% end %>
+
+      <p><%= link_to 'Log out', destroy_user_session_path %></p>
+    </section>
+  </article>
+</div>

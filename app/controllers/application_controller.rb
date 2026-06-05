@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::Base
-  CLIENT_NOTICES_DEFAULT_SORT = 'created_at desc'.freeze
+  ENTERPRISE_NOTICES_DEFAULT_SORT = 'created_at desc'.freeze
 
   layout :layout_by_resource
   protect_from_forgery with: :exception
@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
   after_action :store_action
   after_action :include_auth_cookie
 
-  helper_method :client_my_notices_path
+  helper_method :enterprise_my_notices_path
 
   if Rails.env.staging? || Rails.env.production?
     [
@@ -53,13 +53,16 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    return client_my_notices_path if resource.respond_to?(:enterprise?) && resource.enterprise?
+    return super unless resource.respond_to?(:enterprise?) && resource.enterprise?
+    return enterprise_my_notices_path if resource.active_enterprise_account
 
-    super
+    # Enterprise users whose account is not yet Pro land on a status page that
+    # explains how to activate, rather than being bounced off a restricted route.
+    enterprise_status_path
   end
 
-  def client_my_notices_path
-    client_notices_search_index_path(sort_by: CLIENT_NOTICES_DEFAULT_SORT)
+  def enterprise_my_notices_path
+    enterprise_notices_search_index_path(sort_by: ENTERPRISE_NOTICES_DEFAULT_SORT)
   end
 
   def resource_not_found(exception = false)

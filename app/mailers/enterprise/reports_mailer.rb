@@ -1,5 +1,7 @@
-class EnterpriseReportsMailer < ApplicationMailer
-  def enterprise_report_digest(enterprise_account, starts_at, ends_at)
+class Enterprise::ReportsMailer < ApplicationMailer
+  default template_path: 'enterprise/reports_mailer'
+
+  def report_digest(enterprise_account, starts_at, ends_at)
     @enterprise_account = enterprise_account
     @report = EnterpriseNoticeReport.new(
       enterprise_account,

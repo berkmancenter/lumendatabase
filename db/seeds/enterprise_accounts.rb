@@ -4,7 +4,9 @@ enterprise_account = EnterpriseAccount.find_or_initialize_by(
   name: 'Example Business'
 )
 enterprise_account.assign_attributes(
-  active: true,
+  plan: 'pro',
+  payment_method: 'credit_card',
+  paid_until: 1.month.from_now,
   report_frequency: 'weekly',
   report_recipient_email: 'enterprise@lumendatabase.org',
   notes: 'Seeded enterprise account for domain-scoped notice access.'

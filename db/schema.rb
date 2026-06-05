@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_05_29_120000) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_05_120001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -250,13 +250,17 @@ ActiveRecord::Schema[7.2].define(version: 2026_05_29_120000) do
 
   create_table "enterprise_accounts", force: :cascade do |t|
     t.string "name", null: false
-    t.boolean "active", default: true, null: false
     t.string "report_frequency", default: "none", null: false
     t.string "report_recipient_email"
     t.datetime "last_report_sent_at"
     t.text "notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "plan", default: "inactive", null: false
+    t.datetime "paid_until"
+    t.text "company_contact_information"
+    t.text "representative_contact_information"
+    t.string "payment_method"
   end
 
   create_table "enterprise_domains", force: :cascade do |t|

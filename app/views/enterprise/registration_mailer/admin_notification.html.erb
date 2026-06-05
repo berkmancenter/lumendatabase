@@ -1,0 +1,17 @@
+<h1>New Lumen Enterprise registration</h1>
+
+<table>
+  <tr><th align="left">Company name</th><td><%= @enterprise_account.name %></td></tr>
+  <tr><th align="left">User email</th><td><%= @user.email %></td></tr>
+  <tr><th align="left">Payment method</th><td><%= @enterprise_account.payment_method_label %></td></tr>
+  <tr><th align="left">Plan</th><td><%= @enterprise_account.plan %></td></tr>
+  <% if @enterprise_account.paid_until.present? %>
+    <tr><th align="left">Paid until</th><td><%= @enterprise_account.paid_until.to_fs(:simple) %></td></tr>
+  <% end %>
+</table>
+
+<h2>Company contact information</h2>
+<p><%= simple_format(@enterprise_account.company_contact_information.presence || '(not provided)') %></p>
+
+<h2>Representative contact information</h2>
+<p><%= simple_format(@enterprise_account.representative_contact_information.presence || '(not provided)') %></p>

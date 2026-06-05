@@ -42,7 +42,7 @@ class User < ApplicationRecord
   end
 
   def active_enterprise_account
-    enterprise_account if enterprise?
+    enterprise_account if enterprise? && enterprise_account&.pro?
   end
 
   def enterprise_cache_key

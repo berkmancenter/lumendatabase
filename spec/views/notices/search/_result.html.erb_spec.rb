@@ -28,7 +28,7 @@ describe 'notices/search/_result.html.erb' do
       'URLs https://business.example/<em>private</em> ' \
         'https://pending.example/private https://other.example/private'
     ])
-    allow(view).to receive(:client_area?).and_return(true)
+    allow(view).to receive(:enterprise_area?).and_return(true)
     allow(view).to receive(:current_user).and_return(user)
     allow(view).to receive(:params)
       .and_return({ term: 'private' }.with_indifferent_access)
@@ -59,7 +59,7 @@ describe 'notices/search/_result.html.erb' do
     allow(result).to receive(:highlight).and_return([
       'URL https://<em>sensitive</em>-domain.com/private'
     ])
-    allow(view).to receive(:client_area?).and_return(false)
+    allow(view).to receive(:enterprise_area?).and_return(false)
     allow(view).to receive(:current_user).and_return(nil)
     allow(view).to receive(:params)
       .and_return({ term: 'sensitive' }.with_indifferent_access)

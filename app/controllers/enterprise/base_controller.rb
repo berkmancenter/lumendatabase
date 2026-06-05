@@ -1,4 +1,4 @@
-class Client::BaseController < ApplicationController
+class Enterprise::BaseController < ApplicationController
   before_action :authenticate_user!
   before_action :require_enterprise_account!
 
@@ -7,7 +7,7 @@ class Client::BaseController < ApplicationController
   def require_enterprise_account!
     return if current_user&.active_enterprise_account
 
-    redirect_to root_path, alert: 'Client access is not active for this account.'
+    redirect_to root_path, alert: 'Enterprise access is not active for this account.'
   end
 
   def enterprise_account

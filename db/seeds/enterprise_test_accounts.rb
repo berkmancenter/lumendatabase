@@ -29,7 +29,7 @@ enterprise_test_accounts = [
   {
     name: 'Inactive Demo Client',
     email: 'enterprise-inactive@lumendatabase.test',
-    active: false,
+    plan: 'inactive',
     report_frequency: 'none',
     domains: [
       { domain: 'inactive-client.test', verified: true }
@@ -112,8 +112,11 @@ end
 
 enterprise_test_seed_account = lambda do |attributes|
   account = EnterpriseAccount.find_or_initialize_by(name: attributes.fetch(:name))
+  plan = attributes.fetch(:plan, 'pro')
   account.assign_attributes(
-    active: attributes.fetch(:active, true),
+    plan: plan,
+    payment_method: plan == 'pro' ? 'credit_card' : 'invoice',
+    paid_until: plan == 'pro' ? 1.month.from_now : nil,
     report_frequency: attributes.fetch(:report_frequency),
     report_recipient_email: attributes[:report_recipient_email],
     notes: 'Seeded enterprise QA account for tester workflows.'
@@ -241,7 +244,7 @@ enterprise_test_accounts.each do |attributes|
     "#{domain.domain} (#{status})"
   end
 
-  puts "#{account.name}#{account.active? ? '' : ' [inactive]'}"
+  puts "#{account.name}#{account.pro? ? '' : ' [inactive]'}"
   puts "  login: #{user.email}"
   puts "  domains: #{domains.join(', ')}"
   puts "  reports: #{account.report_frequency}"

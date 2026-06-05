@@ -1,11 +1,11 @@
-<% title 'Client settings', @enterprise_account.name %>
+<% title 'Enterprise settings', @enterprise_account.name %>
 
 <div class="inner-padding">
   <h2>Reports</h2>
   <% report_delivery_off = @enterprise_account.report_frequency == 'none' %>
   <%= form_with(
         model: @enterprise_account,
-        url: client_settings_path,
+        url: enterprise_settings_path,
         method: :patch,
         local: true
       ) do |form| %>
@@ -29,7 +29,7 @@
   <h2>Domains</h2>
   <%= form_with(
         model: EnterpriseDomain.new,
-        url: client_enterprise_domains_path,
+        url: enterprise_domains_path,
         local: true
       ) do |form| %>
     <p>
@@ -56,14 +56,14 @@
             <% unless enterprise_domain.verified? %>
               <%= button_to(
                     'Verify now',
-                    verify_client_enterprise_domain_path(enterprise_domain),
+                    verify_enterprise_domain_path(enterprise_domain),
                     method: :post,
                     class: 'small-button'
                   ) %>
             <% end %>
             <%= button_to(
                   'Remove',
-                  client_enterprise_domain_path(enterprise_domain),
+                  enterprise_domain_path(enterprise_domain),
                   method: :delete,
                   class: 'small-button',
                   data: { confirm: 'Remove this domain?' }

@@ -1,12 +1,12 @@
-class Client::EnterpriseDomainsController < Client::BaseController
+class Enterprise::DomainsController < Enterprise::BaseController
   def create
     enterprise_domain = enterprise_account.enterprise_domains.build(enterprise_domain_params)
 
     if enterprise_domain.save
-      redirect_to client_settings_path, notice: 'Domain added. Add the verification file to verify ownership.'
+      redirect_to enterprise_settings_path, notice: 'Domain added. Add the verification file to verify ownership.'
     else
       redirect_to(
-        client_settings_path,
+        enterprise_settings_path,
         alert: enterprise_domain.errors.full_messages.join('<br>').html_safe
       )
     end
@@ -16,10 +16,10 @@ class Client::EnterpriseDomainsController < Client::BaseController
     enterprise_domain = find_enterprise_domain
 
     if enterprise_domain.verify!
-      redirect_to client_settings_path, notice: "#{enterprise_domain.domain} verified."
+      redirect_to enterprise_settings_path, notice: "#{enterprise_domain.domain} verified."
     else
       redirect_to(
-        client_settings_path,
+        enterprise_settings_path,
         alert: "We could not verify #{enterprise_domain.domain}. Check the file and try again."
       )
     end
@@ -28,7 +28,7 @@ class Client::EnterpriseDomainsController < Client::BaseController
   def destroy
     find_enterprise_domain.destroy!
 
-    redirect_to client_settings_path, notice: 'Domain removed.'
+    redirect_to enterprise_settings_path, notice: 'Domain removed.'
   end
 
   private

@@ -1,4 +1,4 @@
-class Client::SettingsController < Client::BaseController
+class Enterprise::SettingsController < Enterprise::BaseController
   def show
     @enterprise_account = enterprise_account
     @enterprise_domains = @enterprise_account.enterprise_domains.order(:domain)
@@ -6,10 +6,10 @@ class Client::SettingsController < Client::BaseController
 
   def update
     if enterprise_account.update(settings_params)
-      redirect_to client_settings_path, notice: 'Client settings updated.'
+      redirect_to enterprise_settings_path, notice: 'Enterprise settings updated.'
     else
       redirect_to(
-        client_settings_path,
+        enterprise_settings_path,
         alert: enterprise_account.errors.full_messages.join('<br>').html_safe
       )
     end

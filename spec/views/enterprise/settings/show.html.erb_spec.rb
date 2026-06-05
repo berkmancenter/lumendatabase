@@ -1,12 +1,12 @@
 require 'rails_helper'
 
-describe 'client/settings/show.html.erb' do
+describe 'enterprise/settings/show.html.erb' do
   let(:current_user) { build_stubbed(:user, email: 'client@example.com') }
 
   before do
     allow(view).to receive(:current_user).and_return(current_user)
-    allow(view).to receive(:client_my_notices_path)
-      .and_return(client_notices_search_index_path(sort_by: 'created_at desc'))
+    allow(view).to receive(:enterprise_my_notices_path)
+      .and_return(enterprise_notices_search_index_path(sort_by: 'created_at desc'))
     assign(:enterprise_domains, [])
   end
 

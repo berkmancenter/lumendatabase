@@ -48,20 +48,21 @@ module ApplicationHelper
     current_user.present? && can?(:view_enterprise_version, notice)
   end
 
-  def client_area?
-    controller_path.to_s.start_with?('client/')
+  def enterprise_area?
+    controller_path.to_s.start_with?('enterprise/') &&
+      %w[enterprise/registrations enterprise/status].exclude?(controller_path)
   end
 
   def application_header_classes
-    ['app', ('search-header' if client_settings?)].compact.join(' ')
+    ['app', ('search-header' if enterprise_settings?)].compact.join(' ')
   end
 
-  def client_navigation?
-    client_area? || enterprise_notice_view?
+  def enterprise_navigation?
+    enterprise_area? || enterprise_notice_view?
   end
 
-  def client_settings?
-    controller_path == 'client/settings'
+  def enterprise_settings?
+    controller_path == 'enterprise/settings'
   end
 
   def enterprise_notice_view?

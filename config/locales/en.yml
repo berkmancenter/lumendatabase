@@ -60,3 +60,8 @@ en:
         breadcrumb: 'Top token urls requested'
         menu: 'Top token urls requested'
         title: 'Top token urls requested'
+
+      accept_invoice:
+        breadcrumb: 'Accept invoice'
+        menu: 'Accept invoice'
+        title: 'Accept invoice'

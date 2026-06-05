@@ -173,7 +173,7 @@ module NoticesHelper
     with_redacted_urls(
       highlight_elem,
       notice: notice,
-      unredacted_domains: client_search_highlight_unredacted_domains
+      unredacted_domains: enterprise_search_highlight_unredacted_domains
     )
   end
 
@@ -239,8 +239,8 @@ module NoticesHelper
     (ENV['SAFELISTED_NOTICES_FULL'] || '').split(',').include?(notice.id.to_s)
   end
 
-  def client_search_highlight_unredacted_domains
-    return [] unless client_area?
+  def enterprise_search_highlight_unredacted_domains
+    return [] unless enterprise_area?
 
     current_user&.active_enterprise_account&.verified_domain_names || []
   end

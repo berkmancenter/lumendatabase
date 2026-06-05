@@ -17,7 +17,7 @@ class EnterpriseNoticeAccess
 
   def allowed?
     enterprise_account.present? &&
-      enterprise_account.active? &&
+      enterprise_account.pro? &&
       enterprise_domains.any? &&
       !restricted_notice? &&
       matching_infringing_urls.any?

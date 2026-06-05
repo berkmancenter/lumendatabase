@@ -4,7 +4,7 @@
       <%= image_tag("logo_2x.png", size: "265x64") %>
     <% end %>
     <% if current_user&.active_enterprise_account.present? %>
-      <%= link_to 'Enterprise', client_my_notices_path, class: 'enterprise-version-indicator' %>
+      <%= link_to 'Enterprise', enterprise_my_notices_path, class: 'enterprise-version-indicator' %>
     <% end %>
   </div>
   <div class="flex-end">

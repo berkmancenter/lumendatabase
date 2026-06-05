@@ -55,6 +55,13 @@ describe EnterpriseNoticeAccess do
 
       expect(described_class.new(user, notice)).not_to be_allowed
     end
+
+    it 'does not allow access when the account is not on the pro plan' do
+      enterprise_account.update!(plan: 'inactive')
+      notice = build_notice_with_urls(infringing_urls: ['https://business.example/path'])
+
+      expect(described_class.new(user, notice)).not_to be_allowed
+    end
   end
 
   describe '#url_rows' do

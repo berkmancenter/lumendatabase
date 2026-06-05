@@ -231,8 +231,21 @@ FactoryBot.define do
 
   factory :enterprise_account do
     name { 'Example Business' }
-    active { true }
+    plan { 'pro' }
     report_frequency { 'none' }
+
+    trait :inactive do
+      plan { 'inactive' }
+    end
+
+    trait :credit_card do
+      payment_method { 'credit_card' }
+      paid_until { 1.month.from_now }
+    end
+
+    trait :invoice do
+      payment_method { 'invoice' }
+    end
   end
 
   factory :enterprise_domain do

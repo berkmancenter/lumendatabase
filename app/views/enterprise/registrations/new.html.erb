@@ -1,0 +1,59 @@
+<% title 'Register for Lumen Enterprise' %>
+
+<div class="inner-padding">
+  <article class="enterprise-registration">
+    <section class="body">
+      <h1>Lumen Enterprise</h1>
+
+      <p>
+        Lumen Enterprise gives your company a private view of the takedown notices
+        that mention the domains you own. Once you verify a domain, you can:
+      </p>
+
+      <ul>
+        <li>See the notices that involve your company's verified domains.</li>
+        <li>Search across your domain notices in one place.</li>
+        <li>Manage and verify the domains tied to your account.</li>
+        <li>Receive optional daily or weekly notice reports by email.</li>
+        <li>Use enterprise API access while your account is on the Pro plan.</li>
+      </ul>
+
+      <p>
+        Register below to get started. Pay by credit card to unlock Pro access
+        right away, or choose to be invoiced and we'll follow up with you.
+      </p>
+
+      <%= simple_form_for @registration, url: enterprise_register_path, as: :enterprise_registration do |f| %>
+        <%= f.error_notification %>
+
+        <div class="form-inputs">
+          <h3>Your login</h3>
+          <%= f.input :email, label: 'Email', required: true,
+                hint: 'You will use this email address to sign in.' %>
+          <%= f.input :password, as: :password, label: 'Password', required: true %>
+          <%= f.input :password_confirmation, as: :password, label: 'Confirm password', required: true %>
+
+          <h3>Your company</h3>
+          <%= f.input :company_name, label: 'Company name', required: true %>
+          <%= f.input :company_contact_information, as: :text,
+                label: 'Company contact information',
+                hint: 'How can Lumen reach your company? (address, email, phone)' %>
+          <%= f.input :representative_contact_information, as: :text,
+                label: 'What is the name and contact information for the representative of your company with whom Lumen should communicate?' %>
+
+          <h3>Payment</h3>
+          <%= f.input :payment_method, as: :radio_buttons,
+                label: 'How would you like to pay?',
+                collection: EnterpriseAccount::PAYMENT_METHOD_OPTIONS,
+                required: true %>
+
+          <%= recaptcha_tags %>
+        </div>
+
+        <div class="form-actions">
+          <%= f.submit 'Register' %>
+        </div>
+      <% end %>
+    </section>
+  </article>
+</div>

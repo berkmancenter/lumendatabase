@@ -8,16 +8,16 @@ describe 'Notices::Searches' do
     )
   end
 
-  it "routes client/notices/search to Client::Notices::SearchController#index" do
-    expect(get: 'client/notices/search').to route_to(
-      controller: 'client/notices/search',
+  it "routes enterprise/notices/search to Enterprise::Notices::SearchController#index" do
+    expect(get: 'enterprise/notices/search').to route_to(
+      controller: 'enterprise/notices/search',
       action: 'index'
     )
   end
 
-  it "routes client/settings to Client::SettingsController#show" do
-    expect(get: 'client/settings').to route_to(
-      controller: 'client/settings',
+  it "routes enterprise/settings to Enterprise::SettingsController#show" do
+    expect(get: 'enterprise/settings').to route_to(
+      controller: 'enterprise/settings',
       action: 'show'
     )
   end

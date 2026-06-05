@@ -4,17 +4,17 @@ describe 'shared/_navigation.html.erb' do
   include Comfy::ComfyHelper
 
   it 'shows client links in the client area' do
-    allow(view).to receive(:client_navigation?).and_return(true)
-    allow(view).to receive(:client_my_notices_path)
-      .and_return(client_notices_search_index_path(sort_by: 'created_at desc'))
+    allow(view).to receive(:enterprise_navigation?).and_return(true)
+    allow(view).to receive(:enterprise_my_notices_path)
+      .and_return(enterprise_notices_search_index_path(sort_by: 'created_at desc'))
 
     render
 
     expect(rendered).to contain_link(
-      client_notices_search_index_path(sort_by: 'created_at desc'),
+      enterprise_notices_search_index_path(sort_by: 'created_at desc'),
       'My notices'
     )
-    expect(rendered).to contain_link(client_settings_path)
+    expect(rendered).to contain_link(enterprise_settings_path)
     expect(rendered).to contain_link(destroy_user_session_path)
     expect(rendered).to have_css('.main-nav .nav-item:nth-child(1)', text: 'My notices')
     expect(rendered).to have_css('.main-nav .nav-item:nth-child(2)', text: 'Settings')
@@ -24,7 +24,7 @@ describe 'shared/_navigation.html.erb' do
   end
 
   it 'has links to all topics' do
-    allow(view).to receive(:client_navigation?).and_return(false)
+    allow(view).to receive(:enterprise_navigation?).and_return(false)
     topics = create_list(:topic, 3)
 
     render
@@ -35,7 +35,7 @@ describe 'shared/_navigation.html.erb' do
   end
 
   it 'shows topics in alphabetical order' do
-    allow(view).to receive(:client_navigation?).and_return(false)
+    allow(view).to receive(:enterprise_navigation?).and_return(false)
     first_topic = create(:topic, name: 'AA topic')
     third_topic = create(:topic, name: 'CC topic')
     second_topic = create(:topic, name: 'BB topic')

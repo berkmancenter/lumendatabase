@@ -1,0 +1,15 @@
+<%= rails_admin_form_for @object, url: edit_path(@abstract_model, @object.id), as: @abstract_model.param_key, html: { method: "put", multipart: true, class: "main", data: { title: @page_name } } do |form| %>
+  <%= form.generate action: :update %>
+<% end %>
+
+<%# Invoice-only shortcut: activate the account and notify the client. %>
+<% if @object.is_a?(EnterpriseAccount) && @object.persisted? && @object.payment_method == 'invoice' %>
+  <div class="accept-invoice-action mt-3">
+    <%= link_to url_for(action: :accept_invoice, controller: 'rails_admin/main', model_name: @abstract_model.to_param, id: @object.id), class: 'btn btn-primary' do %>
+      <i class="fas fa-file-invoice-dollar"></i> Accept invoice
+    <% end %>
+    <p class="form-text text-muted">
+      Marks this invoice account as Pro, extends paid access by one month, and emails the client.
+    </p>
+  </div>
+<% end %>

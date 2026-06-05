@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-describe EnterpriseReportsMailer, type: :mailer do
-  describe '#enterprise_report_digest' do
+describe Enterprise::ReportsMailer, type: :mailer do
+  describe '#report_digest' do
     let(:enterprise_account) do
       create(
         :enterprise_account,
@@ -35,7 +35,7 @@ describe EnterpriseReportsMailer, type: :mailer do
     end
     let(:mail) do
       described_class
-        .enterprise_report_digest(enterprise_account, starts_at, ends_at)
+        .report_digest(enterprise_account, starts_at, ends_at)
         .deliver_now
     end
 

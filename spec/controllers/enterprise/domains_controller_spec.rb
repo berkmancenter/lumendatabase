@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Client::EnterpriseDomainsController do
+describe Enterprise::DomainsController do
   let(:enterprise_account) { create(:enterprise_account) }
   let(:user) { create(:user, :enterprise, enterprise_account: enterprise_account) }
 
@@ -19,7 +19,7 @@ describe Client::EnterpriseDomainsController do
       expect(enterprise_domain).not_to be_verified
       expect(enterprise_domain.verification_token).to be_present
       expect(enterprise_domain.verification_filename).to start_with('lumen-domain-verification-')
-      expect(response).to redirect_to(client_settings_path)
+      expect(response).to redirect_to(enterprise_settings_path)
     end
   end
 
@@ -37,7 +37,7 @@ describe Client::EnterpriseDomainsController do
 
       expect(enterprise_domain.reload).to be_verified
       expect(enterprise_domain.verified_at).to be_present
-      expect(response).to redirect_to(client_settings_path)
+      expect(response).to redirect_to(enterprise_settings_path)
     end
 
     it 'keeps a domain pending when the verification file is missing' do
@@ -50,7 +50,7 @@ describe Client::EnterpriseDomainsController do
 
       expect(enterprise_domain.reload).not_to be_verified
       expect(enterprise_domain.verified_at).to be_nil
-      expect(response).to redirect_to(client_settings_path)
+      expect(response).to redirect_to(enterprise_settings_path)
     end
   end
 
@@ -61,7 +61,7 @@ describe Client::EnterpriseDomainsController do
       delete :destroy, params: { id: enterprise_domain.id }
 
       expect(enterprise_account.enterprise_domains).to be_empty
-      expect(response).to redirect_to(client_settings_path)
+      expect(response).to redirect_to(enterprise_settings_path)
     end
   end
 end

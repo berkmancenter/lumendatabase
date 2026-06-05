@@ -73,19 +73,19 @@ describe ApplicationHelper do
     end
   end
 
-  context '#client_navigation?' do
+  context '#enterprise_navigation?' do
     it 'returns true in the client area' do
-      allow(helper).to receive(:client_area?).and_return(true)
+      allow(helper).to receive(:enterprise_area?).and_return(true)
       allow(helper).to receive(:enterprise_notice_view?).and_return(false)
 
-      expect(helper.client_navigation?).to eq(true)
+      expect(helper.enterprise_navigation?).to eq(true)
     end
 
     it 'returns true on the client settings page' do
-      allow(helper).to receive(:controller_path).and_return('client/settings')
+      allow(helper).to receive(:controller_path).and_return('enterprise/settings')
       allow(helper).to receive(:action_name).and_return('show')
 
-      expect(helper.client_navigation?).to eq(true)
+      expect(helper.enterprise_navigation?).to eq(true)
     end
 
     it 'returns true for an active enterprise user on a notice show page' do
@@ -95,7 +95,7 @@ describe ApplicationHelper do
       allow(helper).to receive(:action_name).and_return('show')
       allow(helper).to receive(:current_user).and_return(user)
 
-      expect(helper.client_navigation?).to eq(true)
+      expect(helper.enterprise_navigation?).to eq(true)
     end
 
     it 'returns false for public notice show pages without an active enterprise user' do
@@ -103,13 +103,13 @@ describe ApplicationHelper do
       allow(helper).to receive(:action_name).and_return('show')
       allow(helper).to receive(:current_user).and_return(nil)
 
-      expect(helper.client_navigation?).to eq(false)
+      expect(helper.enterprise_navigation?).to eq(false)
     end
   end
 
   context '#application_header_classes' do
     it 'uses the search header sizing on the client settings page' do
-      allow(helper).to receive(:controller_path).and_return('client/settings')
+      allow(helper).to receive(:controller_path).and_return('enterprise/settings')
 
       expect(helper.application_header_classes).to eq('app search-header')
     end

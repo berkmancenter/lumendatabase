@@ -7,10 +7,18 @@ Rails.application.routes.draw do
 
   mount RailsAdmin::Engine => '/admin'
 
-  namespace :client do
-    root to: redirect('/client/notices/search?sort_by=created_at%20desc')
+  namespace :enterprise do
+    root to: redirect('/enterprise/notices/search?sort_by=created_at%20desc')
+
+    # Public Lumen Enterprise sign-up (the controller, not the namespace, gates auth).
+    get 'register', to: 'registrations#new', as: :register
+    post 'register', to: 'registrations#create'
+
+    # Signed-in landing page for accounts that are not yet on the Pro plan.
+    get 'status', to: 'status#show', as: :status
+
     resource :settings, only: %i[show update]
-    resources :enterprise_domains, only: %i[create destroy] do
+    resources :domains, only: %i[create destroy] do
       member do
         post :verify
       end

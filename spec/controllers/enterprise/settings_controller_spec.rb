@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Client::SettingsController do
+describe Enterprise::SettingsController do
   render_views
 
   let(:enterprise_account) { create(:enterprise_account) }
@@ -9,6 +9,18 @@ describe Client::SettingsController do
   before do
     allow(controller).to receive(:authenticate_user!).and_return(true)
     allow(controller).to receive(:current_user).and_return(user)
+  end
+
+  describe 'access control' do
+    it 'denies access to accounts that are not on the pro plan' do
+      inactive_account = create(:enterprise_account, :inactive)
+      inactive_user = create(:user, :enterprise, enterprise_account: inactive_account)
+      allow(controller).to receive(:current_user).and_return(inactive_user)
+
+      get :show
+
+      expect(response).to redirect_to(root_path)
+    end
   end
 
   describe '#show' do
@@ -38,7 +50,7 @@ describe Client::SettingsController do
 
       expect(enterprise_account.report_frequency).to eq('weekly')
       expect(enterprise_account.report_recipient_email).to eq('reports@example.com')
-      expect(response).to redirect_to(client_settings_path)
+      expect(response).to redirect_to(enterprise_settings_path)
     end
   end
 end

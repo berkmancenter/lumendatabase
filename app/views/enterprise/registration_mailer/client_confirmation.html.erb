@@ -1,0 +1,17 @@
+<h1>Welcome to Lumen Enterprise</h1>
+
+<p>Thanks for registering <strong><%= @enterprise_account.name %></strong> for Lumen Enterprise. We have received your registration.</p>
+
+<p>Selected payment method: <strong><%= @enterprise_account.payment_method_label %></strong></p>
+
+<% if @enterprise_account.pro? %>
+  <p>Your Pro access is ready. You can start working with the notices involving your verified domains right away:</p>
+  <ul>
+    <li><%= link_to 'My notices', enterprise_notices_search_index_url(host: Chill::Application.config.site_host, sort_by: ApplicationController::ENTERPRISE_NOTICES_DEFAULT_SORT) %></li>
+    <li><%= link_to 'Settings', enterprise_settings_url(host: Chill::Application.config.site_host) %></li>
+  </ul>
+<% else %>
+  <p>We will follow up with you shortly about invoicing. Your Pro features unlock once payment has been processed.</p>
+<% end %>
+
+<p>Thanks,<br>The Lumen team</p>
