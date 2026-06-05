@@ -5,8 +5,7 @@ class CreateSettingForEnterpriseRegistrationAdminEmails < ActiveRecord::Migratio
     return if LumenSetting.find_by(key: KEY)
 
     LumenSetting.create!(
-      name: 'Admin emails notified of new Lumen Enterprise registrations ' \
-            '(comma or newline separated)',
+      name: 'Admin emails notified of new Lumen Enterprise registrations (comma separated)',
       key: KEY,
       value: 'team@lumendatabase.org'
     )
