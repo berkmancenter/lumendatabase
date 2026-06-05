@@ -1,15 +1,7 @@
-Hi,
-
-Good news - we've accepted the invoice for <%= @enterprise_account.name %> and your Lumen Enterprise Pro access is now active.
-
-<% if @enterprise_account.paid_until.present? -%>
-Your Pro access is paid through <%= @enterprise_account.paid_until.to_fs(:simple) %>.
-
-<% end -%>
-You can log in and start using it right now:
-
-Log in:     <%= new_user_session_url(host: Chill::Application.config.site_host) %>
-My notices: <%= enterprise_notices_search_index_url(host: Chill::Application.config.site_host, sort_by: ApplicationController::ENTERPRISE_NOTICES_DEFAULT_SORT) %>
-
-Thanks,
-The Lumen team
+<%= format(
+      Translation.t('enterprise_email_invoice_accepted_text'),
+      company_name: @enterprise_account.name,
+      paid_until: @enterprise_account.paid_until&.to_fs(:simple),
+      login_url: new_user_session_url(host: Chill::Application.config.site_host),
+      my_notices_url: enterprise_notices_search_index_url(host: Chill::Application.config.site_host, sort_by: ApplicationController::ENTERPRISE_NOTICES_DEFAULT_SORT)
+    ) %>

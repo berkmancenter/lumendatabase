@@ -1,17 +1,10 @@
-<h1>New Lumen Enterprise registration</h1>
-
-<table>
-  <tr><th align="left">Company name</th><td><%= @enterprise_account.name %></td></tr>
-  <tr><th align="left">User email</th><td><%= @user.email %></td></tr>
-  <tr><th align="left">Payment method</th><td><%= @enterprise_account.payment_method_label %></td></tr>
-  <tr><th align="left">Plan</th><td><%= @enterprise_account.plan %></td></tr>
-  <% if @enterprise_account.paid_until.present? %>
-    <tr><th align="left">Paid until</th><td><%= @enterprise_account.paid_until.to_fs(:simple) %></td></tr>
-  <% end %>
-</table>
-
-<h2>Company contact information</h2>
-<p><%= simple_format(@enterprise_account.company_contact_information.presence || '(not provided)') %></p>
-
-<h2>Representative contact information</h2>
-<p><%= simple_format(@enterprise_account.representative_contact_information.presence || '(not provided)') %></p>
+<%= format(
+      Translation.t('enterprise_email_admin_notification_html'),
+      company_name: h(@enterprise_account.name),
+      user_email: h(@user.email),
+      payment_method: h(@enterprise_account.payment_method_label),
+      plan: h(@enterprise_account.plan),
+      paid_until: h(@enterprise_account.paid_until&.to_fs(:simple).presence || '—'),
+      company_contact_information: simple_format(@enterprise_account.company_contact_information.presence || '(not provided)'),
+      representative_contact_information: simple_format(@enterprise_account.representative_contact_information.presence || '(not provided)')
+    ).html_safe %>

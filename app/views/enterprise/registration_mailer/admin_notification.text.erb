@@ -1,15 +1,10 @@
-A new Lumen Enterprise registration was submitted.
-
-Company name: <%= @enterprise_account.name %>
-User email: <%= @user.email %>
-Payment method: <%= @enterprise_account.payment_method_label %>
-Plan: <%= @enterprise_account.plan %>
-<% if @enterprise_account.paid_until.present? -%>
-Paid until: <%= @enterprise_account.paid_until.to_fs(:simple) %>
-<% end -%>
-
-Company contact information:
-<%= @enterprise_account.company_contact_information.presence || '(not provided)' %>
-
-Representative contact information:
-<%= @enterprise_account.representative_contact_information.presence || '(not provided)' %>
+<%= format(
+      Translation.t('enterprise_email_admin_notification_text'),
+      company_name: @enterprise_account.name,
+      user_email: @user.email,
+      payment_method: @enterprise_account.payment_method_label,
+      plan: @enterprise_account.plan,
+      paid_until: @enterprise_account.paid_until&.to_fs(:simple).presence || '—',
+      company_contact_information: @enterprise_account.company_contact_information.presence || '(not provided)',
+      representative_contact_information: @enterprise_account.representative_contact_information.presence || '(not provided)'
+    ) %>

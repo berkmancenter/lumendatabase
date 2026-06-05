@@ -12,7 +12,10 @@ class Enterprise::RegistrationMailer < ApplicationMailer
 
     mail(
       to: recipients,
-      subject: "New Lumen Enterprise registration: #{enterprise_account.name}"
+      subject: format(
+        Translation.t('enterprise_email_admin_notification_subject'),
+        company_name: enterprise_account.name
+      )
     )
   end
 
@@ -22,7 +25,7 @@ class Enterprise::RegistrationMailer < ApplicationMailer
 
     mail(
       to: user.email,
-      subject: 'Your Lumen Enterprise registration'
+      subject: Translation.t('enterprise_email_client_confirmation_subject')
     )
   end
 
@@ -35,7 +38,7 @@ class Enterprise::RegistrationMailer < ApplicationMailer
 
     mail(
       to: user.email,
-      subject: 'Your Lumen Enterprise access is ready'
+      subject: Translation.t('enterprise_email_invoice_accepted_subject')
     )
   end
 
