@@ -53,6 +53,14 @@ module ApplicationHelper
       %w[enterprise/registrations enterprise/status].exclude?(controller_path)
   end
 
+  def enterprise_pro_price
+    amount = LumenSetting.get('enterprise_pro_price_usd', cache: false)
+    return if amount.blank?
+
+    precision = amount.to_f == amount.to_f.round ? 0 : 2
+    number_to_currency(amount, precision: precision)
+  end
+
   def application_header_classes
     ['app', ('search-header' if enterprise_settings?)].compact.join(' ')
   end

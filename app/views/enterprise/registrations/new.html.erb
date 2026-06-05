@@ -18,6 +18,10 @@
         <li>Use enterprise API access while your account is on the Pro plan.</li>
       </ul>
 
+      <p class="enterprise-pro-price">
+        Lumen Enterprise Pro is <strong><%= enterprise_pro_price %></strong> per month.
+      </p>
+
       <p>
         Register below to get started. Pay by credit card to unlock Pro access
         right away, or choose to be invoiced and we'll follow up with you.
@@ -46,6 +50,8 @@
                 label: 'How would you like to pay?',
                 collection: EnterpriseAccount::PAYMENT_METHOD_OPTIONS,
                 required: true %>
+
+          <h4>Total: <strong><%= enterprise_pro_price %></strong></h4>
 
           <%= recaptcha_tags %>
         </div>

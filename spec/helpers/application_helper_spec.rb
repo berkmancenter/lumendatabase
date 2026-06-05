@@ -120,4 +120,26 @@ describe ApplicationHelper do
       expect(helper.application_header_classes).to eq('app')
     end
   end
+
+  context '#enterprise_pro_price' do
+    let(:setting) { LumenSetting.find_by(key: 'enterprise_pro_price_usd') }
+
+    it 'formats a whole-dollar price without cents' do
+      setting.update_columns(value: '500')
+
+      expect(helper.enterprise_pro_price).to eq('$500')
+    end
+
+    it 'formats a price that has cents' do
+      setting.update_columns(value: '499.99')
+
+      expect(helper.enterprise_pro_price).to eq('$499.99')
+    end
+
+    it 'returns nil when no price is configured' do
+      setting.update_columns(value: '')
+
+      expect(helper.enterprise_pro_price).to be_nil
+    end
+  end
 end
