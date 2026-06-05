@@ -10,6 +10,31 @@ describe 'enterprise/settings/show.html.erb' do
     assign(:enterprise_domains, [])
   end
 
+  it 'shows the plan, payment method, and how long Pro access is active' do
+    assign(
+      :enterprise_account,
+      build_stubbed(
+        :enterprise_account,
+        plan: 'pro',
+        payment_method: 'credit_card',
+        paid_until: Time.utc(2026, 7, 1, 12, 0, 0),
+        report_frequency: 'none'
+      )
+    )
+
+    render
+
+    expect(rendered).to have_css('.enterprise-plan', text: /Pro/)
+    expect(rendered).to have_css(
+      '.enterprise-plan-payment-method',
+      text: /Credit card/
+    )
+    expect(rendered).to have_css(
+      '.enterprise-plan-active-until',
+      text: /active until .*July 01, 2026/
+    )
+  end
+
   it 'labels report frequency as Status with Off, Daily, and Weekly options' do
     assign(
       :enterprise_account,
