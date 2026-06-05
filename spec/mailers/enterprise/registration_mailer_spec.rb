@@ -78,6 +78,25 @@ describe Enterprise::RegistrationMailer, type: :mailer do
     end
   end
 
+  describe '#renewal_invoice' do
+    it 'tells the invoice client their period is ending, the amount due, and links to settings' do
+      account = create(:enterprise_account, :invoice, plan: 'pro', name: 'Acme',
+                                            paid_until: Time.utc(2026, 7, 1, 12, 0, 0))
+      client = create(:user, :enterprise, email: 'inv@example.com', enterprise_account: account)
+
+      mail = described_class.renewal_invoice(account, client).deliver_now
+      body = mail.body.encoded
+
+      expect(mail.to).to eq(['inv@example.com'])
+      expect(mail.subject).to match(/renewal invoice/i)
+      expect(body).to include('Acme')
+      expect(body).to include('July 01, 2026')
+      expect(body).to include('$500.00')
+      expect(body).to include('/enterprise/settings')
+      expect(mail.attachments).to be_empty
+    end
+  end
+
   describe '#invoice_accepted' do
     it 'tells the client their access is ready, through which date, and how to log in' do
       account = create(:enterprise_account, :inactive, :invoice)

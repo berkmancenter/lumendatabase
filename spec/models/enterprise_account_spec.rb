@@ -95,6 +95,40 @@ describe EnterpriseAccount, type: :model do
     end
   end
 
+  describe '#renewal_reminder_due?' do
+    def invoice_pro(paid_until:, **attrs)
+      create(:enterprise_account, :invoice, plan: 'pro', paid_until: paid_until, **attrs)
+    end
+
+    it 'is due one week and one day before the paid period ends' do
+      expect(invoice_pro(paid_until: 7.days.from_now).renewal_reminder_due?).to be true
+      expect(invoice_pro(paid_until: 1.day.from_now).renewal_reminder_due?).to be true
+    end
+
+    it 'is not due on other days' do
+      expect(invoice_pro(paid_until: 3.days.from_now).renewal_reminder_due?).to be false
+      expect(invoice_pro(paid_until: 30.days.from_now).renewal_reminder_due?).to be false
+    end
+
+    it 'only applies to invoice-billed pro accounts' do
+      credit_card = create(:enterprise_account, :credit_card, plan: 'pro', paid_until: 7.days.from_now)
+      inactive = create(:enterprise_account, :invoice, plan: 'inactive', paid_until: 7.days.from_now)
+
+      expect(credit_card.renewal_reminder_due?).to be false
+      expect(inactive.renewal_reminder_due?).to be false
+    end
+
+    it 'does not remind twice the same day but reminds again in a later window' do
+      account = invoice_pro(paid_until: 7.days.from_now)
+
+      account.update!(last_renewal_reminder_sent_at: Time.current)
+      expect(account.renewal_reminder_due?).to be false
+
+      account.update!(last_renewal_reminder_sent_at: 2.days.ago)
+      expect(account.renewal_reminder_due?).to be true
+    end
+  end
+
   describe 'destroying an account' do
     it 'detaches its users instead of deleting them or raising a foreign key error' do
       account = create(:enterprise_account)

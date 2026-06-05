@@ -29,6 +29,19 @@ class Enterprise::RegistrationMailer < ApplicationMailer
     )
   end
 
+  # Renewal-invoice reminder, sent before an invoice-billed Pro account's paid
+  # period ends. Informational only for now (no attachment).
+  def renewal_invoice(enterprise_account, user)
+    @enterprise_account = enterprise_account
+    @user = user
+    @amount = renewal_amount
+
+    mail(
+      to: user.email,
+      subject: Translation.t('enterprise_email_renewal_invoice_subject')
+    )
+  end
+
   # Sent when an admin accepts an invoice and activates the account. Tells the
   # client their Pro access is ready, through which date, and that they can log
   # in and use it now.
@@ -43,6 +56,15 @@ class Enterprise::RegistrationMailer < ApplicationMailer
   end
 
   private
+
+  # The renewal price, configured in dollars via LumenSetting, formatted as
+  # currency. Falls back to neutral wording when no price is set.
+  def renewal_amount
+    price = LumenSetting.get('enterprise_pro_price_usd', cache: false)
+    return 'the current Pro rate' if price.blank?
+
+    ActiveSupport::NumberHelper.number_to_currency(price)
+  end
 
   # Admin recipients are configured through LumenSetting and may be given as a
   # comma and/or newline separated list. Read live (cache: false) so updates take

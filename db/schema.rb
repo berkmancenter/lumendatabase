@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_06_05_120003) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_05_120005) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -261,6 +261,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_05_120003) do
     t.text "company_contact_information"
     t.text "representative_contact_information"
     t.string "payment_method"
+    t.datetime "last_renewal_reminder_sent_at"
   end
 
   create_table "enterprise_domains", force: :cascade do |t|

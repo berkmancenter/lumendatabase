@@ -9,6 +9,10 @@ class EnterpriseAccount < ApplicationRecord
 
   PRO_PERIOD = 1.month
 
+  # How many days before paid_until to email invoice-billed accounts a renewal
+  # invoice: one week and one day before the Pro period ends.
+  RENEWAL_REMINDER_DAYS = [7, 1].freeze
+
   REPORT_FREQUENCIES = %w[none daily weekly].freeze
   REPORT_FREQUENCY_OPTIONS = [
     ['Off', 'none'],
@@ -30,6 +34,9 @@ class EnterpriseAccount < ApplicationRecord
 
   scope :pro, -> { where(plan: 'pro') }
   scope :reporting_enabled, -> { pro.where.not(report_frequency: 'none') }
+  scope :renewal_invoice_candidates, lambda {
+    pro.where(payment_method: 'invoice').where.not(paid_until: nil)
+  }
 
   def pro?
     plan == 'pro'
@@ -75,7 +82,23 @@ class EnterpriseAccount < ApplicationRecord
     last_report_sent_at || report_interval(now)
   end
 
+  # True when an invoice-billed Pro account is exactly one week or one day from
+  # the end of its paid period and hasn't already been reminded today (so the
+  # daily task is safe to run more than once a day).
+  def renewal_reminder_due?(now = Time.current)
+    return false unless pro? && payment_method == 'invoice'
+    return false if paid_until.blank?
+    return false unless RENEWAL_REMINDER_DAYS.include?(days_until_paid_until(now))
+    return true if last_renewal_reminder_sent_at.blank?
+
+    last_renewal_reminder_sent_at.to_date < now.to_date
+  end
+
   private
+
+  def days_until_paid_until(now)
+    (paid_until.to_date - now.to_date).to_i
+  end
 
   def report_interval(now)
     case report_frequency

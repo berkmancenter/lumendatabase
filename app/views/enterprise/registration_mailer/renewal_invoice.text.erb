@@ -1,0 +1,7 @@
+<%= format(
+      Translation.t('enterprise_email_renewal_invoice_text'),
+      company_name: @enterprise_account.name,
+      ends_on: @enterprise_account.paid_until&.to_fs(:simple),
+      amount: @amount,
+      settings_url: enterprise_settings_url(host: Chill::Application.config.site_host)
+    ) %>
