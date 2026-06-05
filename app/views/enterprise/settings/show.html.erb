@@ -8,10 +8,14 @@
   <p class="enterprise-plan-payment-method">
     Payment method: <strong><%= @enterprise_account.payment_method_label %></strong>
   </p>
-  <p class="enterprise-plan-active-until">
-    Your Pro access is active until
-    <strong><%= @enterprise_account.paid_until.to_fs(:simple) %></strong>.
-  </p>
+  <% if @enterprise_account.paid_until.present? %>
+    <p class="enterprise-plan-active-until">
+      Your Pro access is active until
+      <strong><%= @enterprise_account.paid_until.to_fs(:simple) %></strong>.
+    </p>
+  <% else %>
+    <p class="enterprise-plan-active-until">Your Pro access is active.</p>
+  <% end %>
 
   <h2>Reports</h2>
   <% report_delivery_off = @enterprise_account.report_frequency == 'none' %>

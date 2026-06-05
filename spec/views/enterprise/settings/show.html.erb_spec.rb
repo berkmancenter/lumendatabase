@@ -31,7 +31,8 @@ describe 'enterprise/settings/show.html.erb' do
     )
     expect(rendered).to have_css(
       '.enterprise-plan-active-until',
-      text: /active until .*July 01, 2026/
+      text: /active until July 01, 2026/,
+      normalize_ws: true
     )
   end
 
