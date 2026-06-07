@@ -1,7 +1,12 @@
 require 'rails_helper'
 
 describe 'rake lumen:import_github_notices', type: :task, vcr: true do
-  before :all do
+  # Use before(:each), not before(:all): before(:all) runs outside
+  # DatabaseCleaner's per-example transaction, so records created here are
+  # committed and survive the rollback, polluting Notice.count/Notice.all for
+  # later examples (e.g. CollapsesTopics, publish_via_rake_task) until a
+  # deletion-strategy example happens to truncate the table.
+  before :each do
     create(:court_order, :with_document)
     user = create(:user, :submitter, email: LumenSetting.get('github_user_email'))
     create(:entity, name: 'GitHub', users: [user])

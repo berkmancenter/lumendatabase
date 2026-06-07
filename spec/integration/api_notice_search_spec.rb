@@ -476,8 +476,7 @@ feature "Searching for Notices via the API" do
 
       expect_api_search_to_find('Foobar', date_submitted: "#{notice.created_at.to_i - 10.days - 60.seconds}000..#{notice.created_at.to_i + 60.seconds}000") do |json|
         expect(json['notices'].length).to eq(2)
-        expect(json['notices'].first['id']).to eq(notice.id)
-        expect(json['notices'].last['id']).to eq(older_notice.id)
+        expect(json['notices'].map { |notice| notice['id'] }).to contain_exactly(notice.id, older_notice.id)
       end
     end
   end

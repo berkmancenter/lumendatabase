@@ -166,7 +166,7 @@ describe 'notices/new.html.erb' do
 
   (Notice.type_models - [Placeholder]).each do |model|
     context "country selectors in \"#{model.label}\" notices" do
-      it 'use ISO country codes' do
+      it 'use ISO country codes', search: true do
         factory_name = model.name.tableize.singularize
         assign(
           :notice, build(factory_name, role_names: %w[sender recipient])

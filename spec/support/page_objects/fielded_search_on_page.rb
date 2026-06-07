@@ -66,7 +66,27 @@ class FieldedSearchOnPage < PageObject
   end
 
   def run_search
-    find('.advanced-search .resubmit .button').click
+    # The advanced-search form submits via GET. Two intermittent failures are
+    # guarded here:
+    #   1. The submit click occasionally no-ops (it lands while the advanced
+    #      panel is briefly re-rendered, hitting a detached node), so no
+    #      navigation happens and we stay on the unconstrained search page.
+    #   2. Even once submitted, callers must not read the *previous* page:
+    #      visit_search_page loads an unconstrained /notices/search that lists
+    #      every visible notice and shares the .results-list selector with the
+    #      real results, so Capybara would otherwise happily read the stale
+    #      page and find notices the constrained search excludes.
+    # Clicking and then waiting for the query-string URL handles (2); retrying
+    # the click when navigation doesn't occur handles (1). The pre-submission
+    # search page has no query string, so its presence proves navigation ran.
+    attempts = 0
+    begin
+      find('.advanced-search .resubmit .button').click
+      assert_current_path(/\?.+=/, url: true, wait: 5)
+    rescue Capybara::ExpectationNotMet
+      retry if (attempts += 1) < 3
+      raise
+    end
   end
 
   def visit_search_page

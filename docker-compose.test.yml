@@ -64,9 +64,10 @@ services:
     volumes:
       - '.:/app:ro'
     tmpfs:
-      - /user/share/logstash/data
+      - /usr/share/logstash/data:uid=1000,gid=0,mode=0775
     environment:
       LS_JAVA_OPTS: "-Xmx2g -Xms2g"
+      LOGSTASH_QUEUE_TYPE: memory
 
   redis:
     image: 'redis:7.2'

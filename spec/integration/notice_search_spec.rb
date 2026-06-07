@@ -44,7 +44,7 @@ feature 'Searching Notices', type: :feature do
     expect(page).to have_css('ol.action_taken_facet li', count: 2)
   end
 
-  scenario 'displays correct content when a notice only has a principal' do
+  scenario 'displays correct content when a notice only has a principal', search: true do
     create(:dmca, role_names: %w[principal], title: 'A notice')
     index_changed_instances
     submit_search 'A notice'
@@ -84,7 +84,7 @@ feature 'Searching Notices', type: :feature do
     expect(page).to have_words('foo bar baz')
   end
 
-  scenario 'sanitizes excerpts' do
+  scenario 'sanitizes excerpts', search: true do
     create(:dmca, title: '<strong>foo</strong> and <em>bar</em>')
     index_changed_instances
 
@@ -511,7 +511,7 @@ feature 'Searching Notices', type: :feature do
     ).to eq '1 Results'
   end
 
-  scenario 'respects criteria which should suppress notices' do
+  scenario 'respects criteria which should suppress notices', search: true do
     rescinded = create(:dmca, title: 'rescinded', rescinded: true)
     hidden = create(:dmca, title: 'hidden', hidden: true)
     spam = create(:dmca, title: 'spam', spam: true)
