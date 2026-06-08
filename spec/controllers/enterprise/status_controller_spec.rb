@@ -34,6 +34,28 @@ describe Enterprise::StatusController do
       end
     end
 
+    context 'with a previous Pro subscription' do
+      let(:account) do
+        create(
+          :enterprise_account,
+          :inactive,
+          :invoice,
+          paid_until: 2.days.ago
+        )
+      end
+      let(:user) { create(:user, :enterprise, enterprise_account: account) }
+
+      it 'shows when the most recent Pro subscription was paid through' do
+        get :show
+
+        expect(response).to be_successful
+        expect(response.body).to include(
+          account.paid_until.to_fs(:simple)
+        )
+        expect(response.body).to match(/most recent Pro subscription/i)
+      end
+    end
+
     context 'when the account is already on the pro plan' do
       let(:account) { create(:enterprise_account, plan: 'pro') }
       let(:user) { create(:user, :enterprise, enterprise_account: account) }

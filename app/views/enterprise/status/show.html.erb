@@ -33,6 +33,13 @@
         </p>
       <% end %>
 
+      <% if @enterprise_account&.paid_until.present? %>
+        <p class="enterprise-plan-expired-on">
+          Your most recent Pro subscription was paid through
+          <strong><%= @enterprise_account.paid_until.to_fs(:simple) %></strong>.
+        </p>
+      <% end %>
+
       <p><%= link_to 'Log out', destroy_user_session_path %></p>
     </section>
   </article>
