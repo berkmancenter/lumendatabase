@@ -238,6 +238,21 @@ describe Ability do
 
       expect(subject.can? :view_enterprise_version, notice).to be false
     end
+
+    it "cannot see the enterprise API version when the account is inactive" do
+      enterprise_account.update!(plan: 'inactive')
+      notice = build(
+        :dmca,
+        works: [
+          Work.new(
+            infringing_urls: [InfringingUrl.new(url: 'https://business.example/path')],
+            copyrighted_urls: []
+          )
+        ]
+      )
+
+      expect(subject.can? :view_enterprise_version, notice).to be false
+    end
   end
 
   context "a researcher with the can_generate_permanent_notice_token_urls setting on" do

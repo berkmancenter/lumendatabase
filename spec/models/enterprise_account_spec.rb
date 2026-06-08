@@ -86,7 +86,7 @@ describe EnterpriseAccount, type: :model do
   end
 
   describe '.reporting_enabled' do
-    it 'only includes pro accounts with reporting turned on' do
+    it 'does not give report access to inactive accounts' do
       pro_with_reports = create(:enterprise_account, plan: 'pro', report_frequency: 'daily')
       create(:enterprise_account, plan: 'pro', report_frequency: 'none')
       create(:enterprise_account, :inactive, report_frequency: 'daily')

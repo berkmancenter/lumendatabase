@@ -12,7 +12,7 @@ describe Enterprise::SettingsController do
   end
 
   describe 'access control' do
-    it 'denies access to accounts that are not on the pro plan' do
+    it 'denies settings access to inactive accounts' do
       inactive_account = create(:enterprise_account, :inactive)
       inactive_user = create(:user, :enterprise, enterprise_account: inactive_account)
       allow(controller).to receive(:current_user).and_return(inactive_user)
