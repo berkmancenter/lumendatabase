@@ -19,14 +19,18 @@ if (!RedactorPlugins) var RedactorPlugins = {};
 
         this.definedlinks.storage = {};
         data = [
-          <% Comfy::Cms::Page.find_by_label('pages').children.published.each do |page| %>
-            { "name": "<%= page.label %>", "url": "<%= page.full_path %>" },
+          <% if (pages_page = Comfy::Cms::Page.find_by_label('pages')) %>
+            <% pages_page.children.published.each do |page| %>
+              { "name": "<%= page.label %>", "url": "<%= page.full_path %>" },
+            <% end %>
           <% end %>
         ]
+        <% if (blog_page = Comfy::Cms::Page.find_by_label('blog_entries')) %>
         data.push(
           {"name": "Blog Archive",
-           "url": "<%= Comfy::Cms::Page.find_by_label('blog_entries').full_path %>"}
+           "url": "<%= blog_page.full_path %>"}
          )
+        <% end %>
 
         $.each(data, $.proxy(function(key, val)
         {

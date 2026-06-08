@@ -1,7 +1,9 @@
 if ($.Redactor !== undefined) {
   $.Redactor.opts.definedLinks = [
-    <% Comfy::Cms::Site.first.pages.root.children.published.each do |page| %>
-      { "name": "<%= page.label %>", "url": "<%= page.full_path %>" },
+    <% if (root = Comfy::Cms::Site.first&.pages&.root) %>
+      <% root.children.published.each do |page| %>
+        { "name": "<%= page.label %>", "url": "<%= page.full_path %>" },
+      <% end %>
     <% end %>
   ]
 }
