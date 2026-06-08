@@ -226,15 +226,33 @@ FactoryBot.define do
     trait :enterprise do
       roles { [Role.enterprise] }
       enterprise_account
+      enterprise_email_confirmed_at { Time.current }
+    end
+
+    trait :unconfirmed_enterprise_email do
+      enterprise_email_confirmed_at { nil }
+      enterprise_email_confirmation_token { SecureRandom.hex(16) }
     end
   end
 
   factory :enterprise_account do
     name { 'Example Business' }
     plan { 'pro' }
+    status { 'approved' }
     report_frequency { 'none' }
 
     trait :inactive do
+      plan { 'inactive' }
+    end
+
+    trait :pre_registration do
+      status { 'pre_registration' }
+      plan { 'inactive' }
+      applicant_email { 'applicant@example.com' }
+    end
+
+    trait :rejected do
+      status { 'rejected' }
       plan { 'inactive' }
     end
 

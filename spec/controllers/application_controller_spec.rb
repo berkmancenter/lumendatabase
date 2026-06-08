@@ -11,9 +11,16 @@ describe ApplicationController do
       )
     end
 
-    it 'sends inactive enterprise users to the account status page' do
+    it 'sends a confirmed not-yet-pro enterprise user to settings to choose a plan' do
       account = create(:enterprise_account, :inactive)
       user = create(:user, :enterprise, enterprise_account: account)
+
+      expect(controller.after_sign_in_path_for(user)).to eq(enterprise_settings_path)
+    end
+
+    it 'sends an unconfirmed enterprise user to the account status page' do
+      account = create(:enterprise_account, :inactive)
+      user = create(:user, :enterprise, :unconfirmed_enterprise_email, enterprise_account: account)
 
       expect(controller.after_sign_in_path_for(user)).to eq(enterprise_status_path)
     end

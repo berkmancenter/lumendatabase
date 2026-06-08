@@ -1,0 +1,42 @@
+<% title 'Confirm your email' %>
+
+<div class="inner-padding">
+  <article class="enterprise-email-confirmation">
+    <section class="body">
+      <h1>Confirm your email and set your password</h1>
+
+      <p>
+        Your Lumen Enterprise registration for
+        <strong><%= @user.enterprise_account&.name %></strong> has been accepted.
+        Set a password below to confirm your email
+        (<strong><%= @user.email %></strong>) and finish setting up your account.
+      </p>
+
+      <%= form_with model: @user, url: enterprise_confirm_email_path, method: :patch, local: true do |form| %>
+        <% if @user.errors.any? %>
+          <div class="error-messages">
+            <ul>
+              <% @user.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <%= hidden_field_tag :token, @user.enterprise_email_confirmation_token %>
+
+        <p>
+          <%= form.label :password, 'Password' %>
+          <%= form.password_field :password, required: true %>
+        </p>
+
+        <p>
+          <%= form.label :password_confirmation, 'Confirm password' %>
+          <%= form.password_field :password_confirmation, required: true %>
+        </p>
+
+        <p><%= form.submit 'Confirm email and set password' %></p>
+      <% end %>
+    </section>
+  </article>
+</div>

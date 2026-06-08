@@ -19,9 +19,76 @@ describe EnterpriseAccount, type: :model do
     end
   end
 
+  describe 'status' do
+    it 'only allows known statuses' do
+      expect(build(:enterprise_account, status: 'pre_registration')).to be_valid
+      expect(build(:enterprise_account, status: 'approved')).to be_valid
+      expect(build(:enterprise_account, status: 'rejected')).to be_valid
+      expect(build(:enterprise_account, status: 'maybe')).not_to be_valid
+    end
+  end
+
   describe 'defaults' do
     it 'defaults a new account to the inactive plan' do
       expect(EnterpriseAccount.new.plan).to eq('inactive')
+    end
+
+    it 'defaults a new account to the pre_registration status' do
+      expect(EnterpriseAccount.new.status).to eq('pre_registration')
+    end
+  end
+
+  describe '#approve_registration!' do
+    let(:account) { create(:enterprise_account, :pre_registration, applicant_email: 'rep@example.com') }
+
+    it 'marks the account approved and creates an unconfirmed enterprise user with a token' do
+      allow(Enterprise::RegistrationMailer).to receive(:email_confirmation)
+        .and_return(instance_double(ActionMailer::MessageDelivery, deliver_later: true))
+
+      user = account.approve_registration!
+
+      expect(account.reload.status).to eq('approved')
+      expect(user.email).to eq('rep@example.com')
+      expect(user.role?(:enterprise)).to be true
+      expect(user.enterprise_account).to eq(account)
+      expect(user.enterprise_email_confirmed?).to be false
+      expect(user.enterprise_email_confirmation_token).to be_present
+    end
+
+    it 'emails the user the confirm-email/set-password link' do
+      mailer = instance_double(ActionMailer::MessageDelivery, deliver_later: true)
+      expect(Enterprise::RegistrationMailer)
+        .to receive(:email_confirmation)
+        .with(account, an_instance_of(User))
+        .and_return(mailer)
+
+      account.approve_registration!
+    end
+
+    it 'attaches the enterprise role to an existing user with that email' do
+      existing = create(:user, email: 'rep@example.com')
+      allow(Enterprise::RegistrationMailer).to receive(:email_confirmation)
+        .and_return(instance_double(ActionMailer::MessageDelivery, deliver_later: true))
+
+      user = account.approve_registration!
+
+      expect(user.id).to eq(existing.id)
+      expect(user.reload.role?(:enterprise)).to be true
+      expect(user.enterprise_account).to eq(account)
+    end
+  end
+
+  describe '#reject_registration!' do
+    let(:account) { create(:enterprise_account, :pre_registration) }
+
+    it 'marks the account rejected and notifies the applicant' do
+      mailer = instance_double(ActionMailer::MessageDelivery, deliver_later: true)
+      expect(Enterprise::RegistrationMailer)
+        .to receive(:client_rejected).with(account).and_return(mailer)
+
+      account.reject_registration!
+
+      expect(account.reload.status).to eq('rejected')
     end
   end
 

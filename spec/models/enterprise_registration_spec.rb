@@ -4,107 +4,64 @@ describe EnterpriseRegistration, type: :model do
   def valid_attributes(overrides = {})
     {
       email: 'rep@example.com',
-      password: 'secretsauce',
-      password_confirmation: 'secretsauce',
       company_name: 'Example Business',
       company_contact_information: '123 Main St, contact@example.com',
       representative_contact_information: 'Jane Rep, jane@example.com',
-      payment_method: 'invoice'
+      interested_domains: "example.com\nshop.example.com"
     }.merge(overrides)
   end
 
   describe 'validations' do
-    it 'requires email, password, company name and a known payment method' do
+    it 'requires email and company name' do
       registration = described_class.new
 
       expect(registration).not_to be_valid
-      expect(registration.errors.attribute_names).to include(:email, :password, :company_name, :payment_method)
-    end
-
-    it 'requires the password confirmation to match' do
-      registration = described_class.new(valid_attributes(password_confirmation: 'different'))
-
-      expect(registration).not_to be_valid
-      expect(registration.errors[:password_confirmation]).to be_present
-    end
-
-    it 'rejects unknown payment methods' do
-      registration = described_class.new(valid_attributes(payment_method: 'cash'))
-
-      expect(registration).not_to be_valid
-      expect(registration.errors[:payment_method]).to be_present
+      expect(registration.errors.attribute_names).to include(:email, :company_name)
     end
   end
 
   describe '#save' do
-    context 'with an invoice registration' do
-      subject(:registration) { described_class.new(valid_attributes(payment_method: 'invoice')) }
+    subject(:registration) { described_class.new(valid_attributes) }
 
-      it 'creates an inactive account and an enterprise user' do
-        expect(registration.save).to be true
+    it 'creates a pre_registration account with the submitted data and no user' do
+      expect(registration.save).to be true
 
-        account = registration.enterprise_account
-        user = registration.user
+      account = registration.enterprise_account
 
-        expect(account.name).to eq('Example Business')
-        expect(account.plan).to eq('inactive')
-        expect(account.paid_until).to be_nil
-        expect(account.payment_method).to eq('invoice')
-        expect(account.company_contact_information).to eq('123 Main St, contact@example.com')
-        expect(account.representative_contact_information).to eq('Jane Rep, jane@example.com')
-
-        expect(user.email).to eq('rep@example.com')
-        expect(user.enterprise_account).to eq(account)
-        expect(user.role?(:enterprise)).to be true
-        expect(registration.pro?).to be false
-      end
+      expect(account.name).to eq('Example Business')
+      expect(account.status).to eq('pre_registration')
+      expect(account.plan).to eq('inactive')
+      expect(account.applicant_email).to eq('rep@example.com')
+      expect(account.company_contact_information).to eq('123 Main St, contact@example.com')
+      expect(account.representative_contact_information).to eq('Jane Rep, jane@example.com')
+      expect(account.interested_domains).to eq("example.com\nshop.example.com")
+      expect(User.count).to eq(0)
     end
 
-    context 'with a credit card registration' do
-      subject(:registration) { described_class.new(valid_attributes(payment_method: 'credit_card')) }
-
-      it 'creates a pro account with a paid period' do
-        expect(registration.save).to be true
-
-        account = registration.enterprise_account
-
-        expect(account.plan).to eq('pro')
-        expect(account.paid_until).to be_within(1.minute).of(1.month.from_now)
-        expect(registration.pro?).to be true
-        expect(registration.user.role?(:enterprise)).to be true
-      end
-    end
-
-    context 'with a duplicate email' do
-      before { create(:user, email: 'rep@example.com') }
-
-      subject(:registration) { described_class.new(valid_attributes) }
-
-      it 'fails with a friendly error and creates nothing' do
-        expect(registration.save).to be false
-
-        expect(User.count).to eq(1)
-        expect(EnterpriseAccount.count).to eq(0)
-        expect(registration.errors[:email].join).to match(/taken/i)
-      end
-    end
-
-    it 'sends admin and client notification emails after a successful commit' do
-      registration = described_class.new(valid_attributes)
-
+    it 'sends the admin review request and the applicant acknowledgement' do
       admin_double = instance_double(ActionMailer::MessageDelivery, deliver_later: true)
       client_double = instance_double(ActionMailer::MessageDelivery, deliver_later: true)
-      allow(Enterprise::RegistrationMailer).to receive(:admin_notification).and_return(admin_double)
-      allow(Enterprise::RegistrationMailer).to receive(:client_confirmation).and_return(client_double)
+      allow(Enterprise::RegistrationMailer).to receive(:admin_review_request).and_return(admin_double)
+      allow(Enterprise::RegistrationMailer).to receive(:client_registration_received).and_return(client_double)
 
       registration.save
 
       expect(Enterprise::RegistrationMailer)
-        .to have_received(:admin_notification).with(registration.enterprise_account, registration.user)
+        .to have_received(:admin_review_request).with(registration.enterprise_account)
       expect(Enterprise::RegistrationMailer)
-        .to have_received(:client_confirmation).with(registration.enterprise_account, registration.user)
+        .to have_received(:client_registration_received).with(registration.enterprise_account)
       expect(admin_double).to have_received(:deliver_later)
       expect(client_double).to have_received(:deliver_later)
+    end
+
+    context 'when the company name is missing' do
+      it 'fails and creates nothing' do
+        registration = described_class.new(valid_attributes(company_name: ''))
+
+        expect(registration.save).to be false
+        expect(EnterpriseAccount.count).to eq(0)
+        expect(registration.errors[:company_name]).to be_present
+      end
     end
   end
 end

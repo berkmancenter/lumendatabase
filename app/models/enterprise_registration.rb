@@ -1,43 +1,30 @@
-# Form object that orchestrates a public Lumen Enterprise sign-up: it validates
-# the submitted data, then transactionally creates the EnterpriseAccount, the
-# Devise user, assigns the enterprise role, applies the payment-method rules and
-# sends the notification emails. Plan and paid_until are always derived here,
-# never trusted from the browser.
+# Form object for a public Lumen Enterprise sign-up. It validates the submitted
+# data and creates the EnterpriseAccount in pre_registration status - no user and
+# no payment yet. An admin later accepts or rejects the registration; the user is
+# created on accept (see EnterpriseAccount#approve_registration!). On success it
+# notifies the admins (with a link to review) and acknowledges the applicant.
 class EnterpriseRegistration
   include ActiveModel::Model
 
   ATTRIBUTES = %i[
     email
-    password
-    password_confirmation
     company_name
     company_contact_information
     representative_contact_information
-    payment_method
+    interested_domains
   ].freeze
 
   attr_accessor(*ATTRIBUTES)
-  attr_reader :user, :enterprise_account
+  attr_reader :enterprise_account
 
   validates :email, presence: true
-  validates :password, presence: true
   validates :company_name, presence: true
-  validates :payment_method,
-            inclusion: {
-              in: EnterpriseAccount::PAYMENT_METHODS,
-              message: 'must be selected'
-            }
-  validate :passwords_match
 
   def save
     return false unless valid?
 
-    ActiveRecord::Base.transaction do
-      @enterprise_account = build_enterprise_account
-      @enterprise_account.save!
-      @user = build_user(@enterprise_account)
-      @user.save!
-    end
+    @enterprise_account = build_enterprise_account
+    @enterprise_account.save!
 
     send_notifications
 
@@ -47,67 +34,31 @@ class EnterpriseRegistration
     false
   end
 
-  def pro?
-    enterprise_account&.pro?
-  end
-
   private
 
   def build_enterprise_account
-    account = EnterpriseAccount.new(
+    EnterpriseAccount.new(
       name: company_name,
+      applicant_email: email,
       company_contact_information: company_contact_information,
       representative_contact_information: representative_contact_information,
-      payment_method: payment_method
-    )
-
-    apply_payment_method(account)
-
-    account
-  end
-
-  # The plan and paid period are decided on the server based purely on the
-  # chosen payment method, never on anything the form posts directly.
-  def apply_payment_method(account)
-    if payment_method == 'credit_card'
-      account.extend_pro_access!
-    else
-      account.plan = 'inactive'
-    end
-  end
-
-  def build_user(account)
-    User.new(
-      email: email,
-      password: password,
-      password_confirmation: password_confirmation,
-      enterprise_account: account,
-      roles: [Role.enterprise]
+      interested_domains: interested_domains,
+      status: 'pre_registration'
     )
   end
 
   def send_notifications
     Enterprise::RegistrationMailer
-      .admin_notification(enterprise_account, user)
+      .admin_review_request(enterprise_account)
       .deliver_later
 
     Enterprise::RegistrationMailer
-      .client_confirmation(enterprise_account, user)
+      .client_registration_received(enterprise_account)
       .deliver_later
   end
 
-  def passwords_match
-    return if password.blank?
-    return if password == password_confirmation
-
-    errors.add(:password_confirmation, "doesn't match Password")
-  end
-
   def import_record_errors
-    copy_errors(user, email: :email,
-                      password: :password,
-                      password_confirmation: :password_confirmation)
-    copy_errors(enterprise_account, name: :company_name)
+    copy_errors(enterprise_account, name: :company_name, applicant_email: :email)
   end
 
   def copy_errors(record, mapping)

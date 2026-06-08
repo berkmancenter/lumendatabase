@@ -5,97 +5,125 @@
   <p class="enterprise-plan">
     Your plan: <strong><%= @enterprise_account.plan.titleize %></strong>
   </p>
-  <p class="enterprise-plan-payment-method">
-    Payment method: <strong><%= @enterprise_account.payment_method_label %></strong>
-  </p>
-  <% if @enterprise_account.paid_until.present? %>
-    <p class="enterprise-plan-active-until">
-      Your Pro access is active until
-      <strong><%= @enterprise_account.paid_until.to_fs(:simple) %></strong>.
+
+  <% if @enterprise_account.pro? %>
+    <p class="enterprise-plan-payment-method">
+      Payment method: <strong><%= @enterprise_account.payment_method_label %></strong>
     </p>
-  <% else %>
-    <p class="enterprise-plan-active-until">Your Pro access is active.</p>
-  <% end %>
-
-  <h2>Reports</h2>
-  <% report_delivery_off = @enterprise_account.report_frequency == 'none' %>
-  <%= form_with(
-        model: @enterprise_account,
-        url: enterprise_settings_path,
-        method: :patch,
-        local: true
-      ) do |form| %>
-    <p>
-      <%= form.label :report_frequency, 'Status' %>
-      <%= form.select :report_frequency, EnterpriseAccount::REPORT_FREQUENCY_OPTIONS %>
-    </p>
-
-    <p id="enterprise-report-recipient" <%= 'hidden' if report_delivery_off %>>
-      <%= form.label :report_recipient_email, 'Delivery email' %>
-      <%= form.email_field(
-            :report_recipient_email,
-            placeholder: current_user.email,
-            disabled: report_delivery_off
-          ) %>
-    </p>
-
-    <p><%= form.submit 'Save report settings' %></p>
-  <% end %>
-
-  <h2>Domains</h2>
-  <%= form_with(
-        model: EnterpriseDomain.new,
-        url: enterprise_domains_path,
-        local: true
-      ) do |form| %>
-    <p>
-      <%= form.label :domain, 'Add domain' %>
-      <%= form.text_field :domain, placeholder: 'example.com' %>
-    </p>
-
-    <p><%= form.submit 'Add domain' %></p>
-  <% end %>
-
-  <h2>Domains list</h2>
-  <ol>
-    <% @enterprise_domains.each do |enterprise_domain| %>
-      <li class="enterprise-domain-row">
-        <div class="enterprise-domain-row-header">
-          <span>
-            <strong><%= enterprise_domain.domain %></strong>
-            <% if enterprise_domain.verified? %>
-              <span class="lumen-badge enterprise-domain-badge">Verified</span>
-            <% end %>
-          </span>
-
-          <span class="enterprise-domain-row-actions">
-            <% unless enterprise_domain.verified? %>
-              <%= button_to(
-                    'Verify now',
-                    verify_enterprise_domain_path(enterprise_domain),
-                    method: :post,
-                    class: 'small-button'
-                  ) %>
-            <% end %>
-            <%= button_to(
-                  'Remove',
-                  enterprise_domain_path(enterprise_domain),
-                  method: :delete,
-                  class: 'small-button',
-                  data: { confirm: 'Remove this domain?' }
-                ) %>
-          </span>
-        </div>
-
-        <% unless enterprise_domain.verified? %>
-          <p>
-            Create
-            <code>/<%= enterprise_domain.verification_filename %></code>
-            on this domain with this exact content:
-          </p>
-          <pre><%= enterprise_domain.verification_file_content %></pre>
-        <% end %>
-      </li>
+    <% if @enterprise_account.paid_until.present? %>
+      <p class="enterprise-plan-active-until">
+        Your Pro access is active until
+        <strong><%= @enterprise_account.paid_until.to_fs(:simple) %></strong>.
+      </p>
+    <% else %>
+      <p class="enterprise-plan-active-until">Your Pro access is active.</p>
     <% end %>
-  </ol>
+  <% else %>
+    <section class="enterprise-get-pro">
+      <p>
+        Your email is confirmed. Choose how to pay to unlock Lumen Enterprise Pro
+        - <strong><%= enterprise_pro_price %></strong> per month.
+      </p>
+
+      <%= form_with url: enterprise_pay_path, method: :post, local: true do |form| %>
+        <% EnterpriseAccount::PAYMENT_METHOD_OPTIONS.each do |label, value| %>
+          <p>
+            <label>
+              <%= form.radio_button :payment_method, value, required: true %>
+              <%= label %>
+            </label>
+          </p>
+        <% end %>
+        <p class="form-text">
+          Pay by credit card to unlock Pro right away, or choose to be invoiced and
+          we'll follow up - your Pro access unlocks once the invoice is paid.
+        </p>
+        <p><%= form.submit 'Get Pro' %></p>
+      <% end %>
+    </section>
+  <% end %>
+
+  <% if @enterprise_account.pro? %>
+    <h2>Reports</h2>
+    <% report_delivery_off = @enterprise_account.report_frequency == 'none' %>
+    <%= form_with(
+          model: @enterprise_account,
+          url: enterprise_settings_path,
+          method: :patch,
+          local: true
+        ) do |form| %>
+      <p>
+        <%= form.label :report_frequency, 'Status' %>
+        <%= form.select :report_frequency, EnterpriseAccount::REPORT_FREQUENCY_OPTIONS %>
+      </p>
+
+      <p id="enterprise-report-recipient" <%= 'hidden' if report_delivery_off %>>
+        <%= form.label :report_recipient_email, 'Delivery email' %>
+        <%= form.email_field(
+              :report_recipient_email,
+              placeholder: current_user.email,
+              disabled: report_delivery_off
+            ) %>
+      </p>
+
+      <p><%= form.submit 'Save report settings' %></p>
+    <% end %>
+
+    <h2>Domains</h2>
+    <%= form_with(
+          model: EnterpriseDomain.new,
+          url: enterprise_domains_path,
+          local: true
+        ) do |form| %>
+      <p>
+        <%= form.label :domain, 'Add domain' %>
+        <%= form.text_field :domain, placeholder: 'example.com' %>
+      </p>
+
+      <p><%= form.submit 'Add domain' %></p>
+    <% end %>
+
+    <h2>Domains list</h2>
+    <ol>
+      <% @enterprise_domains.each do |enterprise_domain| %>
+        <li class="enterprise-domain-row">
+          <div class="enterprise-domain-row-header">
+            <span>
+              <strong><%= enterprise_domain.domain %></strong>
+              <% if enterprise_domain.verified? %>
+                <span class="lumen-badge enterprise-domain-badge">Verified</span>
+              <% end %>
+            </span>
+
+            <span class="enterprise-domain-row-actions">
+              <% unless enterprise_domain.verified? %>
+                <%= button_to(
+                      'Verify now',
+                      verify_enterprise_domain_path(enterprise_domain),
+                      method: :post,
+                      class: 'small-button'
+                    ) %>
+              <% end %>
+              <%= button_to(
+                    'Remove',
+                    enterprise_domain_path(enterprise_domain),
+                    method: :delete,
+                    class: 'small-button',
+                    data: { confirm: 'Remove this domain?' }
+                  ) %>
+            </span>
+          </div>
+
+          <% unless enterprise_domain.verified? %>
+            <p>
+              Create
+              <code>/<%= enterprise_domain.verification_filename %></code>
+              on this domain with this exact content:
+            </p>
+            <pre><%= enterprise_domain.verification_file_content %></pre>
+          <% end %>
+        </li>
+      <% end %>
+    </ol>
+  <% end %>
 </div>

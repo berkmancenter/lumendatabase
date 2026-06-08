@@ -13,6 +13,14 @@ Rails.application.routes.draw do
     # Public Lumen Enterprise sign-up (the controller, not the namespace, gates auth).
     get 'register', to: 'registrations#new', as: :register
     post 'register', to: 'registrations#create'
+    get 'register/received', to: 'registrations#received', as: :registration_received
+
+    # Confirm email + set password (link sent when an admin accepts a sign-up).
+    get 'confirm_email', to: 'email_confirmations#show', as: :confirm_email
+    patch 'confirm_email', to: 'email_confirmations#update'
+
+    # Choose and pay for a Pro plan from settings.
+    post 'pay', to: 'payments#create', as: :pay
 
     # Signed-in landing page for accounts that are not yet on the Pro plan.
     get 'status', to: 'status#show', as: :status

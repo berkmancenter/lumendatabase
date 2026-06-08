@@ -1,6 +1,12 @@
 class EnterpriseAccount < ApplicationRecord
   PLANS = %w[inactive pro].freeze
 
+  # Review lifecycle, independent of plan (which tracks paid access):
+  #   pre_registration -> approved | rejected
+  # A registration starts in pre_registration with no user; an admin accepts
+  # (creating the user) or rejects it.
+  STATUSES = %w[pre_registration approved rejected].freeze
+
   PAYMENT_METHODS = %w[credit_card invoice].freeze
   PAYMENT_METHOD_OPTIONS = [
     ['Credit card', 'credit_card'],
@@ -30,6 +36,7 @@ class EnterpriseAccount < ApplicationRecord
   validates :name, presence: true
   validates :report_frequency, inclusion: { in: REPORT_FREQUENCIES }
   validates :plan, presence: true, inclusion: { in: PLANS }
+  validates :status, presence: true, inclusion: { in: STATUSES }
   validates :payment_method, inclusion: { in: PAYMENT_METHODS }, allow_blank: true
 
   scope :pro, -> { where(plan: 'pro') }
@@ -40,6 +47,42 @@ class EnterpriseAccount < ApplicationRecord
 
   def pro?
     plan == 'pro'
+  end
+
+  def pre_registration?
+    status == 'pre_registration'
+  end
+
+  def approved?
+    status == 'approved'
+  end
+
+  def rejected?
+    status == 'rejected'
+  end
+
+  # Admin accepts the registration: mark it approved, create (or attach) the
+  # enterprise user with an unconfirmed email + confirmation token, and email
+  # them the confirm-email/set-password link. Mirrors
+  # ApiSubmitterRequest#approve_request. Returns the user.
+  def approve_registration!
+    user = nil
+
+    transaction do
+      update!(status: 'approved')
+      user = build_applicant_user
+    end
+
+    Enterprise::RegistrationMailer.email_confirmation(self, user).deliver_later
+
+    user
+  end
+
+  # Admin rejects the registration: mark it rejected and let the applicant know.
+  def reject_registration!
+    update!(status: 'rejected')
+
+    Enterprise::RegistrationMailer.client_rejected(self).deliver_later
   end
 
   def payment_method_label
@@ -95,6 +138,23 @@ class EnterpriseAccount < ApplicationRecord
   end
 
   private
+
+  # Find an existing user for the applicant email or create one with a throwaway
+  # password (they set their real password during email confirmation). Either
+  # way the user is left unconfirmed with a fresh confirmation token and tied to
+  # this account with the enterprise role.
+  def build_applicant_user
+    user = User.find_by(email: applicant_email) ||
+           User.new(email: applicant_email, password: SecureRandom.hex(16))
+
+    user.enterprise_account = self
+    user.roles = (user.roles | [Role.enterprise])
+    user.enterprise_email_confirmed_at = nil
+    user.assign_enterprise_email_confirmation_token
+    user.save!
+
+    user
+  end
 
   def days_until_paid_until(now)
     (paid_until.to_date - now.to_date).to_i

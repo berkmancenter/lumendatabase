@@ -3,8 +3,9 @@ require 'rails_helper'
 describe 'shared/_navigation.html.erb' do
   include Comfy::ComfyHelper
 
-  it 'shows client links in the client area' do
+  it 'shows client links, including My notices, for a paid (pro) client' do
     allow(view).to receive(:enterprise_navigation?).and_return(true)
+    allow(view).to receive(:current_user).and_return(double(active_enterprise_account: true))
     allow(view).to receive(:enterprise_my_notices_path)
       .and_return(enterprise_notices_search_index_path(sort_by: 'created_at desc'))
 
@@ -21,6 +22,18 @@ describe 'shared/_navigation.html.erb' do
     expect(rendered).not_to include(Translation.t('navigation_header_search'))
     expect(rendered).not_to include(Translation.t('navigation_header_topics'))
     expect(rendered).not_to include(Translation.t('navigation_header_media_mentions'))
+  end
+
+  it 'hides My notices for a confirmed client who has not paid yet' do
+    allow(view).to receive(:enterprise_navigation?).and_return(true)
+    allow(view).to receive(:current_user).and_return(double(active_enterprise_account: nil))
+
+    render
+
+    expect(rendered).not_to have_css('.main-nav .nav-item', text: 'My notices')
+    expect(rendered).to contain_link(enterprise_settings_path)
+    expect(rendered).to contain_link(destroy_user_session_path)
+    expect(rendered).to have_css('.main-nav .nav-item:nth-child(1)', text: 'Settings')
   end
 
   it 'has links to all topics' do

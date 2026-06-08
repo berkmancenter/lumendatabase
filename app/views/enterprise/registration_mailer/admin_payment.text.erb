@@ -1,0 +1,8 @@
+<%= format(
+      Translation.t('enterprise_email_admin_payment_text'),
+      company_name: @enterprise_account.name,
+      user_email: @user.email,
+      payment_method: @enterprise_account.payment_method_label,
+      plan: @enterprise_account.plan,
+      admin_url: @admin_url
+    ) %>

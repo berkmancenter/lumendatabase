@@ -65,3 +65,13 @@ en:
         breadcrumb: 'Accept invoice'
         menu: 'Accept invoice'
         title: 'Accept invoice'
+
+      accept_enterprise_account:
+        breadcrumb: 'Accept registration'
+        menu: 'Accept registration'
+        title: 'Accept registration'
+
+      reject_enterprise_account:
+        breadcrumb: 'Reject registration'
+        menu: 'Reject registration'
+        title: 'Reject registration'

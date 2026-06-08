@@ -2,6 +2,23 @@
   <%= form.generate action: :update %>
 <% end %>
 
+<%# Review shortcut for a pending registration: accept (creates the user and
+    emails a confirm/set-password link) or reject (notifies the applicant). %>
+<% if @object.is_a?(EnterpriseAccount) && @object.persisted? && @object.status == 'pre_registration' %>
+  <div class="review-enterprise-account-action mt-3">
+    <%= link_to url_for(action: :accept_enterprise_account, controller: 'rails_admin/main', model_name: @abstract_model.to_param, id: @object.id), class: 'btn btn-primary' do %>
+      <i class="fas fa-check"></i> Accept registration
+    <% end %>
+    <%= link_to url_for(action: :reject_enterprise_account, controller: 'rails_admin/main', model_name: @abstract_model.to_param, id: @object.id), class: 'btn btn-danger', data: { confirm: 'Reject this registration and notify the applicant?' } do %>
+      <i class="fas fa-minus"></i> Reject registration
+    <% end %>
+    <p class="form-text text-muted">
+      Accept creates the enterprise user and emails them a confirm-email/set-password link.
+      Reject marks the account rejected and emails the applicant.
+    </p>
+  </div>
+<% end %>
+
 <%# Invoice-only shortcut: activate the account and notify the client. %>
 <% if @object.is_a?(EnterpriseAccount) && @object.persisted? && @object.payment_method == 'invoice' %>
   <div class="accept-invoice-action mt-3">

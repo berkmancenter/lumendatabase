@@ -1,0 +1,9 @@
+<%= format(
+      Translation.t('enterprise_email_admin_review_request_html'),
+      company_name: h(@enterprise_account.name),
+      applicant_email: h(@enterprise_account.applicant_email),
+      interested_domains: simple_format(@enterprise_account.interested_domains.presence || '(none provided)'),
+      company_contact_information: simple_format(@enterprise_account.company_contact_information.presence || '(not provided)'),
+      representative_contact_information: simple_format(@enterprise_account.representative_contact_information.presence || '(not provided)'),
+      admin_url: h(@admin_url)
+    ).html_safe %>

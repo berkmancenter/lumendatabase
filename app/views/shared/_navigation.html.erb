@@ -1,6 +1,8 @@
 <% if enterprise_navigation? %>
   <nav class="main-nav">
-    <div class="nav-item"><%= link_to 'My notices', enterprise_my_notices_path %></div>
+    <% if current_user&.active_enterprise_account.present? %>
+      <div class="nav-item"><%= link_to 'My notices', enterprise_my_notices_path %></div>
+    <% end %>
     <div class="nav-item"><%= link_to 'Settings', enterprise_settings_path %></div>
     <div class="nav-item"><%= link_to 'Log out', destroy_user_session_path %></div>
   </nav>

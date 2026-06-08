@@ -7,6 +7,8 @@ require 'rails_admin/config/actions/approve_api_submitter_request'
 require 'rails_admin/config/actions/reject_api_submitter_request'
 require 'rails_admin/config/actions/top_notices_token_urls'
 require 'rails_admin/config/actions/accept_invoice'
+require 'rails_admin/config/actions/accept_enterprise_account'
+require 'rails_admin/config/actions/reject_enterprise_account'
 require 'rails_admin/config/fields/types/datetime_timezoned'
 require 'rails_admin/config/fields/association_no_count'
 require 'rails_admin/extensions/history'
@@ -65,6 +67,8 @@ RailsAdmin.config do |config|
     reject_api_submitter_request
     top_notices_token_urls
     accept_invoice
+    accept_enterprise_account
+    reject_enterprise_account
   end
 
   ['Notice', Lumen::TYPES].flatten.each do |notice_type|
@@ -512,6 +516,10 @@ RailsAdmin.config do |config|
 
     edit do
       field :name
+      field :status, :enum do
+        enum { EnterpriseAccount::STATUSES }
+      end
+      field :applicant_email
       field :plan, :enum do
         enum { EnterpriseAccount::PLANS }
       end
@@ -521,6 +529,7 @@ RailsAdmin.config do |config|
       end
       field :company_contact_information
       field :representative_contact_information
+      field :interested_domains
       field :report_frequency
       field :report_recipient_email
       field :last_report_sent_at
@@ -531,6 +540,8 @@ RailsAdmin.config do |config|
 
     list do
       field :name
+      field :status
+      field :applicant_email
       field :plan
       field :paid_until
       field :payment_method

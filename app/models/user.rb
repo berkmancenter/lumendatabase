@@ -42,7 +42,36 @@ class User < ApplicationRecord
   end
 
   def active_enterprise_account
-    enterprise_account if enterprise? && enterprise_account&.pro?
+    return unless enterprise? && enterprise_email_confirmed?
+
+    enterprise_account if enterprise_account&.pro?
+  end
+
+  # True once the user has confirmed the email they registered with. Gates both
+  # Pro access (above) and access to the settings/payment pages (below).
+  def enterprise_email_confirmed?
+    enterprise_email_confirmed_at.present?
+  end
+
+  # An approved enterprise user who has confirmed their email but may not have
+  # paid yet. Lets them reach the settings page to choose a Pro plan.
+  def confirmed_enterprise_user?
+    enterprise? && enterprise_email_confirmed? && enterprise_account&.approved?
+  end
+
+  # Mark the registered email confirmed and burn the single-use token.
+  def confirm_enterprise_email!
+    update!(
+      enterprise_email_confirmed_at: Time.current,
+      enterprise_email_confirmation_token: nil
+    )
+  end
+
+  # Assign a unique single-use confirmation token. Called explicitly when an
+  # admin accepts a registration, never as a global callback, so non-enterprise
+  # users never receive one.
+  def assign_enterprise_email_confirmation_token
+    self.enterprise_email_confirmation_token = generate_enterprise_email_confirmation_token
   end
 
   def enterprise_cache_key
@@ -89,6 +118,13 @@ class User < ApplicationRecord
     loop do
       token = Devise.friendly_token
       break token unless User.where(widget_public_key: token).first
+    end
+  end
+
+  def generate_enterprise_email_confirmation_token
+    loop do
+      token = SecureRandom.hex(16)
+      break token unless User.exists?(enterprise_email_confirmation_token: token)
     end
   end
 end

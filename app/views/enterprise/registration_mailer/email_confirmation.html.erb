@@ -1,0 +1,5 @@
+<%= format(
+      Translation.t('enterprise_email_confirmation_html'),
+      company_name: h(@enterprise_account.name),
+      confirmation_url: h(@confirmation_url)
+    ).html_safe %>

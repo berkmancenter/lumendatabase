@@ -1,0 +1,6 @@
+<%= format(
+      Translation.t('enterprise_email_admin_email_confirmed_html'),
+      company_name: h(@enterprise_account.name),
+      user_email: h(@user.email),
+      admin_url: h(@admin_url)
+    ).html_safe %>

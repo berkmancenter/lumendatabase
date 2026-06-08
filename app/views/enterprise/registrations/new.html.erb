@@ -7,7 +7,7 @@
 
       <p>
         Lumen Enterprise gives your company a private view of the takedown notices
-        that mention the domains you own. Once you verify a domain, you can:
+        that mention the domains you own. Once your account is active, you can:
       </p>
 
       <ul>
@@ -18,24 +18,20 @@
         <li>Use enterprise API access while your account is on the Pro plan.</li>
       </ul>
 
-      <p class="enterprise-pro-price">
-        Lumen Enterprise Pro is <strong><%= enterprise_pro_price %></strong> per month.
-      </p>
-
       <p>
-        Register below to get started. Pay by credit card to unlock Pro access
-        right away, or choose to be invoiced and we'll follow up with you.
+        Register below to request access. Our team will review your request and
+        email you when a decision has been made - there's no payment to make now.
+        If we accept it, you'll confirm your email, set a password, and then choose
+        a plan from your settings.
       </p>
 
       <%= simple_form_for @registration, url: enterprise_register_path, as: :enterprise_registration do |f| %>
         <%= f.error_notification %>
 
         <div class="form-inputs">
-          <h3>Your login</h3>
+          <h3>Your contact email</h3>
           <%= f.input :email, label: 'Email', required: true,
-                hint: 'You will use this email address to sign in.' %>
-          <%= f.input :password, as: :password, label: 'Password', required: true %>
-          <%= f.input :password_confirmation, as: :password, label: 'Confirm password', required: true %>
+                hint: 'We will email you about your request. This becomes your sign-in email if accepted.' %>
 
           <h3>Your company</h3>
           <%= f.input :company_name, label: 'Company name', required: true %>
@@ -45,13 +41,10 @@
           <%= f.input :representative_contact_information, as: :text,
                 label: 'What is the name and contact information for the representative of your company with whom Lumen should communicate?' %>
 
-          <h3>Payment</h3>
-          <%= f.input :payment_method, as: :radio_buttons,
-                label: 'How would you like to pay?',
-                collection: EnterpriseAccount::PAYMENT_METHOD_OPTIONS,
-                required: true %>
-
-          <h4>Total: <strong><%= enterprise_pro_price %></strong></h4>
+          <h3>Domains</h3>
+          <%= f.input :interested_domains, as: :text,
+                label: 'Which domains are you interested in watching?',
+                hint: 'List the domains you own or want to monitor, one per line.' %>
 
           <%= recaptcha_tags %>
         </div>

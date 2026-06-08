@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_06_05_120005) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_08_120004) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -262,6 +262,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_05_120005) do
     t.text "representative_contact_information"
     t.string "payment_method"
     t.datetime "last_renewal_reminder_sent_at"
+    t.string "status", default: "pre_registration", null: false
+    t.string "applicant_email"
+    t.text "interested_domains"
   end
 
   create_table "enterprise_domains", force: :cascade do |t|
@@ -589,9 +592,12 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_05_120005) do
     t.text "notes"
     t.integer "entity_id"
     t.bigint "enterprise_account_id"
+    t.string "enterprise_email_confirmation_token"
+    t.datetime "enterprise_email_confirmed_at"
     t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["enterprise_account_id"], name: "index_users_on_enterprise_account_id"
+    t.index ["enterprise_email_confirmation_token"], name: "index_users_on_enterprise_email_confirmation_token", unique: true
     t.index ["entity_id"], name: "index_users_on_entity_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["widget_public_key"], name: "index_users_on_widget_public_key", unique: true
