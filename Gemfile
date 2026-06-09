@@ -6,6 +6,7 @@ gem 'ancestry'
 gem 'bootsnap'
 gem 'bootstrap-datepicker-rails'
 gem 'cancancan'
+gem 'connection_pool', '< 3'
 gem 'comfortable_mexican_sofa'
 gem 'countries', require: false
 gem 'coveralls_reborn', require: false
@@ -24,6 +25,7 @@ gem 'oink'
 gem 'oj'
 # Pinned because the next step is migrating to ActiveStorage.
 gem 'paperclip', '~> 5'
+gem 'passenger'
 gem 'pg'
 gem 'public_suffix'
 gem 'rack'
@@ -34,6 +36,7 @@ gem 'rails_admin', '~> 3.x'
 gem 'rails_admin_tag_list', '~> 0.2.1'
 gem 'recaptcha'
 gem 'recipient_interceptor', require: false
+gem 'redis'
 gem 'record_tag_helper', '~> 1.0'
 gem 'redcarpet'
 gem 'rss'

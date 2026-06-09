@@ -39,5 +39,12 @@ WORKDIR /app
 
 COPY config/database.yml.docker config/database.yml
 
+# Pre-create the log dir owned by the app user. The concurrent stack mounts an
+# anonymous volume here so each instance gets its own log/ (instead of sharing
+# and tailing one another's log/passenger.3000.log via the .:/app bind mount).
+# Anonymous volumes seed their ownership from the image, so this keeps the dir
+# writable by lumen rather than defaulting to root.
+RUN mkdir -p /app/log
+
 # Just to keep the containder running
 CMD (while true; do sleep 1; done;)

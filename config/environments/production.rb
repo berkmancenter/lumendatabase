@@ -1,5 +1,6 @@
 require 'active_support/core_ext/integer/time'
 require 'terser'
+require_relative '../redis_cache_store'
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -48,8 +49,12 @@ Rails.application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
 
-  # Use a different cache store in production.
-  config.cache_store = :file_store, 'tmp/cache'
+  # Use a shared cache store when running multiple app instances.
+  config.cache_store = if RedisCacheStoreConfig.enabled?
+                         [:redis_cache_store, RedisCacheStoreConfig.options]
+                       else
+                         [:file_store, 'tmp/cache']
+                       end
 
   # Use a real queuing backend for Active Job (and separate queues per environment)
   # config.active_job.queue_adapter     = :resque

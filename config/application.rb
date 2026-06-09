@@ -1,6 +1,7 @@
 require_relative 'boot'
 require_relative '../lib/catch_json_parsing_errors'
 require_relative '../lib/handle_bad_encoding_parameters'
+require_relative '../lib/lumen_instance_headers'
 require_relative '../lib/set_request_id'
 
 require 'rails/all'
@@ -23,6 +24,8 @@ module Chill
     config.load_defaults 7.0
 
     config.active_record.default_timezone = :utc
+    active_job_queue_prefix = ENV['ACTIVE_JOB_QUEUE_PREFIX'].to_s
+    config.active_job.queue_name_prefix = active_job_queue_prefix unless active_job_queue_prefix.empty?
     I18n.config.enforce_available_locales = true
 
     config.generators do |generate|
@@ -90,6 +93,8 @@ module Chill
     config.middleware.use SetRequestId
     config.middleware.use CatchJsonParsingErrors
     config.middleware.use Rack::Attack
+    config.middleware.use LumenInstanceHeaders if ENV['LUMEN_INSTANCE_NAME'].present? ||
+                                                  ENV['LUMEN_INSTANCE_POOL'].present?
     config.middleware.use StackProf::Middleware, enabled: false,
                                                  mode: :cpu,
                                                  interval: 1000,

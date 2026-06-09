@@ -2,7 +2,7 @@ default: &default
   adapter: postgresql
   encoding: utf8
   min_messages: warning
-  pool: 5
+  pool: <%= ENV.fetch('DATABASE_POOL', ENV.fetch('RAILS_MAX_THREADS', 5)).to_i %>
   timeout: 5000
 
 test:

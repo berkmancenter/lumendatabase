@@ -1,0 +1,249 @@
+name: lumen-concurrent
+
+x-app-environment: &app-environment
+  RAILS_ENV: production
+  RAILS_LOG_TO_STDOUT: "true"
+  DATABASE_PRODUCTION_USERNAME: lumen
+  DATABASE_PRODUCTION_PASSWORD: so-secret
+  DATABASE_PRODUCTION_DB_NAME: lumen_production
+  DATABASE_PRODUCTION_HOST: postgres
+  DATABASE_PRODUCTION_PORT: "5432"
+  DATABASE_POOL: 2
+  WEB_CONCURRENCY: 1
+  WEB_TIMEOUT: 30
+  RAILS_CACHE_REDIS_URL: redis://redis-cache:6379/0
+  RAILS_CACHE_NAMESPACE: lumen-concurrent-test
+  RAILS_CACHE_POOL_SIZE: 2
+  SIDEKIQ_REDIS_URL: redis://redis:6379/1
+  PROXY_CACHE_CLEAR_SITE_HOST: router:8080
+  PASSENGER_MAX_POOL_SIZE: 1
+
+x-sidekiq-environment: &sidekiq-environment
+  <<: *app-environment
+  SIDEKIQ_CONCURRENCY: 1
+  SIDEKIQ_LOGFILE: /dev/stdout
+  SIDEKIQ_PIDFILE: /tmp/sidekiq.pid
+
+x-app-base: &app-base
+  image: lumendatabase-concurrent-test
+  build: .
+  command: >
+    bash -c "bundle exec passenger start
+    --engine builtin
+    --address 0.0.0.0
+    --port 3000
+    --environment production
+    --max-pool-size 1
+    --disable-security-update-check
+    --disable-anonymous-telemetry"
+  env_file:
+    - .env.test
+  environment:
+    <<: *app-environment
+  volumes:
+    - .:/app
+    - paperclip:/app/paperclip
+    - /app/log
+  depends_on:
+    db-setup:
+      condition: service_completed_successfully
+    redis:
+      condition: service_started
+    redis-cache:
+      condition: service_started
+
+x-sidekiq-base: &sidekiq-base
+  image: lumendatabase-concurrent-test
+  build: .
+  command: bundle exec sidekiq -C config/sidekiq.yml
+  env_file:
+    - .env.test
+  environment:
+    <<: *sidekiq-environment
+  volumes:
+    - .:/app
+    - paperclip:/app/paperclip
+    - /app/log
+  depends_on:
+    db-setup:
+      condition: service_completed_successfully
+    redis:
+      condition: service_started
+    redis-cache:
+      condition: service_started
+
+services:
+  postgres:
+    image: postgres:13.6-alpine
+    env_file:
+      - .env.test
+    environment:
+      POSTGRES_USER: lumen
+      POSTGRES_PASSWORD: so-secret
+      POSTGRES_DB: lumen_production
+    tmpfs:
+      - /var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lumen -d lumen_production"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+
+  redis:
+    image: redis:7.2
+    command: redis-server --save "" --appendonly no
+    tmpfs:
+      - /data
+
+  redis-cache:
+    image: redis:7.2
+    command: redis-server --save "" --appendonly no --maxmemory 256mb --maxmemory-policy allkeys-lru
+    tmpfs:
+      - /data
+
+  db-setup:
+    image: lumendatabase-concurrent-test
+    build: .
+    command: bash -c "bundle exec rake db:drop db:create db:migrate"
+    env_file:
+      - .env.test
+    environment:
+      <<: *app-environment
+      # db:drop/db:create are guarded against production databases; allow them
+      # here since this is a disposable local stack.
+      DISABLE_DATABASE_ENVIRONMENT_CHECK: "1"
+    volumes:
+      - .:/app
+      - paperclip:/app/paperclip
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      redis-cache:
+        condition: service_started
+
+  notices-1:
+    <<: *app-base
+    environment:
+      <<: *app-environment
+      LUMEN_INSTANCE_POOL: notices
+      LUMEN_INSTANCE_NAME: notices-1
+      ACTIVE_JOB_QUEUE_PREFIX: notices-1
+
+  notices-2:
+    <<: *app-base
+    environment:
+      <<: *app-environment
+      LUMEN_INSTANCE_POOL: notices
+      LUMEN_INSTANCE_NAME: notices-2
+      ACTIVE_JOB_QUEUE_PREFIX: notices-2
+
+  admin-1:
+    <<: *app-base
+    environment:
+      <<: *app-environment
+      LUMEN_INSTANCE_POOL: admin
+      LUMEN_INSTANCE_NAME: admin-1
+      ACTIVE_JOB_QUEUE_PREFIX: admin-1
+
+  admin-2:
+    <<: *app-base
+    environment:
+      <<: *app-environment
+      LUMEN_INSTANCE_POOL: admin
+      LUMEN_INSTANCE_NAME: admin-2
+      ACTIVE_JOB_QUEUE_PREFIX: admin-2
+
+  search-1:
+    <<: *app-base
+    environment:
+      <<: *app-environment
+      LUMEN_INSTANCE_POOL: search
+      LUMEN_INSTANCE_NAME: search-1
+      ACTIVE_JOB_QUEUE_PREFIX: search-1
+
+  search-2:
+    <<: *app-base
+    environment:
+      <<: *app-environment
+      LUMEN_INSTANCE_POOL: search
+      LUMEN_INSTANCE_NAME: search-2
+      ACTIVE_JOB_QUEUE_PREFIX: search-2
+
+  notices-1-sidekiq:
+    <<: *sidekiq-base
+    environment:
+      <<: *sidekiq-environment
+      LUMEN_INSTANCE_POOL: notices
+      LUMEN_INSTANCE_NAME: notices-1
+      ACTIVE_JOB_QUEUE_PREFIX: notices-1
+      SIDEKIQ_QUEUE: notices-1_default
+
+  notices-2-sidekiq:
+    <<: *sidekiq-base
+    environment:
+      <<: *sidekiq-environment
+      LUMEN_INSTANCE_POOL: notices
+      LUMEN_INSTANCE_NAME: notices-2
+      ACTIVE_JOB_QUEUE_PREFIX: notices-2
+      SIDEKIQ_QUEUE: notices-2_default
+
+  admin-1-sidekiq:
+    <<: *sidekiq-base
+    environment:
+      <<: *sidekiq-environment
+      LUMEN_INSTANCE_POOL: admin
+      LUMEN_INSTANCE_NAME: admin-1
+      ACTIVE_JOB_QUEUE_PREFIX: admin-1
+      SIDEKIQ_QUEUE: admin-1_default
+
+  admin-2-sidekiq:
+    <<: *sidekiq-base
+    environment:
+      <<: *sidekiq-environment
+      LUMEN_INSTANCE_POOL: admin
+      LUMEN_INSTANCE_NAME: admin-2
+      ACTIVE_JOB_QUEUE_PREFIX: admin-2
+      SIDEKIQ_QUEUE: admin-2_default
+
+  search-1-sidekiq:
+    <<: *sidekiq-base
+    environment:
+      <<: *sidekiq-environment
+      LUMEN_INSTANCE_POOL: search
+      LUMEN_INSTANCE_NAME: search-1
+      ACTIVE_JOB_QUEUE_PREFIX: search-1
+      SIDEKIQ_QUEUE: search-1_default
+
+  search-2-sidekiq:
+    <<: *sidekiq-base
+    environment:
+      <<: *sidekiq-environment
+      LUMEN_INSTANCE_POOL: search
+      LUMEN_INSTANCE_NAME: search-2
+      ACTIVE_JOB_QUEUE_PREFIX: search-2
+      SIDEKIQ_QUEUE: search-2_default
+
+  router:
+    image: nginx:1.27-alpine
+    depends_on:
+      notices-1:
+        condition: service_started
+      notices-2:
+        condition: service_started
+      admin-1:
+        condition: service_started
+      admin-2:
+        condition: service_started
+      search-1:
+        condition: service_started
+      search-2:
+        condition: service_started
+    ports:
+      - "8282:8080"
+    volumes:
+      - ./config/nginx/multi_instance_test.conf:/etc/nginx/nginx.conf:ro
+
+volumes:
+  paperclip:
