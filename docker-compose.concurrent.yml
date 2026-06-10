@@ -129,7 +129,6 @@ services:
       <<: *app-environment
       LUMEN_INSTANCE_POOL: notices
       LUMEN_INSTANCE_NAME: notices-1
-      ACTIVE_JOB_QUEUE_PREFIX: notices-1
 
   notices-2:
     <<: *app-base
@@ -137,7 +136,6 @@ services:
       <<: *app-environment
       LUMEN_INSTANCE_POOL: notices
       LUMEN_INSTANCE_NAME: notices-2
-      ACTIVE_JOB_QUEUE_PREFIX: notices-2
 
   admin-1:
     <<: *app-base
@@ -145,7 +143,6 @@ services:
       <<: *app-environment
       LUMEN_INSTANCE_POOL: admin
       LUMEN_INSTANCE_NAME: admin-1
-      ACTIVE_JOB_QUEUE_PREFIX: admin-1
 
   admin-2:
     <<: *app-base
@@ -153,7 +150,6 @@ services:
       <<: *app-environment
       LUMEN_INSTANCE_POOL: admin
       LUMEN_INSTANCE_NAME: admin-2
-      ACTIVE_JOB_QUEUE_PREFIX: admin-2
 
   search-1:
     <<: *app-base
@@ -161,7 +157,6 @@ services:
       <<: *app-environment
       LUMEN_INSTANCE_POOL: search
       LUMEN_INSTANCE_NAME: search-1
-      ACTIVE_JOB_QUEUE_PREFIX: search-1
 
   search-2:
     <<: *app-base
@@ -169,7 +164,6 @@ services:
       <<: *app-environment
       LUMEN_INSTANCE_POOL: search
       LUMEN_INSTANCE_NAME: search-2
-      ACTIVE_JOB_QUEUE_PREFIX: search-2
 
   notices-1-sidekiq:
     <<: *sidekiq-base
@@ -177,8 +171,6 @@ services:
       <<: *sidekiq-environment
       LUMEN_INSTANCE_POOL: notices
       LUMEN_INSTANCE_NAME: notices-1
-      ACTIVE_JOB_QUEUE_PREFIX: notices-1
-      SIDEKIQ_QUEUE: notices-1_default
 
   notices-2-sidekiq:
     <<: *sidekiq-base
@@ -186,8 +178,6 @@ services:
       <<: *sidekiq-environment
       LUMEN_INSTANCE_POOL: notices
       LUMEN_INSTANCE_NAME: notices-2
-      ACTIVE_JOB_QUEUE_PREFIX: notices-2
-      SIDEKIQ_QUEUE: notices-2_default
 
   admin-1-sidekiq:
     <<: *sidekiq-base
@@ -195,8 +185,6 @@ services:
       <<: *sidekiq-environment
       LUMEN_INSTANCE_POOL: admin
       LUMEN_INSTANCE_NAME: admin-1
-      ACTIVE_JOB_QUEUE_PREFIX: admin-1
-      SIDEKIQ_QUEUE: admin-1_default
 
   admin-2-sidekiq:
     <<: *sidekiq-base
@@ -204,8 +192,6 @@ services:
       <<: *sidekiq-environment
       LUMEN_INSTANCE_POOL: admin
       LUMEN_INSTANCE_NAME: admin-2
-      ACTIVE_JOB_QUEUE_PREFIX: admin-2
-      SIDEKIQ_QUEUE: admin-2_default
 
   search-1-sidekiq:
     <<: *sidekiq-base
@@ -213,8 +199,6 @@ services:
       <<: *sidekiq-environment
       LUMEN_INSTANCE_POOL: search
       LUMEN_INSTANCE_NAME: search-1
-      ACTIVE_JOB_QUEUE_PREFIX: search-1
-      SIDEKIQ_QUEUE: search-1_default
 
   search-2-sidekiq:
     <<: *sidekiq-base
@@ -222,8 +206,6 @@ services:
       <<: *sidekiq-environment
       LUMEN_INSTANCE_POOL: search
       LUMEN_INSTANCE_NAME: search-2
-      ACTIVE_JOB_QUEUE_PREFIX: search-2
-      SIDEKIQ_QUEUE: search-2_default
 
   router:
     image: nginx:1.27-alpine

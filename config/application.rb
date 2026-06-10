@@ -9,6 +9,7 @@ require 'active_storage/engine'
 
 require_relative '../lib/lumen'
 require_relative '../lib/database_utils'
+require_relative '../lib/lumen_job_queues'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -24,8 +25,8 @@ module Chill
     config.load_defaults 7.0
 
     config.active_record.default_timezone = :utc
-    active_job_queue_prefix = ENV['ACTIVE_JOB_QUEUE_PREFIX'].to_s
-    config.active_job.queue_name_prefix = active_job_queue_prefix unless active_job_queue_prefix.empty?
+    active_job_queue_prefix = LumenJobQueues.active_job_queue_prefix
+    config.active_job.queue_name_prefix = active_job_queue_prefix if active_job_queue_prefix
     I18n.config.enforce_available_locales = true
 
     config.generators do |generate|
