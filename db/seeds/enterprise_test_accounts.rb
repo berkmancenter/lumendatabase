@@ -114,6 +114,8 @@ enterprise_test_seed_account = lambda do |attributes|
   account = EnterpriseAccount.find_or_initialize_by(name: attributes.fetch(:name))
   plan = attributes.fetch(:plan, 'pro')
   account.assign_attributes(
+    status: 'approved',
+    applicant_email: attributes.fetch(:email),
     plan: plan,
     payment_method: plan == 'pro' ? 'credit_card' : 'invoice',
     paid_until: plan == 'pro' ? 1.month.from_now : nil,

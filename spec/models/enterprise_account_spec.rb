@@ -21,10 +21,16 @@ describe EnterpriseAccount, type: :model do
 
   describe 'status' do
     it 'only allows known statuses' do
-      expect(build(:enterprise_account, status: 'pre_registration')).to be_valid
+      expect(build(:enterprise_account, :pre_registration)).to be_valid
       expect(build(:enterprise_account, status: 'approved')).to be_valid
       expect(build(:enterprise_account, status: 'rejected')).to be_valid
       expect(build(:enterprise_account, status: 'maybe')).not_to be_valid
+    end
+
+    it 'requires applicant email while awaiting registration review' do
+      expect(build(:enterprise_account, :pre_registration, applicant_email: nil)).not_to be_valid
+      expect(build(:enterprise_account, :pre_registration, applicant_email: 'rep@example.com')).to be_valid
+      expect(build(:enterprise_account, status: 'approved', applicant_email: nil)).to be_valid
     end
   end
 
@@ -76,6 +82,17 @@ describe EnterpriseAccount, type: :model do
       expect(user.reload.role?(:enterprise)).to be true
       expect(user.enterprise_account).to eq(account)
     end
+
+    it 'does not approve a registration without an applicant email' do
+      account = build(:enterprise_account, :pre_registration, applicant_email: nil)
+      account.save!(validate: false)
+
+      expect { account.approve_registration! }
+        .to raise_error(ActiveRecord::RecordInvalid, /Applicant email can't be blank/)
+
+      expect(account.reload.status).to eq('pre_registration')
+      expect(account.users.count).to eq(0)
+    end
   end
 
   describe '#reject_registration!' do
@@ -89,6 +106,16 @@ describe EnterpriseAccount, type: :model do
       account.reject_registration!
 
       expect(account.reload.status).to eq('rejected')
+    end
+
+    it 'does not reject a registration without an applicant email' do
+      account = build(:enterprise_account, :pre_registration, applicant_email: nil)
+      account.save!(validate: false)
+
+      expect { account.reject_registration! }
+        .to raise_error(ActiveRecord::RecordInvalid, /Applicant email can't be blank/)
+
+      expect(account.reload.status).to eq('pre_registration')
     end
   end
 

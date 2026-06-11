@@ -38,6 +38,7 @@ class EnterpriseAccount < ApplicationRecord
   validates :plan, presence: true, inclusion: { in: PLANS }
   validates :status, presence: true, inclusion: { in: STATUSES }
   validates :payment_method, inclusion: { in: PAYMENT_METHODS }, allow_blank: true
+  validates :applicant_email, presence: true, if: :pre_registration?
 
   scope :pro, -> { where(plan: 'pro') }
   scope :reporting_enabled, -> { pro.where.not(report_frequency: 'none') }
@@ -66,6 +67,8 @@ class EnterpriseAccount < ApplicationRecord
   # them the confirm-email/set-password link. Mirrors
   # ApiSubmitterRequest#approve_request. Returns the user.
   def approve_registration!
+    ensure_applicant_email_present!
+
     user = nil
 
     transaction do
@@ -80,6 +83,8 @@ class EnterpriseAccount < ApplicationRecord
 
   # Admin rejects the registration: mark it rejected and let the applicant know.
   def reject_registration!
+    ensure_applicant_email_present!
+
     update!(status: 'rejected')
 
     Enterprise::RegistrationMailer.client_rejected(self).deliver_later
@@ -154,6 +159,13 @@ class EnterpriseAccount < ApplicationRecord
     user.save!
 
     user
+  end
+
+  def ensure_applicant_email_present!
+    return if applicant_email.present?
+
+    errors.add(:applicant_email, :blank) unless errors.added?(:applicant_email, :blank)
+    raise ActiveRecord::RecordInvalid, self
   end
 
   def days_until_paid_until(now)

@@ -4,6 +4,8 @@ enterprise_account = EnterpriseAccount.find_or_initialize_by(
   name: 'Example Business'
 )
 enterprise_account.assign_attributes(
+  status: 'approved',
+  applicant_email: 'enterprise@lumendatabase.org',
   plan: 'pro',
   payment_method: 'credit_card',
   paid_until: 1.month.from_now,
