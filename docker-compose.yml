@@ -54,6 +54,64 @@ services:
     ports:
       - 5601:5601
 
+  matomo_db:
+    image: mariadb:11.4
+    command: --max-allowed-packet=64MB
+    volumes:
+      - matomo_db:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: ${MATOMO_DATABASE_DBNAME:-matomo}
+      MYSQL_USER: ${MATOMO_DATABASE_USERNAME:-matomo}
+      MYSQL_PASSWORD: ${MATOMO_DATABASE_PASSWORD:-matomo-secret}
+      MYSQL_ROOT_PASSWORD: ${MATOMO_DATABASE_ROOT_PASSWORD:-matomo-root-secret}
+
+  matomo:
+    image: matomo:5-apache
+    depends_on:
+      - 'matomo_db'
+    ports:
+      - '${MATOMO_PORT:-8283}:80'
+    volumes:
+      - matomo:/var/www/html
+    environment:
+      MATOMO_DATABASE_HOST: matomo_db
+      MATOMO_DATABASE_ADAPTER: 'PDO\MYSQL'
+      MATOMO_DATABASE_TABLES_PREFIX: matomo_
+      MATOMO_DATABASE_USERNAME: ${MATOMO_DATABASE_USERNAME:-matomo}
+      MATOMO_DATABASE_PASSWORD: ${MATOMO_DATABASE_PASSWORD:-matomo-secret}
+      MATOMO_DATABASE_DBNAME: ${MATOMO_DATABASE_DBNAME:-matomo}
+
+  matomo_bootstrap:
+    image: matomo:5-apache
+    depends_on:
+      - 'matomo'
+      - 'matomo_db'
+    entrypoint:
+      - /bin/sh
+      - /usr/local/bin/matomo-bootstrap
+    volumes:
+      - matomo:/var/www/html
+      - ./docker/matomo/bootstrap.sh:/usr/local/bin/matomo-bootstrap:ro
+    environment:
+      MATOMO_URL: http://matomo
+      MATOMO_DATABASE_HOST: matomo_db
+      MATOMO_DATABASE_ADAPTER: 'PDO\MYSQL'
+      MATOMO_DATABASE_TABLES_PREFIX: matomo_
+      MATOMO_DATABASE_USERNAME: ${MATOMO_DATABASE_USERNAME:-matomo}
+      MATOMO_DATABASE_PASSWORD: ${MATOMO_DATABASE_PASSWORD:-matomo-secret}
+      MATOMO_DATABASE_DBNAME: ${MATOMO_DATABASE_DBNAME:-matomo}
+      MATOMO_DATABASE_SCHEMA: ${MATOMO_DATABASE_SCHEMA:-Mariadb}
+      MATOMO_ADMIN_USERNAME: ${MATOMO_ADMIN_USERNAME:-admin}
+      MATOMO_ADMIN_PASSWORD: ${MATOMO_ADMIN_PASSWORD:-matomo-admin}
+      MATOMO_ADMIN_EMAIL: ${MATOMO_ADMIN_EMAIL:-admin@example.test}
+      MATOMO_SITE_ID: ${MATOMO_SITE_ID:-1}
+      MATOMO_SITE_NAME: ${MATOMO_SITE_NAME:-Lumen development}
+      MATOMO_SITE_URL: ${MATOMO_SITE_URL:-http://localhost:8282}
+      MATOMO_SITE_TIMEZONE: ${MATOMO_SITE_TIMEZONE:-UTC}
+      MATOMO_SITE_ECOMMERCE: ${MATOMO_SITE_ECOMMERCE:-0}
+      MATOMO_TRUSTED_HOST_INTERNAL: ${MATOMO_TRUSTED_HOST_INTERNAL:-matomo}
+      MATOMO_TRUSTED_HOST_EXTERNAL: ${MATOMO_TRUSTED_HOST_EXTERNAL:-localhost:8283}
+
   logstash:
     env_file:
       - '.env'
@@ -96,6 +154,8 @@ services:
 volumes:
   postgres:
   esdata:
+  matomo:
+  matomo_db:
   logstash:
   docker_website_bash_history:
   redis:

@@ -2,15 +2,22 @@
 <!-- Piwik -->
 <script type="text/javascript">
   var _paq = _paq || [];
-  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-  _paq.push(["setDomains",
-["flutie.law.harvard.edu","*.www.chillingeffects.org","*.chillingeffects.org","*.lumendatabase.org","*.www.lumendatabase.org"]]);
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
   (function() {
     var u="//<%= Piwik[ 'url' ] %>/";
     _paq.push(['setTrackerUrl', u+'piwik.php']);
     _paq.push(['setSiteId', '<%= Piwik[ 'id_site' ] %>']);
+
+    /* Share the server-side visitor id so browser-side link tracking joins the same visit. */
+    _paq.push(['setVisitorId', '<%= j matomo_visitor_id %>']);
+    /* Keep dimensions available for browser-side link tracking; pageviews are tracked server-side. */
+    <% matomo_dimension_parameters.each do |dimension, value| %>
+      _paq.push(['setCustomDimension', <%= dimension.to_s.delete_prefix('dimension') %>, '<%= j value %>']);
+    <% end %>
+    <% if matomo_tracking_dimensions[:authenticated_user_email].present? %>
+      _paq.push(['setUserId', '<%= j matomo_tracking_dimensions[:authenticated_user_email] %>']);
+    <% end %>
+    _paq.push(["setDomains", ["flutie.law.harvard.edu","*.www.chillingeffects.org","*.chillingeffects.org","*.lumendatabase.org","*.www.lumendatabase.org"]]);
+    _paq.push(['enableLinkTracking']);
   })();
 </script>
 <%= javascript_include_tag 'piwik.js', defer: 'defer', async: true %>

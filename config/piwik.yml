@@ -8,15 +8,24 @@
 #   The url of your piwik instance (e.g. localhost/piwik/
 # id_site
 #   The id of your website inside Piwik
+# tracking_url
+#   Optional server-side Matomo URL for API tracking
+# token_auth
+#   Not configured here. Injected from ENV['MATOMO_TOKEN_AUTH'] in
+#   config/initializers/piwik.rb. When present, server-side tracking overrides
+#   the real visitor IP (cip) and action time (cdt) so asynchronous job
+#   execution does not distort attribution or timing.
 #
 production:
   id_site: 3
   url: stats.berkman.harvard.edu
+  tracking_url: https://stats.berkman.harvard.edu
   disabled: false
 
 development:
-  id_site: 4
-  url: stats.berkman.harvard.edu
+  id_site: 1
+  url: localhost:8283
+  tracking_url: http://matomo
   disabled: false
 
 test:

@@ -20,8 +20,12 @@ class ApplicationController < ActionController::Base
 
   after_action :store_action
   after_action :include_auth_cookie
+  after_action :track_usage_with_matomo
 
-  helper_method :enterprise_my_notices_path
+  helper_method :enterprise_my_notices_path,
+                :matomo_tracking_dimensions,
+                :matomo_dimension_parameters,
+                :matomo_visitor_id
 
   if Rails.env.staging? || Rails.env.production?
     [
@@ -114,11 +118,15 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_user_from_token!
-    Rails.logger.info "Attempted login from token #{authentication_token.to_s}"
-    user = authentication_token &&
-           User.find_by_authentication_token(authentication_token.to_s)
+    @authenticated_from_api_token = false
+    @matomo_usage_classifier = nil
+
+    token = authentication_token
+    Rails.logger.info "Attempted login from token #{token.to_s}"
+    user = token && User.find_by_authentication_token(token.to_s)
 
     return unless user
+    @authenticated_from_api_token = true
     sign_in user, store: false
   end
 
@@ -138,6 +146,78 @@ class ApplicationController < ActionController::Base
 
   def include_auth_cookie
     cookies[:lumen_authenticated] = (current_user.present? ? 1 : 0)
+  end
+
+  def matomo_tracking_dimensions
+    matomo_usage_classifier.dimensions
+  end
+
+  def matomo_dimension_parameters
+    matomo_usage_classifier.matomo_dimension_parameters
+  end
+
+  def track_usage_with_matomo
+    return if Piwik['disabled']
+
+    MatomoTrackingJob.perform_later(matomo_tracking_payload)
+  end
+
+  def matomo_tracking_payload
+    {
+      url: "#{request.protocol}#{request.host_with_port}#{request.filtered_path}",
+      action_name: "#{controller_path}##{action_name}",
+      ua: request.user_agent,
+      lang: request.headers['Accept-Language'],
+      urlref: request.referer,
+      uid: current_user&.email,
+      _id: matomo_visitor_id
+    }.compact
+     .merge(matomo_attribution_parameters)
+     .merge(matomo_dimension_parameters)
+  end
+
+  # Matomo only honours an overridden visitor IP and action timestamp when a
+  # valid API token accompanies the request; without one it would attribute
+  # every hit to the application server and use the worker's clock. We therefore
+  # send these only when a token is configured, and omit them otherwise rather
+  # than ship values Matomo will silently discard.
+  def matomo_attribution_parameters
+    return {} if Piwik['token_auth'].blank?
+
+    {
+      token_auth: Piwik['token_auth'],
+      cip: request.remote_ip,
+      cdt: Time.now.utc.strftime('%Y-%m-%d %H:%M:%S')
+    }
+  end
+
+  # A stable visitor id lets the server-side pageview and the browser-side link
+  # tracking belong to the same Matomo visit. Browsers persist it in a cookie
+  # (and the JS tracker is told to reuse it via setVisitorId), while API clients
+  # send no cookie, so we derive a deterministic id from the request principal.
+  def matomo_visitor_id
+    @matomo_visitor_id ||=
+      if matomo_usage_classifier.api?
+        derived_matomo_visitor_id
+      else
+        browser_matomo_visitor_id
+      end
+  end
+
+  def browser_matomo_visitor_id
+    existing = cookies[:matomo_visitor_id]
+    return existing if existing.present?
+
+    SecureRandom.hex(8).tap do |id|
+      cookies[:matomo_visitor_id] = { value: id, expires: 2.years, httponly: true }
+    end
+  end
+
+  def derived_matomo_visitor_id
+    seed = current_user&.id || authentication_token.presence ||
+           "#{request.remote_ip}|#{request.user_agent}"
+
+    Digest::SHA256.hexdigest("matomo-visitor-#{seed}")[0, 16]
   end
 
   def store_action
@@ -173,6 +253,15 @@ class ApplicationController < ActionController::Base
 
   def set_current_user
     Current.user = current_user
+  end
+
+  def matomo_usage_classifier
+    @matomo_usage_classifier ||= UsageTracking::Classifier.new(
+      request: request,
+      user: current_user,
+      notice: instance_variable_get(:@notice),
+      authenticated_from_api_token: @authenticated_from_api_token
+    )
   end
 
   def set_default_format

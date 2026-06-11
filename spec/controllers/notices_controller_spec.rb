@@ -56,6 +56,46 @@ describe NoticesController do
         expect(response.status).to eq(404)
         expect(response).to render_template('error_pages/404_hidden')
       end
+
+      it 'tracks HTML views with Matomo usage dimensions' do
+        stub_const('Piwik', Piwik.merge('disabled' => false))
+        allow(MatomoTrackingJob).to receive(:perform_later)
+        set_matomo_dimension_settings
+
+        notice = stub_find_notice(create(:dmca))
+
+        get :show, params: { id: notice.id }
+
+        expect(MatomoTrackingJob).to have_received(:perform_later).with(
+          hash_including(
+            'dimension1' => 'uncredentialed',
+            'dimension2' => 'anonymous',
+            'dimension3' => 'web'
+          )
+        )
+      end
+
+      it 'shares one visitor id between the cookie and the tracking payload' do
+        stub_const('Piwik', Piwik.merge('disabled' => false))
+        payload = capture_matomo_payload
+        notice = stub_find_notice(create(:dmca))
+
+        get :show, params: { id: notice.id }
+
+        expect(payload[:_id]).to match(/\A[0-9a-f]{16}\z/)
+        expect(response.cookies['matomo_visitor_id']).to eq(payload[:_id])
+        expect(payload).not_to include(:cip, :token_auth)
+      end
+
+      it 'overrides IP and timestamp when a Matomo API token is configured' do
+        stub_const('Piwik', Piwik.merge('disabled' => false, 'token_auth' => 'secret-token'))
+        payload = capture_matomo_payload
+        notice = stub_find_notice(create(:dmca))
+
+        get :show, params: { id: notice.id }
+
+        expect(payload).to include(:cip, :cdt, token_auth: 'secret-token')
+      end
     end
 
     context 'as JSON' do
@@ -89,6 +129,48 @@ describe NoticesController do
         expect(json).to have_key('id').with_value(notice.id)
         expect(json).to have_key('title').with_value(notice.title)
         expect(json).to have_key('body').with_value('Notice Rescinded')
+      end
+
+      it 'tracks JSON views with Matomo usage dimensions' do
+        stub_const('Piwik', Piwik.merge('disabled' => false))
+        allow(MatomoTrackingJob).to receive(:perform_later)
+        set_matomo_dimension_settings
+
+        user = create(:user, :researcher, email: 'api-user@example.test')
+        notice = stub_find_notice(create(:dmca))
+
+        get :show, params: {
+          id: notice.id,
+          authentication_token: user.authentication_token,
+          format: :json
+        }
+
+        expect(MatomoTrackingJob).to have_received(:perform_later).with(
+          hash_including(
+            'dimension1' => 'credentialed',
+            'dimension2' => 'api token',
+            'dimension3' => 'api',
+            'dimension4' => 'api-user@example.test',
+            uid: 'api-user@example.test'
+          )
+        )
+      end
+
+      it 'derives a stable cookieless visitor id for API requests' do
+        stub_const('Piwik', Piwik.merge('disabled' => false))
+        user = create(:user, :researcher, email: 'api-user@example.test')
+        notice = stub_find_notice(create(:dmca))
+
+        payload = capture_matomo_payload
+        get :show, params: { id: notice.id, authentication_token: user.authentication_token, format: :json }
+        first_id = payload[:_id]
+
+        payload = capture_matomo_payload
+        get :show, params: { id: notice.id, authentication_token: user.authentication_token, format: :json }
+
+        expect(first_id).to match(/\A[0-9a-f]{16}\z/)
+        expect(payload[:_id]).to eq(first_id)
+        expect(response.cookies['matomo_visitor_id']).to be_nil
       end
 
       it 'returns original URLs for a Notice if you are a researcher' do
@@ -304,6 +386,30 @@ describe NoticesController do
     def stub_find_notice(notice = nil)
       notice ||= Notice.new
       notice.tap { |n| allow(Notice).to receive(:find_by).and_return(n) }
+    end
+
+    def capture_matomo_payload
+      set_matomo_dimension_settings
+      {}.tap do |captured|
+        allow(MatomoTrackingJob).to receive(:perform_later) do |payload|
+          captured.replace(payload)
+        end
+      end
+    end
+
+    def set_matomo_dimension_settings
+      {
+        matomo_dimension_credential_status_id: 1,
+        matomo_dimension_auth_method_id: 2,
+        matomo_dimension_surface_id: 3,
+        matomo_dimension_authenticated_user_email_id: 4
+      }.each do |key, value|
+        setting = LumenSetting.find_or_initialize_by(key: key.to_s)
+        setting.update!(
+          name: key.to_s.humanize,
+          value: value.to_s
+        )
+      end
     end
   end
 
