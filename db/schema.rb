@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_06_11_160000) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_12_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -280,6 +280,30 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_11_160000) do
     t.index ["enterprise_account_id", "domain"], name: "index_enterprise_domains_on_account_and_domain", unique: true
     t.index ["enterprise_account_id"], name: "index_enterprise_domains_on_enterprise_account_id"
     t.index ["verification_token"], name: "index_enterprise_domains_on_verification_token", unique: true
+  end
+
+  create_table "enterprise_payments", force: :cascade do |t|
+    t.bigint "enterprise_account_id", null: false
+    t.bigint "user_id"
+    t.string "provider", default: "stripe", null: false
+    t.string "payment_method", default: "credit_card", null: false
+    t.string "status", default: "pending", null: false
+    t.integer "amount_cents", null: false
+    t.string "currency", default: "usd", null: false
+    t.string "stripe_checkout_session_id"
+    t.string "stripe_payment_intent_id"
+    t.string "stripe_customer_id"
+    t.string "stripe_event_id"
+    t.datetime "period_started_at"
+    t.datetime "period_ends_at"
+    t.datetime "completed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["enterprise_account_id"], name: "index_enterprise_payments_on_enterprise_account_id"
+    t.index ["stripe_checkout_session_id"], name: "index_enterprise_payments_on_stripe_checkout_session_id", unique: true
+    t.index ["stripe_event_id"], name: "index_enterprise_payments_on_stripe_event_id", unique: true
+    t.index ["stripe_payment_intent_id"], name: "index_enterprise_payments_on_stripe_payment_intent_id", unique: true
+    t.index ["user_id"], name: "index_enterprise_payments_on_user_id"
   end
 
   create_table "entities", id: :serial, force: :cascade do |t|
@@ -628,5 +652,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_11_160000) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "enterprise_domains", "enterprise_accounts"
+  add_foreign_key "enterprise_payments", "enterprise_accounts"
+  add_foreign_key "enterprise_payments", "users", on_delete: :nullify
   add_foreign_key "users", "enterprise_accounts"
 end

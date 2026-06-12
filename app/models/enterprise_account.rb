@@ -7,11 +7,8 @@ class EnterpriseAccount < ApplicationRecord
   # (creating the user) or rejects it.
   STATUSES = %w[pre_registration approved rejected].freeze
 
-  PAYMENT_METHODS = %w[credit_card invoice].freeze
-  PAYMENT_METHOD_OPTIONS = [
-    ['Credit card', 'credit_card'],
-    ['Invoice', 'invoice']
-  ].freeze
+  PAYMENT_METHODS = Enterprise::PaymentMethods.names.freeze
+  PAYMENT_METHOD_OPTIONS = Enterprise::PaymentMethods.options.freeze
 
   PRO_PERIOD = 1.month
 
@@ -30,6 +27,7 @@ class EnterpriseAccount < ApplicationRecord
   # rather than blocking the delete on the users foreign key.
   has_many :users, dependent: :nullify
   has_many :enterprise_domains, dependent: :destroy
+  has_many :enterprise_payments, dependent: :restrict_with_error
 
   accepts_nested_attributes_for :enterprise_domains, allow_destroy: true
 
@@ -94,6 +92,17 @@ class EnterpriseAccount < ApplicationRecord
     PAYMENT_METHOD_OPTIONS
       .find { |_label, value| value == payment_method }
       &.first || payment_method
+  end
+
+  def pending_credit_card_payment
+    pending_payment(payment_method: 'credit_card')
+  end
+
+  def pending_payment(payment_method: nil)
+    payments = enterprise_payments.pending
+    payments = payments.where(payment_method: payment_method) if payment_method.present?
+
+    payments.order(created_at: :desc).first
   end
 
   # Promote the account to Pro and (re)set how long that access lasts. Extends an

@@ -135,6 +135,18 @@ describe EnterpriseAccount, type: :model do
     end
   end
 
+  describe '#pending_credit_card_payment' do
+    it 'returns the newest pending credit-card payment' do
+      account = create(:enterprise_account)
+      create(:enterprise_payment, enterprise_account: account, status: 'expired')
+      older = create(:enterprise_payment, enterprise_account: account, created_at: 2.hours.ago)
+      newer = create(:enterprise_payment, enterprise_account: account, created_at: 1.hour.ago)
+
+      expect(account.pending_credit_card_payment).to eq(newer)
+      expect(account.pending_credit_card_payment).not_to eq(older)
+    end
+  end
+
   describe '#extend_pro_access!' do
     it 'promotes the account to pro and sets paid_until one month out' do
       account = build(:enterprise_account, plan: 'inactive', paid_until: nil)

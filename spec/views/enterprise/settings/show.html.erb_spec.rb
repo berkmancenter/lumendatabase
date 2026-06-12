@@ -91,4 +91,15 @@ describe 'enterprise/settings/show.html.erb' do
       visible: :all
     )
   end
+
+  it 'shows an empty state when there are no domains' do
+    assign(
+      :enterprise_account,
+      build_stubbed(:enterprise_account, plan: 'pro', report_frequency: 'none')
+    )
+
+    render
+
+    expect(rendered).to have_css('.enterprise-domains-empty', text: 'Nothing here yet.')
+  end
 end

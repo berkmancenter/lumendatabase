@@ -7,6 +7,8 @@ Rails.application.routes.draw do
 
   mount RailsAdmin::Engine => '/admin'
 
+  post 'stripe/webhook', to: 'stripe_webhooks#create'
+
   namespace :enterprise do
     root to: redirect('/enterprise/notices/search?sort_by=created_at%20desc')
 
@@ -21,6 +23,9 @@ Rails.application.routes.draw do
 
     # Choose and pay for a Pro plan from settings.
     post 'pay', to: 'payments#create', as: :pay
+    get 'pay/success', to: 'payments#success', as: :payment_success
+    get 'pay/cancel', to: 'payments#cancel', as: :payment_cancel
+    post 'pay/cancel_pending', to: 'payments#cancel_pending', as: :cancel_pending_payment
 
     # Signed-in landing page for accounts that are not yet on the Pro plan.
     get 'status', to: 'status#show', as: :status

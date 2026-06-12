@@ -7,15 +7,37 @@
 
       <% case @enterprise_account&.payment_method %>
       <% when 'credit_card' %>
-        <p>
-          Your account is set up to pay by credit card. Your Pro access unlocks as
-          soon as your card payment has been processed.
-        </p>
-        <p>
-          If you haven't finished paying, or you think this is a mistake, contact us
-          at <%= mail_to 'team@lumendatabase.org' %> and we'll help you complete your
-          card payment.
-        </p>
+        <% if @pending_payment.present? %>
+          <p class="enterprise-pending-payment">
+            You have a card payment in progress for
+            <strong><%= number_to_currency(@pending_payment.amount_cents / 100.0) %></strong>.
+            Your Pro access will unlock automatically as soon as Stripe confirms
+            the payment.
+          </p>
+          <p>
+            If you want to start over, cancel this pending payment first. You can
+            choose a payment method again afterward.
+          </p>
+          <p>
+            <%= button_to(
+                  'Cancel pending payment',
+                  enterprise_cancel_pending_payment_path,
+                  method: :post,
+                  data: { confirm: 'Cancel this pending card payment?' }
+                ) %>
+          </p>
+        <% else %>
+          <p>
+            Your account is set up to pay by credit card. Your Pro access unlocks
+            automatically as soon as Stripe confirms your card payment.
+          </p>
+          <p>
+            If you haven't finished paying, return to
+            <%= link_to 'Enterprise settings', enterprise_settings_path %> to start
+            a new card payment. If you think this is a mistake, contact us at
+            <%= mail_to 'team@lumendatabase.org' %>.
+          </p>
+        <% end %>
       <% when 'invoice' %>
         <p>
           Your account is set up to be invoiced. Lumen will follow up with you about

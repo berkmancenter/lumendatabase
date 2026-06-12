@@ -9,5 +9,6 @@ class Enterprise::StatusController < ApplicationController
     return redirect_to(enterprise_my_notices_path) if current_user.active_enterprise_account
 
     @enterprise_account = current_user.enterprise_account
+    @pending_payment = @enterprise_account&.pending_payment
   end
 end

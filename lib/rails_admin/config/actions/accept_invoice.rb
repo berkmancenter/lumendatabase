@@ -3,7 +3,7 @@ require 'rails_admin/config/actions/base'
 
 # Admin action for invoice-based enterprise accounts: marks the account Pro,
 # extends its paid period by one month, and emails the client that their access
-# is ready. Mirrors the approve/reject api-submitter member actions.
+# is ready.
 AcceptInvoiceProc = proc do
   if request.get?
     enterprise_account = EnterpriseAccount.find(params[:id])

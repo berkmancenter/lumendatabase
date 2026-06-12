@@ -35,8 +35,9 @@
           </p>
         <% end %>
         <p class="form-text">
-          Pay by credit card to unlock Pro right away, or choose to be invoiced and
-          we'll follow up - your Pro access unlocks once the invoice is paid.
+          Pay by credit card through Stripe to unlock Pro as soon as payment is
+          confirmed, or choose to be invoiced and we'll follow up - your Pro
+          access unlocks once the invoice is paid.
         </p>
         <p><%= form.submit 'Get Pro' %></p>
       <% end %>
@@ -84,46 +85,50 @@
     <% end %>
 
     <h2>Domains list</h2>
-    <ol>
-      <% @enterprise_domains.each do |enterprise_domain| %>
-        <li class="enterprise-domain-row">
-          <div class="enterprise-domain-row-header">
-            <span>
-              <strong><%= enterprise_domain.domain %></strong>
-              <% if enterprise_domain.verified? %>
-                <span class="lumen-badge enterprise-domain-badge">Verified</span>
-              <% end %>
-            </span>
+    <% if @enterprise_domains.empty? %>
+      <p class="enterprise-domains-empty">Nothing here yet.</p>
+    <% else %>
+      <ol>
+        <% @enterprise_domains.each do |enterprise_domain| %>
+          <li class="enterprise-domain-row">
+            <div class="enterprise-domain-row-header">
+              <span>
+                <strong><%= enterprise_domain.domain %></strong>
+                <% if enterprise_domain.verified? %>
+                  <span class="lumen-badge enterprise-domain-badge">Verified</span>
+                <% end %>
+              </span>
 
-            <span class="enterprise-domain-row-actions">
-              <% unless enterprise_domain.verified? %>
+              <span class="enterprise-domain-row-actions">
+                <% unless enterprise_domain.verified? %>
+                  <%= button_to(
+                        'Verify now',
+                        verify_enterprise_domain_path(enterprise_domain),
+                        method: :post,
+                        class: 'small-button'
+                      ) %>
+                <% end %>
                 <%= button_to(
-                      'Verify now',
-                      verify_enterprise_domain_path(enterprise_domain),
-                      method: :post,
-                      class: 'small-button'
+                      'Remove',
+                      enterprise_domain_path(enterprise_domain),
+                      method: :delete,
+                      class: 'small-button',
+                      data: { confirm: 'Remove this domain?' }
                     ) %>
-              <% end %>
-              <%= button_to(
-                    'Remove',
-                    enterprise_domain_path(enterprise_domain),
-                    method: :delete,
-                    class: 'small-button',
-                    data: { confirm: 'Remove this domain?' }
-                  ) %>
-            </span>
-          </div>
+              </span>
+            </div>
 
-          <% unless enterprise_domain.verified? %>
-            <p>
-              Create
-              <code>/<%= enterprise_domain.verification_filename %></code>
-              on this domain with this exact content:
-            </p>
-            <pre><%= enterprise_domain.verification_file_content %></pre>
-          <% end %>
-        </li>
-      <% end %>
-    </ol>
+            <% unless enterprise_domain.verified? %>
+              <p>
+                Create
+                <code>/<%= enterprise_domain.verification_filename %></code>
+                on this domain with this exact content:
+              </p>
+              <pre><%= enterprise_domain.verification_file_content %></pre>
+            <% end %>
+          </li>
+        <% end %>
+      </ol>
+    <% end %>
   <% end %>
 </div>

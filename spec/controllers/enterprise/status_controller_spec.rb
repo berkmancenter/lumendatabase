@@ -22,6 +22,24 @@ describe Enterprise::StatusController do
       end
     end
 
+    context 'with a pending card payment' do
+      let(:account) { create(:enterprise_account, :inactive, :credit_card) }
+      let(:user) { create(:user, :enterprise, enterprise_account: account) }
+
+      before do
+        create(:enterprise_payment, enterprise_account: account, user: user, amount_cents: 50_000)
+      end
+
+      it 'shows the pending payment and a cancel action' do
+        get :show
+
+        expect(response).to be_successful
+        expect(response.body).to include('card payment in progress')
+        expect(response.body).to include('$500.00')
+        expect(response.body).to include('Cancel pending payment')
+      end
+    end
+
     context 'with an inactive invoice account' do
       let(:account) { create(:enterprise_account, :inactive, :invoice) }
       let(:user) { create(:user, :enterprise, enterprise_account: account) }

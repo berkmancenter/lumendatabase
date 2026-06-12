@@ -568,6 +568,9 @@ GEM
       sprockets (>= 3.0.0)
     stackprof (0.2.28)
     stringio (3.2.0)
+    stripe (19.2.0)
+      bigdecimal
+      logger
     sync (0.5.0)
     temple (0.10.4)
     term-ansicolor (1.11.3)
@@ -692,6 +695,7 @@ DEPENDENCIES
   simple_form
   simplecov
   stackprof
+  stripe
   terser
   test-prof
   timecop

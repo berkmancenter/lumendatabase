@@ -266,6 +266,16 @@ FactoryBot.define do
     end
   end
 
+  factory :enterprise_payment do
+    enterprise_account
+    user { association(:user, :enterprise, enterprise_account: enterprise_account) }
+    provider { 'stripe' }
+    payment_method { 'credit_card' }
+    status { 'pending' }
+    amount_cents { 50_000 }
+    currency { 'usd' }
+  end
+
   factory :enterprise_domain do
     enterprise_account
     domain { 'example.com' }

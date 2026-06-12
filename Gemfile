@@ -41,6 +41,7 @@ gem 'select2-rails', '~> 4.0', '>= 4.0.3'
 gem 'sidekiq', '~> 7.3', '>= 7.3.10'
 gem 'simple_form'
 gem 'stackprof'
+gem 'stripe'
 gem 'turnout'
 
 # This needs to go last or tests fail. Their versions need to be pinned
