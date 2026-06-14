@@ -1,12 +1,18 @@
 # frozen_string_literal: true
 
-require 'collapses_topics'
+require 'lumen/topics'
+require 'lumen/topics/collapser'
 require 'csv'
 require 'comfy/blog_post_factory'
-require 'loggy'
-require 'court_order_reporter'
-require 'youtube_importer/youtube_importer'
-require 'github_importer/github_importer'
+require 'lumen/logging'
+require 'lumen/logging/loggy'
+require 'lumen/reports'
+require 'lumen/reports/court_order_reporter'
+require 'lumen/importers'
+require 'lumen/importers/youtube'
+require 'lumen/importers/youtube/importer'
+require 'lumen/importers/github'
+require 'lumen/importers/github/importer'
 require 'fileutils'
 require 'uri'
 
@@ -21,13 +27,13 @@ namespace :lumen do
   task post_import_cleanup: :environment do
     from = 'DMCA Notices'
     to = 'DMCA Safe Harbor'
-    collapser = CollapsesTopics.new(from, to)
+    collapser = Lumen::Topics::Collapser.new(from, to)
     collapser.collapse
   end
 
   desc 'Update index for all existing hidden notices '
   task index_hidden_notices: :environment do
-    loggy = Loggy.new('rake lumen:index_hidden_notices', true)
+    loggy = Lumen::Logging::Loggy.new('rake lumen:index_hidden_notices', true)
 
     # one-off script for existing hidden notices
     begin
@@ -43,7 +49,7 @@ namespace :lumen do
         loggy.info "index_notices hidden: true, count: #{count}, time: #{Time.now.to_i}"
       end
 
-      CacheSweeper.sweep_search_result_caches
+      Lumen::Cache::Sweeper.sweep_search_result_caches
 
       loggy.info "index_notices done hidden: true, count: #{count}, time: #{Time.now.to_i}"
     rescue StandardError => e
@@ -57,7 +63,7 @@ namespace :lumen do
   end
 
   def index_notices_by_csv(input_csv, id_column)
-    loggy = Loggy.new('rake lumen:index_notices_by_csv', true)
+    loggy = Lumen::Logging::Loggy.new('rake lumen:index_notices_by_csv', true)
 
     usage = "index_notices_by_csv['input_csv,id_column']"
 
@@ -87,7 +93,7 @@ namespace :lumen do
       count += batch.count
       loggy.info "index_notices csv: #{input_csv}, count: #{count}, time: #{Time.now.to_i}"
 
-      CacheSweeper.sweep_search_result_caches
+      Lumen::Cache::Sweeper.sweep_search_result_caches
 
       loggy.info "index_notices done csv: #{input_csv}, count: #{count}, time: #{Time.now.to_i}"
     end
@@ -95,9 +101,9 @@ namespace :lumen do
 
   desc 'Assign titles to untitled notices'
   task title_untitled_notices: :environment do
-    loggy = Loggy.new('rake lumen:title_untitled_notices', true)
+    loggy = Lumen::Logging::Loggy.new('rake lumen:title_untitled_notices', true)
 
-    # Similar to NoticeBuilder model
+    # Similar to Lumen::NoticeBuilder model
     def generic_title(notice)
       if notice.recipient_name.present?
         "#{notice.class.label} notice to #{notice.recipient_name}"
@@ -126,7 +132,7 @@ namespace :lumen do
   end
 
   def hide_notices_by_sid(input_csv, sid_column)
-    loggy = Loggy.new('rake lumen:hide_notices_by_sid', true)
+    loggy = Lumen::Logging::Loggy.new('rake lumen:hide_notices_by_sid', true)
 
     usage = "hide_notices_by_sid['input_csv,sid_column']"
 
@@ -164,7 +170,7 @@ namespace :lumen do
 
   desc 'Change incorrect notice type'
   task :change_incorrect_notice_type, [:input_csv] => :environment do |_t, args|
-    loggy = Loggy.new('rake lumen:change_incorrect_notice_type', true)
+    loggy = Lumen::Logging::Loggy.new('rake lumen:change_incorrect_notice_type', true)
 
     incorrect_ids_file = args[:input_csv] || Rails.root.join('tmp', 'incorrect_ids.csv')
     incorrect_notice_ids = []
@@ -222,7 +228,7 @@ where notices.id in (
 
   desc 'Redact content in a single notice by id'
   task :redact_lr_legalother_single, [:notice_id] => :environment do |_t, args|
-    loggy = Loggy.new('rake lumen:redact_lr_legalother_single', true)
+    loggy = Lumen::Logging::Loggy.new('rake lumen:redact_lr_legalother_single', true)
 
     begin
       notices = Notice.includes(
@@ -237,7 +243,7 @@ where notices.id in (
         group.each do |notice|
           next unless notice.sender.present?
 
-          redactor = Redactors::EntityNameRedactor.new(notice.sender.name)
+          redactor = Lumen::Redactors::EntityNameRedactor.new(notice.sender.name)
           notice.works.each do |work|
             work.update(
               description: redactor.redact(work.description)
@@ -258,7 +264,7 @@ where notices.id in (
 
   desc 'Redact content in lr_legalother notices from Google'
   task redact_lr_legalother: :environment do
-    loggy = Loggy.new('rake lumen:redact_lr_legalother', true)
+    loggy = Lumen::Logging::Loggy.new('rake lumen:redact_lr_legalother', true)
 
     begin
       entities = Entity.where("entities.name ilike '%Google%'")
@@ -277,7 +283,7 @@ where notices.id in (
           group.each do |notice|
             next unless notice.sender.present?
 
-            redactor = Redactors::EntityNameRedactor.new(notice.sender.name)
+            redactor = Lumen::Redactors::EntityNameRedactor.new(notice.sender.name)
             notice.works.each do |work|
               work.update(
                 description: redactor.redact(work.description)
@@ -484,7 +490,7 @@ where works.id in (
   # use in his research; this makes that easier for him.
   desc 'generate report of recent court order attachments'
   task generate_court_order_report: :environment do
-    reporter = CourtOrderReporter.new
+    reporter = Lumen::Reports::CourtOrderReporter.new
     reporter.report
   end
 
@@ -508,7 +514,7 @@ where works.id in (
 
   desc 'Send notifications about file uploads updates'
   task send_file_uploads_notifications: :environment do
-    loggy = Loggy.new('rake lumen:send_file_uploads_notifications', true)
+    loggy = Lumen::Logging::Loggy.new('rake lumen:send_file_uploads_notifications', true)
 
     loggy.info 'Starting a new task run'
 
@@ -564,11 +570,11 @@ where works.id in (
 
   desc 'Import YT notices'
   task import_yt_notices: :environment do
-    loggy = Loggy.new('rake lumen:import_yt_notices', true, true)
+    loggy = Lumen::Logging::Loggy.new('rake lumen:import_yt_notices', true, true)
 
     loggy.info('Starting importing YT notices from old chill')
 
-    importer = YoutubeImporter::YoutubeImporter.new
+    importer = Lumen::Importers::Youtube::Importer.new
     importer.import
 
     loggy.info('Finished importing YT notices from old chill')
@@ -577,11 +583,11 @@ where works.id in (
   # A cron job to fetch any new notices from the Github DMCA public repo
   desc 'Import Github notices'
   task import_github_notices: :environment do
-    loggy = Loggy.new('rake lumen:import_github_notices', true, true)
+    loggy = Lumen::Logging::Loggy.new('rake lumen:import_github_notices', true, true)
 
     loggy.info('Starting import of Github notices from DMCA repo')
 
-    importer = GithubImporter::GithubImporter.new
+    importer = Lumen::Importers::Github::Importer.new
     importer.import
 
     loggy.info('Finished import of Github notices from DMCA repo')
@@ -589,7 +595,7 @@ where works.id in (
 
   desc 'Archive expired token urls'
   task archive_expired_token_urls: :environment do
-    loggy = Loggy.new('rake lumen:archive_expired_token_urls', true)
+    loggy = Lumen::Logging::Loggy.new('rake lumen:archive_expired_token_urls', true)
 
     batch_size = 100
 
@@ -610,7 +616,7 @@ where works.id in (
   task :import_media_mentions_from_csv, [:input_csv] => :environment do |_t, args|
     input_csv = args[:input_csv]
 
-    loggy = Loggy.new('rake lumen:import_media_mentions_from_csv', true)
+    loggy = Lumen::Logging::Loggy.new('rake lumen:import_media_mentions_from_csv', true)
 
     usage = "Use 'rake import_media_mentions_from_csv['input_csv_path']'"
 
@@ -658,7 +664,7 @@ where works.id in (
 
   desc 'Export gov requests'
   task export_gov_requests: :environment do
-    loggy = Loggy.new('rake lumen:archive_expired_token_urls', true)
+    loggy = Lumen::Logging::Loggy.new('rake lumen:archive_expired_token_urls', true)
 
     batch_size = 100
 
@@ -674,7 +680,7 @@ where works.id in (
       GC.start
       notices.each do |notice|
         begin
-          json_file.write(NoticeSerializerProxy.new(notice).to_json)
+          json_file.write(Lumen::NoticeSerializerProxy.new(notice).to_json)
           json_file.write(',')
 
           supporting_docs = notice.file_uploads.where(kind: 'supporting')
@@ -701,7 +707,7 @@ where works.id in (
 
   desc 'Feed notices with empty works'
   task feed_notices_with_empty_works: :environment do
-    loggy = Loggy.new('rake lumen:feed_notices_with_empty_works', true)
+    loggy = Lumen::Logging::Loggy.new('rake lumen:feed_notices_with_empty_works', true)
 
     batch_size = 100
 
@@ -753,7 +759,7 @@ where works.id in (
 
   desc 'Mark notices ready to reindex after relations update'
   task mark_notices_to_reindex_after_relations_update: :environment do
-    loggy = Loggy.new('rake lumen:mark_notices_to_reindex_after_relations_update', true)
+    loggy = Lumen::Logging::Loggy.new('rake lumen:mark_notices_to_reindex_after_relations_update', true)
 
     batch_size = 100
 
@@ -773,7 +779,7 @@ where works.id in (
 
         itx = 1
         related_object.notices.group(:id).find_in_batches(batch_size: batch_size) do |notices|
-          ProxyCache.clear_notice(notices.map(&:id))
+          Lumen::Cache::Proxy.clear_notice(notices.map(&:id))
 
           notices.each do |notice|
             notice.touch
@@ -788,7 +794,7 @@ where works.id in (
 
   desc 'Merge entities with similar name and metadata'
   task merge_similar_entities: :environment do |_t|
-    loggy = Loggy.new('rake lumen:merge_similar_entities', true)
+    loggy = Lumen::Logging::Loggy.new('rake lumen:merge_similar_entities', true)
     entities_to_merge_in = Entity.where("id IN (#{ENV['ENTITIES_TO_MERGE']})")
     entities_ids_to_skip = ENV['ENTITIES_TO_SKIP'] || ''
     entities_ids_to_skip = entities_ids_to_skip.split(',').map(&:to_i)

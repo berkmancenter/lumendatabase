@@ -49,7 +49,7 @@ feature 'Fielded searches of Notices' do
     inside_search = create(:dmca, :with_facet_data, title: 'Lion King two')
     index_changed_instances
 
-    field = TermSearch.new(:title, :title, 'Title')
+    field = Lumen::Search::TermSearch.new(:title, :title, 'Title')
     search_on_page = FieldedSearchOnPage.new
     search_on_page.visit_search_page
 

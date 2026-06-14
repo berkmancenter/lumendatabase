@@ -16,8 +16,8 @@ class LocalLaw < Notice
   end
 
   def auto_redact
-    InstanceRedactor.new.redact(self)
-    Redactors::GoogleSenderRedactor.new.redact(self)
+    Lumen::InstanceRedactor.new.redact(self)
+    Lumen::Redactors::GoogleSenderRedactor.new.redact(self)
     redact_urls
   end
 

@@ -1,16 +1,16 @@
 require 'spec_helper'
 
-# This model test primarily checks that ElasticsearchQuery produces a correctly
+# This model test primarily checks that Lumen::Search::Query produces a correctly
 # formed Elasticsearch query, given various inputs. It doesn't check that good
 # results get returned (that's up to Elasticsearch) or displayed (integration
 # tests).
-# Separating #prepare from #search in ElasticsearchQuery gives us a seam that lets
+# Separating #prepare from #search in Lumen::Search::Query gives us a seam that lets
 # us test here, checking the prepared query without needing to mock out
 # Elasticsearch. Additionally, checking the query will simplify upgrading to
 # other versions of Elasticsearch in future; when the query DSL changes, we
 # can first update the tests here to assert that we produce the correct query
-# syntax, and then update ElasticsearchQuery until tests pass.
-describe ElasticsearchQuery, type: :model do
+# syntax, and then update Lumen::Search::Query until tests pass.
+describe Lumen::Search::Query, type: :model do
 
   # This test has the expected query syntax for a query that exercises many
   # searching/filtering/aggregating/highlighting functions. When updating ES
@@ -104,7 +104,7 @@ describe ElasticsearchQuery, type: :model do
       "term-require-all"=>"true"
     }
 
-    es_query = ElasticsearchQuery.new(params).tap do |searcher|
+    es_query = Lumen::Search::Query.new(params).tap do |searcher|
       Notice::SEARCHABLE_FIELDS.each do |searched_field|
         searcher.register searched_field
       end
@@ -124,10 +124,10 @@ describe ElasticsearchQuery, type: :model do
     end
 
     it 'allows searches / filters to be registered' do
-      title_filter = TermFilter.new(:title)
-      date_range_filter = DateRangeFilter.new('1590009037000..1590009039000')
-      unspecified_filter = UnspecifiedTermFilter.new(:batman)
-      search = TermSearch.new(:title, :batman)
+      title_filter = Lumen::Search::TermFilter.new(:title)
+      date_range_filter = Lumen::Search::DateRangeFilter.new('1590009037000..1590009039000')
+      unspecified_filter = Lumen::Search::UnspecifiedTermFilter.new(:batman)
+      search = Lumen::Search::TermSearch.new(:title, :batman)
 
       subject.register title_filter
       subject.register date_range_filter
@@ -185,7 +185,7 @@ describe ElasticsearchQuery, type: :model do
 
   context 'faceting searches' do
     Notice::FILTERABLE_FIELDS.each do |filter|
-      next if filter.is_a? DateRangeFilter  # they have weird syntax
+      next if filter.is_a? Lumen::Search::DateRangeFilter  # they have weird syntax
 
       it "respects #{filter.parameter}" do
         obj = described_class.new(filter.parameter => 'batman')
@@ -200,7 +200,7 @@ describe ElasticsearchQuery, type: :model do
     end
 
     it 'respect date ranges' do
-      filter = DateRangeFilter.new(:date_received_facet, :date_received, 'Date')
+      filter = Lumen::Search::DateRangeFilter.new(:date_received_facet, :date_received, 'Date')
       obj = described_class.new(date_received_facet: '1589830316000..1589916716000')
       obj.register filter
 

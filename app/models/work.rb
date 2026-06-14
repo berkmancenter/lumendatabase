@@ -52,7 +52,7 @@ class Work
   def force_redactions
     auto_redact
 
-    # DeterminesWorkKind is intended for use here but disabled due to confusion
+    # Lumen::DeterminesWorkKind is intended for use here but disabled due to confusion
     # caused by mis-classified works.
     self.kind = 'Unspecified' if kind.blank?
   end
@@ -150,7 +150,7 @@ class Work
   end
 
   def auto_redact
-    InstanceRedactor.new.redact(self, REDACTABLE_FIELDS)
+    Lumen::InstanceRedactor.new.redact(self, REDACTABLE_FIELDS)
   end
 
   def force_related_notices_reindex

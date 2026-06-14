@@ -16,7 +16,7 @@ class NoticesController < ApplicationController
   end
 
   # In commit d7879d0 and prior, this was split into a two-part process with a
-  # NoticeBuilder and a NoticeFinalizer. The idea here was that we'd create
+  # Lumen::NoticeBuilder and a NoticeFinalizer. The idea here was that we'd create
   # Notices with stub works, and then background the time-consuming work + URL
   # creation step.
   # However, background processing adds a lot of complexity, and didn't seem
@@ -25,7 +25,7 @@ class NoticesController < ApplicationController
   # the stub notice to be created (which it should not!) but returning http 200
   # instead of 201 or 429, confusing clients.
   # Current code falls back to something more like the Rails standard. Not
-  # exactly the same -- we still use NoticeBuilder to do some default-setting
+  # exactly the same -- we still use Lumen::NoticeBuilder to do some default-setting
   # and to create entity relationships -- but close enough that we can rely on
   # rails native error handling.
   # If you're reading this because you want to take another run at backgrounding
@@ -35,7 +35,7 @@ class NoticesController < ApplicationController
   def create
     return unauthorized_response unless authorized_to_create?
 
-    @notice = NoticeBuilder.new(
+    @notice = Lumen::NoticeBuilder.new(
       get_notice_type(params), notice_params, current_user
     ).build
 
@@ -47,7 +47,7 @@ class NoticesController < ApplicationController
         format.json { head :created, location: @notice }
         format.html { redirect_to new_notice_url }
       else
-        LumenLogger.log_metrics('FAILED_CREATE_NEW_NOTICE', notice_errors: @notice.errors)
+        Lumen::Logger.log_metrics('FAILED_CREATE_NEW_NOTICE', notice_errors: @notice.errors)
 
         flash.alert = 'Notice creation failed. See errors below.'
         format.html { render :new, status: :unprocessable_entity }
@@ -71,7 +71,7 @@ class NoticesController < ApplicationController
         show_render_html
       end
       format.json do
-        render json: { json_root_for(@notice.class) => NoticeSerializerProxy.new(@notice) }
+        render json: { json_root_for(@notice.class) => Lumen::NoticeSerializerProxy.new(@notice) }
       end
     end
   end

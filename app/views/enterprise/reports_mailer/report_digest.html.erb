@@ -6,7 +6,7 @@
 
 <ol>
   <% @notices.each do |notice| %>
-    <% access = EnterpriseNoticeAccess.for_account(@enterprise_account, notice) %>
+    <% access = Lumen::Enterprise::NoticeAccess.for_account(@enterprise_account, notice) %>
     <li>
       <p>
         <strong><%= link_to notice.title, notice_url(notice, host: Chill::Application.config.site_host) %></strong><br>

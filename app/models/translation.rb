@@ -1,7 +1,8 @@
-require 'validates_automatically'
+require 'lumen/models'
+require 'lumen/models/validates_automatically'
 
 class Translation < ApplicationRecord
-  include ValidatesAutomatically
+  include Lumen::Models::ValidatesAutomatically
 
   validates :key, presence: true
   validates_uniqueness_of :key

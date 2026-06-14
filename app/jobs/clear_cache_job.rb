@@ -8,7 +8,7 @@ class ClearCacheJob < ApplicationJob
     http.verify_mode = OpenSSL::SSL::VERIFY_NONE
     request = Net::HTTP::Get.new(uri.request_uri)
     request['Host'] = uri.host
-    request[ProxyCache::CLEAR_HEADER] = 'yolo'
+    request[Lumen::Cache::Proxy::CLEAR_HEADER] = 'yolo'
 
     begin
       http.request(request)

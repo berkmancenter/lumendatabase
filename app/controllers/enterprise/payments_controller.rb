@@ -4,7 +4,7 @@ class Enterprise::PaymentsController < Enterprise::ConfirmedBaseController
     result = payment_method_strategy(params[:payment_method]).start
 
     redirect_from(result)
-  rescue Enterprise::PaymentMethods::UnsupportedPaymentMethod => e
+  rescue Lumen::Enterprise::PaymentMethods::UnsupportedPaymentMethod => e
     redirect_to enterprise_settings_path, alert: e.message
   end
 
@@ -26,7 +26,7 @@ class Enterprise::PaymentsController < Enterprise::ConfirmedBaseController
 
     redirect_to enterprise_settings_path,
                 notice: 'Your pending payment was canceled. You can try again whenever you are ready.'
-  rescue Enterprise::PaymentMethods::Error => e
+  rescue Lumen::Enterprise::PaymentMethods::Error => e
     redirect_to enterprise_status_path, alert: e.message
   end
 
@@ -42,14 +42,14 @@ class Enterprise::PaymentsController < Enterprise::ConfirmedBaseController
 
     redirect_to enterprise_settings_path,
                 notice: 'Your pending card payment was canceled. You can start a new payment now.'
-  rescue Enterprise::PaymentMethods::Error => e
+  rescue Lumen::Enterprise::PaymentMethods::Error => e
     redirect_to enterprise_status_path, alert: e.message
   end
 
   private
 
   def payment_method_strategy(payment_method)
-    Enterprise::PaymentMethods.for(
+    Lumen::Enterprise::PaymentMethods.for(
       payment_method,
       enterprise_account: enterprise_account,
       user: current_user,
@@ -58,7 +58,7 @@ class Enterprise::PaymentsController < Enterprise::ConfirmedBaseController
   end
 
   def payment_method_for(payment)
-    Enterprise::PaymentMethods.for_payment(
+    Lumen::Enterprise::PaymentMethods.for_payment(
       payment,
       enterprise_account: enterprise_account,
       user: current_user,

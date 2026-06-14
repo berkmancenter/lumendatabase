@@ -169,9 +169,9 @@ describe 'RedactNoticeProc' do
         redactable_notices = create_list(:dmca, 2, :redactable)
         params[:selected_text] = 'Sensitive thing'
         params[:next_notices]  = %w[2 3 4]
-        redactor = expect_new(InstanceRedactor,
+        redactor = expect_new(Lumen::InstanceRedactor,
                               [
-                                expect_new(Redactors::ContentRedactor,
+                                expect_new(Lumen::Redactors::ContentRedactor,
                                            'Sensitive thing')
                               ])
         review_required_ids = [@object.id] + redactable_notices.map(&:id)

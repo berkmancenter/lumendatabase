@@ -5,13 +5,13 @@ class StripeWebhooksController < ApplicationController
   skip_after_action :store_action, :include_auth_cookie, :track_usage_with_matomo
 
   def create
-    Enterprise::PaymentProviders::Stripe.handle_webhook(stripe_event)
+    Lumen::Enterprise::PaymentProviders::Stripe.handle_webhook(stripe_event)
 
     head :ok
-  rescue Enterprise::PaymentProviders::Stripe::InvalidWebhook => e
+  rescue Lumen::Enterprise::PaymentProviders::Stripe::InvalidWebhook => e
     Rails.logger.warn("Rejected Stripe webhook: #{e.class}: #{e.message}")
     head :bad_request
-  rescue Enterprise::PaymentProviders::Stripe::ConfigurationError => e
+  rescue Lumen::Enterprise::PaymentProviders::Stripe::ConfigurationError => e
     Rails.logger.error("Stripe webhook is not configured: #{e.message}")
     head :internal_server_error
   end
@@ -19,7 +19,7 @@ class StripeWebhooksController < ApplicationController
   private
 
   def stripe_event
-    @stripe_event ||= Enterprise::PaymentProviders::Stripe.construct_event(
+    @stripe_event ||= Lumen::Enterprise::PaymentProviders::Stripe.construct_event(
       payload: request.body.read,
       signature: request.env['HTTP_STRIPE_SIGNATURE']
     )

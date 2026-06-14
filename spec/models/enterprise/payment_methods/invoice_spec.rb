@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Enterprise::PaymentMethods::Invoice do
+describe Lumen::Enterprise::PaymentMethods::Invoice do
   let(:account) { create(:enterprise_account, :inactive) }
   let(:user) { create(:user, :enterprise, enterprise_account: account) }
   let(:urls) do

@@ -1,10 +1,11 @@
-require 'validates_automatically'
+require 'lumen/models'
+require 'lumen/models/validates_automatically'
 
 class MediaMention < ApplicationRecord
-  include ValidatesAutomatically
+  include Lumen::Models::ValidatesAutomatically
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
-  include Searchability
+  include Lumen::Search::Searchability
 
   load_elasticsearch_helpers
 
@@ -13,7 +14,7 @@ class MediaMention < ApplicationRecord
   MULTI_MATCH_FIELDS = %w(base_search)
 
   SEARCHABLE_FIELDS = [
-    TermSearch.new(:term, MULTI_MATCH_FIELDS, 'All Fields')
+    Lumen::Search::TermSearch.new(:term, MULTI_MATCH_FIELDS, 'All Fields')
   ].freeze
 
   now = Time.now.beginning_of_day
@@ -25,17 +26,17 @@ class MediaMention < ApplicationRecord
   ]
 
   FILTERABLE_FIELDS = [
-    TermFilter.new(:source_facet, 'Source'),
-    TermFilter.new(:document_type_facet, 'Document Type'),
-    TermFilter.new(:scale_of_mention_facet, 'Scale of Mention'),
-    DateRangeFilter.new(:date_facet, :date, 'Date Published', DATE_FACET_RANGES)
+    Lumen::Search::TermFilter.new(:source_facet, 'Source'),
+    Lumen::Search::TermFilter.new(:document_type_facet, 'Document Type'),
+    Lumen::Search::TermFilter.new(:scale_of_mention_facet, 'Scale of Mention'),
+    Lumen::Search::DateRangeFilter.new(:date_facet, :date, 'Date Published', DATE_FACET_RANGES)
   ].freeze
 
   ORDERING_OPTIONS = [
-    ResultOrdering.new('relevancy desc', [:_score, :desc], 'Most Relevant'),
-    ResultOrdering.new('relevancy asc', [:_score, :asc], 'Least Relevant'),
-    ResultOrdering.new('date desc', [:date, :desc], 'Date Published - newest', true),
-    ResultOrdering.new('date asc', [:date, :asc], 'Date Published - oldest')
+    Lumen::Search::ResultOrdering.new('relevancy desc', [:_score, :desc], 'Most Relevant'),
+    Lumen::Search::ResultOrdering.new('relevancy asc', [:_score, :asc], 'Least Relevant'),
+    Lumen::Search::ResultOrdering.new('date desc', [:date, :desc], 'Date Published - newest', true),
+    Lumen::Search::ResultOrdering.new('date asc', [:date, :asc], 'Date Published - oldest')
   ].freeze
 
   HIGHLIGHTS = [].freeze

@@ -72,7 +72,7 @@ class ApplicationController < ActionController::Base
   end
 
   def resource_not_found(exception = false)
-    logger404s = LumenLogger.init(
+    logger404s = Lumen::Logger.init(
       path: "log/#{Rails.env}_404s.log",
       customize_event: ->(event) { event['event_type'] = 'rails_log' }
     )
@@ -103,6 +103,10 @@ class ApplicationController < ActionController::Base
                status: :not_found
       end
     end
+  end
+
+  def current_ability
+    @current_ability ||= Lumen::Ability.new(current_user)
   end
 
   private
@@ -256,7 +260,7 @@ class ApplicationController < ActionController::Base
   end
 
   def matomo_usage_classifier
-    @matomo_usage_classifier ||= UsageTracking::Classifier.new(
+    @matomo_usage_classifier ||= Lumen::UsageTracking::Classifier.new(
       request: request,
       user: current_user,
       notice: instance_variable_get(:@notice),

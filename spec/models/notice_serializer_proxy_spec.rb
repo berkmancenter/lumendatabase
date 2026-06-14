@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe NoticeSerializerProxy, type: :model do
+describe Lumen::NoticeSerializerProxy, type: :model do
 
   it "uses the instance's serializer when present" do
     trademark = build_stubbed(:trademark)
@@ -8,7 +8,7 @@ describe NoticeSerializerProxy, type: :model do
     allow(serialized).to receive(:a_method).and_return(:a_value) # test delegation
     expect(TrademarkSerializer).to receive(:new).with(trademark).and_return(serialized)
 
-    delegator = NoticeSerializerProxy.new(trademark)
+    delegator = Lumen::NoticeSerializerProxy.new(trademark)
 
     expect(delegator.a_method).to eq :a_value
   end
@@ -19,7 +19,7 @@ describe NoticeSerializerProxy, type: :model do
     allow(serialized).to receive(:a_method).and_return(:a_value) # test delegation
     expect(NoticeSerializer).to receive(:new).with(object).and_return(serialized)
 
-    delegator = NoticeSerializerProxy.new(object)
+    delegator = Lumen::NoticeSerializerProxy.new(object)
 
     expect(delegator.a_method).to eq :a_value
   end

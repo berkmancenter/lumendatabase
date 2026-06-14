@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe EnterpriseNoticeAccess do
+describe Lumen::Enterprise::NoticeAccess do
   let(:enterprise_account) { create(:enterprise_account) }
   let(:user) { create(:user, :enterprise, enterprise_account: enterprise_account) }
 

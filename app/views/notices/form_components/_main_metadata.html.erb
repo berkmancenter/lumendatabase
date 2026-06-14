@@ -36,7 +36,7 @@
         input_html: { multiple: true }
       %>
   <% end %>
-  <%= form.input :language, collection: Language.all, label_method: :label, value_method: :code %>
+  <%= form.input :language, collection: Lumen::Language.all, label_method: :label, value_method: :code %>
   <%= form.input :jurisdiction_list, label: "Jurisdiction", placeholder: 'a list of countries - US, CA, etc.', input_html: { value: jsonb_array_input(form.object, :jurisdiction_list) } %>
   <% if regulation_list %>
     <%= form.input :regulation_list, label: Translation.t('notice_new_works_gov_law_enf_regulations'), placeholder: Translation.t('notice_new_comma_separated'), input_html: { value: jsonb_array_input(form.object, :regulation_list) } %>

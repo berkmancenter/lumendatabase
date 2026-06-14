@@ -28,7 +28,7 @@ class SearchController < ApplicationController
     @searchdata = @searcher.search
     @wrapped_instances = wrap_instances
 
-    LumenLogger.log_metrics('SEARCHED', search_details: meta_hash_for(@searchdata).except(:facets))
+    Lumen::Logger.log_metrics('SEARCHED', search_details: meta_hash_for(@searchdata).except(:facets))
 
     respond_to do |format|
       format.html { html_responder }
@@ -41,7 +41,7 @@ class SearchController < ApplicationController
 
     resource_not_found and return if filterable_field_facet.nil?
 
-    @searcher = ElasticsearchQuery.new(params, @model_class).tap do |searcher|
+    @searcher = Lumen::Search::Query.new(params, @model_class).tap do |searcher|
       configure_searcher(searcher)
 
       @searchable_fields.each do |searched_field|
@@ -103,7 +103,7 @@ class SearchController < ApplicationController
   end
 
   def sort_by(sort_by_param)
-    ResultOrdering.define(sort_by_param, @model_class).sort_by
+    Lumen::Search::ResultOrdering.define(sort_by_param, @model_class).sort_by
   end
 
   def wrap_instances

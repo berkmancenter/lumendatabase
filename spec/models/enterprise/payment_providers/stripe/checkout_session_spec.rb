@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Enterprise::PaymentProviders::Stripe::CheckoutSession do
+describe Lumen::Enterprise::PaymentProviders::Stripe::CheckoutSession do
   let(:account) { create(:enterprise_account, :inactive) }
   let(:user) { create(:user, :enterprise, enterprise_account: account) }
 
@@ -67,7 +67,7 @@ describe Enterprise::PaymentProviders::Stripe::CheckoutSession do
         success_url: 'https://example.com/success',
         cancel_url: 'https://example.com/cancel'
       ).create
-    end.to raise_error(Enterprise::PaymentProviders::Stripe::ConfigurationError, /Stripe is not configured/)
+    end.to raise_error(Lumen::Enterprise::PaymentProviders::Stripe::ConfigurationError, /Stripe is not configured/)
 
     expect(account.enterprise_payments.count).to eq(0)
   end

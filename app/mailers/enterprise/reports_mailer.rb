@@ -3,7 +3,7 @@ class Enterprise::ReportsMailer < ApplicationMailer
 
   def report_digest(enterprise_account, starts_at, ends_at)
     @enterprise_account = enterprise_account
-    @report = EnterpriseNoticeReport.new(
+    @report = Lumen::Enterprise::NoticeReport.new(
       enterprise_account,
       starts_at: starts_at,
       ends_at: ends_at

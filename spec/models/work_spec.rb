@@ -31,7 +31,7 @@ RSpec.describe Work, type: :model do
     end
 
     it 'does not auto classify if kind is set' do
-      expect_any_instance_of(DeterminesWorkKind).not_to receive(:kind)
+      expect_any_instance_of(Lumen::DeterminesWorkKind).not_to receive(:kind)
       work = build(:work, kind: 'foo')
       create(:dmca, works: [work])
     end

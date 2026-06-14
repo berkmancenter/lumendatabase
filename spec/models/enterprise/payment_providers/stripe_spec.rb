@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Enterprise::PaymentProviders::Stripe do
+describe Lumen::Enterprise::PaymentProviders::Stripe do
   describe '.construct_event' do
     around do |example|
       previous_secret = ENV['STRIPE_WEBHOOK_SECRET']

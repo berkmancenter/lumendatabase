@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Enterprise::PaymentProviders::Stripe::Expiration do
+describe Lumen::Enterprise::PaymentProviders::Stripe::Expiration do
   ExpirationEventData = Struct.new(:object, keyword_init: true)
   ExpirationEvent = Struct.new(:id, :type, :created, :data, keyword_init: true)
   ExpirationCheckoutSession = Struct.new(:id, :metadata, keyword_init: true)

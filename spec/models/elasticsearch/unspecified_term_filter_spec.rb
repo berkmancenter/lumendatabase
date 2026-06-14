@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe UnspecifiedTermFilter, type: :model do
+describe Lumen::Search::UnspecifiedTermFilter, type: :model do
   it 'supplies a basic filter when the regular param is used' do
     facet = :term_facet
     term_search = described_class.new(facet)

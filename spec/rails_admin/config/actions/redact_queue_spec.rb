@@ -8,13 +8,13 @@ describe RedactQueueProc do
 
   context "GET request" do
     before do
-      queue = stub_new(Redaction::Queue, current_user)
+      queue = stub_new(Lumen::Redaction::Queue, current_user)
       allow(queue).to receive(:notices).and_return([])
     end
 
     it "assigns a refill instance" do
-      refill = Redaction::RefillQueue.new(params)
-      expect(Redaction::RefillQueue).to receive(:new).with(params).and_return(refill)
+      refill = Lumen::Redaction::RefillQueue.new(params)
+      expect(Lumen::Redaction::RefillQueue).to receive(:new).with(params).and_return(refill)
 
       instance_eval(&RedactQueueProc)
 
@@ -22,9 +22,9 @@ describe RedactQueueProc do
     end
 
     it "assigns objects from the user's queue" do
-      queue = Redaction::Queue.new(current_user)
+      queue = Lumen::Redaction::Queue.new(current_user)
       allow(queue).to receive(:notices).and_return(:notices)
-      expect(Redaction::Queue).to receive(:new).with(current_user).and_return(queue)
+      expect(Lumen::Redaction::Queue).to receive(:new).with(current_user).and_return(queue)
 
       instance_eval(&RedactQueueProc)
 
@@ -53,8 +53,8 @@ describe RedactQueueProc do
 
     it "fills the users queue before redirecting" do
       params[:fill_queue] = true
-      queue = stub_new(Redaction::Queue, current_user)
-      refill = stub_new(Redaction::RefillQueue, params)
+      queue = stub_new(Lumen::Redaction::Queue, current_user)
+      refill = stub_new(Lumen::Redaction::RefillQueue, params)
       expect(refill).to receive(:fill).with(queue)
       should_redirect_back
 
@@ -83,7 +83,7 @@ describe RedactQueueProc do
         it "calls ##{method} on Queue when :#{parameter} is present" do
           params[:selected] = %w( 1 3 5 9 )
           params[parameter] = true
-          queue = stub_new(Redaction::Queue, current_user)
+          queue = stub_new(Lumen::Redaction::Queue, current_user)
           expect(queue).to receive(method).with(%w( 1 3 5 9 ))
           should_redirect_back
 

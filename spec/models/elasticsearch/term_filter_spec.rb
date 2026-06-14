@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe TermFilter, type: :model do
+describe Lumen::Search::TermFilter, type: :model do
   it 'has an indexed attribute that defaults to the parameter name' do
     facet = :term_facet
     term_search = described_class.new(facet)

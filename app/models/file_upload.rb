@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
-require 'validates_automatically'
+require 'lumen/models'
+require 'lumen/models/validates_automatically'
 
 class FileUpload < ApplicationRecord
-  include ValidatesAutomatically
+  include Lumen::Models::ValidatesAutomatically
 
   attr_accessor :file_name
 

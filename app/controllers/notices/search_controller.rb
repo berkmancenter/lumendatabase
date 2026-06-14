@@ -1,5 +1,5 @@
 class Notices::SearchController < SearchController
-  EACH_SERIALIZER = NoticeSerializerProxy
+  EACH_SERIALIZER = Lumen::NoticeSerializerProxy
   URL_ROOT = 'notices'.freeze
   SEARCHED_MODEL = Notice
 
@@ -17,7 +17,7 @@ class Notices::SearchController < SearchController
   end
 
   def item_searcher
-    ElasticsearchQuery.new(params).tap do |searcher|
+    Lumen::Search::Query.new(params).tap do |searcher|
       configure_searcher(searcher)
 
       Notice::SEARCHABLE_FIELDS.each do |searched_field|

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 class Notice < ApplicationRecord
-  include Searchability
+  include Lumen::Search::Searchability
   include Elasticsearch::Model
-  include RepairNestedParams
+  include Lumen::Models::RepairNestedParams
 
-  extend RecentScope
+  extend Lumen::Models::RecentScope
 
   # == Constants ============================================================
   HIGHLIGHTS = %i[
@@ -24,43 +24,43 @@ class Notice < ApplicationRecord
   MULTI_MATCH_FIELDS = %w(base_search preferred_search^2)
 
   SEARCHABLE_FIELDS = [
-    TermSearch.new(:term, MULTI_MATCH_FIELDS, 'All Fields'),
-    TermSearch.new(:title, :title, 'Title'),
-    TermSearch.new(:topics, 'topics.name', 'Topics'),
-    TermSearch.new(:tags, :tag_list, 'Tags'),
-    TermSearch.new(:jurisdictions, :jurisdiction_list, 'Jurisdictions'),
-    TermSearch.new(:entities_country_codes, :entities_country_codes, 'Entity Country Code'),
-    TermSearch.new(:sender_name, :sender_name, 'Sender Name'),
-    TermSearch.new(:principal_name, :principal_name, 'Principal Name'),
-    TermSearch.new(:recipient_name, :recipient_name, 'Recipient Name'),
-    TermSearch.new(:submitter_name, :submitter_name, 'Submitter Name'),
-    TermSearch.new(:submitter_country_code, :submitter_country_code, 'Submitter Country'),
-    TermSearch.new(:works, 'works.description', 'Works Descriptions'),
-    TermSearch.new(:action_taken, :action_taken, 'Action taken'),
+    Lumen::Search::TermSearch.new(:term, MULTI_MATCH_FIELDS, 'All Fields'),
+    Lumen::Search::TermSearch.new(:title, :title, 'Title'),
+    Lumen::Search::TermSearch.new(:topics, 'topics.name', 'Topics'),
+    Lumen::Search::TermSearch.new(:tags, :tag_list, 'Tags'),
+    Lumen::Search::TermSearch.new(:jurisdictions, :jurisdiction_list, 'Jurisdictions'),
+    Lumen::Search::TermSearch.new(:entities_country_codes, :entities_country_codes, 'Entity Country Code'),
+    Lumen::Search::TermSearch.new(:sender_name, :sender_name, 'Sender Name'),
+    Lumen::Search::TermSearch.new(:principal_name, :principal_name, 'Principal Name'),
+    Lumen::Search::TermSearch.new(:recipient_name, :recipient_name, 'Recipient Name'),
+    Lumen::Search::TermSearch.new(:submitter_name, :submitter_name, 'Submitter Name'),
+    Lumen::Search::TermSearch.new(:submitter_country_code, :submitter_country_code, 'Submitter Country'),
+    Lumen::Search::TermSearch.new(:works, 'works.description', 'Works Descriptions'),
+    Lumen::Search::TermSearch.new(:action_taken, :action_taken, 'Action taken'),
   ].freeze
 
   FILTERABLE_FIELDS = [
-    TermFilter.new(:topic_facet, 'Topic'),
-    TermFilter.new(:sender_name_facet, 'Sender'),
-    TermFilter.new(:principal_name_facet, 'Principal'),
-    TermFilter.new(:recipient_name_facet, 'Recipient'),
-    TermFilter.new(:submitter_name_facet, 'Submitter'),
-    TermFilter.new(:tag_list_facet, 'Tags'),
-    TermFilter.new(:country_code_facet, 'Country'),
-    TermFilter.new(:language_facet, 'Language'),
-    TermFilter.new(:submitter_country_code_facet, 'Submitter Country'),
-    UnspecifiedTermFilter.new(:action_taken_facet, 'Action taken'),
-    DateRangeFilter.new(:date_received_facet, :date_received, 'Date'),
-    DateRangeFilter.new(:date_submitted, :created_at, '', nil, true, true)
+    Lumen::Search::TermFilter.new(:topic_facet, 'Topic'),
+    Lumen::Search::TermFilter.new(:sender_name_facet, 'Sender'),
+    Lumen::Search::TermFilter.new(:principal_name_facet, 'Principal'),
+    Lumen::Search::TermFilter.new(:recipient_name_facet, 'Recipient'),
+    Lumen::Search::TermFilter.new(:submitter_name_facet, 'Submitter'),
+    Lumen::Search::TermFilter.new(:tag_list_facet, 'Tags'),
+    Lumen::Search::TermFilter.new(:country_code_facet, 'Country'),
+    Lumen::Search::TermFilter.new(:language_facet, 'Language'),
+    Lumen::Search::TermFilter.new(:submitter_country_code_facet, 'Submitter Country'),
+    Lumen::Search::UnspecifiedTermFilter.new(:action_taken_facet, 'Action taken'),
+    Lumen::Search::DateRangeFilter.new(:date_received_facet, :date_received, 'Date'),
+    Lumen::Search::DateRangeFilter.new(:date_submitted, :created_at, '', nil, true, true)
   ].freeze
 
   ORDERING_OPTIONS = [
-    ResultOrdering.new('relevancy desc', [:_score, :desc], 'Most Relevant', true),
-    ResultOrdering.new('relevancy asc', [:_score, :asc], 'Least Relevant'),
-    ResultOrdering.new('date_received desc', [:date_received, :desc], 'Date Received - newest'),
-    ResultOrdering.new('date_received asc', [:date_received, :asc], 'Date Received - oldest'),
-    ResultOrdering.new('created_at desc', [:created_at, :desc], 'Reported to Lumen - newest'),
-    ResultOrdering.new('created_at asc', [:created_at, :asc], 'Reported to Lumen - oldest')
+    Lumen::Search::ResultOrdering.new('relevancy desc', [:_score, :desc], 'Most Relevant', true),
+    Lumen::Search::ResultOrdering.new('relevancy asc', [:_score, :asc], 'Least Relevant'),
+    Lumen::Search::ResultOrdering.new('date_received desc', [:date_received, :desc], 'Date Received - newest'),
+    Lumen::Search::ResultOrdering.new('date_received asc', [:date_received, :asc], 'Date Received - oldest'),
+    Lumen::Search::ResultOrdering.new('created_at desc', [:created_at, :desc], 'Reported to Lumen - newest'),
+    Lumen::Search::ResultOrdering.new('created_at asc', [:created_at, :asc], 'Reported to Lumen - oldest')
   ].freeze
 
   REDACTABLE_FIELDS = %i[body].freeze
@@ -120,7 +120,7 @@ class Notice < ApplicationRecord
 
   # == Validations ==========================================================
   validates_inclusion_of :action_taken, in: VALID_ACTIONS, allow_blank: true
-  validates_inclusion_of :language, in: Language.codes, allow_blank: true
+  validates_inclusion_of :language, in: Lumen::Language.codes, allow_blank: true
   validates_presence_of :works, :entity_notice_roles
   validates :date_sent, date: { after: Proc.new { Date.new(1998,10,28) }, before: Proc.new { Time.now + 1.day }, allow_blank: true }
   validates :date_received, date: { after: Proc.new { Date.new(1998,10,28) }, before: Proc.new { Time.now + 1.day }, allow_blank: true }
@@ -242,7 +242,7 @@ class Notice < ApplicationRecord
   end
 
   def language_enum
-    Language.all.inject( {} ) { |memo, l| memo[l.label] = l.code; memo }
+    Lumen::Language.all.inject( {} ) { |memo, l| memo[l.label] = l.code; memo }
   end
 
   def model_serializer
@@ -281,7 +281,7 @@ class Notice < ApplicationRecord
   end
 
   def auto_redact
-    InstanceRedactor.new.redact(self)
+    Lumen::InstanceRedactor.new.redact(self)
     redact_urls
     redact_tld_only_urls_for_google_submitter
   end
@@ -295,7 +295,7 @@ class Notice < ApplicationRecord
       return
     end
 
-    update_column(:review_required, RiskAssessment.new(self).high_risk?)
+    update_column(:review_required, Lumen::RiskAssessment.new(self).high_risk?)
   end
 
   def redacted(field)
@@ -589,7 +589,7 @@ class Notice < ApplicationRecord
   end
 
   def clear_proxy_cache
-    ProxyCache.clear_notice(id)
+    Lumen::Cache::Proxy.clear_notice(id)
   end
 
   def set_default_jurisdiction
@@ -601,11 +601,11 @@ class Notice < ApplicationRecord
 
   def redact_urls
     custom_works_redactors = [
-      Redactors::SsnRedactor.new,
-      Redactors::EmailRedactor.new
+      Lumen::Redactors::SsnRedactor.new,
+      Lumen::Redactors::EmailRedactor.new
     ]
 
-    instance_redactor = InstanceRedactor.new(
+    instance_redactor = Lumen::InstanceRedactor.new(
       custom_works_redactors
     )
 

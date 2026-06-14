@@ -1,6 +1,6 @@
 class EnterprisePayment < ApplicationRecord
-  PROVIDERS = Enterprise::PaymentProviders.names.freeze
-  PAYMENT_METHODS = Enterprise::PaymentMethods.names.freeze
+  PROVIDERS = Lumen::Enterprise::PaymentProviders.names.freeze
+  PAYMENT_METHODS = Lumen::Enterprise::PaymentMethods.names.freeze
   STATUSES = %w[pending completed failed expired canceled].freeze
 
   belongs_to :enterprise_account

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe TermSearch, type: :model do
+describe Lumen::Search::TermSearch, type: :model do
   before do
     @field = :_all
     @term_search = described_class.new(:term, @field)

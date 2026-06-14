@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Enterprise::PaymentMethods::CreditCard do
+describe Lumen::Enterprise::PaymentMethods::CreditCard do
   let(:account) { create(:enterprise_account, :inactive) }
   let(:user) { create(:user, :enterprise, enterprise_account: account) }
   let(:urls) do
@@ -13,7 +13,7 @@ describe Enterprise::PaymentMethods::CreditCard do
       status_path: '/enterprise/status'
     }
   end
-  let(:provider) { class_double(Enterprise::PaymentProviders::Stripe) }
+  let(:provider) { class_double(Lumen::Enterprise::PaymentProviders::Stripe) }
 
   subject(:payment_method) do
     described_class.new(
@@ -25,7 +25,7 @@ describe Enterprise::PaymentMethods::CreditCard do
   end
 
   it 'starts checkout through the configured provider' do
-    checkout_result = Enterprise::PaymentProviders::Stripe::CheckoutSession::Result.new(
+    checkout_result = Lumen::Enterprise::PaymentProviders::Stripe::CheckoutSession::Result.new(
       payment: instance_double(EnterprisePayment),
       session: instance_double(Stripe::Checkout::Session, url: 'https://checkout.example/session')
     )

@@ -11,7 +11,7 @@ describe NoticeSerializer do
 
   %i|infringing_urls copyrighted_urls|.each do |url_relation|
     it "includes #{url_relation}" do
-      allow_any_instance_of(Ability).to receive(:can?).and_return(true)
+      allow_any_instance_of(Lumen::Ability).to receive(:can?).and_return(true)
       allow_any_instance_of(Current).to receive(:user).and_return(create(:user, :admin))
 
       with_a_serialized_notice do |notice, json|
@@ -129,8 +129,8 @@ describe NoticeSerializer do
   describe '.serialize_url_rows' do
     it 'maps full URL rows to {url:} and grouped rows to {fqdn:, count:}' do
       rows = [
-        WorkUrlRows::Row.new(text: 'https://example.com/path', url: 'https://example.com/path', full: true, researchers_only: false),
-        WorkUrlRows::Row.new(text: 'other.com - 2 URLs', fqdn: 'other.com', count: 2, full: false, researchers_only: true)
+        Lumen::WorkUrlRows::Row.new(text: 'https://example.com/path', url: 'https://example.com/path', full: true, researchers_only: false),
+        Lumen::WorkUrlRows::Row.new(text: 'other.com - 2 URLs', fqdn: 'other.com', count: 2, full: false, researchers_only: true)
       ]
 
       expect(described_class.serialize_url_rows(rows)).to eq [
@@ -161,8 +161,8 @@ describe NoticeSerializer do
         granularity: 'urls',
         actions: ['full_notice_version_only_lumen_team']
       )
-      allow_any_instance_of(Ability).to receive(:can?).with(:view_full_version_api, anything).and_return(true)
-      allow_any_instance_of(Ability).to receive(:can?).with(:view_enterprise_version, anything).and_return(false)
+      allow_any_instance_of(Lumen::Ability).to receive(:can?).with(:view_full_version_api, anything).and_return(true)
+      allow_any_instance_of(Lumen::Ability).to receive(:can?).with(:view_enterprise_version, anything).and_return(false)
     end
 
     it 'groups Lumen-team-only filtered URLs as domain counts for researchers' do

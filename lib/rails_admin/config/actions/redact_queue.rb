@@ -2,8 +2,8 @@ require 'rails_admin/config/actions'
 require 'rails_admin/config/actions/base'
 
 RedactQueueProc = Proc.new do
-  queue = Redaction::Queue.new(current_user)
-  refill = Redaction::RefillQueue.new(params)
+  queue = Lumen::Redaction::Queue.new(current_user)
+  refill = Lumen::Redaction::RefillQueue.new(params)
 
   if request.post?
     if params[:fill_queue].present?

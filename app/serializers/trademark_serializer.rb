@@ -9,14 +9,14 @@ class TrademarkSerializer < NoticeSerializer
 
   attribute :marks do |object|
     user = Current.user
-    ability = user && Ability.new(user)
+    ability = user && Lumen::Ability.new(user)
 
     if user && ability.can?(:view_full_version_api, object)
       enterprise_access = ability.can?(:view_enterprise_version, object) ?
-        EnterpriseNoticeAccess.new(user, object) : nil
+        Lumen::Enterprise::NoticeAccess.new(user, object) : nil
 
       object.works.map do |work|
-        rows = WorkUrlRows.new(work: work, type: 'infringing', notice: object, user: user)
+        rows = Lumen::WorkUrlRows.new(work: work, type: 'infringing', notice: object, user: user)
           .visible_rows(enterprise_access: enterprise_access)
         api_rows = serialize_url_rows(rows)
 
@@ -26,7 +26,7 @@ class TrademarkSerializer < NoticeSerializer
         }
       end.as_json
     elsif user && ability.can?(:view_enterprise_version, object)
-      access = EnterpriseNoticeAccess.new(user, object)
+      access = Lumen::Enterprise::NoticeAccess.new(user, object)
 
       object.works.map do |work|
         {

@@ -1,7 +1,8 @@
 require 'spec_helper'
-require 'collapses_topics'
+require 'lumen/topics'
+require 'lumen/topics/collapser'
 
-describe CollapsesTopics do
+describe Lumen::Topics::Collapser do
   [TopicManager, RelevantQuestion, Notice].each do |model|
     it "correctly merges a set of topics together for #{model.name}" do
       factory_name = singular_name = model.name.tableize.singularize
@@ -16,7 +17,7 @@ describe CollapsesTopics do
         create(factory_name, topics: [from_topic, to_topic, other_topic])
       end
 
-      collapser = CollapsesTopics.new(from_topic.name, to_topic.name)
+      collapser = Lumen::Topics::Collapser.new(from_topic.name, to_topic.name)
       collapser.collapse
 
       expect(Topic.find_by_name(from_topic.name)).to be_nil

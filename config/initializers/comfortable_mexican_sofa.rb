@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-require 'cms_devise_auth'
+require 'lumen/integrations'
+require 'lumen/integrations/cms_devise_auth'
 
 ComfortableMexicanSofa.configure do |config|
   # Title of the admin area
@@ -13,7 +14,7 @@ ComfortableMexicanSofa.configure do |config|
 
   # Module responsible for authentication. You can replace it with your own.
   # It simply needs to have #authenticate method. See http_auth.rb for reference.
-  config.admin_auth = 'CmsDeviseAuth'
+  config.admin_auth = 'Lumen::Integrations::CmsDeviseAuth'
 
   # Module responsible for authorization on admin side. It should have #authorize
   # method that returns true or false based on params and loaded instance

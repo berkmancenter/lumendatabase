@@ -26,9 +26,9 @@ describe Enterprise::DomainsController do
   describe '#verify' do
     it 'verifies a domain when the verification file is present' do
       enterprise_domain = create(:enterprise_domain, enterprise_account: enterprise_account, verified: false)
-      verifier = instance_double(EnterpriseDomainVerification, verified?: true)
+      verifier = instance_double(Lumen::Enterprise::DomainVerification, verified?: true)
 
-      expect(EnterpriseDomainVerification)
+      expect(Lumen::Enterprise::DomainVerification)
         .to receive(:new)
         .with(enterprise_domain)
         .and_return(verifier)
@@ -42,9 +42,9 @@ describe Enterprise::DomainsController do
 
     it 'keeps a domain pending when the verification file is missing' do
       enterprise_domain = create(:enterprise_domain, enterprise_account: enterprise_account, verified: false)
-      verifier = instance_double(EnterpriseDomainVerification, verified?: false)
+      verifier = instance_double(Lumen::Enterprise::DomainVerification, verified?: false)
 
-      allow(EnterpriseDomainVerification).to receive(:new).and_return(verifier)
+      allow(Lumen::Enterprise::DomainVerification).to receive(:new).and_return(verifier)
 
       post :verify, params: { id: enterprise_domain.id }
 

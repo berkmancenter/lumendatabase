@@ -1,30 +1,30 @@
 require 'rails_helper'
 
-RSpec.describe NoticeBuilder, type: :model do
+RSpec.describe Lumen::NoticeBuilder, type: :model do
   it 'builds an entity of the expected class' do
-    n = NoticeBuilder.new(CourtOrder, default_notice_hash).build
+    n = Lumen::NoticeBuilder.new(CourtOrder, default_notice_hash).build
     expect(n.class).to eq CourtOrder
   end
 
   it 'does not save the notice' do
-    expect(NoticeBuilder.new(CourtOrder, default_notice_hash).build.persisted?).to be false
+    expect(Lumen::NoticeBuilder.new(CourtOrder, default_notice_hash).build.persisted?).to be false
   end
 
   it 'sets a default title' do
-    n = NoticeBuilder.new(CourtOrder, default_notice_hash(title: '')).build
+    n = Lumen::NoticeBuilder.new(CourtOrder, default_notice_hash(title: '')).build
     expect(n.title).to be_present
   end
 
   it 'preserves non-default titles' do
     title = 'Not default'
-    n = NoticeBuilder.new(CourtOrder, default_notice_hash(title: title)).build
+    n = Lumen::NoticeBuilder.new(CourtOrder, default_notice_hash(title: title)).build
     expect(n.title).to eq title
   end
 
   it 'sets file kind to supporting if unset' do
     attrs = file_uploads_attributes
     attrs[0].delete(:kind)
-    n = NoticeBuilder.new(
+    n = Lumen::NoticeBuilder.new(
       CourtOrder, default_notice_hash(file_uploads_attributes: attrs)
     ).build
     expect(n.file_uploads.size).to eq 1
@@ -34,7 +34,7 @@ RSpec.describe NoticeBuilder, type: :model do
   it 'leaves set file types alone' do
     attrs = file_uploads_attributes
     attrs[0][:kind] = 'original'
-    n = NoticeBuilder.new(
+    n = Lumen::NoticeBuilder.new(
       CourtOrder, default_notice_hash(file_uploads_attributes: attrs)
     ).build
     expect(n.file_uploads.size).to eq 1
@@ -42,7 +42,7 @@ RSpec.describe NoticeBuilder, type: :model do
   end
 
   it 'redacts' do
-    n = NoticeBuilder.new(
+    n = Lumen::NoticeBuilder.new(
       CourtOrder, default_notice_hash(body: 'SSN equals 123-45-6789')
     ).build
     expect(n.body).not_to include '123-45-6789'
@@ -69,7 +69,7 @@ RSpec.describe NoticeBuilder, type: :model do
 
   it 'sets submitter if unset' do
     user = create(:user, :with_entity)
-    n = NoticeBuilder.new(CourtOrder, default_notice_hash, user).build
+    n = Lumen::NoticeBuilder.new(CourtOrder, default_notice_hash, user).build
 
     # We must persist this for the implied db call in n.submitter to work.
     n.save
@@ -81,7 +81,7 @@ RSpec.describe NoticeBuilder, type: :model do
     enr = default_notice_hash[:entity_notice_roles_attributes]
     enr[0][:name] = 'submitter'
 
-    n = NoticeBuilder.new(
+    n = Lumen::NoticeBuilder.new(
       CourtOrder,
       default_notice_hash(entity_notice_roles_attributes: enr),
       user
@@ -93,7 +93,7 @@ RSpec.describe NoticeBuilder, type: :model do
 
   it 'sets recipient if unset' do
     user = create(:user, :with_entity)
-    n = NoticeBuilder.new(
+    n = Lumen::NoticeBuilder.new(
       CourtOrder,
       default_notice_hash(entity_notice_roles_attributes: []),
       user
@@ -107,7 +107,7 @@ RSpec.describe NoticeBuilder, type: :model do
   it 'leaves existing recipients alone' do
     user = create(:user, :with_entity)
 
-    n = NoticeBuilder.new(CourtOrder, default_notice_hash, user).build
+    n = Lumen::NoticeBuilder.new(CourtOrder, default_notice_hash, user).build
     n.save
 
     assert user.entity.name != 'The Googs'

@@ -1,9 +1,10 @@
-require 'validates_urls'
+require 'lumen/models'
+require 'lumen/models/validates_urls'
 
 class Url
   include ActiveModel::Model
   include ActiveModel::Validations
-  include ValidatesUrls
+  include Lumen::Models::ValidatesUrls
 
   attr_reader :url_original
   attr_accessor :only_fqdn

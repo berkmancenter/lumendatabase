@@ -1,0 +1,54 @@
+class Lumen::DeterminesWorkKind
+  def initialize(work)
+    @work = work
+  end
+
+  def kind
+    classifier = Classifier.new
+    classifier.classify(work.description, 3)
+    classifier.classify_each(work.copyrighted_urls.map(&:url), 5)
+    classifier.classify_each(work.infringing_urls.map(&:url), 1)
+
+    classifier.best
+  end
+
+  private
+
+  attr_reader :work
+
+  class Classifier
+    PATTERNS = {
+      software: %r{\.rar\s*$}i,
+      image: %r{(photo|image)s?}i,
+      music: %r{artist\s+name|music|mp3|aac|album|flac|song}i,
+      movie: %r{mp4|mov|movies|dvd|xvid|rip|bluray}i,
+      book: %r{page|novel|book|epub|kindle}i
+    }
+
+    def initialize
+      @results = Hash.new { |hash,key| hash[key] = 0 }
+      @results[:unknown] = 0
+    end
+
+    def classify_each(values, weight)
+      values.each { |value| classify(value, weight) }
+    end
+
+    def classify(value, weight)
+      PATTERNS.each do |kind,pattern|
+        if value =~ pattern
+          results[kind] += weight
+        end
+      end
+    end
+
+    def best
+      results.max_by { |_,weight| weight }.first
+    end
+
+    private
+
+    attr_reader :results
+
+  end
+end

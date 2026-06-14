@@ -5,7 +5,7 @@ Lumen notice report for <%= @enterprise_account.name %>
 <% @notices.each do |notice| %>
 Notice #<%= notice.id %>: <%= notice.title %>
 <%= notice_url(notice, host: Chill::Application.config.site_host) %>
-<% EnterpriseNoticeAccess.for_account(@enterprise_account, notice).matching_infringing_urls.each do |url| %>
+<% Lumen::Enterprise::NoticeAccess.for_account(@enterprise_account, notice).matching_infringing_urls.each do |url| %>
 - <%= url.url %>
 <% end %>
 

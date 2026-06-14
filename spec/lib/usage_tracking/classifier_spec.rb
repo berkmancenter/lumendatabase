@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe UsageTracking::Classifier do
+describe Lumen::UsageTracking::Classifier do
   it 'classifies anonymous web traffic' do
     classifier = described_class.new(
       request: request_for('/notices/1'),

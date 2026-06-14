@@ -82,7 +82,7 @@ class EnterpriseDomain < ApplicationRecord
   private
 
   def verification_file_present?
-    EnterpriseDomainVerification.new(self).verified?
+    Lumen::Enterprise::DomainVerification.new(self).verified?
   end
 
   def ensure_verification_token

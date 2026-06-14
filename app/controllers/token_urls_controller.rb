@@ -1,6 +1,7 @@
 require 'uri'
 require 'net/http'
-require 'hasher'
+require 'lumen/security'
+require 'lumen/security/hasher'
 
 class TokenUrlsController < ApplicationController
   IP_BETWEEN_REQUESTS_WAITING_TIME = 2.hours
@@ -19,9 +20,9 @@ class TokenUrlsController < ApplicationController
     clean_up_email_address
 
     @original_email = @new_token_params[:email]
-    @new_token_params[:email] = Hasher.hash512(@new_token_params[:email])
+    @new_token_params[:email] = Lumen::Security::Hasher.hash512(@new_token_params[:email])
     @token_url = TokenUrl.new(@new_token_params)
-    @token_url.ip = Hasher.hash512(request.remote_ip)
+    @token_url.ip = Lumen::Security::Hasher.hash512(request.remote_ip)
     @notice = Notice.where(id: @new_token_params[:notice_id]).first
 
     authorize!(:create_access_token, @notice) unless @notice.nil?
@@ -57,7 +58,7 @@ class TokenUrlsController < ApplicationController
       @original_email, @token_url, @notice
     ).deliver_later
 
-    LumenLogger.log_metrics('REQUESTED_TOKEN_URL', notice_id: @notice.id, notice_type: @notice.type, email: @token_url.email, email_domain: @original_email.split('@').last)
+    Lumen::Logger.log_metrics('REQUESTED_TOKEN_URL', notice_id: @notice.id, notice_type: @notice.type, email: @token_url.email, email_domain: @original_email.split('@').last)
 
     redirect_to(
       request_access_notice_path(@notice),
@@ -206,7 +207,7 @@ class TokenUrlsController < ApplicationController
 
   def ip_recently_requested?
     TokenUrl
-       .where(ip: Hasher.hash512(request.remote_ip))
+       .where(ip: Lumen::Security::Hasher.hash512(request.remote_ip))
        .where('created_at > ?', Time.now - IP_BETWEEN_REQUESTS_WAITING_TIME)
        .any?
   end

@@ -7,8 +7,8 @@ class EnterpriseAccount < ApplicationRecord
   # (creating the user) or rejects it.
   STATUSES = %w[pre_registration approved rejected].freeze
 
-  PAYMENT_METHODS = Enterprise::PaymentMethods.names.freeze
-  PAYMENT_METHOD_OPTIONS = Enterprise::PaymentMethods.options.freeze
+  PAYMENT_METHODS = Lumen::Enterprise::PaymentMethods.names.freeze
+  PAYMENT_METHOD_OPTIONS = Lumen::Enterprise::PaymentMethods.options.freeze
 
   PRO_PERIOD = 1.month
 

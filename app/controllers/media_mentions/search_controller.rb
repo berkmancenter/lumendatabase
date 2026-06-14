@@ -17,7 +17,7 @@ class MediaMentions::SearchController < SearchController
   end
 
   def item_searcher
-    ElasticsearchQuery.new(params, MediaMention).tap do |searcher|
+    Lumen::Search::Query.new(params, MediaMention).tap do |searcher|
       @searchable_fields.each do |searched_field|
         searcher.register searched_field
       end

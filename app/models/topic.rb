@@ -1,9 +1,11 @@
-require 'validates_automatically'
-require 'hierarchical_relationships'
+require 'lumen/models'
+require 'lumen/models/validates_automatically'
+require 'lumen/models'
+require 'lumen/models/hierarchical_relationships'
 
 class Topic < ApplicationRecord
-  include ValidatesAutomatically
-  include HierarchicalRelationships
+  include Lumen::Models::ValidatesAutomatically
+  include Lumen::Models::HierarchicalRelationships
 
   validates :name, length: { maximum: 255 }
 

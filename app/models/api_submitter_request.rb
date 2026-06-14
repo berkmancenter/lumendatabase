@@ -1,8 +1,9 @@
-require 'validates_automatically'
+require 'lumen/models'
+require 'lumen/models/validates_automatically'
 require 'securerandom'
 
 class ApiSubmitterRequest < ApplicationRecord
-  include ValidatesAutomatically
+  include Lumen::Models::ValidatesAutomatically
 
   # == Relationships ========================================================
   belongs_to :user, optional: true

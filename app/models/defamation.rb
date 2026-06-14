@@ -13,10 +13,10 @@ class Defamation < Notice
 
   def auto_redact
     custom_redactors = [
-      Redactors::PhoneNumberRedactor.new,
-      Redactors::SsnRedactor.new,
-      Redactors::EmailRedactor.new,
-      Redactors::EntityNameRedactor.new
+      Lumen::Redactors::PhoneNumberRedactor.new,
+      Lumen::Redactors::SsnRedactor.new,
+      Lumen::Redactors::EmailRedactor.new,
+      Lumen::Redactors::EntityNameRedactor.new
     ]
 
     entity_name = principal&.name || sender&.name
@@ -25,7 +25,7 @@ class Defamation < Notice
     # double-redaction
     return if entity_name == Lumen::REDACTION_MASK
 
-    instance_redactor = InstanceRedactor.new(
+    instance_redactor = Lumen::InstanceRedactor.new(
       custom_redactors,
       {
         entity_name: entity_name
@@ -35,12 +35,12 @@ class Defamation < Notice
     instance_redactor.redact(self)
 
     custom_works_redactors = [
-      Redactors::SsnRedactor.new,
-      Redactors::EmailRedactor.new,
-      Redactors::EntityNameRedactor.new
+      Lumen::Redactors::SsnRedactor.new,
+      Lumen::Redactors::EmailRedactor.new,
+      Lumen::Redactors::EntityNameRedactor.new
     ]
 
-    instance_redactor = InstanceRedactor.new(
+    instance_redactor = Lumen::InstanceRedactor.new(
       custom_works_redactors,
       {
         entity_name: entity_name
@@ -59,7 +59,7 @@ class Defamation < Notice
       end
     end
 
-    Redactors::GoogleSenderRedactor.new.redact(self)
+    Lumen::Redactors::GoogleSenderRedactor.new.redact(self)
     redact_tld_only_urls_for_google_submitter
   end
 

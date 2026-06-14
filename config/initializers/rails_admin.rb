@@ -1,4 +1,5 @@
 require 'lumen'
+require 'lumen/ability'
 require 'rails_admin/config/actions/redact_queue'
 require 'rails_admin/config/actions/redact_notice'
 require 'rails_admin/config/actions/pdf_requests'
@@ -25,7 +26,7 @@ RailsAdmin.config do |config|
 
   config.current_user_method { current_user }
 
-  config.authorize_with :cancancan
+  config.authorize_with :cancancan, Lumen::Ability
 
   config.asset_source = :sprockets
 
@@ -230,7 +231,7 @@ RailsAdmin.config do |config|
 
         field :rescinded do
           visible do
-            ability = Ability.new(bindings[:view]._current_user)
+            ability = Lumen::Ability.new(bindings[:view]._current_user)
             ability.can? :rescind, Notice
           end
         end
@@ -239,7 +240,7 @@ RailsAdmin.config do |config|
 
         field :review_required do
           visible do
-            ability = Ability.new(bindings[:view]._current_user)
+            ability = Lumen::Ability.new(bindings[:view]._current_user)
             ability.can? :publish, Notice
           end
         end
@@ -323,14 +324,14 @@ RailsAdmin.config do |config|
 
         configure :rescinded do
           visible do
-            ability = Ability.new(bindings[:view]._current_user)
+            ability = Lumen::Ability.new(bindings[:view]._current_user)
             ability.can? :rescind, Notice
           end
         end
 
         configure :review_required do
           visible do
-            ability = Ability.new(bindings[:view]._current_user)
+            ability = Lumen::Ability.new(bindings[:view]._current_user)
             ability.can? :publish, Notice
           end
         end

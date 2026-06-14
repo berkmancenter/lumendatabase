@@ -17,14 +17,14 @@ describe Enterprise::PaymentsController do
         instance_double(Stripe::Checkout::Session, url: 'https://checkout.stripe.com/c/pay/cs_test')
       end
       let(:checkout_result) do
-        Enterprise::PaymentProviders::Stripe::CheckoutSession::Result.new(
+        Lumen::Enterprise::PaymentProviders::Stripe::CheckoutSession::Result.new(
           payment: instance_double(EnterprisePayment),
           session: stripe_session
         )
       end
 
       before do
-        allow(Enterprise::PaymentProviders::Stripe)
+        allow(Lumen::Enterprise::PaymentProviders::Stripe)
           .to receive(:create_checkout_session)
           .and_return(checkout_result)
       end
@@ -35,7 +35,7 @@ describe Enterprise::PaymentsController do
         account.reload
         expect(account.plan).to eq('inactive')
         expect(account.paid_until).to be_nil
-        expect(Enterprise::PaymentProviders::Stripe).to have_received(:create_checkout_session).with(
+        expect(Lumen::Enterprise::PaymentProviders::Stripe).to have_received(:create_checkout_session).with(
           enterprise_account: account,
           user: user,
           success_url: a_string_matching(%r{/enterprise/pay/success\?session_id=\{CHECKOUT_SESSION_ID\}}),
@@ -46,9 +46,9 @@ describe Enterprise::PaymentsController do
       end
 
       it 'redirects back when Stripe Checkout cannot be started' do
-        allow(Enterprise::PaymentProviders::Stripe)
+        allow(Lumen::Enterprise::PaymentProviders::Stripe)
           .to receive(:create_checkout_session)
-          .and_raise(Enterprise::PaymentProviders::Stripe::ConfigurationError, 'Stripe is not configured.')
+          .and_raise(Lumen::Enterprise::PaymentProviders::Stripe::ConfigurationError, 'Stripe is not configured.')
 
         post :create, params: { payment_method: 'credit_card' }
 
@@ -62,7 +62,7 @@ describe Enterprise::PaymentsController do
 
         post :create, params: { payment_method: 'credit_card' }
 
-        expect(Enterprise::PaymentProviders::Stripe).not_to have_received(:create_checkout_session)
+        expect(Lumen::Enterprise::PaymentProviders::Stripe).not_to have_received(:create_checkout_session)
         expect(response).to redirect_to(enterprise_status_path)
         expect(flash[:alert]).to match(/already have a card payment/)
       end
@@ -137,7 +137,7 @@ describe Enterprise::PaymentsController do
 
   describe '#cancel' do
     before do
-      allow(Enterprise::PaymentProviders::Stripe)
+      allow(Lumen::Enterprise::PaymentProviders::Stripe)
         .to receive(:cancel_payment)
         .and_return(:canceled)
     end
@@ -154,14 +154,14 @@ describe Enterprise::PaymentsController do
 
       get :cancel
 
-      expect(Enterprise::PaymentProviders::Stripe).to have_received(:cancel_payment).with(payment: payment)
+      expect(Lumen::Enterprise::PaymentProviders::Stripe).to have_received(:cancel_payment).with(payment: payment)
       expect(response).to redirect_to(enterprise_settings_path)
     end
   end
 
   describe '#cancel_pending' do
     before do
-      allow(Enterprise::PaymentProviders::Stripe)
+      allow(Lumen::Enterprise::PaymentProviders::Stripe)
         .to receive(:cancel_payment)
         .and_return(:canceled)
     end
@@ -171,7 +171,7 @@ describe Enterprise::PaymentsController do
 
       post :cancel_pending
 
-      expect(Enterprise::PaymentProviders::Stripe).to have_received(:cancel_payment).with(payment: payment)
+      expect(Lumen::Enterprise::PaymentProviders::Stripe).to have_received(:cancel_payment).with(payment: payment)
       expect(response).to redirect_to(enterprise_settings_path)
       expect(flash[:notice]).to match(/start a new payment/)
     end
@@ -179,7 +179,7 @@ describe Enterprise::PaymentsController do
     it 'redirects to status when there is no pending payment' do
       post :cancel_pending
 
-      expect(Enterprise::PaymentProviders::Stripe).not_to have_received(:cancel_payment)
+      expect(Lumen::Enterprise::PaymentProviders::Stripe).not_to have_received(:cancel_payment)
       expect(response).to redirect_to(enterprise_status_path)
       expect(flash[:alert]).to match(/no pending payment/)
     end

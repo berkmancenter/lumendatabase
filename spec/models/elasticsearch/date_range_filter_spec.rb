@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe DateRangeFilter, type: :model do
+describe Lumen::Search::DateRangeFilter, type: :model do
   it 'properly creates facet parameters' do
     to = Time.now
     from = to - 1.month

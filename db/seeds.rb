@@ -44,7 +44,7 @@ class FakeNotice
     @language = if rand(100) < 85
                   'en'
                 else
-                  Language.codes.sample
+                  Lumen::Language.codes.sample
                 end
   end
 

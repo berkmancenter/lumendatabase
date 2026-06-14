@@ -57,27 +57,27 @@ class NoticeSerializer < BaseSerializer
 
   def self.works(object)
     user = Current.user
-    ability = user && Ability.new(user)
+    ability = user && Lumen::Ability.new(user)
 
     if user && ability.can?(:view_full_version_api, object)
       enterprise_access = ability.can?(:view_enterprise_version, object) ?
-        EnterpriseNoticeAccess.new(user, object) : nil
+        Lumen::Enterprise::NoticeAccess.new(user, object) : nil
 
       base_works = object.works.map do |work|
         {
           description: work.description,
           infringing_urls: serialize_url_rows(
-            WorkUrlRows.new(work: work, type: 'infringing', notice: object, user: user)
+            Lumen::WorkUrlRows.new(work: work, type: 'infringing', notice: object, user: user)
               .visible_rows(enterprise_access: enterprise_access)
           ),
           copyrighted_urls: serialize_url_rows(
-            WorkUrlRows.new(work: work, type: 'copyrighted', notice: object, user: user)
+            Lumen::WorkUrlRows.new(work: work, type: 'copyrighted', notice: object, user: user)
               .visible_rows(enterprise_access: enterprise_access)
           )
         }
       end.as_json
     elsif user && ability.can?(:view_enterprise_version, object)
-      access = EnterpriseNoticeAccess.new(user, object)
+      access = Lumen::Enterprise::NoticeAccess.new(user, object)
 
       base_works = object.works.map do |work|
         {

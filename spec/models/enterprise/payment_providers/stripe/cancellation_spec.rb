@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Enterprise::PaymentProviders::Stripe::Cancellation do
+describe Lumen::Enterprise::PaymentProviders::Stripe::Cancellation do
   let(:payment) do
     create(:enterprise_payment, stripe_checkout_session_id: 'cs_test_cancel')
   end

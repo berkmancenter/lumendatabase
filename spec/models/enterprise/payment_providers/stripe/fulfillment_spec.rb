@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Enterprise::PaymentProviders::Stripe::Fulfillment do
+describe Lumen::Enterprise::PaymentProviders::Stripe::Fulfillment do
   FulfillmentEventData = Struct.new(:object, keyword_init: true)
   FulfillmentEvent = Struct.new(:id, :type, :created, :data, keyword_init: true)
   FulfillmentCheckoutSession = Struct.new(

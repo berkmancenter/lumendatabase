@@ -1,4 +1,5 @@
-require 'validates_automatically'
+require 'lumen/models'
+require 'lumen/models/validates_automatically'
 
 class ArchivedTokenUrl < TokenUrl
   self.table_name = 'archived_token_urls'

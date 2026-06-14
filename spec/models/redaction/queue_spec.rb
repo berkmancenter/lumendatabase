@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe Redaction::Queue do
+describe Lumen::Redaction::Queue do
   FAKE_QUEUE_MAX = 2
 
-  before { allow(Redaction::Queue).to receive(:queue_max).and_return(FAKE_QUEUE_MAX) }
+  before { allow(Lumen::Redaction::Queue).to receive(:queue_max).and_return(FAKE_QUEUE_MAX) }
 
   context '#notices' do
     it "returns the notices in review with the user" do
@@ -178,7 +178,7 @@ describe Redaction::Queue do
   end
 
   def new_queue(user = User.new)
-    Redaction::Queue.new(user)
+    Lumen::Redaction::Queue.new(user)
   end
 
 end

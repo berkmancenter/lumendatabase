@@ -5,7 +5,7 @@ describe DMCA, type: :model do
     it { is_expected.to validate_presence_of :works }
     it { is_expected.to validate_presence_of :entity_notice_roles }
     it {
-      is_expected.to validate_inclusion_of(:language).in_array(Language.codes)
+      is_expected.to validate_inclusion_of(:language).in_array(Lumen::Language.codes)
     }
     it {
       is_expected.to validate_inclusion_of(:action_taken)
@@ -61,11 +61,11 @@ describe DMCA, type: :model do
     end
 
     context '#auto_redact' do
-      it 'calls InstanceRedactor#redact on itself' do
+      it 'calls Lumen::InstanceRedactor#redact on itself' do
         notice = DMCA.new
-        redactor = InstanceRedactor.new
+        redactor = Lumen::InstanceRedactor.new
         expect(redactor).to receive(:redact).with(notice)
-        expect(InstanceRedactor).to receive(:new).exactly(2).times.and_return(redactor)
+        expect(Lumen::InstanceRedactor).to receive(:new).exactly(2).times.and_return(redactor)
 
         notice.auto_redact
       end
@@ -93,10 +93,10 @@ describe DMCA, type: :model do
       end
 
       def mock_assessment(notice, high_risk)
-        assessment = RiskAssessment.new(notice)
+        assessment = Lumen::RiskAssessment.new(notice)
         allow(assessment).to receive(:high_risk?).and_return(high_risk)
 
-        expect(RiskAssessment).to receive(:new)
+        expect(Lumen::RiskAssessment).to receive(:new)
           .with(notice)
           .and_return(assessment)
       end

@@ -1,13 +1,15 @@
 require_relative 'boot'
-require_relative '../lib/catch_json_parsing_errors'
-require_relative '../lib/handle_bad_encoding_parameters'
-require_relative '../lib/set_request_id'
 
 require 'rails/all'
 require 'active_storage/engine'
 
 require_relative '../lib/lumen'
-require_relative '../lib/database_utils'
+require_relative '../lib/lumen/middleware'
+require_relative '../lib/lumen/middleware/catch_json_parsing_errors'
+require_relative '../lib/lumen/middleware/handle_bad_encoding_parameters'
+require_relative '../lib/lumen/middleware/set_request_id'
+require_relative '../lib/lumen/database'
+require_relative '../lib/lumen/database/utils'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -42,7 +44,6 @@ module Chill
     # Custom directories with classes and modules you want to be autoloadable.
     # config.autoload_paths += %W(#{config.root}/extras)
     additional_autoload_paths = %W(
-      #{config.root}/app/models/elasticsearch
       #{config.root}/lib
     )
     config.autoload_paths += additional_autoload_paths
@@ -86,9 +87,9 @@ module Chill
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
 
-    config.middleware.insert_before 0, HandleBadEncodingParameters
-    config.middleware.use SetRequestId
-    config.middleware.use CatchJsonParsingErrors
+    config.middleware.insert_before 0, Lumen::Middleware::HandleBadEncodingParameters
+    config.middleware.use Lumen::Middleware::SetRequestId
+    config.middleware.use Lumen::Middleware::CatchJsonParsingErrors
     config.middleware.use Rack::Attack
     config.middleware.use StackProf::Middleware, enabled: false,
                                                  mode: :cpu,
@@ -116,7 +117,7 @@ module Chill
     config.logger = Lumen::LOGGER
 
     config.to_prepare do
-      ActiveRecord::Base.singleton_class.include(DatabaseUtils)
+      ActiveRecord::Base.singleton_class.include(Lumen::Database::Utils)
     end
   end
 end

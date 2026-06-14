@@ -10,7 +10,7 @@ module NoticesHelper
       !confidential_order?(notice),
       !notice&.restricted_to_lumen_team?,
       !notice&.restricted_to_researchers?,
-      !EnterpriseNoticeAccess.allowed?(current_user, notice)
+      !Lumen::Enterprise::NoticeAccess.allowed?(current_user, notice)
     ].all?
   end
 
@@ -135,21 +135,21 @@ module NoticesHelper
 
   def enterprise_url_rows(work, type, notice)
     url_instances = work.send("#{type}_urls_public")
-    EnterpriseNoticeAccess.new(current_user, notice).url_rows(url_instances)
+    Lumen::Enterprise::NoticeAccess.new(current_user, notice).url_rows(url_instances)
   end
 
   def works_url_rows(work, type, url_rows: nil)
-    return WorkUrlRows.normalize_collection(url_rows) if url_rows
+    return Lumen::WorkUrlRows.normalize_collection(url_rows) if url_rows
 
-    WorkUrlRows.new(work: work, type: type).rows
+    Lumen::WorkUrlRows.new(work: work, type: type).rows
   end
 
   def notice_version_url_rows(work, type, notice)
-    rows_obj = WorkUrlRows.new(work: work, type: type, notice: notice, user: current_user)
+    rows_obj = Lumen::WorkUrlRows.new(work: work, type: type, notice: notice, user: current_user)
 
     if can_see_full_notice_version?(notice) || can_see_enterprise_notice_version?(notice)
       enterprise_access = can_see_enterprise_notice_version?(notice) ?
-        EnterpriseNoticeAccess.new(current_user, notice) : nil
+        Lumen::Enterprise::NoticeAccess.new(current_user, notice) : nil
       rows_obj.visible_rows(
         enterprise_access: enterprise_access,
         bypass_restrictions: notice_safelisted?(notice)

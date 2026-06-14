@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe RiskAssessment, type: :model do
+describe Lumen::RiskAssessment, type: :model do
   it "returns true if any trigger triggers" do
     triggers = [
       trigger_1 = double("Trigger 1"),
@@ -11,7 +11,7 @@ describe RiskAssessment, type: :model do
     expect(trigger_1).to receive(:risky?).with(notice).and_return(false)
     expect(trigger_2).to receive(:risky?).with(notice).and_return(true)
 
-    assessment = RiskAssessment.new(notice)
+    assessment = Lumen::RiskAssessment.new(notice)
 
     expect(assessment).to be_high_risk
   end
@@ -24,7 +24,7 @@ describe RiskAssessment, type: :model do
     ])
     notice = double("Notice")
 
-    assessment = RiskAssessment.new(notice)
+    assessment = Lumen::RiskAssessment.new(notice)
 
     expect(assessment).not_to be_high_risk
   end

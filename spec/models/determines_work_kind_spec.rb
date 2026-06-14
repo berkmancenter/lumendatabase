@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe DeterminesWorkKind, type: :model do
+describe Lumen::DeterminesWorkKind, type: :model do
   context "determining by copyrighted urls" do
     it "returns unknown for unknown patterns" do
       work = Work.new(copyrighted_urls_attributes: [

@@ -2,9 +2,9 @@ require 'rails_helper'
 
 describe Notices::SearchController do
   context "#index" do
-    it "uses ElasticsearchQuery" do
-      searcher = ElasticsearchQuery.new
-      expect(ElasticsearchQuery).to receive(:new).and_return(searcher)
+    it "uses Lumen::Search::Query" do
+      searcher = Lumen::Search::Query.new
+      expect(Lumen::Search::Query).to receive(:new).and_return(searcher)
 
       get :index, params: { term: 'foo' }
 

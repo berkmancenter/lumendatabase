@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe WorkUrlRows do
+describe Lumen::WorkUrlRows do
   describe '#visible_rows' do
     it 'redacts researcher-only matching URLs to domain rows and leaves other URLs full' do
       ContentFilter.create!(
@@ -306,7 +306,7 @@ describe WorkUrlRows do
 
       rows = described_class.enterprise_rows(
         urls,
-        enterprise_access: EnterpriseNoticeAccess.new(user, notice)
+        enterprise_access: Lumen::Enterprise::NoticeAccess.new(user, notice)
       )
 
       expect(rows.map(&:text)).to eq ['https://business.example/path', 'other.example - 2 URLs']

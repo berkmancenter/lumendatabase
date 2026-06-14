@@ -18,7 +18,8 @@ require 'rubygems'
 require 'rspec/rails'
 require 'webmock/rspec'
 require 'rspec/mocks'
-require 'hasher'
+require 'lumen/security'
+require 'lumen/security/hasher'
 require 'sidekiq/testing'
 
 Sidekiq::Testing.inline!

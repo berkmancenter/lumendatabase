@@ -1,7 +1,8 @@
-require 'validates_automatically'
+require 'lumen/models'
+require 'lumen/models/validates_automatically'
 
 class ContentFilter < ApplicationRecord
-  include ValidatesAutomatically
+  include Lumen::Models::ValidatesAutomatically
 
   validates :name, presence: true
   validates :granularity, inclusion: { in: %w[notice urls] }

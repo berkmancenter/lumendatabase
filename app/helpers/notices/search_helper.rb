@@ -40,12 +40,12 @@ module Notices::SearchHelper
 
   def unspecified_identifiers(parameter)
     @unspecified_identifiers ||= ActiveSupport::HashWithIndifferentAccess.new do |hash, key|
-      hash[key] = UnspecifiedTermFilter.unspecified_identifier(key)
+      hash[key] = Lumen::Search::UnspecifiedTermFilter.unspecified_identifier(key)
     end
     @unspecified_identifiers[parameter]
   end
 
   def sort_order_label(sort_by_param, model_class)
-    ResultOrdering.define(sort_by_param, model_class).label
+    Lumen::Search::ResultOrdering.define(sort_by_param, model_class).label
   end
 end

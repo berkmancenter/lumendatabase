@@ -30,7 +30,7 @@ class SubmitterWidgetNoticesController < NoticesController
       }) and return
     end
 
-    @notice = NoticeBuilder.new(
+    @notice = Lumen::NoticeBuilder.new(
       get_notice_type(params), notice_params, submitter_widget_user
     ).build
 

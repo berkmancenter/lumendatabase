@@ -47,9 +47,9 @@ shared_examples 'a user that can generate new notice permanent token urls' do
   end
 end
 
-describe Ability do
+describe Lumen::Ability do
   context "a role-less user" do
-    subject { Ability.new(build(:user)) }
+    subject { Lumen::Ability.new(build(:user)) }
 
     it_behaves_like 'a non-admin'
     it_behaves_like 'a user that can\'t generate new notice permanent token urls'
@@ -60,7 +60,7 @@ describe Ability do
   end
 
   context "a notice viewer" do
-    subject { Ability.new(build(:user, :notice_viewer)) }
+    subject { Lumen::Ability.new(build(:user, :notice_viewer)) }
 
     it_behaves_like 'a non-admin'
     it_behaves_like 'a user that can\'t generate new notice permanent token urls'
@@ -95,13 +95,13 @@ describe Ability do
   end
 
   context "a notice viewer with the can_generate_permanent_notice_token_urls setting on" do
-    subject { Ability.new(build(:user, :notice_viewer, can_generate_permanent_notice_token_urls: true)) }
+    subject { Lumen::Ability.new(build(:user, :notice_viewer, can_generate_permanent_notice_token_urls: true)) }
 
     it_behaves_like 'a user that can generate new notice permanent token urls'
   end
 
   context "a submitter" do
-    subject { Ability.new(build(:user, :submitter)) }
+    subject { Lumen::Ability.new(build(:user, :submitter)) }
 
     it_behaves_like 'a non-admin'
     it_behaves_like 'a user that can\'t generate new notice permanent token urls'
@@ -112,7 +112,7 @@ describe Ability do
   end
 
   context "a redactor" do
-    subject { Ability.new(build(:user, :redactor)) }
+    subject { Lumen::Ability.new(build(:user, :redactor)) }
 
     it_behaves_like 'an admin'
     it_behaves_like 'a notice editor'
@@ -128,7 +128,7 @@ describe Ability do
   end
 
   context "a publisher" do
-    subject { Ability.new(build(:user, :publisher)) }
+    subject { Lumen::Ability.new(build(:user, :publisher)) }
 
     it_behaves_like 'an admin'
     it_behaves_like 'a notice editor'
@@ -144,7 +144,7 @@ describe Ability do
   end
 
   context "a researcher" do
-    subject { Ability.new(build(:user, :researcher)) }
+    subject { Lumen::Ability.new(build(:user, :researcher)) }
 
     it_behaves_like 'a user that can\'t generate new notice permanent token urls'
 
@@ -174,7 +174,7 @@ describe Ability do
   end
 
   context "an anonymous user" do
-    subject { Ability.new(nil) }
+    subject { Lumen::Ability.new(nil) }
 
     it "can't request an access token for a researchers-only notice" do
       researchers_only_notice = build(:dmca, full_notice_version_only_researchers: true)
@@ -190,7 +190,7 @@ describe Ability do
   end
 
   context "a researcher_truncated_urls" do
-    subject { Ability.new(build(:user, :researcher_truncated_urls)) }
+    subject { Lumen::Ability.new(build(:user, :researcher_truncated_urls)) }
 
     it_behaves_like 'a user that can\'t generate new notice permanent token urls'
 
@@ -202,7 +202,7 @@ describe Ability do
   context "an enterprise user" do
     let(:enterprise_account) { create(:enterprise_account) }
     let(:enterprise_user) { create(:user, :enterprise, enterprise_account: enterprise_account) }
-    subject { Ability.new(enterprise_user) }
+    subject { Lumen::Ability.new(enterprise_user) }
 
     before do
       create(:enterprise_domain, enterprise_account: enterprise_account, domain: 'business.example', verified: true)
@@ -256,7 +256,7 @@ describe Ability do
   end
 
   context "a researcher with the can_generate_permanent_notice_token_urls setting on" do
-    subject { Ability.new(build(:user, :researcher, can_generate_permanent_notice_token_urls: true)) }
+    subject { Lumen::Ability.new(build(:user, :researcher, can_generate_permanent_notice_token_urls: true)) }
 
     it_behaves_like 'a user that can generate new notice permanent token urls'
 
@@ -268,7 +268,7 @@ describe Ability do
   end
 
   context "an admin" do
-    subject { Ability.new(build(:user, :admin)) }
+    subject { Lumen::Ability.new(build(:user, :admin)) }
 
     it_behaves_like 'an admin'
     it_behaves_like 'a user that can generate new notice permanent token urls'
@@ -307,7 +307,7 @@ describe Ability do
   end
 
   context "a super admin" do
-    subject { Ability.new(build(:user, :super_admin)) }
+    subject { Lumen::Ability.new(build(:user, :super_admin)) }
 
     it_behaves_like 'an admin'
     it_behaves_like 'a user that can generate new notice permanent token urls'

@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
-require 'validates_automatically'
-require 'hierarchical_relationships'
+require 'lumen/models'
+require 'lumen/models/validates_automatically'
+require 'lumen/models'
+require 'lumen/models/hierarchical_relationships'
 
 class Entity < ApplicationRecord
-  include ValidatesAutomatically
-  include HierarchicalRelationships
+  include Lumen::Models::ValidatesAutomatically
+  include Lumen::Models::HierarchicalRelationships
   include Elasticsearch::Model
-  include Searchability
+  include Lumen::Search::Searchability
 
   # == Constants ============================================================
   PER_PAGE = 10
@@ -75,7 +77,7 @@ class Entity < ApplicationRecord
     # We don't want to ever redact entities linked with users with the submitter role
     return if submitter_user_entity?
 
-    InstanceRedactor.new.redact(self, REDACTABLE_FIELDS)
+    Lumen::InstanceRedactor.new.redact(self, REDACTABLE_FIELDS)
   end
 
   def submitter_user_entity?

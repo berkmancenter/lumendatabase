@@ -421,7 +421,7 @@ describe NoticesController do
 
     def make_allowances
       allow(subject).to receive(:authorized_to_create?).and_return true
-      allow(NoticeBuilder).to receive(:new).and_return @fake_notice
+      allow(Lumen::NoticeBuilder).to receive(:new).and_return @fake_notice
       allow(@fake_notice).to receive(:id).and_return 1
       allow(@fake_notice).to receive(:errors).and_return []
     end
@@ -430,7 +430,7 @@ describe NoticesController do
       it 'initializes a DMCA by default from params' do
         make_allowances
 
-        expect(NoticeBuilder).to receive(:new)
+        expect(Lumen::NoticeBuilder).to receive(:new)
           .with(DMCA, @notice_params, anything)
 
         post :create, params: { notice: @notice_params }
@@ -439,7 +439,7 @@ describe NoticesController do
       it 'uses the type param to instantiate the correct class' do
         make_allowances
 
-        expect(NoticeBuilder).to receive(:new)
+        expect(Lumen::NoticeBuilder).to receive(:new)
           .with(Trademark, @notice_params, anything)
 
         post :create, params: {
@@ -451,7 +451,7 @@ describe NoticesController do
         invalid_types = ['', 'FlimFlam', 'Object', 'User', 'Hash']
 
         make_allowances
-        expect(NoticeBuilder).to receive(:new)
+        expect(Lumen::NoticeBuilder).to receive(:new)
           .exactly(5).times
           .with(DMCA, @notice_params, anything)
           .and_return(@fake_notice)
@@ -498,7 +498,7 @@ describe NoticesController do
       it 'returns a proper Location header when saved successfully' do
         notice = create(:dmca)
         allow(subject).to receive(:authorized_to_create?).and_return true
-        allow(NoticeBuilder).to receive_message_chain(:new, :build)
+        allow(Lumen::NoticeBuilder).to receive_message_chain(:new, :build)
                             .and_return notice
 
         post_create :json

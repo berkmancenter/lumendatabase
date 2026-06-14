@@ -1,8 +1,12 @@
-require_relative './lumen_logger'
 require_relative '../app/models/current'
 require 'countries/version'
 require 'countries/iso3166'
 require 'dotenv/load'
+
+module Lumen
+end
+
+require_relative './lumen/logger'
 
 module Lumen
   # Application-wide loggers
@@ -13,7 +17,7 @@ module Lumen
     event['request_id'] = Current.request_id
   end
 
-  LOGGER = LumenLogger.init(
+  LOGGER = Lumen::Logger.init(
     path: "log/#{Rails.env}.log",
     customize_event: lambda do |event|
       event['event_type'] = 'rails_log'
@@ -21,7 +25,7 @@ module Lumen
     end
   )
 
-  METRICS_LOGGER = LumenLogger.init(
+  METRICS_LOGGER = Lumen::Logger.init(
     path: "log/#{Rails.env}_metrics.log",
     customize_event: lambda do |event|
       event['event_type'] = 'metrics_log'

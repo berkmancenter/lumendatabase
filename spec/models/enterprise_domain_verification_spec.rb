@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe EnterpriseDomainVerification do
+describe Lumen::Enterprise::DomainVerification do
   describe '#verified?' do
     it 'accepts the Lumen verification file over HTTPS' do
       enterprise_domain = build(:enterprise_domain, domain: 'example.com')
