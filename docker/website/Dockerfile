@@ -37,7 +37,7 @@ RUN sudo chown -R $USERNAME:$USERNAME /home/lumen/hist
 # Code mounted as a volume
 WORKDIR /app
 
-COPY config/database.yml.docker config/database.yml
+COPY docker/website/database.yml config/database.yml
 
 # Just to keep the containder running
 CMD (while true; do sleep 1; done;)

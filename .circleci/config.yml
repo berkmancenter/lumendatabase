@@ -11,7 +11,7 @@ jobs:
       - run:
           name: Setup filesystem
           command: |
-            cp config/database.yml.docker config/database.yml
+            cp docker/website/database.yml config/database.yml
             sudo chown -R 1000 .
       - run:
           name: Docker Compose

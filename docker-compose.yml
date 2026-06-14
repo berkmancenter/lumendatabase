@@ -13,7 +13,9 @@ services:
   website:
     depends_on:
       - 'postgres'
-    build: .
+    build:
+      context: .
+      dockerfile: docker/website/Dockerfile
     ports:
       - '8282:3000'
       - '1080:1080'
@@ -120,7 +122,7 @@ services:
       - 'postgres'
     build:
       context: .
-      dockerfile: Dockerfile-logstash
+      dockerfile: docker/logstash/Dockerfile
     volumes:
       - '.:/app:ro'
     tmpfs:
@@ -136,7 +138,7 @@ services:
       - 'postgres'
     build:
       context: .
-      dockerfile: Dockerfile-logstash
+      dockerfile: docker/logstash/Dockerfile
     volumes:
       - '.:/app:ro'
     tmpfs:
