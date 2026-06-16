@@ -5,14 +5,25 @@ class Lumen::Enterprise::NoticeAccess
     new(user, notice).allowed?
   end
 
-  def self.for_account(account, notice)
-    new(nil, notice, enterprise_account: account)
+  def self.for_account(account, notice, enterprise_domains: nil)
+    new(
+      nil,
+      notice,
+      enterprise_account: account,
+      enterprise_domains: enterprise_domains
+    )
   end
 
-  def initialize(user, notice, enterprise_account: nil)
+  def initialize(
+    user,
+    notice,
+    enterprise_account: nil,
+    enterprise_domains: nil
+  )
     @user = user
     @notice = notice
     @enterprise_account = enterprise_account
+    @enterprise_domains = enterprise_domains if enterprise_domains
   end
 
   def allowed?

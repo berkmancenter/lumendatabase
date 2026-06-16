@@ -39,6 +39,20 @@ describe Enterprise::ReportsMailer, type: :mailer do
         .deliver_now
     end
 
+    before do
+      allow(Notice.__elasticsearch__.client).to receive(:search).and_return(
+        'hits' => {
+          'hits' => [
+            {
+              '_source' => { 'id' => notice.id },
+              '_id' => notice.id.to_s,
+              'sort' => [notice.created_at.iso8601, notice.id.to_s]
+            }
+          ]
+        }
+      )
+    end
+
     it 'sets the subject and recipient' do
       expect(mail.subject).to eq('Lumen notice report for Example Business')
       expect(mail.to).to eq(['reports@example.com'])
