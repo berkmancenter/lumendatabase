@@ -27,6 +27,13 @@ describe Notices::SearchController do
     expect(response).to be_successful
   end
 
+  scenario 'per_page is capped for json', search: true do
+    get :index, params: { per_page: 1_001, term: 'batman', format: :json }
+
+    meta = JSON.parse(response.body).fetch('meta')
+    expect(meta.fetch('per_page')).to eq 1_000
+  end
+
   scenario 'deep pagination allowed for signed-in users', search: true do
     allow_any_instance_of(SearchController).to receive(:user_signed_in?)
                                            .and_return(true)

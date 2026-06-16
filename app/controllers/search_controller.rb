@@ -8,7 +8,12 @@
 # - set_model_specific_variables
 # They may also define html_responder.
 class SearchController < ApplicationController
+  DEFAULT_PER_PAGE = 10
+  MIN_PER_PAGE = 1
+  MAX_PER_PAGE = 1_000
+
   before_action :set_model_specific_variables
+  before_action :normalize_per_page
   before_action :prevent_impossible_pagination
   before_action :restrict_deep_pagination
 
@@ -175,7 +180,13 @@ class SearchController < ApplicationController
   end
 
   def per_page
-    (params[:per_page] || 10).to_i
+    params[:per_page].to_i
+  end
+
+  def normalize_per_page
+    requested_per_page = params[:per_page].presence&.to_i || DEFAULT_PER_PAGE
+
+    params[:per_page] = requested_per_page.clamp(MIN_PER_PAGE, MAX_PER_PAGE)
   end
 
   def total_entries(results)
