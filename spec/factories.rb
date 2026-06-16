@@ -276,6 +276,14 @@ FactoryBot.define do
     currency { 'usd' }
   end
 
+  factory :enterprise_report do
+    enterprise_account
+    requested_by { association(:user, :enterprise, enterprise_account: enterprise_account) }
+    requested_by_email { requested_by&.email || 'client@example.com' }
+    starts_at { 1.week.ago.beginning_of_day }
+    ends_at { Time.current.end_of_day }
+  end
+
   factory :enterprise_domain do
     enterprise_account
     domain { 'example.com' }

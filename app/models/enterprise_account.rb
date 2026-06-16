@@ -28,6 +28,7 @@ class EnterpriseAccount < ApplicationRecord
   has_many :users, dependent: :nullify
   has_many :enterprise_domains, dependent: :destroy
   has_many :enterprise_payments, dependent: :restrict_with_error
+  has_many :enterprise_reports, dependent: :destroy
 
   accepts_nested_attributes_for :enterprise_domains, allow_destroy: true
 

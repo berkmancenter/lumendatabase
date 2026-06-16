@@ -1,0 +1,15 @@
+<h1>Your Lumen Enterprise report is ready</h1>
+
+<p>
+  <%= @enterprise_account.name %>
+</p>
+
+<p>
+  <%= @enterprise_report.starts_at.to_fs(:simple) %>
+  through
+  <%= @enterprise_report.ends_at.to_fs(:simple) %>
+</p>
+
+<p>
+  <%= link_to 'Download report', @download_url %>
+</p>

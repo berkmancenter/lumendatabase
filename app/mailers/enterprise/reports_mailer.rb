@@ -21,6 +21,20 @@ class Enterprise::ReportsMailer < ApplicationMailer
     )
   end
 
+  def on_demand_report_ready(enterprise_report)
+    @enterprise_report = enterprise_report
+    @enterprise_account = enterprise_report.enterprise_account
+    @download_url = enterprise_report_url(
+      token: enterprise_report.download_token,
+      host: Chill::Application.config.site_host
+    )
+
+    mail(
+      to: enterprise_report.requested_by_email,
+      subject: "Your Lumen Enterprise report is ready"
+    )
+  end
+
   private
 
   def attachment_name

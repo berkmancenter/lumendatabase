@@ -73,4 +73,35 @@ describe Enterprise::ReportsMailer, type: :mailer do
       )
     end
   end
+
+  describe '#on_demand_report_ready' do
+    let(:enterprise_report) do
+      create(
+        :enterprise_report,
+        requested_by_email: 'client@example.com',
+        starts_at: Time.zone.local(2026, 6, 1),
+        ends_at: Time.zone.local(2026, 6, 15).end_of_day
+      )
+    end
+    let(:mail) do
+      described_class
+        .on_demand_report_ready(enterprise_report)
+        .deliver_now
+    end
+
+    it 'sends the ready notification to the requester' do
+      expect(mail.subject).to eq('Your Lumen Enterprise report is ready')
+      expect(mail.to).to eq(['client@example.com'])
+      expect(mail.attachments).to be_empty
+    end
+
+    it 'links to the tokenized download URL' do
+      expect(mail.body.encoded).to include(
+        enterprise_report_url(
+          token: enterprise_report.download_token,
+          host: Chill::Application.config.site_host
+        )
+      )
+    end
+  end
 end

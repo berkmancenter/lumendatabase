@@ -45,6 +45,9 @@ describe 'enterprise/settings/show.html.erb' do
     render
 
     expect(rendered).to have_css('div.inner-padding')
+    expect(rendered).to include(
+      'Scheduled reports are emailed automatically based on the status below.'
+    )
     expect(rendered).to have_css(
       'label[for="enterprise_account_report_frequency"]',
       text: 'Status'
@@ -90,6 +93,29 @@ describe 'enterprise/settings/show.html.erb' do
       '#enterprise_account_report_recipient_email[disabled]',
       visible: :all
     )
+  end
+
+  it 'shows the on-demand report request form' do
+    assign(
+      :enterprise_account,
+      build_stubbed(:enterprise_account, plan: 'pro', report_frequency: 'none')
+    )
+
+    render
+
+    expect(rendered).to have_css(
+      "form[action=\"#{enterprise_reports_path}\"][method=\"post\"]"
+    )
+    expect(rendered).to include(
+      "We'll generate the report in the background and"
+    )
+    expect(rendered).to have_css(
+      'input[name="enterprise_report[starts_on]"][type="date"]'
+    )
+    expect(rendered).to have_css(
+      'input[name="enterprise_report[ends_on]"][type="date"]'
+    )
+    expect(rendered).to have_button('Request report')
   end
 
   it 'shows an empty state when there are no domains' do

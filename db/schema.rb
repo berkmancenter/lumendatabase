@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_06_12_120000) do
+ActiveRecord::Schema[7.2].define(version: 2026_06_16_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -304,6 +304,26 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_12_120000) do
     t.index ["stripe_event_id"], name: "index_enterprise_payments_on_stripe_event_id", unique: true
     t.index ["stripe_payment_intent_id"], name: "index_enterprise_payments_on_stripe_payment_intent_id", unique: true
     t.index ["user_id"], name: "index_enterprise_payments_on_user_id"
+  end
+
+  create_table "enterprise_reports", force: :cascade do |t|
+    t.bigint "enterprise_account_id", null: false
+    t.bigint "requested_by_id"
+    t.string "requested_by_email", null: false
+    t.datetime "starts_at", null: false
+    t.datetime "ends_at", null: false
+    t.string "status", default: "pending", null: false
+    t.string "download_token", null: false
+    t.datetime "completed_at"
+    t.datetime "failed_at"
+    t.text "failure_message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["download_token"], name: "index_enterprise_reports_on_download_token", unique: true
+    t.index ["enterprise_account_id", "created_at"], name: "idx_on_enterprise_account_id_created_at_fb1e82c5c2"
+    t.index ["enterprise_account_id"], name: "index_enterprise_reports_on_enterprise_account_id"
+    t.index ["requested_by_id"], name: "index_enterprise_reports_on_requested_by_id"
+    t.index ["status"], name: "index_enterprise_reports_on_status"
   end
 
   create_table "entities", id: :serial, force: :cascade do |t|
@@ -654,5 +674,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_06_12_120000) do
   add_foreign_key "enterprise_domains", "enterprise_accounts"
   add_foreign_key "enterprise_payments", "enterprise_accounts"
   add_foreign_key "enterprise_payments", "users", on_delete: :nullify
+  add_foreign_key "enterprise_reports", "enterprise_accounts"
+  add_foreign_key "enterprise_reports", "users", column: "requested_by_id", on_delete: :nullify
   add_foreign_key "users", "enterprise_accounts"
 end

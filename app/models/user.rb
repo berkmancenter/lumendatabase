@@ -6,6 +6,10 @@ class User < ApplicationRecord
   belongs_to :enterprise_account, optional: true
   has_and_belongs_to_many :roles
   has_many :token_urls
+  has_many :requested_enterprise_reports,
+           class_name: 'EnterpriseReport',
+           foreign_key: :requested_by_id,
+           dependent: :nullify
   has_many :enterprise_domains, through: :enterprise_account
   has_and_belongs_to_many :full_notice_only_researchers_entities,
                           join_table: :entities_full_notice_only_researchers_users,

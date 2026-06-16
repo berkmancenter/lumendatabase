@@ -1,0 +1,8 @@
+Your Lumen Enterprise report is ready
+
+<%= @enterprise_account.name %>
+
+<%= @enterprise_report.starts_at.to_fs(:simple) %> through <%= @enterprise_report.ends_at.to_fs(:simple) %>
+
+Download report:
+<%= @download_url %>

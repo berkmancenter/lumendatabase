@@ -31,6 +31,8 @@ Rails.application.routes.draw do
     get 'status', to: 'status#show', as: :status
 
     resource :settings, only: %i[show update]
+    resources :reports, only: %i[create]
+    get 'reports/:token', to: 'reports#show', as: :report
     resources :domains, only: %i[create destroy] do
       member do
         post :verify

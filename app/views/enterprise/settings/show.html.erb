@@ -46,6 +46,9 @@
 
   <% if @enterprise_account.pro? %>
     <h2>Reports</h2>
+    <p>
+      Scheduled reports are emailed automatically based on the status below.
+    </p>
     <% report_delivery_off = @enterprise_account.report_frequency == 'none' %>
     <%= form_with(
           model: @enterprise_account,
@@ -68,6 +71,35 @@
       </p>
 
       <p><%= form.submit 'Save report settings' %></p>
+    <% end %>
+
+    <h3>Request report</h3>
+    <p>
+      Choose a date range. We'll generate the report in the background and
+      email you a secure download link when it's ready.
+    </p>
+    <%= form_with url: enterprise_reports_path, method: :post, local: true do |form| %>
+      <p>
+        <%= label_tag 'enterprise_report_starts_on', 'Start date' %>
+        <%= date_field_tag(
+              'enterprise_report[starts_on]',
+              1.week.ago.to_date,
+              id: 'enterprise_report_starts_on',
+              required: true
+            ) %>
+      </p>
+
+      <p>
+        <%= label_tag 'enterprise_report_ends_on', 'End date' %>
+        <%= date_field_tag(
+              'enterprise_report[ends_on]',
+              Time.zone.today,
+              id: 'enterprise_report_ends_on',
+              required: true
+            ) %>
+      </p>
+
+      <p><%= form.submit 'Request report' %></p>
     <% end %>
 
     <h2>Domains</h2>
