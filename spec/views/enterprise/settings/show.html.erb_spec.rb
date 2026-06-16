@@ -11,6 +11,36 @@ describe 'enterprise/settings/show.html.erb' do
     assign(:enterprise_domains, [])
   end
 
+  it 'shows enterprise account data without editable fields' do
+    assign(
+      :enterprise_account,
+      build_stubbed(
+        :enterprise_account,
+        plan: 'pro',
+        report_frequency: 'none',
+        applicant_email: 'rep@example.com',
+        company_contact_information: "Example Business\n1 Example Way",
+        representative_contact_information: "Jane Representative\njane@example.com",
+        interested_domains: "example.com\nexample.org"
+      )
+    )
+
+    render
+
+    expect(rendered).to have_css('h2', text: 'Enterprise data')
+    expect(rendered).to have_css('.enterprise-account-details', text: 'Example Business')
+    expect(rendered).to have_css('.enterprise-account-details', text: 'rep@example.com')
+    expect(rendered).to have_css('.enterprise-account-details', text: '1 Example Way')
+    expect(rendered).to have_css('.enterprise-account-details', text: 'jane@example.com')
+    expect(rendered).not_to have_css('.enterprise-account-details', text: 'Interested domains')
+    expect(rendered).not_to have_css('.enterprise-account-details', text: 'example.org')
+    expect(rendered).not_to have_css('input[name="enterprise_account[name]"]')
+    expect(rendered).not_to have_css('input[name="enterprise_account[applicant_email]"]')
+    expect(rendered).not_to have_css('textarea[name="enterprise_account[company_contact_information]"]')
+    expect(rendered).not_to have_css('textarea[name="enterprise_account[representative_contact_information]"]')
+    expect(rendered).not_to have_css('textarea[name="enterprise_account[interested_domains]"]')
+  end
+
   it 'shows the plan, payment method, and how long Pro access is active' do
     assign(
       :enterprise_account,

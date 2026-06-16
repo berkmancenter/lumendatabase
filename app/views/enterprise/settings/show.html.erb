@@ -1,6 +1,21 @@
 <% title 'Enterprise settings', @enterprise_account.name %>
 
 <div class="inner-padding">
+  <h2>Enterprise data</h2>
+  <dl class="enterprise-account-details">
+    <dt>Company name</dt>
+    <dd><%= @enterprise_account.name %></dd>
+
+    <dt>Email</dt>
+    <dd><%= @enterprise_account.applicant_email.presence || current_user.email %></dd>
+
+    <dt>Company contact information</dt>
+    <dd><%= simple_format(@enterprise_account.company_contact_information.presence || 'Not provided') %></dd>
+
+    <dt>Representative contact information</dt>
+    <dd><%= simple_format(@enterprise_account.representative_contact_information.presence || 'Not provided') %></dd>
+  </dl>
+
   <h2>Plan</h2>
   <p class="enterprise-plan">
     Your plan: <strong><%= @enterprise_account.plan.titleize %></strong>
