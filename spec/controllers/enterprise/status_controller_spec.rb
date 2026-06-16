@@ -1,76 +1,20 @@
 require 'rails_helper'
 
 describe Enterprise::StatusController do
-  render_views
-
   before do
     allow(controller).to receive(:authenticate_user!).and_return(true)
     allow(controller).to receive(:current_user).and_return(user)
   end
 
   describe '#show' do
-    context 'with an inactive credit-card account' do
-      let(:account) { create(:enterprise_account, :inactive, :credit_card) }
-      let(:user) { create(:user, :enterprise, enterprise_account: account) }
-
-      it 'renders the status page with credit-card guidance' do
-        get :show
-
-        expect(response).to be_successful
-        expect(response.body).to match(/credit card/i)
-        expect(response.body).not_to match(/invoiced/i)
-      end
-    end
-
-    context 'with a pending card payment' do
-      let(:account) { create(:enterprise_account, :inactive, :credit_card) }
-      let(:user) { create(:user, :enterprise, enterprise_account: account) }
-
-      before do
-        create(:enterprise_payment, enterprise_account: account, user: user, amount_cents: 50_000)
-      end
-
-      it 'shows the pending payment and a cancel action' do
-        get :show
-
-        expect(response).to be_successful
-        expect(response.body).to include('card payment in progress')
-        expect(response.body).to include('$500.00')
-        expect(response.body).to include('Cancel pending payment')
-      end
-    end
-
-    context 'with an inactive invoice account' do
+    context 'with a confirmed not-yet-pro account' do
       let(:account) { create(:enterprise_account, :inactive, :invoice) }
       let(:user) { create(:user, :enterprise, enterprise_account: account) }
 
-      it 'renders the status page with invoice guidance' do
+      it 'redirects to settings' do
         get :show
 
-        expect(response).to be_successful
-        expect(response.body).to match(/invoice/i)
-      end
-    end
-
-    context 'with a previous Pro subscription' do
-      let(:account) do
-        create(
-          :enterprise_account,
-          :inactive,
-          :invoice,
-          paid_until: 2.days.ago
-        )
-      end
-      let(:user) { create(:user, :enterprise, enterprise_account: account) }
-
-      it 'shows when the most recent Pro subscription was paid through' do
-        get :show
-
-        expect(response).to be_successful
-        expect(response.body).to include(
-          account.paid_until.to_fs(:simple)
-        )
-        expect(response.body).to match(/most recent Pro subscription/i)
+        expect(response).to redirect_to(enterprise_settings_path)
       end
     end
 
@@ -84,6 +28,25 @@ describe Enterprise::StatusController do
         expect(response).to redirect_to(
           enterprise_notices_search_index_path(sort_by: 'created_at desc')
         )
+      end
+    end
+
+    context 'with an unconfirmed enterprise user' do
+      let(:account) { create(:enterprise_account, :inactive) }
+      let(:user) do
+        create(
+          :user,
+          :enterprise,
+          :unconfirmed_enterprise_email,
+          enterprise_account: account
+        )
+      end
+
+      it 'redirects home' do
+        get :show
+
+        expect(response).to redirect_to(root_path)
+        expect(flash[:alert]).to eq('Enterprise access is not active for this account.')
       end
     end
   end

@@ -10,7 +10,7 @@ describe Lumen::Enterprise::PaymentMethods::Invoice do
       success_url: 'https://example.com/success',
       cancel_url: 'https://example.com/cancel',
       settings_path: '/enterprise/settings',
-      status_path: '/enterprise/status'
+      status_path: '/enterprise/settings'
     }
   end
 
@@ -39,7 +39,7 @@ describe Lumen::Enterprise::PaymentMethods::Invoice do
 
     expect(account.reload.payment_method).to be_nil
     expect(Enterprise::RegistrationMailer).not_to have_received(:admin_payment)
-    expect(result.redirect_to).to eq('/enterprise/status')
+    expect(result.redirect_to).to eq('/enterprise/settings')
     expect(result.alert).to match(/Cancel your pending card payment/)
   end
 end

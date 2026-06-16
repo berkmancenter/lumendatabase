@@ -19,29 +19,45 @@
       <p class="enterprise-plan-active-until">Your Pro access is active.</p>
     <% end %>
   <% else %>
-    <section class="enterprise-get-pro">
-      <p>
-        Your email is confirmed. Choose how to pay to unlock Lumen Enterprise Pro
-        - <strong><%= enterprise_pro_price %></strong> per month.
-      </p>
+    <% status_visible = @enterprise_account.payment_method.present? ||
+                        @pending_payment.present? ||
+                        @enterprise_account.paid_until.present? %>
+    <% payment_selectable = @pending_payment.blank? &&
+                            @enterprise_account.payment_method != 'invoice' %>
 
-      <%= form_with url: enterprise_pay_path, method: :post, local: true do |form| %>
-        <% EnterpriseAccount::PAYMENT_METHOD_OPTIONS.each do |label, value| %>
-          <p>
-            <label>
-              <%= form.radio_button :payment_method, value, required: true %>
-              <%= label %>
-            </label>
-          </p>
-        <% end %>
-        <p class="form-text">
-          Pay by credit card through Stripe to unlock Pro as soon as payment is
-          confirmed, or choose to be invoiced and we'll follow up - your Pro
-          access unlocks once the invoice is paid.
+    <% if status_visible %>
+      <%= render(
+            'enterprise/settings/account_status',
+            enterprise_account: @enterprise_account,
+            pending_payment: @pending_payment
+          ) %>
+    <% end %>
+
+    <% if payment_selectable %>
+      <section class="enterprise-get-pro">
+        <p>
+          Your email is confirmed. Choose how to pay to unlock Lumen Enterprise Pro
+          - <strong><%= enterprise_pro_price %></strong> per month.
         </p>
-        <p><%= form.submit 'Get Pro' %></p>
-      <% end %>
-    </section>
+
+        <%= form_with url: enterprise_pay_path, method: :post, local: true do |form| %>
+          <% EnterpriseAccount::PAYMENT_METHOD_OPTIONS.each do |label, value| %>
+            <p>
+              <label>
+                <%= form.radio_button :payment_method, value, required: true %>
+                <%= label %>
+              </label>
+            </p>
+          <% end %>
+          <p class="form-text">
+            Pay by credit card through Stripe to unlock Pro as soon as payment is
+            confirmed, or choose to be invoiced and we'll follow up - your Pro
+            access unlocks once the invoice is paid.
+          </p>
+          <p><%= form.submit 'Get Pro' %></p>
+        <% end %>
+      </section>
+    <% end %>
   <% end %>
 
   <% if @enterprise_account.pro? %>

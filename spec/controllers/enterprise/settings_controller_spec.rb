@@ -31,6 +31,19 @@ describe Enterprise::SettingsController do
       expect(response).to be_successful
       expect(response.body).to include('Get Pro')
     end
+
+    it 'shows account status to confirmed invoice users who are not yet Pro' do
+      inactive_account = create(:enterprise_account, :inactive, :invoice)
+      inactive_user = create(:user, :enterprise, enterprise_account: inactive_account)
+      allow(controller).to receive(:current_user).and_return(inactive_user)
+
+      get :show
+
+      expect(response).to be_successful
+      expect(response.body).to match(/Your Lumen Enterprise account isn(&#39;|')t active yet/)
+      expect(response.body).to match(/set up to be invoiced/i)
+      expect(response.body).not_to include('Get Pro')
+    end
   end
 
   describe '#show' do

@@ -4,6 +4,7 @@
 class Enterprise::SettingsController < Enterprise::ConfirmedBaseController
   def show
     @enterprise_account = enterprise_account
+    @pending_payment = @enterprise_account.pending_payment
     @enterprise_domains = @enterprise_account.enterprise_domains.order(:domain)
   end
 

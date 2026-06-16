@@ -27,7 +27,7 @@ Rails.application.routes.draw do
     get 'pay/cancel', to: 'payments#cancel', as: :payment_cancel
     post 'pay/cancel_pending', to: 'payments#cancel_pending', as: :cancel_pending_payment
 
-    # Signed-in landing page for accounts that are not yet on the Pro plan.
+    # Backward-compatible redirect for old account-status links.
     get 'status', to: 'status#show', as: :status
 
     resource :settings, only: %i[show update]

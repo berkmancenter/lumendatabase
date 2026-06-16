@@ -10,7 +10,7 @@ describe Lumen::Enterprise::PaymentMethods::CreditCard do
       success_url: 'https://example.com/success',
       cancel_url: 'https://example.com/cancel',
       settings_path: '/enterprise/settings',
-      status_path: '/enterprise/status'
+      status_path: '/enterprise/settings'
     }
   end
   let(:provider) { class_double(Lumen::Enterprise::PaymentProviders::Stripe) }
@@ -51,7 +51,7 @@ describe Lumen::Enterprise::PaymentMethods::CreditCard do
     result = payment_method.start
 
     expect(provider).not_to have_received(:create_checkout_session)
-    expect(result.redirect_to).to eq('/enterprise/status')
+    expect(result.redirect_to).to eq('/enterprise/settings')
     expect(result.alert).to match(/already have a card payment/)
   end
 

@@ -50,7 +50,7 @@ module ApplicationHelper
 
   def enterprise_area?
     controller_path.to_s.start_with?('enterprise/') &&
-      %w[enterprise/registrations enterprise/status].exclude?(controller_path)
+      controller_path != 'enterprise/registrations'
   end
 
   def enterprise_pro_price

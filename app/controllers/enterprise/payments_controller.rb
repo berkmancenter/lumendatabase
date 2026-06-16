@@ -13,7 +13,7 @@ class Enterprise::PaymentsController < Enterprise::ConfirmedBaseController
       redirect_to enterprise_my_notices_path,
                   notice: 'Payment received. Your Pro access is ready.'
     else
-      redirect_to enterprise_status_path,
+      redirect_to enterprise_settings_path,
                   notice: 'Thanks - Stripe is confirming your card payment. ' \
                           'Your Pro access will unlock automatically.'
     end
@@ -27,14 +27,14 @@ class Enterprise::PaymentsController < Enterprise::ConfirmedBaseController
     redirect_to enterprise_settings_path,
                 notice: 'Your pending payment was canceled. You can try again whenever you are ready.'
   rescue Lumen::Enterprise::PaymentMethods::Error => e
-    redirect_to enterprise_status_path, alert: e.message
+    redirect_to enterprise_settings_path, alert: e.message
   end
 
   def cancel_pending
     payment = enterprise_account.pending_payment
 
     if payment.blank?
-      return redirect_to enterprise_status_path,
+      return redirect_to enterprise_settings_path,
                          alert: 'There is no pending payment to cancel.'
     end
 
@@ -43,7 +43,7 @@ class Enterprise::PaymentsController < Enterprise::ConfirmedBaseController
     redirect_to enterprise_settings_path,
                 notice: 'Your pending card payment was canceled. You can start a new payment now.'
   rescue Lumen::Enterprise::PaymentMethods::Error => e
-    redirect_to enterprise_status_path, alert: e.message
+    redirect_to enterprise_settings_path, alert: e.message
   end
 
   private
@@ -79,7 +79,7 @@ class Enterprise::PaymentsController < Enterprise::ConfirmedBaseController
       success_url: "#{enterprise_payment_success_url}?session_id={CHECKOUT_SESSION_ID}",
       cancel_url: enterprise_payment_cancel_url,
       settings_path: enterprise_settings_path,
-      status_path: enterprise_status_path
+      status_path: enterprise_settings_path
     }
   end
 end

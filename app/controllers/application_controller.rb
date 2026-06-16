@@ -61,10 +61,10 @@ class ApplicationController < ActionController::Base
     return enterprise_my_notices_path if resource.active_enterprise_account
 
     # A confirmed-but-unpaid enterprise user lands on settings, where they can
-    # choose a Pro plan. Anyone else (e.g. unconfirmed) gets the status page.
+    # choose a Pro plan and see payment status.
     return enterprise_settings_path if resource.confirmed_enterprise_user?
 
-    enterprise_status_path
+    root_path
   end
 
   def enterprise_my_notices_path

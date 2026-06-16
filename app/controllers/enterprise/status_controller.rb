@@ -1,14 +1,12 @@
-# Landing page for signed-in enterprise users whose account is not yet on the
-# Pro plan. It explains how to activate based on the chosen payment method.
-# Unlike the Enterprise::BaseController controllers it only requires the user to
-# be signed in (not Pro) - that's the whole point of the page.
+# Backward-compatible endpoint for old Enterprise account-status links. The
+# status UI now lives inside settings.
 class Enterprise::StatusController < ApplicationController
   before_action :authenticate_user!
 
   def show
     return redirect_to(enterprise_my_notices_path) if current_user.active_enterprise_account
+    return redirect_to(enterprise_settings_path) if current_user.confirmed_enterprise_user?
 
-    @enterprise_account = current_user.enterprise_account
-    @pending_payment = @enterprise_account&.pending_payment
+    redirect_to root_path, alert: 'Enterprise access is not active for this account.'
   end
 end

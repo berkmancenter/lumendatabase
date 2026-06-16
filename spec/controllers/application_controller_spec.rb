@@ -18,11 +18,11 @@ describe ApplicationController do
       expect(controller.after_sign_in_path_for(user)).to eq(enterprise_settings_path)
     end
 
-    it 'sends an unconfirmed enterprise user to the account status page' do
+    it 'sends an unconfirmed enterprise user home' do
       account = create(:enterprise_account, :inactive)
       user = create(:user, :enterprise, :unconfirmed_enterprise_email, enterprise_account: account)
 
-      expect(controller.after_sign_in_path_for(user)).to eq(enterprise_status_path)
+      expect(controller.after_sign_in_path_for(user)).to eq(root_path)
     end
   end
 end

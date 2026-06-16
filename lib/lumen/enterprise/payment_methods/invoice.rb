@@ -15,7 +15,7 @@ class Lumen::Enterprise::PaymentMethods::Invoice < Lumen::Enterprise::PaymentMet
     Enterprise::RegistrationMailer.admin_payment(enterprise_account, user).deliver_later
 
     redirect_result(
-      redirect_to: urls.fetch(:settings_path),
+      redirect_to: urls.fetch(:status_path),
       notice: 'Thanks - we will follow up with you about invoicing. ' \
               'Your Pro access unlocks once the invoice has been paid.'
     )

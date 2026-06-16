@@ -63,13 +63,13 @@ describe Enterprise::PaymentsController do
         post :create, params: { payment_method: 'credit_card' }
 
         expect(Lumen::Enterprise::PaymentProviders::Stripe).not_to have_received(:create_checkout_session)
-        expect(response).to redirect_to(enterprise_status_path)
+        expect(response).to redirect_to(enterprise_settings_path)
         expect(flash[:alert]).to match(/already have a card payment/)
       end
     end
 
     context 'choosing invoice' do
-      it 'stays inactive, notifies admins, and redirects to settings' do
+      it 'stays inactive, notifies admins, and redirects to settings status' do
         post :create, params: { payment_method: 'invoice' }
 
         account.reload
@@ -86,7 +86,7 @@ describe Enterprise::PaymentsController do
 
         expect(account.reload.payment_method).to be_nil
         expect(Enterprise::RegistrationMailer).not_to have_received(:admin_payment)
-        expect(response).to redirect_to(enterprise_status_path)
+        expect(response).to redirect_to(enterprise_settings_path)
         expect(flash[:alert]).to match(/Cancel your pending card payment/)
       end
     end
@@ -126,10 +126,10 @@ describe Enterprise::PaymentsController do
     end
 
     context 'when Stripe is still confirming the payment' do
-      it 'sends the user to the status page' do
+      it 'sends the user to settings status' do
         get :success
 
-        expect(response).to redirect_to(enterprise_status_path)
+        expect(response).to redirect_to(enterprise_settings_path)
         expect(flash[:notice]).to match(/Stripe is confirming/)
       end
     end
@@ -176,11 +176,11 @@ describe Enterprise::PaymentsController do
       expect(flash[:notice]).to match(/start a new payment/)
     end
 
-    it 'redirects to status when there is no pending payment' do
+    it 'redirects to settings when there is no pending payment' do
       post :cancel_pending
 
       expect(Lumen::Enterprise::PaymentProviders::Stripe).not_to have_received(:cancel_payment)
-      expect(response).to redirect_to(enterprise_status_path)
+      expect(response).to redirect_to(enterprise_settings_path)
       expect(flash[:alert]).to match(/no pending payment/)
     end
   end

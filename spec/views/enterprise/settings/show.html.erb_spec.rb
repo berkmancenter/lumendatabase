@@ -7,6 +7,7 @@ describe 'enterprise/settings/show.html.erb' do
     allow(view).to receive(:current_user).and_return(current_user)
     allow(view).to receive(:enterprise_my_notices_path)
       .and_return(enterprise_notices_search_index_path(sort_by: 'created_at desc'))
+    assign(:pending_payment, nil)
     assign(:enterprise_domains, [])
   end
 
@@ -93,6 +94,37 @@ describe 'enterprise/settings/show.html.erb' do
       '#enterprise_account_report_recipient_email[disabled]',
       visible: :all
     )
+  end
+
+  it 'shows invoice status in settings for inactive invoice accounts' do
+    assign(
+      :enterprise_account,
+      build_stubbed(:enterprise_account, :inactive, :invoice)
+    )
+
+    render
+
+    expect(rendered).to have_css('h3', text: "Your Lumen Enterprise account isn't active yet")
+    expect(rendered).to match(/set up to be invoiced/i)
+    expect(rendered).not_to have_button('Get Pro')
+  end
+
+  it 'shows pending card status and cancel action in settings' do
+    assign(
+      :enterprise_account,
+      build_stubbed(:enterprise_account, :inactive, :credit_card)
+    )
+    assign(
+      :pending_payment,
+      build_stubbed(:enterprise_payment, amount_cents: 50_000)
+    )
+
+    render
+
+    expect(rendered).to include('card payment in progress')
+    expect(rendered).to include('$500.00')
+    expect(rendered).to have_button('Cancel pending payment')
+    expect(rendered).not_to have_button('Get Pro')
   end
 
   it 'shows the on-demand report request form' do
