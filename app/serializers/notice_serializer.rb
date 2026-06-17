@@ -6,6 +6,9 @@ class NoticeSerializer < BaseSerializer
   # Data to be returned when a Work has no associated URL.
   FALLBACK = [{ url: 'No URL submitted' }].freeze
 
+  # Temporary: enterprise API access is disabled while the feature is paused.
+  ENTERPRISE_API_ACCESS_ENABLED = false
+
   # TODO: serialize additional entities
 
   attribute :topics do |object|
@@ -55,12 +58,16 @@ class NoticeSerializer < BaseSerializer
     end
   end
 
+  def self.enterprise_api_access_enabled?
+    ENTERPRISE_API_ACCESS_ENABLED
+  end
+
   def self.works(object)
     user = Current.user
     ability = user && Lumen::Ability.new(user)
 
     if user && ability.can?(:view_full_version_api, object)
-      enterprise_access = ability.can?(:view_enterprise_version, object) ?
+      enterprise_access = enterprise_api_access_enabled? && ability.can?(:view_enterprise_version, object) ?
         Lumen::Enterprise::NoticeAccess.new(user, object) : nil
 
       base_works = object.works.map do |work|
@@ -76,7 +83,7 @@ class NoticeSerializer < BaseSerializer
           )
         }
       end.as_json
-    elsif user && ability.can?(:view_enterprise_version, object)
+    elsif user && enterprise_api_access_enabled? && ability.can?(:view_enterprise_version, object)
       access = Lumen::Enterprise::NoticeAccess.new(user, object)
 
       base_works = object.works.map do |work|

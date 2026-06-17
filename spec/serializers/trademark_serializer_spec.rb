@@ -32,7 +32,9 @@ describe TrademarkSerializer do
     )
   end
 
-  it 'reveals matching URLs for enterprise users' do
+  it 'reveals matching URLs for enterprise users while API access is enabled' do
+    stub_const('NoticeSerializer::ENTERPRISE_API_ACCESS_ENABLED', true)
+
     enterprise_account = create(:enterprise_account)
     create(
       :enterprise_domain,
@@ -59,6 +61,39 @@ describe TrademarkSerializer do
       { 'url' => 'https://business.example/path' },
       { 'fqdn' => 'other.example', 'count' => 1 }
     ]
+  ensure
+    Current.user = nil
+  end
+
+  it 'does not reveal matching URLs for enterprise users while API access is disabled' do
+    stub_const('NoticeSerializer::ENTERPRISE_API_ACCESS_ENABLED', false)
+
+    enterprise_account = create(:enterprise_account)
+    create(
+      :enterprise_domain,
+      enterprise_account: enterprise_account,
+      domain: 'business.example',
+      verified: true
+    )
+    Current.user = create(:user, :enterprise, enterprise_account: enterprise_account)
+    trademark = build(
+      :trademark,
+      works: [
+        Work.new(
+          infringing_urls: [
+            InfringingUrl.new(url: 'https://business.example/path'),
+            InfringingUrl.new(url: 'https://other.example/path')
+          ]
+        )
+      ]
+    )
+
+    mark = described_class.new(trademark).as_json[:marks].first
+
+    expect(mark['infringing_urls']).to contain_exactly(
+      { 'fqdn' => 'business.example', 'count' => 1 },
+      { 'fqdn' => 'other.example', 'count' => 1 }
+    )
   ensure
     Current.user = nil
   end
