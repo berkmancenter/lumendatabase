@@ -89,12 +89,19 @@ describe NoticesController do
 
       it 'overrides IP and timestamp when a Matomo API token is configured' do
         stub_const('Piwik', Piwik.merge('disabled' => false, 'token_auth' => 'secret-token'))
+        allow_any_instance_of(ActionDispatch::Request)
+          .to receive(:remote_ip)
+          .and_return('203.0.113.42')
         payload = capture_matomo_payload
         notice = stub_find_notice(create(:dmca))
 
         get :show, params: { id: notice.id }
 
-        expect(payload).to include(:cip, :cdt, token_auth: 'secret-token')
+        expect(payload).to include(
+          cip: '203.0.113.42',
+          token_auth: 'secret-token'
+        )
+        expect(payload[:cdt]).to be_present
       end
     end
 
