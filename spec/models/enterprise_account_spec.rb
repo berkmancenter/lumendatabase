@@ -54,6 +54,7 @@ describe EnterpriseAccount, type: :model do
       user = account.approve_registration!
 
       expect(account.reload.status).to eq('approved')
+      expect(account.payment_method).to be_nil
       expect(user.email).to eq('rep@example.com')
       expect(user.role?(:enterprise)).to be true
       expect(user.enterprise_account).to eq(account)
@@ -69,6 +70,52 @@ describe EnterpriseAccount, type: :model do
         .and_return(mailer)
 
       account.approve_registration!
+    end
+
+    it 'does not generate registration dummy data when the setting is off' do
+      allow(Enterprise::RegistrationMailer).to receive(:email_confirmation)
+        .and_return(instance_double(ActionMailer::MessageDelivery, deliver_later: true))
+      allow(LumenSetting).to receive(:get).and_call_original
+      allow(LumenSetting).to receive(:get)
+        .with(EnterpriseAccount::DUMMY_DATA_SETTING_KEY, cache: false)
+        .and_return('0')
+
+      expect(Lumen::Enterprise::DummyDataGenerator).not_to receive(:new)
+      expect(Enterprise::RegistrationMailer).not_to receive(:invoice_accepted)
+
+      account.approve_registration!
+
+      expect(account.reload.plan).to eq('inactive')
+      expect(account.payment_method).to be_nil
+      expect(account.paid_until).to be_nil
+    end
+
+    it 'generates registration dummy data, grants Pro access, and emails the client when the setting is on' do
+      generator = instance_double(Lumen::Enterprise::DummyDataGenerator, run: true)
+      pro_mailer = instance_double(ActionMailer::MessageDelivery, deliver_later: true)
+      allow(Enterprise::RegistrationMailer).to receive(:email_confirmation)
+        .and_return(instance_double(ActionMailer::MessageDelivery, deliver_later: true))
+      allow(Enterprise::RegistrationMailer).to receive(:invoice_accepted)
+        .and_return(pro_mailer)
+      allow(LumenSetting).to receive(:get).and_call_original
+      allow(LumenSetting).to receive(:get)
+        .with(EnterpriseAccount::DUMMY_DATA_SETTING_KEY, cache: false)
+        .and_return('1')
+
+      expect(Lumen::Enterprise::DummyDataGenerator)
+        .to receive(:new)
+        .with(account)
+        .and_return(generator)
+
+      user = account.approve_registration!
+
+      expect(account.reload.plan).to eq('pro')
+      expect(account.payment_method).to eq('invoice')
+      expect(account.paid_until).to be_within(1.minute).of(1.month.from_now)
+      expect(Enterprise::RegistrationMailer)
+        .to have_received(:invoice_accepted)
+        .with(account, user)
+      expect(pro_mailer).to have_received(:deliver_later)
     end
 
     it 'attaches the enterprise role to an existing user with that email' do

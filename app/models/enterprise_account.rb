@@ -22,6 +22,7 @@ class EnterpriseAccount < ApplicationRecord
     ['Daily', 'daily'],
     ['Weekly', 'weekly']
   ].freeze
+  DUMMY_DATA_SETTING_KEY = Lumen::Enterprise::DummyDataGenerator::SETTING_KEY
 
   # Detach users when the account is deleted (they may keep other roles/logins)
   # rather than blocking the delete on the users foreign key.
@@ -69,13 +70,18 @@ class EnterpriseAccount < ApplicationRecord
     ensure_applicant_email_present!
 
     user = nil
+    dummy_data_access_granted = false
 
     transaction do
       update!(status: 'approved')
       user = build_applicant_user
+      dummy_data_access_granted = grant_registration_dummy_data_access!
     end
 
     Enterprise::RegistrationMailer.email_confirmation(self, user).deliver_later
+    if dummy_data_access_granted
+      Enterprise::RegistrationMailer.invoice_accepted(self, user).deliver_later
+    end
 
     user
   end
@@ -169,6 +175,17 @@ class EnterpriseAccount < ApplicationRecord
     user.save!
 
     user
+  end
+
+  def grant_registration_dummy_data_access!
+    return unless LumenSetting.get(DUMMY_DATA_SETTING_KEY, cache: false) == '1'
+
+    self.payment_method = 'invoice'
+    extend_pro_access!
+    save!
+    Lumen::Enterprise::DummyDataGenerator.new(self).run
+
+    true
   end
 
   def ensure_applicant_email_present!

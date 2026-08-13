@@ -12,6 +12,7 @@ gem 'coveralls_reborn', require: false
 gem 'date_validator'
 gem 'devise'
 gem 'dotenv-rails'
+gem 'faker'
 gem 'flutie'
 gem 'jquery-placeholder-rails'
 gem 'jquery-rails'

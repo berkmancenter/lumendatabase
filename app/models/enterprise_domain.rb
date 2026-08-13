@@ -1,4 +1,6 @@
 class EnterpriseDomain < ApplicationRecord
+  DOMAIN_FORMAT = /\A[a-z0-9][a-z0-9.-]*\.[a-z0-9-]{2,}\z/
+
   belongs_to :enterprise_account
 
   before_validation :ensure_verification_token, on: :create
@@ -8,7 +10,7 @@ class EnterpriseDomain < ApplicationRecord
             presence: true,
             uniqueness: { scope: :enterprise_account_id },
             format: {
-              with: /\A[a-z0-9][a-z0-9.-]*\.[a-z0-9-]{2,}\z/,
+              with: DOMAIN_FORMAT,
               message: 'must be a domain name'
             }
   validates :verification_token, presence: true, uniqueness: true
