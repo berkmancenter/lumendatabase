@@ -39,14 +39,9 @@ class Lumen::Enterprise::DummyDataGenerator
   end
 
   def run
-    created_notices = []
-
-    domains.each do |domain|
-      enterprise_domain = verify_domain(domain)
-      created_notices.concat(create_missing_notices_for_domain(enterprise_domain.domain))
+    missing_notice_jobs.shuffle(random: random).map do |domain, notice_number|
+      create_notice(domain, notice_number)
     end
-
-    created_notices
   end
 
   private
@@ -78,14 +73,22 @@ class Lumen::Enterprise::DummyDataGenerator
     enterprise_domain
   end
 
-  def create_missing_notices_for_domain(domain)
+  def missing_notice_jobs
+    domains.flat_map do |domain|
+      enterprise_domain = verify_domain(domain)
+
+      missing_notice_numbers_for_domain(enterprise_domain.domain).map do |notice_number|
+        [enterprise_domain.domain, notice_number]
+      end
+    end
+  end
+
+  def missing_notice_numbers_for_domain(domain)
     existing_count = generated_notice_scope(domain).count
     target_count = target_notice_count(domain)
     return [] if existing_count >= target_count
 
-    ((existing_count + 1)..target_count).map do |notice_number|
-      create_notice(domain, notice_number)
-    end
+    (existing_count + 1)..target_count
   end
 
   def generated_notice_scope(domain)

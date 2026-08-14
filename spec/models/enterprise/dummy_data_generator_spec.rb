@@ -64,6 +64,21 @@ describe Lumen::Enterprise::DummyDataGenerator, type: :model do
       expect(Lumen::Enterprise::NoticeAccess.for_account(account, notice)).to be_allowed
     end
 
+    it 'creates missing notices in randomized order across domains' do
+      created_notices = generator.run
+
+      created_domains = created_notices.map do |notice|
+        notice.notes[/domain=(.+)\z/, 1]
+      end
+
+      expect(created_domains).to eq([
+        'video.example.org',
+        'example.com',
+        'example.com',
+        'video.example.org'
+      ])
+    end
+
     it 'does not duplicate notices when run again' do
       generator.run
 
