@@ -71,7 +71,11 @@ class NoticesController < ApplicationController
         show_render_html
       end
       format.json do
-        render json: { json_root_for(@notice.class) => Lumen::NoticeSerializerProxy.new(@notice) }
+        if json_show_allowed?
+          render json: { json_root_for(@notice.class) => Lumen::NoticeSerializerProxy.new(@notice) }
+        else
+          resource_not_found
+        end
       end
     end
   end
@@ -291,6 +295,13 @@ class NoticesController < ApplicationController
     else
       true
     end
+  end
+
+  def json_show_allowed?
+    current_user&.role?(:super_admin) ||
+      Notice.visible_qualifiers.except(:rescinded).all? do |field, expected_value|
+        @notice.public_send(field) == expected_value
+      end
   end
 
   def process_notice_viewer_request

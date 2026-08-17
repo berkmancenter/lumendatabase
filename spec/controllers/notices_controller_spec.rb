@@ -138,6 +138,34 @@ describe NoticesController do
         expect(json).to have_key('body').with_value('Notice Rescinded')
       end
 
+      [
+        ['hidden', { hidden: true }],
+        ['spam', { spam: true }],
+        ['unpublished', { published: false }]
+      ].each do |notice_state, notice_attributes|
+        it "returns not found for #{notice_state} notices unless the user is a super admin" do
+          stub_find_notice(build(:dmca, notice_attributes))
+          allow(controller).to receive(:current_user)
+            .and_return(build(:user, :researcher))
+
+          get :show, params: { id: 1, format: :json }
+
+          expect(response).to have_http_status(:not_found)
+        end
+
+        it "returns #{notice_state} notices for super admins" do
+          notice = stub_find_notice(build(:dmca, notice_attributes.merge(id: 1)))
+          allow(controller).to receive(:current_user)
+            .and_return(build(:user, :super_admin))
+
+          get :show, params: { id: 1, format: :json }
+
+          json = JSON.parse(response.body)['dmca']
+          expect(response).to be_successful
+          expect(json).to have_key('id').with_value(notice.id)
+        end
+      end
+
       it 'tracks JSON views with Matomo usage dimensions' do
         stub_const('Piwik', Piwik.merge('disabled' => false))
         allow(MatomoTrackingJob).to receive(:perform_later)
