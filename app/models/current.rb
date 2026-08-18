@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 class Current < ActiveSupport::CurrentAttributes
-  attribute :user, :request_id
+  attribute :user, :request_id, :content_filter_context
 end

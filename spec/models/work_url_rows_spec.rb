@@ -266,6 +266,41 @@ describe Lumen::WorkUrlRows do
         user: create(:user, :researcher)
       ).visible_rows
     end
+
+    it 'reuses one notice match set across works and URL types' do
+      ContentFilter.create!(
+        name: 'Sensitive notice',
+        query: '"entities"."name" = \'Stop\'',
+        granularity: 'notice',
+        actions: ['full_notice_version_only_researchers']
+      )
+      notice = create(:dmca, role_names: %w[sender principal submitter])
+      notice.submitter.update!(name: 'Stop')
+      works = 2.times.map do
+        Work.new(
+          copyrighted_urls: [CopyrightedUrl.new(url: 'https://example.com/original')],
+          infringing_urls: [InfringingUrl.new(url: 'https://example.com/copy')]
+        )
+      end
+      notice.works = works
+      notice.save!
+
+      expect(ContentFilter)
+        .to receive(:query_matches_for)
+        .once
+        .and_call_original
+
+      works.each do |work|
+        %w[copyrighted infringing].each do |type|
+          described_class.new(
+            work: work,
+            type: type,
+            notice: notice,
+            user: nil
+          ).limited_rows
+        end
+      end
+    end
   end
 
   describe '#rows' do

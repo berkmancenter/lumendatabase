@@ -256,6 +256,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_current_user
+    Current.content_filter_context = Lumen::ContentFilters::Context.new
     Current.user = current_user
   end
 

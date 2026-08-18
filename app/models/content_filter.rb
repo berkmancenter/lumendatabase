@@ -4,6 +4,8 @@ require 'lumen/models/validates_automatically'
 class ContentFilter < ApplicationRecord
   include Lumen::Models::ValidatesAutomatically
 
+  QUERY_NOT_EVALUATED = Object.new.freeze
+
   validates :name, presence: true
   validates :granularity, inclusion: { in: %w[notice urls] }
   validate :query_or_url_text_present
@@ -37,9 +39,9 @@ class ContentFilter < ApplicationRecord
     granularity == 'urls'
   end
 
-  def matches_notice?(notice_instance)
+  def matches_notice?(notice_instance, query_match: QUERY_NOT_EVALUATED)
     criteria = []
-    criteria << query_matches_notice?(notice_instance) if query.present?
+    criteria << resolved_query_match(notice_instance, query_match) if query.present?
     criteria << url_text_matches_notice?(notice_instance) if url_text.present?
 
     criteria.any? && criteria.all?
@@ -55,37 +57,63 @@ class ContentFilter < ApplicationRecord
   def self.notice_has_action?(notice_instance, action_id)
     return false unless notice_instance
 
-    ContentFilter.all.each do |content_filter|
-      next unless content_filter.notice_granularity?
-      next unless content_filter.matches_notice?(notice_instance)
-
-      return true if content_filter.has_action?(action_id)
-    end
-
-    false
+    match_set_for(notice_instance).notice_has_action?(action_id)
   end
 
   def self.matching_url_filters(notice_instance, url_instance, content_filters: nil)
     return [] unless notice_instance && url_instance
 
-    (content_filters || url_filters_matching_notice(notice_instance)).select do |content_filter|
-      content_filter.matches_url?(url_instance)
-    end
+    return match_set_for(notice_instance).matching_url_filters(url_instance) unless content_filters
+
+    content_filters.select { |content_filter| content_filter.matches_url?(url_instance) }
   end
 
   def self.url_filters_matching_notice(notice_instance)
     return [] unless notice_instance
 
-    ContentFilter.where(granularity: 'urls').select do |content_filter|
-      content_filter.matches_notice_query?(notice_instance)
-    end
+    match_set_for(notice_instance).url_filters
   end
 
   def self.notice_filters_matching_notice(notice_instance)
     return [] unless notice_instance
 
-    ContentFilter.where(granularity: 'notice').select do |content_filter|
-      content_filter.matches_notice?(notice_instance)
+    match_set_for(notice_instance).notice_filters
+  end
+
+  def self.match_set_for(notice_instance)
+    return Lumen::ContentFilters::MatchSet.empty unless notice_instance
+
+    context = Current.content_filter_context
+    return context.for(notice_instance) if context
+
+    cache_ivar = :@content_filter_match_set
+    return notice_instance.instance_variable_get(cache_ivar) if notice_instance.instance_variable_defined?(cache_ivar)
+
+    Lumen::ContentFilters::MatchSet.new(notice_instance, ContentFilter.all.to_a).tap do |match_set|
+      notice_instance.instance_variable_set(cache_ivar, match_set)
+    end
+  end
+
+  def self.query_matches_for(notice_instance, content_filters)
+    query_filters = content_filters.select { |content_filter| content_filter.query.present? }
+    return {} if query_filters.empty?
+
+    expressions = query_filters.each_with_index.map do |content_filter, index|
+      Arel.sql(
+        "COALESCE(BOOL_OR(COALESCE((#{content_filter.query}), FALSE)), FALSE) " \
+        "AS content_filter_match_#{index}"
+      )
+    end
+
+    values = Notice
+             .includes(:topics, :entity_notice_roles, :entities)
+             .where(id: notice_instance.id)
+             .references(:topics, :entity_notice_roles, :entities)
+             .pick(*expressions)
+    values = [values] if query_filters.one?
+
+    query_filters.each_with_index.to_h do |content_filter, index|
+      [content_filter.id, values&.fetch(index, false) == true]
     end
   end
 
@@ -98,8 +126,8 @@ class ContentFilter < ApplicationRecord
     }
   end
 
-  def matches_notice_query?(notice_instance)
-    query.blank? || query_matches_notice?(notice_instance)
+  def matches_notice_query?(notice_instance, query_match: QUERY_NOT_EVALUATED)
+    query.blank? || resolved_query_match(notice_instance, query_match)
   end
 
   def matches_url?(url_instance)
@@ -113,6 +141,12 @@ class ContentFilter < ApplicationRecord
   end
 
   private
+
+  def resolved_query_match(notice_instance, query_match)
+    return query_matches_notice?(notice_instance) if query_match.equal?(QUERY_NOT_EVALUATED)
+
+    query_match
+  end
 
   def query_matches_notice?(notice_instance)
     Notice.includes(:topics)
