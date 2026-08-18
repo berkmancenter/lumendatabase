@@ -3,3 +3,6 @@
 :verbose: <%= ENV.fetch("SIDEKIQ_VERBOSE", false) %>
 :logfile: <%= ENV.fetch("SIDEKIQ_LOGFILE", "log/sidekiq.log") %>
 :pidfile: <%= ENV.fetch("SIDEKIQ_PIDFILE", "tmp/pids/sidekiq.pid") %>
+:queues:
+  - default
+  - matomo

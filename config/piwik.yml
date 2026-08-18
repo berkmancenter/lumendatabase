@@ -15,20 +15,26 @@
 #   config/initializers/piwik.rb. When present, server-side tracking overrides
 #   the real visitor IP (cip) and action time (cdt) so asynchronous job
 #   execution does not distort attribution or timing.
+# server_tracking_enabled
+#   Controls server-side API tracking independently of the browser tracker.
+#   Override with ENV['MATOMO_SERVER_TRACKING_ENABLED']; defaults to true.
 #
 production:
   id_site: 3
   url: stats.berkman.harvard.edu
   tracking_url: https://stats.berkman.harvard.edu
   disabled: false
+  server_tracking_enabled: true
 
 development:
   id_site: 1
   url: localhost:8283
   tracking_url: http://matomo
   disabled: false
+  server_tracking_enabled: true
 
 test:
   id_site: 4
   url: stats.berkman.harvard.edu
   disabled: true
+  server_tracking_enabled: true

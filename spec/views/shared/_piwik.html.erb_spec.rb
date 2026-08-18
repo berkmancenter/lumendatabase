@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe 'shared/_piwik.html.erb' do
-  it 'does not track pageviews in the browser' do
+  it 'tracks pageviews after configuring visitor identity and dimensions' do
     stub_const(
       'Piwik',
       {
@@ -20,9 +20,14 @@ describe 'shared/_piwik.html.erb' do
 
     render partial: 'shared/piwik'
 
-    expect(rendered).not_to include('trackPageView')
+    expect(rendered).to include('trackPageView')
     expect(rendered).to include('enableLinkTracking')
     expect(rendered).to include('setCustomDimension')
     expect(rendered).to include("setVisitorId', '0123456789abcdef'")
+    track_pageview_position = rendered.index("_paq.push(['trackPageView'])")
+
+    expect(rendered.index("_paq.push(['setVisitorId'")).to be < track_pageview_position
+    expect(rendered.index("_paq.push(['setCustomDimension'")).to be < track_pageview_position
+    expect(rendered.index("_paq.push(['setUserId'")).to be < track_pageview_position
   end
 end

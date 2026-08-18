@@ -24,7 +24,7 @@ module Lumen::UsageTracking
     end
 
     def dimensions
-      {
+      @dimensions ||= {
         credential_status: credentialed? ? 'credentialed' : 'uncredentialed',
         auth_method: auth_method,
         surface: surface,
@@ -33,9 +33,13 @@ module Lumen::UsageTracking
     end
 
     def matomo_dimension_parameters
-      dimensions.each_with_object({}) do |(name, value), memo|
-        dimension_id = self.class.dimension_id_for(name)
-        memo["dimension#{dimension_id}"] = value if dimension_id && value.present?
+      @matomo_dimension_parameters ||= begin
+        dimension_ids = self.class.dimension_ids
+
+        dimensions.each_with_object({}) do |(name, value), memo|
+          dimension_id = dimension_ids[name.to_s]
+          memo["dimension#{dimension_id}"] = value if dimension_id && value.present?
+        end
       end
     end
 

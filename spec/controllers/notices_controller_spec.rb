@@ -57,51 +57,27 @@ describe NoticesController do
         expect(response).to render_template('error_pages/404_hidden')
       end
 
-      it 'tracks HTML views with Matomo usage dimensions' do
+      it 'does not enqueue server-side tracking for HTML views' do
         stub_const('Piwik', Piwik.merge('disabled' => false))
         allow(MatomoTrackingJob).to receive(:perform_later)
-        set_matomo_dimension_settings
 
         notice = stub_find_notice(create(:dmca))
 
         get :show, params: { id: notice.id }
 
-        expect(MatomoTrackingJob).to have_received(:perform_later).with(
-          hash_including(
-            'dimension1' => 'uncredentialed',
-            'dimension2' => 'anonymous',
-            'dimension3' => 'web'
-          )
-        )
+        expect(MatomoTrackingJob).not_to have_received(:perform_later)
       end
 
-      it 'shares one visitor id between the cookie and the tracking payload' do
+      it 'stores a stable visitor id for browser tracking' do
         stub_const('Piwik', Piwik.merge('disabled' => false))
-        payload = capture_matomo_payload
         notice = stub_find_notice(create(:dmca))
 
         get :show, params: { id: notice.id }
 
-        expect(payload[:_id]).to match(/\A[0-9a-f]{16}\z/)
-        expect(response.cookies['matomo_visitor_id']).to eq(payload[:_id])
-        expect(payload).not_to include(:cip, :token_auth)
-      end
+        visitor_id = controller.send(:matomo_visitor_id)
 
-      it 'overrides IP and timestamp when a Matomo API token is configured' do
-        stub_const('Piwik', Piwik.merge('disabled' => false, 'token_auth' => 'secret-token'))
-        allow_any_instance_of(ActionDispatch::Request)
-          .to receive(:remote_ip)
-          .and_return('203.0.113.42')
-        payload = capture_matomo_payload
-        notice = stub_find_notice(create(:dmca))
-
-        get :show, params: { id: notice.id }
-
-        expect(payload).to include(
-          cip: '203.0.113.42',
-          token_auth: 'secret-token'
-        )
-        expect(payload[:cdt]).to be_present
+        expect(visitor_id).to match(/\A[0-9a-f]{16}\z/)
+        expect(controller.send(:cookies)[:matomo_visitor_id]).to eq(visitor_id)
       end
     end
 
@@ -189,6 +165,36 @@ describe NoticesController do
             uid: 'api-user@example.test'
           )
         )
+      end
+
+      it 'does not enqueue tracking when server-side tracking is disabled' do
+        stub_const(
+          'Piwik',
+          Piwik.merge('disabled' => false, 'server_tracking_enabled' => false)
+        )
+        allow(MatomoTrackingJob).to receive(:perform_later)
+        notice = stub_find_notice(create(:dmca))
+
+        get :show, params: { id: notice.id, format: :json }
+
+        expect(MatomoTrackingJob).not_to have_received(:perform_later)
+      end
+
+      it 'overrides IP and timestamp when a Matomo API token is configured' do
+        stub_const('Piwik', Piwik.merge('disabled' => false, 'token_auth' => 'secret-token'))
+        allow_any_instance_of(ActionDispatch::Request)
+          .to receive(:remote_ip)
+          .and_return('203.0.113.42')
+        payload = capture_matomo_payload
+        notice = stub_find_notice(create(:dmca))
+
+        get :show, params: { id: notice.id, format: :json }
+
+        expect(payload).to include(
+          cip: '203.0.113.42',
+          token_auth: 'secret-token'
+        )
+        expect(payload[:cdt]).to be_present
       end
 
       it 'derives a stable cookieless visitor id for API requests' do

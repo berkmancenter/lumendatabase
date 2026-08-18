@@ -76,6 +76,7 @@ describe Lumen::UsageTracking::Classifier do
       request: request_for('/notices/1'),
       user: user
     )
+    allow(described_class).to receive(:dimension_ids).and_call_original
 
     expect(classifier.matomo_dimension_parameters).to eq(
       'dimension5' => 'credentialed',
@@ -83,6 +84,9 @@ describe Lumen::UsageTracking::Classifier do
       'dimension7' => 'web',
       'dimension8' => 'user@example.test'
     )
+    classifier.matomo_dimension_parameters
+
+    expect(described_class).to have_received(:dimension_ids).once
   end
 
   def request_for(path)

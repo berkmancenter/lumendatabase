@@ -5,10 +5,11 @@ require 'securerandom'
 require 'uri'
 
 class MatomoTrackingJob < ApplicationJob
-  queue_as :default
+  queue_as :matomo
 
   def perform(payload)
     return if Piwik['disabled']
+    return unless Piwik.fetch('server_tracking_enabled', true)
 
     http = Net::HTTP.new(endpoint_uri.host, endpoint_uri.port)
     http.use_ssl = endpoint_uri.scheme == 'https'

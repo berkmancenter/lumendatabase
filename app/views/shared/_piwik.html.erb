@@ -7,9 +7,9 @@
     _paq.push(['setTrackerUrl', u+'piwik.php']);
     _paq.push(['setSiteId', '<%= Piwik[ 'id_site' ] %>']);
 
-    /* Share the server-side visitor id so browser-side link tracking joins the same visit. */
+    /* Keep a stable visitor id across browser pageviews. */
     _paq.push(['setVisitorId', '<%= j matomo_visitor_id %>']);
-    /* Keep dimensions available for browser-side link tracking; pageviews are tracked server-side. */
+    /* Custom dimensions and user id must be configured before trackPageView. */
     <% matomo_dimension_parameters.each do |dimension, value| %>
       _paq.push(['setCustomDimension', <%= dimension.to_s.delete_prefix('dimension') %>, '<%= j value %>']);
     <% end %>
@@ -17,6 +17,7 @@
       _paq.push(['setUserId', '<%= j matomo_tracking_dimensions[:authenticated_user_email] %>']);
     <% end %>
     _paq.push(["setDomains", ["flutie.law.harvard.edu","*.www.chillingeffects.org","*.chillingeffects.org","*.lumendatabase.org","*.www.lumendatabase.org"]]);
+    _paq.push(['trackPageView']);
     _paq.push(['enableLinkTracking']);
   })();
 </script>

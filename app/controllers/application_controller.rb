@@ -162,6 +162,8 @@ class ApplicationController < ActionController::Base
 
   def track_usage_with_matomo
     return if Piwik['disabled']
+    return unless Piwik.fetch('server_tracking_enabled', true)
+    return unless matomo_usage_classifier.api?
 
     MatomoTrackingJob.perform_later(matomo_tracking_payload)
   end
@@ -195,10 +197,9 @@ class ApplicationController < ActionController::Base
     }
   end
 
-  # A stable visitor id lets the server-side pageview and the browser-side link
-  # tracking belong to the same Matomo visit. Browsers persist it in a cookie
-  # (and the JS tracker is told to reuse it via setVisitorId), while API clients
-  # send no cookie, so we derive a deterministic id from the request principal.
+  # Browsers persist a stable visitor id in a cookie and pass it to the JS
+  # tracker. API clients send no cookie, so server-side tracking derives a
+  # deterministic id from the request principal.
   def matomo_visitor_id
     @matomo_visitor_id ||=
       if matomo_usage_classifier.api?

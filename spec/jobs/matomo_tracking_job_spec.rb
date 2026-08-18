@@ -1,6 +1,10 @@
 require 'rails_helper'
 
 describe MatomoTrackingJob do
+  it 'uses the Matomo queue' do
+    expect(described_class.queue_name).to eq('matomo')
+  end
+
   it 'posts usage payloads to Matomo' do
     stub_const(
       'Piwik',
@@ -37,6 +41,21 @@ describe MatomoTrackingJob do
 
   it 'does not post when Matomo is disabled' do
     stub_const('Piwik', { 'disabled' => true })
+    request = stub_request(:post, 'http://matomo/matomo.php')
+
+    described_class.perform_now(url: 'http://example.test/notices/search.json')
+
+    expect(request).not_to have_been_requested
+  end
+
+  it 'does not post when server-side tracking is disabled' do
+    stub_const(
+      'Piwik',
+      {
+        'disabled' => false,
+        'server_tracking_enabled' => false
+      }
+    )
     request = stub_request(:post, 'http://matomo/matomo.php')
 
     described_class.perform_now(url: 'http://example.test/notices/search.json')
