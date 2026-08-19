@@ -31,6 +31,15 @@ feature 'Viewing notices' do
     check_full_works_urls
   end
 
+  scenario 'as a researcher' do
+    sign_in(create(:user, :researcher))
+
+    visit notice_url(Notice.last)
+
+    check_full_works_urls
+    expect(page).not_to have_content('Click here to request access')
+  end
+
   scenario 'as an anonymous user with a token for a wrong notice' do
     notice2 = create(:dmca)
     token_url = TokenUrl.create(

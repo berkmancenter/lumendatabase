@@ -108,6 +108,7 @@ describe NoticesHelper do
 
       allow(helper).to receive(:confidential_order?).with(notice).and_return(false)
       allow(helper).to receive(:current_user).and_return(nil)
+      allow(helper).to receive(:can_see_full_notice_version?).with(notice).and_return(false)
 
       expect(helper.access_requestable?(notice, false, true)).to be true
     end
@@ -134,6 +135,17 @@ describe NoticesHelper do
 
       allow(helper).to receive(:confidential_order?).with(notice).and_return(false)
       allow(helper).to receive(:current_user).and_return(user)
+      allow(helper).to receive(:can_see_full_notice_version?).with(notice).and_return(false)
+
+      expect(helper.access_requestable?(notice, false, true)).to be false
+    end
+
+    it 'does not offer access tokens when the full notice is already visible' do
+      notice = build(:dmca)
+
+      allow(helper).to receive(:confidential_order?).with(notice).and_return(false)
+      allow(helper).to receive(:current_user).and_return(build(:user, :researcher))
+      allow(helper).to receive(:can_see_full_notice_version?).with(notice).and_return(true)
 
       expect(helper.access_requestable?(notice, false, true)).to be false
     end

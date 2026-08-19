@@ -5,6 +5,7 @@ module NoticesHelper
   def access_requestable?(notice, show_copyrighted, show_infringing)
     [
       show_copyrighted || show_infringing,
+      !can_see_full_notice_version?(notice),
       # Additional access cannot be requested for confidential court orders
       # as there is nothing further to display.
       !confidential_order?(notice),
