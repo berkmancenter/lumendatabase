@@ -405,6 +405,9 @@ RailsAdmin.config do |config|
       end
       limited_pagination true
     end
+    show do
+      exclude_fields :notices, :entity_notice_roles, :ancestry
+    end
     edit do
       configure :kind, :enum do
         enum do
