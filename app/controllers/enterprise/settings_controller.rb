@@ -6,6 +6,7 @@ class Enterprise::SettingsController < Enterprise::ConfirmedBaseController
     @enterprise_account = enterprise_account
     @pending_payment = @enterprise_account.pending_payment
     @enterprise_domains = @enterprise_account.enterprise_domains.order(:domain)
+    @domain_auto_verification_enabled = Lumen::Enterprise::DummyDataGenerator.enabled?
   end
 
   def update

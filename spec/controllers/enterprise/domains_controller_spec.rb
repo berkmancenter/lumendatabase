@@ -21,6 +21,31 @@ describe Enterprise::DomainsController do
       expect(enterprise_domain.verification_filename).to start_with('lumen-domain-verification-')
       expect(response).to redirect_to(enterprise_settings_path)
     end
+
+    it 'auto-verifies and seeds a settings domain when registration dummy data is enabled' do
+      generator = Lumen::Enterprise::DummyDataGenerator.new(
+        enterprise_account,
+        notices_per_domain_range: 1..1,
+        random: Random.new(123)
+      )
+      allow(LumenSetting).to receive(:get).and_call_original
+      allow(LumenSetting).to receive(:get)
+        .with(Lumen::Enterprise::DummyDataGenerator::SETTING_KEY, cache: false)
+        .and_return('1')
+      allow(Lumen::Enterprise::DummyDataGenerator).to receive(:new)
+        .with(enterprise_account)
+        .and_return(generator)
+
+      post :create, params: { enterprise_domain: { domain: 'https://Example.com/path' } }
+
+      enterprise_domain = enterprise_account.enterprise_domains.last
+
+      expect(enterprise_domain).to be_verified
+      expect(enterprise_domain.verified_at).to be_present
+      expect(DMCA.where(source: Lumen::Enterprise::DummyDataGenerator::SOURCE).count).to eq(1)
+      expect(flash[:notice]).to eq('Domain added and auto-verified with dummy data.')
+      expect(response).to redirect_to(enterprise_settings_path)
+    end
   end
 
   describe '#verify' do

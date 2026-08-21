@@ -3,7 +3,17 @@ class Enterprise::DomainsController < Enterprise::BaseController
     enterprise_domain = enterprise_account.enterprise_domains.build(enterprise_domain_params)
 
     if enterprise_domain.save
-      redirect_to enterprise_settings_path, notice: 'Domain added. Add the verification file to verify ownership.'
+      if Lumen::Enterprise::DummyDataGenerator.enabled?
+        Lumen::Enterprise::DummyDataGenerator
+          .new(enterprise_account)
+          .run(domains: [enterprise_domain.domain])
+
+        notice = 'Domain added and auto-verified with dummy data.'
+      else
+        notice = 'Domain added. Add the verification file to verify ownership.'
+      end
+
+      redirect_to enterprise_settings_path, notice: notice
     else
       redirect_to(
         enterprise_settings_path,

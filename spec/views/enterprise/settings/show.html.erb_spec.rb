@@ -9,6 +9,7 @@ describe 'enterprise/settings/show.html.erb' do
       .and_return(enterprise_notices_search_index_path(sort_by: 'created_at desc'))
     assign(:pending_payment, nil)
     assign(:enterprise_domains, [])
+    assign(:domain_auto_verification_enabled, false)
   end
 
   it 'shows enterprise account data without editable fields' do
@@ -189,5 +190,38 @@ describe 'enterprise/settings/show.html.erb' do
     render
 
     expect(rendered).to have_css('.enterprise-domains-empty', text: 'Nothing here yet.')
+  end
+
+  it 'shows the verify button for an unverified domain in normal mode' do
+    assign(
+      :enterprise_account,
+      build_stubbed(:enterprise_account, plan: 'pro', report_frequency: 'none')
+    )
+    assign(
+      :enterprise_domains,
+      [build_stubbed(:enterprise_domain, verified: false)]
+    )
+
+    render
+
+    expect(rendered).to have_button('Verify now')
+  end
+
+  it 'hides the verify button when domain auto-verification is enabled' do
+    assign(
+      :enterprise_account,
+      build_stubbed(:enterprise_account, plan: 'pro', report_frequency: 'none')
+    )
+    assign(
+      :enterprise_domains,
+      [build_stubbed(:enterprise_domain, verified: false)]
+    )
+    assign(:domain_auto_verification_enabled, true)
+
+    render
+
+    expect(rendered).not_to have_button('Verify now')
+    expect(rendered).not_to include('on this domain with this exact content:')
+    expect(rendered).not_to include('lumen-domain-verification-')
   end
 end

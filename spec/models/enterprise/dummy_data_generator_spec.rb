@@ -48,6 +48,24 @@ describe Lumen::Enterprise::DummyDataGenerator, type: :model do
       expect(existing_domain.verified_at).to be_present
     end
 
+    it 'creates dummy data for explicitly supplied settings domains' do
+      settings_domain = create(
+        :enterprise_domain,
+        enterprise_account: account,
+        domain: 'Settings.Example',
+        verified: false,
+        verified_at: nil
+      )
+
+      created_notices = generator.run(domains: [settings_domain.domain])
+
+      expect(settings_domain.reload).to be_verified
+      expect(settings_domain.verified_at).to be_present
+      expect(created_notices.count).to eq(2)
+      expect(generated_notices_for('settings.example').count).to eq(2)
+      expect(account.enterprise_domains.where(domain: 'example.com')).not_to exist
+    end
+
     it 'creates dummy notices with enterprise-visible matching URLs' do
       created_notices = generator.run
 

@@ -163,7 +163,7 @@
               </span>
 
               <span class="enterprise-domain-row-actions">
-                <% unless enterprise_domain.verified? %>
+                <% unless enterprise_domain.verified? || @domain_auto_verification_enabled %>
                   <%= button_to(
                         'Verify now',
                         verify_enterprise_domain_path(enterprise_domain),
@@ -181,7 +181,7 @@
               </span>
             </div>
 
-            <% unless enterprise_domain.verified? %>
+            <% unless enterprise_domain.verified? || @domain_auto_verification_enabled %>
               <p>
                 Create
                 <code>/<%= enterprise_domain.verification_filename %></code>

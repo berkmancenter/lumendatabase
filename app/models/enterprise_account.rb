@@ -178,7 +178,7 @@ class EnterpriseAccount < ApplicationRecord
   end
 
   def grant_registration_dummy_data_access!
-    return unless LumenSetting.get(DUMMY_DATA_SETTING_KEY, cache: false) == '1'
+    return unless Lumen::Enterprise::DummyDataGenerator.enabled?
 
     self.payment_method = 'invoice'
     extend_pro_access!

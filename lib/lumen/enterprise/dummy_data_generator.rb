@@ -28,6 +28,10 @@ class Lumen::Enterprise::DummyDataGenerator
     'SearchCo Example'
   ].freeze
 
+  def self.enabled?
+    LumenSetting.get(SETTING_KEY, cache: false) == '1'
+  end
+
   def initialize(
     enterprise_account,
     notices_per_domain_range: NOTICE_COUNT_RANGE,
@@ -38,8 +42,10 @@ class Lumen::Enterprise::DummyDataGenerator
     @random = random
   end
 
-  def run
-    missing_notice_jobs.shuffle(random: random).map do |domain, notice_number|
+  def run(domains: nil)
+    domain_values = domains || enterprise_account.interested_domains
+
+    missing_notice_jobs(domain_values).shuffle(random: random).map do |domain, notice_number|
       create_notice(domain, notice_number)
     end
   end
@@ -48,14 +54,12 @@ class Lumen::Enterprise::DummyDataGenerator
 
   attr_reader :enterprise_account, :notices_per_domain_range, :random
 
-  def domains
-    @domains ||= enterprise_account
-                 .interested_domains
-                 .to_s
-                 .split(/[\s,;]+/)
-                 .map { |value| EnterpriseDomain.normalize(value) }
-                 .select { |domain| domain.match?(EnterpriseDomain::DOMAIN_FORMAT) }
-                 .uniq
+  def normalized_domains(domain_values)
+    Array(domain_values)
+      .flat_map { |value| value.to_s.split(/[\s,;]+/) }
+      .map { |value| EnterpriseDomain.normalize(value) }
+      .select { |domain| domain.match?(EnterpriseDomain::DOMAIN_FORMAT) }
+      .uniq
   end
 
   def verify_domain(domain)
@@ -73,8 +77,8 @@ class Lumen::Enterprise::DummyDataGenerator
     enterprise_domain
   end
 
-  def missing_notice_jobs
-    domains.flat_map do |domain|
+  def missing_notice_jobs(domain_values)
+    normalized_domains(domain_values).flat_map do |domain|
       enterprise_domain = verify_domain(domain)
 
       missing_notice_numbers_for_domain(enterprise_domain.domain).map do |notice_number|

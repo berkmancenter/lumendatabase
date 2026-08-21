@@ -57,6 +57,27 @@ describe Enterprise::SettingsController do
       expect(assigns(:enterprise_domains)).to eq([verified_domain, pending_domain])
       expect(response.body).to include(pending_domain.verification_filename)
       expect(response.body).to include(pending_domain.verification_file_content)
+      expect(response.body).to include('Verify now')
+    end
+
+    it 'hides manual verification when domain auto-verification is enabled' do
+      pending_domain = create(
+        :enterprise_domain,
+        enterprise_account: enterprise_account,
+        domain: 'pending.example',
+        verified: false
+      )
+      allow(LumenSetting).to receive(:get).and_call_original
+      allow(LumenSetting).to receive(:get)
+        .with(Lumen::Enterprise::DummyDataGenerator::SETTING_KEY, cache: false)
+        .and_return('1')
+
+      get :show
+
+      expect(response).to be_successful
+      expect(response.body).not_to include('Verify now')
+      expect(response.body).not_to include(pending_domain.verification_filename)
+      expect(response.body).not_to include(pending_domain.verification_file_content)
     end
   end
 
