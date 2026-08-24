@@ -7,13 +7,13 @@
   </div>
 
   <nav class="enterprise-sidebar-nav" aria-label="Enterprise navigation">
-    <%= link_to enterprise_root_path,
-                class: ['enterprise-nav-link', ('is-active' if enterprise_nav_active?(:overview))].compact do %>
-      <svg aria-hidden="true"><use href="#enterprise-icon-overview"></use></svg>
-      <span>Overview</span>
-    <% end %>
-
     <% if current_user&.active_enterprise_account.present? %>
+      <%= link_to enterprise_root_path,
+                  class: ['enterprise-nav-link', ('is-active' if enterprise_nav_active?(:overview))].compact do %>
+        <svg aria-hidden="true"><use href="#enterprise-icon-overview"></use></svg>
+        <span>Overview</span>
+      <% end %>
+
       <%= link_to enterprise_my_notices_path,
                   class: ['enterprise-nav-link', ('is-active' if enterprise_nav_active?(:notices))].compact do %>
         <svg aria-hidden="true"><use href="#enterprise-icon-notices"></use></svg>

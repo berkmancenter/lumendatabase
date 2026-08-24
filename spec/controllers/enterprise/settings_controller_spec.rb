@@ -30,6 +30,7 @@ describe Enterprise::SettingsController do
 
       expect(response).to be_successful
       expect(response.body).to include('Get Pro')
+      expect(response.body).not_to have_link('Overview', href: enterprise_root_path)
     end
 
     it 'shows account status to confirmed invoice users who are not yet Pro' do
