@@ -10,7 +10,7 @@ Rails.application.routes.draw do
   post 'stripe/webhook', to: 'stripe_webhooks#create'
 
   namespace :enterprise do
-    root to: redirect('/enterprise/notices/search?sort_by=created_at%20desc')
+    root to: 'dashboard#show'
 
     # Public Lumen Enterprise sign-up (the controller, not the namespace, gates auth).
     get 'register', to: 'registrations#new', as: :register
@@ -30,10 +30,11 @@ Rails.application.routes.draw do
     # Backward-compatible redirect for old account-status links.
     get 'status', to: 'status#show', as: :status
 
+    get 'account', to: 'settings#show', as: :account
     resource :settings, only: %i[show update]
-    resources :reports, only: %i[create]
+    resources :reports, only: %i[index create]
     get 'reports/:token', to: 'reports#show', as: :report
-    resources :domains, only: %i[create destroy] do
+    resources :domains, only: %i[index create destroy] do
       member do
         post :verify
       end

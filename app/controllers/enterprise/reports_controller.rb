@@ -1,6 +1,13 @@
 class Enterprise::ReportsController < ApplicationController
-  before_action :authenticate_user!, only: :create
-  before_action :require_active_enterprise_account!, only: :create
+  layout 'enterprise', only: :index
+
+  before_action :authenticate_user!, only: %i[index create]
+  before_action :require_active_enterprise_account!, only: %i[index create]
+
+  def index
+    @enterprise_account = enterprise_account
+    @enterprise_reports = @enterprise_account.enterprise_reports.order(created_at: :desc).limit(5)
+  end
 
   def create
     enterprise_report = enterprise_account.enterprise_reports.build(
@@ -12,14 +19,14 @@ class Enterprise::ReportsController < ApplicationController
 
     if enterprise_report.save
       EnterpriseReportJob.perform_later(enterprise_report.id)
-      redirect_to enterprise_settings_path,
+      redirect_to enterprise_reports_path,
                   notice: 'Report requested. We will email you when it is ready to download.'
     else
-      redirect_to enterprise_settings_path,
+      redirect_to enterprise_reports_path,
                   alert: enterprise_report.errors.full_messages.join('<br>').html_safe
     end
   rescue ActionController::ParameterMissing, ArgumentError => e
-    redirect_to enterprise_settings_path, alert: e.message
+    redirect_to enterprise_reports_path, alert: e.message
   end
 
   def show

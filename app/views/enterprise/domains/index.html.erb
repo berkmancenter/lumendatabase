@@ -1,0 +1,85 @@
+<% title 'Enterprise domains', @enterprise_account.name %>
+<% content_for :enterprise_page_title, 'Domains' %>
+
+<div class="enterprise-page enterprise-settings-page">
+  <header class="enterprise-page-header enterprise-page-header-compact">
+    <div>
+      <span class="enterprise-eyebrow">Monitoring coverage</span>
+      <h1>Domains</h1>
+      <p>Only verified domains are included in enterprise notice searches and reports.</p>
+    </div>
+  </header>
+
+  <section class="enterprise-settings-section">
+    <article class="enterprise-card enterprise-add-domain-card">
+      <%= form_with(
+            model: EnterpriseDomain.new,
+            url: enterprise_domains_path,
+            local: true,
+            class: 'enterprise-inline-form'
+          ) do |form| %>
+        <div class="enterprise-form-field">
+          <%= form.label :domain, 'Add a domain' %>
+          <%= form.text_field :domain, placeholder: 'example.com' %>
+        </div>
+        <%= form.submit 'Add domain', class: 'enterprise-button enterprise-button-primary' %>
+      <% end %>
+    </article>
+
+    <% if @enterprise_domains.empty? %>
+      <article class="enterprise-card enterprise-empty-state enterprise-domains-empty">
+        <div class="enterprise-empty-icon">
+          <svg aria-hidden="true"><use href="#enterprise-icon-domains"></use></svg>
+        </div>
+        <h2>No domains yet</h2>
+        <p>Add the first domain you want Lumen Enterprise to monitor.</p>
+      </article>
+    <% else %>
+      <ol class="enterprise-domain-list">
+        <% @enterprise_domains.each do |enterprise_domain| %>
+          <li class="enterprise-card enterprise-domain-row">
+            <div class="enterprise-domain-row-header">
+              <span class="enterprise-domain-icon">
+                <svg aria-hidden="true"><use href="#enterprise-icon-domains"></use></svg>
+              </span>
+              <span class="enterprise-domain-name">
+                <strong><%= enterprise_domain.domain %></strong>
+              </span>
+              <span class="enterprise-status-badge enterprise-domain-badge <%= enterprise_domain.verified? ? 'is-success' : 'is-warning' %>">
+                <%= enterprise_domain.verified? ? 'Verified' : 'Pending' %>
+              </span>
+
+              <span class="enterprise-domain-row-actions">
+                <% unless enterprise_domain.verified? || @domain_auto_verification_enabled %>
+                  <%= button_to(
+                        'Verify now',
+                        verify_enterprise_domain_path(enterprise_domain),
+                        method: :post,
+                        class: 'enterprise-button enterprise-button-secondary enterprise-button-small'
+                      ) %>
+                <% end %>
+                <%= button_to(
+                      'Remove',
+                      enterprise_domain_path(enterprise_domain),
+                      method: :delete,
+                      class: 'enterprise-button enterprise-button-danger enterprise-button-small',
+                      data: { confirm: 'Remove this domain?' }
+                    ) %>
+              </span>
+            </div>
+
+            <% unless enterprise_domain.verified? || @domain_auto_verification_enabled %>
+              <div class="enterprise-verification-instructions">
+                <p>
+                  Create <code>/<%= enterprise_domain.verification_filename %></code>
+                  on this domain with this exact content:
+                </p>
+                <pre><%= enterprise_domain.verification_file_content %></pre>
+              </div>
+            <% end %>
+          </li>
+        <% end %>
+      </ol>
+    <% end %>
+  </section>
+</div>

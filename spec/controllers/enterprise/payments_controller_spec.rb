@@ -53,7 +53,7 @@ describe Enterprise::PaymentsController do
         post :create, params: { payment_method: 'credit_card' }
 
         expect(account.reload.plan).to eq('inactive')
-        expect(response).to redirect_to(enterprise_settings_path)
+        expect(response).to redirect_to(enterprise_account_path)
         expect(flash[:alert]).to eq('Stripe is not configured.')
       end
 
@@ -63,7 +63,7 @@ describe Enterprise::PaymentsController do
         post :create, params: { payment_method: 'credit_card' }
 
         expect(Lumen::Enterprise::PaymentProviders::Stripe).not_to have_received(:create_checkout_session)
-        expect(response).to redirect_to(enterprise_settings_path)
+        expect(response).to redirect_to(enterprise_account_path)
         expect(flash[:alert]).to match(/already have a card payment/)
       end
     end
@@ -76,7 +76,7 @@ describe Enterprise::PaymentsController do
         expect(account.plan).to eq('inactive')
         expect(account.payment_method).to eq('invoice')
         expect(Enterprise::RegistrationMailer).to have_received(:admin_payment).with(account, user)
-        expect(response).to redirect_to(enterprise_settings_path)
+        expect(response).to redirect_to(enterprise_account_path)
       end
 
       it 'requires a pending card payment to be canceled before changing methods' do
@@ -86,7 +86,7 @@ describe Enterprise::PaymentsController do
 
         expect(account.reload.payment_method).to be_nil
         expect(Enterprise::RegistrationMailer).not_to have_received(:admin_payment)
-        expect(response).to redirect_to(enterprise_settings_path)
+        expect(response).to redirect_to(enterprise_account_path)
         expect(flash[:alert]).to match(/Cancel your pending card payment/)
       end
     end
@@ -96,7 +96,7 @@ describe Enterprise::PaymentsController do
         post :create, params: {}
 
         expect(account.reload.plan).to eq('inactive')
-        expect(response).to redirect_to(enterprise_settings_path)
+        expect(response).to redirect_to(enterprise_account_path)
         expect(flash[:alert]).to be_present
       end
     end
@@ -120,7 +120,7 @@ describe Enterprise::PaymentsController do
       it 'sends the user to enterprise notices' do
         get :success
 
-        expect(response).to redirect_to(controller.enterprise_my_notices_path)
+        expect(response).to redirect_to(enterprise_root_path)
         expect(flash[:notice]).to match(/Payment received/)
       end
     end
@@ -129,7 +129,7 @@ describe Enterprise::PaymentsController do
       it 'sends the user to settings status' do
         get :success
 
-        expect(response).to redirect_to(enterprise_settings_path)
+        expect(response).to redirect_to(enterprise_account_path)
         expect(flash[:notice]).to match(/Stripe is confirming/)
       end
     end
@@ -145,7 +145,7 @@ describe Enterprise::PaymentsController do
     it 'returns the user to settings' do
       get :cancel
 
-      expect(response).to redirect_to(enterprise_settings_path)
+      expect(response).to redirect_to(enterprise_account_path)
       expect(flash[:notice]).to match(/canceled/)
     end
 
@@ -155,7 +155,7 @@ describe Enterprise::PaymentsController do
       get :cancel
 
       expect(Lumen::Enterprise::PaymentProviders::Stripe).to have_received(:cancel_payment).with(payment: payment)
-      expect(response).to redirect_to(enterprise_settings_path)
+      expect(response).to redirect_to(enterprise_account_path)
     end
   end
 
@@ -172,7 +172,7 @@ describe Enterprise::PaymentsController do
       post :cancel_pending
 
       expect(Lumen::Enterprise::PaymentProviders::Stripe).to have_received(:cancel_payment).with(payment: payment)
-      expect(response).to redirect_to(enterprise_settings_path)
+      expect(response).to redirect_to(enterprise_account_path)
       expect(flash[:notice]).to match(/start a new payment/)
     end
 
@@ -180,7 +180,7 @@ describe Enterprise::PaymentsController do
       post :cancel_pending
 
       expect(Lumen::Enterprise::PaymentProviders::Stripe).not_to have_received(:cancel_payment)
-      expect(response).to redirect_to(enterprise_settings_path)
+      expect(response).to redirect_to(enterprise_account_path)
       expect(flash[:alert]).to match(/no pending payment/)
     end
   end

@@ -15,10 +15,10 @@ describe 'shared/_navigation.html.erb' do
       enterprise_notices_search_index_path(sort_by: 'created_at desc'),
       'My notices'
     )
-    expect(rendered).to contain_link(enterprise_settings_path)
+    expect(rendered).to contain_link(enterprise_account_path)
     expect(rendered).to contain_link(destroy_user_session_path)
     expect(rendered).to have_css('.main-nav .nav-item:nth-child(1)', text: 'My notices')
-    expect(rendered).to have_css('.main-nav .nav-item:nth-child(2)', text: 'Settings')
+    expect(rendered).to have_css('.main-nav .nav-item:nth-child(2)', text: 'Account')
     expect(rendered).not_to include(Translation.t('navigation_header_search'))
     expect(rendered).not_to include(Translation.t('navigation_header_topics'))
     expect(rendered).not_to include(Translation.t('navigation_header_media_mentions'))
@@ -31,9 +31,9 @@ describe 'shared/_navigation.html.erb' do
     render
 
     expect(rendered).not_to have_css('.main-nav .nav-item', text: 'My notices')
-    expect(rendered).to contain_link(enterprise_settings_path)
+    expect(rendered).to contain_link(enterprise_account_path)
     expect(rendered).to contain_link(destroy_user_session_path)
-    expect(rendered).to have_css('.main-nav .nav-item:nth-child(1)', text: 'Settings')
+    expect(rendered).to have_css('.main-nav .nav-item:nth-child(1)', text: 'Account')
   end
 
   it 'has links to all topics' do

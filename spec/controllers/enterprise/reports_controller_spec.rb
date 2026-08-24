@@ -16,6 +16,20 @@ describe Enterprise::ReportsController do
     allow(controller).to receive(:current_user).and_return(user)
   end
 
+  describe '#index' do
+    it 'lists recent reports for the current enterprise account' do
+      older_report = create(:enterprise_report, enterprise_account: enterprise_account, created_at: 2.days.ago)
+      newer_report = create(:enterprise_report, enterprise_account: enterprise_account, created_at: 1.day.ago)
+      create(:enterprise_report)
+
+      get :index
+
+      expect(response).to be_successful
+      expect(assigns(:enterprise_account)).to eq(enterprise_account)
+      expect(assigns(:enterprise_reports)).to eq([newer_report, older_report])
+    end
+  end
+
   describe '#create' do
     before do
       allow(EnterpriseReportJob).to receive(:perform_later)
@@ -42,7 +56,7 @@ describe Enterprise::ReportsController do
       )
       expect(report).to be_pending
       expect(EnterpriseReportJob).to have_received(:perform_later).with(report.id)
-      expect(response).to redirect_to(enterprise_settings_path)
+      expect(response).to redirect_to(enterprise_reports_path)
     end
 
     it 'rejects an invalid period' do
@@ -56,7 +70,7 @@ describe Enterprise::ReportsController do
       end.not_to change(EnterpriseReport, :count)
 
       expect(EnterpriseReportJob).not_to have_received(:perform_later)
-      expect(response).to redirect_to(enterprise_settings_path)
+      expect(response).to redirect_to(enterprise_reports_path)
       expect(flash[:alert]).to eq('End date must be on or after start date.')
     end
 

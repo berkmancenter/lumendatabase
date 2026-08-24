@@ -1,25 +1,22 @@
-# Enterprise settings. Reachable once a user has confirmed their email, even
-# before they have paid: not-yet-Pro accounts see the "Get Pro" payment options,
-# Pro accounts see the full reports/domains settings.
+# Enterprise account and report-delivery settings. Account is reachable once a
+# user has confirmed their email; report delivery updates require Pro access.
 class Enterprise::SettingsController < Enterprise::ConfirmedBaseController
   def show
     @enterprise_account = enterprise_account
     @pending_payment = @enterprise_account.pending_payment
-    @enterprise_domains = @enterprise_account.enterprise_domains.order(:domain)
-    @domain_auto_verification_enabled = Lumen::Enterprise::DummyDataGenerator.enabled?
   end
 
   def update
     unless enterprise_account.pro?
-      return redirect_to enterprise_settings_path,
+      return redirect_to enterprise_account_path,
                          alert: 'Choose a Pro plan before changing these settings.'
     end
 
     if enterprise_account.update(settings_params)
-      redirect_to enterprise_settings_path, notice: 'Enterprise settings updated.'
+      redirect_to enterprise_reports_path, notice: 'Report settings updated.'
     else
       redirect_to(
-        enterprise_settings_path,
+        enterprise_reports_path,
         alert: enterprise_account.errors.full_messages.join('<br>').html_safe
       )
     end

@@ -46,41 +46,6 @@ describe Enterprise::SettingsController do
     end
   end
 
-  describe '#show' do
-    it 'lists domains for the current client' do
-      verified_domain = create(:enterprise_domain, enterprise_account: enterprise_account, domain: 'example.com')
-      pending_domain = create(:enterprise_domain, enterprise_account: enterprise_account, domain: 'pending.example', verified: false)
-
-      get :show
-
-      expect(response).to be_successful
-      expect(assigns(:enterprise_domains)).to eq([verified_domain, pending_domain])
-      expect(response.body).to include(pending_domain.verification_filename)
-      expect(response.body).to include(pending_domain.verification_file_content)
-      expect(response.body).to include('Verify now')
-    end
-
-    it 'hides manual verification when domain auto-verification is enabled' do
-      pending_domain = create(
-        :enterprise_domain,
-        enterprise_account: enterprise_account,
-        domain: 'pending.example',
-        verified: false
-      )
-      allow(LumenSetting).to receive(:get).and_call_original
-      allow(LumenSetting).to receive(:get)
-        .with(Lumen::Enterprise::DummyDataGenerator::SETTING_KEY, cache: false)
-        .and_return('1')
-
-      get :show
-
-      expect(response).to be_successful
-      expect(response.body).not_to include('Verify now')
-      expect(response.body).not_to include(pending_domain.verification_filename)
-      expect(response.body).not_to include(pending_domain.verification_file_content)
-    end
-  end
-
   describe '#update' do
     it 'updates report settings' do
       patch :update, params: {
@@ -94,7 +59,7 @@ describe Enterprise::SettingsController do
 
       expect(enterprise_account.report_frequency).to eq('weekly')
       expect(enterprise_account.report_recipient_email).to eq('reports@example.com')
-      expect(response).to redirect_to(enterprise_settings_path)
+      expect(response).to redirect_to(enterprise_reports_path)
     end
   end
 end

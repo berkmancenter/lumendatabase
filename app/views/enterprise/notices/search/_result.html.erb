@@ -1,0 +1,62 @@
+<%= content_tag_for(:li, result, class: 'result enterprise-result-card') do %>
+  <div class="enterprise-result-main">
+    <div class="enterprise-result-title-row">
+      <span class="enterprise-notice-type"><%= result.type == 'DMCA' ? 'DMCA' : result.type.to_s.underscore.humanize %></span>
+      <h2><%= link_to result.title, notice_path(result.id) %></h2>
+    </div>
+
+    <div class="enterprise-result-parties">
+      <span>
+        <small>Sender</small>
+        <% if result.sender_name.present? %>
+          <%= link_to result.sender_name,
+                      enterprise_notices_search_index_path(sender_name: result.sender_name, sort_by: params[:sort_by]) %>
+        <% elsif result.principal_name.present? %>
+          <%= link_to result.principal_name,
+                      enterprise_notices_search_index_path(principal_name: result.principal_name, sort_by: params[:sort_by]) %>
+        <% else %>
+          <strong>Unknown</strong>
+        <% end %>
+      </span>
+      <svg aria-hidden="true"><use href="#enterprise-icon-arrow"></use></svg>
+      <span>
+        <small>Recipient</small>
+        <% if result.recipient_name.present? %>
+          <%= link_to result.recipient_name,
+                      enterprise_notices_search_index_path(recipient_name: result.recipient_name, sort_by: params[:sort_by]) %>
+        <% else %>
+          <strong>Unknown</strong>
+        <% end %>
+      </span>
+    </div>
+
+    <% if result.highlight.any? %>
+      <ol class="enterprise-result-excerpts">
+        <% result.highlight.first(2).each do |highlight_elem| %>
+          <li><%= sanitize(search_result_highlight_text(highlight_elem, result), tags: ['em']) %></li>
+        <% end %>
+      </ol>
+    <% end %>
+
+    <% if result.topics.any? %>
+      <div class="enterprise-result-topics">
+        <%= render 'shared/topic_list', topics: result.topics %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="enterprise-result-meta">
+    <span>
+      <small>Date received</small>
+      <strong><%= date_received(result) %></strong>
+    </span>
+    <span>
+      <small>Reported to Lumen</small>
+      <strong><%= date_submitted(result) %></strong>
+    </span>
+    <%= link_to notice_path(result.id), class: 'enterprise-result-open', aria: { label: "Open #{result.title}" } do %>
+      View notice
+      <svg aria-hidden="true"><use href="#enterprise-icon-arrow"></use></svg>
+    <% end %>
+  </div>
+<% end %>

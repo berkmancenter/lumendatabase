@@ -58,11 +58,11 @@ class ApplicationController < ActionController::Base
 
   def after_sign_in_path_for(resource)
     return super unless resource.respond_to?(:enterprise?) && resource.enterprise?
-    return enterprise_my_notices_path if resource.active_enterprise_account
+    return enterprise_root_path if resource.active_enterprise_account
 
-    # A confirmed-but-unpaid enterprise user lands on settings, where they can
+    # A confirmed-but-unpaid enterprise user lands on Account, where they can
     # choose a Pro plan and see payment status.
-    return enterprise_settings_path if resource.confirmed_enterprise_user?
+    return enterprise_account_path if resource.confirmed_enterprise_user?
 
     root_path
   end

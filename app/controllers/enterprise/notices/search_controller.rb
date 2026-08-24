@@ -1,4 +1,6 @@
 class Enterprise::Notices::SearchController < Notices::SearchController
+  layout 'enterprise'
+
   before_action :authenticate_user!
   before_action :require_enterprise_account!
 

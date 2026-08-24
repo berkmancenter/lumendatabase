@@ -79,6 +79,23 @@ module ApplicationHelper
       current_user&.active_enterprise_account.present?
   end
 
+  def enterprise_nav_active?(section)
+    case section.to_sym
+    when :overview
+      controller_path == 'enterprise/dashboard'
+    when :notices
+      controller_path == 'enterprise/notices/search' || enterprise_notice_view?
+    when :reports
+      controller_path == 'enterprise/reports' && action_name == 'index'
+    when :domains
+      controller_path == 'enterprise/domains' && action_name == 'index'
+    when :account
+      controller_path == 'enterprise/settings'
+    else
+      false
+    end
+  end
+
   def footer_links
     ids = Comfy::Cms::Fragment.where(identifier: 'link_in_footer', boolean: true)
                               .pluck(:record_id)

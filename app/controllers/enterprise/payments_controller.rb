@@ -1,19 +1,19 @@
-# Lets a confirmed enterprise user choose and pay for a Pro plan from settings.
+# Lets a confirmed enterprise user choose and pay for a Pro plan from Account.
 class Enterprise::PaymentsController < Enterprise::ConfirmedBaseController
   def create
     result = payment_method_strategy(params[:payment_method]).start
 
     redirect_from(result)
   rescue Lumen::Enterprise::PaymentMethods::UnsupportedPaymentMethod => e
-    redirect_to enterprise_settings_path, alert: e.message
+    redirect_to enterprise_account_path, alert: e.message
   end
 
   def success
     if enterprise_account.pro?
-      redirect_to enterprise_my_notices_path,
+      redirect_to enterprise_root_path,
                   notice: 'Payment received. Your Pro access is ready.'
     else
-      redirect_to enterprise_settings_path,
+      redirect_to enterprise_account_path,
                   notice: 'Thanks - Stripe is confirming your card payment. ' \
                           'Your Pro access will unlock automatically.'
     end
@@ -24,26 +24,26 @@ class Enterprise::PaymentsController < Enterprise::ConfirmedBaseController
 
     cancel_payment(payment) if payment
 
-    redirect_to enterprise_settings_path,
+    redirect_to enterprise_account_path,
                 notice: 'Your pending payment was canceled. You can try again whenever you are ready.'
   rescue Lumen::Enterprise::PaymentMethods::Error => e
-    redirect_to enterprise_settings_path, alert: e.message
+    redirect_to enterprise_account_path, alert: e.message
   end
 
   def cancel_pending
     payment = enterprise_account.pending_payment
 
     if payment.blank?
-      return redirect_to enterprise_settings_path,
+      return redirect_to enterprise_account_path,
                          alert: 'There is no pending payment to cancel.'
     end
 
     cancel_payment(payment)
 
-    redirect_to enterprise_settings_path,
+    redirect_to enterprise_account_path,
                 notice: 'Your pending card payment was canceled. You can start a new payment now.'
   rescue Lumen::Enterprise::PaymentMethods::Error => e
-    redirect_to enterprise_settings_path, alert: e.message
+    redirect_to enterprise_account_path, alert: e.message
   end
 
   private
@@ -78,8 +78,8 @@ class Enterprise::PaymentsController < Enterprise::ConfirmedBaseController
     {
       success_url: "#{enterprise_payment_success_url}?session_id={CHECKOUT_SESSION_ID}",
       cancel_url: enterprise_payment_cancel_url,
-      settings_path: enterprise_settings_path,
-      status_path: enterprise_settings_path
+      settings_path: enterprise_account_path,
+      status_path: enterprise_account_path
     }
   end
 end

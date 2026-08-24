@@ -9,6 +9,20 @@ describe Enterprise::DomainsController do
     allow(controller).to receive(:current_user).and_return(user)
   end
 
+  describe '#index' do
+    it 'lists domains for the current enterprise account' do
+      verified_domain = create(:enterprise_domain, enterprise_account: enterprise_account, domain: 'example.com')
+      pending_domain = create(:enterprise_domain, enterprise_account: enterprise_account, domain: 'pending.example', verified: false)
+      create(:enterprise_domain)
+
+      get :index
+
+      expect(response).to be_successful
+      expect(assigns(:enterprise_account)).to eq(enterprise_account)
+      expect(assigns(:enterprise_domains)).to eq([verified_domain, pending_domain])
+    end
+  end
+
   describe '#create' do
     it 'adds an unverified domain for the current client' do
       post :create, params: { enterprise_domain: { domain: 'https://Example.com/path' } }
@@ -19,7 +33,7 @@ describe Enterprise::DomainsController do
       expect(enterprise_domain).not_to be_verified
       expect(enterprise_domain.verification_token).to be_present
       expect(enterprise_domain.verification_filename).to start_with('lumen-domain-verification-')
-      expect(response).to redirect_to(enterprise_settings_path)
+      expect(response).to redirect_to(enterprise_domains_path)
     end
 
     it 'auto-verifies and seeds a settings domain when registration dummy data is enabled' do
@@ -44,7 +58,7 @@ describe Enterprise::DomainsController do
       expect(enterprise_domain.verified_at).to be_present
       expect(DMCA.where(source: Lumen::Enterprise::DummyDataGenerator::SOURCE).count).to eq(1)
       expect(flash[:notice]).to eq('Domain added and auto-verified with dummy data.')
-      expect(response).to redirect_to(enterprise_settings_path)
+      expect(response).to redirect_to(enterprise_domains_path)
     end
   end
 
@@ -62,7 +76,7 @@ describe Enterprise::DomainsController do
 
       expect(enterprise_domain.reload).to be_verified
       expect(enterprise_domain.verified_at).to be_present
-      expect(response).to redirect_to(enterprise_settings_path)
+      expect(response).to redirect_to(enterprise_domains_path)
     end
 
     it 'keeps a domain pending when the verification file is missing' do
@@ -75,7 +89,7 @@ describe Enterprise::DomainsController do
 
       expect(enterprise_domain.reload).not_to be_verified
       expect(enterprise_domain.verified_at).to be_nil
-      expect(response).to redirect_to(enterprise_settings_path)
+      expect(response).to redirect_to(enterprise_domains_path)
     end
   end
 
@@ -86,7 +100,7 @@ describe Enterprise::DomainsController do
       delete :destroy, params: { id: enterprise_domain.id }
 
       expect(enterprise_account.enterprise_domains).to be_empty
-      expect(response).to redirect_to(enterprise_settings_path)
+      expect(response).to redirect_to(enterprise_domains_path)
     end
   end
 end

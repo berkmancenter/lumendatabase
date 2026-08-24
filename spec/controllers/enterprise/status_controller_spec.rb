@@ -14,7 +14,7 @@ describe Enterprise::StatusController do
       it 'redirects to settings' do
         get :show
 
-        expect(response).to redirect_to(enterprise_settings_path)
+        expect(response).to redirect_to(enterprise_account_path)
       end
     end
 
@@ -25,9 +25,7 @@ describe Enterprise::StatusController do
       it 'redirects to enterprise notices' do
         get :show
 
-        expect(response).to redirect_to(
-          enterprise_notices_search_index_path(sort_by: 'created_at desc')
-        )
+        expect(response).to redirect_to(enterprise_root_path)
       end
     end
 

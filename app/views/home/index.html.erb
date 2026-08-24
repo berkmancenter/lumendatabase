@@ -1,9 +1,6 @@
 <section class="home-search-form">
   <h1>
     <%= image_tag("logo_2x.png", :size=> "340x82") %>
-    <% if current_user&.active_enterprise_account.present? %>
-      <%= link_to 'Enterprise', enterprise_my_notices_path, class: 'enterprise-version-indicator' %>
-    <% end %>
   </h1>
   <%= render 'shared/search' %>
   <div class="more-info">

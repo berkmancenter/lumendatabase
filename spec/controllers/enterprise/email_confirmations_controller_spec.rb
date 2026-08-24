@@ -41,7 +41,7 @@ describe Enterprise::EmailConfirmationsController do
       expect(user.enterprise_email_confirmation_token).to be_nil
       expect(user.valid_password?('newsecret123')).to be true
       expect(controller.current_user).to eq(user)
-      expect(response).to redirect_to(enterprise_settings_path)
+      expect(response).to redirect_to(enterprise_account_path)
     end
 
     it 're-renders the form when the passwords do not match' do

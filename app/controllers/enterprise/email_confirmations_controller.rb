@@ -16,7 +16,7 @@ class Enterprise::EmailConfirmationsController < ApplicationController
 
       sign_in(@user)
 
-      redirect_to enterprise_settings_path,
+      redirect_to enterprise_account_path,
                   notice: 'Your email is confirmed. Choose a Pro plan to get started.'
     else
       render :show

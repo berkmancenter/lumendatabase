@@ -3,6 +3,8 @@
 # Enterprise::BaseController instead, which additionally requires an active
 # (Pro) account.
 class Enterprise::ConfirmedBaseController < ApplicationController
+  layout 'enterprise'
+
   before_action :authenticate_user!
   before_action :require_confirmed_enterprise_user!
 

@@ -1,197 +1,121 @@
-<% title 'Enterprise settings', @enterprise_account.name %>
+<% title 'Enterprise account', @enterprise_account.name %>
+<% content_for :enterprise_page_title, 'Account' %>
 
-<div class="inner-padding">
-  <h2>Enterprise data</h2>
-  <dl class="enterprise-account-details">
-    <dt>Company name</dt>
-    <dd><%= @enterprise_account.name %></dd>
+<div class="enterprise-page enterprise-settings-page">
+  <header class="enterprise-page-header enterprise-page-header-compact">
+    <div>
+      <span class="enterprise-eyebrow">Workspace management</span>
+      <h1>Account</h1>
+      <p>Review your organization details, plan, and payment status.</p>
+    </div>
+  </header>
 
-    <dt>Email</dt>
-    <dd><%= @enterprise_account.applicant_email.presence || current_user.email %></dd>
+  <section id="account" class="enterprise-settings-section">
+    <header class="enterprise-section-heading">
+      <div>
+        <span class="enterprise-card-kicker">Organization</span>
+        <h2>Enterprise account</h2>
+      </div>
+    </header>
 
-    <dt>Company contact information</dt>
-    <dd><%= simple_format(@enterprise_account.company_contact_information.presence || 'Not provided') %></dd>
+    <div class="enterprise-settings-grid">
+      <article class="enterprise-card enterprise-settings-card">
+        <header class="enterprise-card-header">
+          <h3>Enterprise data</h3>
+        </header>
+        <dl class="enterprise-account-details enterprise-detail-list">
+          <div>
+            <dt>Company name</dt>
+            <dd><%= @enterprise_account.name %></dd>
+          </div>
+          <div>
+            <dt>Email</dt>
+            <dd><%= @enterprise_account.applicant_email.presence || current_user.email %></dd>
+          </div>
+          <div>
+            <dt>Company contact information</dt>
+            <dd><%= simple_format(@enterprise_account.company_contact_information.presence || 'Not provided') %></dd>
+          </div>
+          <div>
+            <dt>Representative contact information</dt>
+            <dd><%= simple_format(@enterprise_account.representative_contact_information.presence || 'Not provided') %></dd>
+          </div>
+        </dl>
+      </article>
 
-    <dt>Representative contact information</dt>
-    <dd><%= simple_format(@enterprise_account.representative_contact_information.presence || 'Not provided') %></dd>
-  </dl>
+      <article class="enterprise-card enterprise-settings-card enterprise-plan-card">
+        <header class="enterprise-card-header">
+          <h3>Plan</h3>
+          <span class="enterprise-status-badge <%= @enterprise_account.pro? ? 'is-success' : 'is-neutral' %>">
+            <%= @enterprise_account.plan.titleize %>
+          </span>
+        </header>
 
-  <h2>Plan</h2>
-  <p class="enterprise-plan">
-    Your plan: <strong><%= @enterprise_account.plan.titleize %></strong>
-  </p>
-
-  <% if @enterprise_account.pro? %>
-    <p class="enterprise-plan-payment-method">
-      Payment method: <strong><%= @enterprise_account.payment_method_label %></strong>
-    </p>
-    <% if @enterprise_account.paid_until.present? %>
-      <p class="enterprise-plan-active-until">
-        Your Pro access is active until
-        <strong><%= @enterprise_account.paid_until.to_fs(:simple) %></strong>.
-      </p>
-    <% else %>
-      <p class="enterprise-plan-active-until">Your Pro access is active.</p>
-    <% end %>
-  <% else %>
-    <% status_visible = @enterprise_account.payment_method.present? ||
-                        @pending_payment.present? ||
-                        @enterprise_account.paid_until.present? %>
-    <% payment_selectable = @pending_payment.blank? &&
-                            @enterprise_account.payment_method != 'invoice' %>
-
-    <% if status_visible %>
-      <%= render(
-            'enterprise/settings/account_status',
-            enterprise_account: @enterprise_account,
-            pending_payment: @pending_payment
-          ) %>
-    <% end %>
-
-    <% if payment_selectable %>
-      <section class="enterprise-get-pro">
-        <p>
-          Your email is confirmed. Choose how to pay to unlock Lumen Enterprise Pro
-          - <strong><%= enterprise_pro_price %></strong> per month.
+        <p class="enterprise-plan">
+          Your plan: <strong><%= @enterprise_account.plan.titleize %></strong>
         </p>
 
-        <%= form_with url: enterprise_pay_path, method: :post, local: true do |form| %>
-          <% EnterpriseAccount::PAYMENT_METHOD_OPTIONS.each do |label, value| %>
-            <p>
-              <label>
-                <%= form.radio_button :payment_method, value, required: true %>
-                <%= label %>
-              </label>
-            </p>
-          <% end %>
-          <p class="form-text">
-            Pay by credit card through Stripe to unlock Pro as soon as payment is
-            confirmed, or choose to be invoiced and we'll follow up - your Pro
-            access unlocks once the invoice is paid.
-          </p>
-          <p><%= form.submit 'Get Pro' %></p>
-        <% end %>
-      </section>
-    <% end %>
-  <% end %>
-
-  <% if @enterprise_account.pro? %>
-    <h2>Reports</h2>
-    <p>
-      Scheduled reports are emailed automatically based on the status below.
-    </p>
-    <% report_delivery_off = @enterprise_account.report_frequency == 'none' %>
-    <%= form_with(
-          model: @enterprise_account,
-          url: enterprise_settings_path,
-          method: :patch,
-          local: true
-        ) do |form| %>
-      <p>
-        <%= form.label :report_frequency, 'Status' %>
-        <%= form.select :report_frequency, EnterpriseAccount::REPORT_FREQUENCY_OPTIONS %>
-      </p>
-
-      <p id="enterprise-report-recipient" <%= 'hidden' if report_delivery_off %>>
-        <%= form.label :report_recipient_email, 'Delivery email' %>
-        <%= form.email_field(
-              :report_recipient_email,
-              placeholder: current_user.email,
-              disabled: report_delivery_off
-            ) %>
-      </p>
-
-      <p><%= form.submit 'Save report settings' %></p>
-    <% end %>
-
-    <h3>Request report</h3>
-    <p>
-      Choose a date range. We'll generate the report in the background and
-      email you a secure download link when it's ready.
-    </p>
-    <%= form_with url: enterprise_reports_path, method: :post, local: true do |form| %>
-      <p>
-        <%= label_tag 'enterprise_report_starts_on', 'Start date' %>
-        <%= date_field_tag(
-              'enterprise_report[starts_on]',
-              1.week.ago.to_date,
-              id: 'enterprise_report_starts_on',
-              required: true
-            ) %>
-      </p>
-
-      <p>
-        <%= label_tag 'enterprise_report_ends_on', 'End date' %>
-        <%= date_field_tag(
-              'enterprise_report[ends_on]',
-              Time.zone.today,
-              id: 'enterprise_report_ends_on',
-              required: true
-            ) %>
-      </p>
-
-      <p><%= form.submit 'Request report' %></p>
-    <% end %>
-
-    <h2>Domains</h2>
-    <%= form_with(
-          model: EnterpriseDomain.new,
-          url: enterprise_domains_path,
-          local: true
-        ) do |form| %>
-      <p>
-        <%= form.label :domain, 'Add domain' %>
-        <%= form.text_field :domain, placeholder: 'example.com' %>
-      </p>
-
-      <p><%= form.submit 'Add domain' %></p>
-    <% end %>
-
-    <h2>Domains list</h2>
-    <% if @enterprise_domains.empty? %>
-      <p class="enterprise-domains-empty">Nothing here yet.</p>
-    <% else %>
-      <ol>
-        <% @enterprise_domains.each do |enterprise_domain| %>
-          <li class="enterprise-domain-row">
-            <div class="enterprise-domain-row-header">
-              <span>
-                <strong><%= enterprise_domain.domain %></strong>
-                <% if enterprise_domain.verified? %>
-                  <span class="lumen-badge enterprise-domain-badge">Verified</span>
-                <% end %>
-              </span>
-
-              <span class="enterprise-domain-row-actions">
-                <% unless enterprise_domain.verified? || @domain_auto_verification_enabled %>
-                  <%= button_to(
-                        'Verify now',
-                        verify_enterprise_domain_path(enterprise_domain),
-                        method: :post,
-                        class: 'small-button'
-                      ) %>
-                <% end %>
-                <%= button_to(
-                      'Remove',
-                      enterprise_domain_path(enterprise_domain),
-                      method: :delete,
-                      class: 'small-button',
-                      data: { confirm: 'Remove this domain?' }
-                    ) %>
-              </span>
+        <% if @enterprise_account.pro? %>
+          <dl class="enterprise-plan-details">
+            <div>
+              <dt>Payment method</dt>
+              <dd class="enterprise-plan-payment-method"><%= @enterprise_account.payment_method_label.presence || 'Not recorded' %></dd>
             </div>
+            <div>
+              <dt>Access</dt>
+              <dd class="enterprise-plan-active-until">
+                <% if @enterprise_account.paid_until.present? %>
+                  Your Pro access is active until <%= @enterprise_account.paid_until.to_fs(:simple) %>
+                <% else %>
+                  Your Pro access is active
+                <% end %>
+              </dd>
+            </div>
+          </dl>
+        <% else %>
+          <% status_visible = @enterprise_account.payment_method.present? ||
+                              @pending_payment.present? ||
+                              @enterprise_account.paid_until.present? %>
+          <% payment_selectable = @pending_payment.blank? &&
+                                  @enterprise_account.payment_method != 'invoice' %>
 
-            <% unless enterprise_domain.verified? || @domain_auto_verification_enabled %>
+          <% if status_visible %>
+            <%= render(
+                  'enterprise/settings/account_status',
+                  enterprise_account: @enterprise_account,
+                  pending_payment: @pending_payment
+                ) %>
+          <% end %>
+
+          <% if payment_selectable %>
+            <section class="enterprise-get-pro">
+              <h4>Upgrade to Enterprise Pro</h4>
               <p>
-                Create
-                <code>/<%= enterprise_domain.verification_filename %></code>
-                on this domain with this exact content:
+                Unlock domain monitoring, full matching URLs, API access, and reports for
+                <strong><%= enterprise_pro_price %> per month</strong>.
               </p>
-              <pre><%= enterprise_domain.verification_file_content %></pre>
-            <% end %>
-          </li>
+
+              <%= form_with url: enterprise_pay_path, method: :post, local: true do |form| %>
+                <div class="enterprise-payment-options">
+                  <% EnterpriseAccount::PAYMENT_METHOD_OPTIONS.each do |label, value| %>
+                    <label class="enterprise-radio-card">
+                      <%= form.radio_button :payment_method, value, required: true %>
+                      <span>
+                        <strong><%= label %></strong>
+                        <small><%= value == 'credit_card' ? 'Activate through Stripe' : 'We will follow up by email' %></small>
+                      </span>
+                    </label>
+                  <% end %>
+                </div>
+                <p class="form-text">
+                  Card access activates after payment confirmation. Invoice access activates once the invoice is paid.
+                </p>
+                <%= form.submit 'Get Pro', class: 'enterprise-button enterprise-button-primary' %>
+              <% end %>
+            </section>
+          <% end %>
         <% end %>
-      </ol>
-    <% end %>
-  <% end %>
+      </article>
+    </div>
+  </section>
 </div>

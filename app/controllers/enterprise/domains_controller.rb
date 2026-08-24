@@ -1,4 +1,10 @@
 class Enterprise::DomainsController < Enterprise::BaseController
+  def index
+    @enterprise_account = enterprise_account
+    @enterprise_domains = @enterprise_account.enterprise_domains.order(:domain)
+    @domain_auto_verification_enabled = Lumen::Enterprise::DummyDataGenerator.enabled?
+  end
+
   def create
     enterprise_domain = enterprise_account.enterprise_domains.build(enterprise_domain_params)
 
@@ -13,10 +19,10 @@ class Enterprise::DomainsController < Enterprise::BaseController
         notice = 'Domain added. Add the verification file to verify ownership.'
       end
 
-      redirect_to enterprise_settings_path, notice: notice
+      redirect_to enterprise_domains_path, notice: notice
     else
       redirect_to(
-        enterprise_settings_path,
+        enterprise_domains_path,
         alert: enterprise_domain.errors.full_messages.join('<br>').html_safe
       )
     end
@@ -26,10 +32,10 @@ class Enterprise::DomainsController < Enterprise::BaseController
     enterprise_domain = find_enterprise_domain
 
     if enterprise_domain.verify!
-      redirect_to enterprise_settings_path, notice: "#{enterprise_domain.domain} verified."
+      redirect_to enterprise_domains_path, notice: "#{enterprise_domain.domain} verified."
     else
       redirect_to(
-        enterprise_settings_path,
+        enterprise_domains_path,
         alert: "We could not verify #{enterprise_domain.domain}. Check the file and try again."
       )
     end
@@ -38,7 +44,7 @@ class Enterprise::DomainsController < Enterprise::BaseController
   def destroy
     find_enterprise_domain.destroy!
 
-    redirect_to enterprise_settings_path, notice: 'Domain removed.'
+    redirect_to enterprise_domains_path, notice: 'Domain removed.'
   end
 
   private

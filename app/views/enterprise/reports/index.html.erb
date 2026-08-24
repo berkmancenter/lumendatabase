@@ -1,0 +1,132 @@
+<% title 'Enterprise reports', @enterprise_account.name %>
+<% content_for :enterprise_page_title, 'Reports' %>
+
+<div class="enterprise-page enterprise-settings-page">
+  <header class="enterprise-page-header enterprise-page-header-compact">
+    <div>
+      <span class="enterprise-eyebrow">Delivery and exports</span>
+      <h1>Reports</h1>
+      <p>Schedule recurring email summaries or request a JSON export for a date range.</p>
+    </div>
+  </header>
+
+  <section class="enterprise-settings-section">
+    <div class="enterprise-settings-grid">
+      <article class="enterprise-card enterprise-settings-card">
+        <header class="enterprise-card-header">
+          <h2>Scheduled delivery</h2>
+          <span class="enterprise-status-badge <%= @enterprise_account.report_frequency == 'none' ? 'is-neutral' : 'is-success' %>">
+            <%= @enterprise_account.report_frequency == 'none' ? 'Off' : @enterprise_account.report_frequency.titleize %>
+          </span>
+        </header>
+        <p>Receive notices matching your verified domains automatically.</p>
+
+        <% report_delivery_off = @enterprise_account.report_frequency == 'none' %>
+        <%= form_with(
+              model: @enterprise_account,
+              url: enterprise_settings_path,
+              method: :patch,
+              local: true,
+              class: 'enterprise-form'
+            ) do |form| %>
+          <div class="enterprise-form-field">
+            <%= form.label :report_frequency, 'Frequency' %>
+            <%= form.select :report_frequency, EnterpriseAccount::REPORT_FREQUENCY_OPTIONS %>
+          </div>
+
+          <div id="enterprise-report-recipient" class="enterprise-form-field" <%= 'hidden' if report_delivery_off %>>
+            <%= form.label :report_recipient_email, 'Delivery email' %>
+            <%= form.email_field(
+                  :report_recipient_email,
+                  placeholder: current_user.email,
+                  disabled: report_delivery_off
+                ) %>
+          </div>
+
+          <%= form.submit 'Save report settings', class: 'enterprise-button enterprise-button-primary' %>
+        <% end %>
+      </article>
+
+      <article id="request-report" class="enterprise-card enterprise-settings-card">
+        <header class="enterprise-card-header">
+          <h2>Request a report</h2>
+        </header>
+        <p>We will generate the report in the background and email a secure download link.</p>
+
+        <%= form_with url: enterprise_reports_path, method: :post, local: true, class: 'enterprise-form' do |form| %>
+          <div class="enterprise-date-fields">
+            <div class="enterprise-form-field">
+              <%= label_tag 'enterprise_report_starts_on', 'Start date' %>
+              <%= date_field_tag(
+                    'enterprise_report[starts_on]',
+                    1.week.ago.to_date,
+                    id: 'enterprise_report_starts_on',
+                    required: true
+                  ) %>
+            </div>
+
+            <div class="enterprise-form-field">
+              <%= label_tag 'enterprise_report_ends_on', 'End date' %>
+              <%= date_field_tag(
+                    'enterprise_report[ends_on]',
+                    Time.zone.today,
+                    id: 'enterprise_report_ends_on',
+                    required: true
+                  ) %>
+            </div>
+          </div>
+
+          <%= form.submit 'Request report', class: 'enterprise-button enterprise-button-secondary' %>
+        <% end %>
+      </article>
+    </div>
+
+    <% if @enterprise_reports.any? %>
+      <article class="enterprise-card enterprise-settings-card enterprise-report-history">
+        <header class="enterprise-card-header">
+          <h2>Recent requests</h2>
+        </header>
+        <div class="enterprise-table-wrap">
+          <table class="enterprise-table">
+            <thead>
+              <tr>
+                <th>Date range</th>
+                <th>Requested</th>
+                <th>Status</th>
+                <th><span class="visually-hidden">Download</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @enterprise_reports.each do |report| %>
+                <tr>
+                  <td data-label="Date range"><%= report.starts_at.to_fs(:simple) %> – <%= report.ends_at.to_fs(:simple) %></td>
+                  <td data-label="Requested"><%= time_ago_in_words(report.created_at) %> ago</td>
+                  <td data-label="Status">
+                    <span class="enterprise-status-badge is-<%= report.status == 'ready' ? 'success' : (report.status == 'failed' ? 'danger' : 'neutral') %>">
+                      <%= report.status.titleize %>
+                    </span>
+                  </td>
+                  <td class="enterprise-table-action">
+                    <% if report.downloadable? %>
+                      <%= link_to enterprise_report_path(report.download_token), aria: { label: 'Download report' } do %>
+                        <svg aria-hidden="true"><use href="#enterprise-icon-download"></use></svg>
+                      <% end %>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </article>
+    <% else %>
+      <article class="enterprise-card enterprise-empty-state enterprise-report-history">
+        <div class="enterprise-empty-icon">
+          <svg aria-hidden="true"><use href="#enterprise-icon-reports"></use></svg>
+        </div>
+        <h2>No report requests yet</h2>
+        <p>Your generated reports will appear here.</p>
+      </article>
+    <% end %>
+  </section>
+</div>

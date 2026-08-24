@@ -62,8 +62,13 @@ class NoticesController < ApplicationController
     @searchable_fields = Notice::SEARCHABLE_FIELDS
     @filterable_fields = Notice::FILTERABLE_FIELDS
     @ordering_options = Notice::ORDERING_OPTIONS
-    @search_all_placeholder = 'Search all notices...'
-    @search_index_path = notices_search_index_path
+    if current_user&.active_enterprise_account.present?
+      @search_all_placeholder = 'Search your domain notices...'
+      @search_index_path = enterprise_notices_search_index_path
+    else
+      @search_all_placeholder = 'Search all notices...'
+      @search_index_path = notices_search_index_path
+    end
 
     respond_to do |format|
       format.html do
@@ -234,7 +239,7 @@ class NoticesController < ApplicationController
   def resolve_layout
     case action_name
     when 'show'
-      'search'
+      current_user&.active_enterprise_account.present? ? 'enterprise' : 'search'
     when 'url_input'
       false
     else

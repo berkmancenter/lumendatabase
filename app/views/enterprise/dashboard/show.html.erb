@@ -1,0 +1,249 @@
+<% title 'Enterprise overview', @enterprise_account.name %>
+<% content_for :enterprise_page_title, 'Overview' %>
+
+<div class="enterprise-page enterprise-dashboard">
+  <header class="enterprise-page-header">
+    <div>
+      <span class="enterprise-eyebrow">Workspace overview</span>
+      <h1>Monitor your domains at a glance</h1>
+      <p>Notice activity for your verified domains, updated from the Lumen database.</p>
+    </div>
+    <%= link_to enterprise_my_notices_path, class: 'enterprise-button enterprise-button-primary' do %>
+      <svg aria-hidden="true"><use href="#enterprise-icon-search"></use></svg>
+      Search notices
+    <% end %>
+  </header>
+
+  <% if @enterprise_domains.none?(&:verified?) %>
+    <section class="enterprise-setup-banner">
+      <div class="enterprise-setup-icon">
+        <svg aria-hidden="true"><use href="#enterprise-icon-domains"></use></svg>
+      </div>
+      <div>
+        <strong>Add and verify a domain to start monitoring</strong>
+        <p>Your dashboard will show matching notices as soon as a domain is verified.</p>
+      </div>
+      <%= link_to 'Set up domains', enterprise_domains_path, class: 'enterprise-button enterprise-button-secondary' %>
+    </section>
+  <% end %>
+
+  <section class="enterprise-metric-grid" aria-label="Thirty-day summary">
+    <article class="enterprise-card enterprise-metric-card">
+      <div class="enterprise-metric-heading">
+        <span>Notices</span>
+        <small>Last 30 days</small>
+      </div>
+      <strong class="enterprise-metric-value"><%= number_with_delimiter(@dashboard.total_notices) %></strong>
+      <p>Matching your verified domains</p>
+    </article>
+
+    <article class="enterprise-card enterprise-metric-card">
+      <div class="enterprise-metric-heading">
+        <span>Recent activity</span>
+        <small>Last 7 days</small>
+      </div>
+      <strong class="enterprise-metric-value"><%= number_with_delimiter(@dashboard.notices_last_seven_days) %></strong>
+      <p>New notices reported to Lumen</p>
+    </article>
+
+    <article class="enterprise-card enterprise-metric-card">
+      <div class="enterprise-metric-heading">
+        <span>Domains</span>
+        <small>Monitored</small>
+      </div>
+      <strong class="enterprise-metric-value"><%= @enterprise_domains.count(&:verified?) %></strong>
+      <p>
+        <% pending_domains = @enterprise_domains.reject(&:verified?).size %>
+        <%= pending_domains.zero? ? 'All domains verified' : "#{pending_domains} awaiting verification" %>
+      </p>
+    </article>
+
+    <article class="enterprise-card enterprise-metric-card">
+      <div class="enterprise-metric-heading">
+        <span>Scheduled reports</span>
+        <small>Delivery</small>
+      </div>
+      <strong class="enterprise-metric-value enterprise-metric-value-text">
+        <%= @enterprise_account.report_frequency == 'none' ? 'Off' : @enterprise_account.report_frequency.titleize %>
+      </strong>
+      <p>
+        <%= @enterprise_account.report_frequency == 'none' ? 'Automatic delivery is disabled' : "Sent to #{@enterprise_account.report_recipient}" %>
+      </p>
+    </article>
+  </section>
+
+  <section class="enterprise-dashboard-grid">
+    <article class="enterprise-card enterprise-chart-card">
+      <header class="enterprise-card-header">
+        <div>
+          <span class="enterprise-card-kicker">Notice volume</span>
+          <h2>Activity over time</h2>
+        </div>
+        <span class="enterprise-period-chip">30 days</span>
+      </header>
+      <div class="enterprise-chart-wrap">
+        <canvas
+          id="enterprise-activity-chart"
+          data-labels="<%= @dashboard.daily_activity.keys.map { |date| date.strftime('%b %-d') }.to_json %>"
+          data-values="<%= @dashboard.daily_activity.values.to_json %>"
+          aria-label="Notices matching your domains during the last 30 days"
+          role="img"
+        ></canvas>
+      </div>
+    </article>
+
+    <article class="enterprise-card enterprise-breakdown-card">
+      <header class="enterprise-card-header">
+        <div>
+          <span class="enterprise-card-kicker">Breakdown</span>
+          <h2>Notice types</h2>
+        </div>
+      </header>
+
+      <% if @dashboard.notice_types.any? %>
+        <ol class="enterprise-breakdown-list">
+          <% largest_type_count = @dashboard.notice_types.values.max.to_f %>
+          <% @dashboard.notice_types.each do |type, count| %>
+            <li>
+              <div class="enterprise-breakdown-label">
+                <span><%= type %></span>
+                <strong><%= number_with_delimiter(count) %></strong>
+              </div>
+              <div class="enterprise-progress-track">
+                <span style="width: <%= largest_type_count.zero? ? 0 : ((count / largest_type_count) * 100).round %>%"></span>
+              </div>
+            </li>
+          <% end %>
+        </ol>
+      <% else %>
+        <div class="enterprise-empty-state enterprise-empty-state-compact">
+          <p>Notice types will appear here when matching activity is found.</p>
+        </div>
+      <% end %>
+    </article>
+  </section>
+
+  <section class="enterprise-card enterprise-recent-card">
+    <header class="enterprise-card-header">
+      <div>
+        <span class="enterprise-card-kicker">Latest matches</span>
+        <h2>Recent notices</h2>
+      </div>
+      <%= link_to enterprise_my_notices_path, class: 'enterprise-text-link' do %>
+        View all
+        <svg aria-hidden="true"><use href="#enterprise-icon-arrow"></use></svg>
+      <% end %>
+    </header>
+
+    <% if @dashboard.recent_notices.any? %>
+      <div class="enterprise-table-wrap">
+        <table class="enterprise-table enterprise-recent-notices">
+          <thead>
+            <tr>
+              <th>Notice</th>
+              <th>Sender</th>
+              <th>Received</th>
+              <th>Matching URLs</th>
+              <th><span class="visually-hidden">Open</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @dashboard.recent_notices.each do |notice| %>
+              <tr>
+                <td data-label="Notice">
+                  <%= link_to notice.title, notice_path(notice), class: 'enterprise-notice-title' %>
+                  <span class="enterprise-notice-type"><%= notice.type == 'DMCA' ? 'DMCA' : notice.type.to_s.underscore.humanize %></span>
+                </td>
+                <td data-label="Sender"><%= notice.sender_name.presence || notice.principal_name.presence || 'Unknown' %></td>
+                <td data-label="Received"><%= notice.date_received&.to_date&.to_fs(:simple) || 'Unknown' %></td>
+                <td data-label="Matching URLs"><%= @dashboard.matching_url_count(notice) %></td>
+                <td class="enterprise-table-action">
+                  <%= link_to notice_path(notice), aria: { label: "Open #{notice.title}" } do %>
+                    <svg aria-hidden="true"><use href="#enterprise-icon-arrow"></use></svg>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <div class="enterprise-empty-state">
+        <div class="enterprise-empty-icon">
+          <svg aria-hidden="true"><use href="#enterprise-icon-notices"></use></svg>
+        </div>
+        <h3>No matching notices yet</h3>
+        <p>New notices involving your verified domains will appear here.</p>
+      </div>
+    <% end %>
+  </section>
+
+  <section class="enterprise-lower-grid">
+    <article class="enterprise-card enterprise-domain-card">
+      <header class="enterprise-card-header">
+        <div>
+          <span class="enterprise-card-kicker">Coverage</span>
+          <h2>Monitored domains</h2>
+        </div>
+        <%= link_to 'Manage', enterprise_domains_path, class: 'enterprise-text-link' %>
+      </header>
+      <% if @enterprise_domains.any? %>
+        <ol class="enterprise-domain-summary-list">
+          <% @enterprise_domains.first(5).each do |domain| %>
+            <li>
+              <span class="enterprise-domain-icon">
+                <svg aria-hidden="true"><use href="#enterprise-icon-domains"></use></svg>
+              </span>
+              <span>
+                <strong><%= domain.domain %></strong>
+                <small><%= domain.verified? ? 'Actively monitored' : 'Verification required' %></small>
+              </span>
+              <span class="enterprise-status-badge <%= domain.verified? ? 'is-success' : 'is-warning' %>">
+                <%= domain.verified? ? 'Verified' : 'Pending' %>
+              </span>
+            </li>
+          <% end %>
+        </ol>
+      <% else %>
+        <div class="enterprise-empty-state enterprise-empty-state-compact">
+          <p>No domains have been added.</p>
+        </div>
+      <% end %>
+    </article>
+
+    <article class="enterprise-card enterprise-report-card">
+      <header class="enterprise-card-header">
+        <div>
+          <span class="enterprise-card-kicker">Exports</span>
+          <h2>Latest report</h2>
+        </div>
+        <%= link_to 'Manage', enterprise_reports_path, class: 'enterprise-text-link' %>
+      </header>
+      <% if @latest_report %>
+        <div class="enterprise-latest-report">
+          <span class="enterprise-report-icon">
+            <svg aria-hidden="true"><use href="#enterprise-icon-reports"></use></svg>
+          </span>
+          <div>
+            <strong><%= @latest_report.starts_at.to_date.to_fs(:simple) %> – <%= @latest_report.ends_at.to_date.to_fs(:simple) %></strong>
+            <p>Requested <%= time_ago_in_words(@latest_report.created_at) %> ago</p>
+          </div>
+          <span class="enterprise-status-badge is-<%= @latest_report.status == 'ready' ? 'success' : (@latest_report.status == 'failed' ? 'danger' : 'neutral') %>">
+            <%= @latest_report.status.titleize %>
+          </span>
+        </div>
+        <% if @latest_report.downloadable? %>
+          <%= link_to enterprise_report_path(@latest_report.download_token), class: 'enterprise-button enterprise-button-secondary enterprise-full-button' do %>
+            <svg aria-hidden="true"><use href="#enterprise-icon-download"></use></svg>
+            Download JSON report
+          <% end %>
+        <% end %>
+      <% else %>
+        <div class="enterprise-empty-state enterprise-empty-state-compact">
+          <p>You have not requested an on-demand report yet.</p>
+          <%= link_to 'Request a report', enterprise_reports_path(anchor: 'request-report'), class: 'enterprise-text-link' %>
+        </div>
+      <% end %>
+    </article>
+  </section>
+</div>

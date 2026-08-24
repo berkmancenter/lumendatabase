@@ -1,0 +1,61 @@
+<aside class="enterprise-sidebar" id="enterprise-sidebar">
+  <div class="enterprise-brand">
+    <%= link_to enterprise_root_path, class: 'enterprise-brand-link' do %>
+      <%= image_tag 'logo_2x.png', alt: 'Lumen' %>
+      <span>Enterprise</span>
+    <% end %>
+  </div>
+
+  <nav class="enterprise-sidebar-nav" aria-label="Enterprise navigation">
+    <%= link_to enterprise_root_path,
+                class: ['enterprise-nav-link', ('is-active' if enterprise_nav_active?(:overview))].compact do %>
+      <svg aria-hidden="true"><use href="#enterprise-icon-overview"></use></svg>
+      <span>Overview</span>
+    <% end %>
+
+    <% if current_user&.active_enterprise_account.present? %>
+      <%= link_to enterprise_my_notices_path,
+                  class: ['enterprise-nav-link', ('is-active' if enterprise_nav_active?(:notices))].compact do %>
+        <svg aria-hidden="true"><use href="#enterprise-icon-notices"></use></svg>
+        <span>Notices</span>
+      <% end %>
+
+      <%= link_to enterprise_reports_path,
+                  class: ['enterprise-nav-link', ('is-active' if enterprise_nav_active?(:reports))].compact do %>
+        <svg aria-hidden="true"><use href="#enterprise-icon-reports"></use></svg>
+        <span>Reports</span>
+      <% end %>
+
+      <%= link_to enterprise_domains_path,
+                  class: ['enterprise-nav-link', ('is-active' if enterprise_nav_active?(:domains))].compact do %>
+        <svg aria-hidden="true"><use href="#enterprise-icon-domains"></use></svg>
+        <span>Domains</span>
+      <% end %>
+    <% end %>
+
+    <%= link_to enterprise_account_path,
+                class: ['enterprise-nav-link', ('is-active' if enterprise_nav_active?(:account))].compact do %>
+      <svg aria-hidden="true"><use href="#enterprise-icon-account"></use></svg>
+      <span>Account</span>
+    <% end %>
+  </nav>
+
+  <div class="enterprise-sidebar-footer">
+    <% if current_user&.enterprise_account %>
+      <div class="enterprise-plan-summary">
+        <span>Current plan</span>
+        <strong><%= current_user.enterprise_account.plan.titleize %></strong>
+      </div>
+    <% end %>
+
+    <%= link_to root_path, class: 'enterprise-secondary-link' do %>
+      <svg aria-hidden="true"><use href="#enterprise-icon-external"></use></svg>
+      <span>Public Lumen</span>
+    <% end %>
+
+    <%= link_to destroy_user_session_path, class: 'enterprise-secondary-link' do %>
+      <svg aria-hidden="true"><use href="#enterprise-icon-logout"></use></svg>
+      <span>Log out</span>
+    <% end %>
+  </div>
+</aside>

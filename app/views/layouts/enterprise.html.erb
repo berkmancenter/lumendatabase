@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title><%= yield(:title) %></title>
+  <%= render 'shared/head' -%>
+</head>
+<body class="<%= body_class %> enterprise-console">
+  <%= render 'enterprise/shared/icon_sprite' %>
+
+  <div class="enterprise-shell">
+    <%= render 'enterprise/shared/sidebar' %>
+
+    <div class="enterprise-workspace">
+      <header class="enterprise-topbar">
+        <button
+          class="enterprise-menu-toggle reset"
+          type="button"
+          aria-label="Open navigation"
+          aria-controls="enterprise-sidebar"
+          aria-expanded="false"
+        >
+          <svg aria-hidden="true"><use href="#enterprise-icon-menu"></use></svg>
+        </button>
+
+        <div class="enterprise-topbar-title">
+          <span class="enterprise-topbar-eyebrow">Lumen Enterprise</span>
+          <strong>
+            <%= content_for?(:enterprise_page_title) ? yield(:enterprise_page_title) : yield(:header) %>
+          </strong>
+        </div>
+
+        <div class="enterprise-topbar-account">
+          <span class="enterprise-avatar" aria-hidden="true">
+            <%= current_user&.email.to_s.first&.upcase || 'E' %>
+          </span>
+          <span class="enterprise-account-copy">
+            <strong><%= current_user&.enterprise_account&.name %></strong>
+            <small><%= current_user&.email %></small>
+          </span>
+        </div>
+      </header>
+
+      <%= render 'flashes' -%>
+
+      <main class="enterprise-main">
+        <%= yield %>
+      </main>
+    </div>
+  </div>
+
+  <button class="enterprise-sidebar-scrim reset" type="button" aria-label="Close navigation"></button>
+
+  <%= render 'javascript' %>
+  <%= render 'shared/piwik' %>
+</body>
+</html>

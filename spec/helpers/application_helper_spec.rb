@@ -107,6 +107,27 @@ describe ApplicationHelper do
     end
   end
 
+  context '#enterprise_nav_active?' do
+    it 'tracks reports and domains as separate controller pages' do
+      allow(helper).to receive(:action_name).and_return('index')
+      allow(helper).to receive(:controller_path).and_return('enterprise/reports')
+
+      expect(helper.enterprise_nav_active?(:reports)).to eq(true)
+      expect(helper.enterprise_nav_active?(:domains)).to eq(false)
+
+      allow(helper).to receive(:controller_path).and_return('enterprise/domains')
+
+      expect(helper.enterprise_nav_active?(:reports)).to eq(false)
+      expect(helper.enterprise_nav_active?(:domains)).to eq(true)
+    end
+
+    it 'marks the account view from settings' do
+      allow(helper).to receive(:controller_path).and_return('enterprise/settings')
+
+      expect(helper.enterprise_nav_active?(:account)).to eq(true)
+    end
+  end
+
   context '#application_header_classes' do
     it 'uses the search header sizing on the client settings page' do
       allow(helper).to receive(:controller_path).and_return('enterprise/settings')

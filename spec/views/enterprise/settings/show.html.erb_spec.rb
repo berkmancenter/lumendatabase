@@ -5,11 +5,7 @@ describe 'enterprise/settings/show.html.erb' do
 
   before do
     allow(view).to receive(:current_user).and_return(current_user)
-    allow(view).to receive(:enterprise_my_notices_path)
-      .and_return(enterprise_notices_search_index_path(sort_by: 'created_at desc'))
     assign(:pending_payment, nil)
-    assign(:enterprise_domains, [])
-    assign(:domain_auto_verification_enabled, false)
   end
 
   it 'shows enterprise account data without editable fields' do
@@ -18,7 +14,6 @@ describe 'enterprise/settings/show.html.erb' do
       build_stubbed(
         :enterprise_account,
         plan: 'pro',
-        report_frequency: 'none',
         applicant_email: 'rep@example.com',
         company_contact_information: "Example Business\n1 Example Way",
         representative_contact_information: "Jane Representative\njane@example.com",
@@ -28,18 +23,14 @@ describe 'enterprise/settings/show.html.erb' do
 
     render
 
-    expect(rendered).to have_css('h2', text: 'Enterprise data')
+    expect(rendered).to have_css('h1', text: 'Account')
+    expect(rendered).to have_css('h3', text: 'Enterprise data')
     expect(rendered).to have_css('.enterprise-account-details', text: 'Example Business')
     expect(rendered).to have_css('.enterprise-account-details', text: 'rep@example.com')
     expect(rendered).to have_css('.enterprise-account-details', text: '1 Example Way')
     expect(rendered).to have_css('.enterprise-account-details', text: 'jane@example.com')
     expect(rendered).not_to have_css('.enterprise-account-details', text: 'Interested domains')
-    expect(rendered).not_to have_css('.enterprise-account-details', text: 'example.org')
     expect(rendered).not_to have_css('input[name="enterprise_account[name]"]')
-    expect(rendered).not_to have_css('input[name="enterprise_account[applicant_email]"]')
-    expect(rendered).not_to have_css('textarea[name="enterprise_account[company_contact_information]"]')
-    expect(rendered).not_to have_css('textarea[name="enterprise_account[representative_contact_information]"]')
-    expect(rendered).not_to have_css('textarea[name="enterprise_account[interested_domains]"]')
   end
 
   it 'shows the plan, payment method, and how long Pro access is active' do
@@ -49,18 +40,14 @@ describe 'enterprise/settings/show.html.erb' do
         :enterprise_account,
         plan: 'pro',
         payment_method: 'credit_card',
-        paid_until: Time.utc(2026, 7, 1, 12, 0, 0),
-        report_frequency: 'none'
+        paid_until: Time.utc(2026, 7, 1, 12, 0, 0)
       )
     )
 
     render
 
     expect(rendered).to have_css('.enterprise-plan', text: /Pro/)
-    expect(rendered).to have_css(
-      '.enterprise-plan-payment-method',
-      text: /Credit card/
-    )
+    expect(rendered).to have_css('.enterprise-plan-payment-method', text: /Credit card/)
     expect(rendered).to have_css(
       '.enterprise-plan-active-until',
       text: /active until July 01, 2026/,
@@ -68,70 +55,8 @@ describe 'enterprise/settings/show.html.erb' do
     )
   end
 
-  it 'labels report frequency as Status with Off, Daily, and Weekly options' do
-    assign(
-      :enterprise_account,
-      build_stubbed(:enterprise_account, report_frequency: 'none')
-    )
-
-    render
-
-    expect(rendered).to have_css('div.inner-padding')
-    expect(rendered).to include(
-      'Scheduled reports are emailed automatically based on the status below.'
-    )
-    expect(rendered).to have_css(
-      'label[for="enterprise_account_report_frequency"]',
-      text: 'Status'
-    )
-    expect(rendered).not_to include('Cadence')
-    expect(rendered).to have_css('option[value="none"]', text: 'Off')
-    expect(rendered).to have_css('option[value="daily"]', text: 'Daily')
-    expect(rendered).to have_css('option[value="weekly"]', text: 'Weekly')
-  end
-
-  it 'hides the delivery email field when report status is off' do
-    assign(
-      :enterprise_account,
-      build_stubbed(:enterprise_account, report_frequency: 'none')
-    )
-
-    render
-
-    expect(rendered).to have_css(
-      '#enterprise-report-recipient[hidden]',
-      visible: :all
-    )
-    expect(rendered).to have_css(
-      '#enterprise_account_report_recipient_email[disabled]',
-      visible: :all
-    )
-  end
-
-  it 'shows the delivery email field when report status is daily' do
-    assign(
-      :enterprise_account,
-      build_stubbed(:enterprise_account, report_frequency: 'daily')
-    )
-
-    render
-
-    expect(rendered).to have_css('#enterprise-report-recipient')
-    expect(rendered).not_to have_css(
-      '#enterprise-report-recipient[hidden]',
-      visible: :all
-    )
-    expect(rendered).not_to have_css(
-      '#enterprise_account_report_recipient_email[disabled]',
-      visible: :all
-    )
-  end
-
-  it 'shows invoice status in settings for inactive invoice accounts' do
-    assign(
-      :enterprise_account,
-      build_stubbed(:enterprise_account, :inactive, :invoice)
-    )
+  it 'shows invoice status for an inactive invoice account' do
+    assign(:enterprise_account, build_stubbed(:enterprise_account, :inactive, :invoice))
 
     render
 
@@ -140,15 +65,9 @@ describe 'enterprise/settings/show.html.erb' do
     expect(rendered).not_to have_button('Get Pro')
   end
 
-  it 'shows pending card status and cancel action in settings' do
-    assign(
-      :enterprise_account,
-      build_stubbed(:enterprise_account, :inactive, :credit_card)
-    )
-    assign(
-      :pending_payment,
-      build_stubbed(:enterprise_payment, amount_cents: 50_000)
-    )
+  it 'shows a pending card payment and its cancel action' do
+    assign(:enterprise_account, build_stubbed(:enterprise_account, :inactive, :credit_card))
+    assign(:pending_payment, build_stubbed(:enterprise_payment, amount_cents: 50_000))
 
     render
 
@@ -156,72 +75,5 @@ describe 'enterprise/settings/show.html.erb' do
     expect(rendered).to include('$500.00')
     expect(rendered).to have_button('Cancel pending payment')
     expect(rendered).not_to have_button('Get Pro')
-  end
-
-  it 'shows the on-demand report request form' do
-    assign(
-      :enterprise_account,
-      build_stubbed(:enterprise_account, plan: 'pro', report_frequency: 'none')
-    )
-
-    render
-
-    expect(rendered).to have_css(
-      "form[action=\"#{enterprise_reports_path}\"][method=\"post\"]"
-    )
-    expect(rendered).to include(
-      "We'll generate the report in the background and"
-    )
-    expect(rendered).to have_css(
-      'input[name="enterprise_report[starts_on]"][type="date"]'
-    )
-    expect(rendered).to have_css(
-      'input[name="enterprise_report[ends_on]"][type="date"]'
-    )
-    expect(rendered).to have_button('Request report')
-  end
-
-  it 'shows an empty state when there are no domains' do
-    assign(
-      :enterprise_account,
-      build_stubbed(:enterprise_account, plan: 'pro', report_frequency: 'none')
-    )
-
-    render
-
-    expect(rendered).to have_css('.enterprise-domains-empty', text: 'Nothing here yet.')
-  end
-
-  it 'shows the verify button for an unverified domain in normal mode' do
-    assign(
-      :enterprise_account,
-      build_stubbed(:enterprise_account, plan: 'pro', report_frequency: 'none')
-    )
-    assign(
-      :enterprise_domains,
-      [build_stubbed(:enterprise_domain, verified: false)]
-    )
-
-    render
-
-    expect(rendered).to have_button('Verify now')
-  end
-
-  it 'hides the verify button when domain auto-verification is enabled' do
-    assign(
-      :enterprise_account,
-      build_stubbed(:enterprise_account, plan: 'pro', report_frequency: 'none')
-    )
-    assign(
-      :enterprise_domains,
-      [build_stubbed(:enterprise_domain, verified: false)]
-    )
-    assign(:domain_auto_verification_enabled, true)
-
-    render
-
-    expect(rendered).not_to have_button('Verify now')
-    expect(rendered).not_to include('on this domain with this exact content:')
-    expect(rendered).not_to include('lumen-domain-verification-')
   end
 end
