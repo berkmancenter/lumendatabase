@@ -5,8 +5,8 @@
     <div class="main">
       <%= Translation.t('captcha_gateway_info') %>
 
-      <form id="captcha-gateway-form" method="get">
-        <input type="hidden" name="destination" value="<%= params[:destination] %>">
+      <%= form_tag(captcha_gateway_index_path, method: :post, id: 'captcha-gateway-form') do %>
+        <%= hidden_field_tag :destination, params[:destination] %>
 
         <div class="form-inputs">
           <%= recaptcha_tags %>
@@ -15,7 +15,7 @@
         <div class="form-actions">
           <input type="submit" name="commit" value="Submit">
         </div>
-      </form>
+      <% end %>
     </div>
   </section>
 </article>

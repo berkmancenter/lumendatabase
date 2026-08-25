@@ -127,7 +127,7 @@ Rails.application.routes.draw do
 
   resources :api_submitter_requests
 
-  resources :captcha_gateway, only: :index
+  resources :captcha_gateway, only: %i[index create]
 
   resources :status, only: :index
 
