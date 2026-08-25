@@ -15,6 +15,7 @@ module Lumen
     event.remove('host')
     event.remove('@version')
     event['request_id'] = Current.request_id
+    event['request_url'] = Current.request_url
   end
 
   LOGGER = Lumen::Logger.init(
