@@ -76,6 +76,8 @@ class SearchController < ApplicationController
 
   def configure_searcher(_searcher); end
 
+  def record_includes; end
+
   def json_renderer
     # The self.class incantation is necessary to make instances look up their
     # subclass overrides to these constants, rather than pulling in the
@@ -116,7 +118,7 @@ class SearchController < ApplicationController
     # response ordering.
     # Note that the search definition above is lazy; this is the first line
     # where anything with Elasticsearch actually gets executed.
-    instances = @searchdata.records
+    instances = @searchdata.records(includes: record_includes)
     instances.map { |r| augment_instance(r) }
   end
 

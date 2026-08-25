@@ -2,6 +2,10 @@ class Notices::SearchController < SearchController
   EACH_SERIALIZER = Lumen::NoticeSerializerProxy
   URL_ROOT = 'notices'.freeze
   SEARCHED_MODEL = Notice
+  RECORD_INCLUDES = [
+    :topics,
+    { entity_notice_roles: :entity }
+  ].freeze
 
   private
 
@@ -42,4 +46,8 @@ class Notices::SearchController < SearchController
   end
 
   def configure_searcher(_searcher); end
+
+  def record_includes
+    RECORD_INCLUDES
+  end
 end

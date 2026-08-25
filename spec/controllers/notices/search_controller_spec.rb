@@ -1,6 +1,18 @@
 require 'rails_helper'
 
 describe Notices::SearchController do
+  describe '#wrap_instances' do
+    it 'preloads associations used by notice search results' do
+      searchdata = instance_double(Elasticsearch::Model::Response::Response)
+      allow(searchdata).to receive(:records)
+        .with(includes: Notices::SearchController::RECORD_INCLUDES)
+        .and_return([])
+      controller.instance_variable_set(:@searchdata, searchdata)
+
+      expect(controller.send(:wrap_instances)).to eq []
+    end
+  end
+
   context "#index" do
     it "uses Lumen::Search::Query" do
       searcher = Lumen::Search::Query.new
