@@ -558,6 +558,8 @@ GEM
       actionpack (>= 7.0)
       activemodel (>= 7.0)
     simplecov (1.1.0)
+    skylight (7.1.1)
+      activesupport (>= 7.2.0)
     sprockets (4.3.0)
       concurrent-ruby (~> 1.1)
       logger
@@ -696,6 +698,7 @@ DEPENDENCIES
   sidekiq (~> 7.3, >= 7.3.10)
   simple_form
   simplecov
+  skylight
   stackprof
   stripe
   terser
