@@ -190,6 +190,23 @@ feature 'Searching Notices', type: :feature do
     end
   end
 
+  scenario 'exact search for an alphanumeric URL', search: true do
+    notice = create(
+      :dmca,
+      title: 'Notice containing an alphanumeric URL',
+      works: [Work.new(
+        infringing_urls: [InfringingUrl.new(url: 'https://f5h6b4.us/path')]
+      )]
+    )
+    index_changed_instances
+
+    within_search_results_for('"f5h6b4.us"') do
+      expect(page).to have_n_results(1)
+      expect(page).to have_words(notice.title)
+      expect(page.html).to have_excerpt('f5h6b4.us')
+    end
+  end
+
   scenario 'based on action taken', search: true do
     notices = [
       create(:dmca, action_taken: 'No'),
