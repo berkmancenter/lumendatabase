@@ -1,6 +1,28 @@
 require 'rails_helper'
 
 describe Notices::SearchController do
+  describe 'search result caching' do
+    it 'skips Elasticsearch and record hydration when the fragment is cached' do
+      searcher = instance_double(
+        Lumen::Search::Query,
+        cache_key: 'cached-search',
+        register: nil
+      )
+      allow(Lumen::Search::Query).to receive(:new).and_return(searcher)
+      allow(controller).to receive(:perform_caching).and_return(true)
+      allow(controller).to receive(:read_fragment)
+        .with('cached-search')
+        .and_return('<section class="search-results">cached</section>')
+
+      expect(searcher).not_to receive(:search)
+
+      get :index, params: { term: 'cached' }
+
+      expect(response).to be_successful
+      expect(assigns(:cached_search_results)).to include('cached')
+    end
+  end
+
   describe '#wrap_instances' do
     it 'preloads associations used by notice search results' do
       searchdata = instance_double(Elasticsearch::Model::Response::Response)

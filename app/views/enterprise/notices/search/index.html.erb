@@ -32,60 +32,64 @@
     <% end %>
   </section>
 
-  <%= cache_unless(Current.user&.role?(:super_admin), @searcher.cache_key) do %>
-    <section class="search-results enterprise-search-results">
-      <header class="enterprise-results-header">
-        <%= form_tag(@search_index_path, method: :get, id: 'facets-form') do %>
-          <ol class="results-facets">
-            <li class="enterprise-filter-label">Filter by</li>
-            <% @filterable_fields.each do |filterable_field| %>
-              <% unless filterable_field.skip_frontend %>
-                <%= render filterable_field, results: @searchdata.response['aggregations'] %>
-              <% end %>
-            <% end %>
-          </ol>
-          <%= hidden_field_tag(:sort_by, params[:sort_by], class: 'sort_by_field', id: nil) %>
-          <%= hidden_field_tag('term-exact-search', params['term-exact-search'], class: 'term-exact-search-adv', id: nil) %>
-        <% end %>
-
-        <div class="enterprise-results-toolbar">
-          <span class="total-entries">
-            <%= format(Translation.t('search_index_found'), total: @searchdata.results.total).html_safe %>
-          </span>
-          <div class="dropdown sort-order">
-            <span>Sort:</span>
-            <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)">
-              <%= sort_order_label(params[:sort_by], @model_class) %>
-            </a>
-            <ol class="dropdown-menu" role="menu">
-              <% @ordering_options.each do |ordering| %>
-                <li class="facet">
-                  <%= link_to ordering.label,
-                              '#',
-                              'data-value': ordering.param,
-                              'data-label': ordering.label %>
-                </li>
+  <% if @cached_search_results %>
+    <%= @cached_search_results %>
+  <% else %>
+    <%= cache_if(search_result_cache_enabled?, @searcher.cache_key) do %>
+      <section class="search-results enterprise-search-results">
+        <header class="enterprise-results-header">
+          <%= form_tag(@search_index_path, method: :get, id: 'facets-form') do %>
+            <ol class="results-facets">
+              <li class="enterprise-filter-label">Filter by</li>
+              <% @filterable_fields.each do |filterable_field| %>
+                <% unless filterable_field.skip_frontend %>
+                  <%= render filterable_field, results: @searchdata.response['aggregations'] %>
+                <% end %>
               <% end %>
             </ol>
-          </div>
-        </div>
-      </header>
+            <%= hidden_field_tag(:sort_by, params[:sort_by], class: 'sort_by_field', id: nil) %>
+            <%= hidden_field_tag('term-exact-search', params['term-exact-search'], class: 'term-exact-search-adv', id: nil) %>
+          <% end %>
 
-      <% if @wrapped_instances.any? %>
-        <ol class="results-list enterprise-results-list">
-          <%= render partial: 'enterprise/notices/search/result', collection: @wrapped_instances %>
-        </ol>
-        <%= paginate @searchdata.results, left: 9, right: 2, current_page: @searcher.page.to_i %>
-      <% else %>
-        <div class="enterprise-empty-state enterprise-search-empty-state">
-          <div class="enterprise-empty-icon">
-            <svg aria-hidden="true"><use href="#enterprise-icon-search"></use></svg>
+          <div class="enterprise-results-toolbar">
+            <span class="total-entries">
+              <%= format(Translation.t('search_index_found'), total: @searchdata.results.total).html_safe %>
+            </span>
+            <div class="dropdown sort-order">
+              <span>Sort:</span>
+              <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)">
+                <%= sort_order_label(params[:sort_by], @model_class) %>
+              </a>
+              <ol class="dropdown-menu" role="menu">
+                <% @ordering_options.each do |ordering| %>
+                  <li class="facet">
+                    <%= link_to ordering.label,
+                                '#',
+                                'data-value': ordering.param,
+                                'data-label': ordering.label %>
+                  </li>
+                <% end %>
+              </ol>
+            </div>
           </div>
-          <h3>No notices found</h3>
-          <p>Try a different search term or clear one of the active filters.</p>
-        </div>
-      <% end %>
-    </section>
+        </header>
+
+        <% if @wrapped_instances.any? %>
+          <ol class="results-list enterprise-results-list">
+            <%= render partial: 'enterprise/notices/search/result', collection: @wrapped_instances %>
+          </ol>
+          <%= paginate @searchdata.results, left: 9, right: 2, current_page: @searcher.page.to_i %>
+        <% else %>
+          <div class="enterprise-empty-state enterprise-search-empty-state">
+            <div class="enterprise-empty-icon">
+              <svg aria-hidden="true"><use href="#enterprise-icon-search"></use></svg>
+            </div>
+            <h3>No notices found</h3>
+            <p>Try a different search term or clear one of the active filters.</p>
+          </div>
+        <% end %>
+      </section>
+    <% end %>
   <% end %>
 </div>
 

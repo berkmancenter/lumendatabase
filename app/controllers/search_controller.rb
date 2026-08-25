@@ -18,6 +18,7 @@ class SearchController < ApplicationController
   before_action :restrict_deep_pagination
 
   layout 'search'
+  helper_method :search_result_cache_enabled?
 
   EACH_SERIALIZER = nil
   URL_ROOT = nil
@@ -30,10 +31,14 @@ class SearchController < ApplicationController
     end
 
     @searcher = item_searcher
-    @searchdata = @searcher.search
-    @wrapped_instances = wrap_instances
+    @cached_search_results = cached_search_results
 
-    Lumen::Logger.log_metrics('SEARCHED', search_details: meta_hash_for(@searchdata).except(:facets))
+    unless @cached_search_results
+      @searchdata = @searcher.search
+      @wrapped_instances = wrap_instances
+
+      Lumen::Logger.log_metrics('SEARCHED', search_details: meta_hash_for(@searchdata).except(:facets))
+    end
 
     respond_to do |format|
       format.html { html_responder }
@@ -77,6 +82,16 @@ class SearchController < ApplicationController
   def configure_searcher(_searcher); end
 
   def record_includes; end
+
+  def search_result_cache_enabled?
+    perform_caching && request.format.html? && current_user.nil?
+  end
+
+  def cached_search_results
+    return unless search_result_cache_enabled?
+
+    read_fragment(@searcher.cache_key)
+  end
 
   def json_renderer
     # The self.class incantation is necessary to make instances look up their

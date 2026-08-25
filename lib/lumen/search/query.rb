@@ -9,6 +9,11 @@
 # app/models/Elasticsearch) which know how to produce values for particular
 # keys in the query.
 class Lumen::Search::Query
+  CACHE_KEY_EXCLUDED_PARAMS = %w[
+    authentication_token commit format
+    g-recaptcha-response g-recaptcha-response-data utf8
+  ].freeze
+
   attr_accessor :sort_by, :registry
   attr_reader :instances, :model_class, :params, :page, :per_page
 
@@ -78,18 +83,46 @@ class Lumen::Search::Query
   # forever, which makes it impossible to redact things from search results.
   # Adding a datestamp guarantees that the cache_key eventually expires.
   def cache_key
-    is_super_admin = Current.user&.role?(:super_admin)
-    enterprise_cache_key = Current.user&.enterprise_cache_key
-    digest_values = params
-                    .except('g-recaptcha-response-data', 'g-recaptcha-response')
-                    .values
-                    .push(enterprise_cache_key, @enterprise_domains)
-                    .to_s
+    @cache_key ||= begin
+      user = Current.user
+      digest_values = {
+        model: model_class.name,
+        params: canonical_cache_value(cache_key_params),
+        enterprise: user&.enterprise_cache_key,
+        enterprise_domains: Array(@enterprise_domains).sort,
+        super_admin: user&.role?(:super_admin)
+      }
+      digest = Digest::SHA256.hexdigest(JSON.generate(digest_values))
 
-    @cache_key ||= "search-result-#{Digest::MD5.hexdigest(digest_values)}-#{Date.today}-#{is_super_admin}"
+      "search-result-v2-#{digest}-#{Date.current}"
+    end
   end
 
   private
+
+  def cache_key_params
+    raw_params = if params.respond_to?(:to_unsafe_h)
+                   params.to_unsafe_h
+                 else
+                   params.to_h
+                 end
+
+    raw_params.stringify_keys.except(*CACHE_KEY_EXCLUDED_PARAMS)
+  end
+
+  def canonical_cache_value(value)
+    if value.respond_to?(:to_unsafe_h)
+      canonical_cache_value(value.to_unsafe_h)
+    elsif value.is_a?(Hash)
+      value.stringify_keys.sort.to_h do |key, nested_value|
+        [key, canonical_cache_value(nested_value)]
+      end
+    elsif value.is_a?(Array)
+      value.map { |nested_value| canonical_cache_value(nested_value) }
+    else
+      value
+    end
+  end
 
   # These are full-text queries -- searches and filters -- which Elasticsearch
   # will score with a best-match algorithm.

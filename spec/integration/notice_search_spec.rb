@@ -115,6 +115,26 @@ feature 'Searching Notices', type: :feature do
     expect(first_page).not_to eq second_page
   end
 
+  scenario 'a cache hit skips Elasticsearch execution', search: true do
+    original_perform_caching = Notices::SearchController.perform_caching
+    original_cache_store = Notices::SearchController.cache_store
+    Notices::SearchController.perform_caching = true
+    Notices::SearchController.cache_store = :memory_store
+
+    create(:dmca, title: 'Cache this search')
+    index_changed_instances
+    search_for(term: 'Cache this search')
+    expect(page).to have_words('Cache this search')
+
+    expect_any_instance_of(Lumen::Search::Query).not_to receive(:search)
+
+    search_for(term: 'Cache this search')
+    expect(page).to have_words('Cache this search')
+  ensure
+    Notices::SearchController.perform_caching = original_perform_caching
+    Notices::SearchController.config.cache_store = original_cache_store
+  end
+
   scenario 'displays search terms', search: true do
     create(:dmca, title: 'The Lion King on Youtube')
     index_changed_instances

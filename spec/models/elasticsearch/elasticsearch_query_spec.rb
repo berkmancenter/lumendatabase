@@ -308,6 +308,34 @@ describe Lumen::Search::Query, type: :model do
       expect(searcher_page1.cache_key).not_to eq searcher_page2.cache_key
     end
 
+    it 'is different when the same value is used for different fields' do
+      term_searcher = described_class.new(term: 'lion')
+      title_searcher = described_class.new(title: 'lion')
+
+      expect(term_searcher.cache_key).not_to eq title_searcher.cache_key
+    end
+
+    it 'is stable when parameters have a different insertion order' do
+      searcher1 = described_class.new(term: 'lion', page: '2')
+      searcher2 = described_class.new(page: '2', term: 'lion')
+
+      expect(searcher1.cache_key).to eq searcher2.cache_key
+    end
+
+    it 'is different for different searched models' do
+      notice_searcher = described_class.new({ term: 'lion' }, Notice)
+      entity_searcher = described_class.new({ term: 'lion' }, Entity)
+
+      expect(notice_searcher.cache_key).not_to eq entity_searcher.cache_key
+    end
+
+    it 'is different for search interfaces rendering different fragments' do
+      public_searcher = described_class.new(term: 'lion', controller: 'notices/search')
+      enterprise_searcher = described_class.new(term: 'lion', controller: 'enterprise/notices/search')
+
+      expect(public_searcher.cache_key).not_to eq enterprise_searcher.cache_key
+    end
+
     it 'is different for enterprise domain restrictions' do
       params = { utf8: '✓', term: 'lion', sort_by: '',
                  controller: 'notices/search', action: 'index' }
