@@ -1,6 +1,8 @@
 require 'logstash-logger'
 
 class Lumen::Logger
+  ERROR_SEVERITIES = %w[ERROR FATAL].freeze
+
   def self.init(**args)
     file_path = args[:path]
 
@@ -22,6 +24,14 @@ class Lumen::Logger
   def self.log_metrics(action, **data)
     # We want to always log metrics, therefore calling error here.
     Lumen::METRICS_LOGGER.error(action: action, **data, **current_user)
+  end
+
+  def self.customize_rails_log_event(event, stack_trace = nil)
+    event['event_type'] = 'rails_log'
+    return unless ERROR_SEVERITIES.include?(event['severity'])
+
+    stack_trace ||= caller(2)
+    event['stack_trace'] = Rails.backtrace_cleaner.clean(stack_trace).join("\n")
   end
 
   def self.current_user

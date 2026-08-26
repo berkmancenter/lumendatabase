@@ -21,7 +21,7 @@ module Lumen
   LOGGER = Lumen::Logger.init(
     path: "log/#{Rails.env}.log",
     customize_event: lambda do |event|
-      event['event_type'] = 'rails_log'
+      Lumen::Logger.customize_rails_log_event(event)
       lumen_logger_event_customize.call(event)
     end
   )
