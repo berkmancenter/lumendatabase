@@ -30,8 +30,14 @@ class Lumen::Logger
     event['event_type'] = 'rails_log'
     return unless ERROR_SEVERITIES.include?(event['severity'])
 
+    stack_trace ||= Current.exception_backtrace
+    Current.exception_backtrace = nil
     stack_trace ||= caller(2)
-    event['stack_trace'] = Rails.backtrace_cleaner.clean(stack_trace).join("\n")
+    event['stack_trace'] = stack_trace.join("\n")
+  end
+
+  def self.capture_exception_backtrace(_request, exception)
+    Current.exception_backtrace = exception.backtrace
   end
 
   def self.current_user
