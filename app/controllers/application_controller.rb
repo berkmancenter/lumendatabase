@@ -71,24 +71,8 @@ class ApplicationController < ActionController::Base
     enterprise_notices_search_index_path(sort_by: ENTERPRISE_NOTICES_DEFAULT_SORT)
   end
 
-  def resource_not_found(exception = false)
-    logger404s = Lumen::Logger.init(
-      path: "log/#{Rails.env}_404s.log",
-      customize_event: ->(event) { event['event_type'] = 'rails_log' }
-    )
-
-    if exception
-      logger404s.error(
-        format(
-          'Exception %s "%s" for %s at %s',
-          request.raw_request_method,
-          request.filtered_path,
-          request.remote_ip,
-          Time.now.to_s
-        )
-      )
-      logger404s.error(exception)
-    end
+  def resource_not_found(exception = nil)
+    log_not_found(exception)
 
     set_default_format
 
@@ -110,6 +94,19 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def log_not_found(exception)
+    event = {
+      message: 'Request not found',
+      status: 404,
+      request_method: request.raw_request_method,
+      request_path: request.filtered_path,
+      remote_ip: request.remote_ip
+    }
+    event[:exception_class] = exception.class.name if exception
+
+    Lumen::NOT_FOUND_LOGGER.warn(event)
+  end
 
   def layout_by_resource
     if devise_controller?

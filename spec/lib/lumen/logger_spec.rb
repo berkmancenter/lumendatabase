@@ -22,8 +22,8 @@ RSpec.describe Lumen::Logger do
       end
     end
 
-    it 'does not add a stack trace to non-error events' do
-      event = { 'severity' => 'INFO' }
+    it 'does not add a stack trace to warnings' do
+      event = { 'severity' => 'WARN' }
 
       described_class.customize_rails_log_event(event, stack_trace)
 

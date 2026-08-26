@@ -26,6 +26,14 @@ module Lumen
     end
   )
 
+  NOT_FOUND_LOGGER = Lumen::Logger.init(
+    path: "log/#{Rails.env}_404s.log",
+    customize_event: lambda do |event|
+      Lumen::Logger.customize_rails_log_event(event)
+      lumen_logger_event_customize.call(event)
+    end
+  )
+
   METRICS_LOGGER = Lumen::Logger.init(
     path: "log/#{Rails.env}_metrics.log",
     customize_event: lambda do |event|
