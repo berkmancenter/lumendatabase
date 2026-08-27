@@ -34,6 +34,10 @@ describe Lumen::Search::Query, type: :model do
       query: {
         bool: {
           must: [
+            { match: { spam: { query: false, operator: 'AND' } } },
+            { match: { hidden: { query: false, operator: 'AND' } } },
+            { match: { published: { query: true, operator: 'AND' } } },
+            { match: { rescinded: { query: false, operator: 'AND' } } },
             { multi_match: {
               query: 'i give up',
               fields: Notice::MULTI_MATCH_FIELDS,
@@ -42,10 +46,6 @@ describe Lumen::Search::Query, type: :model do
             } }
           ],
           filter: [
-            { term: { spam: false } },
-            { term: { hidden: false } },
-            { term: { published: true } },
-            { term: { rescinded: false } },
             { term: { sender_name_facet: 'Mike Itten' } },
             { range: {
                 date_received: {
@@ -144,15 +144,15 @@ describe Lumen::Search::Query, type: :model do
       obj = described_class.new
 
       obj.prepare
-      filter = obj.search_definition[:query][:bool][:filter]
+      must = obj.search_definition[:query][:bool][:must]
 
       expect(obj.model_class).to eq Notice  # check assumption
       # Notice.visible_qualifiers:
       # { spam: false, hidden: false, published: true, rescinded: false }
-      expect(filter).to include({ term: { spam: false } })
-      expect(filter).to include({ term: { hidden: false } })
-      expect(filter).to include({ term: { published: true } })
-      expect(filter).to include({ term: { rescinded: false } })
+      expect(must).to include( { match: { spam: { query: false, operator: "AND" } } } )
+      expect(must).to include( { match: { hidden: { query: false, operator: "AND" } } } )
+      expect(must).to include( { match: { published: { query: true, operator: "AND" } } } )
+      expect(must).to include( { match: { rescinded: { query: false, operator: "AND" } } } )
     end
 
     it 'can restrict results to notices with matching enterprise domains' do
@@ -281,34 +281,6 @@ describe Lumen::Search::Query, type: :model do
           )
         end
       end
-    end
-  end
-
-  context 'exact searching' do
-    it 'searches catch-all source fields and limits catch-all phrase work to highlighting' do
-      obj = described_class.new('term' => '"f5h6b4.us"')
-      obj.register Notice::SEARCHABLE_FIELDS.first
-
-      obj.prepare
-
-      expect(obj.search_definition[:query][:bool][:must]).to include(
-        multi_match: {
-          query: '"f5h6b4.us"',
-          fields: Notice::EXACT_MULTI_MATCH_FIELDS,
-          operator: 'OR',
-          type: :phrase
-        }
-      )
-      expect(obj.search_definition[:highlight]).to include(
-        highlight_query: {
-          multi_match: {
-            query: '"f5h6b4.us"',
-            fields: Notice::MULTI_MATCH_FIELDS,
-            operator: 'OR',
-            type: :phrase
-          }
-        }
-      )
     end
   end
 

@@ -22,28 +22,6 @@ class Notice < ApplicationRecord
   # We could simply list all of the fields we would have searched, but that
   # scoring proves to be incredibly slow.
   MULTI_MATCH_FIELDS = %w(base_search preferred_search^2)
-  # Exact searches use the source fields copied into the catch-all fields. In
-  # particular, URL fields retain useful tokens such as `a8d3`, while the
-  # custom analyzer on base_search splits that token into `a`, `8`, `d`, `3`.
-  # Ordinary searches keep using the faster catch-all fields above.
-  EXACT_MULTI_MATCH_FIELDS = %w[
-    body
-    jurisdiction_list
-    mark_registration_number
-    principal_name
-    request_type
-    subject
-    submitter_country_code
-    submitter_name
-    tag_list
-    topics.name
-    works.copyrighted_urls.url
-    works.infringing_urls.url
-    recipient_name^2
-    sender_name^2
-    title^2
-    works.description^2
-  ].freeze
 
   SEARCHABLE_FIELDS = [
     Lumen::Search::TermSearch.new(:term, MULTI_MATCH_FIELDS, 'All Fields'),

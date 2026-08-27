@@ -230,7 +230,9 @@ class Lumen::Search::Query
     return unless visible_qualifiers.any?
 
     visible_qualifiers.each do |k, v|
-      search_config[:query][:bool][:filter] << { term: { k => v } }
+      limitation = { k => { query: v, operator: 'AND' } }
+
+      search_config[:query][:bool][:must] << { match: limitation }
     end
   end
 
@@ -258,33 +260,12 @@ class Lumen::Search::Query
     return unless @term_exact_search
 
     search_definition[:query][:bool][:must].map! do |query_item|
-      multi_match = query_item[:multi_match]
-      next query_item if multi_match.nil?
-
-      multi_match[:type] = :phrase
-      if exact_multi_match_fields?(multi_match)
-        add_exact_search_highlight_query(multi_match)
-        multi_match[:fields] = model_class::EXACT_MULTI_MATCH_FIELDS
+      unless query_item[:multi_match].nil?
+        query_item[:multi_match][:type] = :phrase
       end
 
       query_item
     end
-  end
-
-  def exact_multi_match_fields?(multi_match)
-    return false unless model_class.const_defined?(:EXACT_MULTI_MATCH_FIELDS, false)
-    return false unless model_class.const_defined?(:MULTI_MATCH_FIELDS, false)
-
-    multi_match[:fields] == model_class::MULTI_MATCH_FIELDS
-  end
-
-  # Highlighting only runs against the returned page, so the existing catch-all
-  # phrase query remains useful there without evaluating its pathological URL
-  # tokenization across the whole index.
-  def add_exact_search_highlight_query(multi_match)
-    search_definition[:highlight][:highlight_query] = {
-      multi_match: multi_match.deep_dup
-    }
   end
 
   # ----------------------------------------------------------------------------
