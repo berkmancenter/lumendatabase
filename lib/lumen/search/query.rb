@@ -25,7 +25,7 @@ class Lumen::Search::Query
     @params = params
     @page = params[:page] || 1
     @per_page = params[:per_page] || model_class::PER_PAGE
-    @term_exact_search = (params['term'] && params['term'][0] == '"' && params['term'][-1] == '"')
+    @term_exact_search = quoted_term_search? || full_url_search? || www_domain_search?
   end
 
   # This adds TermFilters and TermSearches to the registry. They will be
@@ -308,6 +308,7 @@ class Lumen::Search::Query
                           "http://#{value}"
                         end
     uri = Addressable::URI.parse(value_for_parsing)
+    return @exact_search_domain = nil if uri.host.blank?
     return @exact_search_domain = nil if uri.user.present?
 
     @exact_search_domain = PublicSuffix.parse(uri.host, default_rule: nil)
@@ -318,14 +319,48 @@ class Lumen::Search::Query
   end
 
   def exact_search_value
-    @params['term'][1...-1]
+    term = @params['term'].to_s
+
+    quoted_term_search? ? term[1...-1] : term
+  end
+
+  def quoted_term_search?
+    term = @params['term']
+
+    term.present? && term.start_with?('"') && term.end_with?('"')
+  end
+
+  # A pasted full URL is unambiguous enough to use exact-search semantics
+  # without requiring the user to wrap it in quotes first. This avoids running
+  # the expensive catch-all URL analyzer across the whole index.
+  def full_url_search?
+    return false if quoted_term_search?
+    return false unless exact_search_value.match?(%r{\A[a-z][a-z0-9+\-.]*://}i)
+
+    exact_search_domain.present?
+  end
+
+  # A conventional www hostname is indexed as one standard token even when it
+  # appears in a full URL, so it can bypass the catch-all analyzer safely. Bare
+  # domains retain the catch-all behavior because they may be suffix searches
+  # for longer hostnames (for example, harvard.edu for gogo-team.harvard.edu).
+  def www_domain_search?
+    return false if quoted_term_search?
+    return false unless exact_search_value.match?(%r{\Awww\.}i)
+
+    domain = exact_search_domain
+    return false if domain.nil?
+    return false unless exact_search_value.casecmp?(domain.to_s)
+
+    domain.trd.present? && domain.trd.casecmp?('www')
   end
 
   # The standard analyzer can join a subdomain to the label before it in a
   # stored full URL. Keep the catch-all phrase as a fallback for domain suffixes
   # such as r2.cloudflarestorage.com.
   def exact_subdomain_search?
-    !exact_search_value.match?(%r{\A[a-z][a-z0-9+\-.]*://}i) &&
+    !www_domain_search? &&
+      !exact_search_value.match?(%r{\A[a-z][a-z0-9+\-.]*://}i) &&
       exact_search_domain.trd.present?
   end
 

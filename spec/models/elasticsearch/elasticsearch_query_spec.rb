@@ -285,6 +285,99 @@ describe Lumen::Search::Query, type: :model do
   end
 
   context 'exact searching' do
+    it 'automatically searches an unquoted full URL as an exact URL' do
+      term = 'https://imgur.com/a/rge778&dew87'
+      obj = described_class.new('term' => term)
+      obj.register Notice::SEARCHABLE_FIELDS.first
+
+      obj.prepare
+
+      expect(obj.search_definition[:query][:bool][:must]).to include(
+        multi_match: {
+          query: term,
+          fields: Notice::EXACT_URL_SEARCH_FIELDS,
+          operator: 'OR',
+          type: :phrase
+        }
+      )
+      expect(obj.search_definition[:highlight]).to include(
+        highlight_query: {
+          multi_match: {
+            query: term,
+            fields: Notice::MULTI_MATCH_FIELDS,
+            operator: 'OR',
+            type: :phrase
+          }
+        }
+      )
+    end
+
+    it 'automatically searches an unquoted www hostname as an exact domain' do
+      term = 'www.youtube.com'
+      obj = described_class.new('term' => term)
+      obj.register Notice::SEARCHABLE_FIELDS.first
+
+      obj.prepare
+
+      expect(obj.search_definition[:query][:bool][:must]).to include(
+        multi_match: {
+          query: term,
+          fields: Notice::EXACT_URL_SEARCH_FIELDS,
+          operator: 'OR',
+          type: :phrase
+        }
+      )
+    end
+
+    it 'keeps an unquoted bare domain on the catch-all fields' do
+      term = 'youtube.com'
+      obj = described_class.new('term' => term)
+      obj.register Notice::SEARCHABLE_FIELDS.first
+
+      obj.prepare
+
+      expect(obj.search_definition[:query][:bool][:must]).to include(
+        multi_match: {
+          query: term,
+          fields: Notice::MULTI_MATCH_FIELDS,
+          operator: 'OR'
+        }
+      )
+    end
+
+    it 'keeps an unquoted arbitrary subdomain on the catch-all fields' do
+      term = 'r2.cloudflarestorage.com'
+      obj = described_class.new('term' => term)
+      obj.register Notice::SEARCHABLE_FIELDS.first
+
+      obj.prepare
+
+      expect(obj.search_definition[:query][:bool][:must]).to include(
+        multi_match: {
+          query: term,
+          fields: Notice::MULTI_MATCH_FIELDS,
+          operator: 'OR'
+        }
+      )
+    end
+
+    it 'keeps an incomplete URL on the catch-all fields' do
+      term = 'https://'
+      obj = described_class.new('term' => term)
+      obj.register Notice::SEARCHABLE_FIELDS.first
+
+      obj.prepare
+
+      expect(obj.search_definition[:query][:bool][:must]).to include(
+        multi_match: {
+          query: term,
+          fields: Notice::MULTI_MATCH_FIELDS,
+          operator: 'OR'
+        }
+      )
+      expect(obj.search_definition[:highlight]).not_to have_key(:highlight_query)
+    end
+
     it 'searches source fields for a full URL or registrable domain' do
       exact_searches = [
         '"http://vextro.k7f2d9a4c1b8e6350f4a9d2c7e1b6a3f.r2.cloudflarestorage.com"',

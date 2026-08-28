@@ -222,6 +222,7 @@ feature 'Searching Notices', type: :feature do
     index_changed_instances
 
     exact_searches = [
+      url,
       %Q{"#{url}"},
       '"r2.cloudflarestorage.com"',
       '"cloudflarestorage.com"'
@@ -232,6 +233,21 @@ feature 'Searching Notices', type: :feature do
         expect(page).to have_n_results(1)
         expect(page).to have_words(notice.title)
       end
+    end
+  end
+
+  scenario 'automatic exact search for an unquoted www hostname', search: true do
+    url = 'https://www.youtube.com/watch?v=d1P3Rdh'
+    notice = create(
+      :dmca,
+      title: 'Notice containing a www URL',
+      works: [Work.new(infringing_urls: [InfringingUrl.new(url: url)])]
+    )
+    index_changed_instances
+
+    within_search_results_for('www.youtube.com') do
+      expect(page).to have_n_results(1)
+      expect(page).to have_words(notice.title)
     end
   end
 
