@@ -24,19 +24,17 @@ module NoticesHelper
   end
 
   def researchers_only_notice_message(notice)
-    unless notice&.submitter&.full_notice_only_researchers
-      return 'The full version of this notice is viewable only by users with a Lumen researcher credential.'
+    if notice&.restricted_to_lumen_team?
+      return 'The full version of this notice is viewable only by the Lumen team.'
     end
 
-    key =
-      if access_just_for_specific_researchers?(notice)
-        'notice_show_works_only_for_selected_researchers'
-      else
-        'notice_show_works_only_for_researchers'
-      end
+    unless notice&.submitter&.full_notice_only_researchers &&
+           access_just_for_specific_researchers?(notice)
+      return Translation.t('notice_show_works_only_for_researchers')
+    end
 
     format(
-      Translation.t(key),
+      Translation.t('notice_show_works_only_for_selected_researchers'),
       submitter_name: h(notice&.submitter&.name.presence || 'unknown')
     ).html_safe
   end

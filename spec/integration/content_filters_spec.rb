@@ -54,6 +54,7 @@ feature 'content filters' do
       visit notice_url(notice)
 
       expect(page).not_to have_content('to request access and see full URLs')
+      expect(page).to have_content('The full version of this notice is viewable only by the Lumen team.')
     end
 
     scenario 'researcher cannot see flagged notice full URLs' do

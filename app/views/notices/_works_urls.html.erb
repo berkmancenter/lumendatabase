@@ -18,7 +18,7 @@
               url_rows: notice_version_url_rows(work, 'infringing', @notice) %>
 <% end %>
 
-<% if access_just_for_researchers?(@notice) %>
+<% if @notice&.restricted_to_lumen_team? || access_just_for_researchers?(@notice) %>
   <div class="row">
     <p><%= researchers_only_notice_message(@notice) %></p>
   </div>

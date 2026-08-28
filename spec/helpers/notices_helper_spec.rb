@@ -151,6 +151,31 @@ describe NoticesHelper do
     end
   end
 
+  describe '#researchers_only_notice_message' do
+    it 'uses the submitter-wide researchers translation' do
+      submitter = double(
+        full_notice_only_researchers: true,
+        full_notice_only_researchers_users: []
+      )
+      notice = double(restricted_to_lumen_team?: false, submitter: submitter)
+
+      allow(Translation).to receive(:t)
+        .with('notice_show_works_only_for_researchers')
+        .and_return('The full version is restricted to researchers.')
+
+      expect(helper.researchers_only_notice_message(notice))
+        .to eq 'The full version is restricted to researchers.'
+    end
+
+    it 'gives the Lumen-team restriction precedence over submitter restrictions' do
+      submitter = double(full_notice_only_researchers: true)
+      notice = double(restricted_to_lumen_team?: true, submitter: submitter)
+
+      expect(helper.researchers_only_notice_message(notice))
+        .to eq 'The full version of this notice is viewable only by the Lumen team.'
+    end
+  end
+
   it 'redacts URL paths in rendered text' do
     text = 'Body URL: http://some-tld.com/private/page?token=123.'
 

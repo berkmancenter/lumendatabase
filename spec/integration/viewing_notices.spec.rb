@@ -89,7 +89,7 @@ feature 'Viewing notices' do
       visit notice_url(Notice.last)
 
       check_limited_works_urls
-      expect(page).to have_content("Thanks for your interest, but URLs from submitter #{notice.submitter.name} are viewable only by users with a Lumen researcher credential.")
+      expect(page).to have_content('The full version of this notice is viewable only by users with a Lumen researcher credential.')
     end
 
     scenario 'as a researcher viewing a notice with full access restricted to researchers only' do
@@ -134,7 +134,7 @@ feature 'Viewing notices' do
       visit notice_url(Notice.last)
 
       check_full_works_urls
-      expect(page).not_to have_content("Thanks for your interest, but URLs from submitter #{notice.submitter.name} are viewable only by users with a Lumen researcher credential.")
+      expect(page).not_to have_content('The full version of this notice is viewable only by users with a Lumen researcher credential.')
     end
   end
 
