@@ -284,6 +284,97 @@ describe Lumen::Search::Query, type: :model do
     end
   end
 
+  context 'exact searching' do
+    it 'searches source fields for a full URL or registrable domain' do
+      exact_searches = [
+        '"http://vextro.k7f2d9a4c1b8e6350f4a9d2c7e1b6a3f.r2.cloudflarestorage.com"',
+        '"cloudflarestorage.com"'
+      ]
+
+      exact_searches.each do |term|
+        obj = described_class.new('term' => term)
+        obj.register Notice::SEARCHABLE_FIELDS.first
+
+        obj.prepare
+
+        expect(obj.search_definition[:query][:bool][:must]).to include(
+          multi_match: {
+            query: term,
+            fields: Notice::EXACT_URL_SEARCH_FIELDS,
+            operator: 'OR',
+            type: :phrase
+          }
+        )
+        expect(obj.search_definition[:highlight]).to include(
+          highlight_query: {
+            multi_match: {
+              query: term,
+              fields: Notice::MULTI_MATCH_FIELDS,
+              operator: 'OR',
+              type: :phrase
+            }
+          }
+        )
+      end
+    end
+
+    it 'also searches catch-all fields for an exact subdomain suffix' do
+      term = '"r2.cloudflarestorage.com"'
+      obj = described_class.new('term' => term)
+      obj.register Notice::SEARCHABLE_FIELDS.first
+
+      obj.prepare
+
+      expect(obj.search_definition[:query][:bool][:must]).to include(
+        bool: {
+          should: [
+            {
+              multi_match: {
+                query: term,
+                fields: Notice::EXACT_URL_SEARCH_FIELDS,
+                operator: 'OR',
+                type: :phrase
+              }
+            },
+            {
+              multi_match: {
+                query: term,
+                fields: Notice::MULTI_MATCH_FIELDS,
+                operator: 'OR',
+                type: :phrase
+              }
+            }
+          ],
+          minimum_should_match: 1
+        }
+      )
+    end
+
+    it 'keeps URL fragments on the catch-all fields' do
+      exact_searches = [
+        '"vextro.k7f2d9a4c1b8e6350f4a9d2c7e1b6a3f"',
+        '"k7f2d9a4c1b8e6350f4a9d2c7e1b6a3f.r2"'
+      ]
+
+      exact_searches.each do |term|
+        obj = described_class.new('term' => term)
+        obj.register Notice::SEARCHABLE_FIELDS.first
+
+        obj.prepare
+
+        expect(obj.search_definition[:query][:bool][:must]).to include(
+          multi_match: {
+            query: term,
+            fields: Notice::MULTI_MATCH_FIELDS,
+            operator: 'OR',
+            type: :phrase
+          }
+        )
+        expect(obj.search_definition[:highlight]).not_to have_key(:highlight_query)
+      end
+    end
+  end
+
   context '.cache_key' do
     it 'is the same for different instances of the same search' do
       params = { utf8: '✓', term: 'lion', sort_by: '',

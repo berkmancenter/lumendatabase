@@ -23,6 +23,37 @@ class Notice < ApplicationRecord
   # scoring proves to be incredibly slow.
   MULTI_MATCH_FIELDS = %w(base_search preferred_search^2)
 
+  # This source-field fallback for exact URL and domain searches is temporary
+  # until notices are reindexed with:
+  #
+  # url_analyzer:
+  #   tokenizer: standard
+  #   filter:
+  #     - lowercase
+  #     - url_word_delimiter
+  # url_word_delimiter:
+  #   type: word_delimiter_graph
+  #   split_on_numerics: false
+  #   split_on_case_change: false
+  EXACT_URL_SEARCH_FIELDS = %w[
+    body
+    jurisdiction_list
+    mark_registration_number
+    principal_name
+    request_type
+    subject
+    submitter_country_code
+    submitter_name
+    tag_list
+    topics.name
+    works.copyrighted_urls.url
+    works.infringing_urls.url
+    recipient_name^2
+    sender_name^2
+    title^2
+    works.description^2
+  ].freeze
+
   SEARCHABLE_FIELDS = [
     Lumen::Search::TermSearch.new(:term, MULTI_MATCH_FIELDS, 'All Fields'),
     Lumen::Search::TermSearch.new(:title, :title, 'Title'),

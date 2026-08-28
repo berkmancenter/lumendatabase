@@ -212,6 +212,29 @@ feature 'Searching Notices', type: :feature do
     end
   end
 
+  scenario 'exact search for a full alphanumeric URL or domain', search: true do
+    url = 'http://vextro.k7f2d9a4c1b8e6350f4a9d2c7e1b6a3f.r2.cloudflarestorage.com'
+    notice = create(
+      :dmca,
+      title: 'Notice containing an alphanumeric URL',
+      works: [Work.new(infringing_urls: [InfringingUrl.new(url: url)])]
+    )
+    index_changed_instances
+
+    exact_searches = [
+      %Q{"#{url}"},
+      '"r2.cloudflarestorage.com"',
+      '"cloudflarestorage.com"'
+    ]
+
+    exact_searches.each do |term|
+      within_search_results_for(term) do
+        expect(page).to have_n_results(1)
+        expect(page).to have_words(notice.title)
+      end
+    end
+  end
+
   scenario 'based on action taken', search: true do
     notices = [
       create(:dmca, action_taken: 'No'),

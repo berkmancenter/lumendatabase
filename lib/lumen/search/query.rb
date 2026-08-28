@@ -260,12 +260,82 @@ class Lumen::Search::Query
     return unless @term_exact_search
 
     search_definition[:query][:bool][:must].map! do |query_item|
-      unless query_item[:multi_match].nil?
-        query_item[:multi_match][:type] = :phrase
+      multi_match = query_item[:multi_match]
+      next query_item if multi_match.nil?
+
+      multi_match[:type] = :phrase
+      if exact_url_search_fields?(multi_match)
+        catch_all_multi_match = multi_match.deep_dup
+        add_exact_search_highlight_query(multi_match)
+        multi_match[:fields] = model_class::EXACT_URL_SEARCH_FIELDS
+
+        if exact_subdomain_search?
+          query_item = {
+            bool: {
+              should: [
+                query_item,
+                { multi_match: catch_all_multi_match }
+              ],
+              minimum_should_match: 1
+            }
+          }
+        end
       end
 
       query_item
     end
+  end
+
+  def exact_url_search_fields?(multi_match)
+    return false unless model_class.const_defined?(:EXACT_URL_SEARCH_FIELDS, false)
+    return false unless model_class.const_defined?(:MULTI_MATCH_FIELDS, false)
+    return false unless exact_domain_or_url_search?
+
+    multi_match[:fields] == model_class::MULTI_MATCH_FIELDS
+  end
+
+  def exact_domain_or_url_search?
+    exact_search_domain.present?
+  end
+
+  def exact_search_domain
+    return @exact_search_domain if defined?(@exact_search_domain)
+
+    value = exact_search_value
+    value_for_parsing = if value.match?(%r{\A[a-z][a-z0-9+\-.]*://}i)
+                          value
+                        else
+                          "http://#{value}"
+                        end
+    uri = Addressable::URI.parse(value_for_parsing)
+    return @exact_search_domain = nil if uri.user.present?
+
+    @exact_search_domain = PublicSuffix.parse(uri.host, default_rule: nil)
+  rescue Addressable::URI::InvalidURIError,
+         PublicSuffix::DomainInvalid,
+         PublicSuffix::DomainNotAllowed
+    @exact_search_domain = nil
+  end
+
+  def exact_search_value
+    @params['term'][1...-1]
+  end
+
+  # The standard analyzer can join a subdomain to the label before it in a
+  # stored full URL. Keep the catch-all phrase as a fallback for domain suffixes
+  # such as r2.cloudflarestorage.com.
+  def exact_subdomain_search?
+    !exact_search_value.match?(%r{\A[a-z][a-z0-9+\-.]*://}i) &&
+      exact_search_domain.trd.present?
+  end
+
+  # Highlighting only runs against the returned page, so the existing catch-all
+  # phrase query remains useful there without evaluating its pathological URL
+  # tokenization across the whole index.
+  def add_exact_search_highlight_query(multi_match)
+    search_definition[:highlight][:highlight_query] = {
+      multi_match: multi_match.deep_dup
+    }
   end
 
   # ----------------------------------------------------------------------------
