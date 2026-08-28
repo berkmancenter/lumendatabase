@@ -13,6 +13,11 @@ class Lumen::Search::Query
     authentication_token commit format
     g-recaptcha-response g-recaptcha-response-data utf8
   ].freeze
+  PROGRESSIVE_TERM_MINIMUM_WORDS = 5
+  # 1-4 terms: 1; 5-8: all but 3; 9-12: all but 4;
+  # 13-20: all but 5; 21 or more: 75%.
+  PROGRESSIVE_TERM_MINIMUM_SHOULD_MATCH = '0<1 4<-3 8<-4 12<-5 20<75%'.freeze
+  PROGRESSIVE_TERM_SEARCH_ANALYZER = 'standard'.freeze
 
   attr_accessor :sort_by, :registry
   attr_reader :instances, :model_class, :params, :page, :per_page
@@ -149,10 +154,17 @@ class Lumen::Search::Query
 
   def add_searches_to_elasticsearch_query(param, value)
     registry[:searches].each do |term_search|
+      operator = operator_for_param(param)
+      minimum_should_match = progressive_minimum_should_match(param, value, operator)
+      analyzer = if minimum_should_match.present?
+                   PROGRESSIVE_TERM_SEARCH_ANALYZER
+                 end
       query = term_search.as_elasticsearch_query(
         param,
         value,
-        operator_for_param(param)
+        operator,
+        minimum_should_match: minimum_should_match,
+        analyzer: analyzer
       )
 
       case query
@@ -167,6 +179,16 @@ class Lumen::Search::Query
   def operator_for_param(param)
     return unless params["#{param}-require-all"].present?
     'AND'
+  end
+
+  def progressive_minimum_should_match(param, value, operator)
+    return if operator.present?
+    return unless param.to_s == 'term'
+    return unless value.is_a?(String)
+    return if @term_exact_search || exact_domain_or_url_search?
+    return if value.scan(/[[:alnum:]]+/).size < PROGRESSIVE_TERM_MINIMUM_WORDS
+
+    PROGRESSIVE_TERM_MINIMUM_SHOULD_MATCH
   end
 
   # These are term-level queries, which require exact matches of desired data

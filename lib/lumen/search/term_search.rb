@@ -14,7 +14,7 @@ class Lumen::Search::TermSearch
     'search/term_search'
   end
 
-  def query_for(value, operator)
+  def query_for(value, operator, minimum_should_match: nil, analyzer: nil)
     operator ||= 'OR'
 
     query_hash = {}
@@ -25,13 +25,18 @@ class Lumen::Search::TermSearch
         operator: operator
       }
 
-      if operator == 'AND'
+      query_hash[:minimum_should_match] = minimum_should_match if minimum_should_match.present?
+      query_hash[:analyzer] = analyzer if analyzer.present?
+
+      if operator == 'AND' || minimum_should_match.present?
         query_hash[:type] = :cross_fields
       end
 
       { multi_match: query_hash }
     else
       query_hash[@field] = { query: value, operator: operator }
+      query_hash[@field][:minimum_should_match] = minimum_should_match if minimum_should_match.present?
+      query_hash[@field][:analyzer] = analyzer if analyzer.present?
 
       { match: query_hash }
     end
@@ -39,17 +44,27 @@ class Lumen::Search::TermSearch
 
   def as_elasticsearch_filter(*); end
 
-  def as_elasticsearch_query(param, value, operator)
+  def as_elasticsearch_query(param, value, operator, minimum_should_match: nil, analyzer: nil)
     return nil unless handles?(param)
 
     query = []
 
     if value.is_a?(Array)
       value.each do |sub_val|
-        query << query_for(sub_val, operator)
+        query << query_for(
+          sub_val,
+          operator,
+          minimum_should_match: minimum_should_match,
+          analyzer: analyzer
+        )
       end
     else
-      query << query_for(value, operator)
+      query << query_for(
+        value,
+        operator,
+        minimum_should_match: minimum_should_match,
+        analyzer: analyzer
+      )
     end
 
     query

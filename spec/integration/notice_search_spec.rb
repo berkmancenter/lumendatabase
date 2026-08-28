@@ -190,6 +190,24 @@ feature 'Searching Notices', type: :feature do
     end
   end
 
+  scenario 'progressively requires matches in long unquoted searches', search: true do
+    matching = create(
+      :dmca,
+      title: 'Progressivealpha matching notice',
+      body: 'Progressivebeta appears in the body'
+    )
+    partial = create(:dmca, title: 'Progressivealpha partial notice')
+    index_changed_instances
+
+    within_search_results_for(
+      'progressivealpha progressivebeta progressivegamma progressivedelta progressiveepsilon'
+    ) do
+      expect(page).to have_n_results(1)
+      expect(page).to have_words(matching.title)
+      expect(page).not_to have_words(partial.title)
+    end
+  end
+
   scenario 'exact search for parts of an alphanumeric URL', search: true do
     url = 'http://vextro.k7f2d9a4c1b8e6350f4a9d2c7e1b6a3f.r2.cloudflarestorage.com'
     notice = create(

@@ -284,6 +284,113 @@ describe Lumen::Search::Query, type: :model do
     end
   end
 
+  context 'progressive matching for global searches' do
+    let(:global_search) { Notice::SEARCHABLE_FIELDS.first }
+
+    it 'keeps short unquoted searches on the existing match-any behavior' do
+      term = 'one two three four'
+      obj = described_class.new('term' => term)
+      obj.register global_search
+
+      obj.prepare
+
+      expect(obj.search_definition[:query][:bool][:must]).to include(
+        multi_match: {
+          query: term,
+          fields: Notice::MULTI_MATCH_FIELDS,
+          operator: 'OR'
+        }
+      )
+    end
+
+    it 'progressively requires more matches for unquoted searches of five or more words' do
+      term = 'one two three four five'
+      obj = described_class.new('term' => term)
+      obj.register global_search
+
+      obj.prepare
+
+      expect(obj.search_definition[:query][:bool][:must]).to include(
+        multi_match: {
+          query: term,
+          fields: Notice::MULTI_MATCH_FIELDS,
+          operator: 'OR',
+          minimum_should_match: described_class::PROGRESSIVE_TERM_MINIMUM_SHOULD_MATCH,
+          analyzer: described_class::PROGRESSIVE_TERM_SEARCH_ANALYZER,
+          type: :cross_fields
+        }
+      )
+    end
+
+    it 'does not change explicit all-words searches' do
+      term = 'one two three four five'
+      obj = described_class.new('term' => term, 'term-require-all' => true)
+      obj.register global_search
+
+      obj.prepare
+
+      expect(obj.search_definition[:query][:bool][:must]).to include(
+        multi_match: {
+          query: term,
+          fields: Notice::MULTI_MATCH_FIELDS,
+          operator: 'AND',
+          type: :cross_fields
+        }
+      )
+    end
+
+    it 'does not change field-specific searches' do
+      term = 'one two three four five'
+      title_search = Notice::SEARCHABLE_FIELDS.find { |search| search.parameter == :title }
+      obj = described_class.new('title' => term)
+      obj.register title_search
+
+      obj.prepare
+
+      expect(obj.search_definition[:query][:bool][:must]).to include(
+        match: {
+          title: {
+            query: term,
+            operator: 'OR'
+          }
+        }
+      )
+    end
+
+    it 'does not change quoted phrase searches' do
+      term = '"one two three four five"'
+      obj = described_class.new('term' => term)
+      obj.register global_search
+
+      obj.prepare
+
+      expect(obj.search_definition[:query][:bool][:must]).to include(
+        multi_match: {
+          query: term,
+          fields: Notice::MULTI_MATCH_FIELDS,
+          operator: 'OR',
+          type: :phrase
+        }
+      )
+    end
+
+    it 'does not change multi-label bare domain searches' do
+      term = 'one.two.three.example.com'
+      obj = described_class.new('term' => term)
+      obj.register global_search
+
+      obj.prepare
+
+      expect(obj.search_definition[:query][:bool][:must]).to include(
+        multi_match: {
+          query: term,
+          fields: Notice::MULTI_MATCH_FIELDS,
+          operator: 'OR'
+        }
+      )
+    end
+  end
+
   context 'exact searching' do
     it 'automatically searches an unquoted full URL as an exact URL' do
       term = 'https://imgur.com/a/rge778&dew87'
