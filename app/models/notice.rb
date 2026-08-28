@@ -22,6 +22,7 @@ class Notice < ApplicationRecord
   # We could simply list all of the fields we would have searched, but that
   # scoring proves to be incredibly slow.
   MULTI_MATCH_FIELDS = %w(base_search preferred_search^2)
+  UNQUOTED_SEARCH_ANALYZER = 'stop'.freeze
 
   # This source-field fallback for exact URL and domain searches is temporary
   # until notices are reindexed with:

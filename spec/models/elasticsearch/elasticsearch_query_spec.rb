@@ -42,7 +42,8 @@ describe Lumen::Search::Query, type: :model do
               query: 'i give up',
               fields: Notice::MULTI_MATCH_FIELDS,
               type: :cross_fields,
-              operator: 'AND'
+              operator: 'AND',
+              analyzer: Notice::UNQUOTED_SEARCH_ANALYZER
             } }
           ],
           filter: [
@@ -225,12 +226,17 @@ describe Lumen::Search::Query, type: :model do
 
           obj.prepare
 
+          expected_query = {
+            query: 'batman',
+            fields: search.field.map(&:to_s),
+            operator: 'OR'
+          }
+          if search.parameter == :term
+            expected_query[:analyzer] = Notice::UNQUOTED_SEARCH_ANALYZER
+          end
+
           expect(obj.search_definition[:query][:bool][:must]).to include(
-            { multi_match: {
-              query: 'batman',
-              fields: search.field.map(&:to_s),
-              operator: 'OR'
-            } }
+            multi_match: expected_query
           )
         end
 
@@ -243,16 +249,21 @@ describe Lumen::Search::Query, type: :model do
 
           obj.prepare
 
+          expected_query = {
+            query: 'all of these',
+            fields: search.field.map(&:to_s),
+            operator: 'AND',
+            # The 'AND' operator doesn't work the way you expect on the
+            # default multi_match type. See
+            # https://www.elastic.co/guide/en/elasticsearch/reference/6.8/query-dsl-multi-match-query.html .
+            type: :cross_fields
+          }
+          if search.parameter == :term
+            expected_query[:analyzer] = Notice::UNQUOTED_SEARCH_ANALYZER
+          end
+
           expect(obj.search_definition[:query][:bool][:must]).to include(
-            { multi_match: {
-              query: 'all of these',
-              fields: search.field.map(&:to_s),
-              operator: 'AND',
-              # The 'AND' operator doesn't work the way you expect on the
-              # default multi_match type. See
-              # https://www.elastic.co/guide/en/elasticsearch/reference/6.8/query-dsl-multi-match-query.html .
-              type: :cross_fields
-            } }
+            multi_match: expected_query
           )
         end
       else
@@ -298,7 +309,8 @@ describe Lumen::Search::Query, type: :model do
         multi_match: {
           query: term,
           fields: Notice::MULTI_MATCH_FIELDS,
-          operator: 'OR'
+          operator: 'OR',
+          analyzer: Notice::UNQUOTED_SEARCH_ANALYZER
         }
       )
     end
@@ -316,7 +328,7 @@ describe Lumen::Search::Query, type: :model do
           fields: Notice::MULTI_MATCH_FIELDS,
           operator: 'OR',
           minimum_should_match: described_class::PROGRESSIVE_TERM_MINIMUM_SHOULD_MATCH,
-          analyzer: described_class::PROGRESSIVE_TERM_SEARCH_ANALYZER,
+          analyzer: Notice::UNQUOTED_SEARCH_ANALYZER,
           type: :cross_fields
         }
       )
@@ -334,6 +346,7 @@ describe Lumen::Search::Query, type: :model do
           query: term,
           fields: Notice::MULTI_MATCH_FIELDS,
           operator: 'AND',
+          analyzer: Notice::UNQUOTED_SEARCH_ANALYZER,
           type: :cross_fields
         }
       )
@@ -376,6 +389,22 @@ describe Lumen::Search::Query, type: :model do
 
     it 'does not change multi-label bare domain searches' do
       term = 'one.two.three.example.com'
+      obj = described_class.new('term' => term)
+      obj.register global_search
+
+      obj.prepare
+
+      expect(obj.search_definition[:query][:bool][:must]).to include(
+        multi_match: {
+          query: term,
+          fields: Notice::MULTI_MATCH_FIELDS,
+          operator: 'OR'
+        }
+      )
+    end
+
+    it 'does not change searches containing numeric identifiers' do
+      term = 'Entity name 51'
       obj = described_class.new('term' => term)
       obj.register global_search
 

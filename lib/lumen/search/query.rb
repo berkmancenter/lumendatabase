@@ -58,6 +58,7 @@ class Lumen::Search::Query
     add_exact_match_requirements
     limit_to_enterprise_domains
     define_search
+    apply_unquoted_search_analyzer
     apply_term_exact_search
   end
 
@@ -308,6 +309,27 @@ class Lumen::Search::Query
     end
   end
 
+  def apply_unquoted_search_analyzer
+    return unless model_class.const_defined?(:UNQUOTED_SEARCH_ANALYZER, false)
+    return unless ordinary_unquoted_term_search?
+
+    search_definition[:query][:bool][:must].each do |query_item|
+      multi_match = query_item[:multi_match]
+      next if multi_match.nil?
+      next unless multi_match[:fields] == model_class::MULTI_MATCH_FIELDS
+
+      multi_match[:analyzer] = model_class::UNQUOTED_SEARCH_ANALYZER
+    end
+  end
+
+  def ordinary_unquoted_term_search?
+    term = term_search_value
+
+    term.present? &&
+      !quoted_term_search? &&
+      !term.match?(%r{[[:digit:]/@_'’]|:\S|[[:alnum:]]-[[:alnum:]]|\.[[:alnum:]]})
+  end
+
   def exact_url_search_fields?(multi_match)
     return false unless model_class.const_defined?(:EXACT_URL_SEARCH_FIELDS, false)
     return false unless model_class.const_defined?(:MULTI_MATCH_FIELDS, false)
@@ -341,15 +363,19 @@ class Lumen::Search::Query
   end
 
   def exact_search_value
-    term = @params['term'].to_s
+    term = term_search_value.to_s
 
     quoted_term_search? ? term[1...-1] : term
   end
 
   def quoted_term_search?
-    term = @params['term']
+    term = term_search_value
 
     term.present? && term.start_with?('"') && term.end_with?('"')
+  end
+
+  def term_search_value
+    @params['term'] || @params[:term]
   end
 
   # A pasted full URL is unambiguous enough to use exact-search semantics

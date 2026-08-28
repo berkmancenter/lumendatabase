@@ -208,6 +208,25 @@ feature 'Searching Notices', type: :feature do
     end
   end
 
+  scenario 'ignores stop words only in ordinary prose searches', search: true do
+    notice = create(:dmca, title: 'To Be or Not to Be on Youtube')
+    index_changed_instances
+
+    within_search_results_for('To be Youtube.') do
+      expect(page).to have_n_results(1)
+      expect(page).to have_words(notice.title)
+    end
+
+    within_search_results_for('to be') do
+      expect(page).to have_n_results(0)
+    end
+
+    within_search_results_for('"to be"') do
+      expect(page).to have_n_results(1)
+      expect(page).to have_words(notice.title)
+    end
+  end
+
   scenario 'exact search for parts of an alphanumeric URL', search: true do
     url = 'http://vextro.k7f2d9a4c1b8e6350f4a9d2c7e1b6a3f.r2.cloudflarestorage.com'
     notice = create(
