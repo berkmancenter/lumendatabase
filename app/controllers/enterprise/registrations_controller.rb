@@ -5,6 +5,8 @@
 # it and the user is created on accept.
 class Enterprise::RegistrationsController < ApplicationController
   def new
+    return if ENV['ENTERPRISE_REGISTRATION_DISABLED_TOKEN'] && params[:token] != ENV['ENTERPRISE_REGISTRATION_DISABLED_TOKEN']
+
     @registration = EnterpriseRegistration.new
   end
 
