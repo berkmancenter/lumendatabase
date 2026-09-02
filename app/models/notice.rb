@@ -218,7 +218,28 @@ class Notice < ApplicationRecord
   end
 
   def self.visible
-    where(visible_qualifiers)
+    where(visible_qualifiers).where(<<~'SQL'.squish)
+      NOT (
+        EXISTS (
+          SELECT 1
+          FROM entity_notice_roles submitter_roles
+          INNER JOIN entities submitters
+            ON submitters.id = submitter_roles.entity_id
+          WHERE submitter_roles.notice_id = notices.id
+            AND submitter_roles.name = 'submitter'
+            AND submitters.name ~* '\ygoogle\y'
+        )
+        AND EXISTS (
+          SELECT 1
+          FROM entity_notice_roles sender_roles
+          INNER JOIN entities senders
+            ON senders.id = sender_roles.entity_id
+          WHERE sender_roles.notice_id = notices.id
+            AND sender_roles.name = 'sender'
+            AND UPPER(senders.country_code) = 'KR'
+        )
+      )
+    SQL
   end
 
   def self.visible_qualifiers
@@ -446,6 +467,14 @@ class Notice < ApplicationRecord
     false
   end
 
+  def hidden
+    super || google_submission_from_south_korea?
+  end
+
+  def hidden?
+    hidden
+  end
+
   def set_topics
     topic = notice_topic_map
     topics << topic unless topics.include?(topic)
@@ -656,6 +685,11 @@ class Notice < ApplicationRecord
 
   def google_submitter?
     submitter && submitter.name =~ /\bgoogle\b/i
+  end
+
+  def google_submission_from_south_korea?
+    submitters.any? { |entity| entity.name&.match?(/\bgoogle\b/i) } &&
+      senders.any? { |entity| entity.country_code&.casecmp?('KR') }
   end
 
   def taiwan_sender?

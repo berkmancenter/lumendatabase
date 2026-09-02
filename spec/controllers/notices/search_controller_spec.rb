@@ -24,14 +24,19 @@ describe Notices::SearchController do
   end
 
   describe '#wrap_instances' do
-    it 'preloads associations used by notice search results' do
-      searchdata = instance_double(Elasticsearch::Model::Response::Response)
-      allow(searchdata).to receive(:records)
-        .with(includes: Notices::SearchController::RECORD_INCLUDES)
-        .and_return([])
+    it 'loads only notices visible in search views' do
+      visible_notice = create(:dmca)
+      hidden_notice = build(:dmca, role_names: %w[submitter sender])
+      hidden_notice.submitter.name = 'Google LLC'
+      hidden_notice.sender.country_code = 'KR'
+      hidden_notice.save!
+      searchdata = [
+        { _id: hidden_notice.id.to_s, _score: 2.0 },
+        { _id: visible_notice.id.to_s, _score: 1.0 }
+      ]
       controller.instance_variable_set(:@searchdata, searchdata)
 
-      expect(controller.send(:wrap_instances)).to eq []
+      expect(controller.send(:wrap_instances)).to eq [visible_notice]
     end
   end
 

@@ -15,7 +15,7 @@ class HomeController < ApplicationController
       @notices.pluck(:id)
     end
 
-    @notices ||= Notice.where(id: notice_ids)
+    @notices ||= Notice.visible.where(id: notice_ids)
 
     @blog_entries = blog_entries
     @search_index_path = notices_search_index_path

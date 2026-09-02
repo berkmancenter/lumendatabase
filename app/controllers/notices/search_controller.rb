@@ -47,6 +47,19 @@ class Notices::SearchController < SearchController
 
   def configure_searcher(_searcher); end
 
+  def wrap_instances
+    notice_ids = @searchdata.map { |result| result[:_id].to_s }
+    notices_by_id = Notice
+                    .visible
+                    .includes(record_includes)
+                    .where(id: notice_ids)
+                    .index_by { |notice| notice.id.to_s }
+
+    notice_ids.filter_map do |notice_id|
+      augment_instance(notices_by_id[notice_id])
+    end
+  end
+
   def record_includes
     RECORD_INCLUDES
   end

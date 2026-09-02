@@ -57,6 +57,19 @@ describe NoticesController do
         expect(response).to render_template('error_pages/404_hidden')
       end
 
+      it 'hides Google submissions from South Korea without updating the hidden field' do
+        notice = build(:dmca, role_names: %w[submitter sender])
+        notice.submitter.name = 'Google LLC'
+        notice.sender.country_code = 'KR'
+        stub_find_notice(notice)
+
+        get :show, params: { id: 1 }
+
+        expect(notice[:hidden]).to be false
+        expect(response.status).to eq(404)
+        expect(response).to render_template('error_pages/404_hidden')
+      end
+
       it 'does not enqueue server-side tracking for HTML views' do
         stub_const('Piwik', Piwik.merge('disabled' => false))
         allow(MatomoTrackingJob).to receive(:perform_later)

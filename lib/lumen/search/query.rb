@@ -100,7 +100,7 @@ class Lumen::Search::Query
       }
       digest = Digest::SHA256.hexdigest(JSON.generate(digest_values))
 
-      "search-result-v2-#{digest}-#{Date.current}"
+      "search-result-v3-#{digest}-#{Date.current}"
     end
   end
 

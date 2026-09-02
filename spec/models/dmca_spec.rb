@@ -296,6 +296,44 @@ describe DMCA, type: :model do
     end
   end
 
+  context 'on-the-fly hiding' do
+    it 'hides Google submissions from South Korea without changing the record' do
+      notice = build_notice_for_hiding(
+        submitter_name: 'Google LLC',
+        sender_country_code: 'kr'
+      )
+
+      notice.save!
+      notice.reload
+
+      expect(notice).to be_hidden
+      expect(notice[:hidden]).to be false
+      expect(described_class.visible).not_to include(notice)
+    end
+
+    it 'does not hide notices from a non-Google submitter in South Korea' do
+      notice = build_notice_for_hiding(
+        submitter_name: 'Another submitter',
+        sender_country_code: 'KR'
+      )
+
+      notice.save!
+
+      expect(notice).not_to be_hidden
+    end
+
+    it 'does not hide notices submitted by Google when the sender is outside South Korea' do
+      notice = build_notice_for_hiding(
+        submitter_name: 'Google LLC',
+        sender_country_code: 'US'
+      )
+
+      notice.save!
+
+      expect(notice).not_to be_hidden
+    end
+  end
+
   context 'miscellaneous properties' do
     context 'entity notice roles' do
       it 'has the expected entity notice roles' do
@@ -434,5 +472,12 @@ describe DMCA, type: :model do
         headers: { ENV['PROXY_CACHE_CLEAR_HEADER'] => 'yolo' }
       )).to have_been_made.once
     end
+  end
+
+  def build_notice_for_hiding(submitter_name:, sender_country_code:)
+    notice = build(:dmca, role_names: %w[submitter sender])
+    notice.submitter.name = submitter_name
+    notice.sender.country_code = sender_country_code
+    notice
   end
 end

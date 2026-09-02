@@ -94,7 +94,7 @@ class NoticesController < ApplicationController
       @notices.pluck(:id)
     end
 
-    @recent_notices ||= Notice.where(id: notice_ids)
+    @recent_notices ||= Notice.visible.where(id: notice_ids)
 
     respond_to do |format|
       format.rss { render layout: false }
@@ -320,13 +320,13 @@ class NoticesController < ApplicationController
   end
 
   def show_render_html
-    if @notice.rescinded?
-      render :rescinded
-    elsif @notice.hidden
+    if @notice.hidden
       render 'error_pages/404_hidden',
              formats: [:html],
              status: :not_found,
              layout: false
+    elsif @notice.rescinded?
+      render :rescinded
     elsif @notice.spam || !@notice.published
       render 'error_pages/404_unavailable',
              formats: [:html],
