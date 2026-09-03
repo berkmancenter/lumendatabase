@@ -11,11 +11,10 @@ class HomeController < ApplicationController
     notice_ids = Rails.cache.fetch(
       'recent_notices', expires_in: 1.hour
     ) do
-      @notices = Notice.visible.recent
-      @notices.pluck(:id)
+      Notice.visible.recent.pluck(:id)
     end
 
-    @notices ||= Notice.visible.where(id: notice_ids)
+    @notices = Notice.visible_for_display(notice_ids)
 
     @blog_entries = blog_entries
     @search_index_path = notices_search_index_path

@@ -308,7 +308,15 @@ describe DMCA, type: :model do
 
       expect(notice).to be_hidden
       expect(notice[:hidden]).to be false
-      expect(described_class.visible).not_to include(notice)
+      expect(described_class.visible).to include(notice)
+      expect(described_class.visible_for_display([notice.id])).not_to include(notice)
+      expect { described_class.find_visible(notice.id) }.to raise_error(
+        ActiveRecord::RecordNotFound
+      )
+    end
+
+    it 'does not add entity subqueries to the unbounded visible scope' do
+      expect(described_class.visible.to_sql).not_to include('entity_notice_roles')
     end
 
     it 'does not hide notices from a non-Google submitter in South Korea' do

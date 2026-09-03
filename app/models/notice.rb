@@ -214,32 +214,27 @@ class Notice < ApplicationRecord
   end
 
   def self.find_visible(notice_id)
-    self.visible.find(notice_id)
+    visible_for_display([notice_id]).first || raise(ActiveRecord::RecordNotFound)
   end
 
   def self.visible
-    where(visible_qualifiers).where(<<~'SQL'.squish)
-      NOT (
-        EXISTS (
-          SELECT 1
-          FROM entity_notice_roles submitter_roles
-          INNER JOIN entities submitters
-            ON submitters.id = submitter_roles.entity_id
-          WHERE submitter_roles.notice_id = notices.id
-            AND submitter_roles.name = 'submitter'
-            AND submitters.name ~* '\ygoogle\y'
-        )
-        AND EXISTS (
-          SELECT 1
-          FROM entity_notice_roles sender_roles
-          INNER JOIN entities senders
-            ON senders.id = sender_roles.entity_id
-          WHERE sender_roles.notice_id = notices.id
-            AND sender_roles.name = 'sender'
-            AND UPPER(senders.country_code) = 'KR'
-        )
-      )
-    SQL
+    where(visible_qualifiers)
+  end
+
+  def self.visible_for_display(notice_ids, includes: [])
+    ids = Array(notice_ids).map(&:to_s)
+    return [] if ids.empty?
+
+    eager_loads = [{ entity_notice_roles: :entity }] + Array(includes)
+    notices_by_id = visible
+                    .includes(*eager_loads)
+                    .where(id: ids)
+                    .index_by { |notice| notice.id.to_s }
+
+    ids.filter_map do |id|
+      notice = notices_by_id[id]
+      notice unless notice&.hidden?
+    end
   end
 
   def self.visible_qualifiers

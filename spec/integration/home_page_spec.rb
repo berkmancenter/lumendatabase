@@ -17,12 +17,21 @@ feature 'home page' do
   it 'links to recent visible notices' do
     create_list(:dmca, 15)
     Notice.last(10).shuffle.take(5).map { |x| x.update(published: false) }
+    hidden_notice = build(:dmca, role_names: %w[submitter sender])
+    hidden_notice.submitter.name = 'Google LLC'
+    hidden_notice.sender.country_code = 'KR'
+    hidden_notice.save!
 
     visit root_path
 
-    Notice.visible.recent.each do |n|
+    recent_ids = Notice.visible.recent.pluck(:id)
+    Notice.visible_for_display(recent_ids).each do |n|
       expect(page).to have_selector(:css, "a[href='#{notice_path(n.id)}']")
     end
+
+    expect(page).not_to have_selector(
+      :css, "a[href='#{notice_path(hidden_notice.id)}']"
+    )
 
     Notice.first(5).each do |n|
       expect(page).not_to have_selector(:css, "a[href='#{notice_path(n.id)}']")

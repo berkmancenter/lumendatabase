@@ -90,11 +90,10 @@ class NoticesController < ApplicationController
       'recent_notices',
       expires_in: 1.hour
     ) do
-      @notices = Notice.visible.recent
-      @notices.pluck(:id)
+      Notice.visible.recent.pluck(:id)
     end
 
-    @recent_notices ||= Notice.visible.where(id: notice_ids)
+    @recent_notices = Notice.visible_for_display(notice_ids)
 
     respond_to do |format|
       format.rss { render layout: false }
