@@ -89,6 +89,16 @@ describe ContentFilter do
   end
 
   describe 'validations' do
+    it 'allows a valid SQL query' do
+      filter = described_class.new(
+        name: 'Entity name',
+        query: '"entities"."name" = \'Stop\'',
+        actions: ['full_notice_version_only_researchers']
+      )
+
+      expect(filter).to be_valid
+    end
+
     it 'allows a filter with URL text and no SQL query' do
       filter = described_class.new(
         name: 'URL text',
@@ -106,6 +116,47 @@ describe ContentFilter do
       )
 
       expect(filter).not_to be_valid
+    end
+
+    it 'rejects malformed SQL queries without saving them' do
+      filter = described_class.new(
+        name: 'Broken SQL',
+        query: '"entities"."name" =',
+        actions: ['full_notice_version_only_researchers']
+      )
+
+      expect(filter.save).to be false
+      expect(filter.errors[:query].join).to include('is invalid SQL')
+      expect(filter).not_to be_persisted
+    end
+
+    it 'rejects SQL queries that reference missing columns' do
+      filter = described_class.new(
+        name: 'Missing column',
+        query: '"entities"."missing_column" = \'Stop\'',
+        actions: ['full_notice_version_only_researchers']
+      )
+
+      expect(filter).not_to be_valid
+      expect(filter.errors[:query].join).to include('missing_column')
+      expect { Notice.count }.not_to raise_error
+    end
+
+    it 'does not execute additional SQL statements during validation' do
+      existing_filter = described_class.create!(
+        name: 'Existing filter',
+        url_text: 'sensitive-name',
+        actions: ['full_notice_version_only_researchers']
+      )
+      filter = described_class.new(
+        name: 'Multiple statements',
+        query: 'TRUE); DELETE FROM content_filters; --',
+        actions: ['full_notice_version_only_researchers']
+      )
+
+      expect(filter).not_to be_valid
+      expect(filter.errors[:query].join).to include('is invalid SQL')
+      expect(existing_filter.reload).to be_present
     end
   end
 

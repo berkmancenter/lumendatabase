@@ -9,6 +9,7 @@ class ContentFilter < ApplicationRecord
   validates :name, presence: true
   validates :granularity, inclusion: { in: %w[notice urls] }
   validate :query_or_url_text_present
+  validate :query_is_valid_sql
 
   before_validation :normalize_url_text
   before_validation :set_default_granularity
@@ -180,6 +181,26 @@ class ContentFilter < ApplicationRecord
     return if query.present? || url_text.present?
 
     errors.add(:base, 'Query or URL text must be present')
+  end
+
+  def query_is_valid_sql
+    return if query.blank?
+
+    self.class.transaction(requires_new: true) do
+      validation_query = Notice
+                         .includes(:topics, :entity_notice_roles, :entities)
+                         .where(query)
+                         .references(:topics, :entity_notice_roles, :entities)
+                         .limit(0)
+
+      self.class.connection.exec_query(
+        "EXPLAIN #{validation_query.to_sql}",
+        'ContentFilter SQL validation'
+      )
+    end
+  rescue ActiveRecord::StatementInvalid => error
+    message = (error.cause&.message || error.message).lines.first.strip
+    errors.add(:query, "is invalid SQL: #{message}")
   end
 
   def normalize_url_text
