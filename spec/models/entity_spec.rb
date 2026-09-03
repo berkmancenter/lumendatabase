@@ -10,8 +10,97 @@ describe Entity, type: :model do
   it { is_expected.to have_many(:users) }
   it { is_expected.to have_many(:entity_notice_roles).dependent(:destroy) }
   it { is_expected.to have_many(:notices).through(:entity_notice_roles) }
+  it { is_expected.to have_many(:submitted_notices).through(:submission_roles) }
   it { is_expected.to have_and_belong_to_many(:full_notice_only_researchers_users) }
   it { is_expected.to validate_inclusion_of(:kind).in_array(Entity::KINDS) }
+
+  context 'submitter inactivity notifications' do
+    it 'parses comma- and newline-separated notification addresses' do
+      entity = build(
+        :entity,
+        inactivity_notification_emails: "one@example.com, two@example.com\nthree@example.com",
+        inactivity_notification_after_hours: 1
+      )
+
+      expect(entity.inactivity_notification_recipients).to eq(
+        %w[one@example.com two@example.com three@example.com]
+      )
+    end
+
+    it 'requires notification addresses and an inactivity period together' do
+      addresses_only = build(
+        :entity,
+        inactivity_notification_emails: 'alerts@example.com'
+      )
+      period_only = build(
+        :entity,
+        inactivity_notification_after_hours: 1
+      )
+
+      expect(addresses_only).not_to be_valid
+      expect(addresses_only.errors[:inactivity_notification_after_hours]).to be_present
+      expect(period_only).not_to be_valid
+      expect(period_only.errors[:inactivity_notification_emails]).to be_present
+    end
+
+    it 'requires positive whole days and valid email addresses' do
+      entity = build(
+        :entity,
+        inactivity_notification_emails: 'not-an-email',
+        inactivity_notification_after_hours: 0
+      )
+
+      expect(entity).not_to be_valid
+      expect(entity.errors[:inactivity_notification_emails]).to be_present
+      expect(entity.errors[:inactivity_notification_after_hours]).to be_present
+    end
+
+    it 'uses only notices where the entity has the submitter role' do
+      entity = create(:entity)
+      older_submission = create(:dmca, created_at: 3.days.ago)
+      newer_non_submission = create(:dmca, created_at: 1.day.ago)
+      create(
+        :entity_notice_role,
+        entity: entity,
+        notice: older_submission,
+        name: 'submitter'
+      )
+      create(
+        :entity_notice_role,
+        entity: entity,
+        notice: newer_non_submission,
+        name: 'sender'
+      )
+
+      expect(entity.latest_submission_at).to be_within(1.second).of(older_submission.created_at)
+    end
+
+    it 'resets the sent marker when notification settings change' do
+      entity = create(
+        :entity,
+        inactivity_notification_emails: 'alerts@example.com',
+        inactivity_notification_after_hours: 1
+      )
+      entity.update_column(:inactivity_notification_sent_at, Time.current)
+
+      entity.update!(inactivity_notification_after_hours: 2)
+
+      expect(entity.inactivity_notification_sent_at).to be_nil
+    end
+
+    it 'does not include notification configuration in the search index' do
+      entity = build(
+        :entity,
+        inactivity_notification_emails: 'private-alerts@example.com',
+        inactivity_notification_after_hours: 1,
+        inactivity_notification_sent_at: Time.current
+      )
+
+      indexed_entity = entity.as_indexed_json(nil)
+
+      expect(indexed_entity).not_to include(*Entity::INACTIVITY_NOTIFICATION_ATTRIBUTES)
+    end
+  end
 
   context '.submitters' do
     it "returns only submitter types" do
@@ -29,6 +118,32 @@ describe Entity, type: :model do
   end
 
   context 'post update reindexing' do
+    it 'does not enqueue a reindex when notification settings are enabled' do
+      entity = create(:entity)
+
+      expect do
+        entity.update!(
+          inactivity_notification_emails: 'alerts@example.com',
+          inactivity_notification_after_hours: 24
+        )
+      end.not_to change(NoticeUpdateCall, :count)
+    end
+
+    it 'does not enqueue a reindex when existing notification settings change' do
+      entity = create(
+        :entity,
+        inactivity_notification_emails: 'alerts@example.com',
+        inactivity_notification_after_hours: 24
+      )
+      entity.update_column(:inactivity_notification_sent_at, 1.hour.ago)
+
+      expect do
+        entity.update!(inactivity_notification_after_hours: 48)
+      end.not_to change(NoticeUpdateCall, :count)
+
+      expect(entity.inactivity_notification_sent_at).to be_nil
+    end
+
     it 'updates updated_at for every notice associated with an entity' do
       notice = create(:dmca)
 

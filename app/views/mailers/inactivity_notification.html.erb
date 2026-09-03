@@ -1,0 +1,8 @@
+<h1>Submitter inactivity alert</h1>
+
+<p>
+  <strong><%= @submitter.name %></strong> has not submitted a notice to Lumen recently.
+</p>
+
+<p>Last submission: <%= @last_submission_at.to_fs(:long) %></p>
+<p>Notification threshold: <%= pluralize(@inactivity_hours, 'hour') %></p>

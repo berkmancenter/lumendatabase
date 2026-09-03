@@ -10,6 +10,8 @@ Lumen relies on several cron jobs in production. As of October 2020, cron runs:
 * `rails lumen:publish_embargoed`
 * `rails lumen:generate_court_order_report`
   - There's also a cron job which rotates the generated reports.
+* `rails lumen:send_submitter_inactivity_notifications`
+  - Runs every 60 minutes. It emails the addresses configured on a submitter entity after the configured number of inactive hours. It sends one alert per period of inactivity and becomes eligible again after the submitter submits a new notice.
 
 ## Troubleshooting
 

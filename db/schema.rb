@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_08_28_120000) do
+ActiveRecord::Schema[7.2].define(version: 2026_09_02_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -352,6 +352,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_08_28_120000) do
     t.string "zip_original"
     t.string "url_original"
     t.text "name_description"
+    t.text "inactivity_notification_emails"
+    t.integer "inactivity_notification_after_hours"
+    t.datetime "inactivity_notification_sent_at"
     t.index ["address_line_1"], name: "index_entities_on_address_line_1"
     t.index ["ancestry"], name: "index_entities_on_ancestry"
     t.index ["city"], name: "index_entities_on_city"

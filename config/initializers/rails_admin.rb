@@ -406,7 +406,11 @@ RailsAdmin.config do |config|
       limited_pagination true
     end
     show do
-      exclude_fields :notices, :entity_notice_roles, :ancestry
+      exclude_fields :notices,
+                     :entity_notice_roles,
+                     :submission_roles,
+                     :submitted_notices,
+                     :ancestry
     end
     edit do
       configure :kind, :enum do
@@ -434,6 +438,18 @@ RailsAdmin.config do |config|
       field :users
       field :full_notice_only_researchers
       field :full_notice_only_researchers_users
+      field :inactivity_notification_emails, :text do
+        label 'Inactivity notification addresses'
+        help 'Comma- or newline-separated email addresses. Leave blank to disable notifications.'
+      end
+      field :inactivity_notification_after_hours do
+        label 'Notify after inactivity (hours)'
+        help 'Number of full hours without a submitted notice before sending an alert.'
+      end
+      field :inactivity_notification_sent_at do
+        label 'Last inactivity notification sent at'
+        read_only true
+      end
       field :name_original
       field :address_line_1_original
       field :address_line_2_original
