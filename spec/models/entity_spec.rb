@@ -118,11 +118,23 @@ describe Entity, type: :model do
   end
 
   context 'post update reindexing' do
-    it 'does not enqueue a reindex when notification settings are enabled' do
-      entity = create(:entity)
+    it 'does not enqueue a reindex when Rails Admin normalizes blank fields' do
+      entity = create(
+        :entity,
+        address_line_2: '',
+        phone: '',
+        email: '',
+        url: '',
+        name_original: ''
+      )
 
       expect do
         entity.update!(
+          address_line_2: nil,
+          phone: nil,
+          email: nil,
+          url: nil,
+          name_original: nil,
           inactivity_notification_emails: 'alerts@example.com',
           inactivity_notification_after_hours: 24
         )

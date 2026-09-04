@@ -170,15 +170,16 @@ class Entity < ApplicationRecord
   end
 
   def inactivity_notification_changes_only?
-    changed_attributes = saved_changes.keys
+    changes = saved_changes.except('updated_at')
     notification_attributes_changed = (
-      changed_attributes & INACTIVITY_NOTIFICATION_ATTRIBUTES
+      changes.keys & INACTIVITY_NOTIFICATION_ATTRIBUTES
     ).any?
-    other_attributes_changed = changed_attributes -
-                               INACTIVITY_NOTIFICATION_ATTRIBUTES -
-                               ['updated_at']
+    other_changes = changes.except(*INACTIVITY_NOTIFICATION_ATTRIBUTES)
+    other_changes_are_blank_normalizations = other_changes.values.all? do |values|
+      values.all?(&:blank?)
+    end
 
-    notification_attributes_changed && other_attributes_changed.empty?
+    notification_attributes_changed && other_changes_are_blank_normalizations
   end
 
   def reset_inactivity_notification_sent_at
