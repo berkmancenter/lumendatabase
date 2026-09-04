@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'base64'
 
 describe NoticesController do
   context '#show' do
@@ -19,6 +20,15 @@ describe NoticesController do
 
         expect(response).to be_successful
         expect(response).to render_template(:show)
+      end
+
+      it 'renders a processing page for a reserved notice ID' do
+        submission_request = create(:notice_submission_request)
+
+        get :show, params: { id: submission_request.reserved_notice_id }
+
+        expect(response).to have_http_status(:accepted)
+        expect(response).to render_template(:processing)
       end
 
       it 'renders the rescinded template if the notice is rescinded' do
@@ -95,6 +105,21 @@ describe NoticesController do
     end
 
     context 'as JSON' do
+      it 'returns processing status for a reserved notice ID' do
+        submission_request = create(:notice_submission_request)
+
+        get :show,
+            params: { id: submission_request.reserved_notice_id, format: :json }
+
+        expect(response).to have_http_status(:accepted)
+        expect(JSON.parse(response.body)).to eq(
+          'notice' => {
+            'id' => submission_request.reserved_notice_id,
+            'status' => 'processing'
+          }
+        )
+      end
+
       Notice.type_models.each do |model_class|
         it "returns a serialized notice for #{model_class}" do
           notice = stub_find_notice(model_class.new)
@@ -528,6 +553,15 @@ describe NoticesController do
         expect(assigns(:notice)).to eq @fake_notice
         expect(response).to render_template(:new)
       end
+
+      it 'continues to save HTML submissions synchronously' do
+        make_allowances
+
+        expect(@fake_notice).to receive(:save)
+        expect(NoticeSubmissionRequest).not_to receive(:create!)
+
+        post_create
+      end
     end
 
     context 'as JSON' do
@@ -550,15 +584,85 @@ describe NoticesController do
       end
 
       it 'returns a proper Location header when saved successfully' do
-        notice = create(:dmca)
-        allow(subject).to receive(:authorized_to_create?).and_return true
-        allow(Lumen::NoticeBuilder).to receive_message_chain(:new, :build)
-                            .and_return notice
+        make_allowances
+        allow(NoticeSubmissionJob).to receive(:perform_later)
 
-        post_create :json
+        expect do
+          post_create :json
+        end.to change(NoticeSubmissionRequest, :count).by(1)
+          .and change(Notice, :count).by(0)
 
-        expect(response).to be_successful
-        expect(response.headers['Location']).to eq notice_url(notice)
+        submission_request = NoticeSubmissionRequest.last
+
+        expect(response).to have_http_status(:created)
+        expect(response.body).to be_empty
+        expect(response.headers['Location']).to eq(
+          notice_url(submission_request.reserved_notice_id)
+        )
+        expect(NoticeSubmissionJob).to have_received(:perform_later)
+          .with(submission_request.id)
+      end
+
+      it 'returns created after durable storage even if enqueueing fails' do
+        make_allowances
+        allow(NoticeSubmissionJob).to receive(:perform_later)
+          .and_raise(RedisClient::CannotConnectError, 'redis unavailable')
+
+        expect do
+          post_create :json
+        end.to change(NoticeSubmissionRequest, :count).by(1)
+
+        expect(response).to have_http_status(:created)
+        expect(NoticeSubmissionRequest.last).to be_processing
+      end
+
+      it 'stores attachments without staging them before the response' do
+        make_allowances
+        file_data = Base64.strict_encode64('small file')
+        @notice_params[:file_uploads_attributes] = [{
+          kind: 'original',
+          file: "data:text/plain;base64,#{file_data}",
+          file_name: 'small.txt'
+        }]
+        validation_payload = nil
+        allow(Lumen::NoticeBuilder).to receive(:new) do |_type, payload, _user|
+          validation_payload = payload
+          @fake_notice
+        end
+        allow(NoticeSubmissionJob).to receive(:perform_later)
+
+        expect do
+          post :create,
+               params: { notice: @notice_params, format: :json }
+        end.not_to change(ActiveStorage::Blob, :count)
+
+        expect(response).to have_http_status(:created)
+        expect(validation_payload).not_to have_key('file_uploads_attributes')
+        expect(
+          NoticeSubmissionRequest.last.payload.dig(
+            'file_uploads_attributes', 0, 'file'
+          )
+        ).to eq("data:text/plain;base64,#{file_data}")
+      end
+
+      it 'rejects invalid attachment data before storing a receipt' do
+        make_allowances
+        allow(@fake_notice).to receive(:errors)
+          .and_return(mock_errors(@fake_notice))
+        @notice_params[:file_uploads_attributes] = [{
+          kind: 'original',
+          file: 'data:text/plain;base64,not-base64!',
+          file_name: 'broken.txt'
+        }]
+
+        expect do
+          post :create,
+               params: { notice: @notice_params, format: :json }
+        end.not_to change(NoticeSubmissionRequest, :count)
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(JSON.parse(response.body).dig('notices', 'file_uploads'))
+          .to include('contains invalid base64 data')
       end
 
       it 'returns a useful status code when there are errors' do

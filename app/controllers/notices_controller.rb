@@ -15,50 +15,38 @@ class NoticesController < ApplicationController
     build_new_notice
   end
 
-  # In commit d7879d0 and prior, this was split into a two-part process with a
-  # Lumen::NoticeBuilder and a NoticeFinalizer. The idea here was that we'd create
-  # Notices with stub works, and then background the time-consuming work + URL
-  # creation step.
-  # However, background processing adds a lot of complexity, and didn't seem
-  # worth it in light of the fact that no one really cares if notice creation
-  # is slow. Also, the format.html step when the notice was invalid was allowing
-  # the stub notice to be created (which it should not!) but returning http 200
-  # instead of 201 or 429, confusing clients.
-  # Current code falls back to something more like the Rails standard. Not
-  # exactly the same -- we still use Lumen::NoticeBuilder to do some default-setting
-  # and to create entity relationships -- but close enough that we can rely on
-  # rails native error handling.
-  # If you're reading this because you want to take another run at backgrounding
-  # the expensive parts of notice creation, by all means check out the code
-  # from that commit, but make sure to wrap ready_for_persistence? in a
-  # transaction.
+  # HTML submissions retain the standard synchronous create flow. JSON
+  # submissions are validated, stored as durable requests, and completed by a
+  # background job using a notice ID reserved before the response is returned.
   def create
     return unauthorized_response unless authorized_to_create?
 
-    @notice = Lumen::NoticeBuilder.new(
-      get_notice_type(params), notice_params, current_user
-    ).build
+    notice_type = get_notice_type(params)
+    submitted_params = notice_params
 
     respond_to do |format|
-      if @notice.valid?
-        @notice.save
-        @notice.mark_for_review
-        flash.notice = "Notice created! It can be found at #{notice_url(@notice)}"
-        format.json { head :created, location: @notice }
-        format.html { redirect_to new_notice_url }
-      else
-        Lumen::Logger.log_metrics('FAILED_CREATE_NEW_NOTICE', notice_errors: @notice.errors)
-
-        flash.alert = 'Notice creation failed. See errors below.'
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: { notices: @notice.errors }, status: :unprocessable_entity }
+      format.json do
+        create_json_notice(notice_type, submitted_params)
+      end
+      format.html do
+        @notice = Lumen::NoticeBuilder.new(
+          notice_type, submitted_params, current_user
+        ).build
+        if @notice.valid?
+          @notice.save
+          @notice.mark_for_review
+          flash.notice = "Notice created! It can be found at #{notice_url(@notice)}"
+          redirect_to new_notice_url
+        else
+          log_failed_notice
+          flash.alert = 'Notice creation failed. See errors below.'
+          render :new, status: :unprocessable_entity
+        end
       end
     end
   end
 
   def show
-    return resource_not_found("Can't fing notice with id=#{params[:id]}") unless (@notice = Notice.find_by(id: params[:id]))
-
     @searchable_fields = Notice::SEARCHABLE_FIELDS
     @filterable_fields = Notice::FILTERABLE_FIELDS
     @ordering_options = Notice::ORDERING_OPTIONS
@@ -68,6 +56,16 @@ class NoticesController < ApplicationController
     else
       @search_all_placeholder = 'Search all notices...'
       @search_index_path = notices_search_index_path
+    end
+
+    @notice = Notice.find_by(id: params[:id])
+    unless @notice
+      @notice_submission_request = NoticeSubmissionRequest.find_by(
+        reserved_notice_id: params[:id]
+      )
+      return render_processing_notice if @notice_submission_request
+
+      return resource_not_found("Can't fing notice with id=#{params[:id]}")
     end
 
     respond_to do |format|
@@ -178,6 +176,79 @@ class NoticesController < ApplicationController
   end
 
   private
+
+  def create_json_notice(notice_type, submitted_params)
+    @notice = Lumen::NoticeBuilder.new(
+      notice_type,
+      submitted_params.except('file_uploads_attributes'),
+      current_user
+    ).build
+    notice_valid = valid_json_notice?
+    attachments_valid = Lumen::Submissions::AttachmentValidator.new(
+      submitted_params
+    ).validate(@notice.errors)
+
+    unless notice_valid && attachments_valid
+      log_failed_notice
+      render json: { notices: @notice.errors }, status: :unprocessable_entity
+      return
+    end
+
+    submission_request = Lumen::Submissions::Intake.new(
+      notice_type: notice_type,
+      payload: submitted_params,
+      submitted_by: current_user,
+      request_id: request.request_id
+    ).call
+    enqueue_notice_submission(submission_request)
+
+    head :created,
+         location: notice_url(submission_request.reserved_notice_id)
+  end
+
+  def valid_json_notice?
+    valid = false
+
+    Notice.transaction(requires_new: true) do
+      valid = @notice.valid?
+      raise ActiveRecord::Rollback
+    end
+
+    valid
+  end
+
+  def enqueue_notice_submission(submission_request)
+    return if submission_request.completed?
+
+    NoticeSubmissionJob.perform_later(submission_request.id)
+    submission_request.mark_queued!
+  rescue StandardError => error
+    Rails.logger.error(
+      "Notice submission #{submission_request.id} was stored but could not " \
+      "be enqueued: #{error.class}: #{error.message}"
+    )
+  end
+
+  def log_failed_notice
+    Lumen::Logger.log_metrics(
+      'FAILED_CREATE_NEW_NOTICE',
+      notice_errors: @notice.errors
+    )
+  end
+
+  def render_processing_notice
+    respond_to do |format|
+      format.html { render :processing, status: :accepted }
+      format.json do
+        render json: {
+          notice: {
+            id: @notice_submission_request.reserved_notice_id,
+            status: 'processing'
+          }
+        }, status: :accepted
+      end
+    end
+  end
 
   def unauthorized_response
     self.status = :unauthorized

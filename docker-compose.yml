@@ -27,6 +27,19 @@ services:
     environment:
       HISTFILE: /home/lumen/hist/.bash_history
 
+  worker:
+    depends_on:
+      - 'postgres'
+      - 'redis'
+    build:
+      context: .
+      dockerfile: docker/website/Dockerfile
+    command: bundle exec sidekiq -C config/sidekiq.yml
+    volumes:
+      - '.:/app'
+    env_file:
+      - '.env'
+
   elasticsearch:
     image: elasticsearch:7.17.0
     environment:

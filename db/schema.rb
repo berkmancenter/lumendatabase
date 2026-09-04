@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_09_02_120000) do
+ActiveRecord::Schema[7.2].define(version: 2026_09_03_120000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -431,6 +431,44 @@ ActiveRecord::Schema[7.2].define(version: 2026_09_02_120000) do
     t.datetime "updated_at", precision: nil
   end
 
+  create_table "notice_submission_requests", force: :cascade do |t|
+    t.integer "reserved_notice_id", null: false
+    t.string "notice_type", null: false
+    t.jsonb "payload", default: {}, null: false
+    t.string "payload_digest", null: false
+    t.bigint "submitted_by_id"
+    t.bigint "submitter_entity_id"
+    t.string "status", default: "pending", null: false
+    t.string "request_id"
+    t.integer "attempts", default: 0, null: false
+    t.datetime "queued_at"
+    t.datetime "started_at"
+    t.datetime "completed_at"
+    t.datetime "failed_at"
+    t.string "failure_class"
+    t.text "failure_message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["reserved_notice_id"], name: "index_notice_submission_requests_on_reserved_notice_id", unique: true
+    t.index ["status"], name: "index_notice_submission_requests_on_status"
+    t.index ["submitted_by_id"], name: "index_notice_submission_requests_on_submitted_by_id"
+    t.index ["submitter_entity_id"], name: "index_notice_submission_requests_on_submitter_entity_id"
+  end
+
+  create_table "notice_submission_uploads", force: :cascade do |t|
+    t.bigint "notice_submission_request_id", null: false
+    t.string "parameter_key", null: false
+    t.string "kind"
+    t.string "original_filename", null: false
+    t.string "content_type", null: false
+    t.bigint "byte_size", null: false
+    t.string "checksum", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["notice_submission_request_id", "parameter_key"], name: "idx_notice_submission_uploads_on_request_and_key", unique: true
+    t.index ["notice_submission_request_id"], name: "idx_notice_submission_uploads_on_request_id"
+  end
+
   create_table "notice_update_calls", force: :cascade do |t|
     t.integer "caller_id"
     t.string "caller_type"
@@ -679,5 +717,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_09_02_120000) do
   add_foreign_key "enterprise_payments", "users", on_delete: :nullify
   add_foreign_key "enterprise_reports", "enterprise_accounts"
   add_foreign_key "enterprise_reports", "users", column: "requested_by_id", on_delete: :nullify
+  add_foreign_key "notice_submission_requests", "entities", column: "submitter_entity_id"
+  add_foreign_key "notice_submission_requests", "users", column: "submitted_by_id", on_delete: :nullify
+  add_foreign_key "notice_submission_uploads", "notice_submission_requests"
   add_foreign_key "users", "enterprise_accounts"
 end

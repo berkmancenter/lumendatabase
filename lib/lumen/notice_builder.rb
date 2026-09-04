@@ -1,8 +1,9 @@
 class Lumen::NoticeBuilder
-  def initialize(model_class, params, user = nil)
+  def initialize(model_class, params, user = nil, submitter_entity: nil)
     @model_class = model_class
     @params = params
     @user = user
+    @submitter_entity = submitter_entity
     @json_params = nil
   end
 
@@ -17,7 +18,7 @@ class Lumen::NoticeBuilder
 
   private
 
-  attr_reader :model_class, :params, :json_params, :user
+  attr_reader :model_class, :params, :json_params, :submitter_entity, :user
 
   # This ensures that the data structure we're working with will look like JSON
   # data, not form data, so we don't have to worry about figuring out which
@@ -56,7 +57,8 @@ class Lumen::NoticeBuilder
   end
 
   def set_all_entities
-    return unless !!user && !!(entity = user.entity)
+    entity = submitter_entity || user&.entity
+    return unless entity
 
     # Submitter should always be forced to be a linked entity of the current user
     @notice.entity_notice_roles = @notice.entity_notice_roles.select { |entity_role| entity_role.name.to_sym != :submitter } if entity_present?(:submitter)

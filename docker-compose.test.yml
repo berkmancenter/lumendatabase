@@ -26,6 +26,19 @@ services:
     env_file:
       - '.env.test'
 
+  worker:
+    depends_on:
+      - 'postgres'
+      - 'redis'
+    build:
+      context: .
+      dockerfile: docker/website/Dockerfile
+    command: bundle exec sidekiq -C config/sidekiq.yml
+    volumes:
+      - '.:/app'
+    env_file:
+      - '.env.test'
+
   elasticsearch:
     image: elasticsearch:7.17.0
     environment:

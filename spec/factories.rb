@@ -150,6 +150,23 @@ FactoryBot.define do
     end
   end
 
+  factory :notice_submission_request do
+    sequence(:reserved_notice_id) { |number| 900_000_000 + number }
+    notice_type { 'DMCA' }
+    payload do
+      {
+        'title' => 'A queued notice',
+        'works_attributes' => [{ 'description' => 'A work' }],
+        'entity_notice_roles_attributes' => [{
+          'name' => 'recipient',
+          'entity_attributes' => { 'name' => 'The Googs' }
+        }]
+      }
+    end
+    payload_digest { Digest::SHA256.hexdigest(JSON.generate(payload)) }
+    status { 'pending' }
+  end
+
   factory :entity_notice_role do
     entity
     association(:notice, factory: :dmca)
