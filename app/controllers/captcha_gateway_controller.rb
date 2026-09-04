@@ -1,4 +1,6 @@
 class CaptchaGatewayController < ApplicationController
+  skip_after_action :store_action, only: :index
+
   def index
     redirect_to root_path if params[:destination].blank?
   end

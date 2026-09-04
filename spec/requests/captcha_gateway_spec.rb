@@ -11,6 +11,18 @@ describe 'Captcha gateway', type: :request do
       expect(response.body).to include('method="post"')
       expect(response.body).to include('name="destination"')
     end
+
+    it 'does not store a legacy GET captcha response in the session' do
+      get captcha_gateway_index_path,
+          params: {
+            destination: destination,
+            'g-recaptcha-response': 'secret-captcha-response' * 200,
+            commit: 'Submit'
+          }
+
+      expect(response).to be_successful
+      expect(session.to_hash.to_s).not_to include('secret-captcha-response')
+    end
   end
 
   describe 'POST /captcha_gateway' do

@@ -4,8 +4,10 @@ class Lumen::Middleware::SetRequestId
   end
 
   def call(env)
+    request = ActionDispatch::Request.new(env)
+
     Current.request_id = env['action_dispatch.request_id']
-    Current.request_url = Rack::Request.new(env).url
+    Current.request_url = "#{request.base_url}#{request.filtered_path}"
     @app.call(env)
   end
 end
