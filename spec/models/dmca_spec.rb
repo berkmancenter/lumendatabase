@@ -319,7 +319,7 @@ describe DMCA, type: :model do
       expect(described_class.visible.to_sql).not_to include('entity_notice_roles')
     end
 
-    it 'does not hide notices from a non-Google submitter in South Korea' do
+    it 'does not hide notices from another submitter in South Korea' do
       notice = build_notice_for_hiding(
         submitter_name: 'Another submitter',
         sender_country_code: 'KR'
@@ -328,6 +328,45 @@ describe DMCA, type: :model do
       notice.save!
 
       expect(notice).not_to be_hidden
+    end
+
+    it 'hides notices when one of the recipients is Google' do
+      notice = build_notice_for_hiding(
+        submitter_name: 'Another submitter',
+        sender_country_code: 'KR'
+      )
+      add_recipient(notice, 'Another recipient')
+      add_recipient(notice, 'Google LLC')
+
+      notice.save!
+      notice.reload
+
+      expect(notice).to be_hidden
+    end
+
+    it 'hides notices when YouTube is the recipient' do
+      notice = build_notice_for_hiding(
+        submitter_name: 'Another submitter',
+        sender_country_code: 'KR'
+      )
+      add_recipient(notice, 'YouTube LLC')
+
+      notice.save!
+      notice.reload
+
+      expect(notice).to be_hidden
+    end
+
+    it 'hides notices when YouTube is the submitter' do
+      notice = build_notice_for_hiding(
+        submitter_name: 'YouTube LLC',
+        sender_country_code: 'KR'
+      )
+
+      notice.save!
+      notice.reload
+
+      expect(notice).to be_hidden
     end
 
     it 'does not hide notices submitted by Google when the sender is outside South Korea' do
@@ -487,5 +526,10 @@ describe DMCA, type: :model do
     notice.submitter.name = submitter_name
     notice.sender.country_code = sender_country_code
     notice
+  end
+
+  def add_recipient(notice, name)
+    role = notice.entity_notice_roles.build(name: 'recipient')
+    role.entity = build(:entity, name: name)
   end
 end

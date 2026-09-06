@@ -463,7 +463,7 @@ class Notice < ApplicationRecord
   end
 
   def hidden
-    super || google_submission_from_south_korea?
+    super || google_or_youtube_notice_from_south_korea?
   end
 
   def hidden?
@@ -682,8 +682,12 @@ class Notice < ApplicationRecord
     submitter && submitter.name =~ /\bgoogle\b/i
   end
 
-  def google_submission_from_south_korea?
-    submitters.any? { |entity| entity.name&.match?(/\bgoogle\b/i) } &&
+  def google_or_youtube_notice_from_south_korea?
+    google_or_youtube_party = (submitters + recipients).any? do |entity|
+      entity.name&.match?(/\b(?:google|youtube)\b/i)
+    end
+
+    google_or_youtube_party &&
       senders.any? { |entity| entity.country_code&.casecmp?('KR') }
   end
 
