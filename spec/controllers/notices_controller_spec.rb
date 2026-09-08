@@ -616,7 +616,9 @@ describe NoticesController do
         end.to change(NoticeSubmissionRequest, :count).by(1)
 
         expect(response).to have_http_status(:created)
-        expect(NoticeSubmissionRequest.last).to be_processing
+        submission_request = NoticeSubmissionRequest.last
+        expect(submission_request.status).to eq('received')
+        expect(submission_request.queued_at).to be_nil
       end
 
       it 'stores attachments without staging them before the response' do

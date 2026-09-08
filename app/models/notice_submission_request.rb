@@ -2,7 +2,13 @@
 
 class NoticeSubmissionRequest < ApplicationRecord
   MAX_ATTEMPTS = 25
-  STATUSES = %w[received staging_failed pending processing completed failed].freeze
+  PROCESSING_TIMEOUT = 1.hour
+  RETRY_BASE_DELAY = 1.minute
+  RETRY_MAX_DELAY = 6.hours
+  DISPATCHABLE_STATUSES = %w[received staging_failed failed].freeze
+  STATUSES = %w[
+    received queued staging_failed pending processing completed failed
+  ].freeze
 
   belongs_to :submitted_by, class_name: 'User', optional: true
   belongs_to :submitter_entity, class_name: 'Entity', optional: true
@@ -23,11 +29,22 @@ class NoticeSubmissionRequest < ApplicationRecord
   validates :status, presence: true, inclusion: { in: STATUSES }
 
   scope :dispatchable, lambda {
-    where(
-      status: %w[received staging_failed pending failed],
-      attempts: ...MAX_ATTEMPTS
+    now = Time.current
+
+    where(attempts: ...MAX_ATTEMPTS).where(
+      <<~SQL.squish,
+        (
+          status IN (:statuses)
+          AND (next_attempt_at IS NULL OR next_attempt_at <= :now)
+        ) OR (
+          status = 'processing'
+          AND started_at < :processing_timeout
+        )
+      SQL
+      statuses: DISPATCHABLE_STATUSES,
+      now: now,
+      processing_timeout: now - PROCESSING_TIMEOUT
     )
-      .where('queued_at IS NULL OR queued_at < ?', 5.minutes.ago)
   }
 
   def completed?
@@ -39,7 +56,7 @@ class NoticeSubmissionRequest < ApplicationRecord
   end
 
   def processing?
-    %w[received pending processing].include?(status)
+    %w[received queued pending processing].include?(status)
   end
 
   def retryable?
@@ -50,8 +67,34 @@ class NoticeSubmissionRequest < ApplicationRecord
     Notice.find_by(id: reserved_notice_id)
   end
 
-  def mark_queued!
-    update_column(:queued_at, Time.current)
+  def dispatchable_now?(now = Time.current)
+    return false unless retryable?
+
+    if status == 'processing'
+      return started_at.present? && started_at < now - PROCESSING_TIMEOUT
+    end
+
+    DISPATCHABLE_STATUSES.include?(status) &&
+      (next_attempt_at.nil? || next_attempt_at <= now)
+  end
+
+  def begin_processing!
+    started = false
+
+    with_lock do
+      if %w[received queued pending].include?(status)
+        update!(
+          status: 'processing',
+          started_at: Time.current,
+          failed_at: nil,
+          failure_class: nil,
+          failure_message: nil
+        )
+        started = true
+      end
+    end
+
+    started
   end
 
   def mark_failed!(error)
@@ -72,13 +115,23 @@ class NoticeSubmissionRequest < ApplicationRecord
     with_lock do
       return if completed?
 
+      attempt_count = attempts + 1
       update!(
         status: failure_status,
-        attempts: attempts + 1,
+        attempts: attempt_count,
         failed_at: Time.current,
         failure_class: error.class.name,
-        failure_message: error.message.to_s.truncate(2_000)
+        failure_message: error.message.to_s.truncate(2_000),
+        next_attempt_at: next_attempt_at_for(attempt_count)
       )
     end
+  end
+
+  def next_attempt_at_for(attempt_count)
+    return if attempt_count >= MAX_ATTEMPTS
+
+    exponent = [attempt_count - 1, 12].min
+    delay = [RETRY_BASE_DELAY * (2**exponent), RETRY_MAX_DELAY].min
+    Time.current + delay + (id % 30).seconds
   end
 end

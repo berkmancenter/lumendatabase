@@ -2,10 +2,13 @@
 
 class NoticeSubmissionJob < ApplicationJob
   queue_as :submissions
+  # Receipt state and the cron dispatcher are the single retry authority.
+  sidekiq_options retry: false
+  self.enqueue_after_transaction_commit = :never
 
   def perform(submission_request_id)
     submission_request = NoticeSubmissionRequest.find(submission_request_id)
-    return submission_request.notice if submission_request.completed?
+    return submission_request.notice unless submission_request.begin_processing!
 
     staging_attachments = true
     Lumen::Submissions::AttachmentStager.new(submission_request).stage

@@ -44,7 +44,7 @@ RSpec.describe Lumen::Submissions::AttachmentStager do
 
     expect { stager.stage }
       .not_to change(NoticeSubmissionUpload, :count)
-    expect(submission_request.reload.status).to eq('pending')
+    expect(submission_request.reload.status).to eq('processing')
     expect(submission_request.uploads.first.file.download).to eq(bytes)
   end
 

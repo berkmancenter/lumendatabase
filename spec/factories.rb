@@ -164,7 +164,7 @@ FactoryBot.define do
       }
     end
     payload_digest { Digest::SHA256.hexdigest(JSON.generate(payload)) }
-    status { 'pending' }
+    status { 'queued' }
   end
 
   factory :entity_notice_role do

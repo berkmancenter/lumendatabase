@@ -4,12 +4,11 @@ class NoticeSubmissionDispatchJob < ApplicationJob
   queue_as :default
 
   def perform
-    NoticeSubmissionRequest.dispatchable.find_each do |submission_request|
-      submission_request.mark_queued!
-      NoticeSubmissionJob.perform_later(submission_request.id)
+    NoticeSubmissionRequest.dispatchable.select(:id).find_each do |request|
+      Lumen::Submissions::Enqueuer.new(request.id).call
     rescue StandardError => error
       Rails.logger.error(
-        "Could not enqueue notice submission #{submission_request.id}: " \
+        "Could not enqueue notice submission #{request.id}: " \
         "#{error.class}: #{error.message}"
       )
     end

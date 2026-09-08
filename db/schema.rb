@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_09_03_120000) do
+ActiveRecord::Schema[7.2].define(version: 2026_09_08_093000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -438,7 +438,7 @@ ActiveRecord::Schema[7.2].define(version: 2026_09_03_120000) do
     t.string "payload_digest", null: false
     t.bigint "submitted_by_id"
     t.bigint "submitter_entity_id"
-    t.string "status", default: "pending", null: false
+    t.string "status", default: "received", null: false
     t.string "request_id"
     t.integer "attempts", default: 0, null: false
     t.datetime "queued_at"
@@ -449,7 +449,10 @@ ActiveRecord::Schema[7.2].define(version: 2026_09_03_120000) do
     t.text "failure_message"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "next_attempt_at"
     t.index ["reserved_notice_id"], name: "index_notice_submission_requests_on_reserved_notice_id", unique: true
+    t.index ["status", "next_attempt_at"], name: "idx_submission_requests_on_retry_schedule", where: "(((status)::text = ANY ((ARRAY['received'::character varying, 'staging_failed'::character varying, 'failed'::character varying])::text[])) AND (attempts < 25))"
+    t.index ["status", "started_at"], name: "idx_submission_requests_on_stale_processing", where: "(((status)::text = 'processing'::text) AND (attempts < 25))"
     t.index ["status"], name: "index_notice_submission_requests_on_status"
     t.index ["submitted_by_id"], name: "index_notice_submission_requests_on_submitted_by_id"
     t.index ["submitter_entity_id"], name: "index_notice_submission_requests_on_submitter_entity_id"

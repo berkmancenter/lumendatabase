@@ -51,6 +51,7 @@ class Lumen::Submissions::Processor
       status: 'completed',
       attempts: submission_request.attempts + 1,
       completed_at: Time.current,
+      next_attempt_at: nil,
       failed_at: nil,
       failure_class: nil,
       failure_message: nil

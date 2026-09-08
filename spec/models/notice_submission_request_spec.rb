@@ -1,21 +1,40 @@
 require 'rails_helper'
 
 RSpec.describe NoticeSubmissionRequest, type: :model do
-  it 'finds pending and retryable failed submissions for dispatch' do
-    pending = create(:notice_submission_request)
+  it 'finds new, due failed, and stale processing submissions for dispatch' do
+    received = create(:notice_submission_request, status: 'received')
     failed = create(
       :notice_submission_request,
       status: 'failed',
       attempts: 2,
-      queued_at: 10.minutes.ago
+      next_attempt_at: 1.minute.ago
     )
     staging_failed = create(
       :notice_submission_request,
       status: 'staging_failed',
       attempts: 1,
-      queued_at: 10.minutes.ago
+      next_attempt_at: 1.minute.ago
     )
-    create(:notice_submission_request, queued_at: Time.current)
+    stale_processing = create(
+      :notice_submission_request,
+      status: 'processing',
+      started_at: described_class::PROCESSING_TIMEOUT.ago - 1.minute
+    )
+    create(
+      :notice_submission_request,
+      status: 'queued',
+      queued_at: 1.day.ago
+    )
+    create(
+      :notice_submission_request,
+      status: 'failed',
+      next_attempt_at: 1.hour.from_now
+    )
+    create(
+      :notice_submission_request,
+      status: 'processing',
+      started_at: Time.current
+    )
     create(
       :notice_submission_request,
       status: 'failed',
@@ -24,7 +43,12 @@ RSpec.describe NoticeSubmissionRequest, type: :model do
     create(:notice_submission_request, status: 'completed')
 
     expect(described_class.dispatchable)
-      .to contain_exactly(pending, failed, staging_failed)
+      .to contain_exactly(
+        received,
+        failed,
+        staging_failed,
+        stale_processing
+      )
   end
 
   it 'resolves the notice created with its reserved ID' do
@@ -51,6 +75,7 @@ RSpec.describe NoticeSubmissionRequest, type: :model do
     expect(submission_request.started_at).to be_nil
     expect(submission_request.failure_class).to eq('StandardError')
     expect(submission_request.failure_message).to eq('processor failed')
+    expect(submission_request.next_attempt_at).to be > Time.current
   end
 
   it 'does not replace a concurrently completed status with a failure' do
@@ -64,5 +89,28 @@ RSpec.describe NoticeSubmissionRequest, type: :model do
 
     expect(submission_request.reload).to be_completed
     expect(submission_request.failure_message).to be_nil
+  end
+
+  it 'stops scheduling retries after the maximum attempt count' do
+    submission_request = create(
+      :notice_submission_request,
+      attempts: described_class::MAX_ATTEMPTS - 1
+    )
+
+    submission_request.mark_failed!(StandardError.new('still failing'))
+
+    submission_request.reload
+    expect(submission_request.attempts).to eq(described_class::MAX_ATTEMPTS)
+    expect(submission_request.next_attempt_at).to be_nil
+    expect(described_class.dispatchable).not_to include(submission_request)
+  end
+
+  it 'allows only a queued or received submission to begin processing' do
+    queued = create(:notice_submission_request, status: 'queued')
+
+    expect(queued.begin_processing!).to be true
+    expect(queued.reload.status).to eq('processing')
+    expect(queued.started_at).to be_present
+    expect(queued.begin_processing!).to be false
   end
 end

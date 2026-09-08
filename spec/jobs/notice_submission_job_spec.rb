@@ -5,6 +5,11 @@ RSpec.describe NoticeSubmissionJob, type: :job do
     expect(described_class.queue_name).to eq('submissions')
   end
 
+  it 'leaves retries to the database dispatcher' do
+    expect(described_class.get_sidekiq_options['retry']).to be false
+    expect(described_class.enqueue_after_transaction_commit).to eq(:never)
+  end
+
   it 'processes the stored submission' do
     submission_request = create(:notice_submission_request)
 
@@ -27,6 +32,7 @@ RSpec.describe NoticeSubmissionJob, type: :job do
     expect(submission_request).to be_failed
     expect(submission_request.attempts).to eq(1)
     expect(submission_request.failure_message).to eq('boom')
+    expect(submission_request.next_attempt_at).to be > Time.current
     expect(submission_request.payload).to be_present
   end
 
@@ -75,6 +81,20 @@ RSpec.describe NoticeSubmissionJob, type: :job do
     submission_request.reload
     expect(submission_request.status).to eq('staging_failed')
     expect(submission_request.attempts).to eq(1)
+    expect(submission_request.next_attempt_at).to be > Time.current
     expect(submission_request.payload).to be_present
+  end
+
+  it 'does not process a duplicate job while another worker owns the receipt' do
+    submission_request = create(
+      :notice_submission_request,
+      status: 'processing',
+      started_at: Time.current
+    )
+    expect(Lumen::Submissions::AttachmentStager).not_to receive(:new)
+    expect(Lumen::Submissions::Processor).not_to receive(:new)
+
+    expect(described_class.perform_now(submission_request.id)).to be_nil
+    expect(submission_request.reload.status).to eq('processing')
   end
 end

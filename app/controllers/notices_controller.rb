@@ -221,7 +221,7 @@ class NoticesController < ApplicationController
   def enqueue_notice_submission(submission_request)
     return if submission_request.completed?
 
-    NoticeSubmissionJob.perform_later(submission_request.id)
+    Lumen::Submissions::Enqueuer.new(submission_request.id).call
   rescue StandardError => error
     Rails.logger.error(
       "Notice submission #{submission_request.id} was stored but could not " \

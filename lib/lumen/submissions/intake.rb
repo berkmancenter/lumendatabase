@@ -27,8 +27,7 @@ class Lumen::Submissions::Intake
       submitted_by: submitted_by,
       submitter_entity: submitted_by&.entity,
       request_id: request_id,
-      status: 'pending',
-      queued_at: Time.current
+      status: 'received'
     )
   end
 

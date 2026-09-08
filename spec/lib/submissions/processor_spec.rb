@@ -120,6 +120,6 @@ RSpec.describe Lumen::Submissions::Processor do
     end.to raise_error(StandardError, 'review failed')
 
     expect(Notice.exists?(submission_request.reserved_notice_id)).to be false
-    expect(submission_request.reload.status).to eq('pending')
+    expect(submission_request.reload.status).to eq('queued')
   end
 end
