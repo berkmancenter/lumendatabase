@@ -30,6 +30,39 @@ RSpec.describe NoticeSubmissionJob, type: :job do
     expect(submission_request.payload).to be_present
   end
 
+  it 'records the original error after the processor transaction rolls back' do
+    submission_request = create(:notice_submission_request)
+    allow_any_instance_of(DMCA).to receive(:mark_for_review)
+      .and_raise(StandardError, 'review failed')
+
+    expect do
+      described_class.perform_now(submission_request.id)
+    end.to raise_error(StandardError, 'review failed')
+
+    submission_request.reload
+    expect(submission_request).to be_failed
+    expect(submission_request.attempts).to eq(1)
+    expect(submission_request.failure_class).to eq('StandardError')
+    expect(submission_request.failure_message).to eq('review failed')
+    expect(Notice.exists?(submission_request.reserved_notice_id)).to be false
+  end
+
+  it 'preserves the processor error when recording the failure also fails' do
+    submission_request = create(:notice_submission_request)
+    allow(Lumen::Submissions::Processor).to receive(:new)
+      .and_raise(StandardError, 'processor failed')
+    allow_any_instance_of(NoticeSubmissionRequest).to receive(:mark_failed!)
+      .and_raise(StandardError, 'failure recording failed')
+    allow(Rails.logger).to receive(:error)
+
+    expect do
+      described_class.perform_now(submission_request.id)
+    end.to raise_error(StandardError, 'processor failed')
+
+    expect(Rails.logger).to have_received(:error)
+      .with(/failure recording failed/)
+  end
+
   it 'records attachment staging failures for retry' do
     submission_request = create(:notice_submission_request)
     allow(Lumen::Submissions::AttachmentStager).to receive(:new)

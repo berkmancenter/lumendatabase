@@ -33,4 +33,36 @@ RSpec.describe NoticeSubmissionRequest, type: :model do
 
     expect(submission_request.notice).to eq(notice)
   end
+
+  it 'discards rolled-back changes before recording a failure' do
+    submission_request = create(:notice_submission_request)
+    submission_request.assign_attributes(
+      status: 'processing',
+      started_at: Time.current
+    )
+
+    expect do
+      submission_request.mark_failed!(StandardError.new('processor failed'))
+    end.not_to raise_error
+
+    submission_request.reload
+    expect(submission_request).to be_failed
+    expect(submission_request.attempts).to eq(1)
+    expect(submission_request.started_at).to be_nil
+    expect(submission_request.failure_class).to eq('StandardError')
+    expect(submission_request.failure_message).to eq('processor failed')
+  end
+
+  it 'does not replace a concurrently completed status with a failure' do
+    submission_request = create(
+      :notice_submission_request,
+      status: 'completed'
+    )
+    submission_request.status = 'processing'
+
+    submission_request.mark_failed!(StandardError.new('late failure'))
+
+    expect(submission_request.reload).to be_completed
+    expect(submission_request.failure_message).to be_nil
+  end
 end

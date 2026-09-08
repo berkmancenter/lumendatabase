@@ -65,7 +65,13 @@ class NoticeSubmissionRequest < ApplicationRecord
   private
 
   def record_failure!(failure_status, error)
+    # A processor transaction can leave this instance with rolled-back changes.
+    # Active Record refuses to lock a dirty record, so restore the persisted
+    # receipt before taking the failure-recording lock.
+    reload
     with_lock do
+      return if completed?
+
       update!(
         status: failure_status,
         attempts: attempts + 1,

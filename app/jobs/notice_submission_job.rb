@@ -12,14 +12,21 @@ class NoticeSubmissionJob < ApplicationJob
     staging_attachments = false
     Lumen::Submissions::Processor.new(submission_request).process
   rescue StandardError => error
-    unless submission_request&.completed?
-      if staging_attachments ||
-         error.is_a?(Lumen::Submissions::Processor::StagedAttachmentError)
-        submission_request&.mark_staging_failed!(error)
-      else
-        submission_request&.mark_failed!(error)
+    begin
+      unless submission_request&.completed?
+        if staging_attachments ||
+           error.is_a?(Lumen::Submissions::Processor::StagedAttachmentError)
+          submission_request&.mark_staging_failed!(error)
+        else
+          submission_request&.mark_failed!(error)
+        end
       end
+    rescue StandardError => recording_error
+      Rails.logger.error(
+        "Unable to record failure for submission #{submission_request_id}: " \
+        "#{recording_error.class}: #{recording_error.message}"
+      )
     end
-    raise
+    raise error
   end
 end
