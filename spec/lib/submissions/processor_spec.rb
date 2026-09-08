@@ -107,6 +107,34 @@ RSpec.describe Lumen::Submissions::Processor do
     expect(Notice.exists?(submission_request.reserved_notice_id)).to be false
   end
 
+  it 'stops downloading when staged bytes exceed the resource limit' do
+    bytes = '12345'
+    payload = attributes_for(:notice_submission_request)[:payload].merge(
+      'file_uploads_attributes' => [{
+        'kind' => 'supporting',
+        'file' => "data:text/plain;base64,#{Base64.strict_encode64(bytes)}",
+        'file_name' => 'supporting.txt'
+      }]
+    )
+    submission_request = Lumen::Submissions::Intake.new(
+      notice_type: DMCA,
+      payload: payload,
+      submitted_by: nil
+    ).call
+    Lumen::Submissions::AttachmentStager.new(submission_request).stage
+    submission_request.uploads.first.update_column(:byte_size, 4)
+    stub_const('Lumen::Submissions::Attachment::MAX_ATTACHMENT_BYTES', 4)
+
+    expect do
+      described_class.new(submission_request).process
+    end.to raise_error(
+      described_class::StagedAttachmentError,
+      /4 bytes per-file limit/
+    )
+
+    expect(Notice.exists?(submission_request.reserved_notice_id)).to be false
+  end
+
   it 'is idempotent when the same request is processed twice' do
     submission_request = create(:notice_submission_request)
     processor = described_class.new(submission_request)

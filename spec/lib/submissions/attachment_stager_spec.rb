@@ -58,4 +58,29 @@ RSpec.describe Lumen::Submissions::AttachmentStager do
     expect(submission_request.reload.payload).to eq(payload)
     expect(submission_request.uploads).to be_empty
   end
+
+  it 'enforces resource limits again before staging a stored payload' do
+    stub_const('Lumen::Submissions::Attachment::MAX_ATTACHMENT_BYTES', 4)
+
+    expect { described_class.new(submission_request).stage }
+      .to raise_error(
+        Lumen::Submissions::Attachment::InvalidAttachment,
+        /4 bytes per-file limit/
+      )
+
+    expect(submission_request.reload.payload).to eq(payload)
+    expect(submission_request.uploads).to be_empty
+  end
+
+  it 'enforces resource limits on attachments staged by an older attempt' do
+    stager = described_class.new(submission_request)
+    stager.stage
+    stub_const('Lumen::Submissions::Attachment::MAX_ATTACHMENT_BYTES', 4)
+
+    expect { stager.stage }
+      .to raise_error(
+        Lumen::Submissions::Attachment::InvalidAttachment,
+        /4 bytes per-file limit/
+      )
+  end
 end

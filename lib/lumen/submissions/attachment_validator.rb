@@ -9,11 +9,17 @@ class Lumen::Submissions::AttachmentValidator
 
   def validate(errors)
     valid = true
+    total_bytes = 0
+    entries = Lumen::Submissions::Attachment.limited_entries(payload)
 
-    Lumen::Submissions::Attachment.entries(payload).each do |key, attributes|
+    entries.each do |key, attributes|
       begin
         content_type, bytes = Lumen::Submissions::Attachment.decode(
           Lumen::Submissions::Attachment.file_value(attributes)
+        )
+        total_bytes = Lumen::Submissions::Attachment.add_to_total_size!(
+          total_bytes,
+          bytes.bytesize
         )
       rescue Lumen::Submissions::Attachment::InvalidAttachment => error
         errors.add(:file_uploads, error.message)
@@ -32,6 +38,9 @@ class Lumen::Submissions::AttachmentValidator
     end
 
     valid
+  rescue Lumen::Submissions::Attachment::InvalidAttachment => error
+    errors.add(:file_uploads, error.message)
+    false
   end
 
   private

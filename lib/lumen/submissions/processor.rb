@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'digest'
+require 'tempfile'
 
 class Lumen::Submissions::Processor
   class StagedAttachmentError < StandardError; end
@@ -64,25 +65,55 @@ class Lumen::Submissions::Processor
     notice
   end
 
-  def with_staged_uploads(payload, uploads = staged_uploads, index = 0, &block)
-    verify_upload_count!(payload, uploads) if index.zero?
-    return yield(payload) if index >= uploads.length
+  def with_staged_uploads(payload)
+    uploads = staged_uploads
+    verify_uploads!(payload, uploads)
+    tempfiles = []
+    total_bytes = 0
 
-    upload = uploads[index]
-    upload.file.blob.open do |tempfile|
-      verify_checksum!(upload, tempfile)
+    uploads.each do |upload|
+      tempfile, file_bytes = download_to_tempfile(upload, total_bytes)
+      tempfiles << tempfile
+      total_bytes += file_bytes
       file_attributes(payload, upload)['file'] =
         ActionDispatch::Http::UploadedFile.new(
           tempfile: tempfile,
           filename: upload.original_filename,
           type: upload.content_type
         )
-
-      with_staged_uploads(payload, uploads, index + 1, &block)
     end
-  rescue ActiveStorage::FileNotFoundError, Errno::ENOENT => error
+
+    yield(payload)
+  ensure
+    tempfiles&.each(&:close!)
+  end
+
+  def download_to_tempfile(upload, existing_total_bytes)
+    tempfile = Tempfile.new('notice-submission-processing')
+    tempfile.binmode
+    file_bytes = 0
+
+    upload.file.blob.download do |chunk|
+      file_bytes += chunk.bytesize
+      Lumen::Submissions::Attachment.validate_file_size!(file_bytes)
+      Lumen::Submissions::Attachment.add_to_total_size!(
+        existing_total_bytes,
+        file_bytes
+      )
+      tempfile.write(chunk)
+    end
+    tempfile.flush
+    tempfile.rewind
+    verify_checksum!(upload, tempfile)
+    [tempfile, file_bytes]
+  rescue ActiveStorage::FileNotFoundError, Errno::ENOENT,
+         Lumen::Submissions::Attachment::InvalidAttachment => error
+    tempfile&.close!
     raise StagedAttachmentError,
-          "Staged upload #{upload.id} is unavailable: #{error.message}"
+          "Staged upload #{upload.id} is invalid: #{error.message}"
+  rescue StandardError
+    tempfile&.close!
+    raise
   end
 
   def verify_checksum!(upload, tempfile)
@@ -113,11 +144,24 @@ class Lumen::Submissions::Processor
     end
   end
 
-  def verify_upload_count!(payload, uploads)
-    expected_count = Lumen::Submissions::Attachment.entries(payload).count
-    return if uploads.count == expected_count
+  def verify_uploads!(payload, uploads)
+    expected_count = Lumen::Submissions::Attachment
+      .limited_entries(payload)
+      .count
+    unless uploads.count == expected_count
+      raise StagedAttachmentError,
+            "Expected #{expected_count} staged uploads, found #{uploads.count}"
+    end
 
-    raise StagedAttachmentError,
-          "Expected #{expected_count} staged uploads, found #{uploads.count}"
+    total_bytes = 0
+    uploads.each do |upload|
+      Lumen::Submissions::Attachment.validate_file_size!(upload.byte_size)
+      total_bytes = Lumen::Submissions::Attachment.add_to_total_size!(
+        total_bytes,
+        upload.byte_size
+      )
+    end
+  rescue Lumen::Submissions::Attachment::InvalidAttachment => error
+    raise StagedAttachmentError, error.message
   end
 end

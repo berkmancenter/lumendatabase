@@ -814,6 +814,27 @@ describe NoticesController do
           .to include(/contents.*reported/)
       end
 
+      it 'rejects attachments over the resource limit before storing a receipt' do
+        make_allowances
+        allow(@fake_notice).to receive(:errors)
+          .and_return(mock_errors(@fake_notice))
+        stub_const('Lumen::Submissions::Attachment::MAX_ATTACHMENT_BYTES', 4)
+        @notice_params[:file_uploads_attributes] = [{
+          kind: 'supporting',
+          file: "data:text/plain;base64,#{Base64.strict_encode64('12345')}",
+          file_name: 'attachment.txt'
+        }]
+
+        expect do
+          post :create,
+               params: { notice: @notice_params, format: :json }
+        end.not_to change(NoticeSubmissionRequest, :count)
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(JSON.parse(response.body).dig('notices', 'file_uploads'))
+          .to include(/4 bytes per-file limit/)
+      end
+
       it 'returns a useful status code when there are errors' do
         make_allowances
         allow(@fake_notice).to receive(:valid?).and_return(false)
