@@ -4,6 +4,17 @@ require 'base64'
 feature 'notice submission', js: true do
   include CurbHelpers
 
+  around do |example|
+    # Preserve the production boundary between committing the API response and
+    # starting work; inline mode runs before Active Storage's commit callbacks.
+    Sidekiq::Testing.fake!
+    Sidekiq::Job.clear_all
+    example.run
+  ensure
+    Sidekiq::Job.clear_all
+    Sidekiq::Testing.inline!
+  end
+
   scenario 'submitting as an unauthenticated user' do
     parameters = request_hash(default_notice_hash)
     parameters.delete(:authentication_token)
@@ -49,7 +60,7 @@ feature 'notice submission', js: true do
 
     expect(curb.response_code).to eq 201
 
-    notice = Notice.last
+    notice = process_accepted_submission(curb)
 
     expect(notice.title).to eq 'A superduper title'
     expect(notice.regulation_list).to match_array(
@@ -76,7 +87,7 @@ feature 'notice submission', js: true do
 
     expect(curb.response_code).to eq 201
 
-    notice = Notice.last
+    notice = process_accepted_submission(curb)
 
     expect(notice).to be_a Trademark
     expect(notice.regulation_list).to match_array(['EU 2017/1001', 'Article 9'])
@@ -109,8 +120,9 @@ feature 'notice submission', js: true do
     curb = post_api('/notices', parameters)
 
     expect(curb.response_code).to eq 201
-    expect(Notice.last.recipient).to eq entity
-    expect(Notice.last.title).to eq 'A notice with an entity created by id'
+    notice = process_accepted_submission(curb)
+    expect(notice.recipient).to eq entity
+    expect(notice.title).to eq 'A notice with an entity created by id'
   end
 
   scenario 'submitting as a user with a linked entity' do
@@ -122,8 +134,8 @@ feature 'notice submission', js: true do
 
     curb = post_api('/notices', parameters)
 
-    notice = Notice.last
     expect(curb.response_code).to eq 201
+    notice = process_accepted_submission(curb)
     expect(notice.submitter).to eq entity
     expect(notice.recipient).to eq entity
   end
@@ -152,17 +164,16 @@ feature 'notice submission', js: true do
 
     curb = post_api('/notices', parameters)
 
-    notice = Notice.last
     expect(curb.response_code).to eq 201
+    notice = process_accepted_submission(curb)
     expect(notice.submitter).to eq entity
   end
 
   scenario 'submitting a notice with text file attachments' do
     parameters = request_hash(notice_hash_with_text_files)
 
-    post_api('/notices', parameters)
-
-    notice = Notice.last
+    curb = post_api('/notices', parameters)
+    notice = process_accepted_submission(curb)
     original_document = original_document_file(notice)
     supporting_document = supporting_document_file(notice)
 
@@ -178,9 +189,8 @@ feature 'notice submission', js: true do
   scenario 'submitting a notice with binary file attachments' do
     parameters = request_hash(notice_hash_with_binary_files)
 
-    post_api('/notices', parameters)
-
-    notice = Notice.last
+    curb = post_api('/notices', parameters)
+    notice = process_accepted_submission(curb)
     original_document = original_document_file(notice)
     supporting_document = supporting_document_file(notice)
 
@@ -212,7 +222,7 @@ feature 'notice submission', js: true do
 
       expect(curb.response_code).to eq 201
 
-      work = Notice.last.works.first
+      work = process_accepted_submission(curb).works.first
 
       expect(work.copyrighted_urls.map(&:url)).to match_array([
         'http://example.com/', 'http://example2.com'
@@ -236,7 +246,7 @@ feature 'notice submission', js: true do
 
       expect(curb.response_code).to eq 201
 
-      work = Notice.last.works.first
+      work = process_accepted_submission(curb).works.first
 
       expect(work.copyrighted_urls.map(&:url)).to match_array([
         'http://example.com/', 'http://example2.com', 'http://picklefactory.com'
@@ -259,7 +269,7 @@ feature 'notice submission', js: true do
 
       expect(curb.response_code).to eq 201
 
-      work = Notice.last.works.first
+      work = process_accepted_submission(curb).works.first
 
       expect(work.infringing_urls.map(&:url)).to match_array([
         'http://example.com/', 'http://example2.com'
@@ -284,7 +294,7 @@ feature 'notice submission', js: true do
 
       expect(curb.response_code).to eq 201
 
-      work = Notice.last.works.first
+      work = process_accepted_submission(curb).works.first
 
       expect(work.infringing_urls.map(&:url)).to match_array([
         'http://httpwww.mp3stahuj.cz/henry-d-feat-sista-carmen-prague-city-42689'
@@ -457,8 +467,8 @@ feature 'notice submission', js: true do
         )
       )
 
-      post_api('/notices', parameters)
-      notice = Notice.last
+      curb = post_api('/notices', parameters)
+      notice = process_accepted_submission(curb)
       urls = notice.works.first.infringing_urls.map(&:url)
 
       expect(urls[0]).to eq('http://e[redacted]e.com')
@@ -498,8 +508,8 @@ feature 'notice submission', js: true do
         )
       )
 
-      post_api('/notices', parameters)
-      notice = Notice.last
+      curb = post_api('/notices', parameters)
+      notice = process_accepted_submission(curb)
       urls = notice.works.first.infringing_urls.map(&:url)
 
       expect(urls[0]).to eq('http://example.com')
@@ -507,6 +517,21 @@ feature 'notice submission', js: true do
   end
 
   private
+
+  def process_accepted_submission(curb)
+    expect(curb.response_code).to eq 201
+    location = curb.header_str.lines.find { |line| line.match?(/\ALocation:/i) }
+    expect(location).to be_present
+    reserved_notice_id = location&.match(%r{/notices/(\d+)})&.captures&.first
+    submission_request = NoticeSubmissionRequest.find_by!(
+      reserved_notice_id: reserved_notice_id
+    )
+
+    NoticeSubmissionJob.perform_now(submission_request.id)
+
+    expect(submission_request.reload).to be_completed
+    submission_request.notice
+  end
 
   def original_document_file(notice)
     notice.original_documents.first.file
@@ -579,9 +604,8 @@ feature 'notice submission', js: true do
   end
 
   def submit_and_test_defamation_redaction(parameters, original_text, redacted_text, original_infringing_url, redacted_infringing_url)
-    post_api('/notices', parameters)
-
-    notice = Notice.last
+    curb = post_api('/notices', parameters)
+    notice = process_accepted_submission(curb)
 
     expect(notice.body).to eq redacted_text
     expect(notice.body_original).to eq original_text
