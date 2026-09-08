@@ -3,6 +3,7 @@
 class NoticeSubmissionRequest < ApplicationRecord
   MAX_ATTEMPTS = 25
   PROCESSING_TIMEOUT = 1.hour
+  QUEUED_TIMEOUT = 2.hours
   RETRY_BASE_DELAY = 1.minute
   RETRY_MAX_DELAY = 6.hours
   DISPATCHABLE_STATUSES = %w[received staging_failed failed].freeze
@@ -37,12 +38,16 @@ class NoticeSubmissionRequest < ApplicationRecord
           status IN (:statuses)
           AND (next_attempt_at IS NULL OR next_attempt_at <= :now)
         ) OR (
+          status = 'queued'
+          AND queued_at < :queued_timeout
+        ) OR (
           status = 'processing'
           AND started_at < :processing_timeout
         )
       SQL
       statuses: DISPATCHABLE_STATUSES,
       now: now,
+      queued_timeout: now - QUEUED_TIMEOUT,
       processing_timeout: now - PROCESSING_TIMEOUT
     )
   }
@@ -70,7 +75,9 @@ class NoticeSubmissionRequest < ApplicationRecord
   def dispatchable_now?(now = Time.current)
     return false unless retryable?
 
-    if status == 'processing'
+    if status == 'queued'
+      return queued_at.present? && queued_at < now - QUEUED_TIMEOUT
+    elsif status == 'processing'
       return started_at.present? && started_at < now - PROCESSING_TIMEOUT
     end
 

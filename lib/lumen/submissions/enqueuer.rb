@@ -2,7 +2,7 @@
 
 class Lumen::Submissions::Enqueuer
   LOCK_COLUMNS = %i[
-    id status attempts next_attempt_at started_at
+    id status attempts next_attempt_at queued_at started_at
   ].freeze
 
   class EnqueueError < StandardError; end

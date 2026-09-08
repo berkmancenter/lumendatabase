@@ -16,10 +16,15 @@ RSpec.describe NoticeSubmissionDispatchJob, type: :job do
       status: 'processing',
       started_at: NoticeSubmissionRequest::PROCESSING_TIMEOUT.ago - 1.minute
     )
+    stale_queued = create(
+      :notice_submission_request,
+      status: 'queued',
+      queued_at: NoticeSubmissionRequest::QUEUED_TIMEOUT.ago - 1.minute
+    )
     create(
       :notice_submission_request,
       status: 'queued',
-      queued_at: 1.day.ago
+      queued_at: Time.current
     )
     create(
       :notice_submission_request,
@@ -33,7 +38,7 @@ RSpec.describe NoticeSubmissionDispatchJob, type: :job do
     )
     create(:notice_submission_request, status: 'completed')
     enqueued_request_ids = []
-    expect(NoticeSubmissionJob).to receive(:perform_later).exactly(3).times do |request_id|
+    expect(NoticeSubmissionJob).to receive(:perform_later).exactly(4).times do |request_id|
       enqueued_request_ids << request_id
       queued_request = NoticeSubmissionRequest.find(request_id)
       expect(queued_request.status).to eq('queued')
@@ -46,10 +51,13 @@ RSpec.describe NoticeSubmissionDispatchJob, type: :job do
     expect(enqueued_request_ids).to contain_exactly(
       received.id,
       failed.id,
+      stale_queued.id,
       stale_processing.id
     )
     expect(received.reload.status).to eq('queued')
     expect(failed.reload.status).to eq('queued')
+    expect(stale_queued.reload.queued_at).to be >
+      NoticeSubmissionRequest::QUEUED_TIMEOUT.ago
     expect(stale_processing.reload.status).to eq('queued')
   end
 

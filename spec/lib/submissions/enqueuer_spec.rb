@@ -51,11 +51,24 @@ RSpec.describe Lumen::Submissions::Enqueuer do
     expect(submission_request.queued_at).to be_nil
   end
 
-  it 'does not publish a receipt that is already queued' do
+  it 're-publishes a receipt that has been queued too long' do
     submission_request = create(
       :notice_submission_request,
       status: 'queued',
-      queued_at: 1.day.ago
+      queued_at: NoticeSubmissionRequest::QUEUED_TIMEOUT.ago - 1.minute
+    )
+    expect(NoticeSubmissionJob).to receive(:perform_later)
+
+    expect(described_class.new(submission_request.id).call).to be true
+    expect(submission_request.reload.queued_at).to be >
+      NoticeSubmissionRequest::QUEUED_TIMEOUT.ago
+  end
+
+  it 'does not re-publish a recently queued receipt' do
+    submission_request = create(
+      :notice_submission_request,
+      status: 'queued',
+      queued_at: Time.current
     )
     expect(NoticeSubmissionJob).not_to receive(:perform_later)
 

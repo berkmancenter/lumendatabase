@@ -11,7 +11,7 @@ RSpec.describe NoticeSubmissionRequest, type: :model do
     expect(submission_request).to be_valid
   end
 
-  it 'finds new, due failed, and stale processing submissions for dispatch' do
+  it 'finds new, due failed, and stale queued or processing submissions for dispatch' do
     received = create(:notice_submission_request, status: 'received')
     failed = create(
       :notice_submission_request,
@@ -30,10 +30,15 @@ RSpec.describe NoticeSubmissionRequest, type: :model do
       status: 'processing',
       started_at: described_class::PROCESSING_TIMEOUT.ago - 1.minute
     )
+    stale_queued = create(
+      :notice_submission_request,
+      status: 'queued',
+      queued_at: described_class::QUEUED_TIMEOUT.ago - 1.minute
+    )
     create(
       :notice_submission_request,
       status: 'queued',
-      queued_at: 1.day.ago
+      queued_at: Time.current
     )
     create(
       :notice_submission_request,
@@ -57,6 +62,7 @@ RSpec.describe NoticeSubmissionRequest, type: :model do
         received,
         failed,
         staging_failed,
+        stale_queued,
         stale_processing
       )
   end
