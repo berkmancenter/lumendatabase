@@ -6,9 +6,9 @@ module Lumen::Submissions::Attachment
   class InvalidAttachment < StandardError; end
 
   DEFAULT_KIND = 'supporting'
-  MAX_ATTACHMENTS = 20
-  MAX_ATTACHMENT_BYTES = 25.megabytes
-  MAX_TOTAL_ATTACHMENT_BYTES = 50.megabytes
+  MAX_ATTACHMENTS = 500
+  MAX_ATTACHMENT_BYTES = 50.megabytes
+  MAX_TOTAL_ATTACHMENT_BYTES = 200.megabytes
   DATA_URI_PATTERN = %r{\Adata:([^;,]+);base64,(.*)\z}m
 
   module_function
