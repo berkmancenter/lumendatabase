@@ -221,7 +221,6 @@ class NoticesController < ApplicationController
     return if submission_request.completed?
 
     NoticeSubmissionJob.perform_later(submission_request.id)
-    submission_request.mark_queued!
   rescue StandardError => error
     Rails.logger.error(
       "Notice submission #{submission_request.id} was stored but could not " \

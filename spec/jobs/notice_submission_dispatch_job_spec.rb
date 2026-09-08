@@ -2,15 +2,27 @@ require 'rails_helper'
 
 RSpec.describe NoticeSubmissionDispatchJob, type: :job do
   it 'enqueues each dispatchable submission' do
-    pending = create(:notice_submission_request)
-    failed = create(:notice_submission_request, status: 'failed')
+    stale_queued_at = 10.minutes.ago
+    pending = create(
+      :notice_submission_request,
+      queued_at: stale_queued_at
+    )
+    failed = create(
+      :notice_submission_request,
+      status: 'failed',
+      queued_at: stale_queued_at
+    )
     create(:notice_submission_request, status: 'completed')
-    allow(NoticeSubmissionJob).to receive(:perform_later)
+    enqueued_request_ids = []
+    expect(NoticeSubmissionJob).to receive(:perform_later).twice do |request_id|
+      enqueued_request_ids << request_id
+      expect(NoticeSubmissionRequest.find(request_id).queued_at)
+        .to be > stale_queued_at
+    end
 
     described_class.perform_now
 
-    expect(NoticeSubmissionJob).to have_received(:perform_later).with(pending.id)
-    expect(NoticeSubmissionJob).to have_received(:perform_later).with(failed.id)
+    expect(enqueued_request_ids).to contain_exactly(pending.id, failed.id)
     expect(pending.reload.queued_at).to be_present
     expect(failed.reload.queued_at).to be_present
   end

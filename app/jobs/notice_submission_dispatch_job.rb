@@ -5,8 +5,8 @@ class NoticeSubmissionDispatchJob < ApplicationJob
 
   def perform
     NoticeSubmissionRequest.dispatchable.find_each do |submission_request|
-      NoticeSubmissionJob.perform_later(submission_request.id)
       submission_request.mark_queued!
+      NoticeSubmissionJob.perform_later(submission_request.id)
     rescue StandardError => error
       Rails.logger.error(
         "Could not enqueue notice submission #{submission_request.id}: " \

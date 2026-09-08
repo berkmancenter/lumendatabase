@@ -22,6 +22,7 @@ RSpec.describe Lumen::Submissions::Intake do
     expect(submission_request.payload).to eq(payload.deep_stringify_keys)
     expect(submission_request.submitted_by).to eq(user)
     expect(submission_request.submitter_entity).to eq(user.entity)
+    expect(submission_request.queued_at).to be_present
     expect(submission_request.reserved_notice_id).to be_positive
     expect(Notice.exists?(submission_request.reserved_notice_id)).to be false
   end

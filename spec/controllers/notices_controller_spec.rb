@@ -585,7 +585,11 @@ describe NoticesController do
 
       it 'returns a proper Location header when saved successfully' do
         make_allowances
-        allow(NoticeSubmissionJob).to receive(:perform_later)
+        enqueued_request_id = nil
+        expect(NoticeSubmissionJob).to receive(:perform_later) do |request_id|
+          enqueued_request_id = request_id
+          expect(NoticeSubmissionRequest.find(request_id).queued_at).to be_present
+        end
 
         expect do
           post_create :json
@@ -599,8 +603,7 @@ describe NoticesController do
         expect(response.headers['Location']).to eq(
           notice_url(submission_request.reserved_notice_id)
         )
-        expect(NoticeSubmissionJob).to have_received(:perform_later)
-          .with(submission_request.id)
+        expect(enqueued_request_id).to eq(submission_request.id)
       end
 
       it 'returns created after durable storage even if enqueueing fails' do
