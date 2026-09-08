@@ -230,6 +230,9 @@ class ApplicationController < ActionController::Base
     return if !request.get? || skip_paths.include?(request.path) ||
               request.xhr?
 
+    # Do not persist large captcha tokens in the cookie-backed session.
+    return if request.query_parameters.key?('g-recaptcha-response')
+
     store_location_for(:user, request.fullpath)
   end
 

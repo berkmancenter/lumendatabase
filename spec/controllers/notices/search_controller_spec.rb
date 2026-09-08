@@ -49,6 +49,30 @@ describe Notices::SearchController do
 
       expect(response).to be_successful
     end
+
+    it 'does not store a legacy captcha response in the session' do
+      searcher = instance_double(
+        Lumen::Search::Query,
+        cache_key: 'cached-search',
+        register: nil
+      )
+      allow(searcher).to receive(:sort_by=)
+      allow(Lumen::Search::Query).to receive(:new).and_return(searcher)
+      allow(controller).to receive(:perform_caching).and_return(true)
+      allow(controller).to receive(:read_fragment)
+        .with('cached-search')
+        .and_return('<section class="search-results">cached</section>')
+
+      get :index,
+          params: {
+            term: 'example.com',
+            sort_by: '',
+            'g-recaptcha-response': 'secret-captcha-response' * 200
+          }
+
+      expect(response).to be_successful
+      expect(session.to_hash.to_s).not_to include('secret-captcha-response')
+    end
   end
 
   scenario 'deep pagination allowed with json', search: true do
