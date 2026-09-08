@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'base64'
 
 RSpec.describe NoticeSubmissionJob, type: :job do
   it 'uses the submissions queue' do
@@ -83,6 +84,48 @@ RSpec.describe NoticeSubmissionJob, type: :job do
     expect(submission_request.attempts).to eq(1)
     expect(submission_request.next_attempt_at).to be > Time.current
     expect(submission_request.payload).to be_present
+  end
+
+  it 'restages a missing staged blob on the next attempt' do
+    bytes = "original\x00document".b
+    payload = attributes_for(:notice_submission_request)[:payload].merge(
+      'file_uploads_attributes' => [{
+        'kind' => 'original',
+        'file' => "data:application/octet-stream;base64,#{Base64.strict_encode64(bytes)}",
+        'file_name' => 'original.bin'
+      }]
+    )
+    submission_request = Lumen::Submissions::Intake.new(
+      notice_type: DMCA,
+      payload: payload,
+      submitted_by: nil
+    ).call
+    Lumen::Submissions::AttachmentStager.new(submission_request).stage
+    staged_upload = submission_request.uploads.first
+    staged_upload.file.blob.service.delete(staged_upload.file.blob.key)
+    submission_request.update!(status: 'queued')
+
+    expect do
+      described_class.perform_now(submission_request.id)
+    end.to raise_error(
+      Lumen::Submissions::Processor::StagedAttachmentError,
+      /ActiveStorage::FileNotFoundError/
+    )
+
+    submission_request.reload
+    expect(submission_request.status).to eq('staging_failed')
+    expect(submission_request.attempts).to eq(1)
+    expect(submission_request.uploads).to be_empty
+    expect(submission_request.payload).to eq(payload)
+
+    submission_request.update!(status: 'queued', next_attempt_at: nil)
+    described_class.perform_now(submission_request.id)
+
+    submission_request.reload
+    notice = submission_request.notice
+    expect(submission_request).to be_completed
+    expect(submission_request.attempts).to eq(2)
+    expect(File.binread(notice.original_documents.first.file.path)).to eq(bytes)
   end
 
   it 'does not process a duplicate job while another worker owns the receipt' do

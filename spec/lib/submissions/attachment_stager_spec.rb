@@ -40,12 +40,19 @@ RSpec.describe Lumen::Submissions::AttachmentStager do
   it 'restages attachments after a staging failure' do
     stager = described_class.new(submission_request)
     stager.stage
+    original_upload = submission_request.uploads.first
+    original_blob_id = original_upload.file.blob.id
     submission_request.mark_staging_failed!(IOError.new('corrupt upload'))
 
+    expect(submission_request.reload.uploads).to be_empty
     expect { stager.stage }
-      .not_to change(NoticeSubmissionUpload, :count)
+      .to change(NoticeSubmissionUpload, :count).by(1)
+    replacement_upload = submission_request.reload.uploads.first
+
+    expect(replacement_upload.id).not_to eq(original_upload.id)
+    expect(replacement_upload.file.blob.id).not_to eq(original_blob_id)
     expect(submission_request.reload.status).to eq('processing')
-    expect(submission_request.uploads.first.file.download).to eq(bytes)
+    expect(replacement_upload.file.download).to eq(bytes)
   end
 
   it 'leaves the durable payload intact when staging fails' do

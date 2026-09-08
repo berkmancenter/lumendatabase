@@ -109,18 +109,22 @@ class NoticeSubmissionRequest < ApplicationRecord
   end
 
   def mark_staging_failed!(error)
-    record_failure!('staging_failed', error)
+    record_failure!('staging_failed', error, discard_uploads: true)
   end
 
   private
 
-  def record_failure!(failure_status, error)
+  def record_failure!(failure_status, error, discard_uploads: false)
     # A processor transaction can leave this instance with rolled-back changes.
     # Active Record refuses to lock a dirty record, so restore the persisted
     # receipt before taking the failure-recording lock.
     reload
     with_lock do
       return if completed?
+
+      # A staging failure means the attachment records cannot be trusted.
+      # Keep the durable payload, but force the next attempt to stage new blobs.
+      uploads.destroy_all if discard_uploads
 
       attempt_count = attempts + 1
       update!(
