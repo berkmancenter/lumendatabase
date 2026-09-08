@@ -1,6 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe NoticeSubmissionRequest, type: :model do
+  it 'requires a payload until processing is completed' do
+    submission_request = build(:notice_submission_request, payload: {})
+
+    expect(submission_request).not_to be_valid
+
+    submission_request.status = 'completed'
+
+    expect(submission_request).to be_valid
+  end
+
   it 'finds new, due failed, and stale processing submissions for dispatch' do
     received = create(:notice_submission_request, status: 'received')
     failed = create(

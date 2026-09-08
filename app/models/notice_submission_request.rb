@@ -20,7 +20,7 @@ class NoticeSubmissionRequest < ApplicationRecord
 
   validates :attempts, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :notice_type, presence: true, inclusion: { in: Lumen::TYPES }
-  validates :payload, presence: true
+  validates :payload, presence: true, unless: :completed?
   validates :payload_digest, presence: true
   validates :reserved_notice_id,
             presence: true,

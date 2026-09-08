@@ -19,3 +19,14 @@ Lumen relies on several cron jobs in production. As of October 2020, cron runs:
 
 * something works on staging and not on prod? Check to see that staging and production cron have not drifted out of sync.
 * cron job not running successfully? Make sure cron is invoking rails tasks with bash and bundle exec, so that dotenv loads environment variables from `.env`. Writing environment variables directly into the crontab means that eventually they will be out of sync with the app and something will fail.
+
+## Completed notice submission cleanup
+
+Newly completed background submissions discard their receipt payload and
+Active Storage staging copy automatically. After deploying this behavior, run
+the following task once to clean receipts completed by an older release:
+
+`rails lumen:cleanup_completed_notice_submissions`
+
+The task updates payloads in batches and can safely be run again if it is
+interrupted. Active Storage blob purges run on the default Sidekiq queue.

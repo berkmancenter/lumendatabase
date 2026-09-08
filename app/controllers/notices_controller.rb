@@ -61,9 +61,9 @@ class NoticesController < ApplicationController
 
     @notice = Notice.find_by(id: params[:id])
     unless @notice
-      @notice_submission_request = NoticeSubmissionRequest.find_by(
-        reserved_notice_id: params[:id]
-      )
+      @notice_submission_request = NoticeSubmissionRequest
+        .select(:id, :reserved_notice_id, :status)
+        .find_by(reserved_notice_id: params[:id])
       return render_processing_notice if @notice_submission_request
 
       return resource_not_found("Can't fing notice with id=#{params[:id]}")

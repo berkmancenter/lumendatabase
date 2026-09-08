@@ -47,8 +47,12 @@ class Lumen::Submissions::Processor
   end
 
   def mark_completed!(notice)
+    # Payload and staged uploads are needed only while a receipt can retry.
+    # Destroying them in this transaction keeps them if finalization rolls
+    # back; Active Storage purges the unreferenced blobs after commit.
     submission_request.update!(
       status: 'completed',
+      payload: {},
       attempts: submission_request.attempts + 1,
       completed_at: Time.current,
       next_attempt_at: nil,
@@ -56,6 +60,7 @@ class Lumen::Submissions::Processor
       failure_class: nil,
       failure_message: nil
     )
+    submission_request.uploads.find_each(&:destroy!)
     notice
   end
 

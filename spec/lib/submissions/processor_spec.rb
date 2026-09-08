@@ -12,6 +12,7 @@ RSpec.describe Lumen::Submissions::Processor do
     expect(notice.works.first.description).to eq('A work')
     expect(submission_request.reload.status).to eq('completed')
     expect(submission_request.completed_at).to be_present
+    expect(submission_request.payload).to eq({})
   end
 
   it 'uses the submitter entity captured when the request was accepted' do
@@ -41,11 +42,18 @@ RSpec.describe Lumen::Submissions::Processor do
       submitted_by: nil
     ).call
     Lumen::Submissions::AttachmentStager.new(submission_request).stage
+    staged_upload = submission_request.uploads.first
+    staged_blob_id = staged_upload.file.blob.id
+    staged_blob_key = staged_upload.file.blob.key
 
     notice = described_class.new(submission_request).process
 
     expect(File.binread(notice.original_documents.first.file.path)).to eq(bytes)
     expect(notice.original_documents.first.file_file_name).to eq('original.bin')
+    expect(submission_request.reload.uploads).to be_empty
+    expect(ActiveStorage::Attachment.where(record: staged_upload)).to be_empty
+    expect(ActiveStorage::Blob.exists?(staged_blob_id)).to be false
+    expect(ActiveStorage::Blob.service.exist?(staged_blob_key)).to be false
   end
 
   it 'defaults a blank attachment kind before creating the notice' do
@@ -121,5 +129,33 @@ RSpec.describe Lumen::Submissions::Processor do
 
     expect(Notice.exists?(submission_request.reserved_notice_id)).to be false
     expect(submission_request.reload.status).to eq('queued')
+  end
+
+  it 'rolls back notice creation when staging cleanup fails' do
+    bytes = 'supporting document'
+    payload = attributes_for(:notice_submission_request)[:payload].merge(
+      'file_uploads_attributes' => [{
+        'kind' => 'supporting',
+        'file' => "data:text/plain;base64,#{Base64.strict_encode64(bytes)}",
+        'file_name' => 'supporting.txt'
+      }]
+    )
+    submission_request = Lumen::Submissions::Intake.new(
+      notice_type: DMCA,
+      payload: payload,
+      submitted_by: nil
+    ).call
+    Lumen::Submissions::AttachmentStager.new(submission_request).stage
+    allow_any_instance_of(NoticeSubmissionUpload).to receive(:destroy!)
+      .and_raise(StandardError, 'cleanup failed')
+
+    expect do
+      described_class.new(submission_request).process
+    end.to raise_error(StandardError, 'cleanup failed')
+
+    expect(Notice.exists?(submission_request.reserved_notice_id)).to be false
+    expect(submission_request.reload.status).to eq('processing')
+    expect(submission_request.payload).to eq(payload)
+    expect(submission_request.uploads.count).to eq(1)
   end
 end

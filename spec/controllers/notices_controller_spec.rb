@@ -31,6 +31,22 @@ describe NoticesController do
         expect(response).to render_template(:processing)
       end
 
+      it 'does not load the submission payload while polling' do
+        submission_request = build_stubbed(:notice_submission_request)
+        receipt_scope = instance_double(ActiveRecord::Relation)
+        allow(Notice).to receive(:find_by).and_return(nil)
+        expect(NoticeSubmissionRequest).to receive(:select)
+          .with(:id, :reserved_notice_id, :status)
+          .and_return(receipt_scope)
+        expect(receipt_scope).to receive(:find_by)
+          .with(reserved_notice_id: submission_request.reserved_notice_id.to_s)
+          .and_return(submission_request)
+
+        get :show, params: { id: submission_request.reserved_notice_id }
+
+        expect(response).to have_http_status(:accepted)
+      end
+
       it 'renders the rescinded template if the notice is rescinded' do
         stub_find_notice(build(:dmca, rescinded: true))
 
