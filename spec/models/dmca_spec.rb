@@ -369,6 +369,111 @@ describe DMCA, type: :model do
       expect(notice).to be_hidden
     end
 
+    it 'hides notices with a South Korean jurisdiction' do
+      notice = build_notice_for_hiding(
+        submitter_name: 'Google LLC',
+        sender_country_code: 'US',
+        jurisdictions: ['kr']
+      )
+
+      notice.save!
+      notice.reload
+
+      expect(notice).to be_hidden
+    end
+
+    it 'hides notices written in Korean' do
+      notice = build_notice_for_hiding(
+        submitter_name: 'YouTube LLC',
+        sender_country_code: 'US',
+        language: 'ko'
+      )
+
+      notice.save!
+      notice.reload
+
+      expect(notice).to be_hidden
+    end
+
+    it 'does not hide Korean notices from another submitter' do
+      notice = build_notice_for_hiding(
+        submitter_name: 'Another submitter',
+        sender_country_code: 'US',
+        jurisdictions: ['KR'],
+        language: 'ko'
+      )
+
+      notice.save!
+      notice.reload
+
+      expect(notice).not_to be_hidden
+    end
+
+    it 'hides notices with Korean text in an entity name' do
+      notice = build_notice_for_hiding(
+        submitter_name: 'Google LLC',
+        sender_country_code: 'US'
+      )
+      notice.sender.name = '주식회사 카카오'
+
+      notice.save!
+      notice.reload
+
+      expect(notice).to be_hidden
+    end
+
+    it 'hides notices with Korean text in a work description' do
+      notice = build_notice_for_hiding(
+        submitter_name: 'YouTube LLC',
+        sender_country_code: 'US'
+      )
+      notice.works = [build(:work, description: '저작권 침해 신고')]
+
+      notice.save!
+      notice.reload
+
+      expect(notice).to be_hidden
+    end
+
+    it 'hides notices with Korean text in the body' do
+      notice = build_notice_for_hiding(
+        submitter_name: 'Google LLC',
+        sender_country_code: 'US'
+      )
+      notice.body = '아래 콘텐츠의 삭제를 요청합니다.'
+
+      notice.save!
+      notice.reload
+
+      expect(notice).to be_hidden
+    end
+
+    it 'does not hide notices with Korean text from another submitter' do
+      notice = build_notice_for_hiding(
+        submitter_name: 'Another submitter',
+        sender_country_code: 'US'
+      )
+      notice.works = [build(:work, description: '저작권 침해 신고')]
+
+      notice.save!
+      notice.reload
+
+      expect(notice).not_to be_hidden
+    end
+
+    it 'does not hide notices with Japanese or Chinese text' do
+      notice = build_notice_for_hiding(
+        submitter_name: 'Google LLC',
+        sender_country_code: 'US'
+      )
+      notice.works = [build(:work, description: '著作権侵害の申し立て')]
+
+      notice.save!
+      notice.reload
+
+      expect(notice).not_to be_hidden
+    end
+
     it 'does not hide notices submitted by Google when the sender is outside South Korea' do
       notice = build_notice_for_hiding(
         submitter_name: 'Google LLC',
@@ -521,10 +626,14 @@ describe DMCA, type: :model do
     end
   end
 
-  def build_notice_for_hiding(submitter_name:, sender_country_code:)
+  def build_notice_for_hiding(
+    submitter_name:, sender_country_code:, jurisdictions: nil, language: nil
+  )
     notice = build(:dmca, role_names: %w[submitter sender])
     notice.submitter.name = submitter_name
     notice.sender.country_code = sender_country_code
+    notice.jurisdiction_list = jurisdictions if jurisdictions
+    notice.language = language if language
     notice
   end
 

@@ -24,6 +24,14 @@ class Notice < ApplicationRecord
   MULTI_MATCH_FIELDS = %w(base_search preferred_search^2)
   UNQUOTED_SEARCH_ANALYZER = 'stop'.freeze
 
+  # 'ko' is the ISO 639-1 code we store; 'kr' shows up in legacy/imported data.
+  SOUTH_KOREAN_LANGUAGE_CODES = %w[ko kr].freeze
+
+  # Hangul syllables and jamo, including the compatibility and halfwidth
+  # blocks. Deliberately excludes Han characters, so Chinese and Japanese
+  # notices don't match.
+  HANGUL = /\p{Hangul}/.freeze
+
   # This source-field fallback for exact URL and domain searches is temporary
   # until notices are reindexed with:
   #
@@ -687,8 +695,23 @@ class Notice < ApplicationRecord
       entity.name&.match?(/\b(?:google|youtube)\b/i)
     end
 
-    google_or_youtube_party &&
-      senders.any? { |entity| entity.country_code&.casecmp?('KR') }
+    google_or_youtube_party && south_korean_notice?
+  end
+
+  def south_korean_notice?
+    senders.any? { |entity| entity.country_code&.casecmp?('KR') } ||
+      jurisdictions.any? { |jurisdiction| jurisdiction.to_s.casecmp?('KR') } ||
+      SOUTH_KOREAN_LANGUAGE_CODES.any? { |code| language&.casecmp?(code) } ||
+      korean_text?
+  end
+
+  # Entity names go first because they're short: a non-matching scan reads the
+  # whole string, and the body and work descriptions can be long. URLs are
+  # never scanned.
+  def korean_text?
+    entity_notice_roles.filter_map(&:entity).any? { |entity| entity.name&.match?(HANGUL) } ||
+      body&.match?(HANGUL) ||
+      works.any? { |work| work.description&.match?(HANGUL) }
   end
 
   def taiwan_sender?
