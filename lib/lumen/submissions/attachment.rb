@@ -5,6 +5,7 @@ require 'base64'
 module Lumen::Submissions::Attachment
   class InvalidAttachment < StandardError; end
 
+  DEFAULT_KIND = 'supporting'
   DATA_URI_PATTERN = %r{\Adata:([^;,]+);base64,(.*)\z}m
 
   module_function
@@ -39,6 +40,21 @@ module Lumen::Submissions::Attachment
     end
 
     entries
+  end
+
+  def normalize!(payload)
+    entries(payload).each do |_parameter_key, attributes|
+      next if (attributes['kind'] || attributes[:kind]).present?
+
+      key = if attributes.key?(:kind) && !attributes.key?('kind')
+              :kind
+            else
+              'kind'
+            end
+      attributes[key] = DEFAULT_KIND
+    end
+
+    payload
   end
 
   def file_value(attributes)

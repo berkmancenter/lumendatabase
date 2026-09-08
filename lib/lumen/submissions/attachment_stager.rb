@@ -54,7 +54,8 @@ class Lumen::Submissions::AttachmentStager
                         "attachment-#{parameter_key}"
     upload = submission_request.uploads.create!(
       parameter_key: parameter_key.to_s,
-      kind: attributes['kind'] || attributes[:kind],
+      kind: (attributes['kind'] || attributes[:kind]).presence ||
+            Lumen::Submissions::Attachment::DEFAULT_KIND,
       original_filename: original_filename,
       content_type: content_type,
       byte_size: bytes.bytesize,

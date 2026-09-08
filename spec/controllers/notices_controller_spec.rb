@@ -648,6 +648,27 @@ describe NoticesController do
         ).to eq("data:text/plain;base64,#{file_data}")
       end
 
+      it 'normalizes blank attachment kinds before storing the receipt' do
+        make_allowances
+        file_data = Base64.strict_encode64('small file')
+        @notice_params[:file_uploads_attributes] = [{
+          kind: '',
+          file: "data:text/plain;base64,#{file_data}",
+          file_name: 'small.txt'
+        }]
+        allow(NoticeSubmissionJob).to receive(:perform_later)
+
+        post :create,
+             params: { notice: @notice_params, format: :json }
+
+        expect(response).to have_http_status(:created)
+        expect(
+          NoticeSubmissionRequest.last.payload.dig(
+            'file_uploads_attributes', 0, 'kind'
+          )
+        ).to eq('supporting')
+      end
+
       it 'rejects invalid attachment data before storing a receipt' do
         make_allowances
         allow(@fake_notice).to receive(:errors)
@@ -666,6 +687,27 @@ describe NoticesController do
         expect(response).to have_http_status(:unprocessable_entity)
         expect(JSON.parse(response.body).dig('notices', 'file_uploads'))
           .to include('contains invalid base64 data')
+      end
+
+      it 'rejects attachments that fail Paperclip spoof validation' do
+        make_allowances
+        allow(@fake_notice).to receive(:errors)
+          .and_return(mock_errors(@fake_notice))
+        file_data = Base64.strict_encode64('plain text')
+        @notice_params[:file_uploads_attributes] = [{
+          kind: 'supporting',
+          file: "data:text/plain;base64,#{file_data}",
+          file_name: 'something.jpg'
+        }]
+
+        expect do
+          post :create,
+               params: { notice: @notice_params, format: :json }
+        end.not_to change(NoticeSubmissionRequest, :count)
+
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(JSON.parse(response.body).dig('notices', 'file_uploads'))
+          .to include(/contents.*reported/)
       end
 
       it 'returns a useful status code when there are errors' do

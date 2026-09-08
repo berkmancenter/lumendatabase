@@ -31,6 +31,16 @@ RSpec.describe Lumen::NoticeBuilder, type: :model do
     expect(n.file_uploads.first.kind).to eq 'supporting'
   end
 
+  it 'sets file kind to supporting if blank' do
+    attrs = file_uploads_attributes
+    attrs[0][:kind] = ''
+    n = Lumen::NoticeBuilder.new(
+      CourtOrder, default_notice_hash(file_uploads_attributes: attrs)
+    ).build
+
+    expect(n.file_uploads.first.kind).to eq 'supporting'
+  end
+
   it 'leaves set file types alone' do
     attrs = file_uploads_attributes
     attrs[0][:kind] = 'original'

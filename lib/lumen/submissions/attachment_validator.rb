@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'tempfile'
+
 class Lumen::Submissions::AttachmentValidator
   def initialize(payload)
     @payload = payload
@@ -8,28 +10,25 @@ class Lumen::Submissions::AttachmentValidator
   def validate(errors)
     valid = true
 
-    Lumen::Submissions::Attachment.entries(payload).each do |_key, attributes|
-      kind = attributes['kind'] || attributes[:kind]
-      kind = 'supporting' if kind.blank?
-      unless FileUpload::ALLOWED_KINDS.include?(kind)
-        errors.add(:file_uploads, "kind #{kind.inspect} is invalid")
-        valid = false
-      end
-
-      filename = attributes['file_name'] || attributes[:file_name]
-      if filename.present? && filename.length > 255
-        errors.add(:file_uploads, 'filename is too long')
-        valid = false
-      end
-
+    Lumen::Submissions::Attachment.entries(payload).each do |key, attributes|
       begin
-        Lumen::Submissions::Attachment.decode(
+        content_type, bytes = Lumen::Submissions::Attachment.decode(
           Lumen::Submissions::Attachment.file_value(attributes)
         )
       rescue Lumen::Submissions::Attachment::InvalidAttachment => error
         errors.add(:file_uploads, error.message)
         valid = false
+        next
       end
+
+      upload_valid = validate_file_upload(
+        key,
+        attributes,
+        content_type,
+        bytes,
+        errors
+      )
+      valid = false unless upload_valid
     end
 
     valid
@@ -38,4 +37,49 @@ class Lumen::Submissions::AttachmentValidator
   private
 
   attr_reader :payload
+
+  def validate_file_upload(key, attributes, content_type, bytes, errors)
+    file_upload = nil
+
+    Tempfile.create('notice-submission-validation') do |tempfile|
+      tempfile.binmode
+      tempfile.write(bytes)
+      tempfile.rewind
+
+      filename = (attributes['file_name'] || attributes[:file_name]).presence ||
+                 "attachment-#{key}"
+      uploaded_file = ActionDispatch::Http::UploadedFile.new(
+        tempfile: tempfile,
+        filename: filename,
+        type: content_type
+      )
+      file_upload = FileUpload.new(
+        kind: attributes['kind'] || attributes[:kind],
+        file_name: attributes['file_name'] || attributes[:file_name]
+      )
+      file_upload.file.post_processing = false
+      file_upload.file = uploaded_file
+
+      file_upload.valid?
+      copy_file_upload_errors(file_upload, errors)
+      file_upload.errors.empty?
+    end
+  ensure
+    close_queued_files(file_upload)
+  end
+
+  def copy_file_upload_errors(file_upload, errors)
+    file_upload.errors.each do |error|
+      errors.add(:file_uploads, error.full_message)
+    end
+  end
+
+  def close_queued_files(file_upload)
+    return unless file_upload
+
+    file_upload.file.queued_for_write.each_value do |file|
+      file.close! if file.respond_to?(:close!)
+    end
+    file_upload.file.clear
+  end
 end

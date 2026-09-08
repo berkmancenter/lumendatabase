@@ -48,6 +48,27 @@ RSpec.describe Lumen::Submissions::Processor do
     expect(notice.original_documents.first.file_file_name).to eq('original.bin')
   end
 
+  it 'defaults a blank attachment kind before creating the notice' do
+    bytes = 'supporting document'
+    payload = attributes_for(:notice_submission_request)[:payload].merge(
+      'file_uploads_attributes' => [{
+        'kind' => '',
+        'file' => "data:text/plain;base64,#{Base64.strict_encode64(bytes)}",
+        'file_name' => 'supporting.txt'
+      }]
+    )
+    submission_request = Lumen::Submissions::Intake.new(
+      notice_type: DMCA,
+      payload: payload,
+      submitted_by: nil
+    ).call
+    Lumen::Submissions::AttachmentStager.new(submission_request).stage
+
+    notice = described_class.new(submission_request).process
+
+    expect(notice.file_uploads.first.kind).to eq('supporting')
+  end
+
   it 'refuses to create a notice from a corrupted staged attachment' do
     bytes = 'original document'
     payload = attributes_for(:notice_submission_request)[:payload].merge(

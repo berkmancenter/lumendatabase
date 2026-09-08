@@ -23,6 +23,7 @@ class NoticesController < ApplicationController
 
     notice_type = get_notice_type(params)
     submitted_params = notice_params
+    Lumen::Submissions::Attachment.normalize!(submitted_params)
 
     respond_to do |format|
       format.json do

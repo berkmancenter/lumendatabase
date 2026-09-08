@@ -34,7 +34,7 @@ class Lumen::NoticeBuilder
   def add_defaults
     @notice.title = generic_title unless @notice.title.present?
     @notice.file_uploads.map do |file|
-      file.kind = 'supporting' if file.kind.nil?
+      file.kind = 'supporting' if file.kind.blank?
     end
   end
 
