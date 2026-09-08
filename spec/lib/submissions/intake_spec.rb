@@ -27,19 +27,31 @@ RSpec.describe Lumen::Submissions::Intake do
     expect(Notice.exists?(submission_request.reserved_notice_id)).to be false
   end
 
-  it 'stores attachment data in the receipt without staging it synchronously' do
+  it 'stores attachments as file uploads instead of payload data' do
     bytes = "attachment\x00contents".b
+    file_upload = FileUpload.new(kind: 'original', file_name: 'original.bin')
+    file_upload.file = data_uri_for('application/octet-stream', bytes)
+
+    submission_request = intake(file_uploads: [file_upload]).call
+
+    expect(submission_request.payload).not_to have_key('file_uploads_attributes')
+    stored_upload = submission_request.file_uploads.first
+    expect(stored_upload.kind).to eq('original')
+    expect(stored_upload.file_file_name).to eq('original.bin')
+    expect(File.binread(stored_upload.file.path)).to eq(bytes)
+  end
+
+  it 'keeps attachment data out of the payload it stores' do
     payload[:file_uploads_attributes] = [{
       kind: 'original',
-      file: "data:application/octet-stream;base64,#{Base64.encode64(bytes)}",
-      file_name: 'original.bin'
+      file: data_uri_for('text/plain', 'Original Document'),
+      file_name: 'original.txt'
     }]
 
     submission_request = intake.call
 
-    expect(submission_request.payload.dig('file_uploads_attributes', 0, 'file'))
-      .to start_with('data:application/octet-stream;base64,')
-    expect(submission_request.uploads).to be_empty
+    expect(submission_request.payload).not_to have_key('file_uploads_attributes')
+    expect(submission_request.file_uploads).to be_empty
   end
 
   it 'creates a new receipt and reserved notice ID for every submission' do
@@ -54,12 +66,17 @@ RSpec.describe Lumen::Submissions::Intake do
 
   private
 
-  def intake(supplied_payload: payload)
+  def intake(supplied_payload: payload, file_uploads: [])
     described_class.new(
       notice_type: DMCA,
       payload: supplied_payload,
       submitted_by: user,
+      file_uploads: file_uploads,
       request_id: 'request-id'
     )
+  end
+
+  def data_uri_for(mime_type, data)
+    "data:#{mime_type};base64,#{Base64.strict_encode64(data)}"
   end
 end

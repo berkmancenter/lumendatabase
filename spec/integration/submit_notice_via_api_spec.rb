@@ -6,7 +6,7 @@ feature 'notice submission', js: true do
 
   around do |example|
     # Preserve the production boundary between committing the API response and
-    # starting work; inline mode runs before Active Storage's commit callbacks.
+    # starting work, so the specs exercise the job the way a worker runs it.
     Sidekiq::Testing.fake!
     Sidekiq::Job.clear_all
     example.run

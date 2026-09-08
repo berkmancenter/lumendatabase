@@ -22,11 +22,11 @@ Lumen relies on several cron jobs in production. As of October 2020, cron runs:
 
 ## Completed notice submission cleanup
 
-Newly completed background submissions discard their receipt payload and
-Active Storage staging copy automatically. After deploying this behavior, run
-the following task once to clean receipts completed by an older release:
+Newly completed background submissions discard their receipt payload
+automatically. After deploying this behavior, run the following task once to
+clean receipts completed by an older release:
 
 `rails lumen:cleanup_completed_notice_submissions`
 
 The task updates payloads in batches and can safely be run again if it is
-interrupted. Active Storage blob purges run on the default Sidekiq queue.
+interrupted.

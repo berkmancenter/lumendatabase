@@ -6,18 +6,15 @@ class NoticeSubmissionRequest < ApplicationRecord
   QUEUED_TIMEOUT = 2.hours
   RETRY_BASE_DELAY = 1.minute
   RETRY_MAX_DELAY = 6.hours
-  DISPATCHABLE_STATUSES = %w[received staging_failed failed].freeze
-  STATUSES = %w[
-    received queued staging_failed pending processing completed failed
-  ].freeze
+  DISPATCHABLE_STATUSES = %w[received failed].freeze
+  STATUSES = %w[received queued pending processing completed failed].freeze
 
   belongs_to :submitted_by, class_name: 'User', optional: true
   belongs_to :submitter_entity, class_name: 'Entity', optional: true
 
-  has_many :uploads,
-           class_name: 'NoticeSubmissionUpload',
-           dependent: :destroy,
-           inverse_of: :notice_submission_request
+  # Attachments are validated and stored by the request that accepted them, so
+  # the worker only has to hand them to the notice it creates.
+  has_many :file_uploads, dependent: :destroy
 
   validates :attempts, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :notice_type, presence: true, inclusion: { in: Lumen::TYPES }
@@ -57,7 +54,7 @@ class NoticeSubmissionRequest < ApplicationRecord
   end
 
   def failed?
-    %w[staging_failed failed].include?(status)
+    status == 'failed'
   end
 
   def processing?
@@ -105,16 +102,6 @@ class NoticeSubmissionRequest < ApplicationRecord
   end
 
   def mark_failed!(error)
-    record_failure!('failed', error)
-  end
-
-  def mark_staging_failed!(error)
-    record_failure!('staging_failed', error, discard_uploads: true)
-  end
-
-  private
-
-  def record_failure!(failure_status, error, discard_uploads: false)
     # A processor transaction can leave this instance with rolled-back changes.
     # Active Record refuses to lock a dirty record, so restore the persisted
     # receipt before taking the failure-recording lock.
@@ -122,13 +109,9 @@ class NoticeSubmissionRequest < ApplicationRecord
     with_lock do
       return if completed?
 
-      # A staging failure means the attachment records cannot be trusted.
-      # Keep the durable payload, but force the next attempt to stage new blobs.
-      uploads.destroy_all if discard_uploads
-
       attempt_count = attempts + 1
       update!(
-        status: failure_status,
+        status: 'failed',
         attempts: attempt_count,
         failed_at: Time.current,
         failure_class: error.class.name,
@@ -137,6 +120,8 @@ class NoticeSubmissionRequest < ApplicationRecord
       )
     end
   end
+
+  private
 
   def next_attempt_at_for(attempt_count)
     return if attempt_count >= MAX_ATTEMPTS

@@ -23,7 +23,6 @@ class NoticesController < ApplicationController
 
     notice_type = get_notice_type(params)
     submitted_params = notice_params
-    Lumen::Submissions::Attachment.normalize!(submitted_params)
 
     respond_to do |format|
       format.json do
@@ -179,17 +178,14 @@ class NoticesController < ApplicationController
   private
 
   def create_json_notice(notice_type, submitted_params)
+    # The notice is built and validated exactly as it is for HTML submissions,
+    # including its attachments, but only the attachments are stored now. The
+    # notice itself is created from the receipt by the background worker.
     @notice = Lumen::NoticeBuilder.new(
-      notice_type,
-      submitted_params.except('file_uploads_attributes'),
-      current_user
+      notice_type, submitted_params, current_user
     ).build
-    notice_valid = valid_json_notice?
-    attachments_valid = Lumen::Submissions::AttachmentValidator.new(
-      submitted_params
-    ).validate(@notice.errors)
 
-    unless notice_valid && attachments_valid
+    unless valid_json_notice?
       log_failed_notice
       render json: { notices: @notice.errors }, status: :unprocessable_entity
       return
@@ -199,6 +195,7 @@ class NoticesController < ApplicationController
       notice_type: notice_type,
       payload: submitted_params,
       submitted_by: current_user,
+      file_uploads: @notice.file_uploads,
       request_id: request.request_id
     ).call
     enqueue_notice_submission(submission_request)

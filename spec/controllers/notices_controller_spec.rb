@@ -519,6 +519,7 @@ describe NoticesController do
       allow(Lumen::NoticeBuilder).to receive(:new).and_return @fake_notice
       allow(@fake_notice).to receive(:id).and_return 1
       allow(@fake_notice).to receive(:errors).and_return []
+      allow(@fake_notice).to receive(:file_uploads).and_return []
     end
 
     context 'format-independent logic' do
@@ -723,116 +724,95 @@ describe NoticesController do
         end
       end
 
-      it 'stores attachments without staging them before the response' do
-        make_allowances
-        file_data = Base64.strict_encode64('small file')
-        @notice_params[:file_uploads_attributes] = [{
-          kind: 'original',
-          file: "data:text/plain;base64,#{file_data}",
-          file_name: 'small.txt'
-        }]
-        validation_payload = nil
-        allow(Lumen::NoticeBuilder).to receive(:new) do |_type, payload, _user|
-          validation_payload = payload
-          @fake_notice
+      context 'with attachments' do
+        let(:payload) { attributes_for(:notice_submission_request)[:payload] }
+
+        before do
+          allow(NoticeSubmissionJob).to receive(:perform_later)
         end
-        allow(NoticeSubmissionJob).to receive(:perform_later)
 
-        expect do
-          post :create,
-               params: { notice: @notice_params, format: :json }
-        end.not_to change(ActiveStorage::Blob, :count)
+        it 'stores attachments as file uploads instead of payload data' do
+          payload['file_uploads_attributes'] = [{
+            'kind' => 'original',
+            'file' => data_uri_for('text/plain', 'Original Document'),
+            'file_name' => 'original.txt'
+          }]
 
-        expect(response).to have_http_status(:created)
-        expect(validation_payload).not_to have_key('file_uploads_attributes')
-        expect(
-          NoticeSubmissionRequest.last.payload.dig(
-            'file_uploads_attributes', 0, 'file'
+          expect do
+            post :create, params: { notice: payload, format: :json }
+          end.to change(FileUpload, :count).by(1)
+            .and change(Notice, :count).by(0)
+
+          expect(response).to have_http_status(:created)
+          submission_request = NoticeSubmissionRequest.last
+          expect(submission_request.payload)
+            .not_to have_key('file_uploads_attributes')
+          file_upload = submission_request.file_uploads.first
+          expect(file_upload.notice).to be_nil
+          expect(file_upload.kind).to eq('original')
+          expect(file_upload.file_file_name).to eq('original.txt')
+          expect(File.read(file_upload.file.path)).to eq('Original Document')
+        end
+
+        it 'stores a multipart attachment' do
+          payload['file_uploads_attributes'] = [{
+            'kind' => 'supporting',
+            'file' => Rack::Test::UploadedFile.new(
+              Rails.root.join('spec/support/example_files/supporting.jpg'),
+              'image/jpeg'
+            )
+          }]
+
+          post :create, params: { notice: payload, format: :json }
+
+          expect(response).to have_http_status(:created)
+          file_upload = NoticeSubmissionRequest.last.file_uploads.first
+          expect(file_upload.kind).to eq('supporting')
+          expect(file_upload.file_file_name).to eq('supporting.jpg')
+          expect(File.binread(file_upload.file.path)).to eq(
+            File.binread('spec/support/example_files/supporting.jpg')
           )
-        ).to eq("data:text/plain;base64,#{file_data}")
-      end
+        end
 
-      it 'normalizes blank attachment kinds before storing the receipt' do
-        make_allowances
-        file_data = Base64.strict_encode64('small file')
-        @notice_params[:file_uploads_attributes] = [{
-          kind: '',
-          file: "data:text/plain;base64,#{file_data}",
-          file_name: 'small.txt'
-        }]
-        allow(NoticeSubmissionJob).to receive(:perform_later)
+        it 'defaults a blank attachment kind before storing the receipt' do
+          payload['file_uploads_attributes'] = [{
+            'kind' => '',
+            'file' => data_uri_for('text/plain', 'Supporting Document'),
+            'file_name' => 'supporting.txt'
+          }]
 
-        post :create,
-             params: { notice: @notice_params, format: :json }
+          post :create, params: { notice: payload, format: :json }
 
-        expect(response).to have_http_status(:created)
-        expect(
-          NoticeSubmissionRequest.last.payload.dig(
-            'file_uploads_attributes', 0, 'kind'
-          )
-        ).to eq('supporting')
-      end
+          expect(response).to have_http_status(:created)
+          expect(NoticeSubmissionRequest.last.file_uploads.first.kind)
+            .to eq('supporting')
+        end
 
-      it 'rejects invalid attachment data before storing a receipt' do
-        make_allowances
-        allow(@fake_notice).to receive(:errors)
-          .and_return(mock_errors(@fake_notice))
-        @notice_params[:file_uploads_attributes] = [{
-          kind: 'original',
-          file: 'data:text/plain;base64,not-base64!',
-          file_name: 'broken.txt'
-        }]
+        it 'rejects attachments that fail Paperclip spoof validation' do
+          payload['file_uploads_attributes'] = [{
+            'kind' => 'supporting',
+            'file' => Rack::Test::UploadedFile.new(
+              Rails.root.join(
+                'spec/support/example_files/original_notice_source.txt'
+              ),
+              'image/jpeg',
+              false,
+              original_filename: 'something.jpg'
+            )
+          }]
 
-        expect do
-          post :create,
-               params: { notice: @notice_params, format: :json }
-        end.not_to change(NoticeSubmissionRequest, :count)
+          expect do
+            post :create, params: { notice: payload, format: :json }
+          end.not_to change { [NoticeSubmissionRequest.count, FileUpload.count] }
 
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(JSON.parse(response.body).dig('notices', 'file_uploads'))
-          .to include('contains invalid base64 data')
-      end
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(JSON.parse(response.body).dig('notices', 'file_uploads.file'))
+            .to include(/contents that are not what they are reported to be/)
+        end
 
-      it 'rejects attachments that fail Paperclip spoof validation' do
-        make_allowances
-        allow(@fake_notice).to receive(:errors)
-          .and_return(mock_errors(@fake_notice))
-        file_data = Base64.strict_encode64('plain text')
-        @notice_params[:file_uploads_attributes] = [{
-          kind: 'supporting',
-          file: "data:text/plain;base64,#{file_data}",
-          file_name: 'something.jpg'
-        }]
-
-        expect do
-          post :create,
-               params: { notice: @notice_params, format: :json }
-        end.not_to change(NoticeSubmissionRequest, :count)
-
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(JSON.parse(response.body).dig('notices', 'file_uploads'))
-          .to include(/contents.*reported/)
-      end
-
-      it 'rejects attachments over the resource limit before storing a receipt' do
-        make_allowances
-        allow(@fake_notice).to receive(:errors)
-          .and_return(mock_errors(@fake_notice))
-        stub_const('Lumen::Submissions::Attachment::MAX_ATTACHMENT_BYTES', 4)
-        @notice_params[:file_uploads_attributes] = [{
-          kind: 'supporting',
-          file: "data:text/plain;base64,#{Base64.strict_encode64('12345')}",
-          file_name: 'attachment.txt'
-        }]
-
-        expect do
-          post :create,
-               params: { notice: @notice_params, format: :json }
-        end.not_to change(NoticeSubmissionRequest, :count)
-
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(JSON.parse(response.body).dig('notices', 'file_uploads'))
-          .to include(/4 bytes per-file limit/)
+        def data_uri_for(mime_type, data)
+          "data:#{mime_type};base64,#{Base64.strict_encode64(data)}"
+        end
       end
 
       it 'returns a useful status code when there are errors' do

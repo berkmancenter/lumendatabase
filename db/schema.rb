@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2026_09_08_140000) do
+ActiveRecord::Schema[7.2].define(version: 2026_09_08_200000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -395,7 +395,9 @@ ActiveRecord::Schema[7.2].define(version: 2026_09_08_140000) do
     t.boolean "pdf_request_fulfilled", default: false, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.bigint "notice_submission_request_id"
     t.index ["notice_id"], name: "index_file_uploads_on_notice_id"
+    t.index ["notice_submission_request_id"], name: "index_file_uploads_on_notice_submission_request_id"
   end
 
   create_table "lumen_settings", force: :cascade do |t|
@@ -451,26 +453,12 @@ ActiveRecord::Schema[7.2].define(version: 2026_09_08_140000) do
     t.datetime "updated_at", null: false
     t.datetime "next_attempt_at"
     t.index ["reserved_notice_id"], name: "index_notice_submission_requests_on_reserved_notice_id", unique: true
-    t.index ["status", "next_attempt_at"], name: "idx_submission_requests_on_retry_schedule", where: "(((status)::text = ANY ((ARRAY['received'::character varying, 'staging_failed'::character varying, 'failed'::character varying])::text[])) AND (attempts < 25))"
+    t.index ["status", "next_attempt_at"], name: "idx_submission_requests_on_retry_schedule", where: "(((status)::text = ANY ((ARRAY['received'::character varying, 'failed'::character varying])::text[])) AND (attempts < 25))"
     t.index ["status", "queued_at"], name: "idx_submission_requests_on_stale_queued", where: "(((status)::text = 'queued'::text) AND (attempts < 25))"
     t.index ["status", "started_at"], name: "idx_submission_requests_on_stale_processing", where: "(((status)::text = 'processing'::text) AND (attempts < 25))"
     t.index ["status"], name: "index_notice_submission_requests_on_status"
     t.index ["submitted_by_id"], name: "index_notice_submission_requests_on_submitted_by_id"
     t.index ["submitter_entity_id"], name: "index_notice_submission_requests_on_submitter_entity_id"
-  end
-
-  create_table "notice_submission_uploads", force: :cascade do |t|
-    t.bigint "notice_submission_request_id", null: false
-    t.string "parameter_key", null: false
-    t.string "kind"
-    t.string "original_filename", null: false
-    t.string "content_type", null: false
-    t.bigint "byte_size", null: false
-    t.string "checksum", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["notice_submission_request_id", "parameter_key"], name: "idx_notice_submission_uploads_on_request_and_key", unique: true
-    t.index ["notice_submission_request_id"], name: "idx_notice_submission_uploads_on_request_id"
   end
 
   create_table "notice_update_calls", force: :cascade do |t|
@@ -721,8 +709,8 @@ ActiveRecord::Schema[7.2].define(version: 2026_09_08_140000) do
   add_foreign_key "enterprise_payments", "users", on_delete: :nullify
   add_foreign_key "enterprise_reports", "enterprise_accounts"
   add_foreign_key "enterprise_reports", "users", column: "requested_by_id", on_delete: :nullify
+  add_foreign_key "file_uploads", "notice_submission_requests"
   add_foreign_key "notice_submission_requests", "entities", column: "submitter_entity_id"
   add_foreign_key "notice_submission_requests", "users", column: "submitted_by_id", on_delete: :nullify
-  add_foreign_key "notice_submission_uploads", "notice_submission_requests"
   add_foreign_key "users", "enterprise_accounts"
 end

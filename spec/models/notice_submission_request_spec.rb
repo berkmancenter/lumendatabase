@@ -19,12 +19,6 @@ RSpec.describe NoticeSubmissionRequest, type: :model do
       attempts: 2,
       next_attempt_at: 1.minute.ago
     )
-    staging_failed = create(
-      :notice_submission_request,
-      status: 'staging_failed',
-      attempts: 1,
-      next_attempt_at: 1.minute.ago
-    )
     stale_processing = create(
       :notice_submission_request,
       status: 'processing',
@@ -61,7 +55,6 @@ RSpec.describe NoticeSubmissionRequest, type: :model do
       .to contain_exactly(
         received,
         failed,
-        staging_failed,
         stale_queued,
         stale_processing
       )

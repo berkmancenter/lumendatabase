@@ -16,6 +16,9 @@ class FileUpload < ApplicationRecord
             inclusion: { in: ALLOWED_KINDS }
 
   belongs_to :notice, optional: true
+  # Set while a background notice submission holds the upload, and cleared when
+  # the submission's notice is created.
+  belongs_to :notice_submission_request, optional: true
   has_one :youtube_import_file_location
   has_attached_file :file,
     path: ':rails_root/paperclip/:class/:attachment/:id_partition/:style/:filename',
