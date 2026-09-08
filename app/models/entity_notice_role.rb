@@ -27,6 +27,9 @@ class EntityNoticeRole < ApplicationRecord
   accepts_nested_attributes_for :entity
 
   def validate_associated_records_for_entity
+    # Intake checks the submitted entity through validates_associated below.
+    # Deduplication and persistence belong to the worker's normal save path.
+    return if Array(validation_context).include?(:submission_intake)
     return unless entity.present?
 
     if entity.id.nil? && existing_entity = Entity.where(entity.attributes_for_deduplication).first

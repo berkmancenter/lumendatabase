@@ -208,14 +208,9 @@ class NoticesController < ApplicationController
   end
 
   def valid_json_notice?
-    valid = false
-
-    Notice.transaction(requires_new: true) do
-      valid = @notice.valid?
-      raise ActiveRecord::Rollback
-    end
-
-    valid
+    # Rails propagates this context to nested entity roles, which validate
+    # without inserting or deduplicating entities during intake.
+    @notice.valid?([:create, :submission_intake])
   end
 
   def enqueue_notice_submission(submission_request)

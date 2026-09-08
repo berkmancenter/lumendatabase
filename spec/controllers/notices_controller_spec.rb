@@ -637,6 +637,92 @@ describe NoticesController do
         expect(submission_request.queued_at).to be_nil
       end
 
+      context 'with real notice validation' do
+        let(:payload) { attributes_for(:notice_submission_request)[:payload] }
+
+        before do
+          allow(NoticeSubmissionJob).to receive(:perform_later)
+        end
+
+        it 'leaves entity inserts and deduplication to the worker' do
+          payload['entity_notice_roles_attributes'] = %w[recipient sender].map do |role|
+            { 'name' => role, 'entity_attributes' => { 'name' => 'New intake entity' } }
+          end
+          sql = []
+          capture_sql = ->(*event) { sql << event.last[:sql] }
+
+          expect do
+            ActiveSupport::Notifications.subscribed(capture_sql, 'sql.active_record') do
+              post :create, params: { notice: payload, format: :json }
+            end
+          end.not_to change { entity_sequence_state }
+
+          expect(response).to have_http_status(:created)
+          expect(sql.grep(/(?:INSERT INTO|UPDATE|DELETE FROM|FROM) "entities"/i)).to be_empty
+          expect(Entity.where(name: 'New intake entity')).not_to exist
+          submission_request = NoticeSubmissionRequest.last
+
+          expect do
+            NoticeSubmissionJob.perform_now(submission_request.id)
+          end.to change(Entity, :count).by(1)
+
+          notice = submission_request.reload.notice
+          expect(submission_request).to be_completed
+          expect(notice.recipient).to eq(notice.sender)
+          expect(notice.recipient.name).to eq('New intake entity')
+        end
+
+        it 'does not consume entity IDs when the notice fails validation' do
+          payload['works_attributes'] = []
+
+          expect do
+            post :create, params: { notice: payload, format: :json }
+          end.not_to change { entity_sequence_state }
+
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(NoticeSubmissionRequest.count).to eq(0)
+          expect(Entity.count).to eq(0)
+        end
+
+        [
+          { 'name' => '' },
+          { 'kind' => 'invalid-kind' },
+          { 'address_line_1' => 'x' * 256 }
+        ].each do |invalid_attributes|
+          it "rejects invalid nested entity #{invalid_attributes.keys.first} before accepting a receipt" do
+            payload['entity_notice_roles_attributes'].first['entity_attributes']
+              .merge!(invalid_attributes)
+
+            expect do
+              post :create, params: { notice: payload, format: :json }
+            end.not_to change { entity_sequence_state }
+
+            expect(response).to have_http_status(:unprocessable_entity)
+            expect(JSON.parse(response.body)['notices']).to have_key('entity_notice_roles.entity')
+            expect(NoticeSubmissionRequest.count).to eq(0)
+          end
+        end
+
+        it 'accepts an existing entity by ID without changing it' do
+          entity = create(:entity)
+          payload['entity_notice_roles_attributes'] = [{
+            'name' => 'recipient', 'entity_id' => entity.id
+          }]
+
+          expect do
+            post :create, params: { notice: payload, format: :json }
+          end.not_to change { entity.reload.attributes }
+
+          expect(response).to have_http_status(:created)
+        end
+
+        def entity_sequence_state
+          Entity.connection.select_one(
+            "SELECT last_value, is_called FROM #{Entity.connection.quote_table_name(Entity.sequence_name)}"
+          )
+        end
+      end
+
       it 'stores attachments without staging them before the response' do
         make_allowances
         file_data = Base64.strict_encode64('small file')
