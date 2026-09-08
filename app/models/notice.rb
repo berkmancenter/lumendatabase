@@ -24,6 +24,9 @@ class Notice < ApplicationRecord
   MULTI_MATCH_FIELDS = %w(base_search preferred_search^2)
   UNQUOTED_SEARCH_ANALYZER = 'stop'.freeze
 
+  # Platforms whose South Korean notices are hidden.
+  SOUTH_KOREA_HIDDEN_PLATFORMS = /\b(?:google|youtube|twitter)\b/i
+
   # 'ko' is the ISO 639-1 code we store; 'kr' shows up in legacy/imported data.
   SOUTH_KOREAN_LANGUAGE_CODES = %w[ko kr].freeze
 
@@ -471,7 +474,7 @@ class Notice < ApplicationRecord
   end
 
   def hidden
-    super || google_or_youtube_notice_from_south_korea?
+    super || platform_notice_from_south_korea?
   end
 
   def hidden?
@@ -690,12 +693,12 @@ class Notice < ApplicationRecord
     submitter && submitter.name =~ /\bgoogle\b/i
   end
 
-  def google_or_youtube_notice_from_south_korea?
-    google_or_youtube_party = (submitters + recipients).any? do |entity|
-      entity.name&.match?(/\b(?:google|youtube)\b/i)
+  def platform_notice_from_south_korea?
+    platform_party = (submitters + recipients).any? do |entity|
+      entity.name&.match?(SOUTH_KOREA_HIDDEN_PLATFORMS)
     end
 
-    google_or_youtube_party && south_korean_notice?
+    platform_party && south_korean_notice?
   end
 
   def south_korean_notice?

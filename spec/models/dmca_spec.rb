@@ -369,6 +369,42 @@ describe DMCA, type: :model do
       expect(notice).to be_hidden
     end
 
+    it 'hides notices when Twitter is the recipient' do
+      notice = build_notice_for_hiding(
+        submitter_name: 'Another submitter',
+        sender_country_code: 'KR'
+      )
+      add_recipient(notice, 'Twitter, Inc.')
+
+      notice.save!
+      notice.reload
+
+      expect(notice).to be_hidden
+    end
+
+    it 'hides notices when Twitter is the submitter' do
+      notice = build_notice_for_hiding(
+        submitter_name: 'Twitter, Inc.',
+        sender_country_code: 'KR'
+      )
+
+      notice.save!
+      notice.reload
+
+      expect(notice).to be_hidden
+    end
+
+    it 'does not hide notices submitted by Twitter when the notice is not Korean' do
+      notice = build_notice_for_hiding(
+        submitter_name: 'Twitter, Inc.',
+        sender_country_code: 'US'
+      )
+
+      notice.save!
+
+      expect(notice).not_to be_hidden
+    end
+
     it 'hides notices with a South Korean jurisdiction' do
       notice = build_notice_for_hiding(
         submitter_name: 'Google LLC',
